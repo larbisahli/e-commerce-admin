@@ -1,0 +1,137 @@
+import 'react-toastify/dist/ReactToastify.css';
+import '@fontsource/open-sans';
+import '@fontsource/open-sans/600.css';
+import '@fontsource/open-sans/700.css';
+import '@styles/main.css';
+
+import {
+  ApolloClient,
+  ApolloProvider,
+  from,
+  HttpLink,
+  InMemoryCache
+} from '@apollo/client';
+import { RetryLink } from '@apollo/client/link/retry';
+import DefaultSeo from '@components/ui/default-seo';
+import LoadingBar from '@components/ui/loading-bar';
+// import ErrorMessage from "@components/ui/error-message";
+import ManagedModal from '@components/ui/modal/managed-modal';
+import { ModalProvider } from '@components/ui/modal/modal.context';
+import { StaffInfoProvider } from '@contexts/staff.context';
+// import { SettingsProvider } from "@contexts/settings.context";
+import { UIProvider } from '@contexts/ui.context';
+// import PageLoader from "@components/ui/page-loader/page-loader";
+import { apiURL, PRODUCTION_ENV } from '@utils/utils';
+// import { useSettingsQuery } from "@graphql/settings.graphql";
+import type { AppProps } from 'next/app';
+// import { useRouter } from 'next/router';
+import { appWithTranslation } from 'next-i18next';
+import React, { Fragment } from 'react';
+import { Slide, ToastContainer } from 'react-toastify';
+
+const httpLink = new HttpLink({
+  uri: `${apiURL}/graphql`,
+  credentials: PRODUCTION_ENV ? 'same-origin' : 'include'
+});
+
+const retryLink = new RetryLink({
+  delay: {
+    initial: 1000,
+    max: Infinity,
+    jitter: true
+  },
+  attempts: {
+    max: 5,
+    retryIf: (error, _operation) => {
+      console.log(`retryIf`, { error, _operation });
+      return !!error;
+    }
+  }
+});
+
+const client = new ApolloClient({
+  link: from([retryLink, httpLink]),
+  cache: new InMemoryCache({
+    addTypename: false
+  })
+});
+
+const Noop: React.FC = ({ children }) => <>{children}</>;
+
+// const AppSettings: React.FC = (props) => {
+//   // const { data, loading, error } = useSettingsQuery();
+//   const data ={}
+//   // if (loading) return <PageLoader />;
+//   // if (error) return <ErrorMessage message={error.message} />;
+//   return <SettingsProvider initialValue={data?.settings?.options} {...props} />;
+// };
+
+function App({ Component, pageProps }: AppProps) {
+  // const { asPath } = useRouter();
+
+  const Layout = (Component as any).Layout || Noop;
+
+  return (
+    <Fragment>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        className="text-sm"
+        // hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        transition={Slide}
+      />
+      <ApolloProvider client={client}>
+        <StaffInfoProvider>
+          <LoadingBar />
+          {/* <AppSettings> */}
+          <UIProvider>
+            <ModalProvider>
+              <ManagedModal />
+              <DefaultSeo />
+              <Layout {...pageProps}>
+                <Component {...pageProps} />
+              </Layout>
+            </ModalProvider>
+          </UIProvider>
+          {/* </AppSettings> */}
+        </StaffInfoProvider>
+      </ApolloProvider>
+    </Fragment>
+  );
+}
+
+const FixNum = (num: number) => Number((num / 1000).toFixed(6));
+
+export function reportWebVitals(metric) {
+  switch (metric.name) {
+    case 'FCP':
+      console.log('First Contentful Paint (s): ', FixNum(metric.startTime));
+      break;
+    case 'LCP':
+      console.log('Largest Contentful Paint (s): ', FixNum(metric.startTime));
+      break;
+    case 'CLS':
+      console.log('Cumulative Layout Shift (s): ', FixNum(metric.startTime));
+      break;
+    case 'FID':
+      console.log('First Input Delay (s): ', FixNum(metric.startTime));
+      break;
+    case 'TTFB':
+      console.log('Time to First Byte (s): ', FixNum(metric.startTime));
+      break;
+    case 'Next.js-hydration':
+      console.log('Next.js hydration (s): ', FixNum(metric.startTime));
+      break;
+    default:
+      console.log(`${metric.name} (S)`, FixNum(metric.startTime));
+      break;
+  }
+}
+
+export default appWithTranslation(App);

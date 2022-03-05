@@ -1,0 +1,10 @@
+{
+  "USER-EXIT": "User already exist",
+  "EMAIL-EXIT": "Email already exist.",
+  "SERVER-ERROR": "Server error.",
+  "PERMISSION-DENIED": "Permission denied.",
+  "SOMETHING-HAPPENED": "Something happened.",
+  "UNKNOWN-ERROR": "Unknown error",
+  "STAFF-NOT-ACTIVE": "Staff is not active",
+  "STAFF-NOT-EXIST": "Staff does not exist"
+}
