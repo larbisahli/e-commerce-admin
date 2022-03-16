@@ -69,7 +69,7 @@ export default function ProductVariableForm({ shopId, initialValues }: IProps) {
 
   const attributes = data?.attributes;
   return (
-    <div className="flex flex-wrap my-5 sm:my-8">
+    <div className="flex flex-wrap pb-8 border-b border-dashed border-border-base my-5 sm:my-8">
       <Description
         title={t('form:form-title-variation-product-info')}
         details={`${

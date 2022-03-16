@@ -1,19 +1,19 @@
 import { ROUTES } from '@utils/routes';
 
 export const siteSettings = {
-  name: 'Ecomhost',
-  description: '',
+  name: 'DropGala',
+  description: 'Great place to buy items with a fair price.',
   logo: {
-    url: 'logo.svg',
-    alt: 'ecomhost',
-    href: '/',
+    url: '/logo.svg',
+    alt: 'DropGala',
+    href: 'logo.svg',
     width: 128,
     height: 40
   },
   defaultLanguage: 'en',
   author: {
-    name: 'ecomhost',
-    websiteUrl: 'https://ecomhost.ma',
+    name: 'DropGala',
+    websiteUrl: 'https://dropgala.com',
     address: ''
   },
   headerLinks: [],
@@ -95,123 +95,6 @@ export const siteSettings = {
         href: ROUTES.STAFFS,
         label: 'sidebar-nav-item-staffs',
         icon: 'StaffsIcon'
-      },
-      {
-        id: 'X9LjJr',
-        href: '/store',
-        label: 'sidebar-nav-item-store',
-        icon: 'ShopIcon',
-        subLinks: [
-          {
-            id: 'fEhiVv',
-            href: ROUTES.STORE_SETTINGS,
-            label: 'sidebar-nav-item-store-settings',
-            padding: '35px'
-          },
-          {
-            id: '1AFhvZ',
-            href: '/#',
-            label: 'sidebar-nav-item-theme-settings',
-            padding: '35px',
-            subLinks: [
-              {
-                id: 'rcC2Kv',
-                href: ROUTES.COLORS,
-                label: 'sidebar-nav-item-colors',
-                padding: '45px'
-              },
-              {
-                id: 'DuCwGd',
-                href: ROUTES.STORE_NAVIGATION,
-                label: 'sidebar-nav-item-store-navigation',
-                padding: '45px'
-              },
-              {
-                id: 'rwpxKv',
-                href: ROUTES.CUSTOM_COUNTDOWN,
-                label: 'sidebar-nav-item-custom-countdown',
-                padding: '45px'
-              },
-              {
-                id: 'cksAN3',
-                href: ROUTES.PRODUCT_CARD,
-                label: 'sidebar-nav-item-product-card',
-                padding: '45px'
-              }
-            ]
-          },
-          {
-            id: 'ajo2jA',
-            href: '/#',
-            label: 'sidebar-nav-item-product-settings',
-            padding: '35px',
-            subLinks: [
-              {
-                id: 'DeCdGd',
-                href: ROUTES.CUSTOMERS_REVIEW,
-                label: 'sidebar-nav-item-customers-review',
-                padding: '45px'
-              }
-            ]
-          },
-          {
-            id: 'LtFy5c',
-            href: '/#',
-            label: 'sidebar-nav-item-pages-settings',
-            padding: '35px',
-            subLinks: [
-              {
-                id: 'Kkr1Ej',
-                href: ROUTES.CONTACT_PAGE,
-                label: 'sidebar-nav-item-contact-page',
-                padding: '45px'
-              },
-              {
-                id: 'KbtNNr',
-                href: ROUTES.ABOUT_PAGE,
-                label: 'sidebar-nav-item-about-page',
-                padding: '45px'
-              }
-            ]
-          },
-          {
-            id: 'fEziVv',
-            href: ROUTES.INTEGRATIONS,
-            label: 'sidebar-nav-item-integrations',
-            padding: '35px'
-          },
-          {
-            id: 'fEhnVv',
-            href: ROUTES.PAYMENTS,
-            label: 'sidebar-nav-item-payments',
-            padding: '35px'
-          },
-          {
-            id: 'fRhiVv',
-            href: ROUTES.EMAIL_TEMPLATES,
-            label: 'sidebar-nav-item-email-templates',
-            padding: '35px'
-          }
-        ]
-      },
-      {
-        id: 'rD4wfP',
-        href: ROUTES.APPS,
-        label: 'sidebar-nav-item-apps',
-        icon: 'AppsIcon'
-      },
-      {
-        id: 'fJcEP1',
-        href: ROUTES.AFFILIATE,
-        label: 'sidebar-nav-item-affiliate',
-        icon: 'AffiliateIcon',
-        line: true
-      },
-      {
-        id: 'P060cP',
-        href: ROUTES.SUPPORT,
-        label: 'sidebar-nav-item-support',
-        icon: 'SupportIcon'
       },
       {
         id: 'nMtvIg',

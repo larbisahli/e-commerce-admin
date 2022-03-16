@@ -4,9 +4,9 @@ export interface State {
 }
 
 const initialState = {
-  siteTitle: 'PickBazar',
+  siteTitle: 'DropGala',
   siteSubtitle: '',
-  currency: 'MAD',
+  currency: '$',
   logo: {
     id: 1,
     thumbnail: '/logo.svg',

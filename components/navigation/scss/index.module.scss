@@ -12,7 +12,7 @@
     left: 0;
     height: 3px;
     width: 30px;
-    background: #388f63;
+    background: #ececec;
     opacity: 1;
     transition: 0.25s all ease-in-out;
 
@@ -93,7 +93,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgb(139, 211, 111);
+      background-color: rgb(153, 235, 121);
       border-radius: 100%;
       z-index: -1;
       animation: pulse 2s infinite;
@@ -117,10 +117,10 @@
 }
 
 .border-hover{
-  border: 2px solid #c5c4c4;
+  border: 2px solid #807f7f;
   box-shadow: 0 0 10px 2px #18181818;
 
   &:hover{
-    border: 2px solid #678b2c;
+    border: 2px solid #a7e641;
   }
 }

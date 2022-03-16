@@ -1,23 +1,23 @@
-import Card from '@components/common/card';
-import StaffList from '@components/staff/staff-list';
-import AppLayout from '@components/layouts/app';
 import { useQuery } from '@apollo/client';
+import Card from '@components/common/card';
+import SortForm from '@components/common/sort-form';
 import { Add } from '@components/icons/add';
+import AppLayout from '@components/layouts/app';
+import StaffList from '@components/staff/staff-list';
+import ErrorMessage from '@components/ui/error-message';
 import LinkButton from '@components/ui/link-button';
+import Loader from '@components/ui/loader/loader';
+import { STAFFS } from '@graphql/staff';
 import { useErrorLogger, useGetStaff } from '@hooks/index';
 import { getClientToken, verifyAuth } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
-import { OrderBy, SortOrder, Coupon, StaffType } from '@ts-types/generated';
+import { OrderBy, SortOrder, StaffType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import isEmpty from 'lodash/isEmpty';
 import type { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useState, useEffect } from 'react';
-import Loader from '@components/ui/loader/loader';
-import ErrorMessage from '@components/ui/error-message';
-import { STAFFS } from '@graphql/staff';
-import SortForm from '@components/common/sort-form';
+import { useEffect, useState } from 'react';
 
 interface TStaff {
   staffs: StaffType[];
@@ -59,17 +59,6 @@ export default function Staff({ client }: SSRProps) {
   useErrorLogger(error);
 
   useEffect(() => {
-    fetchMore({
-      variables: {
-        page,
-        limit,
-        orderBy,
-        sortedBy: SortOrder.Desc
-      }
-    });
-  }, [page]);
-
-  useEffect(() => {
     const staffs = data?.staffs;
     if (!isEmpty(staffs)) {
       setStaffsData(() => staffs);
@@ -78,6 +67,14 @@ export default function Staff({ client }: SSRProps) {
 
   function handlePagination(current: any) {
     setPage(current);
+    fetchMore({
+      variables: {
+        page: current,
+        limit,
+        orderBy,
+        sortedBy: SortOrder.Desc
+      }
+    });
   }
 
   if (loading) {

@@ -1,24 +1,24 @@
+import { useQuery } from '@apollo/client';
 import Card from '@components/common/card';
+import { Add } from '@components/icons/add';
 import AppLayout from '@components/layouts/app';
 import ShippingList from '@components/shipping/shipping-list';
 import ErrorMessage from '@components/ui/error-message';
 import LinkButton from '@components/ui/link-button';
 import Loader from '@components/ui/loader/loader';
-import type { Shipping } from '@ts-types/generated';
-import { OrderBy, SortOrder } from '@ts-types/generated';
-import { ROUTES } from '@utils/routes';
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useState, useEffect } from 'react';
-import isEmpty from 'lodash/isEmpty';
-import { useQuery } from '@apollo/client';
 import { SHIPPINGS } from '@graphql/shipping';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetStaff } from '@hooks/useGetStaff';
-import type { SSRProps } from '@ts-types/custom.types';
-import type { GetServerSideProps } from 'next';
 import { getClientToken, verifyAuth } from '@middleware/utils';
-import { Add } from '@components/icons/add';
+import type { SSRProps } from '@ts-types/custom.types';
+import type { Shipping } from '@ts-types/generated';
+import { OrderBy, SortOrder } from '@ts-types/generated';
+import { ROUTES } from '@utils/routes';
+import isEmpty from 'lodash/isEmpty';
+import type { GetServerSideProps } from 'next';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useState } from 'react';
 
 interface TShipping {
   shippings: Shipping[];
@@ -60,23 +60,20 @@ export default function ShippingsPage({ client }: SSRProps) {
   useGetStaff(client?.staff_id);
   useErrorLogger(error);
 
-  useEffect(() => {
-    fetchMore({
-      variables: {
-        page,
-        limit,
-        orderBy,
-        sortedBy: SortOrder.Desc
-      }
-    });
-  }, [page]);
-
   const toggleVisible = () => {
     setVisible((v) => !v);
   };
 
   const handlePagination = (current: number) => {
     setPage(current);
+    fetchMore({
+      variables: {
+        page: current,
+        limit,
+        orderBy,
+        sortedBy: SortOrder.Desc
+      }
+    });
   };
 
   if (loading) {

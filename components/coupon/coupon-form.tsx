@@ -149,8 +149,6 @@ export default function CreateOrUpdateCouponForm({ initialValues }: IProps) {
       coupon_end_date: pgFormatDate(values.coupon_end_date)
     };
 
-    console.log(`object`, { variables, values });
-
     if (isEmpty(initialValues)) {
       createCoupon({ variables });
     } else {

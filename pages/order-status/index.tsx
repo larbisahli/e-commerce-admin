@@ -1,23 +1,23 @@
+import { useQuery } from '@apollo/client';
 import Card from '@components/common/card';
 import SortForm from '@components/common/sort-form';
 import { Add } from '@components/icons/add';
 import AppLayout from '@components/layouts/app';
 import OrderStatusList from '@components/order-status/order-status-list';
+import ErrorMessage from '@components/ui/error-message';
 import LinkButton from '@components/ui/link-button';
-import { OrderBy, OrderStatus, SortOrder } from '@ts-types/generated';
-import { ROUTES } from '@utils/routes';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import isEmpty from 'lodash/isEmpty';
-import { useQuery } from '@apollo/client';
+import Loader from '@components/ui/loader/loader';
+import { ORDER_STATUSES } from '@graphql/order_status';
 import { useErrorLogger, useGetStaff } from '@hooks/index';
 import { getClientToken, verifyAuth } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
+import { OrderBy, OrderStatus, SortOrder } from '@ts-types/generated';
+import { ROUTES } from '@utils/routes';
+import isEmpty from 'lodash/isEmpty';
 import type { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
-import { useState, useEffect } from 'react';
-import { ORDER_STATUSES } from '@graphql/order_status';
-import Loader from '@components/ui/loader/loader';
-import ErrorMessage from '@components/ui/error-message';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useEffect, useState } from 'react';
 
 interface TOrderStatus {
   orderStatusesForAdmin: OrderStatus[];
@@ -61,17 +61,6 @@ export default function OrderStatusPage({ client }: SSRProps) {
   useErrorLogger(error);
 
   useEffect(() => {
-    fetchMore({
-      variables: {
-        page,
-        limit,
-        orderBy,
-        sortedBy: SortOrder.Desc
-      }
-    });
-  }, [page]);
-
-  useEffect(() => {
     const orderStatusesForAdmin = data?.orderStatusesForAdmin;
     if (!isEmpty(orderStatusesForAdmin)) {
       setOrderStatuses(() => orderStatusesForAdmin);
@@ -80,6 +69,14 @@ export default function OrderStatusPage({ client }: SSRProps) {
 
   function handlePagination(current: any) {
     setPage(current);
+    fetchMore({
+      variables: {
+        page: current,
+        limit,
+        orderBy,
+        sortedBy: SortOrder.Desc
+      }
+    });
   }
 
   if (loading) {

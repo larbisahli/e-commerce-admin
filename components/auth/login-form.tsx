@@ -1,27 +1,24 @@
+import { useMutation } from '@apollo/client';
 import Alert from '@components/ui/alert';
 import Button from '@components/ui/button';
 import Checkbox from '@components/ui/checkbox';
 import Input from '@components/ui/input';
 import PasswordInput from '@components/ui/password-input';
+import { STORE_LOGIN } from '@graphql/login';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useErrorLogger } from '@hooks/useErrorLogger';
 import { ROUTES } from '@utils/routes';
-import { apiURL } from '@utils/utils';
-import _ from 'lodash';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
-interface RespondType {
-  success: boolean;
-  error: { error: any; message: string } | null;
-  staff: { uid: string } | null;
-}
 
 type FormValues = {
   email: string;
   password: string;
-  rememberMe: boolean;
+  remember_me: boolean;
+  success: boolean;
 };
 
 const loginFormSchema = yup.object().shape({
@@ -43,7 +40,6 @@ const LoginForm = () => {
   const { t } = useTranslation();
 
   const [errorMsg, setErrorMsg] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(false);
 
   const {
     register,
@@ -54,36 +50,23 @@ const LoginForm = () => {
     resolver: yupResolver(loginFormSchema)
   });
 
-  async function onSubmit({ email, password, rememberMe }: FormValues) {
-    setLoading(true);
-
-    try {
-      const res = await fetch(`${apiURL}/login`, {
-        credentials: 'include',
-        mode: 'cors',
-        headers: new Headers({
-          'content-type': 'application/json',
-          'x-client-mode': 'admin'
-        }),
-        method: 'POST',
-        body: JSON.stringify({
-          email: email,
-          password: password,
-          remember_me: rememberMe
-        })
-      });
-
-      const { success, error }: RespondType = await res.json();
-
-      if (success) router.push(ROUTES.DASHBOARD);
-
-      if (!_.isEmpty(error)) {
-        setErrorMsg('form:error-credential-wrong');
+  const [staffLogin, { loading, error }] = useMutation(STORE_LOGIN, {
+    onCompleted: (data: { staffLogin: FormValues }) => {
+      if (data?.staffLogin?.success) {
+        router.push(ROUTES.DASHBOARD);
       }
-    } catch (err) {
-      console.log('err :>> ', err);
     }
-    setLoading(false);
+  });
+
+  useErrorLogger(error);
+
+  async function onSubmit({ email, password, remember_me }: FormValues) {
+    const variables = {
+      email,
+      password,
+      remember_me
+    };
+    staffLogin({ variables });
   }
 
   return (
@@ -108,7 +91,7 @@ const LoginForm = () => {
         />
         <Checkbox
           label={t('form:input-label-remember-me')}
-          {...register('rememberMe')}
+          {...register('remember_me')}
           className="mb-4"
         />
         <Button className="w-full" loading={loading} disabled={loading}>

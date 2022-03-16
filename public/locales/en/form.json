@@ -321,5 +321,9 @@
   "input-label-private": "Private",
   "input-label-usage-limit": "Usage Limit",
   "input-label-discount-value": "Discount Value",
-  "input-label-discount-type": "Discount Type"
+  "input-label-discount-type": "Discount Type",
+  "input-label-suppliers": "Suppliers",
+  "input-label-compare-price": "Compare Price",
+  "input-label-buying-price": "Buying Price",
+  "item-short-description": "Short Description (SEO)"
 }

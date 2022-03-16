@@ -21,7 +21,7 @@ import isEmpty from 'lodash/isEmpty';
 import type { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 interface TCategories {
   categoriesForAdmin: Category[];
@@ -65,23 +65,20 @@ export default function Categories({ client }: SSRProps) {
   useGetStaff(client?.staff_id);
   useErrorLogger(categoriesError);
 
-  useEffect(() => {
-    fetchMore({
-      variables: {
-        page,
-        limit,
-        orderBy,
-        sortedBy: SortOrder.Desc
-      }
-    });
-  }, [page]);
-
   const toggleVisible = () => {
     setVisible((v) => !v);
   };
 
   const handlePagination = (current: number) => {
     setPage(current);
+    fetchMore({
+      variables: {
+        page: current,
+        limit,
+        orderBy,
+        sortedBy: SortOrder.Desc
+      }
+    });
   };
 
   if (loading) {

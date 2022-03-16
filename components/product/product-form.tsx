@@ -32,10 +32,10 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { animateScroll } from 'react-scroll';
 
 import ProductCategoryInput from './product-category-input';
-import ProductGroupInput from './product-group-input';
-import ProductSimpleForm from './product-simple-form';
+import ProductInfoForm from './product-info-form';
+import ProductShippingOptionsForm from './product-shipping-options';
+import ProductSupplierInput from './product-supplier-input';
 import ProductTagInput from './product-tag-input';
-import ProductTypeInput from './product-type-input';
 import { productValidationSchema } from './product-validation-schema';
 import ProductVariableForm from './product-variable-form';
 
@@ -330,6 +330,7 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
       ) : null}
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
+          {/* Thumbnail */}
           <div className="flex flex-wrap pb-8 border-b border-dashed border-border-base my-5 sm:my-8">
             <Description
               title={t('form:featured-image-title')}
@@ -342,6 +343,7 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
             </Card>
           </div>
 
+          {/* Gallery */}
           <div className="flex flex-wrap pb-8 border-b border-dashed border-border-base my-5 sm:my-8">
             <Description
               title={t('form:gallery-title')}
@@ -354,6 +356,7 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
             </Card>
           </div>
 
+          {/* Tags & Category */}
           <div className="flex flex-wrap pb-8 border-b border-dashed border-border-base my-5 sm:my-8">
             <Description
               title={t('form:type-and-category')}
@@ -362,7 +365,7 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
             />
 
             <Card className="w-full sm:w-8/12 md:w-2/3">
-              <ProductGroupInput
+              <ProductSupplierInput
                 control={control}
                 error={t((errors?.type as any)?.message)}
               />
@@ -371,6 +374,10 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
             </Card>
           </div>
 
+          {/* Simple Type */}
+          <ProductInfoForm initialValues={initialValues} />
+
+          {/* Description */}
           <div className="flex flex-wrap my-5 sm:my-8">
             <Description
               title={t('form:item-description')}
@@ -383,22 +390,13 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
             />
 
             <Card className="w-full sm:w-8/12 md:w-2/3">
-              <Input
-                label={`${t('form:input-label-name')}*`}
-                {...register('name')}
-                error={t(errors.name?.message!)}
+              <TextArea
+                label={t('form:item-short-description')}
+                {...register('short_description')}
+                error={t(errors.short_description?.message!)}
                 variant="outline"
                 className="mb-5"
               />
-
-              <Input
-                label={`${t('form:input-label-unit')}*`}
-                {...register('unit')}
-                error={t(errors.unit?.message!)}
-                variant="outline"
-                className="mb-5"
-              />
-
               <TextArea
                 label={t('form:input-label-description')}
                 {...register('description')}
@@ -406,7 +404,6 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
                 variant="outline"
                 className="mb-5"
               />
-
               <div>
                 <Label>{t('form:input-label-status')}</Label>
                 <Radio
@@ -426,28 +423,11 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
             </Card>
           </div>
 
-          <div className="flex flex-wrap pb-8 border-b border-dashed border-border-base my-5 sm:my-8">
-            <Description
-              title={t('form:form-title-product-type')}
-              details={t('form:form-description-product-type')}
-              className="w-full px-0 sm:pr-4 md:pr-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
-            />
-
-            <ProductTypeInput />
-          </div>
-
-          {/* Simple Type */}
-          {productTypeValue?.value === ProductType.Simple && (
-            <ProductSimpleForm initialValues={initialValues} />
-          )}
-
           {/* Variation Type */}
-          {productTypeValue?.value === ProductType.Variable && (
-            <ProductVariableForm
-              shopId={shopId}
-              initialValues={initialValues}
-            />
-          )}
+          <ProductVariableForm shopId={shopId} initialValues={initialValues} />
+
+          {/* Shipping options */}
+          <ProductShippingOptionsForm initialValues={initialValues} />
 
           <div className="mb-4 text-end">
             {initialValues && (

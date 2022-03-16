@@ -10,7 +10,7 @@ interface Props {
   error: string | undefined;
 }
 
-const ProductGroupInput = ({ control, error }: Props) => {
+const ProductSupplierInput = ({ control, error }: Props) => {
   const { t } = useTranslation();
 
   // const { data, isLoading: loading } = useTypesQuery({
@@ -22,7 +22,7 @@ const ProductGroupInput = ({ control, error }: Props) => {
 
   return (
     <div className="mb-5">
-      <Label>{t('form:input-label-group')}*</Label>
+      <Label>{t('form:input-label-suppliers')}*</Label>
       <SelectInput
         name="type"
         control={control}
@@ -36,4 +36,4 @@ const ProductGroupInput = ({ control, error }: Props) => {
   );
 };
 
-export default ProductGroupInput;
+export default ProductSupplierInput;

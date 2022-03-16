@@ -1,23 +1,23 @@
-import CouponList from '@components/coupon/coupon-list';
-import AppLayout from '@components/layouts/app';
 import { useQuery } from '@apollo/client';
 import Card from '@components/common/card';
 import SortForm from '@components/common/sort-form';
+import CouponList from '@components/coupon/coupon-list';
 import { Add } from '@components/icons/add';
+import AppLayout from '@components/layouts/app';
+import ErrorMessage from '@components/ui/error-message';
 import LinkButton from '@components/ui/link-button';
+import Loader from '@components/ui/loader/loader';
+import { COUPONS } from '@graphql/coupons';
 import { useErrorLogger, useGetStaff } from '@hooks/index';
 import { getClientToken, verifyAuth } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
-import { OrderBy, SortOrder, Coupon } from '@ts-types/generated';
+import { Coupon, OrderBy, SortOrder } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import isEmpty from 'lodash/isEmpty';
 import type { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useState, useEffect } from 'react';
-import Loader from '@components/ui/loader/loader';
-import ErrorMessage from '@components/ui/error-message';
-import { COUPONS } from '@graphql/coupons';
+import { useEffect, useState } from 'react';
 
 interface TCoupon {
   couponsForAdmin: Coupon[];
@@ -59,17 +59,6 @@ export default function Coupons({ client }: SSRProps) {
   useErrorLogger(error);
 
   useEffect(() => {
-    fetchMore({
-      variables: {
-        page,
-        limit,
-        orderBy,
-        sortedBy: SortOrder.Desc
-      }
-    });
-  }, [page]);
-
-  useEffect(() => {
     const couponsForAdmin = data?.couponsForAdmin;
     if (!isEmpty(couponsForAdmin)) {
       setCouponsData(() => couponsForAdmin);
@@ -78,6 +67,14 @@ export default function Coupons({ client }: SSRProps) {
 
   function handlePagination(current: any) {
     setPage(current);
+    fetchMore({
+      variables: {
+        page: current,
+        limit,
+        orderBy,
+        sortedBy: SortOrder.Desc
+      }
+    });
   }
 
   if (loading) {

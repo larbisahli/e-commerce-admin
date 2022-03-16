@@ -136,7 +136,7 @@ export const CATEGORY = gql`
 
 export const CATEGORIES_FOR_SELECT = gql`
   query CategoriesSelect(
-    $id: ID!
+    $id: ID
     $page: Int!
     $limit: Int!
     $orderBy: String!

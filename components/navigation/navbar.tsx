@@ -25,7 +25,10 @@ const Navbar = () => {
 
   return (
     <header className="bg-white shadow fixed w-full z-40">
-      <nav style={{background:'#1a1a1a'}} className="px-5 md:px-8 py-2 flex items-center justify-between">
+      <nav
+        style={{ background: '#1a1a1a', borderBottom: '1px solid #636262' }}
+        className="px-5 md:px-8 py-2 flex items-center justify-between"
+      >
         {/* <!-- Mobile menu button --> */}
         <motion.button
           whileTap={{ scale: 0.88 }}
@@ -38,11 +41,9 @@ const Navbar = () => {
             <span className={menuSpanClass}></span>
           </div>
         </motion.button>
-        <div className="hidden md:flex ms-5 me-auto">
-          {/* <Logo /> */}
-          <span style={{fontSize:'2rem', color:'#ffffff'}}>Ecomhost</span>
+        <div className="hidden md:flex me-auto">
+          <Logo />
         </div>
-
         <div className="flex items-center space-s-8">
           <LinkButton
             href={`${ROUTES.PRODUCTS}/create`}

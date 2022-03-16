@@ -1,10 +1,10 @@
 import { useQuery } from '@apollo/client';
 import AttributeList from '@components/attribute/attribute-list';
 import Card from '@components/common/card';
+import SortForm from '@components/common/sort-form';
 import { Add } from '@components/icons/add';
 import { ArrowDown } from '@components/icons/arrow-down';
 import { ArrowUp } from '@components/icons/arrow-up';
-import SortForm from '@components/common/sort-form';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
 import LinkButton from '@components/ui/link-button';
@@ -15,12 +15,12 @@ import { getClientToken, verifyAuth } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { Attribute, OrderBy, SortOrder } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
+import cn from 'classnames';
+import isEmpty from 'lodash/isEmpty';
 import type { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useState, useEffect } from 'react';
-import isEmpty from 'lodash/isEmpty';
-import cn from 'classnames';
+import { useState } from 'react';
 
 interface TAttributes {
   attributesForAdmin: Attribute[];
@@ -62,23 +62,20 @@ export default function AttributePage({ client }: SSRProps) {
   useGetStaff(client?.staff_id);
   useErrorLogger(error);
 
-  useEffect(() => {
-    fetchMore({
-      variables: {
-        page,
-        limit,
-        orderBy,
-        sortedBy: SortOrder.Desc
-      }
-    });
-  }, [page]);
-
   const toggleVisible = () => {
     setVisible((v) => !v);
   };
 
   const handlePagination = (current: number) => {
     setPage(current);
+    fetchMore({
+      variables: {
+        page: current,
+        limit,
+        orderBy,
+        sortedBy: SortOrder.Desc
+      }
+    });
   };
 
   if (loading) {

@@ -161,15 +161,13 @@ const StaffList = ({
       render: (id: string, { active }: StaffType) => {
         return (
           <>
-            {staffInfo?.id != id && (
-              <ActionButtons
-                id={id}
-                editUrl={`${ROUTES.STAFFS}/edit/${id}`}
-                deleteModalView="DELETE_STAFF"
-                userStatus={true}
-                isUserActive={active}
-              />
-            )}
+            <ActionButtons
+              id={id}
+              editUrl={`${ROUTES.STAFFS}/edit/${id}`}
+              deleteModalView={staffInfo?.id != id ? 'DELETE_STAFF' : null}
+              userStatus={staffInfo?.id != id}
+              isUserActive={active}
+            />
           </>
         );
       }

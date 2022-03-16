@@ -4,7 +4,9 @@ import SortForm from '@components/common/sort-form';
 import { Add } from '@components/icons/add';
 import AppLayout from '@components/layouts/app';
 import TagList from '@components/tag/tag-list';
+import ErrorMessage from '@components/ui/error-message';
 import LinkButton from '@components/ui/link-button';
+import Loader from '@components/ui/loader/loader';
 import { TAGS } from '@graphql/tag';
 import { useErrorLogger, useGetStaff } from '@hooks/index';
 import { getClientToken, verifyAuth } from '@middleware/utils';
@@ -15,9 +17,7 @@ import isEmpty from 'lodash/isEmpty';
 import type { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useState, useEffect } from 'react';
-import Loader from '@components/ui/loader/loader';
-import ErrorMessage from '@components/ui/error-message';
+import { useEffect, useState } from 'react';
 
 interface TTags {
   tagsForAdmin: Tag[];
@@ -59,17 +59,6 @@ export default function Tags({ client }: SSRProps) {
   useErrorLogger(error);
 
   useEffect(() => {
-    fetchMore({
-      variables: {
-        page,
-        limit,
-        orderBy,
-        sortedBy: SortOrder.Desc
-      }
-    });
-  }, [page]);
-
-  useEffect(() => {
     const tagsForAdmin = data?.tagsForAdmin;
     if (!isEmpty(tagsForAdmin)) {
       setTags(() => tagsForAdmin);
@@ -78,6 +67,14 @@ export default function Tags({ client }: SSRProps) {
 
   function handlePagination(current: any) {
     setPage(current);
+    fetchMore({
+      variables: {
+        page: current,
+        limit,
+        orderBy,
+        sortedBy: SortOrder.Desc
+      }
+    });
   }
 
   if (loading) {

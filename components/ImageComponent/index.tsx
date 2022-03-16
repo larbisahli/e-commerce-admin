@@ -53,9 +53,9 @@ const ImageComponent = ({ customPlaceholder, ...props }: Props) => {
       toBase64();
     }
 
-    return ()=>{
-      setSrc('')
-    }
+    return () => {
+      setSrc(customPlaceholder ?? '/placeholders/no-image.svg');
+    };
   }, [props.src]);
 
   return (
@@ -70,4 +70,4 @@ const ImageComponent = ({ customPlaceholder, ...props }: Props) => {
   );
 };
 
-export default memo(ImageComponent);
+export default ImageComponent;
