@@ -34,7 +34,7 @@ const ProductCategoryInput = ({ control, setValue }: Props) => {
 
   return (
     <div className="mb-5">
-      <Label>{t('form:input-label-categories')}</Label>
+      <Label>{t('form:input-label-categories')}*</Label>
       <SelectInput
         name="categories"
         isMulti

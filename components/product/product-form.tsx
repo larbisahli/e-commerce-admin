@@ -1,6 +1,7 @@
 import Card from '@components/common/card';
 import Alert from '@components/ui/alert';
 import Button from '@components/ui/button';
+import Checkbox from '@components/ui/checkbox';
 import Description from '@components/ui/description';
 import FileInput from '@components/ui/file-input';
 import Input from '@components/ui/input';
@@ -167,16 +168,12 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
     defaultValues: initialValues
       ? cloneDeep({
           ...initialValues,
+          quantity: 0,
           isVariation:
             initialValues.variations?.length &&
             initialValues.variation_options?.length
               ? true
               : false,
-          productTypeValue: initialValues.product_type
-            ? productType.find(
-                (type) => initialValues.product_type === type.value
-              )
-            : productType[0],
           variations: getFormattedVariations(initialValues?.variations)
         })
       : defaultValues
@@ -420,6 +417,12 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
                   value="draft"
                 />
               </div>
+              <div className="my-5">
+                <Checkbox
+                  {...register('disable_out_of_stock')}
+                  label={t('form:input-label-disable-out-of-stock')}
+                />
+              </div>
             </Card>
           </div>
 
@@ -427,7 +430,10 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
           <ProductVariableForm shopId={shopId} initialValues={initialValues} />
 
           {/* Shipping options */}
-          <ProductShippingOptionsForm initialValues={initialValues} />
+          <ProductShippingOptionsForm
+            control={control}
+            initialValues={initialValues}
+          />
 
           <div className="mb-4 text-end">
             {initialValues && (

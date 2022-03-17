@@ -22,7 +22,7 @@ const ProductSupplierInput = ({ control, error }: Props) => {
 
   return (
     <div className="mb-5">
-      <Label>{t('form:input-label-suppliers')}*</Label>
+      <Label>{t('form:input-label-suppliers')}</Label>
       <SelectInput
         name="type"
         control={control}

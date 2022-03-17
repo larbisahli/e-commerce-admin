@@ -1,8 +1,9 @@
-import Input from '@components/ui/input';
-import Description from '@components/ui/description';
 import Card from '@components/common/card';
-import { useFormContext } from 'react-hook-form';
+import Description from '@components/ui/description';
+import Input from '@components/ui/input';
+import TextArea from '@components/ui/text-area';
 import { useTranslation } from 'next-i18next';
+import { useFormContext } from 'react-hook-form';
 
 type IProps = {
   initialValues: any;
@@ -18,7 +19,7 @@ export default function ProductInfoForm({ initialValues }: IProps) {
   return (
     <div className="flex flex-wrap pb-8 border-b border-dashed border-border-base my-5 sm:my-8">
       <Description
-        title={t('form:form-title-simple-product-info')}
+        title={t('form:form-title-product-info')}
         details={`${
           initialValues
             ? t('form:item-description-edit')
@@ -37,25 +38,28 @@ export default function ProductInfoForm({ initialValues }: IProps) {
         />
 
         <Input
-          label={`${t('form:input-label-sale-price')}*`}
-          type="number"
+          label={t('form:input-label-sale-price')}
           {...register('sale_price')}
+          type="number"
+          min="0"
           error={t(errors.sale_price?.message!)}
           variant="outline"
           className="mb-5"
         />
         <Input
-          label={`${t('form:input-label-compare-price')}*`}
+          label={t('form:input-label-compare-price')}
           {...register('compare_price')}
           type="number"
+          min="0"
           error={t(errors.compare_price?.message!)}
           variant="outline"
           className="mb-5"
         />
         <Input
-          label={`${t('form:input-label-buying-price')}`}
+          label={t('form:input-label-buying-price')}
           {...register('buying_price')}
           type="number"
+          min="0"
           error={t(errors.buying_price?.message!)}
           variant="outline"
           className="mb-5"
@@ -63,6 +67,7 @@ export default function ProductInfoForm({ initialValues }: IProps) {
         <Input
           label={`${t('form:input-label-quantity')}*`}
           type="number"
+          min="0"
           {...register('quantity')}
           error={t(errors.quantity?.message!)}
           variant="outline"
@@ -70,9 +75,16 @@ export default function ProductInfoForm({ initialValues }: IProps) {
         />
 
         <Input
-          label={`${t('form:input-label-sku')}`}
+          label={t('form:input-label-sku')}
           {...register('sku')}
           error={t(errors.sku?.message!)}
+          variant="outline"
+          className="mb-5"
+        />
+        <TextArea
+          label={t('form:item-hidden-note')}
+          {...register('note')}
+          error={t(errors.note?.message!)}
           variant="outline"
           className="mb-5"
         />

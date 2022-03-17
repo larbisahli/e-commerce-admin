@@ -4,8 +4,8 @@
   "form-title-edit-product": "Edit Product",
   "form-title-create-type": "Create New Group",
   "form-title-product-type": "Product Type",
-  "form-description-product-type": "Select product type form here",
-  "form-title-simple-product-info": "Simple Product Information",
+  "form-title-product-info": "Product Information",
+  "form-title-product-shipping-options": "Product Shipping Options",
   "form-description-simple-product-info": "your simple product description and necessary information from here",
   "form-title-variation-product-info": "Product Variation Information",
   "form-description-variation-product-info": "your product variation and necessary information from here",
@@ -325,5 +325,16 @@
   "input-label-suppliers": "Suppliers",
   "input-label-compare-price": "Compare Price",
   "input-label-buying-price": "Buying Price",
-  "item-short-description": "Short Description (SEO)"
+  "item-short-description": "Short Description (SEO)",
+  "input-label-volume": "Volume",
+  "input-label-dimensions": "Dimensions",
+  "input-label-dimensions-width": "Width",
+  "input-label-dimensions-height": "Height",
+  "input-label-dimensions-depth": "Depth",
+  "input-label-dimensions-units": "Units",
+  "button-label-add-shipping": "Add Shipping",
+  "input-label-shipping-provider": "Shipping Provider",
+  "input-label-shipping-price": "Shipping Price",
+  "input-label-disable-out-of-stock": "Disable out of stock",
+  "item-hidden-note": "Hidden Note"
 }
