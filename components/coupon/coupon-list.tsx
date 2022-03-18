@@ -63,14 +63,16 @@ const CouponList = ({
       )
     },
     {
-      title: t('table:table-item-details'),
-      dataIndex: 'coupon_description',
-      key: 'coupon_description',
+      title: t('table:table-item-order-amount-limit'),
+      dataIndex: 'order_amount_limit',
+      key: 'order_amount_limit',
       align: 'center',
       ellipsis: true,
       width: 150,
-      render: (coupon_description: string) => (
-        <span className="whitespace-nowrap">{coupon_description}</span>
+      render: (order_amount_limit: number) => (
+        <span className="whitespace-nowrap">
+          {order_amount_limit ? `${order_amount_limit} USD` : 'Any'}
+        </span>
       )
     },
     {
@@ -87,7 +89,7 @@ const CouponList = ({
         if (record.discount_type === CouponType.Percentage) {
           return <span className={className}>{`- ${discount_value} %`}</span>;
         } else if (record.discount_type === CouponType.Fixed) {
-          return <span className={className}>{`- ${discount_value} MAD`}</span>;
+          return <span className={className}>{`- ${discount_value} USD`}</span>;
         } else {
           return (
             <span className={className}>{t('form:input-label-free')}</span>

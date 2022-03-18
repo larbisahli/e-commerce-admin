@@ -61,6 +61,15 @@ export const SHIPPINGS = gql`
   }
 `;
 
+export const SHIPPINGS_FOR_SELECT = gql`
+  query ShippingsSelectForAdmin($page: Int!, $limit: Int!, $orderBy: String!) {
+    shippingsSelectForAdmin(page: $page, limit: $limit, orderBy: $orderBy) {
+      id
+      shipper_name
+    }
+  }
+`;
+
 export const CREATE_SHIPPING = gql`
   mutation CreateShipping(
     $shipper_name: String!

@@ -46,8 +46,8 @@ export declare enum WithdrawStatus {
 }
 
 interface CreatedUpdatedByAt {
-  created_at?: number;
-  updated_at?: number | null;
+  created_at?: Scalars['DateTime'];
+  updated_at?: Scalars['DateTime'];
   created_by?: Nullable<{
     id: string;
     first_name: string;
@@ -93,12 +93,36 @@ export interface Category extends CreatedUpdatedByAt {
   has_children?: Scalars['Boolean'];
 }
 
-export declare type AttributeValue = {
+export interface Suppliers extends CreatedUpdatedByAt {
   id?: Scalars['ID'];
-  attribute_id?: Scalars['String'];
+}
+
+export interface ProductShippingOptions {
+  id?: Scalars['ID'];
+  product_id?: Scalars['ID'];
+  weight?: Scalars['Int'];
+  weight_unit?: Scalars['String'] | { unit: Scalars['String'] };
+  volume?: Scalars['Int'];
+  volume_unit?: Scalars['String'] | { unit: Scalars['String'] };
+  dimension_width?: Scalars['Int'];
+  dimension_height?: Scalars['Int'];
+  dimension_depth?: Scalars['Int'];
+  dimension_unit?: Scalars['String'] | { unit: Scalars['String'] };
+}
+
+export interface ProductShippings {
+  id?: Scalars['ID'];
+  key?: Scalars['ID'];
+  shipping_id?: Scalars['ID'];
+  shipping_price?: Scalars['Float'];
+  shipping_provider?: Shipping;
+}
+export interface AttributeValue {
+  id?: Scalars['ID'];
+  attribute_id?: Scalars['ID'];
   attribute_value?: Scalars['String'];
   color?: Nullable<Scalars['String']>;
-};
+}
 
 export interface Attribute extends CreatedUpdatedByAt {
   id?: Scalars['ID'];
@@ -122,7 +146,6 @@ export interface OrderStatus extends CreatedUpdatedByAt {
 export interface Coupon extends CreatedUpdatedByAt {
   id?: Nullable<Scalars['ID']>;
   code?: Nullable<Scalars['String']>;
-  coupon_description?: Nullable<Scalars['String']>;
   discount_value?: Scalars['Int'];
   discount_type?:
     | {
@@ -131,6 +154,7 @@ export interface Coupon extends CreatedUpdatedByAt {
     | CouponType;
   times_used?: Nullable<Scalars['Int']>;
   max_usage?: Nullable<Scalars['Int']>;
+  order_amount_limit?: Nullable<Scalars['Int']>;
   coupon_start_date?: Nullable<Scalars['Date']>;
   coupon_end_date?: Nullable<Scalars['Date']>;
 }
@@ -176,6 +200,32 @@ export declare type LocationInput = {
   zip?: Nullable<Scalars['String']>;
   formattedAddress?: Nullable<Scalars['String']>;
 };
+
+export interface Product extends CreatedUpdatedByAt {
+  id: Scalars['ID'];
+  slug: Scalars['String'];
+  product_name: Scalars['String'];
+  sku?: Nullable<Scalars['String']>;
+  sale_price?: Scalars['Float'];
+  compare_price?: Scalars['Float'];
+  buying_price?: Scalars['Float'];
+  quantity?: Scalars['Int'];
+  short_description?: Nullable<Scalars['String']>;
+  product_description?: Scalars['String'];
+  published?: Scalars['Boolean'];
+  status?: 'draft' | 'publish';
+  disable_out_of_stock?: Scalars['Boolean'];
+  note?: Nullable<Scalars['String']>;
+  image?: Array<Scalars['String']> | Scalars['String'];
+  gallery?: Array<Nullable<Scalars['String']>>;
+  categories?: Array<Category>;
+  suppliers?: Nullable<Array<Nullable<Suppliers>>>;
+  variations?: Nullable<Array<Nullable<AttributeValue>>>;
+  tags?: Nullable<Array<Nullable<Tag>>>;
+  shippings?: Nullable<Array<Nullable<ProductShippings>>>;
+  product_shipping_options?: ProductShippingOptions;
+  // [key: string]: any;
+}
 
 // export declare type Address = {
 //   id: Scalars['ID'];
@@ -260,37 +310,6 @@ export declare type LocationInput = {
 //   amount: Scalars['Float'];
 //   active_from: Scalars['DateTime'];
 //   expire_at: Scalars['DateTime'];
-//   created_at: Scalars['DateTime'];
-//   updated_at: Scalars['DateTime'];
-// };
-
-// export declare type Product = {
-//   id: Scalars['ID'];
-//   shop_id: Scalars['ID'];
-//   name: Scalars['String'];
-//   slug: Scalars['String'];
-//   type: Type;
-//   product_type: ProductType;
-//   max_price?: Maybe<Scalars['Float']>;
-//   min_price?: Maybe<Scalars['Float']>;
-//   categories: Array<Category>;
-//   variations?: Maybe<Array<Maybe<AttributeValue>>>;
-//   variation_options?: Maybe<Array<Maybe<Variation>>>;
-//   orders: Array<Order>;
-//   description?: Maybe<Scalars['String']>;
-//   in_stock?: Maybe<Scalars['Boolean']>;
-//   is_taxable?: Maybe<Scalars['Boolean']>;
-//   sale_price?: Maybe<Scalars['Float']>;
-//   sku?: Maybe<Scalars['String']>;
-//   // gallery?: Maybe<Array<Maybe<Attachment>>>;
-//   // image?: Maybe<Attachment>;
-//   status?: Maybe<ProductStatus>;
-//   height?: Maybe<Scalars['String']>;
-//   length?: Maybe<Scalars['String']>;
-//   width?: Maybe<Scalars['String']>;
-//   price: Scalars['Float'];
-//   quantity?: Maybe<Scalars['Int']>;
-//   unit?: Maybe<Scalars['String']>;
 //   created_at: Scalars['DateTime'];
 //   updated_at: Scalars['DateTime'];
 // };

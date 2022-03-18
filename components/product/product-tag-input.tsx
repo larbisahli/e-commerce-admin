@@ -1,37 +1,44 @@
-import SelectInput from '@components/ui/select-input';
+import { useQuery } from '@apollo/client';
 import Label from '@components/ui/label';
-import { Control, useFormState, useWatch } from 'react-hook-form';
-import { useEffect } from 'react';
-// import { useTagsQuery } from '@data/tag/use-tags.query';
+import SelectInput from '@components/ui/select-input';
+import { TAGS_FOR_SELECT } from '@graphql/tag';
+import { useErrorLogger } from '@hooks/useErrorLogger';
+import { OrderBy, Tag } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
+import { Control } from 'react-hook-form';
 
 interface Props {
   control: Control<any>;
-  setValue: any;
 }
 
-const ProductTagInput = ({ control, setValue }: Props) => {
+interface TagSelect {
+  tagsSelectForAdmin: Tag[];
+}
+
+interface OptionsVariable {
+  page: number;
+  limit: number;
+  orderBy: OrderBy;
+}
+
+const ProductTagInput = ({ control }: Props) => {
   const { t } = useTranslation();
-  const type = useWatch({
-    control,
-    name: 'type'
-  });
-  const { dirtyFields } = useFormState({
-    control
-  });
-  useEffect(() => {
-    if (type?.slug && dirtyFields?.type) {
-      setValue('tags', []);
+
+  const { data, loading, error } = useQuery<TagSelect, OptionsVariable>(
+    TAGS_FOR_SELECT,
+    {
+      variables: {
+        page: 1,
+        limit: 999,
+        orderBy: OrderBy.CREATED_AT
+      },
+      fetchPolicy: 'cache-and-network'
     }
-  }, [type?.slug]);
+  );
 
-  // const { data, isLoading: loading } = useTagsQuery({
-  //   limit: 999,
-  //   type: type.slug
-  // });
+  const tags = data?.tagsSelectForAdmin;
 
-  const data = [];
-  const loading = false;
+  useErrorLogger(error);
 
   return (
     <div>
@@ -40,10 +47,10 @@ const ProductTagInput = ({ control, setValue }: Props) => {
         name="tags"
         isMulti
         control={control}
-        getOptionLabel={(option: any) => option.name}
+        getOptionLabel={(option: any) => option.tag_name}
         getOptionValue={(option: any) => option.id}
         // @ts-ignore
-        options={data?.tags?.data}
+        options={tags}
         isLoading={loading}
       />
     </div>

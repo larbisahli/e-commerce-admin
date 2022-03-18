@@ -54,5 +54,6 @@
   "table-item-times-used": "Times used",
   "table-item-usage-limit": "Usage limit",
   "table-item-value": "Value",
-  "table-item-roles": "Roles"
+  "table-item-roles": "Roles",
+  "table-item-order-amount-limit": "Order Amount Limit"
 }

@@ -41,7 +41,7 @@ export default function ProductInfoForm({ initialValues }: IProps) {
           label={t('form:input-label-sale-price')}
           {...register('sale_price')}
           type="number"
-          min="0"
+          min={0}
           error={t(errors.sale_price?.message!)}
           variant="outline"
           className="mb-5"
@@ -50,7 +50,7 @@ export default function ProductInfoForm({ initialValues }: IProps) {
           label={t('form:input-label-compare-price')}
           {...register('compare_price')}
           type="number"
-          min="0"
+          min={0}
           error={t(errors.compare_price?.message!)}
           variant="outline"
           className="mb-5"
@@ -59,7 +59,7 @@ export default function ProductInfoForm({ initialValues }: IProps) {
           label={t('form:input-label-buying-price')}
           {...register('buying_price')}
           type="number"
-          min="0"
+          min={0}
           error={t(errors.buying_price?.message!)}
           variant="outline"
           className="mb-5"
@@ -67,7 +67,7 @@ export default function ProductInfoForm({ initialValues }: IProps) {
         <Input
           label={`${t('form:input-label-quantity')}*`}
           type="number"
-          min="0"
+          min={0}
           {...register('quantity')}
           error={t(errors.quantity?.message!)}
           variant="outline"

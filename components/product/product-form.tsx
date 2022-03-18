@@ -4,33 +4,27 @@ import Button from '@components/ui/button';
 import Checkbox from '@components/ui/checkbox';
 import Description from '@components/ui/description';
 import FileInput from '@components/ui/file-input';
-import Input from '@components/ui/input';
 import Label from '@components/ui/label';
 import Radio from '@components/ui/radio';
 import TextArea from '@components/ui/text-area';
-// import { useCreateProductMutation } from '@data/product/product-create.mutation';
-// import { useUpdateProductMutation } from '@data/product/product-update.mutation';
-// import { useShopQuery } from '@data/shop/use-shop.query';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useErrorLogger, useWarnIfUnsavedChanges } from '@hooks/index';
 import {
-  AttachmentInput,
   Category,
   Product,
   ProductStatus,
   ProductType,
-  Tag,
-  Type,
-  VariationOption
+  Tag
 } from '@ts-types/generated';
 import cloneDeep from 'lodash/cloneDeep';
 import groupBy from 'lodash/groupBy';
+import isEmpty from 'lodash/isEmpty';
 import orderBy from 'lodash/orderBy';
 import sum from 'lodash/sum';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { animateScroll } from 'react-scroll';
 
 import ProductCategoryInput from './product-category-input';
 import ProductInfoForm from './product-info-form';
@@ -40,72 +34,42 @@ import ProductTagInput from './product-tag-input';
 import { productValidationSchema } from './product-validation-schema';
 import ProductVariableForm from './product-variable-form';
 
-type Variation = {
-  formName: number;
-};
+type FormValues = Product;
 
-type FormValues = {
-  sku: string;
-  name: string;
-  type: Type;
-  product_type: ProductType;
-  description: string;
-  unit: string;
-  price: number;
-  min_price: number;
-  max_price: number;
-  sale_price: number;
-  quantity: number;
-  categories: Category[];
-  tags: Tag[];
-  in_stock: boolean;
-  is_taxable: boolean;
-  image: AttachmentInput;
-  gallery: AttachmentInput[];
-  status: ProductStatus;
-  width: string;
-  height: string;
-  length: string;
-  isVariation: boolean;
-  variations: Variation[];
-  variation_options: Product['variation_options'];
-  [key: string]: any;
-};
 const defaultValues = {
+  product_name: '',
   sku: '',
-  name: '',
-  type: '',
-  productTypeValue: { name: 'Simple Product', value: ProductType.Simple },
-  description: '',
-  unit: '',
-  price: '',
-  min_price: 0.0,
-  max_price: 0.0,
-  sale_price: '',
-  quantity: '',
-  categories: [],
-  tags: [],
-  in_stock: true,
-  is_taxable: false,
+  sale_price: 0,
+  compare_price: 0,
+  buying_price: 0,
+  quantity: 0,
+  short_description: '',
+  product_description: '',
+  status: 'draft',
+  disable_out_of_stock: true,
+  note: '',
   image: [],
   gallery: [],
-  status: ProductStatus.Publish,
-  width: '',
-  height: '',
-  length: '',
-  isVariation: false,
+  categories: [],
+  suppliers: [],
   variations: [],
-  variation_options: []
+  tags: [],
+  product_shipping_options: {
+    weight: 0,
+    weight_unit: { unit: 'kg' },
+    volume: 0,
+    volume_unit: { unit: 'L' },
+    dimension_width: 0,
+    dimension_height: 0,
+    dimension_depth: 0,
+    dimension_unit: { unit: 'L' }
+  }
 };
 
 type IProps = {
   initialValues?: Product | null;
 };
 
-const productType = [
-  { name: 'Simple Product', value: ProductType.Simple },
-  { name: 'Variable Product', value: ProductType.Variable }
-];
 function getFormattedVariations(variations: any) {
   const variationGroup = groupBy(variations, 'attribute.slug');
   return Object.values(variationGroup)?.map((vg) => {
@@ -153,13 +117,11 @@ function calculateQuantity(variationOptions: any) {
 export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
   const router = useRouter();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [unsavedChanges, setUnsavedChanges] = useState<string[]>([]);
 
   const { t } = useTranslation();
-  // const { data: shopData } = useShopQuery(router.query.shop as string, {
-  //   enabled: !!router.query.shop
-  // });
 
-  const shopId = ''; //shopData?.shop?.id!;
+  const shopId = '';
 
   const methods = useForm<FormValues>({
     // resolver: yupResolver(productValidationSchema),
@@ -169,107 +131,108 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
       ? cloneDeep({
           ...initialValues,
           quantity: 0,
-          isVariation:
-            initialValues.variations?.length &&
-            initialValues.variation_options?.length
-              ? true
-              : false,
           variations: getFormattedVariations(initialValues?.variations)
         })
       : defaultValues
   });
+
   const {
     register,
     handleSubmit,
     control,
     setValue,
-    setError,
     watch,
     formState: { errors }
   } = methods;
 
-  // const { mutate: createProduct, isLoading: creating } =
-  //   useCreateProductMutation();
-  // const { mutate: updateProduct, isLoading: updating } =
-  //   useUpdateProductMutation();
-
   const onSubmit = async (values: FormValues) => {
-    const { type } = values;
     const inputValues: any = {
-      description: values.description,
-      height: values.height,
-      length: values.length,
-      name: values.name,
+      product_name: values.product_name,
+      short_description: values.short_description,
+      product_description: values.product_description,
       sku: values.sku,
-      status: values.status,
-      unit: values.unit,
-      width: values.width,
-      quantity:
-        values?.productTypeValue?.value === ProductType.Simple
-          ? values?.quantity
-          : calculateQuantity(values?.variation_options),
-      product_type: values.productTypeValue?.value,
-      type_id: type?.id,
-      ...(initialValues
-        ? { shop_id: initialValues?.shop_id }
-        : { shop_id: Number(shopId) }),
-      price: Number(values.price),
-      sale_price: values.sale_price ? Number(values.sale_price) : null,
-      categories: values?.categories?.map(({ id }: any) => id),
-      tags: values?.tags?.map(({ id }: any) => id),
-      image: {
-        thumbnail: values?.image?.thumbnail,
-        original: values?.image?.original,
-        id: values?.image?.id
+      published: values.status === 'publish',
+      quantity: values?.quantity,
+      sale_price: Number(values.sale_price),
+      compare_price: Number(values.compare_price),
+      buying_price: Number(values.buying_price),
+      categories: values?.categories?.map(({ id }: Category) => id),
+      tags: values?.tags?.map(({ id }: Tag) => id),
+      image: values?.image,
+      gallery: values.gallery,
+      disable_out_of_stock: values?.disable_out_of_stock,
+      product_shipping_options: {
+        weight: Number(values?.product_shipping_options?.weight),
+        weight_unit: (
+          values?.product_shipping_options?.weight_unit as { unit: string }
+        )?.unit,
+        volume: Number(values?.product_shipping_options?.volume),
+        volume_unit: (
+          values?.product_shipping_options?.volume_unit as { unit: string }
+        )?.unit,
+        dimension_width: Number(
+          values?.product_shipping_options?.dimension_width
+        ),
+        dimension_height: Number(
+          values?.product_shipping_options?.dimension_height
+        ),
+        dimension_depth: Number(
+          values?.product_shipping_options?.dimension_depth
+        ),
+        dimension_unit: (
+          values?.product_shipping_options?.dimension_unit as { unit: string }
+        )?.unit
       },
-      gallery: values.gallery?.map(({ thumbnail, original, id }: any) => ({
-        thumbnail,
-        original,
-        id
-      })),
-      ...(productTypeValue?.value === ProductType.Variable && {
-        variations: values?.variations?.flatMap(({ value }: any) =>
-          value?.map(({ id }: any) => ({ attribute_value_id: id }))
-        )
-      }),
-      ...(productTypeValue?.value === ProductType.Variable
-        ? {
-            variation_options: {
-              upsert: values?.variation_options?.map(
-                ({ options, ...rest }: any) => ({
-                  ...rest,
-                  options: processOptions(options).map(
-                    ({ name, value }: VariationOption) => ({
-                      name,
-                      value
-                    })
-                  )
-                })
-              ),
-              delete: initialValues?.variation_options
-                ?.map((initialVariationOption) => {
-                  const find = values?.variation_options?.find(
-                    (variationOption) =>
-                      variationOption?.id === initialVariationOption?.id
-                  );
-                  if (!find) {
-                    return initialVariationOption?.id;
-                  }
-                })
-                .filter((item) => item !== undefined)
-            }
-          }
-        : {
-            variations: [],
-            variation_options: {
-              upsert: [],
-              delete: initialValues?.variation_options?.map(
-                (variation) => variation?.id
-              )
-            }
-          }),
-      ...calculateMaxMinPrice(values?.variation_options)
+      shippings: values?.shippings?.map((value) => {
+        return {
+          shipping_price: Number(value?.shipping_price),
+          shipping_id: value?.shipping_provider?.id
+        };
+      })
+      // ...(productTypeValue?.value === ProductType.Variable && {
+      //   variations: values?.variations?.flatMap(({ value }: any) =>
+      //     value?.map(({ id }: any) => ({ attribute_value_id: id }))
+      //   )
+      // }),
+      // ...(productTypeValue?.value === ProductType.Variable
+      //   ? {
+      //       variation_options: {
+      //         upsert: values?.variation_options?.map(
+      //           ({ options, ...rest }: any) => ({
+      //             ...rest,
+      //             options: processOptions(options).map(
+      //               ({ name, value }: VariationOption) => ({
+      //                 name,
+      //                 value
+      //               })
+      //             )
+      //           })
+      //         ),
+      //         delete: initialValues?.variation_options
+      //           ?.map((initialVariationOption) => {
+      //             const find = values?.variation_options?.find(
+      //               (variationOption) =>
+      //                 variationOption?.id === initialVariationOption?.id
+      //             );
+      //             if (!find) {
+      //               return initialVariationOption?.id;
+      //             }
+      //           })
+      //           .filter((item) => item !== undefined)
+      //       }
+      //     }
+      //   : {
+      //       variations: [],
+      //       variation_options: {
+      //         upsert: [],
+      //         delete: initialValues?.variation_options?.map(
+      //           (variation) => variation?.id
+      //         )
+      //       }
+      //     }),
+      // ...calculateMaxMinPrice(values?.variation_options)
     };
+    console.log('inputValues', inputValues);
 
     if (initialValues) {
       // updateProduct(
@@ -313,7 +276,13 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
       // );
     }
   };
-  const productTypeValue = watch('productTypeValue');
+
+  useWarnIfUnsavedChanges(!isEmpty(unsavedChanges), () => {
+    return confirm(t('common:UNSAVED_IMAGE'));
+  });
+
+  const shortDescription = watch('short_description');
+
   return (
     <>
       {errorMessage ? (
@@ -336,7 +305,12 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
             />
 
             <Card className="w-full sm:w-8/12 md:w-2/3">
-              <FileInput name="image" control={control} multiple={false} />
+              <FileInput
+                name="image"
+                control={control}
+                multiple={false}
+                setUnsavedChanges={setUnsavedChanges}
+              />
             </Card>
           </div>
 
@@ -349,7 +323,11 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
             />
 
             <Card className="w-full sm:w-8/12 md:w-2/3">
-              <FileInput name="gallery" control={control} />
+              <FileInput
+                name="gallery"
+                control={control}
+                setUnsavedChanges={setUnsavedChanges}
+              />
             </Card>
           </div>
 
@@ -366,8 +344,8 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
                 control={control}
                 error={t((errors?.type as any)?.message)}
               />
-              <ProductCategoryInput control={control} setValue={setValue} />
-              <ProductTagInput control={control} setValue={setValue} />
+              <ProductCategoryInput control={control} />
+              <ProductTagInput control={control} />
             </Card>
           </div>
 
@@ -396,8 +374,8 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
               />
               <TextArea
                 label={t('form:input-label-description')}
-                {...register('description')}
-                error={t(errors.description?.message!)}
+                {...register('product_description')}
+                error={t(errors.product_description?.message!)}
                 variant="outline"
                 className="mb-5"
               />

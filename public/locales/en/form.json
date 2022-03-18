@@ -336,5 +336,7 @@
   "input-label-shipping-provider": "Shipping Provider",
   "input-label-shipping-price": "Shipping Price",
   "input-label-disable-out-of-stock": "Disable out of stock",
-  "item-hidden-note": "Hidden Note"
+  "item-hidden-note": "Hidden Note",
+  "input-label-weight": "Weight",
+  "order-amount-limit": "Order Amount Limit"
 }

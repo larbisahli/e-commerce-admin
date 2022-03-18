@@ -59,6 +59,15 @@ export const TAG = gql`
   }
 `;
 
+export const TAGS_FOR_SELECT = gql`
+  query TagsSelectForAdmin($page: Int!, $limit: Int!, $orderBy: String!) {
+    tagsSelectForAdmin(page: $page, limit: $limit, orderBy: $orderBy) {
+      id
+      tag_name
+    }
+  }
+`;
+
 export const CREATE_TAG = gql`
   mutation CreateTag($tag_name: String!, $icon: String) {
     createTag(tag_name: $tag_name, icon: $icon) {

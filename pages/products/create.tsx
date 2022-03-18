@@ -28,7 +28,7 @@ export default function UpdateProductPage() {
       <div className="py-5 sm:py-8 flex border-b border-dashed border-border-base">
         <h1 className="text-lg font-semibold text-heading">Edit Product</h1>
       </div>
-      <CreateOrUpdateProductForm initialValues={data} />
+      <CreateOrUpdateProductForm />
     </>
   );
 }

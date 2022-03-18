@@ -7,7 +7,6 @@ import ValidationError from '@components/ui/form-validation-error';
 import Input from '@components/ui/input';
 import Label from '@components/ui/label';
 import SelectInput from '@components/ui/select-input';
-import TextArea from '@components/ui/text-area';
 import { useSettings } from '@contexts/settings.context';
 import { CREATE_COUPON, UPDATE_COUPON } from '@graphql/coupons';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -26,12 +25,12 @@ import { couponValidationSchema } from './coupon-validation-schema';
 
 type FormValues = {
   code: Scalars['String'];
-  coupon_description: Nullable<Scalars['String']>;
   discount_value: Scalars['Int'];
   discount_type: {
     value: CouponType;
     label: Nullable<Scalars['String']>;
   };
+  order_amount_limit?: Nullable<Scalars['Int']>;
   max_usage: Scalars['Int'];
   coupon_start_date: Scalars['Date'];
   coupon_end_date: Scalars['Date'];
@@ -40,6 +39,7 @@ type FormValues = {
 const defaultValues = {
   discount_value: 0,
   max_usage: 0,
+  order_amount_limit: 0,
   coupon_start_date: new Date(),
   coupon_end_date: new Date()
 };
@@ -138,9 +138,10 @@ export default function CreateOrUpdateCouponForm({ initialValues }: IProps) {
 
   const onSubmit = async (values: FormValues) => {
     const discount_type = values.discount_type?.value;
+
     const variables = {
       code: values.code,
-      coupon_description: values.coupon_description,
+      order_amount_limit: values.order_amount_limit,
       discount_value:
         discount_type === CouponType.FreeShipping ? 0 : values.discount_value,
       discount_type,
@@ -177,10 +178,12 @@ export default function CreateOrUpdateCouponForm({ initialValues }: IProps) {
             variant="outline"
             className="mb-5"
           />
-
-          <TextArea
-            label={t('form:input-label-description')}
-            {...register('coupon_description')}
+          <Input
+            label={`${t('form:order-amount-limit')} (${currency})`}
+            {...register('order_amount_limit')}
+            type={'number'}
+            min={0}
+            error={t(errors.order_amount_limit?.message!)}
             variant="outline"
             className="mb-5"
           />

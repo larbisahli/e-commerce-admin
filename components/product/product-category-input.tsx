@@ -1,36 +1,44 @@
-import SelectInput from '@components/ui/select-input';
+import { useQuery } from '@apollo/client';
 import Label from '@components/ui/label';
-import { Control, useFormState, useWatch } from 'react-hook-form';
-import { useEffect } from 'react';
-// import { useCategoriesQuery } from '@data/category/use-categories.query';
+import SelectInput from '@components/ui/select-input';
+import { CATEGORIES_FOR_SELECT } from '@graphql/category';
+import { useErrorLogger } from '@hooks/useErrorLogger';
+import { Category, OrderBy } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
+import { Control } from 'react-hook-form';
 
 interface Props {
   control: Control<any>;
-  setValue: any;
 }
 
-const ProductCategoryInput = ({ control, setValue }: Props) => {
+interface TCategorySelect {
+  categoriesSelectForAdmin: Category[];
+}
+
+interface OptionsVariable {
+  page: number;
+  limit: number;
+  orderBy: OrderBy;
+}
+
+const ProductCategoryInput = ({ control }: Props) => {
   const { t } = useTranslation('common');
-  const type = useWatch({
-    control,
-    name: 'type'
-  });
-  const { dirtyFields } = useFormState({
-    control
-  });
-  useEffect(() => {
-    if (type?.slug && dirtyFields?.type) {
-      setValue('categories', []);
+
+  const { data, loading, error } = useQuery<TCategorySelect, OptionsVariable>(
+    CATEGORIES_FOR_SELECT,
+    {
+      variables: {
+        page: 1,
+        limit: 999,
+        orderBy: OrderBy.CREATED_AT
+      },
+      fetchPolicy: 'cache-and-network'
     }
-  }, [type?.slug]);
+  );
 
-  // const { data, isLoading: loading } = useCategoriesQuery({
-  //   limit: 999,
-  //   type: type.slug
-  // });
+  const categories = data?.categoriesSelectForAdmin;
 
-  const data = [];
+  useErrorLogger(error);
 
   return (
     <div className="mb-5">
@@ -39,11 +47,10 @@ const ProductCategoryInput = ({ control, setValue }: Props) => {
         name="categories"
         isMulti
         control={control}
-        getOptionLabel={(option: any) => option.name}
-        getOptionValue={(option: any) => option.id}
-        // @ts-ignore
-        options={data?.categories?.data}
-        // isLoading={loading}
+        getOptionLabel={(option: Category) => option.category_name}
+        getOptionValue={(option: Category) => option.id}
+        options={categories}
+        isLoading={loading}
       />
     </div>
   );
