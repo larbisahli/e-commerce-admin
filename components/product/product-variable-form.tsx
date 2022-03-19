@@ -1,11 +1,16 @@
 import Input from '@components/ui/input';
 import { useFieldArray, useFormContext } from 'react-hook-form';
+import type {
+  UseFormRegister,
+  UseFormSetValue,
+  UseFormWatch,
+  FieldValues
+} from 'react-hook-form';
 import Button from '@components/ui/button';
 import Description from '@components/ui/description';
 import Card from '@components/common/card';
 import Label from '@components/ui/label';
 import Title from '@components/ui/title';
-
 import Checkbox from '@components/ui/checkbox';
 import SelectInput from '@components/ui/select-input';
 import { cartesian } from '@utils/cartesian';
@@ -13,61 +18,100 @@ import isEmpty from 'lodash/isEmpty';
 import { useEffect } from 'react';
 import { Product } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
-// import { useAttributesQuery } from '@data/attributes/use-attributes.query';
+import { useErrorLogger } from '@hooks/useErrorLogger';
+import { useQuery } from '@apollo/client';
+import {
+  Attribute,
+  AttributeValue,
+  OrderBy,
+  SortOrder
+} from '@ts-types/generated';
+import { ATTRIBUTES_FOR_SELECT } from '@graphql/attribute';
+import ImageComponent from '@components/ImageComponent';
+import cn from 'classnames';
 
 type IProps = {
   initialValues?: Product | null;
-  shopId: string | undefined;
 };
 
-function filteredAttributes(attributes: any, variations: any) {
-  let res = [];
-  res = attributes?.filter((el: any) => {
-    return !variations.find((element: any) => {
-      return element?.attribute?.slug === el?.slug;
-    });
-  });
-  return res;
+interface TAttributeSelect {
+  attributesForAdmin: Attribute[];
 }
 
-function getCartesianProduct(values: any) {
+interface OptionsVariable {
+  page: number;
+  limit: number;
+  orderBy: OrderBy;
+  sortedBy: SortOrder;
+}
+
+interface CartesianType {
+  id: string;
+  attribute_name: string;
+  attribute_value: string;
+}
+
+function getCartesianProduct(
+  values: {
+    attribute: Attribute;
+    attribute_values: AttributeValue[];
+  }[]
+) {
   const formattedValues = values
-    ?.map((v: any) =>
-      v.value?.map((a: any) => ({ name: v.attribute.name, value: a.value }))
+    ?.map((v) =>
+      v.attribute_values?.map((a) => ({
+        id: a.id,
+        attribute_name: v.attribute.attribute_name,
+        attribute_value: a.attribute_value
+      }))
     )
     .filter((i: any) => i !== undefined);
+
   if (isEmpty(formattedValues)) return [];
-  return cartesian(...formattedValues);
+
+  return cartesian<CartesianType[][]>(...formattedValues) as CartesianType[][];
 }
 
-export default function ProductVariableForm({ shopId, initialValues }: IProps) {
+export default function ProductVariableForm({ initialValues }: IProps) {
   const { t } = useTranslation();
 
-  // const { data, isLoading } = useAttributesQuery({
-  //   shop_id: initialValues ? Number(initialValues.shop_id) : Number(shopId)
-  // });
+  const { data, loading, error } = useQuery<TAttributeSelect, OptionsVariable>(
+    ATTRIBUTES_FOR_SELECT,
+    {
+      variables: {
+        page: 1,
+        limit: 999,
+        orderBy: OrderBy.CREATED_AT,
+        sortedBy: SortOrder.Desc
+      },
+      fetchPolicy: 'cache-and-network'
+    }
+  );
 
-  const data = [];
-  const isLoading = false;
+  useErrorLogger(error);
 
   const {
     register,
     control,
     watch,
     setValue,
-    getValues,
     formState: { errors }
   } = useFormContext();
+
   // This field array will keep all the attribute dropdown fields
   const { fields, append, remove } = useFieldArray({
     shouldUnregister: true,
     control,
     name: 'variations'
   });
-  const cartesianProduct = getCartesianProduct(getValues('variations'));
-  const variations = watch('variations');
 
-  const attributes = data?.attributes;
+  const variations = watch('variations');
+  const gallery = watch('gallery');
+
+  const cartesianProduct = getCartesianProduct(variations);
+
+  const attributes = data?.attributesForAdmin ?? [];
+
   return (
     <div className="flex flex-wrap pb-8 border-b border-dashed border-border-base my-5 sm:my-8">
       <Description
@@ -111,10 +155,10 @@ export default function ProductVariableForm({ shopId, initialValues }: IProps) {
                         name={`variations[${index}].attribute`}
                         control={control}
                         defaultValue={field.attribute}
-                        getOptionLabel={(option: any) => option.name}
+                        getOptionLabel={(option: any) => option.attribute_name}
                         getOptionValue={(option: any) => option.id}
-                        options={filteredAttributes(attributes, variations)!}
-                        isLoading={isLoading}
+                        options={attributes}
+                        isLoading={loading}
                       />
                     </div>
 
@@ -122,13 +166,14 @@ export default function ProductVariableForm({ shopId, initialValues }: IProps) {
                       <Label>{t('form:input-label-attribute-value')}*</Label>
                       <SelectInput
                         isMulti
-                        name={`variations[${index}].value`}
+                        name={`variations[${index}].attribute_values`}
                         control={control}
                         defaultValue={field.value}
-                        getOptionLabel={(option: any) => option.value}
+                        getOptionLabel={(option: any) => option.attribute_value}
                         getOptionValue={(option: any) => option.id}
                         options={
-                          watch(`variations[${index}].attribute`)?.values
+                          watch(`variations[${index}].attribute`)
+                            ?.attribute_values
                         }
                       />
                     </div>
@@ -143,7 +188,7 @@ export default function ProductVariableForm({ shopId, initialValues }: IProps) {
               disabled={fields.length === attributes?.length}
               onClick={(e: any) => {
                 e.preventDefault();
-                append({ attribute: '', value: [] });
+                append({ attribute: '', attribute_values: [] });
               }}
               type="button"
             >
@@ -155,91 +200,97 @@ export default function ProductVariableForm({ shopId, initialValues }: IProps) {
           {!!cartesianProduct?.length && (
             <div className="border-t border-dashed border-border-200 pt-5 md:pt-8 mt-5 md:mt-8">
               <Title className="text-lg uppercase text-center px-5 md:px-8 mb-0">
-                {cartesianProduct?.length} {t('form:total-variation-added')}
+                {cartesianProduct?.length}{' '}
+                {cartesianProduct?.length > 1
+                  ? t('form:total-variations-added')
+                  : t('form:total-variation-added')}
               </Title>
-              {cartesianProduct.map(
-                (fieldAttributeValue: any, index: number) => {
-                  return (
-                    <div
-                      key={`fieldAttributeValues-${index}`}
-                      className="border-b last:border-0 border-dashed border-border-200 p-5 md:p-8 md:last:pb-0 mb-5 last:mb-8 mt-5"
-                    >
-                      <Title className="!text-lg mb-8">
-                        {t('form:form-title-variant')}:{' '}
-                        <span className="text-blue-600 font-normal">
-                          {Array.isArray(fieldAttributeValue)
-                            ? fieldAttributeValue?.map((a) => a.value).join('/')
-                            : fieldAttributeValue.value}
-                        </span>
-                      </Title>
-                      <TitleAndOptionsInput
-                        register={register}
-                        setValue={setValue}
-                        index={index}
-                        fieldAttributeValue={fieldAttributeValue}
-                      />
+              {cartesianProduct.map((fieldAttributeValue, index: number) => {
+                return (
+                  <div
+                    key={`fieldAttributeValues-${index}`}
+                    className="border-b last:border-0 border-dashed border-border-200 p-5 md:p-8 md:last:pb-0 mb-5 last:mb-8 mt-5"
+                  >
+                    <Title className="!text-lg mb-8">
+                      {t('form:form-title-variant')}:{' '}
+                      <span className="text-blue-600 font-semibold">
+                        {Array.isArray(fieldAttributeValue)
+                          ? fieldAttributeValue
+                              ?.map((a) => a?.attribute_value)
+                              .join('/')
+                          : (fieldAttributeValue as { attribute_value: string })
+                              ?.attribute_value}
+                      </span>
+                    </Title>
 
-                      <input
-                        {...register(`variation_options.${index}.id`)}
-                        type="hidden"
-                      />
+                    {/* Hidden inputs title and option */}
+                    <TitleAndOptionsInput
+                      register={register}
+                      setValue={setValue}
+                      index={index}
+                      fieldAttributeValue={fieldAttributeValue}
+                    />
 
-                      <div className="grid grid-cols-2 gap-5">
-                        <Input
-                          label={`${t('form:input-label-price')}*`}
-                          type="number"
-                          {...register(`variation_options.${index}.price`)}
-                          error={t(
-                            errors.variation_options?.[index]?.price?.message
-                          )}
-                          variant="outline"
-                          className="mb-5"
-                        />
-                        <Input
-                          label={t('form:input-label-sale-price')}
-                          type="number"
-                          {...register(`variation_options.${index}.sale_price`)}
-                          error={t(
-                            errors.variation_options?.[index]?.sale_price
-                              ?.message
-                          )}
-                          variant="outline"
-                          className="mb-5"
-                        />
-                        <Input
-                          label={`${t('form:input-label-sku')}*`}
-                          {...register(`variation_options.${index}.sku`)}
-                          error={t(
-                            errors.variation_options?.[index]?.sku?.message
-                          )}
-                          variant="outline"
-                          className="mb-5"
-                        />
-                        <Input
-                          label={`${t('form:input-label-quantity')}*`}
-                          type="number"
-                          {...register(`variation_options.${index}.quantity`)}
-                          error={t(
-                            errors.variation_options?.[index]?.quantity?.message
-                          )}
-                          variant="outline"
-                          className="mb-5"
-                        />
-                      </div>
-                      <div className="mb-5 mt-5">
-                        <Checkbox
-                          {...register(`variation_options.${index}.is_disable`)}
-                          error={t(
-                            errors.variation_options?.[index]?.is_disable
-                              ?.message
-                          )}
-                          label={t('form:input-label-disable-variant')}
-                        />
-                      </div>
+                    <div className="grid grid-cols-2 gap-5">
+                      <Input
+                        label={`${t('form:input-label-price')}*`}
+                        type="number"
+                        {...register(`variation_options.${index}.price`)}
+                        error={t(
+                          errors.variation_options?.[index]?.price?.message
+                        )}
+                        variant="outline"
+                        className="mb-5"
+                      />
+                      <Input
+                        label={t('form:input-label-sale-price')}
+                        type="number"
+                        {...register(`variation_options.${index}.sale_price`)}
+                        error={t(
+                          errors.variation_options?.[index]?.sale_price?.message
+                        )}
+                        variant="outline"
+                        className="mb-5"
+                      />
+                      <Input
+                        label={`${t('form:input-label-sku')}*`}
+                        {...register(`variation_options.${index}.sku`)}
+                        error={t(
+                          errors.variation_options?.[index]?.sku?.message
+                        )}
+                        variant="outline"
+                        className="mb-5"
+                      />
+                      <Input
+                        label={`${t('form:input-label-quantity')}*`}
+                        type="number"
+                        {...register(`variation_options.${index}.quantity`)}
+                        error={t(
+                          errors.variation_options?.[index]?.quantity?.message
+                        )}
+                        variant="outline"
+                        className="mb-5"
+                      />
                     </div>
-                  );
-                }
-              )}
+                    <VariationImages
+                      watch={watch}
+                      gallery={gallery}
+                      index={index}
+                      setValue={setValue}
+                    />
+
+                    <div className="mb-5 mt-5">
+                      <Checkbox
+                        {...register(`variation_options.${index}.is_disable`)}
+                        error={t(
+                          errors.variation_options?.[index]?.is_disable?.message
+                        )}
+                        label={t('form:input-label-disable-variant')}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           )}
         </div>
@@ -248,29 +299,91 @@ export default function ProductVariableForm({ shopId, initialValues }: IProps) {
   );
 }
 
-export const TitleAndOptionsInput = ({
+interface TitleAndOptionsInputProps {
+  fieldAttributeValue: CartesianType[];
+  index: number;
+  setValue: UseFormSetValue<FieldValues>;
+  register: UseFormRegister<FieldValues>;
+}
+
+const TitleAndOptionsInput = ({
   fieldAttributeValue,
   index,
   setValue,
   register
-}: any) => {
+}: TitleAndOptionsInputProps) => {
   const title = Array.isArray(fieldAttributeValue)
-    ? fieldAttributeValue.map((a) => a.value).join('/')
-    : fieldAttributeValue.value;
+    ? fieldAttributeValue.map((a) => a?.attribute_value).join('/')
+    : (fieldAttributeValue as { attribute_value: string })?.attribute_value;
+
   const options = Array.isArray(fieldAttributeValue)
     ? JSON.stringify(fieldAttributeValue)
     : JSON.stringify([fieldAttributeValue]);
+
   useEffect(() => {
+    console.log('fieldAttributeValue', fieldAttributeValue);
     setValue(`variation_options.${index}.title`, title);
     setValue(`variation_options.${index}.options`, options);
+    setValue(`variation_options.${index}.id`, fieldAttributeValue[0]?.id);
   }, [fieldAttributeValue]);
+
   return (
     <>
+      <input {...register(`variation_options.${index}.id`)} type="hidden" />
       <input {...register(`variation_options.${index}.title`)} type="hidden" />
       <input
         {...register(`variation_options.${index}.options`)}
         type="hidden"
       />
     </>
+  );
+};
+
+interface VariationImagesProps {
+  gallery: string[];
+  index: number;
+  setValue: UseFormSetValue<FieldValues>;
+  watch: UseFormWatch<FieldValues>;
+}
+
+const VariationImages = ({
+  gallery,
+  index,
+  watch,
+  setValue
+}: VariationImagesProps) => {
+  const selectedImg = watch(`variation_options.${index}.image`);
+
+  return (
+    <div className="mb-5 mt-5">
+      {gallery?.map((img) => {
+        return (
+          <div
+            onClick={() => setValue(`variation_options.${index}.image`, img)}
+            className={cn(
+              'inline-flex flex-col transition-all overflow-hidden border-2 border-border-200 rounded mt-2 me-2 relative cursor-pointer',
+              {
+                '!border-2': selectedImg === img,
+                shadow: selectedImg === img
+              }
+            )}
+            style={{
+              borderColor: selectedImg === img ? '#46d934' : null,
+              transform: selectedImg === img ? 'translateY(-5px)' : null
+            }}
+            key={img}
+          >
+            <div className="flex items-center justify-center min-w-0 w-16 h-16 overflow-hidden">
+              <ImageComponent
+                src={img}
+                customPlaceholder={'/placeholders/no-image.svg'}
+                width={64}
+                height={64}
+              />
+            </div>
+          </div>
+        );
+      })}{' '}
+    </div>
   );
 };

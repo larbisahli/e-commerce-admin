@@ -66,6 +66,29 @@ export const ATTRIBUTES = gql`
   }
 `;
 
+export const ATTRIBUTES_FOR_SELECT = gql`
+  query Attributes(
+    $page: Int!
+    $limit: Int!
+    $orderBy: String!
+    $sortedBy: String!
+  ) {
+    attributesForAdmin(
+      page: $page
+      limit: $limit
+      orderBy: $orderBy
+      sortedBy: $sortedBy
+    ) {
+      id
+      attribute_name
+      attribute_values {
+        id
+        attribute_value
+      }
+    }
+  }
+`;
+
 export const CREATE_ATTRIBUTE = gql`
   mutation CreateAttribute(
     $attribute_name: String!

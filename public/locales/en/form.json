@@ -45,6 +45,7 @@
   "item-description-add": "Add",
   "product-description-help-text": "your product description and necessary information from here",
   "total-variation-added": "Variant",
+  "total-variations-added": "Variants",
   "input-label-attribute-name": "Attribute Name",
   "input-label-attribute-value": "Attribute Value",
   "input-label-disable-variant": "Disable This Variant",

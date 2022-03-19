@@ -121,8 +121,6 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
 
   const { t } = useTranslation();
 
-  const shopId = '';
-
   const methods = useForm<FormValues>({
     // resolver: yupResolver(productValidationSchema),
     shouldUnregister: true,
@@ -140,8 +138,8 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
     register,
     handleSubmit,
     control,
-    setValue,
     watch,
+    getValues,
     formState: { errors }
   } = methods;
 
@@ -156,7 +154,7 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
       sale_price: Number(values.sale_price),
       compare_price: Number(values.compare_price),
       buying_price: Number(values.buying_price),
-      categories: values?.categories?.map(({ id }: Category) => id),
+      categories: values?.categories?.map(({ id }: string) => id),
       tags: values?.tags?.map(({ id }: Tag) => id),
       image: values?.image,
       gallery: values.gallery,
@@ -232,7 +230,7 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
       //     }),
       // ...calculateMaxMinPrice(values?.variation_options)
     };
-    console.log('inputValues', inputValues);
+    console.log('inputValues', { inputValues, values });
 
     if (initialValues) {
       // updateProduct(
@@ -281,6 +279,7 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
     return confirm(t('common:UNSAVED_IMAGE'));
   });
 
+  // @ts-ignore
   const shortDescription = watch('short_description');
 
   return (
@@ -368,10 +367,22 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
               <TextArea
                 label={t('form:item-short-description')}
                 {...register('short_description')}
+                // onBlur={()=> setShortDescription()}
                 error={t(errors.short_description?.message!)}
                 variant="outline"
-                className="mb-5"
               />
+              <div style={{ fontSize: '.75rem' }} className="mb-5">
+                {shortDescription.length <= 160 ? (
+                  <span className="text-green-600 ">
+                    {`(${shortDescription.length ?? 0}/160 max)`}
+                  </span>
+                ) : (
+                  <span className="text-red-600">
+                    {`(${shortDescription.length}/160 max)`}
+                  </span>
+                )}
+              </div>
+
               <TextArea
                 label={t('form:input-label-description')}
                 {...register('product_description')}
@@ -405,7 +416,7 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
           </div>
 
           {/* Variation Type */}
-          <ProductVariableForm shopId={shopId} initialValues={initialValues} />
+          <ProductVariableForm initialValues={initialValues} />
 
           {/* Shipping options */}
           <ProductShippingOptionsForm

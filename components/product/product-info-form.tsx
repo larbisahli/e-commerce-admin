@@ -33,6 +33,7 @@ export default function ProductInfoForm({ initialValues }: IProps) {
           label={`${t('form:input-label-name')}*`}
           {...register('name')}
           error={t(errors.name?.message!)}
+          placeholder="My product title"
           variant="outline"
           className="mb-5"
         />
@@ -77,6 +78,7 @@ export default function ProductInfoForm({ initialValues }: IProps) {
         <Input
           label={t('form:input-label-sku')}
           {...register('sku')}
+          placeholder="LEV-JN-BL-WM"
           error={t(errors.sku?.message!)}
           variant="outline"
           className="mb-5"
@@ -84,6 +86,7 @@ export default function ProductInfoForm({ initialValues }: IProps) {
         <TextArea
           label={t('form:item-hidden-note')}
           {...register('note')}
+          placeholder="My hidden note"
           error={t(errors.note?.message!)}
           variant="outline"
           className="mb-5"
