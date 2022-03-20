@@ -10,10 +10,11 @@ import ProductList from '@components/product/product-list';
 import ErrorMessage from '@components/ui/error-message';
 import LinkButton from '@components/ui/link-button';
 import Loader from '@components/ui/loader/loader';
+import { getClientToken, verifyAuth } from '@middleware/utils';
 import { SortOrder } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import cn from 'classnames';
-// import { useProductsQuery } from "@data/product/products.query";
+import type { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useState } from 'react';
@@ -148,10 +149,27 @@ export default function ProductsPage() {
     </>
   );
 }
+
 ProductsPage.Layout = AppLayout;
 
-export const getStaticProps = async ({ locale }: any) => ({
-  props: {
-    ...(await serverSideTranslations(locale, ['table', 'common', 'form']))
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { locale } = context;
+  const { token }: { token: string } = getClientToken(context);
+  const { client } = verifyAuth(token);
+
+  if (!client) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: ROUTES.LOGIN
+      }
+    };
   }
-});
+
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['table', 'common', 'form'])),
+      client
+    }
+  };
+};

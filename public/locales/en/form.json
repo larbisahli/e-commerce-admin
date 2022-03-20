@@ -339,5 +339,6 @@
   "input-label-disable-out-of-stock": "Disable out of stock",
   "item-hidden-note": "Hidden Note",
   "input-label-weight": "Weight",
-  "order-amount-limit": "Order Amount Limit"
+  "order-amount-limit": "Order Amount Limit",
+  "input-label-select-image": "Select Image"
 }

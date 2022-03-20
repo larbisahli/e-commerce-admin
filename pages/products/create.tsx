@@ -2,7 +2,9 @@ import AppLayout from '@components/layouts/app';
 import CreateOrUpdateProductForm from '@components/product/product-form';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
-// import { useProductQuery } from "@data/product/product.query";
+import { getClientToken, verifyAuth } from '@middleware/utils';
+import { ROUTES } from '@utils/routes';
+import type { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -34,8 +36,24 @@ export default function UpdateProductPage() {
 }
 UpdateProductPage.Layout = AppLayout;
 
-export const getServerSideProps = async ({ locale }: any) => ({
-  props: {
-    ...(await serverSideTranslations(locale, ['common', 'form']))
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { locale } = context;
+  const { token }: { token: string } = getClientToken(context);
+  const { client } = verifyAuth(token);
+
+  if (!client) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: ROUTES.LOGIN
+      }
+    };
   }
-});
+
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['common', 'form'])),
+      client
+    }
+  };
+};

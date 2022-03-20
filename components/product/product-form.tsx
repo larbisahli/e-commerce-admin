@@ -9,18 +9,11 @@ import Radio from '@components/ui/radio';
 import TextArea from '@components/ui/text-area';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useErrorLogger, useWarnIfUnsavedChanges } from '@hooks/index';
-import {
-  Category,
-  Product,
-  ProductStatus,
-  ProductType,
-  Tag
-} from '@ts-types/generated';
+import { Product, Tag } from '@ts-types/generated';
 import cloneDeep from 'lodash/cloneDeep';
 import groupBy from 'lodash/groupBy';
 import isEmpty from 'lodash/isEmpty';
-import orderBy from 'lodash/orderBy';
-import sum from 'lodash/sum';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
@@ -33,6 +26,11 @@ import ProductSupplierInput from './product-supplier-input';
 import ProductTagInput from './product-tag-input';
 import { productValidationSchema } from './product-validation-schema';
 import ProductVariableForm from './product-variable-form';
+
+const Editor = dynamic(() => import('@components/ui/editor'), {
+  loading: () => <p>...</p>,
+  ssr: false
+});
 
 type FormValues = Product;
 
@@ -80,40 +78,6 @@ function getFormattedVariations(variations: any) {
   });
 }
 
-function processOptions(options: any) {
-  try {
-    return JSON.parse(options);
-  } catch (error) {
-    return options;
-  }
-}
-
-function calculateMaxMinPrice(variationOptions: any) {
-  if (!variationOptions || !variationOptions.length) {
-    return {
-      min_price: null,
-      max_price: null
-    };
-  }
-  const sortedVariationsByPrice = orderBy(variationOptions, ['price']);
-  const sortedVariationsBySalePrice = orderBy(variationOptions, ['sale_price']);
-  return {
-    min_price:
-      sortedVariationsBySalePrice?.[0].sale_price <
-      sortedVariationsByPrice?.[0]?.price
-        ? Number(sortedVariationsBySalePrice?.[0].sale_price)
-        : Number(sortedVariationsByPrice?.[0]?.price),
-    max_price: Number(
-      sortedVariationsByPrice?.[sortedVariationsByPrice?.length - 1]?.price
-    )
-  };
-}
-
-function calculateQuantity(variationOptions: any) {
-  return sum(
-    variationOptions?.map(({ quantity }: { quantity: number }) => quantity)
-  );
-}
 export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
   const router = useRouter();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -138,7 +102,6 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
     register,
     handleSubmit,
     control,
-    watch,
     getValues,
     formState: { errors }
   } = methods;
@@ -150,11 +113,11 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
       product_description: values.product_description,
       sku: values.sku,
       published: values.status === 'publish',
-      quantity: values?.quantity,
+      quantity: Number(values?.quantity),
       sale_price: Number(values.sale_price),
       compare_price: Number(values.compare_price),
       buying_price: Number(values.buying_price),
-      categories: values?.categories?.map(({ id }: string) => id),
+      categories: values?.categories?.map(({ id }) => id),
       tags: values?.tags?.map(({ id }: Tag) => id),
       image: values?.image,
       gallery: values.gallery,
@@ -186,49 +149,26 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
           shipping_price: Number(value?.shipping_price),
           shipping_id: value?.shipping_provider?.id
         };
+      }),
+      variations: values?.variations?.map((v) => {
+        return {
+          attribute_id: v.attribute.id,
+          attribute_values: v.attribute_values?.map((av) => av.id)
+        };
+      }),
+      variation_options: values?.variation_options?.map((vo) => {
+        return {
+          title: vo.title,
+          options: vo.options,
+          image: vo.image,
+          sale_price: Number(vo.sale_price),
+          compare_price: Number(vo.compare_price),
+          buying_price: Number(vo.buying_price),
+          quantity: Number(vo.quantity),
+          sku: vo.sku,
+          active: vo.is_disable
+        };
       })
-      // ...(productTypeValue?.value === ProductType.Variable && {
-      //   variations: values?.variations?.flatMap(({ value }: any) =>
-      //     value?.map(({ id }: any) => ({ attribute_value_id: id }))
-      //   )
-      // }),
-      // ...(productTypeValue?.value === ProductType.Variable
-      //   ? {
-      //       variation_options: {
-      //         upsert: values?.variation_options?.map(
-      //           ({ options, ...rest }: any) => ({
-      //             ...rest,
-      //             options: processOptions(options).map(
-      //               ({ name, value }: VariationOption) => ({
-      //                 name,
-      //                 value
-      //               })
-      //             )
-      //           })
-      //         ),
-      //         delete: initialValues?.variation_options
-      //           ?.map((initialVariationOption) => {
-      //             const find = values?.variation_options?.find(
-      //               (variationOption) =>
-      //                 variationOption?.id === initialVariationOption?.id
-      //             );
-      //             if (!find) {
-      //               return initialVariationOption?.id;
-      //             }
-      //           })
-      //           .filter((item) => item !== undefined)
-      //       }
-      //     }
-      //   : {
-      //       variations: [],
-      //       variation_options: {
-      //         upsert: [],
-      //         delete: initialValues?.variation_options?.map(
-      //           (variation) => variation?.id
-      //         )
-      //       }
-      //     }),
-      // ...calculateMaxMinPrice(values?.variation_options)
     };
     console.log('inputValues', { inputValues, values });
 
@@ -239,37 +179,12 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
       //       id: initialValues.id,
       //       input: inputValues
       //     }
-      //   },
-      //   {
-      //     onError: (error: any) => {
-      //       Object.keys(error?.response?.data).forEach((field: any) => {
-      //         setError(field, {
-      //           type: 'manual',
-      //           message: error?.response?.data[field][0]
-      //         });
-      //       });
-      //     }
       //   }
       // );
     } else {
       // createProduct(
       //   {
       //     ...inputValues
-      //   },
-      //   {
-      //     onError: (error: any) => {
-      //       if (error?.response?.data?.message) {
-      //         setErrorMessage(error?.response?.data?.message);
-      //         animateScroll.scrollToTop();
-      //       } else {
-      //         Object.keys(error?.response?.data).forEach((field: any) => {
-      //           setError(field, {
-      //             type: 'manual',
-      //             message: error?.response?.data[field][0]
-      //           });
-      //         });
-      //       }
-      //     }
       //   }
       // );
     }
@@ -279,8 +194,7 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
     return confirm(t('common:UNSAVED_IMAGE'));
   });
 
-  // @ts-ignore
-  const shortDescription = watch('short_description');
+  const [shortDescription, setShortDescription] = useState(0);
 
   return (
     <>
@@ -341,7 +255,7 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
             <Card className="w-full sm:w-8/12 md:w-2/3">
               <ProductSupplierInput
                 control={control}
-                error={t((errors?.type as any)?.message)}
+                error={''} //{t((errors?.type as any)?.message)}
               />
               <ProductCategoryInput control={control} />
               <ProductTagInput control={control} />
@@ -364,32 +278,34 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
             />
 
             <Card className="w-full sm:w-8/12 md:w-2/3">
+              <Label>{t('form:input-label-description')}*</Label>
+              <Editor
+                control={control}
+                name="product_description"
+                className="mb-5"
+                defaultValue=""
+              />
               <TextArea
-                label={t('form:item-short-description')}
+                label={`${t('form:item-short-description')}*`}
+                // @ts-ignore
                 {...register('short_description')}
-                // onBlur={()=> setShortDescription()}
+                onBlur={() =>
+                  setShortDescription(getValues('short_description').length)
+                }
                 error={t(errors.short_description?.message!)}
                 variant="outline"
               />
               <div style={{ fontSize: '.75rem' }} className="mb-5">
-                {shortDescription.length <= 160 ? (
+                {shortDescription <= 160 ? (
                   <span className="text-green-600 ">
-                    {`(${shortDescription.length ?? 0}/160 max)`}
+                    {`(${shortDescription}/160 max)`}
                   </span>
                 ) : (
                   <span className="text-red-600">
-                    {`(${shortDescription.length}/160 max)`}
+                    {`(${shortDescription}/160 max)`}
                   </span>
                 )}
               </div>
-
-              <TextArea
-                label={t('form:input-label-description')}
-                {...register('product_description')}
-                error={t(errors.product_description?.message!)}
-                variant="outline"
-                className="mb-5"
-              />
               <div>
                 <Label>{t('form:input-label-status')}</Label>
                 <Radio

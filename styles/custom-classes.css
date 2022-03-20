@@ -86,3 +86,12 @@
   border-radius: 4px;
   background: #fff;
 }
+
+.editor-wrapper-class {
+  @apply appearance-none;
+}
+
+.editor-class {
+  min-height: 150px;
+  @apply p-2 rounded appearance-none transition duration-300 ease-in-out text-heading text-sm hover:outline-none hover:ring-0 border border-border-base hover:border-accent;
+}

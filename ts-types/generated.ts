@@ -220,7 +220,21 @@ export interface Product extends CreatedUpdatedByAt {
   gallery?: Array<Nullable<Scalars['String']>>;
   categories?: Array<Category>;
   suppliers?: Nullable<Array<Nullable<Suppliers>>>;
-  variations?: Nullable<Array<Nullable<AttributeValue>>>;
+  variation_options: {
+    title: string;
+    is_disable: boolean;
+    image: string;
+    options: string[];
+    sale_price: Scalars['Float'];
+    compare_price: Scalars['Float'];
+    buying_price: Scalars['Float'];
+    quantity: Scalars['Int'];
+    sku: Scalars['String'];
+  }[];
+  variations?: {
+    attribute: Attribute;
+    attribute_values: Array<Nullable<AttributeValue>>;
+  }[];
   tags?: Nullable<Array<Nullable<Tag>>>;
   shippings?: Nullable<Array<Nullable<ProductShippings>>>;
   product_shipping_options?: ProductShippingOptions;

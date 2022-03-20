@@ -12,6 +12,7 @@ import {
   InMemoryCache
 } from '@apollo/client';
 import { RetryLink } from '@apollo/client/link/retry';
+import ErrorBoundary from '@components/ErrorBoundary';
 import DefaultSeo from '@components/ui/default-seo';
 import LoadingBar from '@components/ui/loading-bar';
 // import ErrorMessage from "@components/ui/error-message";
@@ -109,22 +110,24 @@ function App({ Component, pageProps }: AppProps) {
         pauseOnHover
         transition={Slide}
       />
-      <ApolloProvider client={client}>
-        <StaffInfoProvider>
-          <LoadingBar />
-          {/* <AppSettings> */}
-          <UIProvider>
-            <ModalProvider>
-              <ManagedModal />
-              <DefaultSeo />
-              <Layout {...pageProps}>
-                <Component {...pageProps} />
-              </Layout>
-            </ModalProvider>
-          </UIProvider>
-          {/* </AppSettings> */}
-        </StaffInfoProvider>
-      </ApolloProvider>
+      <ErrorBoundary>
+        <ApolloProvider client={client}>
+          <StaffInfoProvider>
+            <LoadingBar />
+            {/* <AppSettings> */}
+            <UIProvider>
+              <ModalProvider>
+                <ManagedModal />
+                <DefaultSeo />
+                <Layout {...pageProps}>
+                  <Component {...pageProps} />
+                </Layout>
+              </ModalProvider>
+            </UIProvider>
+            {/* </AppSettings> */}
+          </StaffInfoProvider>
+        </ApolloProvider>
+      </ErrorBoundary>
     </Fragment>
   );
 }

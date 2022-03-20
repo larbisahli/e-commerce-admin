@@ -15,7 +15,7 @@ import Checkbox from '@components/ui/checkbox';
 import SelectInput from '@components/ui/select-input';
 import { cartesian } from '@utils/cartesian';
 import isEmpty from 'lodash/isEmpty';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Product } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
 import { useErrorLogger } from '@hooks/useErrorLogger';
@@ -233,17 +233,7 @@ export default function ProductVariableForm({ initialValues }: IProps) {
 
                     <div className="grid grid-cols-2 gap-5">
                       <Input
-                        label={`${t('form:input-label-price')}*`}
-                        type="number"
-                        {...register(`variation_options.${index}.price`)}
-                        error={t(
-                          errors.variation_options?.[index]?.price?.message
-                        )}
-                        variant="outline"
-                        className="mb-5"
-                      />
-                      <Input
-                        label={t('form:input-label-sale-price')}
+                        label={`${t('form:input-label-sale-price')}*`}
                         type="number"
                         {...register(`variation_options.${index}.sale_price`)}
                         error={t(
@@ -253,7 +243,31 @@ export default function ProductVariableForm({ initialValues }: IProps) {
                         className="mb-5"
                       />
                       <Input
-                        label={`${t('form:input-label-sku')}*`}
+                        label={t('form:input-label-sale-price')}
+                        type="number"
+                        {...register(
+                          `variation_options.${index}.compare_price`
+                        )}
+                        error={t(
+                          errors.variation_options?.[index]?.compare_price
+                            ?.message
+                        )}
+                        variant="outline"
+                        className="mb-5"
+                      />
+                      <Input
+                        label={t('form:input-label-sale-price')}
+                        type="number"
+                        {...register(`variation_options.${index}.buying_price`)}
+                        error={t(
+                          errors.variation_options?.[index]?.buying_price
+                            ?.message
+                        )}
+                        variant="outline"
+                        className="mb-5"
+                      />
+                      <Input
+                        label={`${t('form:input-label-sku')}`}
                         {...register(`variation_options.${index}.sku`)}
                         error={t(
                           errors.variation_options?.[index]?.sku?.message
@@ -272,12 +286,16 @@ export default function ProductVariableForm({ initialValues }: IProps) {
                         className="mb-5"
                       />
                     </div>
-                    <VariationImages
-                      watch={watch}
-                      gallery={gallery}
-                      index={index}
-                      setValue={setValue}
-                    />
+
+                    {/* use dynamic import */}
+                    {!isEmpty(gallery) && (
+                      <VariationImages
+                        watch={watch}
+                        gallery={gallery}
+                        index={index}
+                        setValue={setValue}
+                      />
+                    )}
 
                     <div className="mb-5 mt-5">
                       <Checkbox
@@ -312,24 +330,29 @@ const TitleAndOptionsInput = ({
   setValue,
   register
 }: TitleAndOptionsInputProps) => {
-  const title = Array.isArray(fieldAttributeValue)
-    ? fieldAttributeValue.map((a) => a?.attribute_value).join('/')
-    : (fieldAttributeValue as { attribute_value: string })?.attribute_value;
+  const title = useMemo(
+    () =>
+      Array.isArray(fieldAttributeValue)
+        ? fieldAttributeValue.map((a) => a?.attribute_value).join('/')
+        : (fieldAttributeValue as { attribute_value: string })?.attribute_value,
+    [fieldAttributeValue]
+  );
 
-  const options = Array.isArray(fieldAttributeValue)
-    ? JSON.stringify(fieldAttributeValue)
-    : JSON.stringify([fieldAttributeValue]);
+  const options = useMemo(
+    () =>
+      Array.isArray(fieldAttributeValue)
+        ? fieldAttributeValue?.map((av) => av.id)
+        : [(fieldAttributeValue as CartesianType).id],
+    [fieldAttributeValue]
+  );
 
   useEffect(() => {
-    console.log('fieldAttributeValue', fieldAttributeValue);
     setValue(`variation_options.${index}.title`, title);
     setValue(`variation_options.${index}.options`, options);
-    setValue(`variation_options.${index}.id`, fieldAttributeValue[0]?.id);
   }, [fieldAttributeValue]);
 
   return (
     <>
-      <input {...register(`variation_options.${index}.id`)} type="hidden" />
       <input {...register(`variation_options.${index}.title`)} type="hidden" />
       <input
         {...register(`variation_options.${index}.options`)}
@@ -352,14 +375,25 @@ const VariationImages = ({
   watch,
   setValue
 }: VariationImagesProps) => {
+  const { t } = useTranslation();
+
   const selectedImg = watch(`variation_options.${index}.image`);
+
+  const setImage = (img: string) => {
+    if (selectedImg === img) {
+      setValue(`variation_options.${index}.image`, null);
+    } else {
+      setValue(`variation_options.${index}.image`, img);
+    }
+  };
 
   return (
     <div className="mb-5 mt-5">
+      <Label>{t('form:input-label-select-image')}</Label>
       {gallery?.map((img) => {
         return (
           <div
-            onClick={() => setValue(`variation_options.${index}.image`, img)}
+            onClick={() => setImage(img)}
             className={cn(
               'inline-flex flex-col transition-all overflow-hidden border-2 border-border-200 rounded mt-2 me-2 relative cursor-pointer',
               {
@@ -369,7 +403,7 @@ const VariationImages = ({
             )}
             style={{
               borderColor: selectedImg === img ? '#46d934' : null,
-              transform: selectedImg === img ? 'translateY(-5px)' : null
+              transform: selectedImg === img ? 'translateY(-8px)' : null
             }}
             key={img}
           >
@@ -383,7 +417,7 @@ const VariationImages = ({
             </div>
           </div>
         );
-      })}{' '}
+      })}
     </div>
   );
 };

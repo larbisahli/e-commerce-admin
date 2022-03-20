@@ -31,8 +31,8 @@ export default function ProductInfoForm({ initialValues }: IProps) {
       <Card className="w-full sm:w-8/12 md:w-2/3">
         <Input
           label={`${t('form:input-label-name')}*`}
-          {...register('name')}
-          error={t(errors.name?.message!)}
+          {...register('product_name')}
+          error={t(errors.product_name?.message!)}
           placeholder="My product title"
           variant="outline"
           className="mb-5"
