@@ -7,6 +7,7 @@ import {
   DELETE_PRODUCT,
   DELETE_SHIPPING,
   DELETE_STAFF,
+  DELETE_SUPPLIER,
   DELETE_TAG
 } from '@ts-types/constants';
 import dynamic from 'next/dynamic';
@@ -43,6 +44,10 @@ const StaffDeleteView = dynamic(
   () => import('@components/staff/staff-delete-view')
 );
 
+const SupplierDeleteView = dynamic(
+  () => import('@components/suppliers/supplier-delete-view')
+);
+
 // const ExportImportView = dynamic(
 //   () => import('@components/product/import-export-modal')
 // );
@@ -65,6 +70,7 @@ const ManagedModal = () => {
       {view === BAN_CUSTOMER && <BanCustomerView />}
       {view === DELETE_ORDER_STATUS && <OrderStatusDeleteView />}
       {view === DELETE_STAFF && <StaffDeleteView />}
+      {view === DELETE_SUPPLIER && <SupplierDeleteView />}
     </Modal>
   );
 };

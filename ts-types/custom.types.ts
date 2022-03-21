@@ -10,6 +10,7 @@ import type {
   DELETE_PRODUCT_TYPE,
   DELETE_SHIPPING_TYPE,
   DELETE_STAFF_TYPE,
+  DELETE_SUPPLIER_TYPE,
   DELETE_TAG_TYPE,
   DELETE_TYPE,
   READ_TYPE,
@@ -66,7 +67,8 @@ export type ModalView =
   | DELETE_TAG_TYPE
   | BAN_CUSTOMER_TYPE
   | BAN_STAFF_TYPE
-  | DELETE_STAFF_TYPE;
+  | DELETE_STAFF_TYPE
+  | DELETE_SUPPLIER_TYPE;
 
 export type CategoryQueryOptionsType = {
   id?: Scalars['ID'];
@@ -93,6 +95,12 @@ export type TagsQueryOptionsType = {
   limit?: number;
   orderBy?: string;
   sortedBy?: SortOrder;
+};
+
+export type DialCodeType = {
+  name: string;
+  dial_code: string;
+  code: string;
 };
 
 // export type ProductsQueryOptionsType = {

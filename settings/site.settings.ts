@@ -86,6 +86,12 @@ export const siteSettings = {
       },
       {
         id: 'D2IcKt',
+        href: ROUTES.SUPPLIERS,
+        label: 'sidebar-nav-item-suppliers',
+        icon: 'SuppliersIcon'
+      },
+      {
+        id: 'D2IcLt',
         href: ROUTES.CUSTOMERS,
         label: 'sidebar-nav-item-customers',
         icon: 'UsersIcon'

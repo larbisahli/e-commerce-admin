@@ -9,7 +9,7 @@ import Radio from '@components/ui/radio';
 import TextArea from '@components/ui/text-area';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useErrorLogger, useWarnIfUnsavedChanges } from '@hooks/index';
-import { Product, Tag } from '@ts-types/generated';
+import { Product, Suppliers, Tag } from '@ts-types/generated';
 import cloneDeep from 'lodash/cloneDeep';
 import groupBy from 'lodash/groupBy';
 import isEmpty from 'lodash/isEmpty';
@@ -119,6 +119,7 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
       buying_price: Number(values.buying_price),
       categories: values?.categories?.map(({ id }) => id),
       tags: values?.tags?.map(({ id }: Tag) => id),
+      suppliers: values?.suppliers?.map(({ id }: Suppliers) => id),
       image: values?.image,
       gallery: values.gallery,
       disable_out_of_stock: values?.disable_out_of_stock,
@@ -244,7 +245,7 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
             </Card>
           </div>
 
-          {/* Tags & Category */}
+          {/* Tags, Category and Suppliers*/}
           <div className="flex flex-wrap pb-8 border-b border-dashed border-border-base my-5 sm:my-8">
             <Description
               title={t('form:type-and-category')}
@@ -253,11 +254,8 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
             />
 
             <Card className="w-full sm:w-8/12 md:w-2/3">
-              <ProductSupplierInput
-                control={control}
-                error={''} //{t((errors?.type as any)?.message)}
-              />
               <ProductCategoryInput control={control} />
+              <ProductSupplierInput control={control} />
               <ProductTagInput control={control} />
             </Card>
           </div>

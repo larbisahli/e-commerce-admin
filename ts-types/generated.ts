@@ -93,10 +93,6 @@ export interface Category extends CreatedUpdatedByAt {
   has_children?: Scalars['Boolean'];
 }
 
-export interface Suppliers extends CreatedUpdatedByAt {
-  id?: Scalars['ID'];
-}
-
 export interface ProductShippingOptions {
   id?: Scalars['ID'];
   product_id?: Scalars['ID'];
@@ -239,6 +235,19 @@ export interface Product extends CreatedUpdatedByAt {
   shippings?: Nullable<Array<Nullable<ProductShippings>>>;
   product_shipping_options?: ProductShippingOptions;
   // [key: string]: any;
+}
+
+export interface Suppliers extends CreatedUpdatedByAt {
+  id?: Scalars['ID'];
+  supplier_name?: Scalars['String'];
+  company?: Nullable<Scalars['String']>;
+  phone_number?: Nullable<Scalars['String']>;
+  dial_code?: Nullable<Scalars['String']> | { dial_code: string };
+  address_line1?: Scalars['String'];
+  address_line2?: Nullable<Scalars['String']>;
+  country?: Nullable<Scalars['String']> | { name: string };
+  city?: Nullable<Scalars['String']> | { name: string };
+  note?: Nullable<Scalars['String']>;
 }
 
 // export declare type Address = {

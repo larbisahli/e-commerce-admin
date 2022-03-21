@@ -1,37 +1,54 @@
-import ValidationError from '@components/ui/form-validation-error';
+import { useQuery } from '@apollo/client';
 import Label from '@components/ui/label';
 import SelectInput from '@components/ui/select-input';
-// import { useTypesQuery } from '@data/type/use-types.query';
+import { SUPPLIERS_FOR_SELECT } from '@graphql/supplier';
+import { useErrorLogger } from '@hooks/useErrorLogger';
+import { OrderBy, Suppliers } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
 import { Control } from 'react-hook-form';
-
 interface Props {
   control: Control<any>;
-  error: string | undefined;
 }
 
-const ProductSupplierInput = ({ control, error }: Props) => {
+interface TSupplierSelect {
+  suppliersForSelect: Suppliers[];
+}
+
+interface OptionsVariable {
+  page: number;
+  limit: number;
+  orderBy: OrderBy;
+}
+
+const ProductSupplierInput = ({ control }: Props) => {
   const { t } = useTranslation();
 
-  // const { data, isLoading: loading } = useTypesQuery({
-  //   limit: 200
-  // });
+  const { data, loading, error } = useQuery<TSupplierSelect, OptionsVariable>(
+    SUPPLIERS_FOR_SELECT,
+    {
+      variables: {
+        page: 1,
+        limit: 999,
+        orderBy: OrderBy.CREATED_AT
+      },
+      fetchPolicy: 'cache-and-network'
+    }
+  );
 
-  const data = [];
-  const loading = false;
+  useErrorLogger(error);
 
   return (
     <div className="mb-5">
       <Label>{t('form:input-label-suppliers')}</Label>
       <SelectInput
-        name="type"
+        name="suppliers"
+        isMulti
         control={control}
-        getOptionLabel={(option: any) => option.name}
+        getOptionLabel={(option: any) => option.supplier_name}
         getOptionValue={(option: any) => option.id}
-        options={data?.types!}
+        options={data?.suppliersForSelect ?? []}
         isLoading={loading}
       />
-      <ValidationError message={t(error!)} />
     </div>
   );
 };

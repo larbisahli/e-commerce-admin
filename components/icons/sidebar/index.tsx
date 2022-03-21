@@ -13,6 +13,7 @@ export { SettingsIcon } from '@components/icons/sidebar/settings';
 export { ShippingsIcon } from '@components/icons/sidebar/shippings';
 export { ShopIcon } from '@components/icons/sidebar/shop';
 export { StaffsIcon } from '@components/icons/sidebar/staffs';
+export { SuppliersIcon } from '@components/icons/sidebar/suppliers';
 export { SupportIcon } from '@components/icons/sidebar/support';
 export { TagIcon } from '@components/icons/sidebar/tags';
 export { TaxesIcon } from '@components/icons/sidebar/taxes';

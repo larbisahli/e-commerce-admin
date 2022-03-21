@@ -13,6 +13,7 @@ export const ROUTES = {
   ATTRIBUTES: '/attributes',
   ATTRIBUTE_VALUES: '/attribute-values',
   TAGS: '/tags',
+  SUPPLIERS: '/suppliers',
   PROFILE_UPDATE: '/profile-update',
   LOGOUT: '/logout',
   STAFFS: '/staffs',

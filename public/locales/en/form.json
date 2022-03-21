@@ -44,6 +44,7 @@
   "item-description-edit": "Edit",
   "item-description-add": "Add",
   "product-description-help-text": "your product description and necessary information from here",
+  "form-description-supplier-name": "your supplier name and necessary information from here",
   "total-variation-added": "Variant",
   "total-variations-added": "Variants",
   "input-label-attribute-name": "Attribute Name",
@@ -340,5 +341,16 @@
   "item-hidden-note": "Hidden Note",
   "input-label-weight": "Weight",
   "order-amount-limit": "Order Amount Limit",
-  "input-label-select-image": "Select Image"
+  "input-label-select-image": "Select Image",
+  "active-from-date-required": "Active from date is required",
+  "input-label-company": "Company",
+  "input-label-supplier-name": "Supplier Name",
+  "input-label-address-1": "Address 1",
+  "button-label-add-supplier": "Add Supplier",
+  "input-label-address-2": "Address 2",
+  "input-label-phone": "Phone",
+  "item-short-note": "Note",
+  "create-supplier": "Create Supplier",
+  "input-label-phone-number": "Number",
+  "edit-supplier": "Edit Supplier"
 }

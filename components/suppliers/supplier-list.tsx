@@ -2,14 +2,14 @@ import ActionButtons from '@components/common/action-buttons';
 import Pagination from '@components/ui/pagination';
 import { Table } from '@components/ui/table';
 import { Nullable } from '@ts-types/custom.types';
-import { Attribute, AttributeValue } from '@ts-types/generated';
+import { Suppliers } from '@ts-types/generated';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import React from 'react';
 
 type IProps = {
-  attributes: Attribute[];
+  suppliers: Suppliers[];
   // eslint-disable-next-line no-unused-vars
   onPagination: (key: number) => void;
   total: Nullable<number>;
@@ -17,8 +17,8 @@ type IProps = {
   perPage: Nullable<number>;
 };
 
-const AttributeList = ({
-  attributes,
+const SuppliersList = ({
+  suppliers,
   onPagination,
   total,
   currentPage,
@@ -34,36 +34,49 @@ const AttributeList = ({
 
   let columns = [
     {
-      title: t('table:table-item-title'),
-      dataIndex: 'attribute_name',
-      key: 'attribute_name',
+      title: t('table:table-item-name'),
+      dataIndex: 'supplier_name',
+      key: 'supplier_name',
       align: alignLeft,
       width: 100,
       ellipsis: true,
-      render: (attribute_name: string) => {
+      render: (supplier_name: string) => {
         return (
           <span className="font-semibold text-gray-800 capitalize">
-            {attribute_name}
+            {supplier_name}
           </span>
         );
       }
     },
     {
-      title: t('table:table-item-values'),
-      dataIndex: 'attribute_values',
-      key: 'attribute_values',
+      title: t('table:table-item-company'),
+      dataIndex: 'company',
+      key: 'company',
       align: alignLeft,
+      width: 100,
       ellipsis: true,
-      width: 200,
-      render: (values: any) => {
-        const att_values = values?.map(
-          ({ attribute_value }: AttributeValue, index: number) => {
-            return index > 0 ? `, ${attribute_value}` : `${attribute_value}`;
-          }
-        );
+      render: (company: string) => {
         return (
-          <span title={att_values} className="whitespace-nowrap">
-            {att_values}
+          <span title={company} className="text-gray-800 capitalize">
+            {company}
+          </span>
+        );
+      }
+    },
+    {
+      title: t('table:table-item-phone'),
+      dataIndex: 'phone_number',
+      key: 'phone_number',
+      align: alignLeft,
+      width: 150,
+      ellipsis: true,
+      render: (phone_number: string, record: Suppliers) => {
+        return (
+          <span
+            title={`${record?.dial_code ?? ''} ${phone_number}`}
+            className="text-gray-800 capitalize"
+          >
+            {`${record?.dial_code ?? ''} ${phone_number}`}
           </span>
         );
       }
@@ -73,7 +86,7 @@ const AttributeList = ({
       dataIndex: 'created_at',
       key: 'created_at',
       align: alignLeft,
-      width: 200,
+      width: 170,
       render: (created_at: string | number) => {
         return `${dayjs(created_at).format('MMM D, YYYY')} at ${dayjs(
           created_at
@@ -120,7 +133,7 @@ const AttributeList = ({
         <ActionButtons
           id={id}
           editUrl={`${router.asPath}/edit/${id}`}
-          deleteModalView="DELETE_ATTRIBUTE"
+          deleteModalView="DELETE_SUPPLIER"
         />
       )
     }
@@ -133,7 +146,7 @@ const AttributeList = ({
           // @ts-ignore
           columns={columns}
           emptyText={t('table:empty-table-data')}
-          data={attributes}
+          data={suppliers}
           rowKey="id"
           scroll={{ x: 380 }}
         />
@@ -152,4 +165,4 @@ const AttributeList = ({
   );
 };
 
-export default AttributeList;
+export default SuppliersList;

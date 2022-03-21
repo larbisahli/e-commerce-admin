@@ -2,7 +2,7 @@ import { CookieNames } from '@ts-types/enums';
 import cookie from 'cookie';
 import fs from 'fs';
 import jwt, { Algorithm } from 'jsonwebtoken';
-import { GetServerSidePropsContext } from 'next';
+import { GetServerSidePropsContext, NextApiRequest } from 'next';
 import path from 'path';
 import { serializeError } from 'serialize-error';
 
@@ -49,5 +49,10 @@ export function getClientToken(context: GetServerSidePropsContext) {
   const token: string =
     cookie.parse(req?.headers?.cookie || '')[CookieNames.STAFF_TOKEN_NAME] ??
     null;
+  return { token };
+}
+
+export function getClientTokenAPI(req: NextApiRequest) {
+  const token: string = req.cookies[CookieNames.STAFF_TOKEN_NAME] ?? null;
   return { token };
 }
