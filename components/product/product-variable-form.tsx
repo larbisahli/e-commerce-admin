@@ -243,7 +243,7 @@ export default function ProductVariableForm({ initialValues }: IProps) {
                         className="mb-5"
                       />
                       <Input
-                        label={t('form:input-label-sale-price')}
+                        label={t('form:input-label-compare-price')}
                         type="number"
                         {...register(
                           `variation_options.${index}.compare_price`
@@ -256,7 +256,7 @@ export default function ProductVariableForm({ initialValues }: IProps) {
                         className="mb-5"
                       />
                       <Input
-                        label={t('form:input-label-sale-price')}
+                        label={t('form:input-label-buying-price')}
                         type="number"
                         {...register(`variation_options.${index}.buying_price`)}
                         error={t(

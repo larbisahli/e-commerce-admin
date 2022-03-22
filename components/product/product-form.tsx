@@ -46,7 +46,7 @@ const defaultValues = {
   status: 'draft',
   disable_out_of_stock: true,
   note: '',
-  image: [],
+  thumbnail: [],
   gallery: [],
   categories: [],
   suppliers: [],
@@ -117,11 +117,21 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
       sale_price: Number(values.sale_price),
       compare_price: Number(values.compare_price),
       buying_price: Number(values.buying_price),
-      categories: values?.categories?.map(({ id }) => id),
-      tags: values?.tags?.map(({ id }: Tag) => id),
-      suppliers: values?.suppliers?.map(({ id }: Suppliers) => id),
-      image: values?.image,
-      gallery: values.gallery,
+      categories: values?.categories?.map(({ id }) => {
+        return { id };
+      }),
+      tags: values?.tags?.map(({ id }: Tag) => {
+        return { id };
+      }),
+      suppliers: values?.suppliers?.map(({ id }: Suppliers) => {
+        return { id };
+      }),
+      thumbnail: values?.thumbnail?.map((img) => {
+        return { image: img };
+      }),
+      gallery: values.gallery?.map((img) => {
+        return { image: img };
+      }),
       disable_out_of_stock: values?.disable_out_of_stock,
       product_shipping_options: {
         weight: Number(values?.product_shipping_options?.weight),
@@ -147,14 +157,16 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
       },
       shippings: values?.shippings?.map((value) => {
         return {
-          shipping_price: Number(value?.shipping_price),
-          shipping_id: value?.shipping_provider?.id
+          id: value?.shipping_provider?.id,
+          shipping_price: Number(value?.shipping_price)
         };
       }),
       variations: values?.variations?.map((v) => {
         return {
-          attribute_id: v.attribute.id,
-          attribute_values: v.attribute_values?.map((av) => av.id)
+          attribute: { id: v.attribute.id },
+          attribute_values: v.attribute_values?.map((av) => {
+            return { id: av.id };
+          })
         };
       }),
       variation_options: values?.variation_options?.map((vo) => {
@@ -220,7 +232,7 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
 
             <Card className="w-full sm:w-8/12 md:w-2/3">
               <FileInput
-                name="image"
+                name="thumbnail"
                 control={control}
                 multiple={false}
                 setUnsavedChanges={setUnsavedChanges}

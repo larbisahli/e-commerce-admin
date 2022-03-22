@@ -212,13 +212,23 @@ export interface Product extends CreatedUpdatedByAt {
   status?: 'draft' | 'publish';
   disable_out_of_stock?: Scalars['Boolean'];
   note?: Nullable<Scalars['String']>;
-  image?: Array<Scalars['String']> | Scalars['String'];
-  gallery?: Array<Nullable<Scalars['String']>>;
+  thumbnail?: {
+    id: Scalars['String'];
+    image: Scalars['String'];
+  }[];
+  gallery?: {
+    id: Scalars['String'];
+    image: Scalars['String'];
+  }[];
   categories?: Array<Category>;
   suppliers?: Nullable<Array<Nullable<Suppliers>>>;
+  tags?: Nullable<Array<Nullable<Tag>>>;
+  shippings?: Nullable<Array<Nullable<ProductShippings>>>;
+  product_shipping_options?: ProductShippingOptions;
   variation_options: {
     title: string;
     is_disable: boolean;
+    active: boolean;
     image: string;
     options: string[];
     sale_price: Scalars['Float'];
@@ -231,9 +241,6 @@ export interface Product extends CreatedUpdatedByAt {
     attribute: Attribute;
     attribute_values: Array<Nullable<AttributeValue>>;
   }[];
-  tags?: Nullable<Array<Nullable<Tag>>>;
-  shippings?: Nullable<Array<Nullable<ProductShippings>>>;
-  product_shipping_options?: ProductShippingOptions;
   // [key: string]: any;
 }
 

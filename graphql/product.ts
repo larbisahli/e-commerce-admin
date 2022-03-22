@@ -1,59 +1,140 @@
 import { gql } from '@apollo/client';
 
 export const PRODUCTS = gql`
-  query ProductPagination(
-    $account_uid: ID!
-    $category_uid: ID
+  query Products(
     $page: Int!
-    $limit: Int
+    $limit: Int!
+    $orderBy: String!
+    $sortedBy: String!
   ) {
+    productCount {
+      count
+    }
     products(
-      account_uid: $account_uid
-      category_uid: $category_uid
       page: $page
       limit: $limit
+      orderBy: $orderBy
+      sortedBy: $sortedBy
     ) {
-      product_uid
-      category_uid
-      account_uid
-      title
-      price
+      id
+      product_name
+      sale_price
+      quantity
+      published
+      categories {
+        id
+        category_name
+      }
       thumbnail {
-        image_uid
+        id
         image
+      }
+      created_at
+      updated_at
+      created_by {
+        id
+        first_name
+        last_name
+      }
+      updated_by {
+        id
+        first_name
+        last_name
       }
     }
   }
 `;
 
 export const PRODUCT = gql`
-  query getProduct($product_uid: ID!) {
+  query Product($id: ID!) {
     productsCount {
       count
     }
-    product(product_uid: $product_uid) {
-      product_uid
-      category_uid
-      account_uid
-      title
-      price
-      discount
-      warehouse_location
-      product_description
+    product(id: $id) {
+      id
+      product_name
+      sku
+      sale_price
+      compare_price
+      buying_price
+      quantity
       short_description
-      inventory
-      product_weight
-      is_new
+      product_description
+      published
+      disable_out_of_stock
       note
       thumbnail {
-        image_uid
+        id
         image
-        display_order
+        placeholder
       }
       gallery {
-        image_uid
+        id
         image
-        display_order
+        placeholder
+      }
+      categories {
+        id
+        category_name
+      }
+      suppliers {
+        id
+        supplier_name
+      }
+      tags {
+        id
+        tag_name
+      }
+      variation_options {
+        title
+        active
+        image
+        options
+        sale_price
+        compare_price
+        buying_price
+        quantity
+        sku
+      }
+      variations {
+        attribute {
+          id
+          attribute_name
+        }
+        attribute_values {
+          id
+          attribute_value
+        }
+      }
+      shippings {
+        shipping_provider {
+          id
+          shipping_name
+        }
+        shipping_price
+      }
+      product_shipping_options {
+        id
+        weight
+        weight_unit
+        volume
+        volume_unit
+        dimension_width
+        dimension_height
+        dimension_depth
+        dimension_unit
+      }
+      created_at
+      updated_at
+      created_by {
+        id
+        first_name
+        last_name
+      }
+      updated_by {
+        id
+        first_name
+        last_name
       }
     }
   }
@@ -61,76 +142,110 @@ export const PRODUCT = gql`
 
 export const CREATE_PRODUCT = gql`
   mutation CreateProduct(
-    $category_uid: ID!
-    $account_uid: ID!
-    $title: String!
-    $price: Float!
-    $discount: Float
-    $warehouse_location: String!
-    $product_description: String!
-    $short_description: String!
-    $inventory: Int!
-    $product_weight: Float!
-    $is_new: Boolean!
-    $note: String
+    product_name: String!
+    sale_price: Float!
+    compare_price: Float
+    buying_price: Float
+    quantity: Number
+    short_description: String!
+    product_description: String!
+    published: Boolean!
+    disable_out_of_stock: Boolean!
+    note: String
+    sku: String
+    thumbnail: Thumbnail
+    gallery: [Gallery]
+    categories: [Categories]
+    suppliers: [Suppliers]
+    tags: [Tags]
+    variation_options: [VariationOptions]
+    variations: [Variations]
+    shippings: [Shippings]
+    product_shipping_options: [ProductShippingOptions]
   ) {
-    CreateProduct(
-      category_uid: $category_uid
-      account_uid: $account_uid
-      title: $title
-      price: $price
-      discount: $discount
-      warehouse_location: $warehouse_location
-      product_description: $product_description
+    createProduct(
+      product_name: $product_name
+      sale_price: $sale_price
+      compare_price: $compare_price
+      buying_price: $buying_price
+      quantity: $quantity
       short_description: $short_description
-      inventory: $inventory
-      product_weight: $product_weight
-      is_new: $is_new
+      product_description: $product_description
+      published: $published
+      disable_out_of_stock: $disable_out_of_stock
       note: $note
+      sku: $sku
+      thumbnail: $thumbnail
+      gallery: $gallery
+      categories: $categories
+      suppliers: $suppliers
+      tags: $tags
+      variation_options: $variation_options
+      variations: $variations
+      shippings: $shippings
+      product_shipping_options: $product_shipping_options
     ) {
-      product_uid
+      product_name
     }
   }
 `;
 
 export const UPDATE_PRODUCT = gql`
   mutation UpdateProduct(
-    $product_uid: ID!
-    $category_uid: ID!
-    $title: String!
-    $price: Float!
-    $discount: Float
-    $warehouse_location: String!
-    $product_description: String!
-    $short_description: String!
-    $inventory: Int!
-    $product_weight: Float!
-    $is_new: Boolean!
-    $note: String
+    id: ID!
+    product_name: String!
+    sale_price: Float!
+    compare_price: Float
+    buying_price: Float
+    quantity: Number
+    short_description: String!
+    product_description: String!
+    published: Boolean!
+    disable_out_of_stock: Boolean!
+    note: String
+    sku: String
+    thumbnail: Thumbnail
+    gallery: [Gallery]
+    categories: [Categories]
+    suppliers: [Suppliers]
+    tags: [Tags]
+    variation_options: [VariationOptions]
+    variations: [Variations]
+    shippings: [Shippings]
+    product_shipping_options: [ProductShippingOptions]
   ) {
-    UpdateProduct(
-      product_uid: $product_uid
-      category_uid: $category_uid
-      title: $title
-      price: $price
-      discount: $discount
-      warehouse_location: $warehouse_location
-      product_description: $product_description
+    updateProduct(
+      id: $id
+      product_name: $product_name
+      sale_price: $sale_price
+      compare_price: $compare_price
+      buying_price: $buying_price
+      quantity: $quantity
       short_description: $short_description
-      inventory: $inventory
-      product_weight: $product_weight
-      is_new: $is_new
+      product_description: $product_description
+      published: $published
+      disable_out_of_stock: $disable_out_of_stock
       note: $note
+      sku: $sku
+      thumbnail: $thumbnail
+      gallery: $gallery
+      categories: $categories
+      suppliers: $suppliers
+      tags: $tags
+      variation_options: $variation_options
+      variations: $variations
+      shippings: $shippings
+      product_shipping_options: $product_shipping_options
     ) {
-      product_uid
+      product_name
     }
   }
 `;
 
-export const UPDATE_IMAGE_ORDER = gql`
-  mutation UpdateImageOrder($image_uid: ID!, $display_order: Int!) {
-    updateImageOrder(image_uid: $image_uid, display_order: $display_order) {
-      display_order
+export const DELETE_ATTRIBUTE = gql`
+  mutation DeleteProduct($id: ID!) {
+    deleteProduct(id: $id) {
+      product_name
     }
   }
 `;

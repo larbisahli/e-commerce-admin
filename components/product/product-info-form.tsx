@@ -66,7 +66,7 @@ export default function ProductInfoForm({ initialValues }: IProps) {
           className="mb-5"
         />
         <Input
-          label={`${t('form:input-label-quantity')}*`}
+          label={`${t('form:input-label-total-quantity')}*`}
           type="number"
           min={0}
           {...register('quantity')}

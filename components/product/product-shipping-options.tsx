@@ -226,7 +226,6 @@ export default function ProductShippingOptionsForm({
           <Label>{t('form:input-label-shippings')}</Label>
           <div>
             {fields.map((item, index) => {
-              console.log('item====>', { item, index });
               return (
                 <ShippingsComponent
                   key={index}

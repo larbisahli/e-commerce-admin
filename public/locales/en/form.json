@@ -352,5 +352,6 @@
   "item-short-note": "Note",
   "create-supplier": "Create Supplier",
   "input-label-phone-number": "Number",
-  "edit-supplier": "Edit Supplier"
+  "edit-supplier": "Edit Supplier",
+  "input-label-total-quantity": "Total Quantity"
 }
