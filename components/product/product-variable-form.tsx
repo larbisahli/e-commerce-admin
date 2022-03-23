@@ -29,6 +29,7 @@ import {
 import { ATTRIBUTES_FOR_SELECT } from '@graphql/attribute';
 import ImageComponent from '@components/ImageComponent';
 import cn from 'classnames';
+import { useSettings } from '@contexts/settings.context';
 
 type IProps = {
   initialValues?: Product | null;
@@ -104,6 +105,7 @@ export default function ProductVariableForm({ initialValues }: IProps) {
     control,
     name: 'variations'
   });
+  const { currency } = useSettings();
 
   const variations = watch('variations');
   const gallery = watch('gallery');
@@ -233,7 +235,9 @@ export default function ProductVariableForm({ initialValues }: IProps) {
 
                     <div className="grid grid-cols-2 gap-5">
                       <Input
-                        label={`${t('form:input-label-sale-price')}*`}
+                        label={`${t(
+                          'form:input-label-sale-price'
+                        )} (${currency})*`}
                         type="number"
                         {...register(`variation_options.${index}.sale_price`)}
                         error={t(
@@ -243,7 +247,9 @@ export default function ProductVariableForm({ initialValues }: IProps) {
                         className="mb-5"
                       />
                       <Input
-                        label={t('form:input-label-compare-price')}
+                        label={`${t(
+                          'form:input-label-compare-price'
+                        )} (${currency})`}
                         type="number"
                         {...register(
                           `variation_options.${index}.compare_price`
@@ -256,7 +262,9 @@ export default function ProductVariableForm({ initialValues }: IProps) {
                         className="mb-5"
                       />
                       <Input
-                        label={t('form:input-label-buying-price')}
+                        label={`${t(
+                          'form:input-label-buying-price'
+                        )} (${currency})`}
                         type="number"
                         {...register(`variation_options.${index}.buying_price`)}
                         error={t(

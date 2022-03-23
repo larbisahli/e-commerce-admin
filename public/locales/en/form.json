@@ -353,5 +353,7 @@
   "create-supplier": "Create Supplier",
   "input-label-phone-number": "Number",
   "edit-supplier": "Edit Supplier",
-  "input-label-total-quantity": "Total Quantity"
+  "input-label-total-quantity": "Total Quantity",
+  "input-label-shipping-zones": "Shipping Zones",
+  "button-label-add-shipping-zone": "Add Shipping Zone"
 }

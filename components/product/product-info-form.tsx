@@ -2,6 +2,7 @@ import Card from '@components/common/card';
 import Description from '@components/ui/description';
 import Input from '@components/ui/input';
 import TextArea from '@components/ui/text-area';
+import { useSettings } from '@contexts/settings.context';
 import { useTranslation } from 'next-i18next';
 import { useFormContext } from 'react-hook-form';
 
@@ -15,6 +16,8 @@ export default function ProductInfoForm({ initialValues }: IProps) {
     formState: { errors }
   } = useFormContext();
   const { t } = useTranslation();
+
+  const { currency } = useSettings();
 
   return (
     <div className="flex flex-wrap pb-8 border-b border-dashed border-border-base my-5 sm:my-8">
@@ -39,7 +42,7 @@ export default function ProductInfoForm({ initialValues }: IProps) {
         />
 
         <Input
-          label={t('form:input-label-sale-price')}
+          label={`${t('form:input-label-sale-price')} (${currency})`}
           {...register('sale_price')}
           type="number"
           min={0}
@@ -48,7 +51,7 @@ export default function ProductInfoForm({ initialValues }: IProps) {
           className="mb-5"
         />
         <Input
-          label={t('form:input-label-compare-price')}
+          label={`${t('form:input-label-compare-price')} (${currency})`}
           {...register('compare_price')}
           type="number"
           min={0}
@@ -57,7 +60,7 @@ export default function ProductInfoForm({ initialValues }: IProps) {
           className="mb-5"
         />
         <Input
-          label={t('form:input-label-buying-price')}
+          label={`${t('form:input-label-buying-price')} (${currency})`}
           {...register('buying_price')}
           type="number"
           min={0}

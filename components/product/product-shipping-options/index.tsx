@@ -4,21 +4,14 @@ import Button from '@components/ui/button';
 import Description from '@components/ui/description';
 import Input from '@components/ui/input';
 import Label from '@components/ui/label';
-import Select from '@components/ui/select/select';
 import SelectInput from '@components/ui/select-input';
 import { SHIPPINGS_FOR_SELECT } from '@graphql/shipping';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { OrderBy, ProductShippings, Shipping } from '@ts-types/generated';
-import { isEmpty } from 'lodash';
+import { OrderBy, Shipping } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
-import { useState } from 'react';
-import type {
-  FieldValues,
-  UseFormRegister,
-  UseFormSetValue,
-  UseFormWatch
-} from 'react-hook-form';
 import { Control, useFieldArray, useFormContext } from 'react-hook-form';
+
+import ShippingsComponent from './shippings-component';
 
 type IProps = {
   control: Control<any>;
@@ -59,8 +52,6 @@ export default function ProductShippingOptionsForm({
     name: 'shippings',
     keyName: 'key'
   });
-
-  console.log('fields :>> ', fields);
 
   const { data, loading, error } = useQuery<ShippingsSelect, OptionsVariable>(
     SHIPPINGS_FOR_SELECT,
@@ -107,10 +98,8 @@ export default function ProductShippingOptionsForm({
               control={control}
               getOptionLabel={(option: any) => option.unit}
               getOptionValue={(option: any) => option.unit}
-              // @ts-ignore
               options={weight_units}
               className="w-full"
-              // isLoading={loading}
             />
           </div>
         </div>
@@ -131,9 +120,7 @@ export default function ProductShippingOptionsForm({
               className="w-full"
               getOptionLabel={(option: any) => option.unit}
               getOptionValue={(option: any) => option.unit}
-              // @ts-ignore
               options={volume_units}
-              // isLoading={loading}
             />
           </div>
         </div>
@@ -217,7 +204,6 @@ export default function ProductShippingOptionsForm({
               getOptionLabel={(option: any) => option.unit}
               getOptionValue={(option: any) => option.unit}
               options={dimension_units}
-              // isLoading={loading}
             />
           </div>
         </div>
@@ -228,13 +214,13 @@ export default function ProductShippingOptionsForm({
             {fields.map((item, index) => {
               return (
                 <ShippingsComponent
+                  control={control}
                   key={index}
                   item={item}
                   index={index}
                   setValue={setValue}
                   shippings={shippings}
                   loading={loading}
-                  register={register}
                   remove={remove}
                   watch={watch}
                 />
@@ -243,7 +229,15 @@ export default function ProductShippingOptionsForm({
             <Button
               type="button"
               onClick={() =>
-                append({ shipping_provider: {}, shipping_price: 0 })
+                append({
+                  shipping_provider: {},
+                  shipping_zones: [
+                    {
+                      zones: [{ name: 'Global', code: 'Global' }],
+                      shipping_price: 0
+                    }
+                  ]
+                })
               }
               className="w-full sm:w-auto"
             >
@@ -255,103 +249,3 @@ export default function ProductShippingOptionsForm({
     </div>
   );
 }
-
-interface SCProps {
-  item: ProductShippings;
-  index: number;
-  setValue: UseFormSetValue<FieldValues>;
-  register: UseFormRegister<FieldValues>;
-  // eslint-disable-next-line no-unused-vars
-  remove: (index?: number | number[]) => void;
-  watch: UseFormWatch<FieldValues>;
-  shippings: Shipping[];
-  loading: boolean;
-}
-
-const ShippingsComponent = ({
-  item,
-  index,
-  setValue,
-  shippings,
-  loading,
-  register,
-  remove,
-  watch
-}: SCProps) => {
-  const { t } = useTranslation();
-
-  // eslint-disable-next-line no-unused-vars
-  const [deletedIndex, setDeletedIndex] = useState<number | null>(null);
-
-  const value = watch(`shippings[${index}].shipping_provider`);
-
-  const removeAttributeValue = () => {
-    setDeletedIndex(index);
-    console.log('item', { item, index });
-    if (item?.id) {
-      // deleteAttributeValue({
-      //   variables: { id: item?.id },
-      //   onCompleted: (data: { deleteAttributeValue: AttributeValue }) => {
-      //     const attribute_value = data?.deleteAttributeValue?.attribute_value;
-      //     if (!isEmpty(attribute_value)) {
-      //       notify(t('common:successfully-deleted'), 'success');
-      //       remove(index);
-      //     }
-      //   }
-      // });
-      remove(index);
-    } else {
-      remove(index);
-    }
-  };
-
-  return (
-    <div className="border-b border-dashed border-border-200 last:border-0 py-5 md:py-8">
-      <div className="flex justify-between">
-        <div style={{ minWidth: '150px', marginRight: '5px' }}>
-          <Label style={{ color: '#929191', fontSize: '0.8rem' }}>
-            {t('form:input-label-shipping-provider')}
-          </Label>
-          <Select
-            onChange={(value) => {
-              setValue(`shippings[${index}].shipping_provider`, value);
-            }}
-            value={isEmpty(value) ? null : [value]}
-            className="w-full"
-            getOptionLabel={(option: any) => option.shipper_name}
-            getOptionValue={(option: any) => option.id}
-            options={shippings}
-            isLoading={loading}
-          />
-        </div>
-        <div>
-          <Label style={{ color: '#929191', fontSize: '0.8rem' }}>
-            {t('form:input-label-shipping-price')}
-          </Label>
-          <Input
-            {...register(`shippings[${index}].shipping_price` as const)}
-            type="number"
-            variant="outline"
-            className="mr-2"
-          />
-        </div>
-
-        <button
-          onClick={removeAttributeValue}
-          type="button"
-          className="text-sm text-red-500 hover:text-red-700 transition-colors duration-200 focus:outline-none sm:mt-4 sm:col-span-1"
-        >
-          {t('form:button-label-remove')}
-          {/* {deleteAttributeLoading && deletedIndex === index && (
-             <span
-               className="absolute h-4 w-4 ms-2 rounded-full border-2 border-transparent border-t-2 animate-spin"
-               style={{
-                 borderTopColor: 'red'
-               }}
-             />
-           )} */}
-        </button>
-      </div>
-    </div>
-  );
-};
