@@ -1,60 +1,72 @@
-import { ProductType } from '@ts-types/generated';
 import * as yup from 'yup';
 
 export const productValidationSchema = yup.object().shape({
-  name: yup.string().required('form:error-name-required'),
+  // thumbnail
+  // gallery
+  product_name: yup.string().required('form:error-product-name-required'),
   short_description: yup
     .string()
-    .test('len', 'Must be less than 160 characters', (val) => val.length > 160)
+    .test(
+      'len',
+      'Description Must be less than 160 characters',
+      (val) => val.length < 160
+    )
     .required('form:error-short-description-required'),
-  sku: yup.string().nullable(),
-  price: yup.mixed().when('productTypeValue', {
-    is: (productType: {
-      name: string;
-      value: string;
-      [key: string]: unknown;
-    }) => productType?.value === ProductType.Simple,
-    then: yup
-      .number()
-      .typeError('form:error-price-must-number')
-      .positive('form:error-price-must-positive')
-      .required('form:error-price-required')
-  }),
+  product_description: yup
+    .string()
+    .required('form:error-product-description-required'),
   sale_price: yup
     .number()
-    .transform((value) => (isNaN(value) ? undefined : value))
-    .lessThan(yup.ref('price'), 'Sale Price should be less than ${less}')
-    .positive('form:error-sale-price-must-positive'),
-  quantity: yup.number().required('form:error-quantity-required'),
-  status: yup.string().required('form:error-status-required'),
+    .typeError('form:error-amount-must-number')
+    .positive('form:error-price-must-positive')
+    .required('form:error-sale-price-required'),
+  compare_price: yup
+    .number()
+    .typeError('form:error-amount-must-number')
+    .transform((value) => (isNaN(value) ? null : value))
+    .lessThan(
+      yup.ref('sale_price'),
+      'Compare Price should be less than ${less}'
+    ),
+  quantity: yup
+    .number()
+    .typeError('form:error-amount-must-number')
+    .required('form:error-quantity-required'),
   variation_options: yup.array().of(
     yup.object().shape({
-      price: yup
-        .number()
-        .typeError('form:error-price-must-number')
-        .positive('form:error-price-must-positive')
-        .required('form:error-price-required'),
       sale_price: yup
         .number()
-        .transform((value) => (isNaN(value) ? undefined : value))
-        .lessThan(yup.ref('price'), 'Sale Price should be less than ${less}')
-        .positive('form:error-sale-price-must-positive'),
+        .typeError('form:error-amount-must-number')
+        .positive('form:error-price-must-positive')
+        .required('form:error-price-required'),
+      compare_price: yup
+        .number()
+        .typeError('form:error-amount-must-number')
+        .transform((value) => (isNaN(value) ? null : value))
+        .lessThan(
+          yup.ref('sale_price'),
+          'Compare Price should be less than ${less}'
+        ),
       quantity: yup
         .number()
-        .typeError('form:error-quantity-must-number')
-        .positive('form:error-quantity-must-positive')
+        .typeError('form:error-amount-must-number')
         .integer('form:error-quantity-must-integer')
-        .required('form:error-quantity-required'),
-      sku: yup.string().required('form:error-sku-required')
+        .required('form:error-quantity-required')
     })
-  )
+  ),
+  shippings: yup.array().of(
+    yup.object().shape({
+      shipping_provider: yup.object().shape({
+        id: yup.string().required('form:error-shipping-provider-required')
+      })
+    })
+  ),
+  categories: yup.array().min(1, 'Category Required'),
+  product_shipping_options: yup.object().shape({
+    weight: yup.number().typeError('form:error-amount-must-number'),
+    volume: yup.number().typeError('form:error-amount-must-number'),
+    dimension_width: yup.number().typeError('form:error-amount-must-number'),
+    dimension_height: yup.number().typeError('form:error-amount-must-number'),
+    dimension_depth: yup.number().typeError('form:error-amount-must-number')
+  })
 });
-
-// shippingType: yup.mixed().when('type', {
-//   is: (value: string) => value !== ShippingType.Free,
-//   then: yup
-//     .number()
-//     .typeError('form:error-amount-must-number')
-//     .positive('form:error-amount-must-positive')
-//     .required('form:error-amount-required')
-// })

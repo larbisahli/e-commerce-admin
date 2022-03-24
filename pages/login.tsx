@@ -4,13 +4,20 @@ import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-
-import { getClientToken, verifyAuth } from '../middleware/utils';
+import { useRouter } from 'next/router';
+import { getClientToken, verifyAuth } from '@middleware/utils';
+import { useEffect } from 'react';
 
 const LoginPage = (props) => {
+  const router = useRouter();
   const { t } = useTranslation('common');
 
   console.log(`props`, { props });
+
+  useEffect(() => {
+    // Prefetch the dashboard page
+    router.prefetch('/');
+  }, []);
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-light sm:bg-gray-100 bg">

@@ -355,5 +355,10 @@
   "edit-supplier": "Edit Supplier",
   "input-label-total-quantity": "Total Quantity",
   "input-label-shipping-zones": "Shipping Zones",
-  "button-label-add-shipping-zone": "Add Shipping Zone"
+  "button-label-add-shipping-zone": "Add Shipping Zone",
+  "error-product-name-required": "Product Name Required",
+  "error-short-description-required": "Short Description Required",
+  "error-product-description-required": "Product Description Required",
+  "error-sale-price-required": "Sale Price Required",
+  "error-shipping-provider-required": "Shipping Provider Required"
 }

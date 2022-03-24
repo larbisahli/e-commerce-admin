@@ -4,11 +4,13 @@ import Button from '@components/ui/button';
 import Checkbox from '@components/ui/checkbox';
 import Description from '@components/ui/description';
 import FileInput from '@components/ui/file-input';
+import ValidationError from '@components/ui/form-validation-error';
 import Label from '@components/ui/label';
 import Radio from '@components/ui/radio';
 import TextArea from '@components/ui/text-area';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useErrorLogger, useWarnIfUnsavedChanges } from '@hooks/index';
+import { notify } from '@lib/index';
 import { Product, Suppliers, Tag } from '@ts-types/generated';
 import cloneDeep from 'lodash/cloneDeep';
 import groupBy from 'lodash/groupBy';
@@ -86,7 +88,7 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
   const { t } = useTranslation();
 
   const methods = useForm<FormValues>({
-    // resolver: yupResolver(productValidationSchema),
+    resolver: yupResolver(productValidationSchema),
     shouldUnregister: true,
     //@ts-ignore
     defaultValues: initialValues
@@ -107,6 +109,15 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
   } = methods;
 
   const onSubmit = async (values: FormValues) => {
+    // Check if shipping_provider exist
+    const shippingProviderCheck = values?.shippings?.find(
+      (v) => !v.shipping_provider?.id
+    );
+    if (!isEmpty(shippingProviderCheck)) {
+      notify('Please add a Shipping Provider', 'error');
+      return;
+    }
+
     const inputValues: any = {
       product_name: values.product_name,
       short_description: values.short_description,
@@ -157,8 +168,13 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
       },
       shippings: values?.shippings?.map((value) => {
         return {
-          id: value?.shipping_provider?.id,
-          shipping_price: Number(value?.shipping_price)
+          shipping_provider: { id: value?.shipping_provider?.id },
+          shipping_zones: value?.shipping_zones?.map((sz) => {
+            return {
+              shipping_price: Number(sz?.shipping_price),
+              zones: sz?.zones?.map((z) => z?.code)
+            };
+          })
         };
       }),
       variations: values?.variations?.map((v) => {
@@ -267,6 +283,8 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
 
             <Card className="w-full sm:w-8/12 md:w-2/3">
               <ProductCategoryInput control={control} />
+              {/* @ts-ignore */}
+              <ValidationError message={t(errors.categories?.message)} />
               <ProductSupplierInput control={control} />
               <ProductTagInput control={control} />
             </Card>
@@ -294,6 +312,9 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
                 name="product_description"
                 className="mb-5"
                 defaultValue=""
+              />
+              <ValidationError
+                message={t(errors.product_description?.message)}
               />
               <TextArea
                 label={`${t('form:item-short-description')}*`}

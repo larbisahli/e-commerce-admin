@@ -2,6 +2,7 @@ import { useQuery } from '@apollo/client';
 import Card from '@components/common/card';
 import Button from '@components/ui/button';
 import Description from '@components/ui/description';
+import ValidationError from '@components/ui/form-validation-error';
 import Input from '@components/ui/input';
 import Label from '@components/ui/label';
 import SelectInput from '@components/ui/select-input';
@@ -42,8 +43,6 @@ export default function ProductShippingOptionsForm({
 
   const {
     register,
-    setValue,
-    watch,
     formState: { errors }
   } = useFormContext();
 
@@ -88,7 +87,6 @@ export default function ProductShippingOptionsForm({
           <Input
             {...register('product_shipping_options.weight')}
             type="number"
-            error={t(errors.product_shipping_options?.weight?.message!)}
             variant="outline"
             className="mr-2"
           />
@@ -103,13 +101,15 @@ export default function ProductShippingOptionsForm({
             />
           </div>
         </div>
+        <ValidationError
+          message={t(errors.product_shipping_options?.weight?.message!)}
+        />
         {/* Volume */}
         <Label>{t('form:input-label-volume')}</Label>
         <div className="flex items-center mb-5">
           <Input
             {...register('product_shipping_options.volume')}
             type="number"
-            error={t(errors.product_shipping_options?.volume?.message!)}
             variant="outline"
             className="mr-2"
           />
@@ -124,6 +124,9 @@ export default function ProductShippingOptionsForm({
             />
           </div>
         </div>
+        <ValidationError
+          message={t(errors.product_shipping_options?.volume?.message!)}
+        />
         {/* Dimensions */}
         <Label className="mb-3">{t('form:input-label-dimensions')}</Label>
         <div className="flex items-center mb-5 flex-wrap">
@@ -140,9 +143,6 @@ export default function ProductShippingOptionsForm({
             <Input
               {...register('product_shipping_options.dimension_width')}
               type="number"
-              error={t(
-                errors.product_shipping_options?.dimension_width?.message!
-              )}
               variant="outline"
               className="w-24 mr-2"
             />
@@ -160,9 +160,6 @@ export default function ProductShippingOptionsForm({
             <Input
               {...register('product_shipping_options.dimension_height')}
               type="number"
-              error={t(
-                errors.product_shipping_options?.dimension_height?.message!
-              )}
               variant="outline"
               className="w-24 mr-2"
             />
@@ -180,9 +177,6 @@ export default function ProductShippingOptionsForm({
             <Input
               {...register('product_shipping_options.dimension_depth')}
               type="number"
-              error={t(
-                errors.product_shipping_options?.dimension_depth?.message!
-              )}
               variant="outline"
               className="w-24 mr-2"
             />
@@ -206,6 +200,13 @@ export default function ProductShippingOptionsForm({
               options={dimension_units}
             />
           </div>
+          <ValidationError
+            message={
+              t(errors.product_shipping_options?.dimension_depth?.message!) ||
+              t(errors.product_shipping_options?.dimension_height?.message!) ||
+              t(errors.product_shipping_options?.dimension_width?.message!)
+            }
+          />
         </div>
         {/* Shippings */}
         <div>
@@ -218,11 +219,9 @@ export default function ProductShippingOptionsForm({
                   key={index}
                   item={item}
                   index={index}
-                  setValue={setValue}
                   shippings={shippings}
                   loading={loading}
                   remove={remove}
-                  watch={watch}
                 />
               );
             })}

@@ -107,10 +107,10 @@ export interface ProductShippingOptions {
 }
 
 export interface ProductShippings {
-  id?: Scalars['ID'];
-  key?: Scalars['ID'];
-  shipping_id?: Scalars['ID'];
-  shipping_price?: Scalars['Float'];
+  shipping_zones?: {
+    zones: { name: string; code: string }[];
+    shipping_price?: Scalars['Float'];
+  }[];
   shipping_provider?: Shipping;
 }
 export interface AttributeValue {

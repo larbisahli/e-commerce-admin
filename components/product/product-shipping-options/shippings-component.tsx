@@ -1,25 +1,19 @@
+import ValidationError from '@components/ui/form-validation-error';
 import Label from '@components/ui/label';
 import Select from '@components/ui/select/select';
-import { ProductShippings, Shipping } from '@ts-types/generated';
+import { Shipping } from '@ts-types/generated';
 import { isEmpty } from 'lodash';
 import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
-import type {
-  FieldValues,
-  UseFormSetValue,
-  UseFormWatch
-} from 'react-hook-form';
-import { Control } from 'react-hook-form';
+import { Control, useFormContext } from 'react-hook-form';
 
 import ShippingsZonesComponent from './shippings-zones-component';
 
 interface SCProps {
-  item: ProductShippings;
+  item: any;
   index: number;
-  setValue: UseFormSetValue<FieldValues>;
   // eslint-disable-next-line no-unused-vars
   remove: (index?: number | number[]) => void;
-  watch: UseFormWatch<FieldValues>;
   shippings: Shipping[];
   loading: boolean;
   control: Control<any>;
@@ -28,17 +22,23 @@ interface SCProps {
 const ShippingsComponent = ({
   item,
   index,
-  setValue,
   shippings,
   loading,
   remove,
-  watch,
   control
 }: SCProps) => {
   const { t } = useTranslation();
 
   // eslint-disable-next-line no-unused-vars
   const [deletedIndex, setDeletedIndex] = useState<number | null>(null);
+
+  const {
+    setValue,
+    watch,
+    formState: { errors }
+  } = useFormContext();
+
+  console.log('errors', errors);
 
   const value = watch(`shippings[${index}].shipping_provider`);
 
@@ -81,15 +81,20 @@ const ShippingsComponent = ({
             isLoading={loading}
           />
         </div>
+        <ValidationError
+          message={t(
+            isEmpty(errors.shippings)
+              ? null
+              : errors.shippings[index]?.shipping_provider?.id?.message
+          )}
+        />
         <div>
-          {/* <Label>{t('form:input-label-shippings')}</Label> */}
           <ShippingsZonesComponent control={control} index={index} />
         </div>
-
         <button
           onClick={removeShippingProvider}
           type="button"
-          className="transition-colors duration-200 focus:outline-none sm:mt-4 sm:col-span-1 text-red-500 py-1 rounded flex justify-center items-center text-base border border-solid border-red-500 hover:bg-red-700 hover:text-white"
+          className="transition-colors duration-200 focus:outline-none sm:mt-4 sm:col-span-1 text-red-500 py-1 rounded flex justify-center items-center text-base border border-solid border-red-500 hover:bg-red-700 hover:text-white mb-3"
         >
           {t('form:button-label-remove')}
           {/* {deleteAttributeLoading && deletedIndex === index && (

@@ -146,22 +146,22 @@ export const CREATE_PRODUCT = gql`
     sale_price: Float!
     compare_price: Float
     buying_price: Float
-    quantity: Number
+    quantity: Number!
     short_description: String!
     product_description: String!
     published: Boolean!
     disable_out_of_stock: Boolean!
     note: String
     sku: String
-    thumbnail: Thumbnail
-    gallery: [Gallery]
-    categories: [Categories]
-    suppliers: [Suppliers]
-    tags: [Tags]
+    thumbnail: IMGInput
+    gallery: [IMGInput]
+    categories: [categoryInput]
+    suppliers: [supplierInput]
+    tags: [tagInput]
     variation_options: [VariationOptions]
-    variations: [Variations]
-    shippings: [Shippings]
-    product_shipping_options: [ProductShippingOptions]
+    variations: [variationInput]
+    shippings: [ProductShippingInputType]
+    product_shipping_options: productShippingOptionInput
   ) {
     createProduct(
       product_name: $product_name
@@ -197,22 +197,22 @@ export const UPDATE_PRODUCT = gql`
     sale_price: Float!
     compare_price: Float
     buying_price: Float
-    quantity: Number
+    quantity: Number!
     short_description: String!
     product_description: String!
     published: Boolean!
     disable_out_of_stock: Boolean!
     note: String
     sku: String
-    thumbnail: Thumbnail
-    gallery: [Gallery]
-    categories: [Categories]
-    suppliers: [Suppliers]
-    tags: [Tags]
+    thumbnail: IMGInput
+    gallery: [IMGInput]
+    categories: [categoryInput]
+    suppliers: [supplierInput]
+    tags: [tagInput]
     variation_options: [VariationOptions]
-    variations: [Variations]
-    shippings: [Shippings]
-    product_shipping_options: [ProductShippingOptions]
+    variations: [variationInput]
+    shippings: [ProductShippingInputType]
+    product_shipping_options: productShippingOptionInput
   ) {
     updateProduct(
       id: $id
