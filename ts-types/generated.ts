@@ -88,7 +88,7 @@ export interface Category extends CreatedUpdatedByAt {
   category_description?: Nullable<Scalars['String']>;
   children?: Nullable<Array<Category>>;
   active?: Scalars['Boolean'];
-  image_path?: Nullable<string>;
+  image?: Nullable<IMGType[]>;
   icon?: Nullable<Scalars['String']>;
   has_children?: Scalars['Boolean'];
 }
@@ -108,7 +108,7 @@ export interface ProductShippingOptions {
 
 export interface ProductShippings {
   shipping_zones?: {
-    zones: { name: string; code: string }[];
+    zones: { name: string; code: string }[] | string[];
     shipping_price?: Scalars['Float'];
   }[];
   shipping_provider?: Shipping;
@@ -198,8 +198,8 @@ export declare type LocationInput = {
 };
 
 export interface Product extends CreatedUpdatedByAt {
-  id: Scalars['ID'];
-  slug: Scalars['String'];
+  id?: Scalars['ID'];
+  slug?: Scalars['String'];
   product_name: Scalars['String'];
   sku?: Nullable<Scalars['String']>;
   sale_price?: Scalars['Float'];
@@ -212,14 +212,8 @@ export interface Product extends CreatedUpdatedByAt {
   status?: 'draft' | 'publish';
   disable_out_of_stock?: Scalars['Boolean'];
   note?: Nullable<Scalars['String']>;
-  thumbnail?: {
-    id: Scalars['String'];
-    image: Scalars['String'];
-  }[];
-  gallery?: {
-    id: Scalars['String'];
-    image: Scalars['String'];
-  }[];
+  thumbnail?: IMGType[];
+  gallery?: IMGType[];
   categories?: Array<Category>;
   suppliers?: Nullable<Array<Nullable<Suppliers>>>;
   tags?: Nullable<Array<Nullable<Tag>>>;
@@ -227,7 +221,7 @@ export interface Product extends CreatedUpdatedByAt {
   product_shipping_options?: ProductShippingOptions;
   variation_options: {
     title: string;
-    is_disable: boolean;
+    is_disable?: boolean;
     active: boolean;
     image: string;
     options: string[];
@@ -244,6 +238,12 @@ export interface Product extends CreatedUpdatedByAt {
   // [key: string]: any;
 }
 
+export interface IMGType {
+  id?: Scalars['String'];
+  image?: Scalars['String'];
+  placeholder?: Scalars['String'];
+  is_thumbnail?: boolean;
+}
 export interface Suppliers extends CreatedUpdatedByAt {
   id?: Scalars['ID'];
   supplier_name?: Scalars['String'];

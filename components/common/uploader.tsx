@@ -3,22 +3,21 @@ import { UploadIcon } from '@components/icons/upload-icon';
 import ImageComponent from '@components/ImageComponent';
 import Loader from '@components/ui/loader/loader';
 // import { useUploadMutation } from '@data/upload/use-upload.mutation';
-import { useGetStaff } from '@hooks/index';
 import { notify } from '@lib/notify';
-import { generateShortId } from '@utils/utils';
 import { apiURL } from '@utils/utils';
 import isEmpty from 'lodash/isEmpty';
 import { useTranslation } from 'next-i18next';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 
-const getPreviewImage = (value: any) => {
-  let images: any[] = [];
-  if (value) {
-    images = Array.isArray(value) ? value : [{ ...value }];
-  }
-  return images;
-};
+interface ImageType {
+  bucket: string;
+  image: string;
+  mimeType: string;
+  originalname: string;
+  placeholder: string;
+  success: boolean;
+}
 
 export default function Uploader({
   onChange,
@@ -28,82 +27,50 @@ export default function Uploader({
 }: any) {
   const { t } = useTranslation();
 
-  const [files, setFiles] = useState<string[]>(getPreviewImage(value));
+  const [images, setImages] = useState<ImageType[]>(value ?? []);
   const [loading, setLoading] = useState<boolean>(false);
 
   // const { mutate: upload, isLoading: loading } = useUploadMutation();
 
-  const { staffInfo } = useGetStaff();
-
-  const token = staffInfo?.token;
-
   const { getRootProps, getInputProps } = useDropzone({
     accept: 'image/*',
     multiple,
+    maxSize: 5 * (1024 * 1024),
     onDrop: async (acceptedFiles) => {
       try {
         setLoading(true);
-        if (!isEmpty(files) && !multiple) {
+        if (!isEmpty(images) && !multiple) {
           notify('You should remove the current image first', 'warning');
           setLoading(false);
           return;
         }
 
         for await (const file of acceptedFiles) {
-          const fileReader = new FileReader();
+          var formData = new FormData();
+          formData.append('image', file);
+          fetch(`${apiURL}/upload`, {
+            credentials: 'include',
+            method: 'POST',
+            body: formData
+          })
+            .then(async (res) => {
+              const image = (await res.json()) as ImageType;
 
-          // Chunk the image
-          fileReader.onload = async (ev) => {
-            const fileName = file.name;
-            const extension = fileName.slice(fileName.lastIndexOf('.'));
-            const newFileName = `${generateShortId()}${extension}`;
-            //@ts-ignore
-            const CHUNK_SIZE = ev.target?.result.byteLength;
-
-            const response = await fetch(`${apiURL}/upload`, {
-              method: 'POST',
-              credentials: 'include',
-              headers: new Headers({
-                Authorization: 'Bearer ' + token,
-                'content-type': 'application/octet-stream',
-                'content-length': CHUNK_SIZE,
-                'x-file-name': newFileName
-              }),
-              body: ev.target?.result
-            });
-
-            const {
-              success,
-              error,
-              image
-            }: { success: boolean; error: Error | null; image: string | null } =
-              await response.json();
-            const status = response?.status;
-
-            console.log(`<:FINISHED UPLOAD:>`, {
-              success,
-              error,
-              image,
-              status
-            });
-            // If an image was uploaded show a message when leaving the page
-
-            if (success) {
-              setFiles((prev) => [...(prev ?? []), image]);
-              onChange((prev) => [...(prev ?? []), image]);
-              setUnsavedChanges((prev) => [...(prev ?? []), image]);
-            }
-
-            if (error?.message) {
-              notify(error?.message, 'error');
-            }
-
-            if (status === 500) {
+              if (image.success) {
+                setImages((prev) => [...(prev ?? []), image]);
+                onChange((prev) => [...(prev ?? []), image]);
+                setUnsavedChanges((prev) => [...(prev ?? []), image]);
+              }
+              setLoading(false);
+              console.log(`<:FINISHED UPLOAD:>`, image);
+            })
+            .catch((error) => {
               // send error to sentry
-            }
-            setLoading(false);
-          };
-          fileReader.readAsArrayBuffer(file);
+              if (error?.message) {
+                notify(error?.message, 'error');
+              }
+              setLoading(false);
+            });
         }
       } catch (error) {
         // send error to sentry
@@ -117,17 +84,19 @@ export default function Uploader({
     console.log('==========', e, { image });
     e.preventDefault();
 
-    const images = files.filter((file) => file !== image);
+    const images_ = images.filter((file) => file.image !== image);
 
-    setFiles(images);
-    setUnsavedChanges(images);
+    setImages(images_);
+    setUnsavedChanges(images_);
     if (onChange) {
-      onChange(images);
+      onChange(images_);
     }
   };
 
-  const thumbs = files?.map((file, idx) => {
-    if (file) {
+  console.log('images', images);
+
+  const thumbs = images?.map(({ image, placeholder }, idx) => {
+    if (image) {
       return (
         <div
           className="inline-flex flex-col overflow-hidden border border-border-200 rounded mt-2 me-2 relative"
@@ -136,10 +105,11 @@ export default function Uploader({
           <div className="flex items-center justify-center min-w-0 w-16 h-16 overflow-hidden">
             {/* eslint-disable-next-line jsx-a11y/alt-text */}
             <ImageComponent
-              src={file}
-              customPlaceholder={'/placeholders/no-image.svg'}
+              src={image}
+              customPlaceholder={placeholder ?? '/placeholders/no-image.svg'}
               width={64}
               height={64}
+              layout="fill"
             />
           </div>
           <button
@@ -147,7 +117,7 @@ export default function Uploader({
             className="w-4 h-4 flex items-center justify-center rounded-full 
             bg-red-600 text-xs text-light absolute top-1 
               end-1 shadow-xl outline-none"
-            onClick={(e) => handleDelete(e, file)}
+            onClick={(e) => handleDelete(e, image)}
           >
             <CloseIcon width={10} height={10} />
           </button>
@@ -155,14 +125,6 @@ export default function Uploader({
       );
     }
   });
-
-  useEffect(
-    () => () => {
-      // Make sure to revoke the data uris to avoid memory leaks
-      files.forEach((file: any) => URL.revokeObjectURL(file.thumbnail));
-    },
-    [files]
-  );
 
   return (
     <section className="upload">

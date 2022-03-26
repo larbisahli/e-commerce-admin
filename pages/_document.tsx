@@ -6,6 +6,7 @@ import Document, {
   NextScript
 } from 'next/document';
 import { i18n } from 'next-i18next';
+
 export default class CustomDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {
     return Document.getInitialProps(ctx);
@@ -14,7 +15,7 @@ export default class CustomDocument extends Document {
     const { locale } = this.props.__NEXT_DATA__;
     const dir = locale === 'ar' ? 'rtl' : 'ltr';
     if (process.env.NODE_ENV !== 'production') {
-      i18n!.reloadResources(locale);
+      i18n?.reloadResources(locale);
     }
 
     return (

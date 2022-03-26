@@ -1,3 +1,4 @@
+import { useMutation } from '@apollo/client';
 import Card from '@components/common/card';
 import Alert from '@components/ui/alert';
 import Button from '@components/ui/button';
@@ -8,10 +9,12 @@ import ValidationError from '@components/ui/form-validation-error';
 import Label from '@components/ui/label';
 import Radio from '@components/ui/radio';
 import TextArea from '@components/ui/text-area';
+import { CREATE_PRODUCT, UPDATE_PRODUCT } from '@graphql/product';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useErrorLogger, useWarnIfUnsavedChanges } from '@hooks/index';
 import { notify } from '@lib/index';
 import { Product, Suppliers, Tag } from '@ts-types/generated';
+import { ROUTES } from '@utils/routes';
 import cloneDeep from 'lodash/cloneDeep';
 import groupBy from 'lodash/groupBy';
 import isEmpty from 'lodash/isEmpty';
@@ -105,9 +108,33 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
     handleSubmit,
     control,
     getValues,
+    reset,
     formState: { errors }
   } = methods;
 
+  const [createProduct, { loading: creating, error: createProductError }] =
+    useMutation(CREATE_PRODUCT, {
+      onCompleted: (data: { createAttribute: Product }) => {
+        if (!isEmpty(data)) {
+          notify(t('common:successfully-created'), 'success');
+          // reset();
+          // router.push(ROUTES.PRODUCTS);
+        }
+      }
+    });
+
+  const [updateProduct, { loading: updating, error: updateProductError }] =
+    useMutation(UPDATE_PRODUCT, {
+      onCompleted: (data: { updateAttribute: Product }) => {
+        if (!isEmpty(data)) {
+          notify(t('common:successfully-updated'), 'success');
+          // router.push(ROUTES.PRODUCTS);
+        }
+      }
+    });
+
+  useErrorLogger(createProductError);
+  useErrorLogger(updateProductError);
   const onSubmit = async (values: FormValues) => {
     // Check if shipping_provider exist
     const shippingProviderCheck = values?.shippings?.find(
@@ -118,7 +145,7 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
       return;
     }
 
-    const inputValues: any = {
+    const variables: Product = {
       product_name: values.product_name,
       short_description: values.short_description,
       product_description: values.product_description,
@@ -128,6 +155,7 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
       sale_price: Number(values.sale_price),
       compare_price: Number(values.compare_price),
       buying_price: Number(values.buying_price),
+      note: values.note,
       categories: values?.categories?.map(({ id }) => {
         return { id };
       }),
@@ -138,10 +166,16 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
         return { id };
       }),
       thumbnail: values?.thumbnail?.map((img) => {
-        return { image: img };
+        return {
+          image: img?.image,
+          placeholder: img?.placeholder
+        };
       }),
       gallery: values.gallery?.map((img) => {
-        return { image: img };
+        return {
+          image: img?.image,
+          placeholder: img?.placeholder
+        };
       }),
       disable_out_of_stock: values?.disable_out_of_stock,
       product_shipping_options: {
@@ -199,23 +233,17 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
         };
       })
     };
-    console.log('inputValues', { inputValues, values });
+    console.log('inputValues', { variables, values });
 
     if (initialValues) {
-      // updateProduct(
-      //   {
-      //     variables: {
-      //       id: initialValues.id,
-      //       input: inputValues
-      //     }
-      //   }
-      // );
+      updateProduct({
+        variables: {
+          id: initialValues.id,
+          ...variables
+        }
+      });
     } else {
-      // createProduct(
-      //   {
-      //     ...inputValues
-      //   }
-      // );
+      createProduct({ variables });
     }
   };
 
@@ -382,9 +410,7 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
                 {t('form:button-label-back')}
               </Button>
             )}
-            <Button
-            // loading={updating || creating}
-            >
+            <Button loading={updating || creating}>
               {initialValues
                 ? t('form:button-label-update-product')
                 : t('form:button-label-add-product')}

@@ -94,22 +94,13 @@ function SelectCategories({ control }: { control: Control<FormValues> }) {
   );
 }
 
-type FormValues = {
-  category_name: string;
-  category_description: Nullable<string>;
-  parent: Nullable<{
-    id: string;
-    category_name: string;
-  }>;
-  image_path: Nullable<string[]>;
-  icon: any;
-};
+type FormValues = Category;
 
 const defaultValues = {
   category_name: '',
   category_description: null,
   parent: null,
-  image_path: null,
+  image: null,
   icon: null
 };
 
@@ -135,16 +126,13 @@ export default function CreateOrUpdateCategoriesForm({
     defaultValues: initialValues
       ? {
           ...initialValues,
-          image_path: initialValues?.image_path
-            ? [initialValues?.image_path]
-            : [],
           icon: initialValues?.icon
             ? categoryIcons.find(
                 (singleIcon) => singleIcon.value === initialValues?.icon!
               )
             : null
         }
-      : defaultValues,
+      : (defaultValues as unknown),
     resolver: yupResolver(categoryValidationSchema)
   });
 
@@ -179,9 +167,16 @@ export default function CreateOrUpdateCategoriesForm({
       category_description: values.category_description,
       // @ts-ignore
       parent_id: isEmpty(values?.parent) ? null : values?.parent?.id,
-      image_path: isEmpty(values.image_path) ? null : values.image_path[0],
-      icon: values.icon?.value ?? null
+      image: values.image?.map((img) => {
+        return {
+          image: img?.image,
+          placeholder: img?.placeholder
+        };
+      }),
+      icon: (values.icon as unknown as { value: string })?.value ?? null
     };
+
+    console.log('variables :>> ', variables);
 
     if (isEmpty(initialValues)) {
       createCategory({ variables });
@@ -227,6 +222,7 @@ export default function CreateOrUpdateCategoriesForm({
         <Card className="w-full sm:w-8/12 md:w-2/3">
           <Input
             label={t('form:input-label-name')}
+            // @ts-ignore
             {...register('category_name')}
             error={t(errors.category_name?.message!)}
             variant="outline"

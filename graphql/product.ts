@@ -142,26 +142,26 @@ export const PRODUCT = gql`
 
 export const CREATE_PRODUCT = gql`
   mutation CreateProduct(
-    product_name: String!
-    sale_price: Float!
-    compare_price: Float
-    buying_price: Float
-    quantity: Number!
-    short_description: String!
-    product_description: String!
-    published: Boolean!
-    disable_out_of_stock: Boolean!
-    note: String
-    sku: String
-    thumbnail: IMGInput
-    gallery: [IMGInput]
-    categories: [categoryInput]
-    suppliers: [supplierInput]
-    tags: [tagInput]
-    variation_options: [VariationOptions]
-    variations: [variationInput]
-    shippings: [ProductShippingInputType]
-    product_shipping_options: productShippingOptionInput
+    $product_name: String!
+    $sale_price: Float!
+    $compare_price: Float
+    $buying_price: Float
+    $quantity: Int!
+    $short_description: String!
+    $product_description: String!
+    $published: Boolean!
+    $disable_out_of_stock: Boolean!
+    $note: String
+    $sku: String
+    $thumbnail: [IMGInput]
+    $gallery: [IMGInput]
+    $categories: [CategoryInput]
+    $suppliers: [SupplierInput]
+    $tags: [TagInput]
+    $variation_options: [VariationOptionInput]
+    $variations: [VariationInput]
+    $shippings: [ProductShippingInput]
+    $product_shipping_options: ProductShippingOptionInput
   ) {
     createProduct(
       product_name: $product_name
@@ -192,27 +192,27 @@ export const CREATE_PRODUCT = gql`
 
 export const UPDATE_PRODUCT = gql`
   mutation UpdateProduct(
-    id: ID!
-    product_name: String!
-    sale_price: Float!
-    compare_price: Float
-    buying_price: Float
-    quantity: Number!
-    short_description: String!
-    product_description: String!
-    published: Boolean!
-    disable_out_of_stock: Boolean!
-    note: String
-    sku: String
-    thumbnail: IMGInput
-    gallery: [IMGInput]
-    categories: [categoryInput]
-    suppliers: [supplierInput]
-    tags: [tagInput]
-    variation_options: [VariationOptions]
-    variations: [variationInput]
-    shippings: [ProductShippingInputType]
-    product_shipping_options: productShippingOptionInput
+    $id: ID!
+    $product_name: String!
+    $sale_price: Float!
+    $compare_price: Float
+    $buying_price: Float
+    $quantity: Int!
+    $short_description: String!
+    $product_description: String!
+    $published: Boolean!
+    $disable_out_of_stock: Boolean!
+    $note: String
+    $sku: String
+    $thumbnail: [IMGInput]
+    $gallery: [IMGInput]
+    $categories: [CategoryInput]
+    $suppliers: [SupplierInput]
+    $tags: [TagInput]
+    $variation_options: [VariationOptionInput]
+    $variations: [VariationInput]
+    $shippings: [ProductShippingInput]
+    $product_shipping_options: ProductShippingOptionInput
   ) {
     updateProduct(
       id: $id
