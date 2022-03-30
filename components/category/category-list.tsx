@@ -37,7 +37,7 @@ const CategoryList = ({
       dataIndex: 'category_name',
       key: 'category_name',
       align: alignLeft,
-      width: 100,
+      width: 150,
       ellipsis: true,
       render: (category_name: string) => {
         return (

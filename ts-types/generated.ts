@@ -88,7 +88,7 @@ export interface Category extends CreatedUpdatedByAt {
   category_description?: Nullable<Scalars['String']>;
   children?: Nullable<Array<Category>>;
   active?: Scalars['Boolean'];
-  image?: Nullable<IMGType[]>;
+  thumbnail?: IMGType;
   icon?: Nullable<Scalars['String']>;
   has_children?: Scalars['Boolean'];
 }
@@ -159,7 +159,7 @@ export interface Shipping extends CreatedUpdatedByAt {
   id?: Nullable<Scalars['ID']>;
   shipper_name?: Nullable<Scalars['String']>;
   active?: Nullable<Scalars['Boolean']>;
-  shipper_icon_path?: Nullable<Scalars['String']>;
+  thumbnail?: IMGType;
 }
 
 export interface StoreSettingsOptions {
@@ -212,7 +212,7 @@ export interface Product extends CreatedUpdatedByAt {
   status?: 'draft' | 'publish';
   disable_out_of_stock?: Scalars['Boolean'];
   note?: Nullable<Scalars['String']>;
-  thumbnail?: IMGType[];
+  thumbnail?: IMGType;
   gallery?: IMGType[];
   categories?: Array<Category>;
   suppliers?: Nullable<Array<Nullable<Suppliers>>>;

@@ -22,14 +22,10 @@ import { shippingValidationSchema } from './shipping-validation-schema';
 const defaultValues = {
   shipper_name: '',
   active: true,
-  shipper_icon_path: null
+  thumbnail: null
 };
 
-type FormValues = {
-  shipper_name: string;
-  active: boolean;
-  shipper_icon_path: Nullable<string[]>;
-};
+type FormValues = Shipping;
 
 type IProps = {
   initialValues?: Nullable<Shipping>;
@@ -52,10 +48,7 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
     resolver: yupResolver(shippingValidationSchema),
     defaultValues: initialValues
       ? {
-          ...initialValues,
-          shipper_icon_path: initialValues?.shipper_icon_path
-            ? [initialValues?.shipper_icon_path]
-            : []
+          ...initialValues
         }
       : defaultValues
   });
@@ -87,18 +80,18 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
   useErrorLogger(updateShippingError);
 
   const onSubmit = async (values: Shipping) => {
-    if (isEmpty(values.shipper_icon_path)) {
+    if (isEmpty(values.thumbnail)) {
       notify(t('form:error-logo-required'), 'warning');
     }
 
     const variables = {
       ...values,
       active: true,
-      shipper_icon_path: isEmpty(values.shipper_icon_path)
-        ? null
-        : values.shipper_icon_path[0]
+      thumbnail: {
+        image: values.thumbnail?.image,
+        placeholder: values.thumbnail?.placeholder
+      }
     };
-    console.log('values', { values, variables, initialValues });
 
     if (isEmpty(initialValues)) {
       createShipping({ variables });
@@ -122,7 +115,7 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
 
         <Card className="w-full sm:w-8/12 md:w-2/3">
           <FileInput
-            name="shipper_icon_path"
+            name="thumbnail"
             control={control}
             multiple={false}
             setUnsavedChanges={setUnsavedChanges}

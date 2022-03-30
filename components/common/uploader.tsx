@@ -6,8 +6,9 @@ import Loader from '@components/ui/loader/loader';
 import { notify } from '@lib/notify';
 import { apiURL } from '@utils/utils';
 import isEmpty from 'lodash/isEmpty';
+import isArray from 'lodash/isArray';
 import { useTranslation } from 'next-i18next';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useDropzone } from 'react-dropzone';
 
 interface ImageType {
@@ -27,7 +28,7 @@ export default function Uploader({
 }: any) {
   const { t } = useTranslation();
 
-  const [images, setImages] = useState<ImageType[]>(value ?? []);
+  const [images, setImages] = useState<ImageType | ImageType[]>(value);
   const [loading, setLoading] = useState<boolean>(false);
 
   // const { mutate: upload, isLoading: loading } = useUploadMutation();
@@ -52,25 +53,29 @@ export default function Uploader({
             credentials: 'include',
             method: 'POST',
             body: formData
-          })
-            .then(async (res) => {
-              const image = (await res.json()) as ImageType;
+          }).then(async (res) => {
+            const image = (await res.json()) as ImageType;
 
-              if (image.success) {
-                setImages((prev) => [...(prev ?? []), image]);
+            if (image.success) {
+              if (multiple) {
+                setImages((prev) => [...((prev as ImageType[]) ?? []), image]);
                 onChange((prev) => [...(prev ?? []), image]);
-                setUnsavedChanges((prev) => [...(prev ?? []), image]);
+              } else {
+                setImages(image as ImageType);
+                onChange(image);
               }
-              setLoading(false);
-              console.log(`<:FINISHED UPLOAD:>`, image);
-            })
-            .catch((error) => {
-              // send error to sentry
-              if (error?.message) {
-                notify(error?.message, 'error');
-              }
-              setLoading(false);
-            });
+              setUnsavedChanges((prev) => [...(prev ?? []), image]);
+            }
+
+            // @ts-ignore
+            if (image?.error?.message) {
+              // @ts-ignore
+              notify(image?.error?.message, 'error');
+            }
+
+            setLoading(false);
+            console.log(`<:FINISHED UPLOAD:>`, image);
+          });
         }
       } catch (error) {
         // send error to sentry
@@ -80,51 +85,82 @@ export default function Uploader({
     }
   });
 
-  const handleDelete = (e, image: string) => {
-    console.log('==========', e, { image });
+  const handleDelete = (e, image?: string) => {
     e.preventDefault();
-
-    const images_ = images.filter((file) => file.image !== image);
+    let images_;
+    if (isArray(images) && image) {
+      images_ = images.filter((file) => file.image !== image);
+    } else {
+      images_ = null;
+    }
 
     setImages(images_);
+    onChange(images_);
     setUnsavedChanges(images_);
-    if (onChange) {
-      onChange(images_);
-    }
   };
 
-  console.log('images', images);
+  const thumbs = useMemo(() => {
+    if (isEmpty(images)) {
+      return null;
+    }
 
-  const thumbs = images?.map(({ image, placeholder }, idx) => {
-    if (image) {
+    if (isArray(images)) {
+      return images?.map(({ image, placeholder }, idx) => {
+        return (
+          <div
+            className="inline-flex flex-col overflow-hidden border border-border-200 rounded mt-2 me-2 relative"
+            key={idx}
+          >
+            <div className="flex items-center justify-center min-w-0 w-16 h-16 overflow-hidden">
+              {/* eslint-disable-next-line jsx-a11y/alt-text */}
+              <ImageComponent
+                src={image}
+                customPlaceholder={placeholder ?? '/placeholders/no-image.svg'}
+                // width={64}
+                // height={64}
+                layout="fill"
+                objectFit="cover"
+              />
+            </div>
+            <button
+              type="button"
+              className="w-4 h-4 flex items-center justify-center rounded-full 
+                bg-red-600 text-xs text-light absolute top-1 
+                  end-1 shadow-xl outline-none"
+              onClick={(e) => handleDelete(e, image)}
+            >
+              <CloseIcon width={10} height={10} />
+            </button>
+          </div>
+        );
+      });
+    } else {
       return (
-        <div
-          className="inline-flex flex-col overflow-hidden border border-border-200 rounded mt-2 me-2 relative"
-          key={idx}
-        >
+        <div className="inline-flex flex-col overflow-hidden border border-border-200 rounded mt-2 me-2 relative">
           <div className="flex items-center justify-center min-w-0 w-16 h-16 overflow-hidden">
             {/* eslint-disable-next-line jsx-a11y/alt-text */}
             <ImageComponent
-              src={image}
-              customPlaceholder={placeholder ?? '/placeholders/no-image.svg'}
-              width={64}
-              height={64}
+              src={images?.image ?? '/placeholders/no-image.svg'}
+              customPlaceholder={images?.placeholder}
+              // width={64}
+              // height={64}
               layout="fill"
+              objectFit="cover"
             />
           </div>
           <button
             type="button"
             className="w-4 h-4 flex items-center justify-center rounded-full 
-            bg-red-600 text-xs text-light absolute top-1 
-              end-1 shadow-xl outline-none"
-            onClick={(e) => handleDelete(e, image)}
+        bg-red-600 text-xs text-light absolute top-1 
+          end-1 shadow-xl outline-none"
+            onClick={(e) => handleDelete(e)}
           >
             <CloseIcon width={10} height={10} />
           </button>
         </div>
       );
     }
-  });
+  }, [images]);
 
   return (
     <section className="upload">
@@ -145,9 +181,9 @@ export default function Uploader({
         </p>
       </div>
 
-      {(!!thumbs.length || loading) && (
+      {(!!thumbs || loading) && (
         <aside className="flex flex-wrap mt-2">
-          {!!thumbs.length && thumbs}
+          {!!thumbs && thumbs}
           {loading && (
             <div className="h-16 flex items-center mt-2 ms-2">
               <Loader simple={true} className="w-6 h-6" />

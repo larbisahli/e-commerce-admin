@@ -1,11 +1,13 @@
 // import Image from 'next/image';
 import ImageComponent from '@components/ImageComponent/index';
 import cn from 'classnames';
+import Image from 'next/image';
 import React from 'react';
 
 type AvatarProps = {
   className?: string;
   src: string;
+  customPlaceholder: string;
   alt?: string;
   width?: number;
   height?: number;
@@ -13,6 +15,7 @@ type AvatarProps = {
 
 const Avatar: React.FC<AvatarProps> = ({
   src,
+  customPlaceholder,
   className,
   alt = 'Avatar',
   ...rest
@@ -25,13 +28,22 @@ const Avatar: React.FC<AvatarProps> = ({
       )}
       {...rest}
     >
-      <ImageComponent
-        alt={alt}
-        src={src}
-        customPlaceholder={'/placeholders/avatar.svg'}
-        layout="fill"
-        priority={true}
-      />
+      {src ? (
+        <ImageComponent
+          alt={alt}
+          src={src}
+          customPlaceholder={customPlaceholder}
+          layout="fill"
+          priority={true}
+        />
+      ) : (
+        <Image
+          alt={alt}
+          src="/placeholders/avatar.svg"
+          layout="fill"
+          priority={true}
+        />
+      )}
     </div>
   );
 };

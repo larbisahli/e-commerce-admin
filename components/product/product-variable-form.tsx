@@ -16,7 +16,7 @@ import SelectInput from '@components/ui/select-input';
 import { cartesian } from '@utils/cartesian';
 import isEmpty from 'lodash/isEmpty';
 import { useEffect, useMemo } from 'react';
-import { Product } from '@ts-types/generated';
+import { Product, IMGType } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useQuery } from '@apollo/client';
@@ -371,7 +371,7 @@ const TitleAndOptionsInput = ({
 };
 
 interface VariationImagesProps {
-  gallery: string[];
+  gallery: IMGType[];
   index: number;
   setValue: UseFormSetValue<FieldValues>;
   watch: UseFormWatch<FieldValues>;
@@ -398,29 +398,29 @@ const VariationImages = ({
   return (
     <div className="mb-5 mt-5">
       <Label>{t('form:input-label-select-image')}</Label>
-      {gallery?.map((img) => {
+      {gallery?.map(({ image, placeholder }) => {
         return (
           <div
-            onClick={() => setImage(img)}
+            onClick={() => setImage(image)}
             className={cn(
               'inline-flex flex-col transition-all overflow-hidden border-2 border-border-200 rounded mt-2 me-2 relative cursor-pointer',
               {
-                '!border-2': selectedImg === img,
-                shadow: selectedImg === img
+                '!border-2': selectedImg === image,
+                shadow: selectedImg === image
               }
             )}
             style={{
-              borderColor: selectedImg === img ? '#46d934' : null,
-              transform: selectedImg === img ? 'translateY(-8px)' : null
+              borderColor: selectedImg === image ? '#46d934' : null,
+              transform: selectedImg === image ? 'translateY(-8px)' : null
             }}
-            key={img}
+            key={image}
           >
             <div className="flex items-center justify-center min-w-0 w-16 h-16 overflow-hidden">
               <ImageComponent
-                src={img}
-                customPlaceholder={'/placeholders/no-image.svg'}
-                width={64}
-                height={64}
+                src={image ?? '/placeholders/no-image.svg'}
+                customPlaceholder={placeholder}
+                layout="fill"
+                objectFit="cover"
               />
             </div>
           </div>

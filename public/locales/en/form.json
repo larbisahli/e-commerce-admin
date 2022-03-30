@@ -360,5 +360,6 @@
   "error-short-description-required": "Short Description Required",
   "error-product-description-required": "Product Description Required",
   "error-sale-price-required": "Sale Price Required",
-  "error-shipping-provider-required": "Shipping Provider Required"
+  "error-shipping-provider-required": "Shipping Provider Required",
+  "category-image-required": "Category Image Required"
 }

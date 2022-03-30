@@ -31,18 +31,18 @@ const ShippingList = ({
   const columns = [
     {
       title: t('table:table-item-icon'),
-      dataIndex: 'shipper_icon_path',
-      key: 'shipper_icon_path',
+      dataIndex: 'thumbnail',
+      key: 'thumbnail',
       align: alignLeft,
       width: 130,
-      render: (shipper_icon_path: string) => (
+      render: (thumbnail: { image: string; placeholder: string }) => (
         <div
           style={{ maxWidth: '100px' }}
           className="rounded shadow min-w-0 overflow-hidden"
         >
           <ImageComponent
-            src={shipper_icon_path}
-            customPlaceholder={'/placeholders/no-image.svg'}
+            src={thumbnail?.image ?? '/placeholders/no-image.svg'}
+            customPlaceholder={thumbnail?.placeholder}
             layout="fill"
             objectFit="contain"
             className="rounded"

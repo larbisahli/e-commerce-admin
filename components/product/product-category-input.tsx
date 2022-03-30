@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client';
 import Label from '@components/ui/label';
 import SelectInput from '@components/ui/select-input';
-import { CATEGORIES_FOR_SELECT } from '@graphql/category';
+import { CATEGORIES_FOR_SELECT_ALL } from '@graphql/category';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { Category, OrderBy } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
@@ -12,7 +12,7 @@ interface Props {
 }
 
 interface TCategorySelect {
-  categoriesSelectForAdmin: Category[];
+  categoriesSelectAllForAdmin: Category[];
 }
 
 interface OptionsVariable {
@@ -25,7 +25,7 @@ const ProductCategoryInput = ({ control }: Props) => {
   const { t } = useTranslation('common');
 
   const { data, loading, error } = useQuery<TCategorySelect, OptionsVariable>(
-    CATEGORIES_FOR_SELECT,
+    CATEGORIES_FOR_SELECT_ALL,
     {
       variables: {
         page: 1,
@@ -36,7 +36,7 @@ const ProductCategoryInput = ({ control }: Props) => {
     }
   );
 
-  const categories = data?.categoriesSelectForAdmin;
+  const categories = data?.categoriesSelectAllForAdmin;
 
   useErrorLogger(error);
 

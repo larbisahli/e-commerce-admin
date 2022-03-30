@@ -115,6 +115,7 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
   const [createProduct, { loading: creating, error: createProductError }] =
     useMutation(CREATE_PRODUCT, {
       onCompleted: (data: { createAttribute: Product }) => {
+        console.log('CREATE_PRODUCT - data :>> ', data);
         if (!isEmpty(data)) {
           notify(t('common:successfully-created'), 'success');
           // reset();
@@ -126,6 +127,7 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
   const [updateProduct, { loading: updating, error: updateProductError }] =
     useMutation(UPDATE_PRODUCT, {
       onCompleted: (data: { updateAttribute: Product }) => {
+        console.log('UPDATE_PRODUCT - data :>> ', data);
         if (!isEmpty(data)) {
           notify(t('common:successfully-updated'), 'success');
           // router.push(ROUTES.PRODUCTS);
@@ -165,12 +167,10 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
       suppliers: values?.suppliers?.map(({ id }: Suppliers) => {
         return { id };
       }),
-      thumbnail: values?.thumbnail?.map((img) => {
-        return {
-          image: img?.image,
-          placeholder: img?.placeholder
-        };
-      }),
+      thumbnail: {
+        image: values?.thumbnail?.image,
+        placeholder: values?.thumbnail?.placeholder
+      },
       gallery: values.gallery?.map((img) => {
         return {
           image: img?.image,

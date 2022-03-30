@@ -6,7 +6,10 @@ export const SHIPPING = gql`
       id
       shipper_name
       active
-      shipper_icon_path
+      thumbnail {
+        image
+        placeholder
+      }
       created_at
       updated_at
       created_by {
@@ -44,7 +47,10 @@ export const SHIPPINGS = gql`
       id
       shipper_name
       active
-      shipper_icon_path
+      thumbnail {
+        image
+        placeholder
+      }
       created_at
       updated_at
       created_by {
@@ -74,12 +80,12 @@ export const CREATE_SHIPPING = gql`
   mutation CreateShipping(
     $shipper_name: String!
     $active: Boolean!
-    $shipper_icon_path: String!
+    $thumbnail: IMGInput!
   ) {
     createShipping(
       shipper_name: $shipper_name
       active: $active
-      shipper_icon_path: $shipper_icon_path
+      thumbnail: $thumbnail
     ) {
       shipper_name
     }
@@ -91,13 +97,13 @@ export const UPDATE_SHIPPING = gql`
     $id: ID!
     $shipper_name: String!
     $active: Boolean!
-    $shipper_icon_path: String!
+    $thumbnail: IMGInput!
   ) {
     updateShipping(
       id: $id
       shipper_name: $shipper_name
       active: $active
-      shipper_icon_path: $shipper_icon_path
+      thumbnail: $thumbnail
     ) {
       shipper_name
     }

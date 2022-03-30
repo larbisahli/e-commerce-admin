@@ -100,7 +100,7 @@ const defaultValues = {
   category_name: '',
   category_description: null,
   parent: null,
-  image: null,
+  thumbnail: null,
   icon: null
 };
 
@@ -113,6 +113,8 @@ export default function CreateOrUpdateCategoriesForm({
 }: IProps) {
   const router = useRouter();
   const { t } = useTranslation();
+
+  console.log('initialValues', initialValues);
 
   const [unsavedChanges, setUnsavedChanges] = useState<string[]>([]);
 
@@ -162,17 +164,21 @@ export default function CreateOrUpdateCategoriesForm({
   useErrorLogger(updateCategoryError);
 
   const onSubmit = async (values: FormValues) => {
+    console.log('values', values);
+
+    if (isEmpty(values.thumbnail)) {
+      notify('form:category-image-required', 'warning');
+    }
+
     const variables = {
       category_name: values.category_name,
       category_description: values.category_description,
+      thumbnail: {
+        image: values.thumbnail?.image,
+        placeholder: values.thumbnail?.placeholder
+      },
       // @ts-ignore
       parent_id: isEmpty(values?.parent) ? null : values?.parent?.id,
-      image: values.image?.map((img) => {
-        return {
-          image: img?.image,
-          placeholder: img?.placeholder
-        };
-      }),
       icon: (values.icon as unknown as { value: string })?.value ?? null
     };
 
@@ -200,7 +206,7 @@ export default function CreateOrUpdateCategoriesForm({
 
         <Card className="w-full sm:w-8/12 md:w-2/3">
           <FileInput
-            name="image_path"
+            name="thumbnail"
             control={control}
             multiple={false}
             setUnsavedChanges={setUnsavedChanges}

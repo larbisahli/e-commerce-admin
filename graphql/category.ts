@@ -6,14 +6,14 @@ export const CREATE_CATEGORY = gql`
     $category_name: String!
     $category_description: String!
     $icon: String!
-    $image_path: String
+    $thumbnail: IMGInput!
   ) {
     createCategory(
       parent_id: $parent_id
       category_name: $category_name
       category_description: $category_description
       icon: $icon
-      image_path: $image_path
+      thumbnail: $thumbnail
     ) {
       id
       category_name
@@ -28,7 +28,7 @@ export const UPDATE_CATEGORY = gql`
     $category_name: String!
     $category_description: String
     $icon: String!
-    $image_path: String
+    $thumbnail: IMGInput!
   ) {
     updateCategory(
       id: $id
@@ -36,7 +36,7 @@ export const UPDATE_CATEGORY = gql`
       category_name: $category_name
       category_description: $category_description
       icon: $icon
-      image_path: $image_path
+      thumbnail: $thumbnail
     ) {
       id
       category_name
@@ -65,14 +65,12 @@ export const CATEGORIES = gql`
       category_name
       category_description
       icon
-      image_path
       children {
         id
         parent_id
         category_name
         category_description
         icon
-        image_path
         created_at
         updated_at
         created_by {
@@ -114,7 +112,10 @@ export const CATEGORY = gql`
       category_name
       category_description
       icon
-      image_path
+      thumbnail {
+        image
+        placeholder
+      }
       has_children
       created_at
       updated_at
@@ -147,6 +148,15 @@ export const CATEGORIES_FOR_SELECT = gql`
       limit: $limit
       orderBy: $orderBy
     ) {
+      id
+      category_name
+    }
+  }
+`;
+
+export const CATEGORIES_FOR_SELECT_ALL = gql`
+  query CategoriesSelectAll($page: Int!, $limit: Int!, $orderBy: String!) {
+    categoriesSelectAllForAdmin(page: $page, limit: $limit, orderBy: $orderBy) {
       id
       category_name
     }

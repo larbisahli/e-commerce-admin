@@ -153,7 +153,7 @@ export const CREATE_PRODUCT = gql`
     $disable_out_of_stock: Boolean!
     $note: String
     $sku: String
-    $thumbnail: [IMGInput]
+    $thumbnail: IMGInput
     $gallery: [IMGInput]
     $categories: [CategoryInput]
     $suppliers: [SupplierInput]
@@ -204,7 +204,7 @@ export const UPDATE_PRODUCT = gql`
     $disable_out_of_stock: Boolean!
     $note: String
     $sku: String
-    $thumbnail: [IMGInput]
+    $thumbnail: IMGInput
     $gallery: [IMGInput]
     $categories: [CategoryInput]
     $suppliers: [SupplierInput]
