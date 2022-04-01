@@ -87,6 +87,7 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
   const router = useRouter();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [unsavedChanges, setUnsavedChanges] = useState<string[]>([]);
+  const [lockedSubmission, setLockedSubmission] = useState(false);
 
   const { t } = useTranslation();
 
@@ -138,6 +139,13 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
   useErrorLogger(createProductError);
   useErrorLogger(updateProductError);
   const onSubmit = async (values: FormValues) => {
+    if (lockedSubmission) {
+      console.log('lockedSubmission :>> ');
+      return;
+    }
+
+    setLockedSubmission(true);
+
     // Check if shipping_provider exist
     const shippingProviderCheck = values?.shippings?.find(
       (v) => !v.shipping_provider?.id
@@ -146,6 +154,8 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
       notify('Please add a Shipping Provider', 'error');
       return;
     }
+
+    console.time('Product');
 
     const variables: Product = {
       product_name: values.product_name,
@@ -233,6 +243,8 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
         };
       })
     };
+
+    console.timeEnd('Product');
     console.log('inputValues', { variables, values });
 
     if (initialValues) {
@@ -245,6 +257,7 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
     } else {
       createProduct({ variables });
     }
+    setLockedSubmission(false);
   };
 
   useWarnIfUnsavedChanges(!isEmpty(unsavedChanges), () => {
@@ -410,7 +423,10 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
                 {t('form:button-label-back')}
               </Button>
             )}
-            <Button loading={updating || creating}>
+            <Button
+              loading={updating || creating}
+              disabled={updating || creating}
+            >
               {initialValues
                 ? t('form:button-label-update-product')
                 : t('form:button-label-add-product')}
