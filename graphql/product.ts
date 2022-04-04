@@ -1,16 +1,16 @@
 import { gql } from '@apollo/client';
 
-export const PRODUCTS = gql`
-  query Products(
+export const PRODUCTS_FOR_ADMIN = gql`
+  query ProductsForAdmin(
     $page: Int!
     $limit: Int!
     $orderBy: String!
     $sortedBy: String!
   ) {
-    productCount {
+    productsCount {
       count
     }
-    products(
+    productsForAdmin(
       page: $page
       limit: $limit
       orderBy: $orderBy
@@ -19,6 +19,8 @@ export const PRODUCTS = gql`
       id
       product_name
       sale_price
+      max_price
+      min_price
       quantity
       published
       categories {
@@ -28,9 +30,9 @@ export const PRODUCTS = gql`
       thumbnail {
         id
         image
+        placeholder
       }
       created_at
-      updated_at
       created_by {
         id
         first_name
@@ -46,11 +48,8 @@ export const PRODUCTS = gql`
 `;
 
 export const PRODUCT = gql`
-  query Product($id: ID!) {
-    productsCount {
-      count
-    }
-    product(id: $id) {
+  query ProductForAdmin($id: ID!) {
+    productForAdmin(id: $id) {
       id
       product_name
       sku
@@ -75,15 +74,12 @@ export const PRODUCT = gql`
       }
       categories {
         id
-        category_name
       }
       suppliers {
         id
-        supplier_name
       }
       tags {
         id
-        tag_name
       }
       variation_options {
         title
@@ -99,19 +95,19 @@ export const PRODUCT = gql`
       variations {
         attribute {
           id
-          attribute_name
         }
         attribute_values {
           id
-          attribute_value
         }
       }
       shippings {
         shipping_provider {
           id
-          shipping_name
         }
-        shipping_price
+        shipping_zones {
+          shipping_price
+          zones
+        }
       }
       product_shipping_options {
         id
@@ -130,11 +126,19 @@ export const PRODUCT = gql`
         id
         first_name
         last_name
+        profile {
+          image
+          placeholder
+        }
       }
       updated_by {
         id
         first_name
         last_name
+        profile {
+          image
+          placeholder
+        }
       }
     }
   }

@@ -131,9 +131,11 @@ export const siteSettings = {
     ]
   },
   product: {
-    placeholder: '/placeholders/no-image.svg'
+    image: 'placeholders/image.jpg',
+    placeholder: 'placeholders/image__placeholder.png'
   },
   avatar: {
-    placeholder: '/placeholders/avatar.svg'
+    image: 'placeholders/avatar.jpg',
+    placeholder: 'placeholders/avatar__placeholder.png'
   }
 };

@@ -55,12 +55,12 @@ const AttributeList = ({
       align: alignLeft,
       ellipsis: true,
       width: 200,
-      render: (values: any) => {
-        const att_values = values?.map(
-          ({ attribute_value }: AttributeValue, index: number) => {
+      render: (values: AttributeValue[]) => {
+        const att_values = values
+          ?.map(({ attribute_value }: AttributeValue, index: number) => {
             return index > 0 ? `, ${attribute_value}` : `${attribute_value}`;
-          }
-        );
+          })
+          ?.join('');
         return (
           <span title={att_values} className="whitespace-nowrap">
             {att_values}

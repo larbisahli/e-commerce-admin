@@ -38,8 +38,6 @@ const ShippingsComponent = ({
     formState: { errors }
   } = useFormContext();
 
-  console.log('errors', errors);
-
   const value = watch(`shippings[${index}].shipping_provider`);
 
   const removeShippingProvider = () => {

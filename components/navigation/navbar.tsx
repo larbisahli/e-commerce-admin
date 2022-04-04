@@ -24,7 +24,7 @@ const Navbar = () => {
   });
 
   return (
-    <header style={{ zIndex: '100' }} className="bg-white shadow fixed w-full">
+    <header style={{ zIndex: 100 }} className="bg-white shadow fixed w-full">
       <nav
         style={{ background: '#1a1a1a', borderBottom: '1px solid #636262' }}
         className="px-5 md:px-8 py-2 flex items-center justify-between"

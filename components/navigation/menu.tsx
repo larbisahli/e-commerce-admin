@@ -25,7 +25,12 @@ export default function NavMenu() {
           'border-hover'
         )}
       >
-        <Avatar src={staffInfo?.profile_img} />
+        <Avatar
+          src={staffInfo?.profile?.image ?? siteSettings.avatar.image}
+          customPlaceholder={
+            staffInfo?.profile?.placeholder ?? siteSettings.avatar.placeholder
+          }
+        />
       </Menu.Button>
 
       <Transition

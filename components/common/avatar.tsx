@@ -1,7 +1,6 @@
 // import Image from 'next/image';
 import ImageComponent from '@components/ImageComponent/index';
 import cn from 'classnames';
-import Image from 'next/image';
 import React from 'react';
 
 type AvatarProps = {
@@ -28,22 +27,14 @@ const Avatar: React.FC<AvatarProps> = ({
       )}
       {...rest}
     >
-      {src ? (
-        <ImageComponent
-          alt={alt}
-          src={src}
-          customPlaceholder={customPlaceholder}
-          layout="fill"
-          priority={true}
-        />
-      ) : (
-        <Image
-          alt={alt}
-          src="/placeholders/avatar.svg"
-          layout="fill"
-          priority={true}
-        />
-      )}
+      <ImageComponent
+        alt={alt}
+        src={src}
+        customPlaceholder={customPlaceholder}
+        layout="fill"
+        objectFit="cover"
+        priority={true}
+      />
     </div>
   );
 };

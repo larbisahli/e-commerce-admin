@@ -1,16 +1,15 @@
 import ActionButtons from '@components/common/action-buttons';
+import Avatar from '@components/common/avatar';
 import Badge from '@components/ui/badge/badge';
 import Pagination from '@components/ui/pagination';
 import { Table } from '@components/ui/table';
 import { useGetStaff } from '@hooks/useGetStaff';
 import { siteSettings } from '@settings/site.settings';
 import { Nullable } from '@ts-types/custom.types';
-import { RoleType, StaffType } from '@ts-types/generated';
+import { IMGType, RoleType, StaffType } from '@ts-types/generated';
 import { useIsRTL } from '@utils/locals';
 import { ROUTES } from '@utils/routes';
-import { mediaURL } from '@utils/utils';
 import dayjs from 'dayjs';
-import Image from 'next/image';
 import { useTranslation } from 'next-i18next';
 
 type IProps = {
@@ -36,22 +35,29 @@ const StaffList = ({
   const columns = [
     {
       title: t('table:table-item-avatar'),
-      dataIndex: 'profile_img',
-      key: 'profile_img',
+      dataIndex: 'profile',
+      key: 'profile',
       align: 'center',
       width: 74,
-      render: (profile_img: string, record: StaffType) => (
-        <Image
-          src={
-            profile_img
-              ? `${mediaURL}/${profile_img}`
-              : siteSettings.avatar.placeholder
-          }
+      render: (profile: IMGType, record: StaffType) => (
+        // <Image
+        //   src={
+        //     profile_img
+        //       ? `${mediaURL}/${profile_img}`
+        //       : siteSettings.avatar.placeholder
+        //   }
+        //   alt={`${record?.first_name} ${record?.last_name}`}
+        //   layout="fixed"
+        //   width={42}
+        //   height={42}
+        //   className="rounded-full overflow-hidden"
+        // />
+        <Avatar
+          src={profile?.image ?? siteSettings.avatar.image}
           alt={`${record?.first_name} ${record?.last_name}`}
-          layout="fixed"
-          width={42}
-          height={42}
-          className="rounded-full overflow-hidden"
+          customPlaceholder={
+            profile?.placeholder ?? siteSettings.avatar.placeholder
+          }
         />
       )
     },

@@ -16,13 +16,19 @@ export const ATTRIBUTE = gql`
         id
         first_name
         last_name
-        profile_img
+        profile {
+          image
+          placeholder
+        }
       }
       updated_by {
         id
         first_name
         last_name
-        profile_img
+        profile {
+          image
+          placeholder
+        }
       }
     }
   }

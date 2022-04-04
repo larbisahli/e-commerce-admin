@@ -21,7 +21,7 @@ import type { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useState } from 'react';
-
+// import { useRouter } from 'next/router';
 interface TAttributes {
   attributesForAdmin: Attribute[];
   attributesCount: { count: number };
@@ -37,6 +37,7 @@ interface OptionsVariable {
 const limit = 10;
 
 export default function AttributePage({ client }: SSRProps) {
+  // const router = useRouter();
   const { t } = useTranslation();
 
   const [page, setPage] = useState(1);
@@ -77,6 +78,16 @@ export default function AttributePage({ client }: SSRProps) {
       }
     });
   };
+
+  // useEffect(() => {
+  //   // Prefetch the dashboard page
+  //   router.prefetch('/attributes/create');
+  // }, []);
+
+  // useEffect(() => {
+  //   // Prefetch the dashboard page
+  //   router.prefetch('/attributes/edit');
+  // }, []);
 
   if (loading) {
     return <Loader text={t('common:text-loading')} />;

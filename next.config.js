@@ -8,6 +8,15 @@ const { i18n } = require('./next-i18next.config');
 const { withSentryConfig } = require('@sentry/nextjs');
 
 const moduleExports = {
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/dashboard',
+        permanent: true
+      }
+    ];
+  },
   i18n,
   pwa: {
     disable: process.env.NODE_ENV === 'development',

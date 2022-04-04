@@ -4,7 +4,7 @@ import Button from '@components/ui/button';
 import Checkbox from '@components/ui/checkbox';
 import Input from '@components/ui/input';
 import PasswordInput from '@components/ui/password-input';
-import { STORE_LOGIN } from '@graphql/login';
+import { STAFF_LOGIN } from '@graphql/login';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { ROUTES } from '@utils/routes';
@@ -50,7 +50,7 @@ const LoginForm = () => {
     resolver: yupResolver(loginFormSchema)
   });
 
-  const [staffLogin, { loading, error }] = useMutation(STORE_LOGIN, {
+  const [staffLogin, { loading, error }] = useMutation(STAFF_LOGIN, {
     onCompleted: (data: { staffLogin: FormValues }) => {
       if (data?.staffLogin?.success) {
         router.push(ROUTES.DASHBOARD);

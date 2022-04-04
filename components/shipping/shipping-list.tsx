@@ -3,6 +3,7 @@ import ImageComponent from '@components/ImageComponent';
 import Badge from '@components/ui/badge/badge';
 import Pagination from '@components/ui/pagination';
 import { Table } from '@components/ui/table';
+import { siteSettings } from '@settings/site.settings';
 import { Nullable } from '@ts-types/custom.types';
 import { Shipping } from '@ts-types/generated';
 import { useIsRTL } from '@utils/locals';
@@ -18,6 +19,7 @@ export type IProps = {
   currentPage: Nullable<number>;
   perPage: Nullable<number>;
 };
+
 const ShippingList = ({
   shippings,
   onPagination,
@@ -41,8 +43,10 @@ const ShippingList = ({
           className="rounded shadow min-w-0 overflow-hidden"
         >
           <ImageComponent
-            src={thumbnail?.image ?? '/placeholders/no-image.svg'}
-            customPlaceholder={thumbnail?.placeholder}
+            src={thumbnail?.image ?? siteSettings.product.image}
+            customPlaceholder={
+              thumbnail?.placeholder ?? siteSettings.product.placeholder
+            }
             layout="fill"
             objectFit="contain"
             className="rounded"

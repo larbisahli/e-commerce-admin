@@ -1,3 +1,4 @@
+import { mediaURL } from '@utils/utils';
 import { useEffect, useState } from 'react';
 
 export function useGetDataUrl(customPlaceholder: string) {
@@ -8,7 +9,7 @@ export function useGetDataUrl(customPlaceholder: string) {
   useEffect(() => {
     async function toBase64() {
       try {
-        const data = await fetch(customPlaceholder);
+        const data = await fetch(`${mediaURL}/${customPlaceholder}`);
         const blob = await data.blob();
 
         // eslint-disable-next-line no-undef

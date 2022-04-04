@@ -8,7 +8,10 @@ export const STAFF = gql`
       last_name
       phone_number
       email
-      profile_img
+      profile {
+        image
+        placeholder
+      }
       role {
         id
         role_name
@@ -20,13 +23,19 @@ export const STAFF = gql`
         id
         first_name
         last_name
-        profile_img
+        profile {
+          image
+          placeholder
+        }
       }
       updated_by {
         id
         first_name
         last_name
-        profile_img
+        profile {
+          image
+          placeholder
+        }
       }
     }
   }
@@ -47,7 +56,10 @@ export const STAFFS = gql`
       first_name
       last_name
       email
-      profile_img
+      profile {
+        image
+        placeholder
+      }
       active
       role {
         id
@@ -84,7 +96,7 @@ export const CREATE_STAFF = gql`
     $last_name: String!
     $phone_number: String
     $email: String!
-    $profile_img: String
+    $profile: IMGInput
     $password: String!
     $role_id: Int!
   ) {
@@ -93,7 +105,7 @@ export const CREATE_STAFF = gql`
       last_name: $last_name
       phone_number: $phone_number
       email: $email
-      profile_img: $profile_img
+      profile: $profile
       password: $password
       role_id: $role_id
     ) {
@@ -111,7 +123,7 @@ export const UPDATE_STAFF = gql`
     $last_name: String!
     $phone_number: String
     $email: String!
-    $profile_img: String
+    $profile: IMGInput
     $role_id: Int!
   ) {
     updateStaff(
@@ -120,7 +132,7 @@ export const UPDATE_STAFF = gql`
       last_name: $last_name
       phone_number: $phone_number
       email: $email
-      profile_img: $profile_img
+      profile: $profile
       role_id: $role_id
     ) {
       id

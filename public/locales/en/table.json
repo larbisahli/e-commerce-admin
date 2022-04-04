@@ -59,5 +59,6 @@
   "table-item-company": "Company",
   "table-item-name": "Name",
   "table-item-address": "Address",
-  "table-item-phone": "Phone"
+  "table-item-phone": "Phone",
+  "table-item-categories": "Categories"
 }

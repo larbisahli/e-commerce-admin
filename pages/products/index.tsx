@@ -1,66 +1,93 @@
+import { useQuery } from '@apollo/client';
 import Card from '@components/common/card';
-import Search from '@components/common/search';
-import SortForm from '@components/common/sort-form';
+// import Search from '@components/common/search';
+// import SortForm from '@components/common/sort-form';
 import { Add } from '@components/icons/add';
-import { ArrowDown } from '@components/icons/arrow-down';
-import { ArrowUp } from '@components/icons/arrow-up';
+// import { ArrowDown } from '@components/icons/arrow-down';
+// import { ArrowUp } from '@components/icons/arrow-up';
 import AppLayout from '@components/layouts/app';
-import CategoryTypeFilter from '@components/product/category-type-filter';
 import ProductList from '@components/product/product-list';
 import ErrorMessage from '@components/ui/error-message';
 import LinkButton from '@components/ui/link-button';
 import Loader from '@components/ui/loader/loader';
+import { PRODUCTS_FOR_ADMIN } from '@graphql/product';
+import { useErrorLogger } from '@hooks/useErrorLogger';
+import { useGetStaff } from '@hooks/useGetStaff';
 import { getClientToken, verifyAuth } from '@middleware/utils';
-import { SortOrder } from '@ts-types/generated';
+import type { SSRProps } from '@ts-types/custom.types';
+import type { Product } from '@ts-types/generated';
+import { OrderBy, SortOrder } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
-import cn from 'classnames';
+// import cn from 'classnames';
+import isEmpty from 'lodash/isEmpty';
 import type { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useState } from 'react';
 
-export default function ProductsPage() {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [type, setType] = useState('');
-  const [category, setCategory] = useState('');
-  const [page, setPage] = useState(1);
+interface TProduct {
+  productsForAdmin: Product[];
+  productsCount: { count: number };
+}
+
+interface ProductVariable {
+  page: number;
+  limit: number;
+  orderBy: OrderBy;
+  sortedBy: SortOrder;
+}
+
+const limit = 10;
+
+export default function ProductsPage({ client }: SSRProps) {
   const { t } = useTranslation();
-  const [orderBy, setOrder] = useState('created_at');
-  const [sortedBy, setColumn] = useState<SortOrder>(SortOrder.Desc);
+
+  const [page, setPage] = useState(1);
   const [visible, setVisible] = useState(false);
+  const [orderBy, setOrder] = useState(OrderBy.CREATED_AT);
+
+  const { data, loading, error, fetchMore } = useQuery<
+    TProduct,
+    ProductVariable
+  >(PRODUCTS_FOR_ADMIN, {
+    variables: {
+      page,
+      limit,
+      orderBy,
+      sortedBy: SortOrder.Desc
+    },
+    fetchPolicy: 'cache-and-network'
+  });
+
+  const productsCount = data?.productsCount?.count;
+  const productsForAdmin = data?.productsForAdmin;
+
+  useGetStaff(client?.staff_id);
+  useErrorLogger(error);
 
   const toggleVisible = () => {
     setVisible((v) => !v);
   };
 
-  // const {
-  //   data,
-  //   isLoading: loading,
-  //   error,
-  // } = useProductsQuery({
-  //   limit: 20,
-  //   page,
-  //   type,
-  //   category,
-  //   text: searchTerm,
-  //   orderBy,
-  //   sortedBy,
-  // });
-
-  const data = [];
-  const loading = false;
-  const error = null;
-
-  if (loading) return <Loader text={t('common:text-loading')} />;
-  if (error) return <ErrorMessage message={error.message} />;
-
-  function handleSearch({ searchText }: { searchText: string }) {
-    setSearchTerm(searchText);
-    setPage(1);
-  }
-  function handlePagination(current: any) {
+  const handlePagination = (current: number) => {
     setPage(current);
+    fetchMore({
+      variables: {
+        page: current,
+        limit,
+        orderBy,
+        sortedBy: SortOrder.Desc
+      }
+    });
+  };
+
+  if (loading) {
+    return <Loader text={t('common:text-loading')} />;
   }
+  if (!isEmpty(error)) {
+    return <ErrorMessage message={t('common:MESSAGE_SOMETHING_WENT_WRONG')} />;
+  }
+
   return (
     <>
       <Card className="flex flex-col mb-8">
@@ -75,8 +102,8 @@ export default function ProductsPage() {
             <Search onSearch={handleSearch} />
           </div> */}
           <div className="w-full md:w-3/4 flex flex-col md:flex-row items-center">
-            <div className="w-full flex items-center">
-              <Search onSearch={handleSearch} />
+            <div className="w-full flex items-end justify-end md:items-center">
+              {/* <Search onSearch={handleSearch} /> */}
               <LinkButton
                 href={`${ROUTES.PRODUCTS}/create`}
                 className="h-12 ms-4 md:ms-6"
@@ -93,7 +120,7 @@ export default function ProductsPage() {
                 </div>
               </LinkButton>
             </div>
-            <button
+            {/* <button
               className="text-accent text-base font-semibold flex items-center md:ms-5 mt-5 md:mt-0"
               onClick={toggleVisible}
             >
@@ -103,11 +130,11 @@ export default function ProductsPage() {
               ) : (
                 <ArrowDown className="ms-2" />
               )}
-            </button>
+            </button> */}
           </div>
         </div>
 
-        <div
+        {/* <div
           className={cn('w-full flex transition', {
             'h-auto visible': visible,
             'h-0 invisible': !visible
@@ -143,9 +170,15 @@ export default function ProductsPage() {
               ]}
             />
           </div>
-        </div>
+        </div> */}
       </Card>
-      <ProductList products={data?.products} onPagination={handlePagination} />
+      <ProductList
+        products={productsForAdmin}
+        onPagination={handlePagination}
+        total={productsCount}
+        currentPage={page}
+        perPage={limit}
+      />
     </>
   );
 }

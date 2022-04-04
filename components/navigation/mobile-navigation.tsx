@@ -18,7 +18,7 @@ const MobileNavigation: React.FC = () => {
         <DrawerWrapper onClose={closeSidebar}>
           <div className="flex flex-col py-3">
             {siteSettings?.sidebarLinks?.admin?.map(
-              ({ id, href, label, icon, line, subLinks }) => (
+              ({ id, href, label, icon, subLinks }) => (
                 <SidebarItem
                   id={id}
                   key={id}
@@ -26,7 +26,6 @@ const MobileNavigation: React.FC = () => {
                   label={t(label)}
                   icon={icon}
                   includes={href}
-                  line={line}
                   subLinks={subLinks}
                   showLinkId={showLinkIdLevel1}
                   setShowLinkId={setShowLinkIdLevel1}

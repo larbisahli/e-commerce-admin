@@ -52,13 +52,13 @@ interface CreatedUpdatedByAt {
     id: string;
     first_name: string;
     last_name: string;
-    profile_img?: string | null;
+    profile?: IMGType;
   }>;
   updated_by?: Nullable<{
     id: string;
     first_name: string;
     last_name: string;
-    profile_img?: string | null;
+    profile?: IMGType;
   }>;
 }
 
@@ -72,9 +72,10 @@ export interface StaffType extends CreatedUpdatedByAt {
   id: string;
   email: string;
   password: string;
+  confirm_password?: string;
   first_name: string;
   last_name: string;
-  profile_img: Nullable<Scalars['String']>;
+  profile: IMGType;
   phone_number: Nullable<Scalars['Int']>;
   role: RoleType;
   role_id?: number;
@@ -205,6 +206,8 @@ export interface Product extends CreatedUpdatedByAt {
   sale_price?: Scalars['Float'];
   compare_price?: Scalars['Float'];
   buying_price?: Scalars['Float'];
+  max_price?: Scalars['Float'];
+  min_price?: Scalars['Float'];
   quantity?: Scalars['Int'];
   short_description?: Nullable<Scalars['String']>;
   product_description?: Scalars['String'];

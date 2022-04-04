@@ -21,20 +21,7 @@ import { Control, useForm } from 'react-hook-form';
 
 import { staffValidationSchema } from './staff-validation-schema';
 
-type FormValues = {
-  first_name: string;
-  last_name: string;
-  phone_number: string;
-  profile_img: string;
-  email: string;
-  password: string;
-  role: {
-    id: number;
-    role_name: string;
-  };
-  confirm_password: string;
-  role_id: number;
-};
+type FormValues = StaffType;
 
 const defaultValues = {};
 
@@ -96,10 +83,7 @@ const StaffCreateUpdateForm = ({ initialValues }: IProps) => {
       ? {
           ...initialValues,
           password: 'test',
-          confirm_password: 'test',
-          profile_img: initialValues?.profile_img
-            ? [initialValues?.profile_img]
-            : []
+          confirm_password: 'test'
         }
       : defaultValues,
     resolver: yupResolver(staffValidationSchema)
@@ -136,7 +120,10 @@ const StaffCreateUpdateForm = ({ initialValues }: IProps) => {
       first_name: values.first_name,
       last_name: values.last_name,
       phone_number: values.phone_number,
-      profile_img: isEmpty(values.profile_img) ? null : values.profile_img[0],
+      profile: {
+        image: values?.profile?.image,
+        placeholder: values?.profile?.placeholder
+      },
       role_id: values.role.id,
       password: values.password,
       email: values.email
@@ -164,7 +151,7 @@ const StaffCreateUpdateForm = ({ initialValues }: IProps) => {
 
         <Card className="w-full sm:w-8/12 md:w-2/3">
           <FileInput
-            name="profile_img"
+            name="profile"
             control={control}
             multiple={false}
             setUnsavedChanges={setUnsavedChanges}
@@ -242,7 +229,9 @@ const StaffCreateUpdateForm = ({ initialValues }: IProps) => {
 
       <div className="mb-4 text-end">
         <Button loading={creating || updating} disabled={creating || updating}>
-          {t('form:button-label-create-customer')}
+          {isEmpty(initialValues)
+            ? t('form:button-label-create-customer')
+            : t('form:button-label-update-customer')}
         </Button>
       </div>
     </form>

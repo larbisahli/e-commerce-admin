@@ -16,7 +16,7 @@ const LoginPage = (props) => {
 
   useEffect(() => {
     // Prefetch the dashboard page
-    router.prefetch('/');
+    router.prefetch('/dashboard');
   }, []);
 
   return (
