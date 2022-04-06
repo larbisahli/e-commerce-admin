@@ -26,7 +26,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import ProductCategoryInput from './product-category-input';
 import ProductInfoForm from './product-info-form';
-import ProductShippingOptionsForm from './product-shipping-options';
+import ProductShippingInfoForm from './product-shipping-info';
 import ProductSupplierInput from './product-supplier-input';
 import ProductTagInput from './product-tag-input';
 import { productValidationSchema } from './product-validation-schema';
@@ -57,7 +57,7 @@ const defaultValues = {
   suppliers: [],
   variations: [],
   tags: [],
-  product_shipping_options: {
+  product_shipping_info: {
     weight: 0,
     weight_unit: { unit: 'kg' },
     volume: 0,
@@ -188,27 +188,17 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
         };
       }),
       disable_out_of_stock: values?.disable_out_of_stock,
-      product_shipping_options: {
-        weight: Number(values?.product_shipping_options?.weight),
-        weight_unit: (
-          values?.product_shipping_options?.weight_unit as { unit: string }
-        )?.unit,
-        volume: Number(values?.product_shipping_options?.volume),
-        volume_unit: (
-          values?.product_shipping_options?.volume_unit as { unit: string }
-        )?.unit,
-        dimension_width: Number(
-          values?.product_shipping_options?.dimension_width
-        ),
+      product_shipping_info: {
+        weight: Number(values?.product_shipping_info?.weight),
+        weight_unit: values?.product_shipping_info?.weight_unit,
+        volume: Number(values?.product_shipping_info?.volume),
+        volume_unit: values?.product_shipping_info?.volume_unit,
+        dimension_width: Number(values?.product_shipping_info?.dimension_width),
         dimension_height: Number(
-          values?.product_shipping_options?.dimension_height
+          values?.product_shipping_info?.dimension_height
         ),
-        dimension_depth: Number(
-          values?.product_shipping_options?.dimension_depth
-        ),
-        dimension_unit: (
-          values?.product_shipping_options?.dimension_unit as { unit: string }
-        )?.unit
+        dimension_depth: Number(values?.product_shipping_info?.dimension_depth),
+        dimension_unit: values?.product_shipping_info?.dimension_unit
       },
       shippings: values?.shippings?.map((value) => {
         return {
@@ -406,8 +396,8 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
           {/* Variation Type */}
           <ProductVariableForm initialValues={initialValues} />
 
-          {/* Shipping options */}
-          <ProductShippingOptionsForm
+          {/* Shipping Info */}
+          <ProductShippingInfoForm
             control={control}
             initialValues={initialValues}
           />

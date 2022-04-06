@@ -3,31 +3,22 @@
 
 import ImageComponent from '@components/ImageComponent';
 import Label from '@components/ui/label';
-import { IMGType } from '@ts-types/generated';
 import cn from 'classnames';
+import { isEmpty } from 'lodash';
 import { useTranslation } from 'next-i18next';
 import React from 'react';
-import type {
-  FieldValues,
-  UseFormSetValue,
-  UseFormWatch
-} from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 
 interface VariationImagesProps {
-  gallery: IMGType[];
   index: number;
-  setValue: UseFormSetValue<FieldValues>;
-  watch: UseFormWatch<FieldValues>;
 }
 
-const VariationImages = ({
-  gallery,
-  index,
-  watch,
-  setValue
-}: VariationImagesProps) => {
+const VariationImages = ({ index }: VariationImagesProps) => {
   const { t } = useTranslation();
 
+  const { watch, setValue } = useFormContext();
+
+  const gallery = watch('gallery');
   const selectedImg = watch(`variation_options.${index}.image`);
 
   const setImage = (img: string) => {
@@ -37,6 +28,8 @@ const VariationImages = ({
       setValue(`variation_options.${index}.image`, img);
     }
   };
+
+  if (isEmpty(gallery)) return null;
 
   return (
     <div className="mb-5 mt-5">

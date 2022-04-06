@@ -94,17 +94,17 @@ export interface Category extends CreatedUpdatedByAt {
   has_children?: Scalars['Boolean'];
 }
 
-export interface ProductShippingOptions {
+export interface ProductShippingInfo {
   id?: Scalars['ID'];
   product_id?: Scalars['ID'];
   weight?: Scalars['Int'];
-  weight_unit?: Scalars['String'] | { unit: Scalars['String'] };
+  weight_unit?: { unit: Scalars['String'] };
   volume?: Scalars['Int'];
-  volume_unit?: Scalars['String'] | { unit: Scalars['String'] };
+  volume_unit?: { unit: Scalars['String'] };
   dimension_width?: Scalars['Int'];
   dimension_height?: Scalars['Int'];
   dimension_depth?: Scalars['Int'];
-  dimension_unit?: Scalars['String'] | { unit: Scalars['String'] };
+  dimension_unit?: { unit: Scalars['String'] };
 }
 
 export interface ProductShippings {
@@ -221,7 +221,7 @@ export interface Product extends CreatedUpdatedByAt {
   suppliers?: Nullable<Array<Nullable<Suppliers>>>;
   tags?: Nullable<Array<Nullable<Tag>>>;
   shippings?: Nullable<Array<Nullable<ProductShippings>>>;
-  product_shipping_options?: ProductShippingOptions;
+  product_shipping_info?: ProductShippingInfo;
   variation_options: {
     title: string;
     is_disable?: boolean;

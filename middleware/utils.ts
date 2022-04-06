@@ -1,19 +1,10 @@
 import { CookieNames } from '@ts-types/enums';
 import cookie from 'cookie';
-import fs from 'fs';
 import jwt, { Algorithm } from 'jsonwebtoken';
 import { GetServerSidePropsContext, NextApiRequest } from 'next';
-import path from 'path';
 import { serializeError } from 'serialize-error';
 
-let PublicKEY: string;
-
-if (process.env.NODE_ENV === 'production') {
-  const jwtRS256File = path.join(process.cwd(), 'jwtRS256.key.pub');
-  PublicKEY = fs.readFileSync(jwtRS256File, 'utf8');
-} else {
-  PublicKEY = fs.readFileSync('./middleware/jwtRS256.key.pub', 'utf8');
-}
+const PublicKEY = process.env.JWTRS256_KEY_PUB;
 
 /*
  * @params {jwtToken} extracted from cookies

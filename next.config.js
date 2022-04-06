@@ -42,16 +42,19 @@ const moduleExports = {
     // NEXT_PUBLIC_GOOGLE_MAP_API_KEY: 'AIzaSyDB2j-G5LJM0yPNG0AqziJjgh1UOW10W7I',
     FB_APPID: '',
     SENTRY_DSN:
-      'https://37ded038a57b4b9fb298ff89015192ef@o912422.ingest.sentry.io/5849453',
+      'https://bb6c9168b250492493d8695e9851c780@o1189599.ingest.sentry.io/6310398',
     NEXT_PUBLIC_SENTRY_DSN:
-      'https://37ded038a57b4b9fb298ff89015192ef@o912422.ingest.sentry.io/5849453'
+      'https://bb6c9168b250492493d8695e9851c780@o1189599.ingest.sentry.io/6310398'
   },
   typescript: {
     ignoreBuildErrors: true
+  },
+  eslint: {
+    ignoreDuringBuilds: true
   }
 };
 
-const SentryWebpackPluginOptions = {};
+const SentryWebpackPluginOptions = { silent: true };
 
 module.exports = withSentryConfig(
   withPWA(moduleExports),

@@ -4,7 +4,7 @@ import Select from '@components/ui/select/select';
 import { Shipping } from '@ts-types/generated';
 import { isEmpty } from 'lodash';
 import { useTranslation } from 'next-i18next';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Control, useFormContext } from 'react-hook-form';
 
 import ShippingsZonesComponent from './shippings-zones-component';
@@ -59,6 +59,7 @@ const ShippingsComponent = ({
       remove(index);
     }
   };
+  console.log('value ====>', value, index);
 
   return (
     <div className="border-b border-dashed border-border-200 last:border-0 py-5 md:py-8">
@@ -71,7 +72,9 @@ const ShippingsComponent = ({
             onChange={(value) => {
               setValue(`shippings[${index}].shipping_provider`, value);
             }}
-            value={isEmpty(value) ? null : [value]}
+            // value={isEmpty(value) ? null : [value]}
+            // defaultValue={value}
+            value={value}
             className="w-full"
             getOptionLabel={(option: any) => option.shipper_name}
             getOptionValue={(option: any) => option.id}
@@ -109,4 +112,4 @@ const ShippingsComponent = ({
   );
 };
 
-export default ShippingsComponent;
+export default React.memo(ShippingsComponent);

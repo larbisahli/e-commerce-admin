@@ -1,5 +1,4 @@
 import Title from '@components/ui/title';
-import isEmpty from 'lodash/isEmpty';
 import { useTranslation } from 'next-i18next';
 import React, { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
@@ -28,18 +27,17 @@ const CartesianProductComponent = ({
 
   const {
     register,
-    control,
     watch,
     setValue,
+    getValues,
     formState: { errors }
   } = useFormContext();
 
   const { currency } = useSettings();
 
-  const gallery = watch('gallery');
-  const sale_price = watch('sale_price');
-  const compare_price = watch('compare_price');
-  const buying_price = watch('buying_price');
+  const sale_price = getValues('sale_price');
+  const compare_price = getValues('compare_price');
+  const buying_price = getValues('buying_price');
   const quantity = watch(`variation_options.${index}.quantity`);
 
   useEffect(() => {
@@ -118,14 +116,7 @@ const CartesianProductComponent = ({
       </div>
 
       {/* use dynamic import */}
-      {!isEmpty(gallery) && (
-        <VariationImages
-          watch={watch}
-          gallery={gallery}
-          index={index}
-          setValue={setValue}
-        />
-      )}
+      <VariationImages index={index} />
 
       <div className="mb-5 mt-5">
         <Checkbox

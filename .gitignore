@@ -41,3 +41,8 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+.vercel
+
+# Sentry
+.sentryclirc

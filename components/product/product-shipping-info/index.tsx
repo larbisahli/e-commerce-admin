@@ -35,7 +35,7 @@ const volume_units = [{ unit: 'L' }, { unit: 'mL' }];
 
 const dimension_units = [{ unit: 'L' }, { unit: 'mL' }];
 
-export default function ProductShippingOptionsForm({
+export default function ProductShippingInfoForm({
   control,
   initialValues
 }: IProps) {
@@ -71,7 +71,7 @@ export default function ProductShippingOptionsForm({
   return (
     <div className="flex flex-wrap my-5 sm:my-8">
       <Description
-        title={t('form:form-title-product-shipping-options')}
+        title={t('form:form-title-product-shipping-info')}
         details={`${
           initialValues
             ? t('form:item-description-edit')
@@ -85,14 +85,14 @@ export default function ProductShippingOptionsForm({
         <Label>{t('form:input-label-weight')}</Label>
         <div className="flex items-center mb-5">
           <Input
-            {...register('product_shipping_options.weight')}
+            {...register('product_shipping_info.weight')}
             type="number"
             variant="outline"
             className="mr-2"
           />
           <div className="w-36">
             <SelectInput
-              name="product_shipping_options.weight_unit"
+              name="product_shipping_info.weight_unit"
               control={control}
               getOptionLabel={(option: any) => option.unit}
               getOptionValue={(option: any) => option.unit}
@@ -102,20 +102,20 @@ export default function ProductShippingOptionsForm({
           </div>
         </div>
         <ValidationError
-          message={t(errors.product_shipping_options?.weight?.message!)}
+          message={t(errors.product_shipping_info?.weight?.message!)}
         />
         {/* Volume */}
         <Label>{t('form:input-label-volume')}</Label>
         <div className="flex items-center mb-5">
           <Input
-            {...register('product_shipping_options.volume')}
+            {...register('product_shipping_info.volume')}
             type="number"
             variant="outline"
             className="mr-2"
           />
           <div className="w-36">
             <SelectInput
-              name={'product_shipping_options.volume_unit'}
+              name={'product_shipping_info.volume_unit'}
               control={control}
               className="w-full"
               getOptionLabel={(option: any) => option.unit}
@@ -125,7 +125,7 @@ export default function ProductShippingOptionsForm({
           </div>
         </div>
         <ValidationError
-          message={t(errors.product_shipping_options?.volume?.message!)}
+          message={t(errors.product_shipping_info?.volume?.message!)}
         />
         {/* Dimensions */}
         <Label className="mb-3">{t('form:input-label-dimensions')}</Label>
@@ -141,7 +141,7 @@ export default function ProductShippingOptionsForm({
               {t('form:input-label-dimensions-width')}
             </Label>
             <Input
-              {...register('product_shipping_options.dimension_width')}
+              {...register('product_shipping_info.dimension_width')}
               type="number"
               variant="outline"
               className="w-24 mr-2"
@@ -158,7 +158,7 @@ export default function ProductShippingOptionsForm({
               {t('form:input-label-dimensions-height')}
             </Label>
             <Input
-              {...register('product_shipping_options.dimension_height')}
+              {...register('product_shipping_info.dimension_height')}
               type="number"
               variant="outline"
               className="w-24 mr-2"
@@ -175,7 +175,7 @@ export default function ProductShippingOptionsForm({
               {t('form:input-label-dimensions-depth')}
             </Label>
             <Input
-              {...register('product_shipping_options.dimension_depth')}
+              {...register('product_shipping_info.dimension_depth')}
               type="number"
               variant="outline"
               className="w-24 mr-2"
@@ -192,7 +192,7 @@ export default function ProductShippingOptionsForm({
               {t('form:input-label-dimensions-units')}
             </Label>
             <SelectInput
-              name="product_shipping_options.dimension_unit"
+              name="product_shipping_info.dimension_unit"
               control={control}
               className="w-full"
               getOptionLabel={(option: any) => option.unit}
@@ -202,9 +202,9 @@ export default function ProductShippingOptionsForm({
           </div>
           <ValidationError
             message={
-              t(errors.product_shipping_options?.dimension_depth?.message!) ||
-              t(errors.product_shipping_options?.dimension_height?.message!) ||
-              t(errors.product_shipping_options?.dimension_width?.message!)
+              t(errors.product_shipping_info?.dimension_depth?.message!) ||
+              t(errors.product_shipping_info?.dimension_height?.message!) ||
+              t(errors.product_shipping_info?.dimension_width?.message!)
             }
           />
         </div>

@@ -38,7 +38,7 @@ const ProductList = ({
       align: alignLeft,
       width: 85,
       render: (thumbnail: IMGType) => (
-        <div className="rounded shadow min-w-0 overflow-hidden">
+        <div className="shadow min-w-0 overflow-hidden">
           <ImageComponent
             src={thumbnail?.image ?? siteSettings.product.image}
             customPlaceholder={
@@ -46,7 +46,7 @@ const ProductList = ({
             }
             layout="fill"
             objectFit="contain"
-            className="rounded overflow-hidden"
+            className="overflow-hidden"
           />
         </div>
       )

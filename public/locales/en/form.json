@@ -362,5 +362,6 @@
   "error-sale-price-required": "Sale Price Required",
   "error-shipping-provider-required": "Shipping Provider Required",
   "category-image-required": "Category Image Required",
-  "button-label-update-customer": "Update Customer"
+  "button-label-update-customer": "Update Customer",
+  "form-title-product-shipping-info": "Product Shipping Information"
 }

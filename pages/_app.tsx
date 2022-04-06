@@ -94,7 +94,7 @@ function App({ Component, pageProps }: AppProps) {
           sizes="16x16"
           href="/favicons/favicon-16x16.png"
         />
-        <link rel="manifest" href="/manifest.webmanifest" />
+        <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#ffffff" />
       </Head>
       <ToastContainer

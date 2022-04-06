@@ -10,7 +10,10 @@ export async function middleware(req: NextRequest) {
     !staff_token &&
     url.pathname !== '/login' &&
     url.pathname !== '/shop.jpg' &&
-    url.pathname !== '/logo.svg'
+    url.pathname.indexOf('/favicons/') === -1 &&
+    url.pathname !== '/logo.svg' &&
+    url.pathname !== '/robots.txt' &&
+    url.pathname !== '/manifest.json'
   ) {
     return NextResponse.redirect('/login');
   }

@@ -74,12 +74,15 @@ export const PRODUCT = gql`
       }
       categories {
         id
+        category_name
       }
       suppliers {
         id
+        supplier_name
       }
       tags {
         id
+        tag_name
       }
       variation_options {
         title
@@ -103,22 +106,29 @@ export const PRODUCT = gql`
       shippings {
         shipping_provider {
           id
+          shipper_name
         }
         shipping_zones {
           shipping_price
           zones
         }
       }
-      product_shipping_options {
+      product_shipping_info {
         id
         weight
-        weight_unit
+        weight_unit {
+          unit
+        }
         volume
-        volume_unit
+        volume_unit {
+          unit
+        }
         dimension_width
         dimension_height
         dimension_depth
-        dimension_unit
+        dimension_unit {
+          unit
+        }
       }
       created_at
       updated_at
@@ -165,7 +175,7 @@ export const CREATE_PRODUCT = gql`
     $variation_options: [VariationOptionInput]
     $variations: [VariationInput]
     $shippings: [ProductShippingInput]
-    $product_shipping_options: ProductShippingOptionInput
+    $product_shipping_info: ProductShippingInfoInput
   ) {
     createProduct(
       product_name: $product_name
@@ -187,7 +197,7 @@ export const CREATE_PRODUCT = gql`
       variation_options: $variation_options
       variations: $variations
       shippings: $shippings
-      product_shipping_options: $product_shipping_options
+      product_shipping_info: $product_shipping_info
     ) {
       product_name
     }
@@ -216,7 +226,7 @@ export const UPDATE_PRODUCT = gql`
     $variation_options: [VariationOptionInput]
     $variations: [VariationInput]
     $shippings: [ProductShippingInput]
-    $product_shipping_options: ProductShippingOptionInput
+    $product_shipping_info: ProductShippingInfoInput
   ) {
     updateProduct(
       id: $id
@@ -239,7 +249,7 @@ export const UPDATE_PRODUCT = gql`
       variation_options: $variation_options
       variations: $variations
       shippings: $shippings
-      product_shipping_options: $product_shipping_options
+      product_shipping_info: $product_shipping_info
     ) {
       product_name
     }
