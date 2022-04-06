@@ -7,10 +7,17 @@ interface Props {
   text?: string;
   showText?: boolean;
   simple?: boolean;
+  height?: string;
 }
 
 const Loader = (props: Props) => {
-  const { className, showText = true, text = 'Loading...', simple } = props;
+  const {
+    className,
+    showText = true,
+    text = 'Loading...',
+    simple,
+    height = 'calc(100vh - 200px)'
+  } = props;
   return (
     <>
       {simple ? (
@@ -21,7 +28,7 @@ const Loader = (props: Props) => {
             'w-full flex flex-col items-center justify-center',
             className
           )}
-          style={{ height: 'calc(100vh - 200px)' }}
+          style={{ height }}
         >
           <div className={styles.loading} />
 

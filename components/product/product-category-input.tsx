@@ -5,6 +5,7 @@ import { CATEGORIES_FOR_SELECT_ALL } from '@graphql/category';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { Category, OrderBy } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
+import { memo } from 'react';
 import { Control } from 'react-hook-form';
 
 interface Props {
@@ -56,4 +57,4 @@ const ProductCategoryInput = ({ control }: Props) => {
   );
 };
 
-export default ProductCategoryInput;
+export default memo(ProductCategoryInput);

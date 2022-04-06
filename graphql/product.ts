@@ -98,9 +98,11 @@ export const PRODUCT = gql`
       variations {
         attribute {
           id
+          attribute_name
         }
         attribute_values {
           id
+          attribute_value
         }
       }
       shippings {

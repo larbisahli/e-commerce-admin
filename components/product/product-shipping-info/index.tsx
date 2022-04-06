@@ -10,6 +10,7 @@ import { SHIPPINGS_FOR_SELECT } from '@graphql/shipping';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { OrderBy, Shipping } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
+import { memo } from 'react';
 import { Control, useFieldArray, useFormContext } from 'react-hook-form';
 
 import ShippingsComponent from './shippings-component';
@@ -35,10 +36,7 @@ const volume_units = [{ unit: 'L' }, { unit: 'mL' }];
 
 const dimension_units = [{ unit: 'L' }, { unit: 'mL' }];
 
-export default function ProductShippingInfoForm({
-  control,
-  initialValues
-}: IProps) {
+function ProductShippingInfoForm({ control, initialValues }: IProps) {
   const { t } = useTranslation();
 
   const {
@@ -248,3 +246,5 @@ export default function ProductShippingInfoForm({
     </div>
   );
 }
+
+export default memo(ProductShippingInfoForm);

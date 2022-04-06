@@ -4,13 +4,14 @@ import Input from '@components/ui/input';
 import TextArea from '@components/ui/text-area';
 import { useSettings } from '@contexts/settings.context';
 import { useTranslation } from 'next-i18next';
+import { memo } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 type IProps = {
   initialValues: any;
 };
 
-export default function ProductInfoForm({ initialValues }: IProps) {
+function ProductInfoForm({ initialValues }: IProps) {
   const {
     register,
     formState: { errors }
@@ -98,3 +99,5 @@ export default function ProductInfoForm({ initialValues }: IProps) {
     </div>
   );
 }
+
+export default memo(ProductInfoForm);

@@ -3,7 +3,7 @@ import type {
   UseFormSetValue,
   FieldValues
 } from 'react-hook-form';
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, memo } from 'react';
 
 interface CartesianType {
   id: string;
@@ -56,4 +56,4 @@ const TitleAndOptionsInput = ({
   );
 };
 
-export default React.memo(TitleAndOptionsInput);
+export default memo(TitleAndOptionsInput);

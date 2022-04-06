@@ -5,6 +5,7 @@ import { TAGS_FOR_SELECT } from '@graphql/tag';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { OrderBy, Tag } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
+import { memo } from 'react';
 import { Control } from 'react-hook-form';
 
 interface Props {
@@ -57,4 +58,4 @@ const ProductTagInput = ({ control }: Props) => {
   );
 };
 
-export default ProductTagInput;
+export default memo(ProductTagInput);

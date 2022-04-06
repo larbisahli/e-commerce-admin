@@ -17,6 +17,7 @@ import {
 import { cartesian } from '@utils/cartesian';
 import isEmpty from 'lodash/isEmpty';
 import { useTranslation } from 'next-i18next';
+import { memo } from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 
 import CartesianProductComponent from './cartesian-product-component';
@@ -63,7 +64,7 @@ function getCartesianProduct(
   return cartesian<CartesianType[][]>(...formattedValues) as CartesianType[][];
 }
 
-export default function ProductVariableForm({ initialValues }: IProps) {
+function ProductVariableForm({ initialValues }: IProps) {
   const { t } = useTranslation();
 
   const { data, loading, error } = useQuery<TAttributeSelect, OptionsVariable>(
@@ -205,3 +206,5 @@ export default function ProductVariableForm({ initialValues }: IProps) {
     </div>
   );
 }
+
+export default memo(ProductVariableForm);

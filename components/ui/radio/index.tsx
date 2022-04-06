@@ -11,9 +11,9 @@ export interface Props extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 const Radio = React.forwardRef<HTMLInputElement, Props>(
-  ({ className, label, name, id, error, ...rest }, ref) => {
+  ({ style, className, label, name, id, error, ...rest }, ref) => {
     return (
-      <div className={className}>
+      <div style={style} className={className}>
         <div className="flex items-center">
           <input
             id={id}

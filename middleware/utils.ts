@@ -5,7 +5,6 @@ import { GetServerSidePropsContext, NextApiRequest } from 'next';
 import { serializeError } from 'serialize-error';
 
 const PublicKEY = process.env.JWTRS256_KEY_PUB;
-
 /*
  * @params {jwtToken} extracted from cookies
  * @return {object} object of extracted token

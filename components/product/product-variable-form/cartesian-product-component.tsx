@@ -1,6 +1,6 @@
 import Title from '@components/ui/title';
 import { useTranslation } from 'next-i18next';
-import React, { useEffect } from 'react';
+import { useEffect, memo } from 'react';
 import { useFormContext } from 'react-hook-form';
 import TitleAndOptionsInput from './title-option-input';
 import { useSettings } from '@contexts/settings.context';
@@ -129,4 +129,4 @@ const CartesianProductComponent = ({
   );
 };
 
-export default React.memo(CartesianProductComponent);
+export default memo(CartesianProductComponent);

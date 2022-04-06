@@ -5,7 +5,9 @@ import { SUPPLIERS_FOR_SELECT } from '@graphql/supplier';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { OrderBy, Suppliers } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
+import { memo } from 'react';
 import { Control } from 'react-hook-form';
+
 interface Props {
   control: Control<any>;
 }
@@ -53,4 +55,4 @@ const ProductSupplierInput = ({ control }: Props) => {
   );
 };
 
-export default ProductSupplierInput;
+export default memo(ProductSupplierInput);

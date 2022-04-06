@@ -1,12 +1,21 @@
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
-import { convertToRaw, EditorState } from 'draft-js';
+import {
+  ContentState,
+  convertFromHTML,
+  convertToRaw,
+  EditorState
+} from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
-import React, { memo, useState } from 'react';
+import React, { memo, useMemo, useEffect, useState } from 'react';
 import { Editor } from 'react-draft-wysiwyg';
+import { useFormContext } from 'react-hook-form';
+import isEmpty from 'lodash/isEmpty';
 
 const EditorComponent = (props) => {
-  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  const { getValues } = useFormContext();
+
+  const [editorState, setEditorState] = useState(null);
 
   const onEditorStateChange: Function = (editorState) => {
     setEditorState(editorState);
@@ -14,6 +23,23 @@ const EditorComponent = (props) => {
       draftToHtml(convertToRaw(editorState.getCurrentContent()))
     );
   };
+
+  const stateIsEmpty = useMemo(() => isEmpty(editorState), [editorState]);
+
+  useEffect(() => {
+    const productDescription = getValues('product_description');
+
+    if (productDescription && stateIsEmpty) {
+      const blocksFromHTML = convertFromHTML(productDescription);
+      const state = ContentState.createFromBlockArray(
+        blocksFromHTML.contentBlocks,
+        blocksFromHTML.entityMap
+      );
+      setEditorState(EditorState.createWithContent(state));
+    } else if (stateIsEmpty) {
+      setEditorState(EditorState.createEmpty());
+    }
+  }, [stateIsEmpty]);
 
   return (
     <div className={props.className}>

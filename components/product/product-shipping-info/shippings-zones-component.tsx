@@ -6,7 +6,7 @@ import { useSettings } from '@contexts/settings.context';
 import isArray from 'lodash/isArray';
 import isEmpty from 'lodash/isEmpty';
 import { useTranslation } from 'next-i18next';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, memo, useMemo, useState } from 'react';
 import { Control, useFieldArray, useFormContext } from 'react-hook-form';
 
 interface SZProps {
@@ -232,4 +232,4 @@ const ZonesComponent = ({
   );
 };
 
-export default ShippingsZonesComponent;
+export default memo(ShippingsZonesComponent);

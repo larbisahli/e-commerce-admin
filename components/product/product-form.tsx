@@ -7,6 +7,7 @@ import Description from '@components/ui/description';
 import FileInput from '@components/ui/file-input';
 import ValidationError from '@components/ui/form-validation-error';
 import Label from '@components/ui/label';
+import Loader from '@components/ui/loader/loader';
 import Radio from '@components/ui/radio';
 import TextArea from '@components/ui/text-area';
 import { CREATE_PRODUCT, UPDATE_PRODUCT } from '@graphql/product';
@@ -16,12 +17,11 @@ import { notify } from '@lib/index';
 import { Product, Suppliers, Tag } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import cloneDeep from 'lodash/cloneDeep';
-import groupBy from 'lodash/groupBy';
 import isEmpty from 'lodash/isEmpty';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import ProductCategoryInput from './product-category-input';
@@ -33,7 +33,7 @@ import { productValidationSchema } from './product-validation-schema';
 import ProductVariableForm from './product-variable-form';
 
 const Editor = dynamic(() => import('@components/ui/editor'), {
-  loading: () => <p>...</p>,
+  loading: () => <Loader height="150px" text="Editor..." />,
   ssr: false
 });
 
@@ -73,17 +73,7 @@ type IProps = {
   initialValues?: Product | null;
 };
 
-function getFormattedVariations(variations: any) {
-  const variationGroup = groupBy(variations, 'attribute.slug');
-  return Object.values(variationGroup)?.map((vg) => {
-    return {
-      attribute: vg?.[0]?.attribute,
-      value: vg?.map((v) => ({ id: v.id, value: v.value }))
-    };
-  });
-}
-
-export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
+function CreateOrUpdateProductForm({ initialValues }: IProps) {
   const router = useRouter();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [unsavedChanges, setUnsavedChanges] = useState<string[]>([]);
@@ -98,8 +88,7 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
     defaultValues: initialValues
       ? cloneDeep({
           ...initialValues,
-          quantity: 0,
-          variations: getFormattedVariations(initialValues?.variations)
+          status: initialValues?.published ? 'publish' : 'draft'
         })
       : defaultValues
   });
@@ -427,3 +416,5 @@ export default function CreateOrUpdateProductForm({ initialValues }: IProps) {
     </>
   );
 }
+
+export default memo(CreateOrUpdateProductForm);

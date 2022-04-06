@@ -2,7 +2,7 @@ import Label from '@components/ui/label';
 import Select from '@components/ui/select/select';
 import cn from 'classnames';
 import { useTranslation } from 'next-i18next';
-import React from 'react';
+import { memo } from 'react';
 // import { useTypesQuery } from '@data/type/use-types.query';
 // import { useCategoriesQuery } from '@data/category/use-categories.query';
 
@@ -12,7 +12,7 @@ type Props = {
   className?: string;
 };
 
-export default function CategoryTypeFilter({
+function CategoryTypeFilter({
   onTypeFilter,
   onCategoryFilter,
   className
@@ -63,3 +63,5 @@ export default function CategoryTypeFilter({
     </div>
   );
 }
+
+export default memo(CategoryTypeFilter);
