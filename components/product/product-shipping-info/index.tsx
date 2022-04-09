@@ -66,6 +66,8 @@ function ProductShippingInfoForm({ control, initialValues }: IProps) {
 
   useErrorLogger(error);
 
+  console.log('fields > shippings', fields);
+
   return (
     <div className="flex flex-wrap my-5 sm:my-8">
       <Description
@@ -79,6 +81,7 @@ function ProductShippingInfoForm({ control, initialValues }: IProps) {
       />
 
       <Card className="w-full sm:w-8/12 md:w-2/3">
+        <input {...register(`product_shipping_info.id`)} type="hidden" />
         {/* Width */}
         <Label>{t('form:input-label-weight')}</Label>
         <div className="flex items-center mb-5">
@@ -227,13 +230,13 @@ function ProductShippingInfoForm({ control, initialValues }: IProps) {
               type="button"
               onClick={() =>
                 append({
+                  product_shipping_id: null,
                   shipping_provider: {},
-                  shipping_zones: [
-                    {
-                      zones: [{ name: 'Global', code: 'Global' }],
-                      shipping_price: 0
-                    }
-                  ]
+                  shipping_zones: {
+                    id: null,
+                    zones: [{ name: 'Global', code: 'Global' }],
+                    shipping_price: 0
+                  }
                 })
               }
               className="w-full sm:w-auto"

@@ -53,14 +53,6 @@
   background-image: linear-gradient(315deg, #000000 0%, #08201a 74%);
 }
 
-.bg {
-  background-image: url('/shop.jpg');
-  height: 100%;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
 .sub-nav-height-transition {
   overflow-y: hidden;
   max-height: 0px;

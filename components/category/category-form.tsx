@@ -114,8 +114,6 @@ export default function CreateOrUpdateCategoriesForm({
   const router = useRouter();
   const { t } = useTranslation();
 
-  console.log('initialValues', initialValues);
-
   const [unsavedChanges, setUnsavedChanges] = useState<string[]>([]);
 
   const {

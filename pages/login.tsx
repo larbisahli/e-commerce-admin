@@ -6,13 +6,13 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useRouter } from 'next/router';
 import { getClientToken, verifyAuth } from '@middleware/utils';
-import { useEffect } from 'react';
+import { Fragment, useEffect } from 'react';
+import Image from 'next/image';
+import shop from '../public/shop.jpg';
 
 const LoginPage = (props) => {
   const router = useRouter();
   const { t } = useTranslation('common');
-
-  console.log(`props`, { props });
 
   useEffect(() => {
     // Prefetch the dashboard page
@@ -20,53 +20,68 @@ const LoginPage = (props) => {
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-light sm:bg-gray-100 bg">
-      <div className="m-auto max-w-[420px] w-full bg-light sm:shadow p-5 sm:p-8 rounded">
-        <h3 className="text-center text-base italic text-body mb-6 mt-4">
-          {t('admin-login-title')}
-        </h3>
-        <LoginForm />
+    <Fragment>
+      <div
+        className="fixed h-full w-full overflow-hidden"
+        style={{ zIndex: -1 }}
+      >
+        <Image
+          alt="Shop-bg"
+          src={shop}
+          placeholder="blur"
+          layout="fill"
+          objectFit="cover"
+          quality={100}
+        />
       </div>
-      <div className="mt-5 flex justify-center items-center text-white bg-black w-full bg-opacity-40 h-12">
-        <p>© dropgala 2022 All rights reserved</p>
-        <span
-          style={{ width: '1px', height: '20px' }}
-          className="mx-2 bg-white"
-        ></span>
-        <Link href="/" passHref>
-          <a>
-            <p>Contact Us</p>
-          </a>
-        </Link>
-        <span
-          style={{ width: '1px', height: '20px' }}
-          className="mx-2 bg-white"
-        ></span>
-        <Link href="/" passHref>
-          <a>
-            <p>Terms</p>
-          </a>
-        </Link>
-        <span
-          style={{ width: '1px', height: '20px' }}
-          className="mx-2 bg-white"
-        ></span>
-        <Link href="/" passHref>
-          <a>
-            <p>Terms</p>
-          </a>
-        </Link>
-        <span
-          style={{ width: '1px', height: '20px' }}
-          className="mx-2 bg-white"
-        ></span>
-        <Link href="/" passHref>
-          <a>
-            <p>Privacy</p>
-          </a>
-        </Link>
+      <div className="flex flex-col items-center justify-center h-screen">
+        <div className="m-auto max-w-[420px] w-full bg-light sm:shadow p-5 sm:p-8 rounded">
+          <h3 className="text-center text-base italic text-body mb-6 mt-4">
+            {t('admin-login-title')}
+          </h3>
+          <LoginForm />
+        </div>
+        <div className="mt-5 flex justify-center items-center text-white bg-black w-full bg-opacity-40 h-12">
+          <p>© dropgala 2022 All rights reserved</p>
+          <span
+            style={{ width: '1px', height: '20px' }}
+            className="mx-2 bg-white"
+          ></span>
+          <Link href="/" passHref>
+            <a>
+              <p>Contact Us</p>
+            </a>
+          </Link>
+          <span
+            style={{ width: '1px', height: '20px' }}
+            className="mx-2 bg-white"
+          ></span>
+          <Link href="/" passHref>
+            <a>
+              <p>Terms</p>
+            </a>
+          </Link>
+          <span
+            style={{ width: '1px', height: '20px' }}
+            className="mx-2 bg-white"
+          ></span>
+          <Link href="/" passHref>
+            <a>
+              <p>Terms</p>
+            </a>
+          </Link>
+          <span
+            style={{ width: '1px', height: '20px' }}
+            className="mx-2 bg-white"
+          ></span>
+          <Link href="/" passHref>
+            <a>
+              <p>Privacy</p>
+            </a>
+          </Link>
+        </div>
       </div>
-    </div>
+    </Fragment>
   );
 };
 

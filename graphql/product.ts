@@ -106,13 +106,18 @@ export const PRODUCT = gql`
         }
       }
       shippings {
+        product_shipping_id
         shipping_provider {
           id
           shipper_name
         }
         shipping_zones {
+          id
           shipping_price
-          zones
+          zones {
+            name
+            code
+          }
         }
       }
       product_shipping_info {
@@ -262,6 +267,22 @@ export const DELETE_ATTRIBUTE = gql`
   mutation DeleteProduct($id: ID!) {
     deleteProduct(id: $id) {
       product_name
+    }
+  }
+`;
+
+export const DELETE_SHIPPING_ZONE = gql`
+  mutation DeleteShippingZone($id: ID!) {
+    deleteShippingZone(id: $id) {
+      id
+    }
+  }
+`;
+
+export const DELETE_SHIPPING_PROVIDER = gql`
+  mutation DeleteShippingProvider($product_shipping_id: ID!) {
+    deleteShippingProvider(product_shipping_id: $product_shipping_id) {
+      product_shipping_id
     }
   }
 `;

@@ -35,12 +35,12 @@ type IProps = {
 };
 
 export default function CreateOrUpdateAttributeForm({ initialValues }: IProps) {
+  const { t } = useTranslation();
+
   const router = useRouter();
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [deletedIndex, setDeletedIndex] = useState<number | null>(null);
-
-  const { t } = useTranslation();
 
   const {
     register,

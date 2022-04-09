@@ -108,12 +108,15 @@ export interface ProductShippingInfo {
 }
 
 export interface ProductShippings {
-  shipping_zones?: {
-    zones: { name: string; code: string }[] | string[];
-    shipping_price?: Scalars['Float'];
-  }[];
+  product_shipping_id?: Nullable<Scalars['ID']>;
   shipping_provider?: Shipping;
+  shipping_zones?: {
+    id?: Nullable<Scalars['ID']>;
+    zones?: { name: string; code: string }[];
+    shipping_price?: Scalars['Float'];
+  };
 }
+
 export interface AttributeValue {
   id?: Scalars['ID'];
   attribute_id?: Scalars['ID'];

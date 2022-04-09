@@ -62,7 +62,7 @@ export const productValidationSchema = yup.object().shape({
     })
   ),
   categories: yup.array().min(1, 'Category Required'),
-  product_shipping_options: yup.object().shape({
+  product_shipping_info: yup.object().shape({
     weight: yup.number().typeError('form:error-amount-must-number'),
     volume: yup.number().typeError('form:error-amount-must-number'),
     dimension_width: yup.number().typeError('form:error-amount-must-number'),

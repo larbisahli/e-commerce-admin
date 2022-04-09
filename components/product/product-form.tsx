@@ -14,7 +14,7 @@ import { CREATE_PRODUCT, UPDATE_PRODUCT } from '@graphql/product';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useErrorLogger, useWarnIfUnsavedChanges } from '@hooks/index';
 import { notify } from '@lib/index';
-import { Product, Suppliers, Tag } from '@ts-types/generated';
+import { Product } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import cloneDeep from 'lodash/cloneDeep';
 import isEmpty from 'lodash/isEmpty';
@@ -31,6 +31,7 @@ import ProductSupplierInput from './product-supplier-input';
 import ProductTagInput from './product-tag-input';
 import { productValidationSchema } from './product-validation-schema';
 import ProductVariableForm from './product-variable-form';
+import { creationVariable, updateVariable } from './variablesSubmission';
 
 const Editor = dynamic(() => import('@components/ui/editor'), {
   loading: () => <Loader height="150px" text="Editor..." />,
@@ -74,12 +75,13 @@ type IProps = {
 };
 
 function CreateOrUpdateProductForm({ initialValues }: IProps) {
+  const { t } = useTranslation();
+
   const router = useRouter();
+
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [unsavedChanges, setUnsavedChanges] = useState<string[]>([]);
   const [lockedSubmission, setLockedSubmission] = useState(false);
-
-  const { t } = useTranslation();
 
   const methods = useForm<FormValues>({
     resolver: yupResolver(productValidationSchema),
@@ -127,6 +129,7 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
 
   useErrorLogger(createProductError);
   useErrorLogger(updateProductError);
+
   const onSubmit = async (values: FormValues) => {
     if (lockedSubmission) {
       console.log('lockedSubmission :>> ');
@@ -144,97 +147,26 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
       return;
     }
 
-    console.time('Product');
-
-    const variables: Product = {
-      product_name: values.product_name,
-      short_description: values.short_description,
-      product_description: values.product_description,
-      sku: values.sku,
-      published: values.status === 'publish',
-      quantity: Number(values?.quantity),
-      sale_price: Number(values.sale_price),
-      compare_price: Number(values.compare_price),
-      buying_price: Number(values.buying_price),
-      note: values.note,
-      categories: values?.categories?.map(({ id }) => {
-        return { id };
-      }),
-      tags: values?.tags?.map(({ id }: Tag) => {
-        return { id };
-      }),
-      suppliers: values?.suppliers?.map(({ id }: Suppliers) => {
-        return { id };
-      }),
-      thumbnail: {
-        image: values?.thumbnail?.image,
-        placeholder: values?.thumbnail?.placeholder
-      },
-      gallery: values.gallery?.map((img) => {
-        return {
-          image: img?.image,
-          placeholder: img?.placeholder
-        };
-      }),
-      disable_out_of_stock: values?.disable_out_of_stock,
-      product_shipping_info: {
-        weight: Number(values?.product_shipping_info?.weight),
-        weight_unit: values?.product_shipping_info?.weight_unit,
-        volume: Number(values?.product_shipping_info?.volume),
-        volume_unit: values?.product_shipping_info?.volume_unit,
-        dimension_width: Number(values?.product_shipping_info?.dimension_width),
-        dimension_height: Number(
-          values?.product_shipping_info?.dimension_height
-        ),
-        dimension_depth: Number(values?.product_shipping_info?.dimension_depth),
-        dimension_unit: values?.product_shipping_info?.dimension_unit
-      },
-      shippings: values?.shippings?.map((value) => {
-        return {
-          shipping_provider: { id: value?.shipping_provider?.id },
-          shipping_zones: value?.shipping_zones?.map((sz) => {
-            return {
-              shipping_price: Number(sz?.shipping_price),
-              zones: sz?.zones?.map((z) => z?.code)
-            };
-          })
-        };
-      }),
-      variations: values?.variations?.map((v) => {
-        return {
-          attribute: { id: v.attribute.id },
-          attribute_values: v.attribute_values?.map((av) => {
-            return { id: av.id };
-          })
-        };
-      }),
-      variation_options: values?.variation_options?.map((vo) => {
-        return {
-          title: vo.title,
-          options: vo.options,
-          image: vo.image,
-          sale_price: Number(vo.sale_price),
-          compare_price: Number(vo.compare_price),
-          buying_price: Number(vo.buying_price),
-          quantity: Number(vo.quantity),
-          sku: vo.sku,
-          active: vo.is_disable
-        };
-      })
-    };
-
-    console.timeEnd('Product');
-    console.log('inputValues', { variables, values });
+    console.log('inputValues', { values });
 
     if (initialValues) {
-      updateProduct({
-        variables: {
-          id: initialValues.id,
-          ...variables
-        }
-      });
+      console.time('Product Update =========>');
+
+      const variables = updateVariable(values, initialValues);
+
+      console.log('Update Variables :>> ', variables);
+
+      console.timeEnd('Product Update =========>');
+      // updateProduct({
+      //   variables: {
+      //     id: initialValues.id,
+      //     ...variables
+      //   }
+      // });
     } else {
-      createProduct({ variables });
+      const variables = creationVariable(values);
+      console.log('variables', { variables });
+      // createProduct({ variables });
     }
     setLockedSubmission(false);
   };
