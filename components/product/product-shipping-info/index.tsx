@@ -66,8 +66,6 @@ function ProductShippingInfoForm({ control, initialValues }: IProps) {
 
   useErrorLogger(error);
 
-  console.log('fields > shippings', fields);
-
   return (
     <div className="flex flex-wrap my-5 sm:my-8">
       <Description

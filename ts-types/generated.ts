@@ -110,11 +110,17 @@ export interface ProductShippingInfo {
 export interface ProductShippings {
   product_shipping_id?: Nullable<Scalars['ID']>;
   shipping_provider?: Shipping;
-  shipping_zones?: {
-    id?: Nullable<Scalars['ID']>;
-    zones?: { name: string; code: string }[];
-    shipping_price?: Scalars['Float'];
-  };
+  shipping_zones?:
+    | {
+        id?: Nullable<Scalars['ID']>;
+        zones?: { name: string; code: string }[];
+        shipping_price?: Scalars['Float'];
+      }
+    | {
+        id?: Nullable<Scalars['ID']>;
+        zones?: { name: string; code: string }[];
+        shipping_price?: Scalars['Float'];
+      }[];
 }
 
 export interface AttributeValue {
@@ -225,23 +231,32 @@ export interface Product extends CreatedUpdatedByAt {
   tags?: Nullable<Array<Nullable<Tag>>>;
   shippings?: Nullable<Array<Nullable<ProductShippings>>>;
   product_shipping_info?: ProductShippingInfo;
-  variation_options: {
-    title: string;
-    is_disable?: boolean;
-    active: boolean;
-    image: string;
-    options: string[];
-    sale_price: Scalars['Float'];
-    compare_price: Scalars['Float'];
-    buying_price: Scalars['Float'];
-    quantity: Scalars['Int'];
-    sku: Scalars['String'];
-  }[];
+  variation_options?: VariationOptionsType[];
   variations?: {
     attribute: Attribute;
     attribute_values: Array<Nullable<AttributeValue>>;
   }[];
   // [key: string]: any;
+}
+
+export enum VariationOptionActions {
+  INSERT = 'INSERT',
+  INIT = 'INIT',
+  CARTESIAN = 'CARTESIAN'
+}
+export interface VariationOptionsType {
+  id?: string;
+  title: string;
+  key?: string;
+  is_disable?: boolean;
+  active?: boolean;
+  image: string;
+  options: string[];
+  sale_price: Scalars['Float'];
+  compare_price: Scalars['Float'];
+  buying_price: Scalars['Float'];
+  quantity: Scalars['Int'];
+  sku: Scalars['String'];
 }
 
 export interface IMGType {

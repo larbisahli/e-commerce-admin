@@ -1,50 +1,63 @@
-import Title from '@components/ui/title';
-import { useTranslation } from 'next-i18next';
-import { useEffect, memo } from 'react';
-import { useFormContext } from 'react-hook-form';
-import TitleAndOptionsInput from './title-option-input';
-import { useSettings } from '@contexts/settings.context';
 import Checkbox from '@components/ui/checkbox';
 import Input from '@components/ui/input';
+import Title from '@components/ui/title';
+import { useSettings } from '@contexts/settings.context';
+import type { IMGType, VariationOptionsType } from '@ts-types/generated';
+import { VariationOptionActions } from '@ts-types/generated';
+import { useTranslation } from 'next-i18next';
+import React, { memo, useMemo } from 'react';
+
 import VariationImages from './variation-images';
 
-interface CartesianType {
-  id: string;
-  attribute_name: string;
-  attribute_value: string;
+interface VariationOptionAction {
+  type: VariationOptionActions;
+  payload: {
+    value?: any;
+    field?: string;
+    options?: string[];
+  };
 }
 
 interface CartesianProductProps {
-  fieldAttributeValue: CartesianType[];
+  variationOption: VariationOptionsType;
+  dispatchVariationOptions?: React.Dispatch<VariationOptionAction>;
   index: number;
+  gallery: IMGType[];
 }
 
 const CartesianProductComponent = ({
-  fieldAttributeValue,
-  index
+  variationOption,
+  dispatchVariationOptions,
+  index,
+  gallery
 }: CartesianProductProps) => {
   const { t } = useTranslation();
 
-  const {
-    register,
-    watch,
-    setValue,
-    getValues,
-    formState: { errors }
-  } = useFormContext();
-
   const { currency } = useSettings();
 
-  const sale_price = getValues('sale_price');
-  const compare_price = getValues('compare_price');
-  const buying_price = getValues('buying_price');
-  const quantity = watch(`variation_options.${index}.quantity`);
+  const options = useMemo(
+    () => variationOption?.options,
+    [variationOption?.options]
+  );
 
-  useEffect(() => {
-    if (Number(quantity) <= 0) {
-      setValue(`variation_options.${index}.is_disable`, true);
-    }
-  }, [quantity]);
+  const HandleInputChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    const target = e.target;
+    const value = target.type === 'checkbox' ? target['checked'] : target.value;
+    const name = target.name;
+
+    dispatchVariationOptions({
+      type: VariationOptionActions.INSERT,
+      payload: {
+        value: target.type === 'number' ? Number(value) : value,
+        field: name,
+        options
+      }
+    });
+  };
 
   return (
     <div
@@ -54,74 +67,81 @@ const CartesianProductComponent = ({
       <Title className="!text-lg mb-8">
         {t('form:form-title-variant')}:{' '}
         <span className="text-blue-600 font-semibold">
-          {Array.isArray(fieldAttributeValue)
-            ? fieldAttributeValue?.map((a) => a?.attribute_value).join('/')
-            : (fieldAttributeValue as { attribute_value: string })
-                ?.attribute_value}
+          {variationOption.title}
         </span>
       </Title>
-
-      {/* Hidden inputs title and option */}
-      <TitleAndOptionsInput
-        register={register}
-        setValue={setValue}
-        index={index}
-        fieldAttributeValue={fieldAttributeValue}
-      />
 
       <div className="grid grid-cols-2 gap-5">
         <Input
           label={`${t('form:input-label-sale-price')} (${currency})*`}
           type="number"
-          {...register(`variation_options.${index}.sale_price`)}
-          defaultValue={sale_price}
-          error={t(errors.variation_options?.[index]?.sale_price?.message)}
+          name="sale_price"
+          onChange={HandleInputChange}
+          // defaultValue={sale_price}
+          value={variationOption.sale_price}
+          // error={t(errors.variation_options?.[index]?.sale_price?.message)}
           variant="outline"
           className="mb-5"
         />
         <Input
           label={`${t('form:input-label-compare-price')} (${currency})`}
-          defaultValue={compare_price}
+          name="compare_price"
+          onChange={HandleInputChange}
+          value={variationOption.compare_price}
+          // defaultValue={compare_price}
           type="number"
-          {...register(`variation_options.${index}.compare_price`)}
-          error={t(errors.variation_options?.[index]?.compare_price?.message)}
+          // error={t(errors.variation_options?.[index]?.compare_price?.message)}
           variant="outline"
           className="mb-5"
         />
         <Input
           label={`${t('form:input-label-buying-price')} (${currency})`}
-          defaultValue={buying_price}
+          // defaultValue={buying_price}
           type="number"
-          {...register(`variation_options.${index}.buying_price`)}
-          error={t(errors.variation_options?.[index]?.buying_price?.message)}
+          name="buying_price"
+          onChange={HandleInputChange}
+          value={variationOption.buying_price}
+          // error={t(errors.variation_options?.[index]?.buying_price?.message)}
           variant="outline"
           className="mb-5"
         />
         <Input
           label={`${t('form:input-label-sku')}`}
-          {...register(`variation_options.${index}.sku`)}
-          error={t(errors.variation_options?.[index]?.sku?.message)}
+          name="sku"
+          onChange={HandleInputChange}
+          value={variationOption.sku}
+          // error={t(errors.variation_options?.[index]?.sku?.message)}
           variant="outline"
           className="mb-5"
         />
         <Input
           label={`${t('form:input-label-quantity')}*`}
           type="number"
-          defaultValue={1}
-          {...register(`variation_options.${index}.quantity`)}
-          error={t(errors.variation_options?.[index]?.quantity?.message)}
+          // defaultValue={1}
+          name="quantity"
+          onChange={HandleInputChange}
+          value={variationOption.quantity}
+          // error={t(errors.variation_options?.[index]?.quantity?.message)}
           variant="outline"
           className="mb-5"
         />
       </div>
 
       {/* use dynamic import */}
-      <VariationImages index={index} />
+      <VariationImages
+        gallery={gallery}
+        selectedImage={variationOption.image}
+        dispatchVariationOptions={dispatchVariationOptions}
+        options={options}
+      />
 
       <div className="mb-5 mt-5">
         <Checkbox
-          {...register(`variation_options.${index}.is_disable`)}
-          error={t(errors.variation_options?.[index]?.is_disable?.message)}
+          name="is_disable"
+          id={`${index}-is_disable`}
+          onChange={HandleInputChange}
+          checked={variationOption.is_disable}
+          // error={t(errors.variation_options?.[index]?.is_disable?.message)}
           label={t('form:input-label-disable-variant')}
         />
       </div>

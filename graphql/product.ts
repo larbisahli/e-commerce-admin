@@ -85,8 +85,9 @@ export const PRODUCT = gql`
         tag_name
       }
       variation_options {
+        id
         title
-        active
+        is_disable
         image
         options
         sale_price

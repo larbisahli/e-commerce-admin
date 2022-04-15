@@ -19,6 +19,9 @@ const SelectInput = ({
   isMulti,
   isClearable,
   isLoading,
+  // isSearchable=true,
+  // isDisabled=false,
+  // isOptionDisabled=false,
   ...rest
 }: SelectInputProps) => {
   return (
@@ -30,6 +33,9 @@ const SelectInput = ({
       render={({ field }) => (
         <Select
           {...field}
+          // isOptionDisabled={isOptionDisabled}
+          // isDisabled={isDisabled}
+          // isSearchable={isSearchable}
           getOptionLabel={getOptionLabel}
           getOptionValue={getOptionValue}
           isMulti={isMulti}

@@ -141,11 +141,13 @@ export default function CreateOrUpdateCouponForm({ initialValues }: IProps) {
 
     const variables = {
       code: values.code,
-      order_amount_limit: values.order_amount_limit,
+      order_amount_limit: Number(values.order_amount_limit),
       discount_value:
-        discount_type === CouponType.FreeShipping ? 0 : values.discount_value,
+        discount_type === CouponType.FreeShipping
+          ? 0
+          : Number(values.discount_value),
       discount_type,
-      max_usage: values.max_usage,
+      max_usage: Number(values.max_usage),
       coupon_start_date: pgFormatDate(values.coupon_start_date),
       coupon_end_date: pgFormatDate(values.coupon_end_date)
     };

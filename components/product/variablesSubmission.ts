@@ -3,6 +3,15 @@ import differenceWith from 'lodash/differenceWith';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
 
+type TShippings = {
+  id?: string;
+  zones?: {
+    name: string;
+    code: string;
+  }[];
+  shipping_price?: number;
+};
+
 const creationVariable = (values: Product): Product => {
   return {
     product_name: values.product_name,
@@ -45,15 +54,25 @@ const creationVariable = (values: Product): Product => {
       dimension_depth: Number(values?.product_shipping_info?.dimension_depth),
       dimension_unit: values?.product_shipping_info?.dimension_unit
     },
-    shippings: values?.shippings?.map((value) => {
+    shippings: [
+      ...Array.from(
+        new Set(values?.shippings.map((value) => value.shipping_provider.id))
+      )
+    ]?.map((id) => {
       return {
-        shipping_provider: { id: value?.shipping_provider?.id },
-        shipping_zones: value?.shipping_zones?.map((sz) => {
-          return {
-            shipping_price: Number(sz?.shipping_price),
-            zones: sz?.zones
-          };
-        })
+        shipping_provider: { id },
+        shipping_zones: [].concat(
+          ...values?.shippings
+            ?.filter((value) => value.shipping_provider.id === id)
+            ?.map((sz) => {
+              return {
+                shipping_price: Number(
+                  (sz?.shipping_zones as TShippings)?.shipping_price
+                ),
+                zones: (sz?.shipping_zones as TShippings)?.zones
+              };
+            })
+        )
       };
     }),
     variations: values?.variations?.map((v) => {
@@ -178,17 +197,67 @@ const updateVariable = (values: Product, initialValues: Product) => {
   );
 
   // 8) shippings block
+  const newShippingValue = [
+    ...Array.from(
+      new Set(values?.shippings.map((value) => value.shipping_provider.id))
+    )
+  ]?.map((id) => {
+    const shippings = values?.shippings?.find(
+      (v) => v.shipping_provider.id === id
+    );
+    return {
+      product_shipping_id: shippings?.product_shipping_id,
+      shipping_provider: shippings?.shipping_provider,
+      shipping_zones: [].concat(
+        ...values?.shippings
+          ?.filter((v) => v.shipping_provider.id === id)
+          ?.map((sz) => {
+            return {
+              ...(sz?.shipping_zones as TShippings),
+              shipping_price: Number(
+                (sz?.shipping_zones as TShippings)?.shipping_price
+              )
+            };
+          })
+      )
+    };
+  });
+
   const shippingsAdditions = differenceWith(
-    values?.shippings,
+    newShippingValue,
     initialValues?.shippings,
     isEqual
   );
-  console.log('shippings', { shippingsAdditions });
-  console.log('===>', {
-    init: initialValues?.shippings,
-    new: values?.shippings
-  });
+
   // 9) variation options block
+
+  const variation_options = values?.variation_options?.filter(function (
+    element
+  ) {
+    return element !== undefined;
+  });
+
+  const variationOptionsAdditions = differenceWith(
+    variation_options,
+    initialValues?.variation_options,
+    isEqual
+  );
+
+  const variationOptionsDeletions = initialValues?.variation_options?.filter(
+    (vo) => {
+      return isEmpty(variation_options?.find((v) => v?.id === vo?.id));
+    }
+  );
+
+  console.log(
+    'initialValues?.variation_options',
+    initialValues?.variation_options
+  );
+  console.log('VariationOptions ++>', {
+    variationOptionsAdditions,
+    variationOptionsDeletions
+  });
+
   // 10) variation block
 
   return {
@@ -217,7 +286,8 @@ const updateVariable = (values: Product, initialValues: Product) => {
       }),
       suppliers: suppliersAdditions?.map(({ id }) => {
         return { id };
-      })
+      }),
+      shippings: shippingsAdditions
     },
     deletions: {
       gallery: galleryDeletions?.map((img) => {

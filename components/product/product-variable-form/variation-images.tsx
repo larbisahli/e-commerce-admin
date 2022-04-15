@@ -2,27 +2,58 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 
 import ImageComponent from '@components/ImageComponent';
+import Checkbox from '@components/ui/checkbox';
 import Label from '@components/ui/label';
-import Radio from '@components/ui/radio';
+import { useId } from '@hooks/index';
+import type { IMGType } from '@ts-types/generated';
+import { VariationOptionActions } from '@ts-types/generated';
 import cn from 'classnames';
 import { isEmpty } from 'lodash';
 import { useTranslation } from 'next-i18next';
 import { memo } from 'react';
 import React from 'react';
-import { useFormContext } from 'react-hook-form';
 
+interface VariationOptionAction {
+  type: VariationOptionActions;
+  payload: {
+    value?: any;
+    field?: string;
+    options?: string[];
+  };
+}
 interface VariationImagesProps {
-  index: number;
+  dispatchVariationOptions?: React.Dispatch<VariationOptionAction>;
+  selectedImage: string | null;
+  options: string[];
+  gallery: IMGType[];
 }
 
-const VariationImages = ({ index }: VariationImagesProps) => {
+const VariationImages = ({
+  gallery,
+  selectedImage,
+  dispatchVariationOptions,
+  options
+}: VariationImagesProps) => {
   const { t } = useTranslation();
 
-  const { watch } = useFormContext();
+  const HandleInputChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
+    image: string
+  ) => {
+    const target = e.target;
+    const name = target.name;
 
-  const gallery = watch('gallery');
-
-  const selectedImg = watch(`variation_options.${index}.image`);
+    dispatchVariationOptions({
+      type: VariationOptionActions.INSERT,
+      payload: {
+        value: target['checked'] ? image : null,
+        field: name,
+        options
+      }
+    });
+  };
 
   if (isEmpty(gallery)) return null;
 
@@ -32,13 +63,12 @@ const VariationImages = ({ index }: VariationImagesProps) => {
       <div className="flex items-center">
         {gallery?.map(({ image, placeholder }, idx) => {
           return (
-            <ImageVar
-              key={image}
-              index={index}
-              idx={idx}
-              selectedImg={selectedImg}
+            <GalleryShowcase
+              HandleInputChange={HandleInputChange}
+              selectedImage={selectedImage}
               image={image}
               placeholder={placeholder}
+              key={idx}
             />
           );
         })}
@@ -47,57 +77,54 @@ const VariationImages = ({ index }: VariationImagesProps) => {
   );
 };
 
-interface ImageVrProp {
-  index: number;
-  image: string;
-  idx: number;
-  placeholder: string;
-  selectedImg: string;
-}
+const GalleryShowcase = ({
+  HandleInputChange,
+  image,
+  placeholder,
+  selectedImage
+}) => {
+  const isCurrentImg = image === selectedImage;
 
-const ImageVar = memo(
-  ({ index, image, idx, placeholder, selectedImg }: ImageVrProp) => {
-    const { register } = useFormContext();
+  const id = useId();
 
-    return (
-      <div className="relative mt-2 me-2 w-16 h-16">
-        <label
-          htmlFor={`${idx}-${index}.image`}
-          className={cn(
-            'flex transition-all overflow-hidden border-2 w-16 h-16 border-border-200 rounded relative cursor-pointer',
-            {
-              '!border-2': selectedImg === image,
-              shadow: selectedImg === image
-            }
-          )}
-          style={{
-            borderColor: selectedImg === image ? '#46d934' : null,
-            transform: selectedImg === image ? 'translateY(-8px)' : null
-          }}
-        >
-          <ImageComponent
-            src={image ?? '/placeholders/no-image.svg'}
-            customPlaceholder={placeholder}
-            layout="fill"
-            objectFit="cover"
-          />
-        </label>
-        <Radio
-          {...register(`variation_options.${index}.image`)}
-          id={`${idx}-${index}.image`}
-          value={image}
-          className="transition-all absolute"
-          style={{
-            transform: selectedImg === image ? 'translateY(-8px)' : null,
-            top: '-6px',
-            left: '-6px'
-          }}
+  return (
+    <div className="relative mt-2 me-2 w-16 h-16">
+      <label
+        htmlFor={id}
+        className={cn(
+          'flex transition-all overflow-hidden border-2 w-16 h-16 border-border-200 rounded relative cursor-pointer',
+          {
+            '!border-2': isCurrentImg,
+            shadow: isCurrentImg
+          }
+        )}
+        style={{
+          borderColor: isCurrentImg ? '#46d934' : null,
+          transform: isCurrentImg ? 'translateY(-8px)' : null
+        }}
+      >
+        <ImageComponent
+          src={image ?? '/placeholders/no-image.svg'}
+          customPlaceholder={placeholder}
+          layout="fill"
+          objectFit="cover"
         />
-      </div>
-    );
-  }
-);
-
-ImageVar.displayName = 'ImageVar';
+      </label>
+      <Checkbox
+        name="image"
+        id={id}
+        className="transition-all absolute"
+        inputClassName="checkbox-rounded"
+        onChange={(e) => HandleInputChange(e, image)}
+        checked={isCurrentImg}
+        style={{
+          transform: isCurrentImg ? 'translateY(-8px)' : null,
+          top: '-6px',
+          left: '-6px'
+        }}
+      />
+    </div>
+  );
+};
 
 export default memo(VariationImages);

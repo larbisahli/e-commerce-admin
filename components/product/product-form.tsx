@@ -14,14 +14,16 @@ import { CREATE_PRODUCT, UPDATE_PRODUCT } from '@graphql/product';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useErrorLogger, useWarnIfUnsavedChanges } from '@hooks/index';
 import { notify } from '@lib/index';
-import { Product } from '@ts-types/generated';
+import type { Product, VariationOptionsType } from '@ts-types/generated';
+import { VariationOptionActions } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import cloneDeep from 'lodash/cloneDeep';
 import isEmpty from 'lodash/isEmpty';
+import isEqual from 'lodash/isEqual';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
-import { memo, useState } from 'react';
+import { memo, useReducer, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import ProductCategoryInput from './product-category-input';
@@ -74,10 +76,134 @@ type IProps = {
   initialValues?: Product | null;
 };
 
+type TShippings = {
+  id?: string;
+  zones?: {
+    name: string;
+    code: string;
+  }[];
+  shipping_price?: number;
+};
+
+// An interface for our actions
+interface VariationOptionAction {
+  type: VariationOptionActions;
+  payload: {
+    value?: any;
+    values?: any[];
+    field?: string;
+    options?: string[];
+    extra: any;
+  };
+}
+
+function VariationOptionsReducer(
+  state: VariationOptionsType[],
+  action: VariationOptionAction
+) {
+  const { type, payload } = action;
+  console.log('type :>> ', type);
+  switch (type) {
+    case VariationOptionActions.INSERT:
+      return [
+        ...state?.map((option) => {
+          if (isEqual(payload?.options, option?.options)) {
+            return {
+              ...option,
+              [payload.field]: payload.value
+            };
+          }
+          return option;
+        })
+      ];
+    case VariationOptionActions.INIT:
+      return payload.value;
+    case VariationOptionActions.CARTESIAN: {
+      const added = payload.values?.length > state?.length;
+      const deleted = state?.length > payload.values?.length;
+
+      console.log('==>', { deleted, added });
+
+      if (added) {
+        return [
+          ...state,
+          ...payload.values
+            ?.map((v) => {
+              const options = Array.isArray(v) ? v?.map((av) => av.id) : [v.id];
+
+              const combination = state?.find((s) =>
+                isEqual(s.options, options)
+              );
+
+              if (isEmpty(combination)) {
+                const title = Array.isArray(v)
+                  ? v.map((av) => av?.attribute_value).join('/')
+                  : v?.attribute_value;
+                return {
+                  options,
+                  title,
+                  buying_price: payload.extra.buying_price,
+                  compare_price: payload.extra.compare_price,
+                  id: null,
+                  image: null,
+                  is_disable: false,
+                  quantity: 1,
+                  sale_price: payload.extra.sale_price,
+                  sku: ''
+                };
+              }
+              return undefined;
+            })
+            ?.filter(function (element) {
+              return element !== undefined;
+            })
+        ];
+      }
+      if (deleted) {
+        return [
+          ...state
+            ?.map((v) => {
+              const combination = payload.values?.find((cart) => {
+                const options = Array.isArray(cart)
+                  ? cart?.map((av) => av.id)
+                  : [cart.id];
+                console.log('first', { options, 'v.options': v.options });
+                return isEqual(options, v.options);
+              });
+
+              console.log('combination', {
+                state,
+                combination,
+                payload: payload.values,
+                new: v
+              });
+
+              if (isEmpty(combination)) {
+                return undefined;
+              }
+              return v;
+            })
+            ?.filter(function (element) {
+              return element !== undefined;
+            })
+        ];
+      }
+      return state;
+    }
+    default:
+      return state;
+  }
+}
+
 function CreateOrUpdateProductForm({ initialValues }: IProps) {
   const { t } = useTranslation();
 
   const router = useRouter();
+
+  const [VariationOptions, dispatchVariationOptions] = useReducer(
+    VariationOptionsReducer,
+    []
+  );
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [unsavedChanges, setUnsavedChanges] = useState<string[]>([]);
@@ -90,7 +216,18 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
     defaultValues: initialValues
       ? cloneDeep({
           ...initialValues,
-          status: initialValues?.published ? 'publish' : 'draft'
+          status: initialValues?.published ? 'publish' : 'draft',
+          shippings: [].concat(
+            ...initialValues?.shippings?.map((s) => {
+              return (s?.shipping_zones as TShippings[])?.map((sz) => {
+                return {
+                  product_shipping_id: s.product_shipping_id,
+                  shipping_provider: s.shipping_provider,
+                  shipping_zones: sz
+                };
+              });
+            })
+          )
         })
       : defaultValues
   });
@@ -130,7 +267,9 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
   useErrorLogger(createProductError);
   useErrorLogger(updateProductError);
 
-  const onSubmit = async (values: FormValues) => {
+  const onSubmit = async (values_: FormValues) => {
+    const values = { ...values_, variation_options: VariationOptions };
+
     if (lockedSubmission) {
       console.log('lockedSubmission :>> ');
       return;
@@ -166,7 +305,7 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
     } else {
       const variables = creationVariable(values);
       console.log('variables', { variables });
-      // createProduct({ variables });
+      createProduct({ variables });
     }
     setLockedSubmission(false);
   };
@@ -315,7 +454,11 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
           </div>
 
           {/* Variation Type */}
-          <ProductVariableForm initialValues={initialValues} />
+          <ProductVariableForm
+            initialValues={initialValues}
+            variationOptions={VariationOptions}
+            dispatchVariationOptions={dispatchVariationOptions}
+          />
 
           {/* Shipping Info */}
           <ProductShippingInfoForm

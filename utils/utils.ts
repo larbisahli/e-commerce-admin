@@ -1,12 +1,7 @@
 import { Category } from '@ts-types/generated';
 import React from 'react';
-import shortid from 'shortid';
 
 export const PRODUCTION_ENV = process.env.NODE_ENV === 'production';
-
-shortid.characters(
-  '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$£'
-);
 
 // Utils
 export const Timer = (time = 1000) => {
@@ -51,8 +46,6 @@ export const replace = (array, index: number, replacerIndex: number) => {
     return array;
   }
 };
-
-export const generateShortId = () => shortid.generate();
 
 export const mediaURL = PRODUCTION_ENV
   ? process.env.MEDIA_URL

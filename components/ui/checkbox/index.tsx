@@ -1,4 +1,5 @@
 import React, { InputHTMLAttributes } from 'react';
+
 import styles from './checkbox.module.css';
 
 export interface Props extends InputHTMLAttributes<HTMLInputElement> {
@@ -6,23 +7,27 @@ export interface Props extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   name: string;
   error?: string;
+  inputClassName?: string;
 }
 
 const Checkbox = React.forwardRef<HTMLInputElement, Props>(
-  ({ className, label, name, error, ...rest }, ref) => {
+  (
+    { className, inputClassName, style, label, id, name, error, ...rest },
+    ref
+  ) => {
     return (
-      <div className={className}>
+      <div style={style} className={className}>
         <div className="flex items-center">
           <input
-            id={name}
+            id={id ?? name}
             name={name}
             type="checkbox"
             ref={ref}
-            className={styles.checkbox}
+            className={`${styles.checkbox} ${inputClassName ?? ''}`}
             {...rest}
           />
 
-          <label htmlFor={name} className="text-body text-sm">
+          <label htmlFor={id ?? name} className="text-body text-sm">
             {label}
           </label>
         </div>
@@ -32,5 +37,7 @@ const Checkbox = React.forwardRef<HTMLInputElement, Props>(
     );
   }
 );
+
+Checkbox.displayName = 'Checkbox';
 
 export default Checkbox;

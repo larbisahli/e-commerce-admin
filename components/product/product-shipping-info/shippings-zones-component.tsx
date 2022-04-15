@@ -1,23 +1,22 @@
 import Input from '@components/ui/input';
 import Label from '@components/ui/label';
 import { useSettings } from '@contexts/settings.context';
-import isArray from 'lodash/isArray';
 import isEmpty from 'lodash/isEmpty';
 import { useTranslation } from 'next-i18next';
 import { useEffect, memo, useState } from 'react';
-import { Control, useFormContext } from 'react-hook-form';
-import SelectInput from '@components/ui/select-input';
+import { useFormContext } from 'react-hook-form';
+import Select from '@components/ui/select/select';
 
 interface SZProps {
-  control: Control<any>;
   index: number;
 }
 
-const ShippingsZonesComponent = ({ control, index }: SZProps) => {
+const ShippingsZonesComponent = ({ index }: SZProps) => {
   const { t } = useTranslation();
 
   const [countries, setCountries] = useState([]);
   const [loadingCountries, setLoadingCountries] = useState(false);
+  const [zoneInit, setZoneInit] = useState(true);
 
   const { register, watch, setValue } = useFormContext();
 
@@ -26,11 +25,19 @@ const ShippingsZonesComponent = ({ control, index }: SZProps) => {
   const zones = watch(`shippings[${index}].shipping_zones.zones`) as {
     name: string;
     code: string;
-  };
+  }[];
 
   const shipping_price = watch(
     `shippings[${index}].shipping_zones.shipping_price`
   ) as number;
+
+  // set value
+  useEffect(() => {
+    if (zoneInit) {
+      setValue(`shippings[${index}].shipping_zones.zones`, zones);
+      setZoneInit(false);
+    }
+  }, [zones]);
 
   // Add global when zone is empty
   useEffect(() => {
@@ -44,16 +51,13 @@ const ShippingsZonesComponent = ({ control, index }: SZProps) => {
   // remove global when we have at least one country
   useEffect(() => {
     if (
-      isArray(zones) &&
-      zones?.length >= 2 &&
+      zones?.length === 2 &&
       !isEmpty(zones?.find((a) => a.code === 'Global'))
     ) {
       setValue(
         `shippings[${index}].shipping_zones.zones`,
         zones?.filter((a) => a.code !== 'Global')
       );
-    } else {
-      setValue(`shippings[${index}].shipping_zones.zones`, zones);
     }
   }, [zones]);
 
@@ -88,11 +92,12 @@ const ShippingsZonesComponent = ({ control, index }: SZProps) => {
               {t('form:input-label-shipping-zones')}
             </Label>
 
-            <SelectInput
-              name={`shippings[${index}].shipping_zones.zones`}
-              control={control}
+            <Select
+              onChange={(value) => {
+                setValue(`shippings[${index}].shipping_zones.zones`, value);
+              }}
               value={zones}
-              // defaultValue={zones}
+              defaultValue={zones}
               className="w-full"
               isMulti
               getOptionLabel={(option: any) => option.name}

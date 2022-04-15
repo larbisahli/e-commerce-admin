@@ -112,7 +112,7 @@ const ShippingsComponent = ({
           )}
         />
         <div>
-          <ShippingsZonesComponent control={control} index={index} />
+          <ShippingsZonesComponent index={index} />
         </div>
         <button
           onClick={removeShippingProvider}
