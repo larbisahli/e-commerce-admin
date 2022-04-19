@@ -13,7 +13,9 @@ export async function middleware(req: NextRequest) {
     url.pathname.indexOf('/favicons/') === -1 &&
     url.pathname !== '/logo.svg' &&
     url.pathname !== '/robots.txt' &&
-    url.pathname !== '/manifest.json'
+    url.pathname !== '/manifest.json' &&
+    url.pathname !== '/sw.js' &&
+    url.pathname !== '/workbox-4a677df8.js'
   ) {
     return NextResponse.redirect('/login');
   }

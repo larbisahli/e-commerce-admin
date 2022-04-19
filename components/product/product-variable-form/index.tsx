@@ -147,7 +147,6 @@ function ProductVariableForm({
       isEmpty(variationOptions) &&
       !isEmpty(initialValues?.variation_options)
     ) {
-      setInit(true);
       dispatchVariationOptions({
         type: VariationOptionActions.INIT,
         payload: {
@@ -155,12 +154,14 @@ function ProductVariableForm({
         }
       });
     }
+    setInit(true);
   }, []);
 
   useEffect(() => {
     const sale_price = getValues('sale_price');
     const compare_price = getValues('compare_price');
     const buying_price = getValues('buying_price');
+
     if (init) {
       dispatchVariationOptions({
         type: VariationOptionActions.CARTESIAN,

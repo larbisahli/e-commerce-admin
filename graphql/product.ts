@@ -215,51 +215,11 @@ export const CREATE_PRODUCT = gql`
 export const UPDATE_PRODUCT = gql`
   mutation UpdateProduct(
     $id: ID!
-    $product_name: String!
-    $sale_price: Float!
-    $compare_price: Float
-    $buying_price: Float
-    $quantity: Int!
-    $short_description: String!
-    $product_description: String!
-    $published: Boolean!
-    $disable_out_of_stock: Boolean!
-    $note: String
-    $sku: String
-    $thumbnail: IMGInput
-    $gallery: [IMGInput]
-    $categories: [CategoryInput]
-    $suppliers: [SupplierInput]
-    $tags: [TagInput]
-    $variation_options: [VariationOptionInput]
-    $variations: [VariationInput]
-    $shippings: [ProductShippingInput]
-    $product_shipping_info: ProductShippingInfoInput
+    $additions: UpdateProductInput!
+    $deletions: UpdateProductInput!
   ) {
-    updateProduct(
-      id: $id
-      product_name: $product_name
-      sale_price: $sale_price
-      compare_price: $compare_price
-      buying_price: $buying_price
-      quantity: $quantity
-      short_description: $short_description
-      product_description: $product_description
-      published: $published
-      disable_out_of_stock: $disable_out_of_stock
-      note: $note
-      sku: $sku
-      thumbnail: $thumbnail
-      gallery: $gallery
-      categories: $categories
-      suppliers: $suppliers
-      tags: $tags
-      variation_options: $variation_options
-      variations: $variations
-      shippings: $shippings
-      product_shipping_info: $product_shipping_info
-    ) {
-      product_name
+    updateProduct(id: $id, additions: $additions, deletions: $deletions) {
+      id
     }
   }
 `;

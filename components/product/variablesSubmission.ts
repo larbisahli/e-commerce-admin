@@ -189,12 +189,17 @@ const updateVariable = (values: Product, initialValues: Product) => {
     disable_out_of_stock: initialValues?.disable_out_of_stock
   };
   const productMainEqual = isEqual(initProductValues, newProductValues);
+  const productMain = productMainEqual ? {} : newProductValues;
 
   // 7) product shipping info block
   const productShippingInfoEqual = isEqual(
     initialValues?.product_shipping_info,
     values?.product_shipping_info
   );
+
+  const productShippingInfo = productShippingInfoEqual
+    ? {}
+    : values?.product_shipping_info;
 
   // 8) shippings block
   const newShippingValue = [
@@ -231,11 +236,9 @@ const updateVariable = (values: Product, initialValues: Product) => {
 
   // 9) variation options block
 
-  const variation_options = values?.variation_options?.filter(function (
-    element
-  ) {
-    return element !== undefined;
-  });
+  const variation_options = values?.variation_options?.filter(
+    (e) => e !== undefined
+  );
 
   const variationOptionsAdditions = differenceWith(
     variation_options,
@@ -249,23 +252,70 @@ const updateVariable = (values: Product, initialValues: Product) => {
     }
   );
 
-  console.log(
-    'initialValues?.variation_options',
-    initialValues?.variation_options
-  );
-  console.log('VariationOptions ++>', {
-    variationOptionsAdditions,
-    variationOptionsDeletions
-  });
-
   // 10) variation block
 
+  const variationAdditions = values?.variations
+    ?.map((v) => {
+      const initVariation = initialValues?.variations?.find(
+        (vv) => vv?.attribute?.id === v?.attribute?.id
+      );
+      if (!isEmpty(initVariation)) {
+        const addedValues = differenceWith(
+          v?.attribute_values,
+          initVariation?.attribute_values,
+          isEqual
+        );
+        return isEmpty(addedValues)
+          ? undefined
+          : {
+              attribute: { id: v.attribute.id },
+              attribute_values: addedValues?.map((av) => {
+                return { id: av.id };
+              })
+            };
+      } else {
+        return {
+          attribute: { id: v.attribute.id },
+          attribute_values: v.attribute_values?.map((av) => {
+            return { id: av.id };
+          })
+        };
+      }
+    })
+    ?.filter((e) => e !== undefined);
+
+  const variationDeletions = initialValues?.variations
+    ?.map((v) => {
+      const valueVariation = values?.variations?.find(
+        (vv) => vv?.attribute?.id === v?.attribute?.id
+      );
+      if (!isEmpty(valueVariation)) {
+        const deletedValues = differenceWith(
+          v?.attribute_values,
+          valueVariation?.attribute_values,
+          isEqual
+        );
+        return isEmpty(deletedValues)
+          ? undefined
+          : {
+              attribute: { id: v.attribute.id },
+              attribute_values: deletedValues?.map((av) => {
+                return { id: av.id };
+              })
+            };
+      } else {
+        return {
+          attribute: { id: v.attribute.id }
+        };
+      }
+    })
+    ?.filter((e) => e !== undefined);
+
   return {
+    id: initialValues?.id,
     additions: {
-      product_main: productMainEqual ? {} : newProductValues,
-      product_shipping_info: productShippingInfoEqual
-        ? {}
-        : values?.product_shipping_info,
+      product_main: productMain,
+      product_shipping_info: productShippingInfo,
       gallery: galleryAdditions?.map((img) => {
         return {
           image: img?.image,
@@ -287,7 +337,17 @@ const updateVariable = (values: Product, initialValues: Product) => {
       suppliers: suppliersAdditions?.map(({ id }) => {
         return { id };
       }),
-      shippings: shippingsAdditions
+      shippings: shippingsAdditions,
+      variation_options: variationOptionsAdditions?.map((vo) => {
+        return {
+          ...vo,
+          buying_price: Number(vo?.buying_price),
+          compare_price: Number(vo?.compare_price),
+          quantity: Number(vo?.quantity),
+          sale_price: Number(vo?.sale_price)
+        };
+      }),
+      variations: variationAdditions
     },
     deletions: {
       gallery: galleryDeletions?.map((img) => {
@@ -306,7 +366,11 @@ const updateVariable = (values: Product, initialValues: Product) => {
       }),
       suppliers: suppliersDeletions?.map(({ id }) => {
         return { id };
-      })
+      }),
+      variation_options: variationOptionsDeletions?.map((v) => {
+        return { id: v?.id };
+      }),
+      variations: variationDeletions
     }
   };
 };

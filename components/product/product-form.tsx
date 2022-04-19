@@ -18,6 +18,7 @@ import type { Product, VariationOptionsType } from '@ts-types/generated';
 import { VariationOptionActions } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import cloneDeep from 'lodash/cloneDeep';
+import differenceWith from 'lodash/differenceWith';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
 import dynamic from 'next/dynamic';
@@ -102,7 +103,6 @@ function VariationOptionsReducer(
   action: VariationOptionAction
 ) {
   const { type, payload } = action;
-  console.log('type :>> ', type);
   switch (type) {
     case VariationOptionActions.INSERT:
       return [
@@ -119,14 +119,38 @@ function VariationOptionsReducer(
     case VariationOptionActions.INIT:
       return payload.value;
     case VariationOptionActions.CARTESIAN: {
-      const added = payload.values?.length > state?.length;
-      const deleted = state?.length > payload.values?.length;
+      const payloadOptions = payload.values?.map((v) => {
+        return Array.isArray(v) ? v?.map((av) => av.id) : [v.id];
+      });
 
-      console.log('==>', { deleted, added });
+      const stateOptions = state?.map((av) => av.options);
 
-      if (added) {
+      const added = differenceWith(payloadOptions, stateOptions, isEqual);
+      const deleted = differenceWith(stateOptions, payloadOptions, isEqual);
+
+      const cleanedState = !isEmpty(deleted)
+        ? state
+            ?.map((v) => {
+              const combination = payload.values?.find((cart) => {
+                const options = Array.isArray(cart)
+                  ? cart?.map((av) => av.id)
+                  : [cart.id];
+                return isEqual(options, v.options);
+              });
+
+              if (isEmpty(combination)) {
+                return undefined;
+              }
+              return v;
+            })
+            ?.filter(function (element) {
+              return element !== undefined;
+            })
+        : state;
+
+      if (!isEmpty(added)) {
         return [
-          ...state,
+          ...cleanedState,
           ...payload.values
             ?.map((v) => {
               const options = Array.isArray(v) ? v?.map((av) => av.id) : [v.id];
@@ -159,34 +183,8 @@ function VariationOptionsReducer(
             })
         ];
       }
-      if (deleted) {
-        return [
-          ...state
-            ?.map((v) => {
-              const combination = payload.values?.find((cart) => {
-                const options = Array.isArray(cart)
-                  ? cart?.map((av) => av.id)
-                  : [cart.id];
-                console.log('first', { options, 'v.options': v.options });
-                return isEqual(options, v.options);
-              });
-
-              console.log('combination', {
-                state,
-                combination,
-                payload: payload.values,
-                new: v
-              });
-
-              if (isEmpty(combination)) {
-                return undefined;
-              }
-              return v;
-            })
-            ?.filter(function (element) {
-              return element !== undefined;
-            })
-        ];
+      if (!isEmpty(deleted)) {
+        return [...cleanedState];
       }
       return state;
     }
@@ -286,8 +284,6 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
       return;
     }
 
-    console.log('inputValues', { values });
-
     if (initialValues) {
       console.time('Product Update =========>');
 
@@ -296,15 +292,13 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
       console.log('Update Variables :>> ', variables);
 
       console.timeEnd('Product Update =========>');
-      // updateProduct({
-      //   variables: {
-      //     id: initialValues.id,
-      //     ...variables
-      //   }
-      // });
+      updateProduct({
+        variables: {
+          ...variables
+        }
+      });
     } else {
       const variables = creationVariable(values);
-      console.log('variables', { variables });
       createProduct({ variables });
     }
     setLockedSubmission(false);
