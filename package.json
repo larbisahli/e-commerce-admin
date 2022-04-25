@@ -13,7 +13,8 @@
     "check-format": "prettier --write \"**/*.{js,ts,scss,css,tsx,json,md,yml}\"",
     "test-all": "yarn check-format && yarn lint && yarn check-types && yarn build",
     "prepare": "husky install",
-    "cypress:open": "cypress open"
+    "cypress:open": "cypress open",
+    "deploy": "vercel --prod"
   },
   "dependencies": {
     "@apollo/client": "^3.5.6",

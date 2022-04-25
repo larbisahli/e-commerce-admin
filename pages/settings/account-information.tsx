@@ -18,7 +18,7 @@ export default function AccountInformation() {
   // const { data, isLoading: loading, error } = useSettingsQuery();
 
   const data = {};
-  const loading = false;
+  //   const loading = false;
   const error = null;
 
   // if (loading || shippingLoading || taxLoading)
@@ -31,13 +31,7 @@ export default function AccountInformation() {
           {t('form:form-title-settings')}
         </h1>
       </div>
-      <SettingsForm
-        settings={data?.options}
-        // taxClasses={taxData?.taxes}
-        taxClasses={[]}
-        // shippingClasses={ShippingData?.shippingClasses}
-        shippingClasses={[]}
-      />
+      <SettingsForm settings={data} />
     </>
   );
 }

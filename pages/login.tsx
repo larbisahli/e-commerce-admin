@@ -1,13 +1,14 @@
 import LoginForm from '@components/auth/login-form';
+import { getClientToken, verifyAuth } from '@middleware/utils';
 import { ROUTES } from '@utils/routes';
 import { GetServerSideProps } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useRouter } from 'next/router';
-import { getClientToken, verifyAuth } from '@middleware/utils';
 import { Fragment, useEffect } from 'react';
-import Image from 'next/image';
+
 import shop from '../public/shop.jpg';
 
 const LoginPage = (props) => {

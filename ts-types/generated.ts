@@ -110,17 +110,12 @@ export interface ProductShippingInfo {
 export interface ProductShippings {
   product_shipping_id?: Nullable<Scalars['ID']>;
   shipping_provider?: Shipping;
-  shipping_zones?:
-    | {
-        id?: Nullable<Scalars['ID']>;
-        zones?: { name: string; code: string }[];
-        shipping_price?: Scalars['Float'];
-      }
-    | {
-        id?: Nullable<Scalars['ID']>;
-        zones?: { name: string; code: string }[];
-        shipping_price?: Scalars['Float'];
-      }[];
+  shipping_zones?: {
+    id: Nullable<Scalars['ID']>;
+    zones: { name: string; code: string }[];
+    shipping_price: Scalars['Float'];
+  }[];
+  key?: string;
 }
 
 export interface AttributeValue {
@@ -244,6 +239,21 @@ export enum VariationOptionActions {
   INIT = 'INIT',
   CARTESIAN = 'CARTESIAN'
 }
+
+export enum ShippingsActions {
+  INSERT = 'INSERT',
+  INIT = 'INIT',
+  DELETE = 'DELETE',
+  ADD_SHIPPING = 'ADD_SHIPPING',
+  DELETE_SHIPPING = 'DELETE_SHIPPING',
+  ADD_SHIPPING_PROVIDER = 'ADD_SHIPPING_PROVIDER',
+  ADD_SHIPPING_ZONE = 'ADD_SHIPPING_ZONE',
+  ADD_ZONE = 'ADD_ZONE',
+  SHIPPING_PRICE = 'SHIPPING_PRICE',
+  CLEAR_GLOBAL = 'CLEAR_GLOBAL',
+  DELETE_SHIPPING_ZONE = 'DELETE_SHIPPING_ZONE'
+}
+
 export interface VariationOptionsType {
   id?: string;
   title: string;

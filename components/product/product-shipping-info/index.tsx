@@ -8,16 +8,33 @@ import Label from '@components/ui/label';
 import SelectInput from '@components/ui/select-input';
 import { SHIPPINGS_FOR_SELECT } from '@graphql/shipping';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { OrderBy, Shipping } from '@ts-types/generated';
+import {
+  OrderBy,
+  ProductShippings,
+  Shipping,
+  ShippingsActions
+} from '@ts-types/generated';
+import { nanoid } from 'nanoid';
 import { useTranslation } from 'next-i18next';
-import { memo } from 'react';
-import { Control, useFieldArray, useFormContext } from 'react-hook-form';
+import React, { memo } from 'react';
+import { Control, useFormContext } from 'react-hook-form';
 
 import ShippingsComponent from './shippings-component';
+
+interface ShippingsAction {
+  type: ShippingsActions;
+  payload: {
+    value?: any;
+    field?: string;
+    key?: string;
+  };
+}
 
 type IProps = {
   control: Control<any>;
   initialValues: any;
+  shippings: ProductShippings[];
+  dispatchShippings: React.Dispatch<ShippingsAction>;
 };
 
 interface ShippingsSelect {
@@ -36,7 +53,12 @@ const volume_units = [{ unit: 'L' }, { unit: 'mL' }];
 
 const dimension_units = [{ unit: 'L' }, { unit: 'mL' }];
 
-function ProductShippingInfoForm({ control, initialValues }: IProps) {
+function ProductShippingInfoForm({
+  control,
+  initialValues,
+  shippings,
+  dispatchShippings
+}: IProps) {
   const { t } = useTranslation();
 
   const {
@@ -44,11 +66,7 @@ function ProductShippingInfoForm({ control, initialValues }: IProps) {
     formState: { errors }
   } = useFormContext();
 
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: 'shippings',
-    keyName: 'key'
-  });
+  console.log('Shippings', shippings);
 
   const { data, loading, error } = useQuery<ShippingsSelect, OptionsVariable>(
     SHIPPINGS_FOR_SELECT,
@@ -62,9 +80,28 @@ function ProductShippingInfoForm({ control, initialValues }: IProps) {
     }
   );
 
-  const shippings = data?.shippingsSelectForAdmin;
+  const shippingProviders = data?.shippingsSelectForAdmin;
 
   useErrorLogger(error);
+
+  const addShipping = () => {
+    dispatchShippings({
+      type: ShippingsActions.ADD_SHIPPING,
+      payload: {
+        value: {
+          product_shipping_id: nanoid(10),
+          shipping_provider: {},
+          shipping_zones: [
+            {
+              id: nanoid(10),
+              zones: [{ name: 'Global', code: 'Global' }],
+              shipping_price: 0
+            }
+          ]
+        }
+      }
+    });
+  };
 
   return (
     <div className="flex flex-wrap my-5 sm:my-8">
@@ -207,36 +244,25 @@ function ProductShippingInfoForm({ control, initialValues }: IProps) {
             }
           />
         </div>
-        {/* Shippings */}
+
+        {/* ********************** Shippings ********************** */}
         <div>
           <Label>{t('form:input-label-shippings')}</Label>
           <div>
-            {fields.map((item, index) => {
+            {shippings?.map((item) => {
               return (
                 <ShippingsComponent
-                  control={control}
-                  key={index}
+                  key={item?.product_shipping_id}
                   item={item}
-                  index={index}
-                  shippings={shippings}
+                  shippingProviders={shippingProviders}
+                  dispatchShippings={dispatchShippings}
                   loading={loading}
-                  remove={remove}
                 />
               );
             })}
             <Button
               type="button"
-              onClick={() =>
-                append({
-                  product_shipping_id: null,
-                  shipping_provider: {},
-                  shipping_zones: {
-                    id: null,
-                    zones: [{ name: 'Global', code: 'Global' }],
-                    shipping_price: 0
-                  }
-                })
-              }
+              onClick={addShipping}
               className="w-full sm:w-auto"
             >
               {t('form:button-label-add-shipping')}

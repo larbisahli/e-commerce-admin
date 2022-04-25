@@ -26,12 +26,14 @@ interface Props {
     href: string;
     icon?: string;
     label: string;
+    line?: boolean;
     padding: string;
     subLinks?: {
       id: string;
       href: string;
       icon?: string;
       label: string;
+      line?: boolean;
       padding: string;
     }[];
   }[];
@@ -44,6 +46,7 @@ interface LabelProps {
   id: string;
   icon: string;
   label: string;
+  line?: boolean;
   hadSubLinks: boolean;
   padding: string;
   showLinkId: string;

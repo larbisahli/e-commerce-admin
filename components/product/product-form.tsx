@@ -14,13 +14,10 @@ import { CREATE_PRODUCT, UPDATE_PRODUCT } from '@graphql/product';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useErrorLogger, useWarnIfUnsavedChanges } from '@hooks/index';
 import { notify } from '@lib/index';
-import type { Product, VariationOptionsType } from '@ts-types/generated';
-import { VariationOptionActions } from '@ts-types/generated';
+import type { Product } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import cloneDeep from 'lodash/cloneDeep';
-import differenceWith from 'lodash/differenceWith';
 import isEmpty from 'lodash/isEmpty';
-import isEqual from 'lodash/isEqual';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
@@ -34,7 +31,9 @@ import ProductSupplierInput from './product-supplier-input';
 import ProductTagInput from './product-tag-input';
 import { productValidationSchema } from './product-validation-schema';
 import ProductVariableForm from './product-variable-form';
+import { ShippingsReducer } from './shippings-reducer';
 import { creationVariable, updateVariable } from './variablesSubmission';
+import { VariationOptionsReducer } from './variation-options-reducer';
 
 const Editor = dynamic(() => import('@components/ui/editor'), {
   loading: () => <Loader height="150px" text="Editor..." />,
@@ -86,113 +85,6 @@ type TShippings = {
   shipping_price?: number;
 };
 
-// An interface for our actions
-interface VariationOptionAction {
-  type: VariationOptionActions;
-  payload: {
-    value?: any;
-    values?: any[];
-    field?: string;
-    options?: string[];
-    extra: any;
-  };
-}
-
-function VariationOptionsReducer(
-  state: VariationOptionsType[],
-  action: VariationOptionAction
-) {
-  const { type, payload } = action;
-  switch (type) {
-    case VariationOptionActions.INSERT:
-      return [
-        ...state?.map((option) => {
-          if (isEqual(payload?.options, option?.options)) {
-            return {
-              ...option,
-              [payload.field]: payload.value
-            };
-          }
-          return option;
-        })
-      ];
-    case VariationOptionActions.INIT:
-      return payload.value;
-    case VariationOptionActions.CARTESIAN: {
-      const payloadOptions = payload.values?.map((v) => {
-        return Array.isArray(v) ? v?.map((av) => av.id) : [v.id];
-      });
-
-      const stateOptions = state?.map((av) => av.options);
-
-      const added = differenceWith(payloadOptions, stateOptions, isEqual);
-      const deleted = differenceWith(stateOptions, payloadOptions, isEqual);
-
-      const cleanedState = !isEmpty(deleted)
-        ? state
-            ?.map((v) => {
-              const combination = payload.values?.find((cart) => {
-                const options = Array.isArray(cart)
-                  ? cart?.map((av) => av.id)
-                  : [cart.id];
-                return isEqual(options, v.options);
-              });
-
-              if (isEmpty(combination)) {
-                return undefined;
-              }
-              return v;
-            })
-            ?.filter(function (element) {
-              return element !== undefined;
-            })
-        : state;
-
-      if (!isEmpty(added)) {
-        return [
-          ...cleanedState,
-          ...payload.values
-            ?.map((v) => {
-              const options = Array.isArray(v) ? v?.map((av) => av.id) : [v.id];
-
-              const combination = state?.find((s) =>
-                isEqual(s.options, options)
-              );
-
-              if (isEmpty(combination)) {
-                const title = Array.isArray(v)
-                  ? v.map((av) => av?.attribute_value).join('/')
-                  : v?.attribute_value;
-                return {
-                  options,
-                  title,
-                  buying_price: payload.extra.buying_price,
-                  compare_price: payload.extra.compare_price,
-                  id: null,
-                  image: null,
-                  is_disable: false,
-                  quantity: 1,
-                  sale_price: payload.extra.sale_price,
-                  sku: ''
-                };
-              }
-              return undefined;
-            })
-            ?.filter(function (element) {
-              return element !== undefined;
-            })
-        ];
-      }
-      if (!isEmpty(deleted)) {
-        return [...cleanedState];
-      }
-      return state;
-    }
-    default:
-      return state;
-  }
-}
-
 function CreateOrUpdateProductForm({ initialValues }: IProps) {
   const { t } = useTranslation();
 
@@ -202,6 +94,8 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
     VariationOptionsReducer,
     []
   );
+
+  const [shippings, dispatchShippings] = useReducer(ShippingsReducer, []);
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [unsavedChanges, setUnsavedChanges] = useState<string[]>([]);
@@ -458,6 +352,8 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
           <ProductShippingInfoForm
             control={control}
             initialValues={initialValues}
+            shippings={shippings}
+            dispatchShippings={dispatchShippings}
           />
 
           <div className="mb-4 text-end">

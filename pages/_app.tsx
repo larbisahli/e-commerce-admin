@@ -22,7 +22,7 @@ import { StaffInfoProvider } from '@contexts/staff.context';
 // import { SettingsProvider } from "@contexts/settings.context";
 import { UIProvider } from '@contexts/ui.context';
 // import PageLoader from "@components/ui/page-loader/page-loader";
-import { apiURL, PRODUCTION_ENV } from '@utils/utils';
+import { apiURL } from '@utils/utils';
 // import { useSettingsQuery } from "@graphql/settings.graphql";
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
@@ -33,7 +33,7 @@ import { Slide, ToastContainer } from 'react-toastify';
 
 const httpLink = new HttpLink({
   uri: `${apiURL}/graphql`,
-  credentials: PRODUCTION_ENV ? 'same-origin' : 'include'
+  credentials: 'include'
 });
 
 const retryLink = new RetryLink({

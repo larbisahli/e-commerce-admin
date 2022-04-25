@@ -55,6 +55,10 @@ export const apiURL = PRODUCTION_ENV
   ? process.env.API_URL
   : 'http://127.0.0.1:5000';
 
+// export const mediaURL = process.env.MEDIA_URL;
+
+// export const apiURL = process.env.API_URL;
+
 function searchTree(element: Category, matchingId: string) {
   if (element?.id === matchingId) {
     return element;

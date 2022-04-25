@@ -1,6 +1,6 @@
 import Card from '@components/common/card';
 import * as socialIcons from '@components/icons/social';
-import Alert from '@components/ui/alert';
+// import Alert from '@components/ui/alert';
 import Button from '@components/ui/button';
 import Description from '@components/ui/description';
 import FileInput from '@components/ui/file-input';
@@ -9,22 +9,18 @@ import Input from '@components/ui/input';
 import Label from '@components/ui/label';
 import SelectInput from '@components/ui/select-input';
 import TextArea from '@components/ui/text-area';
-// import { useUpdateSettingsMutation } from '@data/settings/use-settings-update.mutation';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { siteSettings } from '@settings/site.settings';
-import {
-  ContactDetailsInput,
-  SettingsOptions,
-  Shipping,
-  ShopSocialInput,
-  Tax
-} from '@ts-types/generated';
+import { Shipping } from '@ts-types/generated';
 import { CURRENCY } from '@utils/currency';
-import { getFormattedImage } from '@utils/get-formatted-image';
+// import { getFormattedImage } from '@utils/get-formatted-image';
 import { getIcon } from '@utils/get-icon';
-import omit from 'lodash/omit';
+// import omit from 'lodash/omit';
 import { useTranslation } from 'next-i18next';
-import { Controller, useFieldArray, useForm } from 'react-hook-form';
+import {
+  //  useFieldArray,
+  useForm
+} from 'react-hook-form';
 
 import { settingsValidationSchema } from './settings-validation-schema';
 
@@ -34,9 +30,9 @@ type FormValues = {
   currency: any;
   minimumOrderAmount: number;
   logo: any;
-  taxClass: Tax;
+  // taxClass: Tax;
   shippingClass: Shipping;
-  contactDetails: ContactDetailsInput;
+  // contactDetails: ContactDetailsInput;
   deliveryTime: {
     title: string;
     description: string;
@@ -99,16 +95,11 @@ export const updatedIcons = socialIcon.map((item: any) => {
 });
 
 type IProps = {
-  settings?: SettingsOptions | undefined | null;
-  taxClasses: Tax[] | undefined | null;
-  shippingClasses: Shipping[] | undefined | null;
+  // SettingsOptions
+  settings?: {} | undefined | null;
 };
 
-export default function SettingsForm({
-  settings,
-  taxClasses,
-  shippingClasses
-}: IProps) {
+export default function SettingsForm({ settings }: IProps) {
   const { t } = useTranslation();
   // const { mutate: updateSettingsMutation, isLoading: loading } =
   //   useUpdateSettingsMutation();
@@ -116,7 +107,6 @@ export default function SettingsForm({
     register,
     handleSubmit,
     control,
-    getValues,
     formState: { errors }
   } = useForm<FormValues>({
     shouldUnregister: true,
@@ -124,19 +114,19 @@ export default function SettingsForm({
     defaultValues: {
       ...settings,
       contactDetails: {
-        ...settings?.contactDetails,
-        socials: settings?.contactDetails?.socials
-          ? settings?.contactDetails?.socials.map((social: any) => ({
-              icon: updatedIcons?.find((icon) => icon?.value === social?.icon),
-              url: social?.url
-            }))
-          : []
+        // ...settings?.contactDetails,
+        // socials: settings?.contactDetails?.socials
+        //   ? settings?.contactDetails?.socials.map((social: any) => ({
+        //       icon: updatedIcons?.find((icon) => icon?.value === social?.icon),
+        //       url: social?.url
+        //     }))
+        //   : []
       },
-      deliveryTime: settings?.deliveryTime ? settings?.deliveryTime : [],
-      logo: settings?.logo ?? '',
-      currency: settings?.currency
-        ? CURRENCY.find((item) => item.code == settings?.currency)
-        : '',
+      // deliveryTime: settings?.deliveryTime ? settings?.deliveryTime : [],
+      // logo: settings?.logo ?? '',
+      // currency: settings?.currency
+      //   ? CURRENCY.find((item) => item.code == settings?.currency)
+      //   : '',
       // @ts-ignore
       // taxClass: !!taxClasses?.length
       //   ? taxClasses?.find((tax: Tax) => tax.id == settings?.taxClass)
@@ -152,31 +142,32 @@ export default function SettingsForm({
     }
   });
 
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: 'deliveryTime'
-  });
+  // const { fields, append, remove } = useFieldArray({
+  //   control,
+  //   name: 'deliveryTime'
+  // });
 
-  const {
-    fields: socialFields,
-    append: socialAppend,
-    remove: socialRemove
-  } = useFieldArray({
-    control,
-    name: 'contactDetails.socials'
-  });
+  // const {
+  //   // fields: socialFields,
+  //   append: socialAppend,
+  //   // remove: socialRemove
+  // } = useFieldArray({
+  //   control,
+  //   name: 'contactDetails.socials'
+  // });
 
   async function onSubmit(values: FormValues) {
-    const contactDetails = {
-      ...values?.contactDetails,
-      location: { ...omit(values?.contactDetails?.location, '__typename') },
-      socials: values?.contactDetails?.socials
-        ? values?.contactDetails?.socials?.map((social: any) => ({
-            icon: social?.icon?.value,
-            url: social?.url
-          }))
-        : []
-    };
+    // const contactDetails = {
+    //   ...values?.contactDetails,
+    //   location: { ...omit(values?.contactDetails?.location, '__typename') },
+    //   socials: values?.contactDetails?.socials
+    //     ? values?.contactDetails?.socials?.map((social: any) => ({
+    //         icon: social?.icon?.value,
+    //         url: social?.url
+    //       }))
+    //     : []
+    // };
+    console.log('values', values);
     // updateSettingsMutation({
     //   variables: {
     //     input: {
@@ -242,27 +233,27 @@ export default function SettingsForm({
         />
 
         <Card className="w-full sm:w-8/12 md:w-2/3">
-          <Input
+          {/* <Input
             label={t('form:input-label-store-name')}
             {...register('store_name')}
             error={t(errors.store_name?.message!)}
             variant="outline"
             className="mb-5"
-          />
-          <Input
+          /> */}
+          {/* <Input
             label={t('form:input-label-store-contact-email')}
             {...register('store_email')}
             error={t(errors.store_email?.message!)}
             variant="outline"
             className="mb-5"
-          />
-          <Input
+          /> */}
+          {/* <Input
             label={t('form:input-label-store-contact-number')}
             {...register('store_number')}
             variant="outline"
             className="mb-5"
             error={t(errors.store_number?.message!)}
-          />
+          /> */}
           <div className="mb-5">
             <Label>{t('form:input-label-currency')}</Label>
             <SelectInput
@@ -275,23 +266,23 @@ export default function SettingsForm({
             <ValidationError message={t(errors.currency?.message)} />
           </div>
 
-          <Input
+          {/* <Input
             label={`${t('form:input-label-max-order-amount')}`}
             {...register('max_order_acount')}
             type="number"
             error={t(errors.max_order_acount?.message!)}
             variant="outline"
             className="mb-5"
-          />
+          /> */}
 
-          <Input
+          {/* <Input
             label={`${t('form:input-label-max-checkout-quantity')}`}
             {...register('max_checkout_quantity')}
             type="number"
             error={t(errors.max_checkout_quantity?.message!)}
             variant="outline"
             className="mb-5"
-          />
+          /> */}
         </Card>
       </div>
       <div className="flex flex-wrap pb-8 border-b border-dashed border-border-base my-5 sm:my-8">
@@ -355,7 +346,7 @@ export default function SettingsForm({
 
         <Card className="w-full sm:w-8/12 md:w-2/3">
           {/* Social and Icon picker */}
-          <div>
+          {/* <div>
             {socialFields.map(
               (item: ShopSocialInput & { id: string }, index: number) => (
                 <div
@@ -397,11 +388,11 @@ export default function SettingsForm({
                 </div>
               )
             )}
-          </div>
+          </div> */}
 
           <Button
             type="button"
-            onClick={() => socialAppend({ icon: '', url: '' })}
+            // onClick={() => socialAppend({ icon: '', url: '' })}
             className="w-full sm:w-auto"
           >
             {t('form:button-label-add-social')}

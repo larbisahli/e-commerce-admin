@@ -240,9 +240,9 @@ export const DELETE_SHIPPING_ZONE = gql`
   }
 `;
 
-export const DELETE_SHIPPING_PROVIDER = gql`
-  mutation DeleteShippingProvider($product_shipping_id: ID!) {
-    deleteShippingProvider(product_shipping_id: $product_shipping_id) {
+export const DELETE_SHIPPING = gql`
+  mutation DeleteShipping($product_shipping_id: ID!) {
+    deleteShipping(product_shipping_id: $product_shipping_id) {
       product_shipping_id
     }
   }
