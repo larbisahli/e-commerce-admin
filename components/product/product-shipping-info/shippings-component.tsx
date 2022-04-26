@@ -159,10 +159,10 @@ const ShippingsComponent = ({
         <button
           onClick={removeShipping}
           type="button"
-          className="transition-colors duration-200 focus:outline-none sm:mt-4 sm:col-span-1 text-red-500 py-1 rounded flex justify-center items-center text-base border border-solid border-red-500 hover:bg-red-700 hover:text-white mb-3"
+          className="transition-colors duration-200 focus:outline-none sm:mt-4 self-end sm:col-span-1 text-red-500 py-1 rounded flex justify-center items-center text-base border border-solid border-red-500 hover:bg-red-700 hover:text-white mb-3 w-24"
         >
           {t('form:button-label-remove')}
-          {deleteShippingLoading && deletedIndex && (
+          {deleteShippingLoading && (
             <span
               className="absolute h-6 w-6 ms-2 rounded-full border-2 border-transparent border-t-2 animate-spin"
               style={{

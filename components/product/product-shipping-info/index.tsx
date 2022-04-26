@@ -14,9 +14,10 @@ import {
   Shipping,
   ShippingsActions
 } from '@ts-types/generated';
+import cloneDeep from 'lodash/cloneDeep';
 import { nanoid } from 'nanoid';
 import { useTranslation } from 'next-i18next';
-import React, { memo } from 'react';
+import React, { memo, useEffect } from 'react';
 import { Control, useFormContext } from 'react-hook-form';
 
 import ShippingsComponent from './shippings-component';
@@ -66,8 +67,6 @@ function ProductShippingInfoForm({
     formState: { errors }
   } = useFormContext();
 
-  console.log('Shippings', shippings);
-
   const { data, loading, error } = useQuery<ShippingsSelect, OptionsVariable>(
     SHIPPINGS_FOR_SELECT,
     {
@@ -83,6 +82,15 @@ function ProductShippingInfoForm({
   const shippingProviders = data?.shippingsSelectForAdmin;
 
   useErrorLogger(error);
+
+  useEffect(() => {
+    dispatchShippings({
+      type: ShippingsActions.INIT,
+      payload: {
+        value: cloneDeep(initialValues?.shippings)
+      }
+    });
+  }, []);
 
   const addShipping = () => {
     dispatchShippings({

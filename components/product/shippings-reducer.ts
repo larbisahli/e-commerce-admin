@@ -96,6 +96,22 @@ export function ShippingsReducer(
           return shipping;
         })
       ];
+    case ShippingsActions.DELETE_SHIPPING_ZONE:
+      return [
+        ...state?.map((shipping) => {
+          if (
+            payload?.value?.product_shipping_id ===
+            shipping?.product_shipping_id
+          ) {
+            shipping.shipping_zones = shipping.shipping_zones?.filter(
+              (shippingZone) =>
+                shippingZone?.id !== payload.value?.shipping_zone?.id
+            );
+            return shipping;
+          }
+          return shipping;
+        })
+      ];
     case ShippingsActions.CLEAR_GLOBAL:
       return [
         ...state?.map((shipping) => {
@@ -113,22 +129,6 @@ export function ShippingsReducer(
                 }
                 return shippingZone;
               }
-            );
-            return shipping;
-          }
-          return shipping;
-        })
-      ];
-    case ShippingsActions.DELETE_SHIPPING_ZONE:
-      return [
-        ...state?.map((shipping) => {
-          if (
-            payload?.value?.product_shipping_id ===
-            shipping?.product_shipping_id
-          ) {
-            shipping.shipping_zones = shipping.shipping_zones?.filter(
-              (shippingZone) =>
-                shippingZone?.id !== payload.value?.shipping_zone?.id
             );
             return shipping;
           }

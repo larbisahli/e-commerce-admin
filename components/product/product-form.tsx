@@ -108,18 +108,7 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
     defaultValues: initialValues
       ? cloneDeep({
           ...initialValues,
-          status: initialValues?.published ? 'publish' : 'draft',
-          shippings: [].concat(
-            ...initialValues?.shippings?.map((s) => {
-              return (s?.shipping_zones as TShippings[])?.map((sz) => {
-                return {
-                  product_shipping_id: s.product_shipping_id,
-                  shipping_provider: s.shipping_provider,
-                  shipping_zones: sz
-                };
-              });
-            })
-          )
+          status: initialValues?.published ? 'publish' : 'draft'
         })
       : defaultValues
   });
@@ -160,7 +149,11 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
   useErrorLogger(updateProductError);
 
   const onSubmit = async (values_: FormValues) => {
-    const values = { ...values_, variation_options: VariationOptions };
+    const values = {
+      ...values_,
+      variation_options: VariationOptions,
+      shippings
+    };
 
     if (lockedSubmission) {
       console.log('lockedSubmission :>> ');
@@ -170,7 +163,7 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
     setLockedSubmission(true);
 
     // Check if shipping_provider exist
-    const shippingProviderCheck = values?.shippings?.find(
+    const shippingProviderCheck = shippings?.find(
       (v) => !v.shipping_provider?.id
     );
     if (!isEmpty(shippingProviderCheck)) {
@@ -186,11 +179,11 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
       console.log('Update Variables :>> ', variables);
 
       console.timeEnd('Product Update =========>');
-      updateProduct({
-        variables: {
-          ...variables
-        }
-      });
+      // updateProduct({
+      //   variables: {
+      //     ...variables
+      //   }
+      // });
     } else {
       const variables = creationVariable(values);
       createProduct({ variables });

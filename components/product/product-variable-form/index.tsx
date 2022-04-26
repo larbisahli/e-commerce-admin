@@ -16,6 +16,7 @@ import {
   VariationOptionActions
 } from '@ts-types/generated';
 import { cartesian } from '@utils/cartesian';
+import cloneDeep from 'lodash/cloneDeep';
 import differenceWith from 'lodash/differenceWith';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
@@ -150,7 +151,7 @@ function ProductVariableForm({
       dispatchVariationOptions({
         type: VariationOptionActions.INIT,
         payload: {
-          value: initialValues?.variation_options
+          value: cloneDeep(initialValues?.variation_options)
         }
       });
     }

@@ -202,31 +202,7 @@ const updateVariable = (values: Product, initialValues: Product) => {
     : values?.product_shipping_info;
 
   // 8) shippings block
-  const newShippingValue = [
-    ...Array.from(
-      new Set(values?.shippings.map((value) => value.shipping_provider.id))
-    )
-  ]?.map((id) => {
-    const shippings = values?.shippings?.find(
-      (v) => v.shipping_provider.id === id
-    );
-    return {
-      product_shipping_id: shippings?.product_shipping_id,
-      shipping_provider: shippings?.shipping_provider,
-      shipping_zones: [].concat(
-        ...values?.shippings
-          ?.filter((v) => v.shipping_provider.id === id)
-          ?.map((sz) => {
-            return {
-              ...(sz?.shipping_zones as TShippings),
-              shipping_price: Number(
-                (sz?.shipping_zones as TShippings)?.shipping_price
-              )
-            };
-          })
-      )
-    };
-  });
+  const newShippingValue = values?.shippings;
 
   const shippingsAdditions = differenceWith(
     newShippingValue,

@@ -54,13 +54,6 @@ export const productValidationSchema = yup.object().shape({
         .required('form:error-quantity-required')
     })
   ),
-  shippings: yup.array().of(
-    yup.object().shape({
-      shipping_provider: yup.object().shape({
-        id: yup.string().required('form:error-shipping-provider-required')
-      })
-    })
-  ),
   categories: yup.array().min(1, 'Category Required'),
   product_shipping_info: yup.object().shape({
     weight: yup.number().typeError('form:error-amount-must-number'),
