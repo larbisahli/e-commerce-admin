@@ -166,6 +166,7 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
     const shippingProviderCheck = shippings?.find(
       (v) => !v.shipping_provider?.id
     );
+
     if (!isEmpty(shippingProviderCheck)) {
       notify('Please add a Shipping Provider', 'error');
       return;
@@ -179,11 +180,11 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
       console.log('Update Variables :>> ', variables);
 
       console.timeEnd('Product Update =========>');
-      // updateProduct({
-      //   variables: {
-      //     ...variables
-      //   }
-      // });
+      updateProduct({
+        variables: {
+          ...variables
+        }
+      });
     } else {
       const variables = creationVariable(values);
       createProduct({ variables });

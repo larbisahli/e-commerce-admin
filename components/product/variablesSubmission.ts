@@ -216,6 +216,11 @@ const updateVariable = (values: Product, initialValues: Product) => {
     (e) => e !== undefined
   );
 
+  console.log('====>', {
+    variation_options,
+    init: initialValues?.variation_options
+  });
+
   const variationOptionsAdditions = differenceWith(
     variation_options,
     initialValues?.variation_options,
