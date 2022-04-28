@@ -93,7 +93,7 @@ const creationVariable = (values: Product): Product => {
         buying_price: Number(vo.buying_price),
         quantity: Number(vo.quantity),
         sku: vo.sku,
-        active: vo.is_disable
+        active: !vo.is_disable
       };
     })
   };
@@ -325,7 +325,8 @@ const updateVariable = (values: Product, initialValues: Product) => {
           buying_price: Number(vo?.buying_price),
           compare_price: Number(vo?.compare_price),
           quantity: Number(vo?.quantity),
-          sale_price: Number(vo?.sale_price)
+          sale_price: Number(vo?.sale_price),
+          active: !vo.is_disable
         };
       }),
       variations: variationAdditions

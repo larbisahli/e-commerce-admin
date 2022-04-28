@@ -34,6 +34,7 @@ const Input = React.forwardRef<HTMLInputElement, Props>(
       shadow = false,
       type = 'text',
       inputClassName,
+      id,
       ...rest
     },
     ref
@@ -62,7 +63,7 @@ const Input = React.forwardRef<HTMLInputElement, Props>(
           </label>
         )}
         <input
-          id={name}
+          id={id ?? name}
           name={name}
           type={type}
           ref={ref}

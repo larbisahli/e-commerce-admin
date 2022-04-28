@@ -2,13 +2,12 @@ import { CloseIcon } from '@components/icons/close-icon';
 import { UploadIcon } from '@components/icons/upload-icon';
 import ImageComponent from '@components/ImageComponent';
 import Loader from '@components/ui/loader/loader';
-// import { useUploadMutation } from '@data/upload/use-upload.mutation';
 import { notify } from '@lib/notify';
 import { apiURL } from '@utils/utils';
-import isEmpty from 'lodash/isEmpty';
 import isArray from 'lodash/isArray';
+import isEmpty from 'lodash/isEmpty';
 import { useTranslation } from 'next-i18next';
-import { useState, useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 
 interface ImageType {
@@ -30,8 +29,6 @@ export default function Uploader({
 
   const [images, setImages] = useState<ImageType | ImageType[]>(value);
   const [loading, setLoading] = useState<boolean>(false);
-
-  // const { mutate: upload, isLoading: loading } = useUploadMutation();
 
   const { getRootProps, getInputProps } = useDropzone({
     accept: 'image/*',
@@ -111,13 +108,11 @@ export default function Uploader({
             className="inline-flex flex-col overflow-hidden border border-border-200 rounded mt-2 me-2 relative"
             key={idx}
           >
-            <div className="flex items-center justify-center min-w-0 w-16 h-16 overflow-hidden">
+            <div className="relative flex items-center justify-center min-w-0 w-16 h-16 overflow-hidden">
               {/* eslint-disable-next-line jsx-a11y/alt-text */}
               <ImageComponent
                 src={image}
                 customPlaceholder={placeholder ?? '/placeholders/no-image.svg'}
-                // width={64}
-                // height={64}
                 layout="fill"
                 objectFit="cover"
               />

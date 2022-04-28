@@ -76,15 +76,6 @@ type IProps = {
   initialValues?: Product | null;
 };
 
-type TShippings = {
-  id?: string;
-  zones?: {
-    name: string;
-    code: string;
-  }[];
-  shipping_price?: number;
-};
-
 function CreateOrUpdateProductForm({ initialValues }: IProps) {
   const { t } = useTranslation();
 
@@ -94,7 +85,6 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
     VariationOptionsReducer,
     []
   );
-
   const [shippings, dispatchShippings] = useReducer(ShippingsReducer, []);
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -128,8 +118,9 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
         console.log('CREATE_PRODUCT - data :>> ', data);
         if (!isEmpty(data)) {
           notify(t('common:successfully-created'), 'success');
-          // reset();
-          // router.push(ROUTES.PRODUCTS);
+          setUnsavedChanges([]);
+          reset();
+          router.push(ROUTES.PRODUCTS);
         }
       }
     });
@@ -140,7 +131,8 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
         console.log('UPDATE_PRODUCT - data :>> ', data);
         if (!isEmpty(data)) {
           notify(t('common:successfully-updated'), 'success');
-          // router.push(ROUTES.PRODUCTS);
+          setUnsavedChanges([]);
+          router.push(ROUTES.PRODUCTS);
         }
       }
     });
@@ -155,10 +147,7 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
       shippings
     };
 
-    if (lockedSubmission) {
-      console.log('lockedSubmission :>> ');
-      return;
-    }
+    if (lockedSubmission) return;
 
     setLockedSubmission(true);
 
@@ -173,13 +162,8 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
     }
 
     if (initialValues) {
-      console.time('Product Update =========>');
-
       const variables = updateVariable(values, initialValues);
 
-      console.log('Update Variables :>> ', variables);
-
-      console.timeEnd('Product Update =========>');
       updateProduct({
         variables: {
           ...variables

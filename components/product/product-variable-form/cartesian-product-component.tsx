@@ -75,9 +75,9 @@ const CartesianProductComponent = ({
         <Input
           label={`${t('form:input-label-sale-price')} (${currency})*`}
           type="number"
+          id={`sale_price-${index}`}
           name="sale_price"
           onChange={HandleInputChange}
-          // defaultValue={sale_price}
           value={variationOption.sale_price}
           // error={t(errors.variation_options?.[index]?.sale_price?.message)}
           variant="outline"
@@ -88,7 +88,6 @@ const CartesianProductComponent = ({
           name="compare_price"
           onChange={HandleInputChange}
           value={variationOption.compare_price}
-          // defaultValue={compare_price}
           type="number"
           // error={t(errors.variation_options?.[index]?.compare_price?.message)}
           variant="outline"
@@ -96,7 +95,6 @@ const CartesianProductComponent = ({
         />
         <Input
           label={`${t('form:input-label-buying-price')} (${currency})`}
-          // defaultValue={buying_price}
           type="number"
           name="buying_price"
           onChange={HandleInputChange}
@@ -117,7 +115,6 @@ const CartesianProductComponent = ({
         <Input
           label={`${t('form:input-label-quantity')}*`}
           type="number"
-          // defaultValue={1}
           name="quantity"
           onChange={HandleInputChange}
           value={variationOption.quantity}

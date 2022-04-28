@@ -25,7 +25,7 @@ export function VariationOptionsReducer(
     case VariationOptionActions.INSERT:
       return [
         ...state?.map((option) => {
-          if (isEqual(payload?.options, option?.options)) {
+          if (isEqual(payload?.options?.sort(), option?.options?.sort())) {
             return {
               ...option,
               [payload.field]: payload.value
@@ -53,7 +53,7 @@ export function VariationOptionsReducer(
                 const options = Array.isArray(cart)
                   ? cart?.map((av) => av.id)
                   : [cart.id];
-                return isEqual(options, v.options);
+                return isEqual(options?.sort(), v.options?.sort());
               });
 
               if (isEmpty(combination)) {
@@ -74,7 +74,7 @@ export function VariationOptionsReducer(
               const options = Array.isArray(v) ? v?.map((av) => av.id) : [v.id];
 
               const combination = state?.find((s) =>
-                isEqual(s.options, options)
+                isEqual(s.options?.sort(), options?.sort())
               );
 
               if (isEmpty(combination)) {

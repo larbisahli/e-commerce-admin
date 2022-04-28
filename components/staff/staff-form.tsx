@@ -105,7 +105,6 @@ const StaffCreateUpdateForm = ({ initialValues }: IProps) => {
       onCompleted: (data: { updateStaff: StaffType }) => {
         if (!isEmpty(data)) {
           notify(t('common:successfully-updated'), 'success');
-          reset();
           setUnsavedChanges([]);
           router.push(ROUTES.STAFFS);
         }
