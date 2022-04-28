@@ -1,7 +1,10 @@
+import { useMutation } from '@apollo/client';
 import { CloseIcon } from '@components/icons/close-icon';
 import { UploadIcon } from '@components/icons/upload-icon';
 import ImageComponent from '@components/ImageComponent';
 import Loader from '@components/ui/loader/loader';
+import { DELETE_IMAGE_OBJECT } from '@graphql/common';
+import { useErrorLogger } from '@hooks/index';
 import { notify } from '@lib/notify';
 import { apiURL } from '@utils/utils';
 import isArray from 'lodash/isArray';
@@ -28,7 +31,15 @@ export default function Uploader({
   const { t } = useTranslation();
 
   const [images, setImages] = useState<ImageType | ImageType[]>(value);
+  const [deletedImage, setDeletedImage] = useState<string>(null);
   const [loading, setLoading] = useState<boolean>(false);
+
+  const [
+    deleteImageObject,
+    { loading: deleteLoading, error: deleteImageObjectError }
+  ] = useMutation(DELETE_IMAGE_OBJECT);
+
+  useErrorLogger(deleteImageObjectError);
 
   const { getRootProps, getInputProps } = useDropzone({
     accept: 'image/*',
@@ -82,18 +93,37 @@ export default function Uploader({
     }
   });
 
-  const handleDelete = (e, image?: string) => {
+  const handleDelete = (
+    e,
+    {
+      isMultiple,
+      image,
+      placeholder
+    }: { isMultiple: boolean; image: string; placeholder: string }
+  ) => {
     e.preventDefault();
-    let images_;
-    if (isArray(images) && image) {
-      images_ = images.filter((file) => file.image !== image);
-    } else {
-      images_ = null;
-    }
 
-    setImages(images_);
-    onChange(images_);
-    setUnsavedChanges(images_);
+    setDeletedImage(image);
+
+    deleteImageObject({
+      variables: { image, placeholder },
+      onCompleted: (data: { deleteImageObject: { image: string } }) => {
+        const image = data?.deleteImageObject.image;
+        if (!isEmpty(data)) {
+          let images_;
+          if (isArray(images) && isMultiple) {
+            images_ = images?.filter((file) => file.image !== image);
+          } else {
+            images_ = null;
+          }
+          setImages(images_);
+          onChange(images_);
+          setUnsavedChanges(images_);
+          setDeletedImage(null);
+          notify(t('common:successfully-deleted'), 'success');
+        }
+      }
+    });
   };
 
   const thumbs = useMemo(() => {
@@ -108,6 +138,16 @@ export default function Uploader({
             className="inline-flex flex-col overflow-hidden border border-border-200 rounded mt-2 me-2 relative"
             key={idx}
           >
+            {deleteLoading && deletedImage === image && (
+              <div className="absolute top-0 right-0 left-0 bottom-0 w-16 h-16 z-40 bg-red-50 opacity-80 flex justify-center items-center">
+                <Loader
+                  simple={true}
+                  borderColor={'#000'}
+                  className="w-8 h-8 z-50"
+                />
+              </div>
+            )}
+
             <div className="relative flex items-center justify-center min-w-0 w-16 h-16 overflow-hidden">
               {/* eslint-disable-next-line jsx-a11y/alt-text */}
               <ImageComponent
@@ -122,7 +162,9 @@ export default function Uploader({
               className="w-4 h-4 flex items-center justify-center rounded-full 
                 bg-red-600 text-xs text-light absolute top-1 
                   end-1 shadow-xl outline-none"
-              onClick={(e) => handleDelete(e, image)}
+              onClick={(e) =>
+                handleDelete(e, { isMultiple: true, image, placeholder })
+              }
             >
               <CloseIcon width={10} height={10} />
             </button>
@@ -132,13 +174,20 @@ export default function Uploader({
     } else {
       return (
         <div className="inline-flex flex-col overflow-hidden border border-border-200 rounded mt-2 me-2 relative">
+          {deleteLoading && (
+            <div className="absolute top-0 right-0 left-0 bottom-0 w-16 h-16 z-40 bg-red-50 opacity-80 flex justify-center items-center">
+              <Loader
+                simple={true}
+                borderColor={'#000'}
+                className="w-8 h-8 z-50"
+              />
+            </div>
+          )}
           <div className="flex items-center justify-center min-w-0 w-16 h-16 overflow-hidden">
             {/* eslint-disable-next-line jsx-a11y/alt-text */}
             <ImageComponent
               src={images?.image ?? '/placeholders/no-image.svg'}
               customPlaceholder={images?.placeholder}
-              // width={64}
-              // height={64}
               layout="fill"
               objectFit="cover"
             />
@@ -148,14 +197,20 @@ export default function Uploader({
             className="w-4 h-4 flex items-center justify-center rounded-full 
         bg-red-600 text-xs text-light absolute top-1 
           end-1 shadow-xl outline-none"
-            onClick={(e) => handleDelete(e)}
+            onClick={(e) =>
+              handleDelete(e, {
+                isMultiple: false,
+                image: images?.image,
+                placeholder: images?.placeholder
+              })
+            }
           >
             <CloseIcon width={10} height={10} />
           </button>
         </div>
       );
     }
-  }, [images]);
+  }, [images, deleteLoading, deletedImage]);
 
   return (
     <section className="upload">

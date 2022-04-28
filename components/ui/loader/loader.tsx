@@ -8,6 +8,7 @@ interface Props {
   showText?: boolean;
   simple?: boolean;
   height?: string;
+  borderColor?: string;
 }
 
 const Loader = (props: Props) => {
@@ -16,19 +17,23 @@ const Loader = (props: Props) => {
     showText = true,
     text = 'Loading...',
     simple,
-    height = 'calc(100vh - 200px)'
+    height = 'calc(100vh - 200px)',
+    borderColor
   } = props;
   return (
     <>
       {simple ? (
-        <div className={cn(className, styles.simple_loading)} />
+        <div
+          className={cn(styles.simple_loading, className)}
+          style={{ borderTopColor: borderColor }}
+        />
       ) : (
         <div
           className={cn(
             'w-full flex flex-col items-center justify-center',
             className
           )}
-          style={{ height }}
+          style={{ height, borderTopColor: borderColor }}
         >
           <div className={styles.loading} />
 
