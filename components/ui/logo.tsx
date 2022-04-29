@@ -1,5 +1,4 @@
 import Link from '@components/ui/link';
-import { useSettings } from '@contexts/settings.context';
 import { siteSettings } from '@settings/site.settings';
 import cn from 'classnames';
 import Image from 'next/image';
@@ -9,7 +8,6 @@ const Logo: React.FC<React.AnchorHTMLAttributes<{}>> = ({
   className,
   ...props
 }) => {
-  const { logo, siteTitle } = useSettings();
   return (
     <Link
       href={siteSettings.logo.href}
@@ -24,8 +22,8 @@ const Logo: React.FC<React.AnchorHTMLAttributes<{}>> = ({
         }}
       >
         <Image
-          src={logo?.original ?? siteSettings.logo.url}
-          alt={siteTitle ?? siteSettings.logo.alt}
+          src={siteSettings.logo.url}
+          alt={siteSettings.logo.alt}
           layout="fill"
           objectFit="contain"
           loading="eager"

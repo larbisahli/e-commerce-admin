@@ -1,5 +1,12 @@
-import Select from '@components/ui/select/select';
+// import Select from '@components/ui/select/select';
+import Loader from '@components/ui/loader/loader';
+import dynamic from 'next/dynamic';
 import { Controller } from 'react-hook-form';
+
+const Select = dynamic(() => import('@components/ui/select/select'), {
+  loading: () => <Loader height="100px" showText={false} />,
+  ssr: false
+});
 
 interface SelectInputProps {
   control: any;

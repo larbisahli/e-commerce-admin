@@ -6,14 +6,14 @@ export const siteSettings = {
   logo: {
     url: '/logo.svg',
     alt: 'DropGala',
-    href: 'logo.svg',
+    href: '/',
     width: 128,
     height: 40
   },
   defaultLanguage: 'en',
   author: {
     name: 'DropGala',
-    websiteUrl: 'https://dropgala.com',
+    websiteUrl: 'https://business.dropgala.com',
     address: ''
   },
   headerLinks: [],

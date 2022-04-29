@@ -162,10 +162,9 @@ export default function CreateOrUpdateCategoriesForm({
   useErrorLogger(updateCategoryError);
 
   const onSubmit = async (values: FormValues) => {
-    console.log('values', values);
-
     if (isEmpty(values.thumbnail)) {
       notify('form:category-image-required', 'warning');
+      return;
     }
 
     const variables = {
@@ -179,8 +178,6 @@ export default function CreateOrUpdateCategoriesForm({
       parent_id: isEmpty(values?.parent) ? null : values?.parent?.id,
       icon: (values.icon as unknown as { value: string })?.value ?? null
     };
-
-    console.log('variables :>> ', variables);
 
     if (isEmpty(initialValues)) {
       createCategory({ variables });

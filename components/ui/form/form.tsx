@@ -1,4 +1,4 @@
-import { useForm, UseFormReturn, SubmitHandler } from 'react-hook-form';
+import { SubmitHandler, useForm, UseFormReturn } from 'react-hook-form';
 
 type FormProps<TFormValues> = {
   onSubmit: SubmitHandler<TFormValues>;

@@ -363,5 +363,6 @@
   "error-shipping-provider-required": "Shipping Provider Required",
   "category-image-required": "Category Image Required",
   "button-label-update-customer": "Update Customer",
-  "form-title-product-shipping-info": "Product Shipping Information"
+  "form-title-product-shipping-info": "Product Shipping Information",
+  "create-attribute": "Create Attribute"
 }
