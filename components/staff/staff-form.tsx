@@ -93,9 +93,9 @@ const StaffCreateUpdateForm = ({ initialValues }: IProps) => {
     useMutation(CREATE_STAFF, {
       onCompleted: (data: { createStaff: StaffType }) => {
         if (!isEmpty(data)) {
-          notify(t('common:successfully-created'), 'success');
           reset();
           setUnsavedChanges([]);
+          notify(t('common:successfully-created'), 'success');
           router.push(ROUTES.STAFFS);
         }
       }
@@ -104,8 +104,8 @@ const StaffCreateUpdateForm = ({ initialValues }: IProps) => {
     useMutation(UPDATE_STAFF, {
       onCompleted: (data: { updateStaff: StaffType }) => {
         if (!isEmpty(data)) {
-          notify(t('common:successfully-updated'), 'success');
           setUnsavedChanges([]);
+          notify(t('common:successfully-updated'), 'success');
           router.push(ROUTES.STAFFS);
         }
       }

@@ -87,7 +87,7 @@ function ProductShippingInfoForm({
     dispatchShippings({
       type: ShippingsActions.INIT,
       payload: {
-        value: cloneDeep(initialValues?.shippings)
+        value: cloneDeep(initialValues?.shippings ?? [])
       }
     });
   }, []);

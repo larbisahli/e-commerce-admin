@@ -148,7 +148,9 @@ function ProductVariableForm({
       isEmpty(variationOptions) &&
       !isEmpty(initialValues?.variation_options)
     ) {
-      const variation_options = cloneDeep(initialValues?.variation_options);
+      const variation_options = cloneDeep(
+        initialValues?.variation_options ?? []
+      );
       dispatchVariationOptions({
         type: VariationOptionActions.INIT,
         payload: {

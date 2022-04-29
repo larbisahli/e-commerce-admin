@@ -57,9 +57,9 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
     useMutation(CREATE_SHIPPING, {
       onCompleted: (data: { createShipping: Shipping }) => {
         if (!isEmpty(data)) {
-          notify(t('common:successfully-created'), 'success');
           setUnsavedChanges([]);
           reset();
+          notify(t('common:successfully-created'), 'success');
           router.push(ROUTES.SHIPPINGS);
         }
       }
