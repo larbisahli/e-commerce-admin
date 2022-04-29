@@ -171,6 +171,7 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
       });
     } else {
       const variables = creationVariable(values);
+      console.log('variables', { variables });
       createProduct({ variables });
     }
     setLockedSubmission(false);

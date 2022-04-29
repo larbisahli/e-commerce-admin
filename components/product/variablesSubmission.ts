@@ -3,15 +3,6 @@ import differenceWith from 'lodash/differenceWith';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
 
-type TShippings = {
-  id?: string;
-  zones?: {
-    name: string;
-    code: string;
-  }[];
-  shipping_price?: number;
-};
-
 const creationVariable = (values: Product): Product => {
   return {
     product_name: values.product_name,
@@ -54,27 +45,7 @@ const creationVariable = (values: Product): Product => {
       dimension_depth: Number(values?.product_shipping_info?.dimension_depth),
       dimension_unit: values?.product_shipping_info?.dimension_unit
     },
-    shippings: [
-      ...Array.from(
-        new Set(values?.shippings.map((value) => value.shipping_provider.id))
-      )
-    ]?.map((id) => {
-      return {
-        shipping_provider: { id },
-        shipping_zones: [].concat(
-          ...values?.shippings
-            ?.filter((value) => value.shipping_provider.id === id)
-            ?.map((sz) => {
-              return {
-                shipping_price: Number(
-                  (sz?.shipping_zones as TShippings)?.shipping_price
-                ),
-                zones: (sz?.shipping_zones as TShippings)?.zones
-              };
-            })
-        )
-      };
-    }),
+    shippings: values?.shippings,
     variations: values?.variations?.map((v) => {
       return {
         attribute: { id: v.attribute.id },

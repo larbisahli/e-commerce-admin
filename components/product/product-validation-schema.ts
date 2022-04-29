@@ -23,11 +23,7 @@ export const productValidationSchema = yup.object().shape({
   compare_price: yup
     .number()
     .typeError('form:error-amount-must-number')
-    .transform((value) => (isNaN(value) ? null : value))
-    .lessThan(
-      yup.ref('sale_price'),
-      'Compare Price should be less than ${less}'
-    ),
+    .transform((value) => (isNaN(value) ? null : value)),
   quantity: yup
     .number()
     .typeError('form:error-amount-must-number')
