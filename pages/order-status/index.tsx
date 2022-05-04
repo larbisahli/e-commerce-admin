@@ -7,7 +7,7 @@ import OrderStatusList from '@components/order-status/order-status-list';
 import ErrorMessage from '@components/ui/error-message';
 import LinkButton from '@components/ui/link-button';
 import Loader from '@components/ui/loader/loader';
-import { ORDER_STATUSES } from '@graphql/order_status';
+import { ORDER_STATUSES } from '@graphql/order-status';
 import { useErrorLogger, useGetStaff } from '@hooks/index';
 import { getClientToken, verifyAuth } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';

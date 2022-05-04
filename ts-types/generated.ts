@@ -288,6 +288,24 @@ export interface Suppliers extends CreatedUpdatedByAt {
   note?: Nullable<Scalars['String']>;
 }
 
+export interface HeroCarouselType extends CreatedUpdatedByAt {
+  id?: Scalars['ID'];
+  destination_url?: Nullable<Scalars['String']>;
+  thumbnail?: IMGType;
+  title?: Scalars['String'];
+  description?: Nullable<Scalars['String']>;
+  btn_label?: Scalars['String'];
+  styles?: {
+    text_color?: string;
+    btn_bgc?: string;
+    btn_text_color?: string;
+  };
+  display_order?: Scalars['Int'];
+  published?: Scalars['Boolean'];
+  status?: 'draft' | 'publish';
+  clicks?: Scalars['Int'];
+}
+
 // export declare type Address = {
 //   id: Scalars['ID'];
 //   title?: Nullable<Scalars['String']>;

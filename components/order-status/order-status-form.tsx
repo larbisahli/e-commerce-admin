@@ -10,7 +10,7 @@ import Radio from '@components/ui/radio';
 import {
   CREATE_ORDER_STATUS,
   UPDATE_ORDER_STATUS
-} from '@graphql/order_status';
+} from '@graphql/order-status';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { notify } from '@lib/notify';

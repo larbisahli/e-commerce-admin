@@ -4,7 +4,7 @@ import {
   useModalAction,
   useModalState
 } from '@components/ui/modal/modal.context';
-import { DELETE_ORDER_STATUS, ORDER_STATUSES } from '@graphql/order_status';
+import { DELETE_ORDER_STATUS, ORDER_STATUSES } from '@graphql/order-status';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 
 const OrderStatusDeleteView = () => {

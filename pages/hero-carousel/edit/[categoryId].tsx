@@ -1,37 +1,36 @@
 import { useQuery } from '@apollo/client';
+import CreateOrUpdateCategoriesForm from '@components/category/category-form';
 import AppLayout from '@components/layouts/app';
-import CreateOrUpdateOrderStatusForm from '@components/order-status/order-status-form';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
-import { ORDER_STATUS } from '@graphql/order-status';
-import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetStaff } from '@hooks/useGetStaff';
+import { CATEGORY } from '@graphql/category';
+import { useErrorLogger, useGetStaff } from '@hooks/index';
 import { getClientToken, verifyAuth } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
-import { OrderStatus } from '@ts-types/generated';
+import { Category } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import type { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-interface TOrderStatus {
-  orderStatusForAdmin: OrderStatus;
+interface TCategory {
+  categoryForAdmin: Category;
 }
 interface OptionsVariable {
   id: string | string[];
 }
 
-export default function UpdateOrderStatusPage({ client }: SSRProps) {
+export default function UpdateCategoriesPage({ client }: SSRProps) {
   const { query } = useRouter();
   const { t } = useTranslation();
 
-  const { statusId } = query;
+  const { categoryId } = query;
 
-  const { data, loading, error } = useQuery<TOrderStatus, OptionsVariable>(
-    ORDER_STATUS,
+  const { data, loading, error } = useQuery<TCategory, OptionsVariable>(
+    CATEGORY,
     {
-      variables: { id: statusId },
+      variables: { id: categoryId },
       fetchPolicy: 'cache-and-network'
     }
   );
@@ -50,17 +49,15 @@ export default function UpdateOrderStatusPage({ client }: SSRProps) {
     <>
       <div className="py-5 sm:py-8 flex border-b border-dashed border-border-base">
         <h1 className="text-lg font-semibold text-heading">
-          {t('form:form-title-edit-order-status')}
+          {t('form:form-title-edit-category')}
         </h1>
       </div>
-      <CreateOrUpdateOrderStatusForm
-        initialValues={data?.orderStatusForAdmin}
-      />
+      <CreateOrUpdateCategoriesForm initialValues={data?.categoryForAdmin} />
     </>
   );
 }
 
-UpdateOrderStatusPage.Layout = AppLayout;
+UpdateCategoriesPage.Layout = AppLayout;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { locale } = context;
@@ -78,12 +75,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   return {
     props: {
-      ...(await serverSideTranslations(locale, [
-        'form',
-        'common',
-        'table',
-        'error'
-      ])),
+      ...(await serverSideTranslations(locale, ['form', 'common', 'error'])),
       client
     }
   };

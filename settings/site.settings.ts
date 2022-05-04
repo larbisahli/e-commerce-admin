@@ -103,6 +103,12 @@ export const siteSettings = {
         icon: 'StaffsIcon'
       },
       {
+        id: 'WaIqCI',
+        href: ROUTES.HERO_CAROUSEL,
+        label: 'sidebar-nav-item-hero-carousel',
+        icon: 'ImageMultipleIcon'
+      },
+      {
         id: 'nMtvIg',
         href: '/settings',
         label: 'sidebar-nav-item-settings',

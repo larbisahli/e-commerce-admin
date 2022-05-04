@@ -364,5 +364,21 @@
   "category-image-required": "Category Image Required",
   "button-label-update-customer": "Update Customer",
   "form-title-product-shipping-info": "Product Shipping Information",
-  "create-attribute": "Create Attribute"
+  "create-attribute": "Create Attribute",
+  "input-label-hero-carousel": "Hero Carousel",
+  "button-label-add-slide": "Add Slide",
+  "form-title-create-slider": "Create Slider",
+  "input-label-title": "Title",
+  "input-label-destination-url": "Destination URL",
+  "hero-slider-image-helper-text": "Upload your hero slider image here",
+  "hero-slider-description-helper-text": "Add your slider details and necessary information from here",
+  "button-label-add-slider": "Add Slider",
+  "button-label-update-slider": "Update Slider",
+  "input-label-display-order": "Display Order",
+  "input-label-slider-styles": "Slider Styles",
+  "hero-slider-style-helper-text": "Add your slider text and button styles from here",
+  "input-text-color": "Text Color",
+  "input-label-button-label": "Button Label",
+  "input-button-text-color": "Button Text Color",
+  "input-button-background-color": "Button background Color"
 }

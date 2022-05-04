@@ -33,5 +33,6 @@ export const ROUTES = {
   NOTIFICATIONS: '/contact-page/notifications',
   INTEGRATIONS: '/store/integrations',
   PAYMENTS: '/store/payments',
-  EMAIL_TEMPLATES: '/store/email-templates'
+  EMAIL_TEMPLATES: '/store/email-templates',
+  HERO_CAROUSEL: '/hero-carousel'
 };

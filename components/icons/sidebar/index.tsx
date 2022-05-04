@@ -5,6 +5,7 @@ export { AttributeValueIcon } from '@components/icons/sidebar/attribute-value';
 export { CategoriesIcon } from '@components/icons/sidebar/categories';
 export { CouponsIcon } from '@components/icons/sidebar/coupons';
 export { DashboardIcon } from '@components/icons/sidebar/dashboard';
+export { ImageMultipleIcon } from '@components/icons/sidebar/image-multiple';
 export { MyShopIcon } from '@components/icons/sidebar/my-shop';
 export { OrdersStatusIcon } from '@components/icons/sidebar/order-status';
 export { OrdersIcon } from '@components/icons/sidebar/orders';
