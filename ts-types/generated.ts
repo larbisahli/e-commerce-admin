@@ -8,7 +8,8 @@ export enum SortOrder {
 
 export enum OrderBy {
   CREATED_AT = 'created_at',
-  UPDATED_AT = 'updated_at'
+  UPDATED_AT = 'updated_at',
+  DISPLAY_ORDER = 'display_order'
 }
 
 export enum ProductStatus {

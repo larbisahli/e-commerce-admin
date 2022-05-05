@@ -380,5 +380,6 @@
   "input-text-color": "Text Color",
   "input-label-button-label": "Button Label",
   "input-button-text-color": "Button Text Color",
-  "input-button-background-color": "Button background Color"
+  "input-button-background-color": "Button background Color",
+  "form-title-edit-hero-slider": "Edit Hero Slider"
 }

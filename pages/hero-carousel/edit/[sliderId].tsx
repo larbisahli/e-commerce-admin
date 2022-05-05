@@ -1,9 +1,9 @@
 import { useQuery } from '@apollo/client';
-import CreateOrUpdateCategoriesForm from '@components/category/category-form';
+import CreateOrUpdateSlideForm from '@components/hero-carousel/hero-slide-form';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
-import { CATEGORY } from '@graphql/category';
+import { HERO_SLIDE } from '@graphql/hero-carousel';
 import { useErrorLogger, useGetStaff } from '@hooks/index';
 import { getClientToken, verifyAuth } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
@@ -14,23 +14,23 @@ import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-interface TCategory {
-  categoryForAdmin: Category;
+interface THeroSlider {
+  heroSlide: Category;
 }
 interface OptionsVariable {
   id: string | string[];
 }
 
-export default function UpdateCategoriesPage({ client }: SSRProps) {
+export default function UpdateHeroSliderPage({ client }: SSRProps) {
   const { query } = useRouter();
   const { t } = useTranslation();
 
-  const { categoryId } = query;
+  const { sliderId } = query;
 
-  const { data, loading, error } = useQuery<TCategory, OptionsVariable>(
-    CATEGORY,
+  const { data, loading, error } = useQuery<THeroSlider, OptionsVariable>(
+    HERO_SLIDE,
     {
-      variables: { id: categoryId },
+      variables: { id: sliderId },
       fetchPolicy: 'cache-and-network'
     }
   );
@@ -49,15 +49,15 @@ export default function UpdateCategoriesPage({ client }: SSRProps) {
     <>
       <div className="py-5 sm:py-8 flex border-b border-dashed border-border-base">
         <h1 className="text-lg font-semibold text-heading">
-          {t('form:form-title-edit-category')}
+          {t('form:form-title-edit-hero-slider')}
         </h1>
       </div>
-      <CreateOrUpdateCategoriesForm initialValues={data?.categoryForAdmin} />
+      <CreateOrUpdateSlideForm initialValues={data?.heroSlide} />
     </>
   );
 }
 
-UpdateCategoriesPage.Layout = AppLayout;
+UpdateHeroSliderPage.Layout = AppLayout;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { locale } = context;

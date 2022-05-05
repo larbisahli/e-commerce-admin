@@ -16,6 +16,7 @@ import { notify } from '@lib/index';
 import { Nullable } from '@ts-types/custom.types';
 import { HeroCarouselType, IMGType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
+import cloneDeep from 'lodash/cloneDeep';
 import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
@@ -61,7 +62,10 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
     reset
   } = useForm<FormValues>({
     defaultValues: initialValues
-      ? initialValues
+      ? cloneDeep({
+          ...initialValues,
+          status: initialValues?.published ? 'publish' : 'draft'
+        })
       : (defaultValues as HeroCarouselType)
   });
 
@@ -80,7 +84,7 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
         notify(t('common:successfully-created'), 'success');
         reset();
         setUnsavedChanges([]);
-        // router.push(ROUTES.HERO_CAROUSEL);
+        router.push(ROUTES.HERO_CAROUSEL);
       }
     }
   });
@@ -92,7 +96,7 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
       if (!isEmpty(data)) {
         notify(t('common:successfully-updated'), 'success');
         setUnsavedChanges([]);
-        // router.push(ROUTES.HERO_CAROUSEL);
+        router.push(ROUTES.HERO_CAROUSEL);
       }
     }
   });
@@ -126,8 +130,6 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
       updateHeroSlider({ variables: { id: initialValues?.id, ...variables } });
     }
   };
-
-  console.log('thumbnail :>> ', { thumbnail });
 
   useWarnIfUnsavedChanges(!isEmpty(unsavedChanges), () => {
     return confirm(t('common:UNSAVED_IMAGE'));

@@ -79,6 +79,14 @@ const HeroCarouselList = ({
       ellipsis: true
     },
     {
+      title: t('table:table-item-display-order'),
+      dataIndex: 'display_order',
+      key: 'display_order',
+      align: 'center',
+      width: 120,
+      ellipsis: true
+    },
+    {
       title: t('table:table-item-status'),
       dataIndex: 'published',
       key: 'published',
@@ -90,14 +98,6 @@ const HeroCarouselList = ({
           color={published ? 'bg-accent' : 'bg-yellow-400'}
         />
       )
-    },
-    {
-      title: t('table:table-item-display-order'),
-      dataIndex: 'display_order',
-      key: 'display_order',
-      align: 'center',
-      width: 120,
-      ellipsis: true
     },
     {
       title: t('table:table-item-created-at'),
@@ -148,7 +148,11 @@ const HeroCarouselList = ({
       align: 'center',
       width: 100,
       render: (id: string) => (
-        <ActionButtons id={id} editUrl={`${ROUTES.CATEGORIES}/edit/${id}`} />
+        <ActionButtons
+          id={id}
+          editUrl={`${ROUTES.HERO_CAROUSEL}/edit/${id}`}
+          deleteModalView="DELETE_SLIDER"
+        />
       )
     }
   ];
@@ -163,7 +167,6 @@ const HeroCarouselList = ({
           data={heroCarouselList}
           rowKey="id"
           scroll={{ x: 1000 }}
-          indentSize={10}
         />
       </div>
 

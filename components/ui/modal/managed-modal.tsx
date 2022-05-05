@@ -6,6 +6,7 @@ import {
   DELETE_ORDER_STATUS,
   DELETE_PRODUCT,
   DELETE_SHIPPING,
+  DELETE_SLIDER,
   DELETE_STAFF,
   DELETE_SUPPLIER,
   DELETE_TAG
@@ -48,6 +49,10 @@ const SupplierDeleteView = dynamic(
   () => import('@components/suppliers/supplier-delete-view')
 );
 
+const SliderDeleteView = dynamic(
+  () => import('@components/hero-carousel/slider-delete-view')
+);
+
 // const ExportImportView = dynamic(
 //   () => import('@components/product/import-export-modal')
 // );
@@ -71,6 +76,7 @@ const ManagedModal = () => {
       {view === DELETE_ORDER_STATUS && <OrderStatusDeleteView />}
       {view === DELETE_STAFF && <StaffDeleteView />}
       {view === DELETE_SUPPLIER && <SupplierDeleteView />}
+      {view === DELETE_SLIDER && <SliderDeleteView />}
     </Modal>
   );
 };

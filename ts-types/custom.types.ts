@@ -14,7 +14,8 @@ import type {
   DELETE_TAG_TYPE,
   DELETE_TYPE,
   READ_TYPE,
-  UPDATE_TYPE
+  UPDATE_TYPE,
+  DELETE_SLIDER_TYPE
 } from './constants';
 import { SortOrder } from './generated';
 
@@ -68,7 +69,8 @@ export type ModalView =
   | BAN_CUSTOMER_TYPE
   | BAN_STAFF_TYPE
   | DELETE_STAFF_TYPE
-  | DELETE_SUPPLIER_TYPE;
+  | DELETE_SUPPLIER_TYPE
+  | DELETE_SLIDER_TYPE;
 
 export type CategoryQueryOptionsType = {
   id?: Scalars['ID'];

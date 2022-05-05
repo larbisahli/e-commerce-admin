@@ -38,13 +38,13 @@ const HeroBannerCard = ({
       </div>
       <div
         className={cn(
-          'mx-auto h-full w-full flex-col flex items-center justify-center text-center px-6'
+          'mx-auto h-full w-full flex-col flex items-center justify-center text-center px-6 2xl:max-w-[850px] max-w-[480px] md:max-w-[550px]'
         )}
       >
         <div className="text-center">
           <h2
             className={cn(
-              'xl:text-5xl 2xl:text-[55px] text-3xl md:text-4xl font-manrope font-extrabold leading-snug md:leading-tight xl:leading-[1.3em] mb-3 md:mb-4 xl:mb-3 -mt-2 xl:-mt-3 2xl:-mt-4'
+              'text-3xl 2xl:text-4xl font-manrope font-extrabold leading-snug md:leading-tight xl:leading-[1.3em] mb-3 md:mb-4 xl:mb-3 -mt-2 xl:-mt-3 2xl:-mt-4'
             )}
             style={{ color: styles?.text_color }}
           >
@@ -52,7 +52,7 @@ const HeroBannerCard = ({
           </h2>
           <p
             className={cn(
-              '2xl:px-32 text-base md:text-[17px] xl:text-lg leading-7 md:leading-8 xl:leading-[1.92em] xl:px-16'
+              '2xl:px-32 md:text-[17px] leading-7 md:leading-8 xl:leading-[1.92em] xl:px-16 text-sm 2xl:text-base'
             )}
             style={{ color: styles?.text_color }}
           >

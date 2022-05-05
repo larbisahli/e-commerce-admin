@@ -98,11 +98,18 @@ export const HERO_SLIDE = gql`
     heroSlide(id: $id) {
       id
       destination_url
-      thumbnail
+      thumbnail {
+        image
+        placeholder
+      }
       title
       description
       btn_label
-      styles
+      styles {
+        text_color
+        btn_bgc
+        btn_text_color
+      }
       display_order
       published
       clicks

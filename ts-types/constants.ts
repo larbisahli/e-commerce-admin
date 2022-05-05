@@ -37,3 +37,5 @@ export const BAN_STAFF = 'BAN_STAFF';
 export type BAN_STAFF_TYPE = typeof BAN_STAFF;
 export const DELETE_STAFF = 'DELETE_STAFF';
 export type DELETE_STAFF_TYPE = typeof DELETE_STAFF;
+export const DELETE_SLIDER = 'DELETE_SLIDER';
+export type DELETE_SLIDER_TYPE = typeof DELETE_SLIDER;
