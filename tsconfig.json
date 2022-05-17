@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": false,
@@ -15,22 +19,58 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
-      "@components/*": ["components/*"],
-      "@contexts/*": ["contexts/*"],
-      "@utils/*": ["utils/*"],
-      "@hooks/*": ["hooks/*"],
-      "@lib/*": ["lib/*"],
-      "@assets/*": ["assets/*"],
-      "@containers/*": ["containers/*"],
-      "@styles/*": ["styles/*"],
-      "@middleware/*": ["middleware/*"],
-      "@data/*": ["data/*"],
-      "@graphql/*": ["graphql/*"],
-      "@settings/*": ["settings/*"],
-      "@ts-types/*": ["ts-types/*"]
+      "@pages/*": [
+        "pages/*"
+      ],
+      "@components/*": [
+        "components/*"
+      ],
+      "@contexts/*": [
+        "contexts/*"
+      ],
+      "@utils/*": [
+        "utils/*"
+      ],
+      "@hooks/*": [
+        "hooks/*"
+      ],
+      "@lib/*": [
+        "lib/*"
+      ],
+      "@assets/*": [
+        "assets/*"
+      ],
+      "@containers/*": [
+        "containers/*"
+      ],
+      "@styles/*": [
+        "styles/*"
+      ],
+      "@middleware/*": [
+        "middleware/*"
+      ],
+      "@data/*": [
+        "data/*"
+      ],
+      "@graphql/*": [
+        "graphql/*"
+      ],
+      "@settings/*": [
+        "settings/*"
+      ],
+      "@ts-types/*": [
+        "ts-types/*"
+      ]
     },
     "incremental": true
   },
-  "include": ["next-env.d.ts", "additional.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "additional.d.ts",
+    "**/*.ts",
+    "**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
