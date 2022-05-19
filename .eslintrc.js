@@ -37,5 +37,15 @@ module.exports = {
         aspects: ['invalidHref', 'preferButton']
       }
     ]
-  }
+  },
+  overrides: [
+    Object.assign(
+      {
+        files: ['**/__tests__/*-spec.tsx', '**/__mocks__/*.ts'],
+        env: { jest: true },
+        plugins: ['jest']
+      },
+      require('eslint-plugin-jest').configs.recommended
+    )
+  ]
 };

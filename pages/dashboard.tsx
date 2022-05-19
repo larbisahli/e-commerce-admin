@@ -1,6 +1,7 @@
 import AppLayout from '@components/layouts/app';
 import { useGetStaff } from '@hooks/index';
 import { getClientToken, verifyAuth } from '@middleware/utils';
+import { SSRProps } from '@ts-types/custom.types';
 import { ROUTES } from '@utils/routes';
 import type { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
@@ -9,7 +10,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 const AdminDashboard = dynamic(() => import('@components/dashboard/admin'));
 // const OwnerDashboard = dynamic(() => import("@components/dashboard/owner"));
 
-export default function Dashboard({ client }: any) {
+export default function Dashboard({ client }: SSRProps) {
   //   if (userPermissions?.includes(SUPER_ADMIN)) {
   //     return <AdminDashboard />;
   //   }
