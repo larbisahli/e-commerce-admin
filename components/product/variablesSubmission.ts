@@ -71,6 +71,7 @@ const creationVariable = (values: Product): Product => {
 };
 
 const updateVariable = (values: Product, initialValues: Product) => {
+  console.log('first', values, initialValues?.gallery);
   // 1) gallery block
   const galleryAdditions = differenceWith(
     values?.gallery,

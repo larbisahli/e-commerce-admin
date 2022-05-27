@@ -10,7 +10,7 @@ import { apiURL } from '@utils/utils';
 import isArray from 'lodash/isArray';
 import isEmpty from 'lodash/isEmpty';
 import { useTranslation } from 'next-i18next';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 
 interface ImageType {
@@ -67,10 +67,8 @@ export default function Uploader({
             if (image.success) {
               if (multiple) {
                 setImages((prev) => [...((prev as ImageType[]) ?? []), image]);
-                onChange((prev) => [...(prev ?? []), image]);
               } else {
                 setImages(image as ImageType);
-                onChange(image);
               }
               setUnsavedChanges((prev) => [...(prev ?? []), image]);
             }
@@ -92,6 +90,10 @@ export default function Uploader({
       }
     }
   });
+
+  useEffect(() => {
+    onChange(images);
+  }, [onChange, images]);
 
   const handleDelete = (
     e,
@@ -138,7 +140,7 @@ export default function Uploader({
             className="inline-flex flex-col overflow-hidden border border-border-200 rounded mt-2 me-2 relative"
             key={idx}
           >
-            {deleteLoading && deletedImage === image && (
+            {deletedImage === image && (
               <div className="absolute top-0 right-0 left-0 bottom-0 w-16 h-16 z-40 bg-red-50 opacity-80 flex justify-center items-center">
                 <Loader
                   simple={true}
@@ -174,7 +176,7 @@ export default function Uploader({
     } else {
       return (
         <div className="inline-flex flex-col overflow-hidden border border-border-200 rounded mt-2 me-2 relative">
-          {deleteLoading && (
+          {deletedImage && (
             <div className="absolute top-0 right-0 left-0 bottom-0 w-16 h-16 z-40 bg-red-50 opacity-80 flex justify-center items-center">
               <Loader
                 simple={true}

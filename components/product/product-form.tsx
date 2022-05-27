@@ -163,7 +163,6 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
 
     if (initialValues) {
       const variables = updateVariable(values, initialValues);
-
       updateProduct({
         variables: {
           ...variables
