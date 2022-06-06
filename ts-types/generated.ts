@@ -81,6 +81,8 @@ export interface StaffType extends CreatedUpdatedByAt {
   role: RoleType;
   role_id?: number;
   active: boolean;
+  csrfToken?: string;
+  csrfError?: string;
 }
 
 export interface Category extends CreatedUpdatedByAt {

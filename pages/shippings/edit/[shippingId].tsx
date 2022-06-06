@@ -6,7 +6,7 @@ import Loader from '@components/ui/loader/loader';
 import { SHIPPING } from '@graphql/shipping';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetStaff } from '@hooks/useGetStaff';
-import { getClientToken, verifyAuth } from '@middleware/utils';
+import { verifyAuth } from '@middleware/utils';
 import type { SSRProps } from '@ts-types/custom.types';
 import { Shipping } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
@@ -65,8 +65,7 @@ UpdateShippingPage.Layout = AppLayout;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { locale } = context;
-  const { token }: { token: string } = getClientToken(context);
-  const { client } = verifyAuth(token);
+  const { client } = verifyAuth(context);
 
   if (!client) {
     return {

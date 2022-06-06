@@ -1,4 +1,4 @@
-import { getClientTokenAPI, verifyAuth } from '@middleware/utils';
+import { verifyAuth } from '@middleware/utils';
 import cities from '@utils/cities.min.json';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
@@ -6,8 +6,8 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
   const { country } = req.body;
 
   try {
-    const { token }: { token: string } = getClientTokenAPI(req);
-    const { client } = verifyAuth(token);
+    // @ts-ignore
+    const { client } = verifyAuth({ req, res });
 
     if (!client) {
       res.status(403).json({});

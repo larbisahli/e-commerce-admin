@@ -1,8 +1,8 @@
 import { notify } from '@lib/index';
 import { sentry } from '@lib/sentry';
 import _ from 'lodash';
-import { useEffect } from 'react';
 import { useTranslation } from 'next-i18next';
+import { useEffect } from 'react';
 
 export function useErrorLogger(error?: any) {
   const { t } = useTranslation();

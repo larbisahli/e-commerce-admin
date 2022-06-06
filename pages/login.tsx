@@ -1,5 +1,5 @@
 import LoginForm from '@components/auth/login-form';
-import { getClientToken, verifyAuth } from '@middleware/utils';
+import { verifyAuth } from '@middleware/utils';
 import { ROUTES } from '@utils/routes';
 import { GetServerSideProps } from 'next';
 import Image from 'next/image';
@@ -11,7 +11,7 @@ import { Fragment, useEffect } from 'react';
 
 import shop from '../public/shop.jpg';
 
-const LoginPage = (props) => {
+const LoginPage = () => {
   const router = useRouter();
   const { t } = useTranslation('common');
 
@@ -88,8 +88,8 @@ const LoginPage = (props) => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { locale } = context;
-  const { token }: { token: string } = getClientToken(context);
-  const { client, error } = verifyAuth(token);
+  const { client, error } = verifyAuth(context);
+
   if (client) {
     return {
       redirect: {

@@ -1,16 +1,20 @@
 import CreateOrUpdateCategoriesForm from '@components/category/category-form';
 import AppLayout from '@components/layouts/app';
 import { useGetStaff } from '@hooks/index';
-import { getClientToken, verifyAuth } from '@middleware/utils';
+import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { ROUTES } from '@utils/routes';
 import type { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-export default function CreateCategoriesPage({ client }: SSRProps) {
+export default function CreateCategoriesPage({
+  client,
+  csrfToken,
+  csrfError
+}: SSRProps) {
   const { t } = useTranslation();
-  useGetStaff(client?.staff_id);
+  useGetStaff(client?.staff_id, { csrfToken, csrfError });
 
   return (
     <>
@@ -28,8 +32,7 @@ CreateCategoriesPage.Layout = AppLayout;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { locale } = context;
-  const { token }: { token: string } = getClientToken(context);
-  const { client } = verifyAuth(token);
+  const { client } = verifyAuth(context);
 
   if (!client) {
     return {
@@ -40,10 +43,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
+  const { csrfToken, csrfError } = await XSRFHandler(context);
+
   return {
     props: {
       ...(await serverSideTranslations(locale!, ['form', 'common', 'error'])),
-      client
+      client,
+      csrfToken,
+      csrfError
     }
   };
 };

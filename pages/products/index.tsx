@@ -13,7 +13,7 @@ import Loader from '@components/ui/loader/loader';
 import { PRODUCTS_FOR_ADMIN } from '@graphql/product';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetStaff } from '@hooks/useGetStaff';
-import { getClientToken, verifyAuth } from '@middleware/utils';
+import { verifyAuth } from '@middleware/utils';
 import type { SSRProps } from '@ts-types/custom.types';
 import type { Product } from '@ts-types/generated';
 import { OrderBy, SortOrder } from '@ts-types/generated';
@@ -187,8 +187,7 @@ ProductsPage.Layout = AppLayout;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { locale } = context;
-  const { token }: { token: string } = getClientToken(context);
-  const { client } = verifyAuth(token);
+  const { client } = verifyAuth(context);
 
   if (!client) {
     return {

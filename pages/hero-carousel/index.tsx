@@ -8,7 +8,7 @@ import LinkButton from '@components/ui/link-button';
 import Loader from '@components/ui/loader/loader';
 import { HERO_CAROUSEL_LIST } from '@graphql/hero-carousel';
 import { useErrorLogger, useGetStaff } from '@hooks/index';
-import { getClientToken, verifyAuth } from '@middleware/utils';
+import { verifyAuth } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { HeroCarouselType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
@@ -116,8 +116,7 @@ HeroCarousel.Layout = AppLayout;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { locale } = context;
-  const { token }: { token: string } = getClientToken(context);
-  const { client } = verifyAuth(token);
+  const { client } = verifyAuth(context);
 
   if (!client) {
     return {

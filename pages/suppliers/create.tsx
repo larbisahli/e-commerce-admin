@@ -1,7 +1,7 @@
 import AppLayout from '@components/layouts/app';
 import CreateOrUpdateSupplierForm from '@components/suppliers/supplier-form';
 import { useGetStaff } from '@hooks/index';
-import { getClientToken, verifyAuth } from '@middleware/utils';
+import { verifyAuth } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { ROUTES } from '@utils/routes';
 import type { GetServerSideProps } from 'next';
@@ -29,8 +29,7 @@ CreateSupplierPage.Layout = AppLayout;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { locale } = context;
-  const { token }: { token: string } = getClientToken(context);
-  const { client } = verifyAuth(token);
+  const { client } = verifyAuth(context);
 
   if (!client) {
     return {

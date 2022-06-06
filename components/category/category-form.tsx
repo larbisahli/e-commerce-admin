@@ -15,6 +15,7 @@ import {
 } from '@graphql/category';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useErrorLogger, useWarnIfUnsavedChanges } from '@hooks/index';
+import { useGetStaff } from '@hooks/index';
 import { notify } from '@lib/index';
 import { Nullable } from '@ts-types/custom.types';
 import { Category, OrderBy } from '@ts-types/generated';
@@ -114,7 +115,12 @@ export default function CreateOrUpdateCategoriesForm({
   const router = useRouter();
   const { t } = useTranslation();
 
+  const [error, setError] = useState();
   const [unsavedChanges, setUnsavedChanges] = useState<string[]>([]);
+
+  const { staffInfo } = useGetStaff();
+
+  const csrfToken = staffInfo?.csrfToken;
 
   const {
     register,
@@ -136,30 +142,32 @@ export default function CreateOrUpdateCategoriesForm({
     resolver: yupResolver(categoryValidationSchema)
   });
 
-  const [createCategory, { loading: creating, error: createCategoryError }] =
-    useMutation(CREATE_CATEGORY, {
-      onCompleted: (data: { createCategory: Category }) => {
-        if (!isEmpty(data)) {
-          notify(t('common:successfully-created'), 'success');
-          reset();
-          setUnsavedChanges([]);
-          router.push(ROUTES.CATEGORIES);
-        }
+  const [createCategory, { loading: creating }] = useMutation(CREATE_CATEGORY, {
+    context: {
+      headers: {
+        'x-csrf-token': csrfToken
       }
-    });
-  const [updateCategory, { loading: updating, error: updateCategoryError }] =
-    useMutation(UPDATE_CATEGORY, {
-      onCompleted: (data: { updateCategory: Category }) => {
-        if (!isEmpty(data)) {
-          notify(t('common:successfully-updated'), 'success');
-          setUnsavedChanges([]);
-          router.push(ROUTES.CATEGORIES);
-        }
+    },
+    onCompleted: (data: { createCategory: Category }) => {
+      if (!isEmpty(data)) {
+        notify(t('common:successfully-created'), 'success');
+        reset();
+        setUnsavedChanges([]);
+        router.push(ROUTES.CATEGORIES);
       }
-    });
+    }
+  });
+  const [updateCategory, { loading: updating }] = useMutation(UPDATE_CATEGORY, {
+    onCompleted: (data: { updateCategory: Category }) => {
+      if (!isEmpty(data)) {
+        notify(t('common:successfully-updated'), 'success');
+        setUnsavedChanges([]);
+        router.push(ROUTES.CATEGORIES);
+      }
+    }
+  });
 
-  useErrorLogger(createCategoryError);
-  useErrorLogger(updateCategoryError);
+  useErrorLogger(error);
 
   const onSubmit = async (values: FormValues) => {
     if (isEmpty(values.thumbnail)) {
@@ -180,9 +188,15 @@ export default function CreateOrUpdateCategoriesForm({
     };
 
     if (isEmpty(initialValues)) {
-      createCategory({ variables });
+      createCategory({ variables }).catch((err) => {
+        setError(err);
+      });
     } else {
-      updateCategory({ variables: { id: initialValues?.id, ...variables } });
+      updateCategory({
+        variables: { id: initialValues?.id, ...variables }
+      }).catch((err) => {
+        setError(err);
+      });
     }
   };
 

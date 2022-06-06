@@ -9,13 +9,13 @@ import type {
   DELETE_ORDER_TYPE,
   DELETE_PRODUCT_TYPE,
   DELETE_SHIPPING_TYPE,
+  DELETE_SLIDER_TYPE,
   DELETE_STAFF_TYPE,
   DELETE_SUPPLIER_TYPE,
   DELETE_TAG_TYPE,
   DELETE_TYPE,
   READ_TYPE,
-  UPDATE_TYPE,
-  DELETE_SLIDER_TYPE
+  UPDATE_TYPE
 } from './constants';
 import { SortOrder } from './generated';
 
@@ -45,6 +45,9 @@ export declare type Scalars = {
 };
 
 export type SSRProps = {
+  csrfToken?: string | null;
+  csrfError?: string | null;
+  token?: string | null;
   client?: {
     staff_id: string;
   } | null;

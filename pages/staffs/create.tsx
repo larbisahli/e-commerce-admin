@@ -1,7 +1,7 @@
 import AppLayout from '@components/layouts/app';
 import StaffCreateUpdateForm from '@components/staff/staff-form';
 import { useGetStaff } from '@hooks/index';
-import { getClientToken, verifyAuth } from '@middleware/utils';
+import { verifyAuth } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { ROUTES } from '@utils/routes';
 import type { GetServerSideProps } from 'next';
@@ -28,8 +28,7 @@ CreateStaffPage.Layout = AppLayout;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { locale } = context;
-  const { token }: { token: string } = getClientToken(context);
-  const { client } = verifyAuth(token);
+  const { client } = verifyAuth(context);
 
   if (!client) {
     return {

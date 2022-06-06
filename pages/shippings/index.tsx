@@ -9,7 +9,7 @@ import Loader from '@components/ui/loader/loader';
 import { SHIPPINGS } from '@graphql/shipping';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetStaff } from '@hooks/useGetStaff';
-import { getClientToken, verifyAuth } from '@middleware/utils';
+import { verifyAuth } from '@middleware/utils';
 import type { SSRProps } from '@ts-types/custom.types';
 import type { Shipping } from '@ts-types/generated';
 import { OrderBy, SortOrder } from '@ts-types/generated';
@@ -121,8 +121,7 @@ ShippingsPage.Layout = AppLayout;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { locale } = context;
-  const { token }: { token: string } = getClientToken(context);
-  const { client } = verifyAuth(token);
+  const { client } = verifyAuth(context);
 
   if (!client) {
     return {

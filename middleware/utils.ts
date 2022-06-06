@@ -1,15 +1,25 @@
 import { CookieNames } from '@ts-types/enums';
-import cookie from 'cookie';
+import { apiURL } from '@utils/utils';
+import axios from 'axios';
+import Cookies from 'cookies';
 import jwt, { Algorithm } from 'jsonwebtoken';
-import { GetServerSidePropsContext, NextApiRequest } from 'next';
+import { GetServerSidePropsContext } from 'next';
 import { serializeError } from 'serialize-error';
+
+const ENV = process.env;
+const PRODUCTION_ENV = ENV.NODE_ENV === 'production';
 
 const PublicKEY = process.env.JWTRS256_KEY_PUB;
 /*
  * @params {jwtToken} extracted from cookies
  * @return {object} object of extracted token
  */
-export function verifyAuth(jwtToken: string | null) {
+export function verifyAuth(context: GetServerSidePropsContext) {
+  const { req, res } = context;
+
+  const cookies = new Cookies(req, res);
+  const jwtToken = cookies.get(CookieNames.STAFF_TOKEN_NAME);
+
   try {
     if (!jwtToken) {
       return {
@@ -29,20 +39,34 @@ export function verifyAuth(jwtToken: string | null) {
   }
 }
 
-/*
- * @params {request} extracted from request response
- * @return {object} object of parse jwt cookie decode object
- */
+export async function XSRFHandler(context: GetServerSidePropsContext) {
+  const { req, res } = context;
 
-export function getClientToken(context: GetServerSidePropsContext) {
-  const { req } = context;
-  const token: string =
-    cookie.parse(req?.headers?.cookie || '')[CookieNames.STAFF_TOKEN_NAME] ??
-    null;
-  return { token };
-}
+  const cookies = new Cookies(req, res);
 
-export function getClientTokenAPI(req: NextApiRequest) {
-  const token: string = req.cookies[CookieNames.STAFF_TOKEN_NAME] ?? null;
-  return { token };
+  let csrfToken: string | null = null;
+  let csrfSecret: string | null = null;
+  let csrfError: string | null = null;
+
+  try {
+    const res = await axios.get(`${apiURL}/getXsrfToken_f3503635c`);
+    csrfToken = res.data?.csrfToken;
+    csrfSecret = res.data?.csrfSecret;
+
+    console.log('first :>', { csrfSecret, csrfToken });
+
+    if (csrfSecret) {
+      cookies.set(CookieNames.XSRF_TOKEN, csrfSecret, {
+        httpOnly: true,
+        maxAge: 5 * 60 * 60 * 1000, // 5 hours
+        sameSite: 'strict',
+        secure: PRODUCTION_ENV
+      });
+    }
+  } catch (err) {
+    console.log('err :>> ', err.message);
+    csrfError = err.message;
+  }
+
+  return { csrfToken, csrfError };
 }

@@ -1,5 +1,8 @@
 import AppLayout from '@components/layouts/app';
 import CreateOrUpdateOrderStatusForm from '@components/order-status/order-status-form';
+import { verifyAuth } from '@middleware/utils';
+import { ROUTES } from '@utils/routes';
+import type { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
@@ -16,15 +19,31 @@ export default function CreateOrderStatusPage() {
     </>
   );
 }
+
 CreateOrderStatusPage.Layout = AppLayout;
 
-export const getStaticProps = async ({ locale }: any) => ({
-  props: {
-    ...(await serverSideTranslations(locale, [
-      'table',
-      'common',
-      'form',
-      'error'
-    ]))
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { locale } = context;
+  const { client } = verifyAuth(context);
+
+  if (!client) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: ROUTES.LOGIN
+      }
+    };
   }
-});
+
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, [
+        'table',
+        'common',
+        'form',
+        'error'
+      ])),
+      client
+    }
+  };
+};

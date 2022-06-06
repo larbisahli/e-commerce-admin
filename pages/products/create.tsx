@@ -2,14 +2,14 @@ import AppLayout from '@components/layouts/app';
 import CreateOrUpdateProductForm from '@components/product/product-form';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
-import { getClientToken, verifyAuth } from '@middleware/utils';
+import { verifyAuth } from '@middleware/utils';
 import { ROUTES } from '@utils/routes';
 import type { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-export default function UpdateProductPage() {
+export default function CreateProductPage() {
   const { t } = useTranslation();
   const { query } = useRouter();
 
@@ -28,18 +28,18 @@ export default function UpdateProductPage() {
   return (
     <>
       <div className="py-5 sm:py-8 flex border-b border-dashed border-border-base">
-        <h1 className="text-lg font-semibold text-heading">Edit Product</h1>
+        <h1 className="text-lg font-semibold text-heading">Create Product</h1>
       </div>
       <CreateOrUpdateProductForm />
     </>
   );
 }
-UpdateProductPage.Layout = AppLayout;
+
+CreateProductPage.Layout = AppLayout;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { locale } = context;
-  const { token }: { token: string } = getClientToken(context);
-  const { client } = verifyAuth(token);
+  const { client } = verifyAuth(context);
 
   if (!client) {
     return {
