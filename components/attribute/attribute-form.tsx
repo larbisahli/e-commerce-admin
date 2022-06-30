@@ -39,6 +39,7 @@ export default function CreateOrUpdateAttributeForm({ initialValues }: IProps) {
 
   const router = useRouter();
 
+  const [error, setError] = useState(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [deletedIndex, setDeletedIndex] = useState<number | null>(null);
 
@@ -60,8 +61,9 @@ export default function CreateOrUpdateAttributeForm({ initialValues }: IProps) {
     keyName: 'key'
   });
 
-  const [createAttribute, { loading: creating, error: createAttributeError }] =
-    useMutation(CREATE_ATTRIBUTE, {
+  const [createAttribute, { loading: creating }] = useMutation(
+    CREATE_ATTRIBUTE,
+    {
       onCompleted: (data: { createAttribute: Attribute }) => {
         if (!isEmpty(data)) {
           notify(t('common:successfully-created'), 'success');
@@ -69,26 +71,25 @@ export default function CreateOrUpdateAttributeForm({ initialValues }: IProps) {
           router.push(ROUTES.ATTRIBUTES);
         }
       }
-    });
+    }
+  );
 
-  const [updateAttribute, { loading: updating, error: updateAttributeError }] =
-    useMutation(UPDATE_ATTRIBUTE, {
+  const [updateAttribute, { loading: updating }] = useMutation(
+    UPDATE_ATTRIBUTE,
+    {
       onCompleted: (data: { updateAttribute: Attribute }) => {
         if (!isEmpty(data)) {
           notify(t('common:successfully-updated'), 'success');
           router.push(ROUTES.ATTRIBUTES);
         }
       }
-    });
+    }
+  );
 
-  const [
-    deleteAttributeValue,
-    { loading: deleteAttributeLoading, error: deleteAttributeValueError }
-  ] = useMutation(DELETE_ATTRIBUTE_VALUE);
+  const [deleteAttributeValue, { loading: deleteAttributeLoading }] =
+    useMutation(DELETE_ATTRIBUTE_VALUE);
 
-  useErrorLogger(createAttributeError);
-  useErrorLogger(updateAttributeError);
-  useErrorLogger(deleteAttributeValueError);
+  useErrorLogger(error);
 
   const onSubmit = (values: FormValues) => {
     if (!isEmpty(values?.attribute_values)) {
@@ -102,7 +103,9 @@ export default function CreateOrUpdateAttributeForm({ initialValues }: IProps) {
     }
 
     if (isEmpty(initialValues)) {
-      createAttribute({ variables: values });
+      createAttribute({ variables: values }).catch((err) => {
+        setError(err);
+      });
     } else {
       const changes = initialValues?.attribute_values
         ?.map((att_value_init: AttributeValue) =>
@@ -129,7 +132,9 @@ export default function CreateOrUpdateAttributeForm({ initialValues }: IProps) {
         ]
       };
 
-      updateAttribute({ variables });
+      updateAttribute({ variables }).catch((err) => {
+        setError(err);
+      });
     }
   };
 
@@ -146,6 +151,8 @@ export default function CreateOrUpdateAttributeForm({ initialValues }: IProps) {
             remove(index);
           }
         }
+      }).catch((err) => {
+        setError(err);
       });
     } else {
       remove(index);
@@ -262,10 +269,7 @@ export default function CreateOrUpdateAttributeForm({ initialValues }: IProps) {
           )}
 
           <Button
-            loading={
-              (creating && isEmpty(createAttributeError)) ||
-              (updating && isEmpty(updateAttributeError))
-            }
+            loading={creating || updating}
             disabled={creating || updating}
           >
             {initialValues

@@ -69,7 +69,8 @@ const StaffCreateUpdateForm = ({ initialValues }: IProps) => {
   const { t } = useTranslation();
   const router = useRouter();
 
-  const [unsavedChanges, setUnsavedChanges] = useState<string[]>([]);
+  const [error, setError] = useState();
+  const [unsavedChanges, setUnsavedChanges] = useState(true);
 
   const {
     register,
@@ -89,30 +90,25 @@ const StaffCreateUpdateForm = ({ initialValues }: IProps) => {
     resolver: yupResolver(staffValidationSchema)
   });
 
-  const [createStaff, { loading: creating, error: createStaffError }] =
-    useMutation(CREATE_STAFF, {
-      onCompleted: (data: { createStaff: StaffType }) => {
-        if (!isEmpty(data)) {
-          reset();
-          setUnsavedChanges([]);
-          notify(t('common:successfully-created'), 'success');
-          router.push(ROUTES.STAFFS);
-        }
+  const [createStaff, { loading: creating }] = useMutation(CREATE_STAFF, {
+    onCompleted: (data: { createStaff: StaffType }) => {
+      if (!isEmpty(data)) {
+        reset();
+        notify(t('common:successfully-created'), 'success');
+        router.push(ROUTES.STAFFS);
       }
-    });
-  const [updateStaff, { loading: updating, error: updateStaffError }] =
-    useMutation(UPDATE_STAFF, {
-      onCompleted: (data: { updateStaff: StaffType }) => {
-        if (!isEmpty(data)) {
-          setUnsavedChanges([]);
-          notify(t('common:successfully-updated'), 'success');
-          router.push(ROUTES.STAFFS);
-        }
+    }
+  });
+  const [updateStaff, { loading: updating }] = useMutation(UPDATE_STAFF, {
+    onCompleted: (data: { updateStaff: StaffType }) => {
+      if (!isEmpty(data)) {
+        notify(t('common:successfully-updated'), 'success');
+        router.push(ROUTES.STAFFS);
       }
-    });
+    }
+  });
 
-  useErrorLogger(createStaffError);
-  useErrorLogger(updateStaffError);
+  useErrorLogger(error);
 
   async function onSubmit(values: FormValues) {
     const variables = {
@@ -129,14 +125,22 @@ const StaffCreateUpdateForm = ({ initialValues }: IProps) => {
     };
 
     if (isEmpty(initialValues)) {
-      createStaff({ variables });
+      createStaff({ variables }).catch((err) => {
+        setError(err);
+      });
     } else {
-      updateStaff({ variables: { id: initialValues?.id, ...variables } });
+      setUnsavedChanges(false);
+      updateStaff({ variables: { id: initialValues?.id, ...variables } }).catch(
+        (err) => {
+          setError(err);
+          setUnsavedChanges(true);
+        }
+      );
     }
   }
 
-  useWarnIfUnsavedChanges(!isEmpty(unsavedChanges), () => {
-    return confirm(t('common:UNSAVED_IMAGE'));
+  useWarnIfUnsavedChanges(unsavedChanges, () => {
+    return confirm(t('common:UNSAVED_CHANGES'));
   });
 
   return (
@@ -149,12 +153,7 @@ const StaffCreateUpdateForm = ({ initialValues }: IProps) => {
         />
 
         <Card className="w-full sm:w-8/12 md:w-2/3">
-          <FileInput
-            name="profile"
-            control={control}
-            multiple={false}
-            setUnsavedChanges={setUnsavedChanges}
-          />
+          <FileInput name="profile" control={control} multiple={false} />
         </Card>
       </div>
 

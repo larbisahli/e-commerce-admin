@@ -59,7 +59,7 @@
   "sidebar-nav-item-staff": "Staff",
   "sidebar-nav-item-coupons": "Coupons",
   "sidebar-nav-item-taxes": "Taxes",
-  "sidebar-nav-item-shippings": "Shippings",
+  "sidebar-nav-item-shippings-zones": "Shipping Zones",
   "sidebar-nav-item-settings": "Settings",
   "sidebar-nav-item-shops": "Shops",
   "sidebar-nav-item-my-shops": "My Shops",
@@ -224,7 +224,5 @@
   "attribute-imported-successfully": "Attributes Imported Successfully",
   "product-imported-successfully": "Products Imported Successfully",
   "variation-options-imported-successfully": "Variation Options Imported Successfully",
-  "ERROR_WRONG_CSV": "You have uploaded wrong csv file!",
-  "UNSAVED_IMAGE": "Warning! Please remove unused image to save storage.",
-  "UNSAVED_IMAGES": "Warning! Please remove unused images to save storage."
+  "UNSAVED_CHANGES": "Warning! If you leave before saving, your changes will be lost."
 }

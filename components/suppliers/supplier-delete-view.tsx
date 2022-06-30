@@ -6,17 +6,16 @@ import {
 } from '@components/ui/modal/modal.context';
 import { DELETE_SUPPLIER, SUPPLIERS } from '@graphql/supplier';
 import { useErrorLogger } from '@hooks/useErrorLogger';
+import { useState } from 'react';
 
 const SupplierDeleteView = () => {
-  const [deleteSupplierValue, { loading, error }] = useMutation(
-    DELETE_SUPPLIER,
-    {
-      refetchQueries: [
-        SUPPLIERS,
-        'Suppliers' // Query name
-      ]
-    }
-  );
+  const [error, setError] = useState(null);
+  const [deleteSupplierValue, { loading }] = useMutation(DELETE_SUPPLIER, {
+    refetchQueries: [
+      SUPPLIERS,
+      'Suppliers' // Query name
+    ]
+  });
 
   const { id } = useModalState();
   const { closeModal } = useModalAction();
@@ -24,7 +23,9 @@ const SupplierDeleteView = () => {
   useErrorLogger(error);
 
   async function handleDelete() {
-    deleteSupplierValue({ variables: { id } });
+    deleteSupplierValue({ variables: { id } }).catch((err) => {
+      setError(err);
+    });
     closeModal();
   }
 

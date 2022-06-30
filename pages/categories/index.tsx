@@ -44,12 +44,10 @@ export default function Categories({ client }: SSRProps) {
   const [visible, setVisible] = useState(false);
   const [orderBy, setOrder] = useState(OrderBy.CREATED_AT);
 
-  const {
-    data,
-    loading,
-    error: categoriesError,
-    fetchMore
-  } = useQuery<TCategories, OptionsVariable>(CATEGORIES, {
+  const { data, loading, error, fetchMore } = useQuery<
+    TCategories,
+    OptionsVariable
+  >(CATEGORIES, {
     variables: {
       page,
       limit,
@@ -63,7 +61,7 @@ export default function Categories({ client }: SSRProps) {
   const categoriesForAdmin = data?.categoriesForAdmin;
 
   useGetStaff(client?.staff_id);
-  useErrorLogger(categoriesError);
+  useErrorLogger(error);
 
   const toggleVisible = () => {
     setVisible((v) => !v);
@@ -84,7 +82,7 @@ export default function Categories({ client }: SSRProps) {
   if (loading) {
     return <Loader text={t('common:text-loading')} />;
   }
-  if (!isEmpty(categoriesError)) {
+  if (!isEmpty(error)) {
     return <ErrorMessage message={t('common:MESSAGE_SOMETHING_WENT_WRONG')} />;
   }
 

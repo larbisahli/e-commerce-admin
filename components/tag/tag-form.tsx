@@ -17,6 +17,7 @@ import { ROUTES } from '@utils/routes';
 import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { tagIcons } from './tag-icons';
@@ -56,6 +57,8 @@ export default function CreateOrUpdateTagForm({ initialValues }: IProps) {
   const router = useRouter();
   const { t } = useTranslation();
 
+  const [error, setError] = useState(null);
+
   const {
     register,
     handleSubmit,
@@ -78,29 +81,26 @@ export default function CreateOrUpdateTagForm({ initialValues }: IProps) {
     resolver: yupResolver(tagValidationSchema)
   });
 
-  const [createTag, { loading: creating, error: createCategoryError }] =
-    useMutation(CREATE_TAG, {
-      onCompleted: (data: { createTag: Tag }) => {
-        if (!isEmpty(data)) {
-          notify(t('common:successfully-created'), 'success');
-          reset();
-          router.push(ROUTES.TAGS);
-        }
+  const [createTag, { loading: creating }] = useMutation(CREATE_TAG, {
+    onCompleted: (data: { createTag: Tag }) => {
+      if (!isEmpty(data)) {
+        notify(t('common:successfully-created'), 'success');
+        reset();
+        router.push(ROUTES.TAGS);
       }
-    });
+    }
+  });
 
-  const [updateTag, { loading: updating, error: updateCategoryError }] =
-    useMutation(UPDATE_TAG, {
-      onCompleted: (data: { updateTag: Tag }) => {
-        if (!isEmpty(data)) {
-          notify(t('common:successfully-updated'), 'success');
-          router.push(ROUTES.TAGS);
-        }
+  const [updateTag, { loading: updating }] = useMutation(UPDATE_TAG, {
+    onCompleted: (data: { updateTag: Tag }) => {
+      if (!isEmpty(data)) {
+        notify(t('common:successfully-updated'), 'success');
+        router.push(ROUTES.TAGS);
       }
-    });
+    }
+  });
 
-  useErrorLogger(createCategoryError);
-  useErrorLogger(updateCategoryError);
+  useErrorLogger(error);
 
   const onSubmit = async (values: FormValues) => {
     const input = {
@@ -109,9 +109,15 @@ export default function CreateOrUpdateTagForm({ initialValues }: IProps) {
     };
 
     if (isEmpty(initialValues)) {
-      createTag({ variables: input });
+      createTag({ variables: input }).catch((err) => {
+        setError(err);
+      });
     } else {
-      updateTag({ variables: { id: initialValues.id, ...input } });
+      updateTag({ variables: { id: initialValues.id, ...input } }).catch(
+        (err) => {
+          setError(err);
+        }
+      );
     }
   };
 

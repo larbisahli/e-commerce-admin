@@ -40,15 +40,14 @@ const ShippingsComponent = ({
 }: SCProps) => {
   const { t } = useTranslation();
 
+  const [error, setError] = useState(null);
   // eslint-disable-next-line no-unused-vars
   const [deletedIndex, setDeletedIndex] = useState<number | null>(null);
 
-  const [
-    deleteShipping,
-    { loading: deleteShippingLoading, error: deleteShippingError }
-  ] = useMutation(DELETE_SHIPPING);
+  const [deleteShipping, { loading: deleteShippingLoading }] =
+    useMutation(DELETE_SHIPPING);
 
-  useErrorLogger(deleteShippingError);
+  useErrorLogger(error);
 
   const removeShipping = () => {
     // nanoid(10) generates 10 characters
@@ -71,6 +70,8 @@ const ShippingsComponent = ({
             });
           }
         }
+      }).catch((err) => {
+        setError(err);
       });
     } else {
       dispatchShippings({

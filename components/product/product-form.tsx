@@ -86,9 +86,10 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
     []
   );
   const [shippings, dispatchShippings] = useReducer(ShippingsReducer, []);
-
+  const [error, setError] = useState(null);
+  const [shortDescription, setShortDescription] = useState(0);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [unsavedChanges, setUnsavedChanges] = useState<string[]>([]);
+  const [unsavedChanges, setUnsavedChanges] = useState(true);
   const [lockedSubmission, setLockedSubmission] = useState(false);
 
   const methods = useForm<FormValues>({
@@ -112,33 +113,26 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
     formState: { errors }
   } = methods;
 
-  const [createProduct, { loading: creating, error: createProductError }] =
-    useMutation(CREATE_PRODUCT, {
-      onCompleted: (data: { createAttribute: Product }) => {
-        console.log('CREATE_PRODUCT - data :>> ', data);
-        if (!isEmpty(data)) {
-          notify(t('common:successfully-created'), 'success');
-          setUnsavedChanges([]);
-          reset();
-          router.push(ROUTES.PRODUCTS);
-        }
+  const [createProduct, { loading: creating }] = useMutation(CREATE_PRODUCT, {
+    onCompleted: (data: { createAttribute: Product }) => {
+      if (!isEmpty(data)) {
+        notify(t('common:successfully-created'), 'success');
+        reset();
+        router.push(ROUTES.PRODUCTS);
       }
-    });
+    }
+  });
 
-  const [updateProduct, { loading: updating, error: updateProductError }] =
-    useMutation(UPDATE_PRODUCT, {
-      onCompleted: (data: { updateAttribute: Product }) => {
-        console.log('UPDATE_PRODUCT - data :>> ', data);
-        if (!isEmpty(data)) {
-          notify(t('common:successfully-updated'), 'success');
-          setUnsavedChanges([]);
-          router.push(ROUTES.PRODUCTS);
-        }
+  const [updateProduct, { loading: updating }] = useMutation(UPDATE_PRODUCT, {
+    onCompleted: (data: { updateAttribute: Product }) => {
+      if (!isEmpty(data)) {
+        notify(t('common:successfully-updated'), 'success');
+        router.push(ROUTES.PRODUCTS);
       }
-    });
+    }
+  });
 
-  useErrorLogger(createProductError);
-  useErrorLogger(updateProductError);
+  useErrorLogger(error);
 
   const onSubmit = async (values_: FormValues) => {
     const values = {
@@ -161,26 +155,29 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
       return;
     }
 
-    if (initialValues) {
+    if (isEmpty(initialValues)) {
+      const variables = creationVariable(values);
+      createProduct({ variables }).catch((err) => {
+        setError(err);
+      });
+    } else {
+      setUnsavedChanges(false);
       const variables = updateVariable(values, initialValues);
       updateProduct({
         variables: {
           ...variables
         }
+      }).catch((err) => {
+        setError(err);
+        setUnsavedChanges(true);
       });
-    } else {
-      const variables = creationVariable(values);
-      console.log('variables', { variables });
-      createProduct({ variables });
     }
     setLockedSubmission(false);
   };
 
-  useWarnIfUnsavedChanges(!isEmpty(unsavedChanges), () => {
-    return confirm(t('common:UNSAVED_IMAGE'));
+  useWarnIfUnsavedChanges(unsavedChanges, () => {
+    return confirm(t('common:UNSAVED_CHANGES'));
   });
-
-  const [shortDescription, setShortDescription] = useState(0);
 
   return (
     <>
@@ -204,12 +201,7 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
             />
 
             <Card className="w-full sm:w-8/12 md:w-2/3">
-              <FileInput
-                name="thumbnail"
-                control={control}
-                multiple={false}
-                setUnsavedChanges={setUnsavedChanges}
-              />
+              <FileInput name="thumbnail" control={control} multiple={false} />
             </Card>
           </div>
 
@@ -222,11 +214,7 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
             />
 
             <Card className="w-full sm:w-8/12 md:w-2/3">
-              <FileInput
-                name="gallery"
-                control={control}
-                setUnsavedChanges={setUnsavedChanges}
-              />
+              <FileInput name="gallery" control={control} />
             </Card>
           </div>
 
@@ -263,7 +251,7 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
             />
 
             <Card className="w-full sm:w-8/12 md:w-2/3">
-              <Label>{t('form:input-label-description')}*</Label>
+              <Label>{t('form:input-label-product-details')}*</Label>
               <Editor
                 control={control}
                 name="product_description"
@@ -274,7 +262,7 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
                 message={t(errors.product_description?.message)}
               />
               <TextArea
-                label={`${t('form:item-short-description')}*`}
+                label={`${t('form:item-seo-description')}*`}
                 // @ts-ignore
                 {...register('short_description')}
                 onBlur={() =>
@@ -286,11 +274,11 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
               <div style={{ fontSize: '.75rem' }} className="mb-5">
                 {shortDescription <= 160 ? (
                   <span className="text-green-600 ">
-                    {`(${shortDescription}/160 max)`}
+                    {`(${shortDescription}/160 characters max)`}
                   </span>
                 ) : (
                   <span className="text-red-600">
-                    {`(${shortDescription}/160 max)`}
+                    {`(${shortDescription}/160 characters max)`}
                   </span>
                 )}
               </div>

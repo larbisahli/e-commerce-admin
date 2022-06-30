@@ -6,9 +6,11 @@ import {
 } from '@components/ui/modal/modal.context';
 import { COUPONS, DELETE_COUPON } from '@graphql/coupons';
 import { useErrorLogger } from '@hooks/useErrorLogger';
+import { useState } from 'react';
 
 const CouponDeleteView = () => {
-  const [deleteCoupon, { loading, error }] = useMutation(DELETE_COUPON, {
+  const [error, setError] = useState(null);
+  const [deleteCoupon, { loading }] = useMutation(DELETE_COUPON, {
     refetchQueries: [
       COUPONS,
       'CouponsForAdmin' // Query name
@@ -21,7 +23,9 @@ const CouponDeleteView = () => {
   useErrorLogger(error);
 
   async function handleDelete() {
-    deleteCoupon({ variables: { id } });
+    deleteCoupon({ variables: { id } }).catch((err) => {
+      setError(err);
+    });
     closeModal();
   }
 

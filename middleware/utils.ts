@@ -1,10 +1,11 @@
 import { CookieNames } from '@ts-types/enums';
-import { apiURL } from '@utils/utils';
-import axios from 'axios';
 import Cookies from 'cookies';
+import Tokens from 'csrf';
 import jwt, { Algorithm } from 'jsonwebtoken';
 import { GetServerSidePropsContext } from 'next';
 import { serializeError } from 'serialize-error';
+
+const tokens = new Tokens();
 
 const ENV = process.env;
 const PRODUCTION_ENV = ENV.NODE_ENV === 'production';
@@ -49,11 +50,12 @@ export async function XSRFHandler(context: GetServerSidePropsContext) {
   let csrfError: string | null = null;
 
   try {
-    const res = await axios.get(`${apiURL}/getXsrfToken_f3503635c`);
-    csrfToken = res.data?.csrfToken;
-    csrfSecret = res.data?.csrfSecret;
+    // generate & set new secret
+    csrfSecret = tokens.secretSync();
+    // create new token
+    csrfToken = tokens.create(csrfSecret);
 
-    console.log('first :>', { csrfSecret, csrfToken });
+    console.log('csrf tokens :>', { csrfSecret, csrfToken });
 
     if (csrfSecret) {
       cookies.set(CookieNames.XSRF_TOKEN, csrfSecret, {

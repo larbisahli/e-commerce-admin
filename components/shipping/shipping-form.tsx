@@ -35,7 +35,8 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
   const router = useRouter();
   const { t } = useTranslation();
 
-  const [unsavedChanges, setUnsavedChanges] = useState<string[]>([]);
+  const [error, setError] = useState(null);
+  const [unsavedChanges, setUnsavedChanges] = useState(true);
 
   const {
     register,
@@ -53,31 +54,26 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
       : defaultValues
   });
 
-  const [createShipping, { loading: creating, error: createShippingError }] =
-    useMutation(CREATE_SHIPPING, {
-      onCompleted: (data: { createShipping: Shipping }) => {
-        if (!isEmpty(data)) {
-          setUnsavedChanges([]);
-          reset();
-          notify(t('common:successfully-created'), 'success');
-          router.push(ROUTES.SHIPPINGS);
-        }
+  const [createShipping, { loading: creating }] = useMutation(CREATE_SHIPPING, {
+    onCompleted: (data: { createShipping: Shipping }) => {
+      if (!isEmpty(data)) {
+        reset();
+        notify(t('common:successfully-created'), 'success');
+        router.push(ROUTES.SHIPPING_ZONES);
       }
-    });
+    }
+  });
 
-  const [updateShipping, { loading: updating, error: updateShippingError }] =
-    useMutation(UPDATE_SHIPPING, {
-      onCompleted: (data: { updateShipping: Shipping }) => {
-        if (!isEmpty(data)) {
-          notify(t('common:successfully-updated'), 'success');
-          setUnsavedChanges([]);
-          router.push(ROUTES.SHIPPINGS);
-        }
+  const [updateShipping, { loading: updating }] = useMutation(UPDATE_SHIPPING, {
+    onCompleted: (data: { updateShipping: Shipping }) => {
+      if (!isEmpty(data)) {
+        notify(t('common:successfully-updated'), 'success');
+        router.push(ROUTES.SHIPPING_ZONES);
       }
-    });
+    }
+  });
 
-  useErrorLogger(createShippingError);
-  useErrorLogger(updateShippingError);
+  useErrorLogger(error);
 
   const onSubmit = async (values: Shipping) => {
     if (isEmpty(values.thumbnail)) {
@@ -94,14 +90,22 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
     };
 
     if (isEmpty(initialValues)) {
-      createShipping({ variables });
+      createShipping({ variables }).catch((err) => {
+        setError(err);
+      });
     } else {
-      updateShipping({ variables: { id: initialValues?.id, ...variables } });
+      setUnsavedChanges(false);
+      updateShipping({
+        variables: { id: initialValues?.id, ...variables }
+      }).catch((err) => {
+        setError(err);
+        setUnsavedChanges(true);
+      });
     }
   };
 
-  useWarnIfUnsavedChanges(!isEmpty(unsavedChanges), () => {
-    return confirm(t('common:UNSAVED_IMAGE'));
+  useWarnIfUnsavedChanges(unsavedChanges, () => {
+    return confirm(t('common:UNSAVED_CHANGES'));
   });
 
   return (
@@ -114,12 +118,7 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
         />
 
         <Card className="w-full sm:w-8/12 md:w-2/3">
-          <FileInput
-            name="thumbnail"
-            control={control}
-            multiple={false}
-            setUnsavedChanges={setUnsavedChanges}
-          />
+          <FileInput name="thumbnail" control={control} multiple={false} />
         </Card>
       </div>
 

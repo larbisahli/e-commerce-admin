@@ -80,8 +80,8 @@ export const siteSettings = {
       },
       {
         id: 'JiCQsO',
-        href: ROUTES.SHIPPINGS,
-        label: 'sidebar-nav-item-shippings',
+        href: ROUTES.SHIPPING_ZONES,
+        label: 'sidebar-nav-item-shipping-zones',
         icon: 'ShippingsIcon'
       },
       {

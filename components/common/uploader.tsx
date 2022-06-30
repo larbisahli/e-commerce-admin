@@ -22,24 +22,18 @@ interface ImageType {
   success: boolean;
 }
 
-export default function Uploader({
-  onChange,
-  value,
-  multiple,
-  setUnsavedChanges
-}: any) {
+export default function Uploader({ onChange, value, multiple }: any) {
   const { t } = useTranslation();
 
+  const [error, setError] = useState(null);
   const [images, setImages] = useState<ImageType | ImageType[]>(value);
   const [deletedImage, setDeletedImage] = useState<string>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const [
-    deleteImageObject,
-    { loading: deleteLoading, error: deleteImageObjectError }
-  ] = useMutation(DELETE_IMAGE_OBJECT);
+  const [deleteImageObject, { loading: deleteLoading }] =
+    useMutation(DELETE_IMAGE_OBJECT);
 
-  useErrorLogger(deleteImageObjectError);
+  useErrorLogger(error);
 
   const { getRootProps, getInputProps } = useDropzone({
     accept: 'image/*',
@@ -70,7 +64,6 @@ export default function Uploader({
               } else {
                 setImages(image as ImageType);
               }
-              setUnsavedChanges((prev) => [...(prev ?? []), image]);
             }
 
             // @ts-ignore
@@ -120,11 +113,12 @@ export default function Uploader({
           }
           setImages(images_);
           onChange(images_);
-          setUnsavedChanges(images_);
           setDeletedImage(null);
           notify(t('common:successfully-deleted'), 'success');
         }
       }
+    }).catch((err) => {
+      setError(err);
     });
   };
 

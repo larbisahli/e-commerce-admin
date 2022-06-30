@@ -115,8 +115,8 @@ export default function CreateOrUpdateCategoriesForm({
   const router = useRouter();
   const { t } = useTranslation();
 
-  const [error, setError] = useState();
-  const [unsavedChanges, setUnsavedChanges] = useState<string[]>([]);
+  const [error, setError] = useState(null);
+  const [unsavedChanges, setUnsavedChanges] = useState(true);
 
   const { staffInfo } = useGetStaff();
 
@@ -152,7 +152,6 @@ export default function CreateOrUpdateCategoriesForm({
       if (!isEmpty(data)) {
         notify(t('common:successfully-created'), 'success');
         reset();
-        setUnsavedChanges([]);
         router.push(ROUTES.CATEGORIES);
       }
     }
@@ -161,7 +160,6 @@ export default function CreateOrUpdateCategoriesForm({
     onCompleted: (data: { updateCategory: Category }) => {
       if (!isEmpty(data)) {
         notify(t('common:successfully-updated'), 'success');
-        setUnsavedChanges([]);
         router.push(ROUTES.CATEGORIES);
       }
     }
@@ -192,16 +190,18 @@ export default function CreateOrUpdateCategoriesForm({
         setError(err);
       });
     } else {
+      setUnsavedChanges(false);
       updateCategory({
         variables: { id: initialValues?.id, ...variables }
       }).catch((err) => {
         setError(err);
+        setUnsavedChanges(true);
       });
     }
   };
 
-  useWarnIfUnsavedChanges(!isEmpty(unsavedChanges), () => {
-    return confirm(t('common:UNSAVED_IMAGE'));
+  useWarnIfUnsavedChanges(unsavedChanges, () => {
+    return confirm(t('common:UNSAVED_CHANGES'));
   });
 
   return (
@@ -214,12 +214,7 @@ export default function CreateOrUpdateCategoriesForm({
         />
 
         <Card className="w-full sm:w-8/12 md:w-2/3">
-          <FileInput
-            name="thumbnail"
-            control={control}
-            multiple={false}
-            setUnsavedChanges={setUnsavedChanges}
-          />
+          <FileInput name="thumbnail" control={control} multiple={false} />
         </Card>
       </div>
 

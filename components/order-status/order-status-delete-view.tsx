@@ -6,9 +6,11 @@ import {
 } from '@components/ui/modal/modal.context';
 import { DELETE_ORDER_STATUS, ORDER_STATUSES } from '@graphql/order-status';
 import { useErrorLogger } from '@hooks/useErrorLogger';
+import { useState } from 'react';
 
 const OrderStatusDeleteView = () => {
-  const [deleteOrderStatusValue, { loading, error }] = useMutation(
+  const [error, setError] = useState(null);
+  const [deleteOrderStatusValue, { loading }] = useMutation(
     DELETE_ORDER_STATUS,
     {
       refetchQueries: [
@@ -24,7 +26,9 @@ const OrderStatusDeleteView = () => {
   useErrorLogger(error);
 
   async function handleDelete() {
-    deleteOrderStatusValue({ variables: { id } });
+    deleteOrderStatusValue({ variables: { id } }).catch((err) => {
+      setError(err);
+    });
     closeModal();
   }
 

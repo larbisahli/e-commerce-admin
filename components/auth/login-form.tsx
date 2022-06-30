@@ -39,7 +39,7 @@ const LoginForm = () => {
   const router = useRouter();
   const { t } = useTranslation();
 
-  const [errorMsg, setErrorMsg] = useState<string>('');
+  const [error, setError] = useState(null);
 
   const {
     register,
@@ -50,7 +50,7 @@ const LoginForm = () => {
     resolver: yupResolver(loginFormSchema)
   });
 
-  const [staffLogin, { loading, error }] = useMutation(STAFF_LOGIN, {
+  const [staffLogin, { loading }] = useMutation(STAFF_LOGIN, {
     onCompleted: (data: { staffLogin: FormValues }) => {
       if (data?.staffLogin?.success) {
         router.push(ROUTES.DASHBOARD);
@@ -66,7 +66,9 @@ const LoginForm = () => {
       password,
       remember_me
     };
-    staffLogin({ variables });
+    staffLogin({ variables }).catch((err) => {
+      setError(err);
+    });
   }
 
   return (
@@ -94,17 +96,21 @@ const LoginForm = () => {
           {...register('remember_me')}
           className="mb-4"
         />
-        <Button className="w-full" loading={loading} disabled={loading}>
+        <Button
+          className="w-full"
+          loading={loading && !error}
+          disabled={loading && !error}
+        >
           {t('form:button-label-login')}
         </Button>
 
-        {errorMsg ? (
+        {error ? (
           <Alert
-            message={t(errorMsg)}
+            message={t(error)}
             variant="error"
             closeable={true}
             className="mt-5"
-            onClose={() => setErrorMsg('')}
+            onClose={() => setError(null)}
           />
         ) : null}
       </form>

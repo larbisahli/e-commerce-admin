@@ -9,11 +9,13 @@ import { useErrorLogger } from '@hooks/useErrorLogger';
 import { notify } from '@lib/index';
 import { StaffType } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
+import { useState } from 'react';
 
 const StaffDeleteView = () => {
   const { t } = useTranslation();
 
-  const [deleteAttributeValue, { loading, error }] = useMutation(DELETE_STAFF, {
+  const [error, setError] = useState(null);
+  const [deleteAttributeValue, { loading }] = useMutation(DELETE_STAFF, {
     refetchQueries: [
       STAFFS,
       'Staffs' // Query name
@@ -37,6 +39,8 @@ const StaffDeleteView = () => {
           'success'
         );
       }
+    }).catch((err) => {
+      setError(err);
     });
     closeModal();
   }

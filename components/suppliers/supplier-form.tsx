@@ -45,6 +45,7 @@ const defaultValues = {
 export default function CreateOrUpdateSupplierForm({ initialValues }: IProps) {
   const router = useRouter();
 
+  const [error, setError] = useState(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [dialCode, setDialCode] = useState<DialCodeType[]>([]);
   const [countries, setCountries] = useState([]);
@@ -91,29 +92,26 @@ export default function CreateOrUpdateSupplierForm({ initialValues }: IProps) {
       : defaultValues
   });
 
-  const [createSupplier, { loading: creating, error: createSupplierError }] =
-    useMutation(CREATE_SUPPLIER, {
-      onCompleted: (data: { createSupplier: Suppliers }) => {
-        if (!isEmpty(data)) {
-          notify(t('common:successfully-created'), 'success');
-          reset();
-          router.push(ROUTES.SUPPLIERS);
-        }
+  const [createSupplier, { loading: creating }] = useMutation(CREATE_SUPPLIER, {
+    onCompleted: (data: { createSupplier: Suppliers }) => {
+      if (!isEmpty(data)) {
+        notify(t('common:successfully-created'), 'success');
+        reset();
+        router.push(ROUTES.SUPPLIERS);
       }
-    });
+    }
+  });
 
-  const [updateSupplier, { loading: updating, error: updateSupplierError }] =
-    useMutation(UPDATE_SUPPLIER, {
-      onCompleted: (data: { updateSupplier: Suppliers }) => {
-        if (!isEmpty(data)) {
-          notify(t('common:successfully-updated'), 'success');
-          router.push(ROUTES.SUPPLIERS);
-        }
+  const [updateSupplier, { loading: updating }] = useMutation(UPDATE_SUPPLIER, {
+    onCompleted: (data: { updateSupplier: Suppliers }) => {
+      if (!isEmpty(data)) {
+        notify(t('common:successfully-updated'), 'success');
+        router.push(ROUTES.SUPPLIERS);
       }
-    });
+    }
+  });
 
-  useErrorLogger(createSupplierError);
-  useErrorLogger(updateSupplierError);
+  useErrorLogger(error);
 
   const country = watch('country');
 
@@ -147,9 +145,15 @@ export default function CreateOrUpdateSupplierForm({ initialValues }: IProps) {
     };
 
     if (isEmpty(initialValues)) {
-      createSupplier({ variables });
+      createSupplier({ variables }).catch((err) => {
+        setError(err);
+      });
     } else {
-      updateSupplier({ variables: { ...variables, id: initialValues.id } });
+      updateSupplier({
+        variables: { ...variables, id: initialValues.id }
+      }).catch((err) => {
+        setError(err);
+      });
     }
   };
 
@@ -270,10 +274,7 @@ export default function CreateOrUpdateSupplierForm({ initialValues }: IProps) {
           )}
 
           <Button
-            loading={
-              (creating && isEmpty(createSupplierError)) ||
-              (updating && isEmpty(updateSupplierError))
-            }
+            loading={creating || updating}
             disabled={creating || updating}
           >
             {initialValues

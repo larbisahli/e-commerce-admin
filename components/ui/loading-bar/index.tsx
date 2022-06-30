@@ -22,9 +22,10 @@ const LoadingBar = () => {
       }
     });
     Router.events.on('routeChangeError', () => {
-      if (LoadingStateCache.current) {
-        setLoading(false);
-      }
+      setLoading(false);
+      // if (LoadingStateCache.current) {
+
+      // }
     });
     return () => setLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps

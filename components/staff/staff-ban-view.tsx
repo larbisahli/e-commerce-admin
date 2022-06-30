@@ -6,9 +6,11 @@ import {
 } from '@components/ui/modal/modal.context';
 import { BAN_STAFF, STAFFS } from '@graphql/staff';
 import { useErrorLogger } from '@hooks/useErrorLogger';
+import { useState } from 'react';
 
 const StaffBanView = () => {
-  const [BanStaff, { loading, error }] = useMutation(BAN_STAFF, {
+  const [error, setError] = useState(null);
+  const [BanStaff, { loading }] = useMutation(BAN_STAFF, {
     refetchQueries: [
       STAFFS,
       'Staffs' // Query name
@@ -28,6 +30,8 @@ const StaffBanView = () => {
           id,
           active: false
         }
+      }).catch((err) => {
+        setError(err);
       });
     } else {
       // Unblock staff
@@ -36,6 +40,8 @@ const StaffBanView = () => {
           id,
           active: true
         }
+      }).catch((err) => {
+        setError(err);
       });
     }
     closeModal();

@@ -6,9 +6,11 @@ import {
 } from '@components/ui/modal/modal.context';
 import { DELETE_SHIPPING, SHIPPINGS } from '@graphql/shipping';
 import { useErrorLogger } from '@hooks/useErrorLogger';
+import { useState } from 'react';
 
 const ShippingDeleteView = () => {
-  const [deleteShipping, { loading, error }] = useMutation(DELETE_SHIPPING, {
+  const [error, setError] = useState(null);
+  const [deleteShipping, { loading }] = useMutation(DELETE_SHIPPING, {
     refetchQueries: [
       SHIPPINGS,
       'Shippings' // Query name
@@ -21,7 +23,9 @@ const ShippingDeleteView = () => {
   useErrorLogger(error);
 
   async function handleDelete() {
-    deleteShipping({ variables: { id } });
+    deleteShipping({ variables: { id } }).catch((err) => {
+      setError(err);
+    });
     closeModal();
   }
   return (

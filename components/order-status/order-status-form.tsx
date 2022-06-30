@@ -19,6 +19,7 @@ import { ROUTES } from '@utils/routes';
 import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { orderStatusValidationSchema } from './order-status-validation-schema';
@@ -41,6 +42,7 @@ export default function CreateOrUpdateOrderStatusForm({
   const router = useRouter();
   const { t } = useTranslation();
 
+  const [error, setError] = useState(null);
   const {
     register,
     handleSubmit,
@@ -53,8 +55,9 @@ export default function CreateOrUpdateOrderStatusForm({
     defaultValues: initialValues ?? defaultValues
   });
 
-  const [createOrderStatus, { loading: creating, error: createCategoryError }] =
-    useMutation(CREATE_ORDER_STATUS, {
+  const [createOrderStatus, { loading: creating }] = useMutation(
+    CREATE_ORDER_STATUS,
+    {
       onCompleted: (data: { createTag: OrderStatus }) => {
         if (!isEmpty(data)) {
           notify(t('common:successfully-created'), 'success');
@@ -62,20 +65,22 @@ export default function CreateOrUpdateOrderStatusForm({
           router.push(ROUTES.ORDER_STATUS);
         }
       }
-    });
+    }
+  );
 
-  const [updateOrderStatus, { loading: updating, error: updateCategoryError }] =
-    useMutation(UPDATE_ORDER_STATUS, {
+  const [updateOrderStatus, { loading: updating }] = useMutation(
+    UPDATE_ORDER_STATUS,
+    {
       onCompleted: (data: { updateTag: OrderStatus }) => {
         if (!isEmpty(data)) {
           notify(t('common:successfully-updated'), 'success');
           router.push(ROUTES.ORDER_STATUS);
         }
       }
-    });
+    }
+  );
 
-  useErrorLogger(createCategoryError);
-  useErrorLogger(updateCategoryError);
+  useErrorLogger(error);
 
   const onSubmit = async (values: FormValues) => {
     if (isEmpty(initialValues)) {
@@ -85,15 +90,19 @@ export default function CreateOrUpdateOrderStatusForm({
           color: values.color,
           privacy: values.privacy
         }
+      }).catch((err) => {
+        setError(err);
       });
     } else {
       updateOrderStatus({
         variables: {
-          id: initialValues.id,
+          // id: initialValues.id,
           status_name: values.status_name,
           color: values.color,
           privacy: values.privacy
         }
+      }).catch((err) => {
+        setError(err);
       });
     }
   };

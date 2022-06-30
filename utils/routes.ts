@@ -7,7 +7,7 @@ export const ROUTES = {
   COUPONS: '/coupons',
   CUSTOMERS: '/customers',
   TAXES: '/taxes',
-  SHIPPINGS: '/shippings',
+  SHIPPING_ZONES: '/shipping-zones',
   SETTINGS: '/settings',
   CATEGORIES: '/categories',
   ATTRIBUTES: '/attributes',

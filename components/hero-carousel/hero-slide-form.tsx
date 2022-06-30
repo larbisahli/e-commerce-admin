@@ -51,7 +51,8 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
   const router = useRouter();
   const { t } = useTranslation();
 
-  const [unsavedChanges, setUnsavedChanges] = useState<string[]>([]);
+  const [error, setError] = useState(null);
+  const [unsavedChanges, setUnsavedChanges] = useState(true);
 
   const {
     watch,
@@ -75,34 +76,31 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
   const title = watch('title');
   const description = watch('description');
 
-  const [
-    createHeroSlider,
-    { loading: creating, error: createHeroSliderError }
-  ] = useMutation(CREATE_HERO_SLIDE, {
-    onCompleted: (data: { createHeroSlide: HeroCarouselType }) => {
-      if (!isEmpty(data)) {
-        notify(t('common:successfully-created'), 'success');
-        reset();
-        setUnsavedChanges([]);
-        router.push(ROUTES.HERO_CAROUSEL);
+  const [createHeroSlider, { loading: creating }] = useMutation(
+    CREATE_HERO_SLIDE,
+    {
+      onCompleted: (data: { createHeroSlide: HeroCarouselType }) => {
+        if (!isEmpty(data)) {
+          notify(t('common:successfully-created'), 'success');
+          reset();
+          router.push(ROUTES.HERO_CAROUSEL);
+        }
       }
     }
-  });
-  const [
-    updateHeroSlider,
-    { loading: updating, error: updateHeroSliderError }
-  ] = useMutation(UPDATE_HERO_SLIDE, {
-    onCompleted: (data: { updateCategory: HeroCarouselType }) => {
-      if (!isEmpty(data)) {
-        notify(t('common:successfully-updated'), 'success');
-        setUnsavedChanges([]);
-        router.push(ROUTES.HERO_CAROUSEL);
+  );
+  const [updateHeroSlider, { loading: updating }] = useMutation(
+    UPDATE_HERO_SLIDE,
+    {
+      onCompleted: (data: { updateCategory: HeroCarouselType }) => {
+        if (!isEmpty(data)) {
+          notify(t('common:successfully-updated'), 'success');
+          router.push(ROUTES.HERO_CAROUSEL);
+        }
       }
     }
-  });
+  );
 
-  useErrorLogger(createHeroSliderError);
-  useErrorLogger(updateHeroSliderError);
+  useErrorLogger(error);
 
   const onSubmit = async (values: FormValues) => {
     if (isEmpty(values.thumbnail)) {
@@ -125,14 +123,22 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
     };
 
     if (isEmpty(initialValues)) {
-      createHeroSlider({ variables });
+      createHeroSlider({ variables }).catch((err) => {
+        setError(err);
+      });
     } else {
-      updateHeroSlider({ variables: { id: initialValues?.id, ...variables } });
+      setUnsavedChanges(false);
+      updateHeroSlider({
+        variables: { id: initialValues?.id, ...variables }
+      }).catch((err) => {
+        setError(err);
+        setUnsavedChanges(true);
+      });
     }
   };
 
-  useWarnIfUnsavedChanges(!isEmpty(unsavedChanges), () => {
-    return confirm(t('common:UNSAVED_IMAGE'));
+  useWarnIfUnsavedChanges(unsavedChanges, () => {
+    return confirm(t('common:UNSAVED_CHANGES'));
   });
 
   return (
@@ -145,12 +151,7 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
         />
 
         <Card className="w-full sm:w-8/12 md:w-2/3">
-          <FileInput
-            name="thumbnail"
-            control={control}
-            multiple={false}
-            setUnsavedChanges={setUnsavedChanges}
-          />
+          <FileInput name="thumbnail" control={control} multiple={false} />
           {!!thumbnail?.image && (
             <div>
               <div className="my-2 border-b border-dashed border-border-base"></div>

@@ -34,7 +34,7 @@ interface ShippingVariable {
 
 const limit = 10;
 
-export default function ShippingsPage({ client }: SSRProps) {
+export default function ShippingZonesPage({ client }: SSRProps) {
   const { t } = useTranslation();
 
   const [page, setPage] = useState(1);
@@ -93,7 +93,7 @@ export default function ShippingsPage({ client }: SSRProps) {
         </div>
         <div className="w-full flex md:justify-end justify-center items-center">
           <LinkButton
-            href={`${ROUTES.SHIPPINGS}/create`}
+            href={`${ROUTES.SHIPPING_ZONES}/create`}
             className="h-12 ms-4 md:ms-6"
           >
             <div className="hidden md:flex items-center justify-center">
@@ -117,7 +117,7 @@ export default function ShippingsPage({ client }: SSRProps) {
     </>
   );
 }
-ShippingsPage.Layout = AppLayout;
+ShippingZonesPage.Layout = AppLayout;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { locale } = context;

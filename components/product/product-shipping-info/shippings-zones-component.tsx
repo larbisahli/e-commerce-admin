@@ -39,6 +39,7 @@ const ShippingsZonesComponent = ({
 }: SZProps) => {
   const { t } = useTranslation();
 
+  const [error, setError] = useState(null);
   const [countries, setCountries] = useState([]);
   const [loadingCountries, setLoadingCountries] = useState(false);
   const { currency } = useSettings();
@@ -46,12 +47,10 @@ const ShippingsZonesComponent = ({
   const zones = shipping_zone?.zones;
   const shipping_price = shipping_zone?.shipping_price;
 
-  const [
-    deleteShippingZone,
-    { loading: deleteShippingZoneLoading, error: deleteShippingError }
-  ] = useMutation(DELETE_SHIPPING_ZONE);
+  const [deleteShippingZone, { loading: deleteShippingZoneLoading }] =
+    useMutation(DELETE_SHIPPING_ZONE);
 
-  useErrorLogger(deleteShippingError);
+  useErrorLogger(error);
 
   // Add global when zone is empty
   useEffect(() => {
@@ -143,6 +142,8 @@ const ShippingsZonesComponent = ({
             });
           }
         }
+      }).catch((err) => {
+        setError(err);
       });
     } else {
       dispatchShippings({

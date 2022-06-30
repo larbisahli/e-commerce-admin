@@ -6,9 +6,11 @@ import {
 } from '@components/ui/modal/modal.context';
 import { DELETE_TAG, TAGS } from '@graphql/tag';
 import { useErrorLogger } from '@hooks/useErrorLogger';
+import { useState } from 'react';
 
 const TagDeleteView = () => {
-  const [deleteAttributeValue, { loading, error }] = useMutation(DELETE_TAG, {
+  const [error, setError] = useState(null);
+  const [deleteAttributeValue, { loading }] = useMutation(DELETE_TAG, {
     refetchQueries: [
       TAGS,
       'TagsForAdmin' // Query name
@@ -21,7 +23,9 @@ const TagDeleteView = () => {
   useErrorLogger(error);
 
   function handleDelete() {
-    deleteAttributeValue({ variables: { id } });
+    deleteAttributeValue({ variables: { id } }).catch((err) => {
+      setError(err);
+    });
     closeModal();
   }
   return (

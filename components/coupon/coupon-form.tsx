@@ -19,6 +19,7 @@ import { pgFormatDate } from '@utils/utils';
 import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
+import { useState } from 'react';
 import { Control, Controller, FieldErrors, useForm } from 'react-hook-form';
 
 import { couponValidationSchema } from './coupon-validation-schema';
@@ -82,6 +83,8 @@ export default function CreateOrUpdateCouponForm({ initialValues }: IProps) {
   const router = useRouter();
   const { t } = useTranslation();
 
+  const [error, setError] = useState(null);
+
   const {
     register,
     handleSubmit,
@@ -112,29 +115,26 @@ export default function CreateOrUpdateCouponForm({ initialValues }: IProps) {
   ]);
   const couponType = watch('discount_type');
 
-  const [createCoupon, { loading: creating, error: createCouponError }] =
-    useMutation(CREATE_COUPON, {
-      onCompleted: (data: { createCoupon: Coupon }) => {
-        if (!isEmpty(data)) {
-          notify(t('common:successfully-created'), 'success');
-          reset();
-          router.push(ROUTES.COUPONS);
-        }
+  const [createCoupon, { loading: creating }] = useMutation(CREATE_COUPON, {
+    onCompleted: (data: { createCoupon: Coupon }) => {
+      if (!isEmpty(data)) {
+        notify(t('common:successfully-created'), 'success');
+        reset();
+        router.push(ROUTES.COUPONS);
       }
-    });
+    }
+  });
 
-  const [updateCoupon, { loading: updating, error: updateCouponError }] =
-    useMutation(UPDATE_COUPON, {
-      onCompleted: (data: { updateCoupon: Coupon }) => {
-        if (!isEmpty(data)) {
-          notify(t('common:successfully-updated'), 'success');
-          router.push(ROUTES.COUPONS);
-        }
+  const [updateCoupon, { loading: updating }] = useMutation(UPDATE_COUPON, {
+    onCompleted: (data: { updateCoupon: Coupon }) => {
+      if (!isEmpty(data)) {
+        notify(t('common:successfully-updated'), 'success');
+        router.push(ROUTES.COUPONS);
       }
-    });
+    }
+  });
 
-  useErrorLogger(createCouponError);
-  useErrorLogger(updateCouponError);
+  useErrorLogger(error);
 
   const onSubmit = async (values: FormValues) => {
     const discount_type = values.discount_type?.value;
@@ -153,9 +153,15 @@ export default function CreateOrUpdateCouponForm({ initialValues }: IProps) {
     };
 
     if (isEmpty(initialValues)) {
-      createCoupon({ variables });
+      createCoupon({ variables }).catch((err) => {
+        setError(err);
+      });
     } else {
-      updateCoupon({ variables: { id: initialValues.id, ...variables } });
+      updateCoupon({ variables: { id: initialValues.id, ...variables } }).catch(
+        (err) => {
+          setError(err);
+        }
+      );
     }
   };
 
