@@ -4,15 +4,17 @@ export const selectStyles = {
     ...provided,
     // fontSize: '1rem',
     fontSize: '0.875rem',
-    color: '#6B7280',
+    color: state.isSelected ? '#222' : '#6B7280',
     paddingLeft: 16,
     paddingRight: 16,
     paddingTop: 12,
     paddingBottom: 12,
     cursor: 'pointer',
-    borderBottom: '1px solid #E5E7EB',
+    borderBottom: state.isSelected
+      ? '1px solid #a6c7f4c4'
+      : '1px solid #E5E7EB',
     backgroundColor: state.isSelected
-      ? '#E5E7EB'
+      ? '#cde2ffc4'
       : state.isFocused
       ? '#F9FAFB'
       : '#ffffff'
@@ -69,7 +71,7 @@ export const selectStyles = {
   multiValue: (provided: any, _: any) => ({
     ...provided,
     backgroundColor: 'rgb(var(--color-accent-400))',
-    borderRadius: 9999,
+    borderRadius: 4,
     overflow: 'hidden',
     boxShadow: '0 0px 3px 0 rgba(0, 0, 0, 0.1), 0 0px 2px 0 rgba(0, 0, 0, 0.06)'
   }),

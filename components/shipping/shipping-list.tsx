@@ -5,14 +5,14 @@ import Pagination from '@components/ui/pagination';
 import { Table } from '@components/ui/table';
 import { siteSettings } from '@settings/site.settings';
 import { Nullable } from '@ts-types/custom.types';
-import { Shipping } from '@ts-types/generated';
+import { ShippingZone } from '@ts-types/generated';
 import { useIsRTL } from '@utils/locals';
 import { ROUTES } from '@utils/routes';
 import dayjs from 'dayjs';
 import { useTranslation } from 'next-i18next';
 
 export type IProps = {
-  shippings: Shipping[] | undefined;
+  shipping_zones: ShippingZone[] | undefined;
   // eslint-disable-next-line no-unused-vars
   onPagination: (key: number) => void;
   total: Nullable<number>;
@@ -21,7 +21,7 @@ export type IProps = {
 };
 
 const ShippingList = ({
-  shippings,
+  shipping_zones,
   onPagination,
   total,
   currentPage,
@@ -61,7 +61,7 @@ const ShippingList = ({
       align: alignLeft,
       width: 150,
       ellipsis: true,
-      render: (shipper_name: Shipping) => {
+      render: (shipper_name: ShippingZone) => {
         return (
           <span className="font-semibold text-gray-800 capitalize">
             {shipper_name}
@@ -135,7 +135,7 @@ const ShippingList = ({
       render: (id: string) => (
         <ActionButtons
           id={id}
-          editUrl={`${ROUTES.SHIPPINGS}/edit/${id}`}
+          editUrl={`${ROUTES.SHIPPING_ZONES}/edit/${id}`}
           deleteModalView="DELETE_SHIPPING"
         />
       ),
@@ -150,7 +150,7 @@ const ShippingList = ({
           //@ts-ignore
           columns={columns}
           emptyText={t('table:empty-table-data')}
-          data={shippings}
+          data={shipping_zones}
           rowKey="id"
           scroll={{ x: 900 }}
         />

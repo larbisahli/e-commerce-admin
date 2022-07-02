@@ -73,6 +73,16 @@ export const SHIPPINGS = gql`
   }
 `;
 
+export const COUNTRIES = gql`
+  {
+    countries {
+      id
+      iso
+      name
+    }
+  }
+`;
+
 export const SHIPPINGS_FOR_SELECT = gql`
   query ShippingsSelectForAdmin($page: Int!, $limit: Int!, $orderBy: String!) {
     shippingsSelectForAdmin(page: $page, limit: $limit, orderBy: $orderBy) {

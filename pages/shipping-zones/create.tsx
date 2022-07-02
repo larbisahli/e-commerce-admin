@@ -16,7 +16,7 @@ export default function CreateShippingPage({ client }: SSRProps) {
     <>
       <div className="py-5 sm:py-8 flex border-b border-dashed border-border-base">
         <h1 className="text-lg font-semibold text-heading">
-          {t('form:form-title-create-shipping')}
+          {t('form:form-title-create-shipping-zone')}
         </h1>
       </div>
       <CreateOrUpdateShippingForm />

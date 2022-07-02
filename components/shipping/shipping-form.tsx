@@ -1,34 +1,44 @@
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import Card from '@components/common/card';
 import Button from '@components/ui/button';
+import Checkbox from '@components/ui/checkbox';
 import Description from '@components/ui/description';
-import FileInput from '@components/ui/file-input';
 import Input from '@components/ui/input';
-import { CREATE_SHIPPING, UPDATE_SHIPPING } from '@graphql/shipping';
+import Label from '@components/ui/label';
+import SelectInput from '@components/ui/select-input';
+import { COUNTRIES, CREATE_SHIPPING, UPDATE_SHIPPING } from '@graphql/shipping';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useErrorLogger, useWarnIfUnsavedChanges } from '@hooks/index';
 import { notify } from '@lib/notify';
 import { Nullable } from '@ts-types/custom.types';
-import { Shipping } from '@ts-types/generated';
+import type { CountriesType, ShippingZoneType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { shippingValidationSchema } from './shipping-validation-schema';
 
 const defaultValues = {
-  shipper_name: '',
-  active: true,
-  thumbnail: null
+  name: '',
+  display_name: '',
+  active: false,
+  free_shipping: true,
+  rate_types: { id: 1, name: 'Weight', type: 'weight' },
+  zones: [],
+  shipping_rates: []
 };
 
-type FormValues = Shipping;
+type FormValues = ShippingZoneType;
+
+type TCountries = {
+  countries: CountriesType[];
+};
 
 type IProps = {
-  initialValues?: Nullable<Shipping>;
+  initialValues?: Nullable<ShippingZoneType>;
 };
 
 export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
@@ -39,10 +49,22 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
   const [unsavedChanges, setUnsavedChanges] = useState(true);
 
   const {
+    data,
+    loading: loadingCountries,
+    error: queryError
+  } = useQuery<TCountries>(COUNTRIES, {
+    fetchPolicy: 'cache-and-network'
+  });
+
+  const countries = data?.countries;
+
+  const {
     register,
     handleSubmit,
     control,
+    watch,
     reset,
+    setValue,
     formState: { errors }
   } = useForm<FormValues>({
     shouldUnregister: true,
@@ -54,48 +76,46 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
       : defaultValues
   });
 
-  const [createShipping, { loading: creating }] = useMutation(CREATE_SHIPPING, {
-    onCompleted: (data: { createShipping: Shipping }) => {
-      if (!isEmpty(data)) {
-        reset();
-        notify(t('common:successfully-created'), 'success');
-        router.push(ROUTES.SHIPPING_ZONES);
+  const [createShippingZone, { loading: creating }] = useMutation(
+    CREATE_SHIPPING,
+    {
+      onCompleted: (data: { createShippingZone: ShippingZoneType }) => {
+        if (!isEmpty(data)) {
+          reset();
+          notify(t('common:successfully-created'), 'success');
+          router.push(ROUTES.SHIPPING_ZONES);
+        }
       }
     }
-  });
+  );
 
-  const [updateShipping, { loading: updating }] = useMutation(UPDATE_SHIPPING, {
-    onCompleted: (data: { updateShipping: Shipping }) => {
-      if (!isEmpty(data)) {
-        notify(t('common:successfully-updated'), 'success');
-        router.push(ROUTES.SHIPPING_ZONES);
+  const [updateShippingZone, { loading: updating }] = useMutation(
+    UPDATE_SHIPPING,
+    {
+      onCompleted: (data: { updateShippingZone: ShippingZoneType }) => {
+        if (!isEmpty(data)) {
+          notify(t('common:successfully-updated'), 'success');
+          router.push(ROUTES.SHIPPING_ZONES);
+        }
       }
     }
-  });
+  );
 
   useErrorLogger(error);
+  useErrorLogger(queryError);
 
-  const onSubmit = async (values: Shipping) => {
-    if (isEmpty(values.thumbnail)) {
-      notify(t('form:error-logo-required'), 'warning');
-    }
-
+  const onSubmit = async (values: ShippingZoneType) => {
     const variables = {
-      ...values,
-      active: true,
-      thumbnail: {
-        image: values.thumbnail?.image,
-        placeholder: values.thumbnail?.placeholder
-      }
+      ...values
     };
 
     if (isEmpty(initialValues)) {
-      createShipping({ variables }).catch((err) => {
+      createShippingZone({ variables }).catch((err) => {
         setError(err);
       });
     } else {
       setUnsavedChanges(false);
-      updateShipping({
+      updateShippingZone({
         variables: { id: initialValues?.id, ...variables }
       }).catch((err) => {
         setError(err);
@@ -108,38 +128,135 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
     return confirm(t('common:UNSAVED_CHANGES'));
   });
 
+  const zones = watch('zones');
+
+  useEffect(() => {
+    const exist = zones?.find((c) => c.name === 'Everywhere');
+    if (isEmpty(zones)) {
+      setValue('zones', [{ id: '0', name: 'Everywhere', iso: 'XX' }]);
+    } else if (zones.length > 1 && exist) {
+      setValue(
+        'zones',
+        zones.filter((c) => c.name !== 'Everywhere')
+      );
+    }
+  }, [zones]);
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex flex-wrap pb-8 border-b border-dashed border-border-base my-5 sm:my-8">
-        <Description
-          title={t('form:input-label-logo')}
-          details={t('form:shipper-logo-helper-text')}
-          className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
-        />
-
-        <Card className="w-full sm:w-8/12 md:w-2/3">
-          <FileInput name="thumbnail" control={control} multiple={false} />
-        </Card>
-      </div>
-
       <div className="flex flex-wrap my-5 sm:my-8">
         <Description
-          title={t('form:item-description')}
-          details={`${
+          title={t('form:item-shipping-information')}
+          details={
             initialValues
-              ? t('form:item-description-update')
-              : t('form:item-description-add')
-          } ${t('form:shipping-form-info-help-text')}`}
+              ? t('form:item-shipping-information-desc-update')
+              : t('form:item-shipping-information-desc-create')
+          }
           className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
         />
         <Card className="w-full sm:w-8/12 md:w-2/3">
-          <Input
-            label={t('form:input-label-name')}
-            {...register('shipper_name', { required: 'Name is required' })}
-            error={t(errors.shipper_name?.message!)}
-            variant="outline"
-            className="mb-5"
-          />
+          <div className="flex items-center justify-between lg:flex-nowrap flex-wrap">
+            <Input
+              label={t('form:input-label-name')}
+              {...register('name', { required: 'Name is required' })}
+              error={t(errors.name?.message!)}
+              placeholder="Name ( The name you'll remember )"
+              variant="outline"
+              className="mb-5 w-full lg:mr-5 mr-0"
+            />
+            <Input
+              label={t('form:input-label-display-name')}
+              {...register('display_name', { required: 'Name is required' })}
+              error={t(errors.display_name?.message!)}
+              placeholder="Name ( Name to be displayed to customers )"
+              variant="outline"
+              className="mb-5 w-full"
+            />
+          </div>
+          <div className="mt-2">
+            <Label>{t('form:input-label-status')}</Label>
+            <Checkbox
+              {...register('free_shipping')}
+              className="mb-4"
+              label={t('form:input-label-free-shipping')}
+            />
+            <Checkbox
+              {...register('active')}
+              label={t('form:input-label-activate-shipping')}
+            />
+          </div>
+        </Card>
+      </div>
+      {/* ZONES */}
+      <div className="flex flex-wrap my-5 sm:my-8">
+        <Description
+          title={t('form:item-shipping-zones-info')}
+          details={
+            initialValues
+              ? t('form:item-shipping-zones-info-update')
+              : t('form:item-shipping-zones-info-create')
+          }
+          className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
+        />
+        <Card className="w-full sm:w-8/12 md:w-2/3">
+          <div>
+            <Label>{t('form:input-label-countries')}</Label>
+            <SelectInput
+              name="zones"
+              control={control}
+              isMulti
+              getOptionLabel={(option: any) => option.name}
+              getOptionValue={(option: any) => option.name}
+              options={countries}
+              isLoading={loadingCountries}
+              closeMenuOnSelect={false}
+              hideSelectedOptions={false}
+            />
+          </div>
+        </Card>
+      </div>
+      {/* TYPES */}
+      <div className="flex flex-wrap my-5 sm:my-8">
+        <Description
+          title={t('form:item-shipping-rate-type')}
+          details={
+            initialValues
+              ? t('form:item-shipping-rate-type-update')
+              : t('form:item-shipping-rate-type-create')
+          }
+          className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
+        />
+        <Card className="w-full sm:w-8/12 md:w-2/3">
+          <div>
+            <Label>{t('form:input-label-type')}</Label>
+            <SelectInput
+              name="rate_types"
+              control={control}
+              getOptionLabel={(option: any) => option.name}
+              getOptionValue={(option: any) => option.type}
+              options={[
+                { id: 1, name: 'Price', type: 'price' },
+                { id: 1, name: 'Weight', type: 'weight' }
+              ]}
+            />
+          </div>
+        </Card>
+      </div>
+      {/* RATES */}
+      <div className="flex flex-wrap my-5 sm:my-8">
+        <Description
+          title={t('form:item-shipping-rates')}
+          details={
+            initialValues
+              ? t('form:item-shipping-rates-update')
+              : t('form:item-shipping-rates-create')
+          }
+          className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
+        />
+        <Card className="w-full sm:w-8/12 md:w-2/3">
+          <div>
+            <Label>{t('form:input-label-rates')}</Label>
+          </div>
         </Card>
       </div>
 

@@ -112,7 +112,7 @@ export interface ProductShippingInfo {
 
 export interface ProductShippings {
   product_shipping_id?: Nullable<Scalars['ID']>;
-  shipping_provider?: Shipping;
+  shipping_provider?: any;
   shipping_zones?: {
     id: Nullable<Scalars['ID']>;
     zones: { name: string; code: string }[];
@@ -163,11 +163,31 @@ export interface Coupon extends CreatedUpdatedByAt {
   coupon_end_date?: Nullable<Scalars['Date']>;
 }
 
-export interface Shipping extends CreatedUpdatedByAt {
-  id?: Nullable<Scalars['ID']>;
-  shipper_name?: Nullable<Scalars['String']>;
-  active?: Nullable<Scalars['Boolean']>;
-  thumbnail?: IMGType;
+export interface ShippingZoneType extends CreatedUpdatedByAt {
+  id?: Scalars['ID'];
+  name?: Scalars['String'];
+  display_name?: Scalars['String'];
+  active?: Scalars['Boolean'];
+  free_shipping?: Scalars['Boolean'];
+  rate_type?: 'price' | 'weight';
+  zones?: CountriesType[];
+  shipping_rates?: {
+    id: Scalars['ID'];
+    min_value: Scalars['Int'];
+    max_value: Nullable<Scalars['Int']>;
+    no_max: Scalars['Boolean'];
+    price: Scalars['Int'];
+  }[];
+}
+
+export interface CountriesType {
+  id: Scalars['ID'];
+  iso: Scalars['String'];
+  name: Scalars['String'];
+  upper_name?: Scalars['String'];
+  iso3?: Scalars['String'];
+  num_code?: Scalars['String'];
+  phone_code?: Scalars['String'];
 }
 
 export interface StoreSettingsOptions {

@@ -26,6 +26,8 @@ const SelectInput = ({
   isMulti,
   isClearable,
   isLoading,
+  closeMenuOnSelect = true,
+  hideSelectedOptions = true,
   // isSearchable=true,
   // isDisabled=false,
   // isOptionDisabled=false,
@@ -48,6 +50,8 @@ const SelectInput = ({
           isMulti={isMulti}
           isClearable={isClearable}
           isLoading={isLoading}
+          closeMenuOnSelect={closeMenuOnSelect}
+          hideSelectedOptions={hideSelectedOptions}
           options={options}
         />
       )}

@@ -11,7 +11,7 @@ import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetStaff } from '@hooks/useGetStaff';
 import { verifyAuth } from '@middleware/utils';
 import type { SSRProps } from '@ts-types/custom.types';
-import type { Shipping } from '@ts-types/generated';
+import type { ShippingZoneType } from '@ts-types/generated';
 import { OrderBy, SortOrder } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import isEmpty from 'lodash/isEmpty';
@@ -21,8 +21,8 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useState } from 'react';
 
 interface TShipping {
-  shippings: Shipping[];
-  shippingsCount: { count: number };
+  shipping_zones: ShippingZoneType[];
+  shippingZonesCount: { count: number };
 }
 
 interface ShippingVariable {
@@ -54,8 +54,8 @@ export default function ShippingZonesPage({ client }: SSRProps) {
     fetchPolicy: 'cache-and-network'
   });
 
-  const shippingsCount = data?.shippingsCount?.count;
-  const shippings = data?.shippings;
+  const shippingZonesCount = data?.shippingZonesCount?.count;
+  const shipping_zones = data?.shipping_zones;
 
   useGetStaff(client?.staff_id);
   useErrorLogger(error);
@@ -88,7 +88,7 @@ export default function ShippingZonesPage({ client }: SSRProps) {
       <Card className="flex flex-col md:flex-row items-center mb-8">
         <div className="md:w-1/4 mb-4 md:mb-0">
           <h1 className="text-xl font-semibold text-heading pb-3">
-            {t('form:input-label-shippings')}
+            {t('form:input-label-shipping-zones')}
           </h1>
         </div>
         <div className="w-full flex md:justify-end justify-center items-center">
@@ -98,7 +98,9 @@ export default function ShippingZonesPage({ client }: SSRProps) {
           >
             <div className="hidden md:flex items-center justify-center">
               <Add width="1rem" height="1rem" />
-              <span className="m-1">{t('form:button-label-shipping')}</span>
+              <span className="m-1">
+                {t('form:button-label-add-shipping-zone')}
+              </span>
             </div>
             <div className="md:hidden flex items-center justify-center">
               <Add width="1rem" height="1rem" />
@@ -108,9 +110,9 @@ export default function ShippingZonesPage({ client }: SSRProps) {
         </div>
       </Card>
       <ShippingList
-        shippings={shippings}
+        shipping_zones={shipping_zones}
         onPagination={handlePagination}
-        total={shippingsCount}
+        total={shippingZonesCount}
         currentPage={page}
         perPage={limit}
       />
