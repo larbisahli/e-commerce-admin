@@ -2,6 +2,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import { useMutation } from '@apollo/client';
 import Card from '@components/common/card';
+import { SaveIcon } from '@components/icons/save-icon';
 import Button from '@components/ui/button';
 import ColorPicker from '@components/ui/color-picker/color-picker';
 import Description from '@components/ui/description';
@@ -280,9 +281,10 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
         )}
 
         <Button loading={creating || updating} disabled={creating || updating}>
-          {initialValues
-            ? t('form:button-label-update-slider')
-            : t('form:button-label-add-slider')}
+          <div className="mr-1">
+            <SaveIcon width="1.3rem" height="1.3rem" />
+          </div>
+          <div>{t('form:button-label-save')}</div>
         </Button>
       </div>
     </form>

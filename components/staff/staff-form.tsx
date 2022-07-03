@@ -1,5 +1,6 @@
 import { useMutation, useQuery } from '@apollo/client';
 import Card from '@components/common/card';
+import { SaveIcon } from '@components/icons/save-icon';
 import Button from '@components/ui/button';
 import Description from '@components/ui/description';
 import FileInput from '@components/ui/file-input';
@@ -227,9 +228,10 @@ const StaffCreateUpdateForm = ({ initialValues }: IProps) => {
 
       <div className="mb-4 text-end">
         <Button loading={creating || updating} disabled={creating || updating}>
-          {isEmpty(initialValues)
-            ? t('form:button-label-create-customer')
-            : t('form:button-label-update-customer')}
+          <div className="mr-1">
+            <SaveIcon width="1.3rem" height="1.3rem" />
+          </div>
+          <div>{t('form:button-label-save')}</div>
         </Button>
       </div>
     </form>

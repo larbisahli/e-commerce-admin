@@ -1,5 +1,6 @@
 import { useMutation } from '@apollo/client';
 import Card from '@components/common/card';
+import { SaveIcon } from '@components/icons/save-icon';
 import Button from '@components/ui/button';
 import ColorPicker from '@components/ui/color-picker/color-picker';
 import DisplayColorCode from '@components/ui/color-picker/display-color-code';
@@ -168,10 +169,10 @@ export default function CreateOrUpdateOrderStatusForm({
         )}
 
         <Button loading={creating || updating} disabled={creating || updating}>
-          {initialValues
-            ? t('form:button-label-update')
-            : t('form:button-label-add')}{' '}
-          {t('form:button-label-order-status')}
+          <div className="mr-1">
+            <SaveIcon width="1.3rem" height="1.3rem" />
+          </div>
+          <div>{t('form:button-label-save')}</div>
         </Button>
       </div>
     </form>

@@ -171,13 +171,16 @@ export interface ShippingZoneType extends CreatedUpdatedByAt {
   free_shipping?: Scalars['Boolean'];
   rate_type?: 'price' | 'weight';
   zones?: CountriesType[];
-  shipping_rates?: {
-    id: Scalars['ID'];
-    min_value: Scalars['Int'];
-    max_value: Nullable<Scalars['Int']>;
-    no_max: Scalars['Boolean'];
-    price: Scalars['Int'];
-  }[];
+  shipping_rates?: ShippingRateType[];
+}
+
+export interface ShippingRateType {
+  id?: Scalars['ID'];
+  min_value?: Scalars['Int'];
+  max_value?: Nullable<Scalars['Int']>;
+  no_max?: Scalars['Boolean'];
+  price?: Scalars['Int'];
+  index?: Scalars['Int'];
 }
 
 export interface CountriesType {

@@ -397,5 +397,9 @@
   "item-shipping-rate-type-update": "Update your rate type",
   "item-shipping-rates": "Shipping rates",
   "item-shipping-rates-create": "Create your shipping rates",
-  "item-shipping-rates-update": "Update your shipping rates"
+  "item-shipping-rates-update": "Update your shipping rates",
+  "button-label-add-rate": "Add rate",
+  "input-label-min": "Min",
+  "input-label-max": "Max",
+  "input-label-no-maximum": "No maximum"
 }

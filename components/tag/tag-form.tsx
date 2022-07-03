@@ -1,6 +1,7 @@
 import { useMutation } from '@apollo/client';
 import Card from '@components/common/card';
 import * as categoriesIcon from '@components/icons/category';
+import { SaveIcon } from '@components/icons/save-icon';
 import Button from '@components/ui/button';
 import Description from '@components/ui/description';
 import Input from '@components/ui/input';
@@ -166,9 +167,10 @@ export default function CreateOrUpdateTagForm({ initialValues }: IProps) {
         )}
 
         <Button loading={creating || updating} disabled={creating || updating}>
-          {initialValues
-            ? t('form:button-label-update-tag')
-            : t('form:button-label-add-tag')}
+          <div className="mr-1">
+            <SaveIcon width="1.3rem" height="1.3rem" />
+          </div>
+          <div>{t('form:button-label-save')}</div>
         </Button>
       </div>
     </form>
