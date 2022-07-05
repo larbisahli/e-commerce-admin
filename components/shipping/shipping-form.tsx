@@ -12,11 +12,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useErrorLogger, useWarnIfUnsavedChanges } from '@hooks/index';
 import { notify } from '@lib/notify';
 import { Nullable } from '@ts-types/custom.types';
-import type {
-  CountriesType,
-  ShippingRateType,
-  ShippingZoneType
-} from '@ts-types/generated';
+import type { CountriesType, ShippingZoneType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
@@ -24,6 +20,7 @@ import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 
+import shippingRatesValidation from './shipping-rates-validation';
 import { shippingValidationSchema } from './shipping-validation-schema';
 import ZoneComponent from './zone-component';
 
@@ -111,22 +108,27 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
   useErrorLogger(queryError);
 
   const onSubmit = async (values: ShippingZoneType) => {
+    console.log('values :>> ', values);
+    const checkFailed = shippingRatesValidation(values.shipping_rates, false);
+
+    if (checkFailed) return;
+
     const variables = {
       ...values
     };
 
     if (isEmpty(initialValues)) {
-      createShippingZone({ variables }).catch((err) => {
-        setError(err);
-      });
+      // createShippingZone({ variables }).catch((err) => {
+      //   setError(err);
+      // });
     } else {
       setUnsavedChanges(false);
-      updateShippingZone({
-        variables: { id: initialValues?.id, ...variables }
-      }).catch((err) => {
-        setError(err);
-        setUnsavedChanges(true);
-      });
+      // updateShippingZone({
+      //   variables: { id: initialValues?.id, ...variables }
+      // }).catch((err) => {
+      //   setError(err);
+      //   setUnsavedChanges(true);
+      // });
     }
   };
 
@@ -157,8 +159,6 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
   }, [zones]);
 
   const handleRateAppend = () => {
-    let checkFailed = false;
-    let prevFailed = {} as ShippingRateType;
     const hasFields = !isEmpty(shipping_rates);
 
     const MaxMaxValueField = hasFields
@@ -177,71 +177,7 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
         })
       : { price: 0, index: 0 };
 
-    // ==== CHECKS ====
-    shipping_rates?.every((field, index) => {
-      console.log('=====> field :>> ', { prevFailed, field });
-
-      if (!field?.max_value && !field?.no_max) {
-        notify(`Please set Max value (Rate #${index + 1})`, 'warning');
-        checkFailed = true;
-        return false; // break
-      } else if (
-        Number(field?.min_value) > Number(field?.max_value) ||
-        field.no_max
-      ) {
-        notify(
-          `Max value should be greater than Min value (Rate #${index + 1})`,
-          'warning'
-        );
-        checkFailed = true;
-        return false;
-      } else if (Number(prevFailed?.price) > Number(field?.price)) {
-        notify(
-          `The price in (Rate #${
-            field.index + 1
-          }) should be greater than the one in (Rate #${prevFailed.index + 1})`,
-          'warning'
-        );
-        checkFailed = true;
-        return false;
-      }
-
-      const diffMinMax = Number(
-        (Number(field?.min_value) - Number(prevFailed?.max_value)).toFixed(1)
-      );
-      console.log(
-        'object :>> ',
-        isNaN(diffMinMax),
-        diffMinMax,
-        diffMinMax !== 0 && diffMinMax !== 0.1
-      );
-      if (!isNaN(diffMinMax) && 0 > diffMinMax) {
-        notify(
-          `Min value in (Rage #${
-            field.index + 1
-          }) should be greater than Max value in (Rage #${
-            prevFailed.index + 1
-          })`,
-          'error'
-        );
-        checkFailed = true;
-        return false;
-      } else if (diffMinMax !== 0 && diffMinMax !== 0.1 && !isNaN(diffMinMax)) {
-        notify(
-          `There is a gap between Max value in (Rage #${
-            prevFailed.index + 1
-          }) and Min value in (Rage #${field.index + 1})`,
-          'error'
-        );
-        checkFailed = true;
-        return false;
-      }
-
-      prevFailed = field;
-      return true; // continue
-    });
-
-    console.log('------------- :>> ', { MaxPriceValueField, MaxMaxValueField });
+    const checkFailed = shippingRatesValidation(shipping_rates);
 
     if (!checkFailed) {
       append({
@@ -256,7 +192,6 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
         index: shipping_rates?.length
       });
     }
-    checkFailed = true;
   };
 
   return (
@@ -272,22 +207,24 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
           className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
         />
         <Card className="w-full sm:w-8/12 md:w-2/3">
-          <div className="flex items-center justify-between lg:flex-nowrap flex-wrap">
+          <div className="mb-5 flex items-center justify-between lg:flex-nowrap flex-wrap">
             <Input
-              label={t('form:input-label-name')}
+              label={`${t('form:input-label-name')}*`}
               {...register('name', { required: 'Name is required' })}
               error={t(errors.name?.message!)}
               placeholder="Name ( The name you'll remember )"
               variant="outline"
-              className="mb-5 w-full lg:mr-5 mr-0"
+              className="w-full lg:mr-5 mr-0"
             />
             <Input
-              label={t('form:input-label-display-name')}
-              {...register('display_name', { required: 'Name is required' })}
+              label={`${t('form:input-label-display-name')}*`}
+              {...register('display_name', {
+                required: 'Display name is required'
+              })}
               error={t(errors.display_name?.message!)}
               placeholder="Name ( Name to be displayed to customers )"
               variant="outline"
-              className="mb-5 w-full"
+              className="w-full"
             />
           </div>
           <div className="mt-2">
