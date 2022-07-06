@@ -3,7 +3,7 @@ import AppLayout from '@components/layouts/app';
 import CreateOrUpdateShippingForm from '@components/shipping/shipping-form';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
-import { SHIPPING } from '@graphql/shipping';
+import { SHIPPING } from '@graphql/shipping-zone';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetStaff } from '@hooks/useGetStaff';
 import { verifyAuth } from '@middleware/utils';

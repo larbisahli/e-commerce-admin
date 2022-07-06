@@ -6,7 +6,7 @@ import ValidationError from '@components/ui/form-validation-error';
 import Input from '@components/ui/input';
 import Label from '@components/ui/label';
 import SelectInput from '@components/ui/select-input';
-import { SHIPPINGS_FOR_SELECT } from '@graphql/shipping';
+import { SHIPPINGS_FOR_SELECT } from '@graphql/shipping-zone';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import {
   OrderBy,

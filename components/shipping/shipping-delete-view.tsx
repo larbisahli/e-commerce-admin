@@ -4,7 +4,7 @@ import {
   useModalAction,
   useModalState
 } from '@components/ui/modal/modal.context';
-import { DELETE_SHIPPING, SHIPPINGS } from '@graphql/shipping';
+import { DELETE_SHIPPING, SHIPPINGS } from '@graphql/shipping-zone';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useState } from 'react';
 

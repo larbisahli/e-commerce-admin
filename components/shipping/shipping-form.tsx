@@ -7,7 +7,11 @@ import Description from '@components/ui/description';
 import Input from '@components/ui/input';
 import Label from '@components/ui/label';
 import SelectInput from '@components/ui/select-input';
-import { COUNTRIES, CREATE_SHIPPING, UPDATE_SHIPPING } from '@graphql/shipping';
+import {
+  COUNTRIES,
+  CREATE_SHIPPING,
+  UPDATE_SHIPPING
+} from '@graphql/shipping-zone';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useErrorLogger, useWarnIfUnsavedChanges } from '@hooks/index';
 import { notify } from '@lib/notify';
@@ -29,7 +33,7 @@ const defaultValues = {
   display_name: '',
   active: false,
   free_shipping: false,
-  rate_types: { id: 1, name: 'Weight', type: 'weight' },
+  rate_type: { id: 1, name: 'Weight', type: 'weight' },
   zones: [],
   shipping_rates: []
 };
@@ -108,26 +112,41 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
   useErrorLogger(queryError);
 
   const onSubmit = async (values: ShippingZoneType) => {
-    console.log('values :>> ', values);
     const checkFailed = shippingRatesValidation(values.shipping_rates, false);
 
     if (checkFailed) return;
 
     const variables = {
-      ...values
+      name: values?.name,
+      display_name: values?.display_name,
+      active: values?.active,
+      free_shipping: values?.free_shipping,
+      rate_type: values?.rate_type?.type,
+      shipping_rates: values?.shipping_rates?.map((rate) => {
+        return {
+          min_value: Number(rate?.min_value),
+          max_value: rate?.no_max ? null : Number(rate?.max_value),
+          no_max: rate?.no_max,
+          price: Number(rate?.price)
+        };
+      }),
+      zones: values?.zones?.map((zone) => {
+        return { id: zone.id };
+      })
     };
 
+    console.log('variables :>> ', variables);
+
+    setUnsavedChanges(false);
     if (isEmpty(initialValues)) {
-      // createShippingZone({ variables }).catch((err) => {
-      //   setError(err);
-      // });
+      createShippingZone({ variables }).catch((err) => {
+        setError(err);
+      });
     } else {
-      setUnsavedChanges(false);
       // updateShippingZone({
       //   variables: { id: initialValues?.id, ...variables }
       // }).catch((err) => {
       //   setError(err);
-      //   setUnsavedChanges(true);
       // });
     }
   };
@@ -285,7 +304,7 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
             <div>
               <Label>{t('form:input-label-type')}</Label>
               <SelectInput
-                name="rate_types"
+                name="rate_type"
                 control={control}
                 getOptionLabel={(option: any) => option.name}
                 getOptionValue={(option: any) => option.type}

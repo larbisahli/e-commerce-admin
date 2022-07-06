@@ -83,6 +83,7 @@ export const COUNTRIES = gql`
   }
 `;
 
+// Remove this
 export const SHIPPINGS_FOR_SELECT = gql`
   query ShippingsSelectForAdmin($page: Int!, $limit: Int!, $orderBy: String!) {
     shippingsSelectForAdmin(page: $page, limit: $limit, orderBy: $orderBy) {
@@ -93,35 +94,51 @@ export const SHIPPINGS_FOR_SELECT = gql`
 `;
 
 export const CREATE_SHIPPING = gql`
-  mutation CreateShipping(
-    $shipper_name: String!
+  mutation CreateShippingZone(
+    $name: String!
+    $display_name: String!
     $active: Boolean!
-    $thumbnail: IMGInput!
+    $free_shipping: Boolean!
+    $rate_type: String!
+    $shipping_rates: [ShippingRateInput]
+    $zones: [ZonesInput]!
   ) {
-    createShipping(
-      shipper_name: $shipper_name
+    createShippingZone(
+      name: $name
+      display_name: $display_name
       active: $active
-      thumbnail: $thumbnail
+      free_shipping: $free_shipping
+      rate_type: $rate_type
+      shipping_rates: $shipping_rates
+      zones: $zones
     ) {
-      shipper_name
+      id
     }
   }
 `;
 
 export const UPDATE_SHIPPING = gql`
-  mutation UpdateShipping(
+  mutation UpdateShippingZone(
     $id: ID!
-    $shipper_name: String!
+    $name: String!
+    $display_name: String!
     $active: Boolean!
-    $thumbnail: IMGInput!
+    $free_shipping: Boolean!
+    $rate_type: String!
+    $shipping_rates: [ShippingRateInput]
+    $zones: [ZonesInput]!
   ) {
-    updateShipping(
+    updateShippingZone(
       id: $id
-      shipper_name: $shipper_name
+      name: $name
+      display_name: $display_name
       active: $active
-      thumbnail: $thumbnail
+      free_shipping: $free_shipping
+      rate_type: $rate_type
+      shipping_rates: $shipping_rates
+      zones: $zones
     ) {
-      shipper_name
+      id
     }
   }
 `;
@@ -129,7 +146,7 @@ export const UPDATE_SHIPPING = gql`
 export const DELETE_SHIPPING = gql`
   mutation DeleteShipping($id: ID!) {
     deleteShipping(id: $id) {
-      shipper_name
+      id
     }
   }
 `;

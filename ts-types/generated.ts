@@ -169,7 +169,7 @@ export interface ShippingZoneType extends CreatedUpdatedByAt {
   display_name?: Scalars['String'];
   active?: Scalars['Boolean'];
   free_shipping?: Scalars['Boolean'];
-  rate_type?: 'price' | 'weight';
+  rate_type?: { id?: number; type?: string };
   zones?: CountriesType[];
   shipping_rates?: ShippingRateType[];
 }

@@ -6,7 +6,7 @@ import ShippingList from '@components/shipping/shipping-list';
 import ErrorMessage from '@components/ui/error-message';
 import LinkButton from '@components/ui/link-button';
 import Loader from '@components/ui/loader/loader';
-import { SHIPPINGS } from '@graphql/shipping';
+import { SHIPPINGS } from '@graphql/shipping-zone';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetStaff } from '@hooks/useGetStaff';
 import { verifyAuth } from '@middleware/utils';
