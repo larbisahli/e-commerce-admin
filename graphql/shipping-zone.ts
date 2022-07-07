@@ -1,14 +1,24 @@
 import { gql } from '@apollo/client';
 
 export const SHIPPING = gql`
-  query Shipping($id: ID!) {
-    shipping(id: $id) {
+  query ShippingZone($id: ID!) {
+    shippingZone(id: $id) {
       id
-      shipper_name
+      name
       active
-      thumbnail {
-        image
-        placeholder
+      free_shipping
+      rate_type
+      zones {
+        id
+        name
+        code
+      }
+      shipping_rates {
+        id
+        min_value
+        max_value
+        no_max
+        price
       }
       created_at
       updated_at
@@ -34,29 +44,27 @@ export const SHIPPING = gql`
   }
 `;
 
-export const SHIPPINGS = gql`
+export const SHIPPING_ZONES = gql`
   query Shippings(
     $page: Int!
     $limit: Int!
     $orderBy: String!
     $sortedBy: String!
   ) {
-    shippingsCount {
+    shippingZonesCount {
       count
     }
-    shippings(
+    shippingZones(
       page: $page
       limit: $limit
       orderBy: $orderBy
       sortedBy: $sortedBy
     ) {
       id
-      shipper_name
+      name
       active
-      thumbnail {
-        image
-        placeholder
-      }
+      free_shipping
+      rate_type
       created_at
       updated_at
       created_by {
@@ -99,7 +107,7 @@ export const CREATE_SHIPPING = gql`
     $display_name: String!
     $active: Boolean!
     $free_shipping: Boolean!
-    $rate_type: String!
+    $rate_type: String
     $shipping_rates: [ShippingRateInput]
     $zones: [ZonesInput]!
   ) {
@@ -124,7 +132,7 @@ export const UPDATE_SHIPPING = gql`
     $display_name: String!
     $active: Boolean!
     $free_shipping: Boolean!
-    $rate_type: String!
+    $rate_type: String
     $shipping_rates: [ShippingRateInput]
     $zones: [ZonesInput]!
   ) {

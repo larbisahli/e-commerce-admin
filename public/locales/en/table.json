@@ -64,5 +64,7 @@
   "table-item-thumbnail": "Thumbnail",
   "table-item-display-order": "Display Order",
   "table-item-clicks": "Clicks",
-  "table-item-title-title": "Title"
+  "table-item-title-title": "Title",
+  "table-item-free": "Free",
+  "table-item-rate-type": "Rate type"
 }

@@ -83,30 +83,30 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
       : defaultValues
   });
 
-  const [createShippingZone, { loading: creating }] = useMutation(
-    CREATE_SHIPPING,
-    {
-      onCompleted: (data: { createShippingZone: ShippingZoneType }) => {
-        if (!isEmpty(data)) {
-          reset();
-          notify(t('common:successfully-created'), 'success');
-          router.push(ROUTES.SHIPPING_ZONES);
-        }
+  const [
+    createShippingZone,
+    { loading: creating, reset: resetCreateMutation }
+  ] = useMutation(CREATE_SHIPPING, {
+    onCompleted: (data: { createShippingZone: ShippingZoneType }) => {
+      if (!isEmpty(data)) {
+        reset();
+        notify(t('common:successfully-created'), 'success');
+        router.push(ROUTES.SHIPPING_ZONES);
       }
     }
-  );
+  });
 
-  const [updateShippingZone, { loading: updating }] = useMutation(
-    UPDATE_SHIPPING,
-    {
-      onCompleted: (data: { updateShippingZone: ShippingZoneType }) => {
-        if (!isEmpty(data)) {
-          notify(t('common:successfully-updated'), 'success');
-          router.push(ROUTES.SHIPPING_ZONES);
-        }
+  const [
+    updateShippingZone,
+    { loading: updating, reset: resetUpdateMutation }
+  ] = useMutation(UPDATE_SHIPPING, {
+    onCompleted: (data: { updateShippingZone: ShippingZoneType }) => {
+      if (!isEmpty(data)) {
+        notify(t('common:successfully-updated'), 'success');
+        router.push(ROUTES.SHIPPING_ZONES);
       }
     }
-  );
+  });
 
   useErrorLogger(error);
   useErrorLogger(queryError);
@@ -141,12 +141,14 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
     if (isEmpty(initialValues)) {
       createShippingZone({ variables }).catch((err) => {
         setError(err);
+        resetCreateMutation();
       });
     } else {
       // updateShippingZone({
       //   variables: { id: initialValues?.id, ...variables }
       // }).catch((err) => {
       //   setError(err);
+      //   resetUpdateMutation()
       // });
     }
   };

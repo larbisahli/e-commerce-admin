@@ -1,18 +1,16 @@
 import ActionButtons from '@components/common/action-buttons';
-import ImageComponent from '@components/ImageComponent';
 import Badge from '@components/ui/badge/badge';
 import Pagination from '@components/ui/pagination';
 import { Table } from '@components/ui/table';
-import { siteSettings } from '@settings/site.settings';
 import { Nullable } from '@ts-types/custom.types';
-import { ShippingZone } from '@ts-types/generated';
+import { ShippingZoneType } from '@ts-types/generated';
 import { useIsRTL } from '@utils/locals';
 import { ROUTES } from '@utils/routes';
 import dayjs from 'dayjs';
 import { useTranslation } from 'next-i18next';
 
 export type IProps = {
-  shipping_zones: ShippingZone[] | undefined;
+  shipping_zones: ShippingZoneType[] | undefined;
   // eslint-disable-next-line no-unused-vars
   onPagination: (key: number) => void;
   total: Nullable<number>;
@@ -32,40 +30,31 @@ const ShippingList = ({
 
   const columns = [
     {
-      title: t('table:table-item-icon'),
-      dataIndex: 'thumbnail',
-      key: 'thumbnail',
-      align: alignLeft,
-      width: 130,
-      render: (thumbnail: { image: string; placeholder: string }) => (
-        <div
-          style={{ maxWidth: '100px' }}
-          className="rounded shadow min-w-0 overflow-hidden"
-        >
-          <ImageComponent
-            src={thumbnail?.image ?? siteSettings.product.image}
-            customPlaceholder={
-              thumbnail?.placeholder ?? siteSettings.product.placeholder
-            }
-            layout="fill"
-            objectFit="contain"
-            className="rounded"
-          />
-        </div>
-      )
-    },
-    {
-      title: t('table:table-item-title'),
-      dataIndex: 'shipper_name',
-      key: 'shipper_name',
+      title: t('table:table-item-name'),
+      dataIndex: 'name',
+      key: 'name',
       align: alignLeft,
       width: 150,
       ellipsis: true,
-      render: (shipper_name: ShippingZone) => {
+      render: (name: string) => {
         return (
-          <span className="font-semibold text-gray-800 capitalize">
-            {shipper_name}
-          </span>
+          <span className="font-semibold capitalize text-accent">{name}</span>
+        );
+      }
+    },
+    {
+      title: t('table:table-item-rate-type'),
+      dataIndex: 'rate_type',
+      key: 'rate_type',
+      align: 'center',
+      width: 90,
+      render: (rate_type: string, record: ShippingZoneType) => {
+        return (
+          <Badge
+            className="!text-sm text-gray-500 capitalize font-medium"
+            text={record?.free_shipping ? 'No Rate' : rate_type}
+            color={'bg-gray-100'}
+          />
         );
       }
     },
@@ -79,8 +68,24 @@ const ShippingList = ({
         return (
           <Badge
             className="!text-sm"
-            text={active ? 'Active' : 'Inactive'}
-            color={active ? 'bg-green-500' : 'bg-red-500'}
+            text={active ? 'Visible' : 'Hidden'}
+            color={active ? 'bg-green-400' : 'bg-red-400'}
+          />
+        );
+      }
+    },
+    {
+      title: t('table:table-item-free'),
+      dataIndex: 'free_shipping',
+      key: 'free_shipping',
+      align: 'center',
+      width: 90,
+      render: (free_shipping: boolean) => {
+        return (
+          <Badge
+            className="!text-sm"
+            text={free_shipping ? 'Yes' : 'No'}
+            color={free_shipping ? 'bg-green-400' : 'bg-red-400'}
           />
         );
       }

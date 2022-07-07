@@ -6,7 +6,7 @@ import ShippingList from '@components/shipping/shipping-list';
 import ErrorMessage from '@components/ui/error-message';
 import LinkButton from '@components/ui/link-button';
 import Loader from '@components/ui/loader/loader';
-import { SHIPPINGS } from '@graphql/shipping-zone';
+import { SHIPPING_ZONES } from '@graphql/shipping-zone';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetStaff } from '@hooks/useGetStaff';
 import { verifyAuth } from '@middleware/utils';
@@ -21,7 +21,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useState } from 'react';
 
 interface TShipping {
-  shipping_zones: ShippingZoneType[];
+  shippingZones: ShippingZoneType[];
   shippingZonesCount: { count: number };
 }
 
@@ -44,7 +44,7 @@ export default function ShippingZonesPage({ client }: SSRProps) {
   const { data, loading, error, fetchMore } = useQuery<
     TShipping,
     ShippingVariable
-  >(SHIPPINGS, {
+  >(SHIPPING_ZONES, {
     variables: {
       page,
       limit,
@@ -55,7 +55,7 @@ export default function ShippingZonesPage({ client }: SSRProps) {
   });
 
   const shippingZonesCount = data?.shippingZonesCount?.count;
-  const shipping_zones = data?.shipping_zones;
+  const shippingZones = data?.shippingZones;
 
   useGetStaff(client?.staff_id);
   useErrorLogger(error);
@@ -110,7 +110,7 @@ export default function ShippingZonesPage({ client }: SSRProps) {
         </div>
       </Card>
       <ShippingList
-        shipping_zones={shipping_zones}
+        shipping_zones={shippingZones}
         onPagination={handlePagination}
         total={shippingZonesCount}
         currentPage={page}
