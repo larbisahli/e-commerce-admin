@@ -18,22 +18,25 @@ import { notify } from '@lib/notify';
 import { Nullable } from '@ts-types/custom.types';
 import type { CountriesType, ShippingZoneType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
+import clone from 'lodash/clone';
 import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 
+import RateComponent from './rate-component';
 import shippingRatesValidation from './shipping-rates-validation';
 import { shippingValidationSchema } from './shipping-validation-schema';
-import ZoneComponent from './zone-component';
 
 const defaultValues = {
-  name: '',
-  display_name: '',
-  active: false,
-  free_shipping: false,
-  rate_type: { id: 1, name: 'Weight', type: 'weight' },
+  shippingZone: {
+    name: '',
+    display_name: '',
+    active: false,
+    free_shipping: false,
+    rate_type: { id: 1, name: 'Weight', type: 'weight' }
+  },
   zones: [],
   shipping_rates: []
 };
@@ -54,6 +57,8 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
 
   const [error, setError] = useState(null);
   const [unsavedChanges, setUnsavedChanges] = useState(true);
+
+  console.log('initialValues', initialValues);
 
   const {
     data,
@@ -76,11 +81,28 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
   } = useForm<FormValues>({
     shouldUnregister: true,
     resolver: yupResolver(shippingValidationSchema),
-    defaultValues: initialValues
-      ? {
-          ...initialValues
+    defaultValues: isEmpty(initialValues)
+      ? defaultValues
+      : {
+          ...initialValues,
+          shippingZone: {
+            ...initialValues?.shippingZone,
+            rate_type:
+              initialValues?.shippingZone?.rate_type === 'weight'
+                ? { id: 1, name: 'Weight', type: 'weight' }
+                : { id: 0, name: 'Price', type: 'price' }
+          },
+          shippingRates: clone(initialValues?.shippingRates)
+            ?.sort((a, b) =>
+              a.min_value > b.min_value ? 1 : b.min_value > a.min_value ? -1 : 0
+            )
+            ?.map((rate, index) => {
+              return {
+                ...rate,
+                index
+              };
+            })
         }
-      : defaultValues
   });
 
   const [
@@ -112,17 +134,19 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
   useErrorLogger(queryError);
 
   const onSubmit = async (values: ShippingZoneType) => {
-    const checkFailed = shippingRatesValidation(values.shipping_rates, false);
+    const checkFailed = shippingRatesValidation(values.shippingRates, false);
 
     if (checkFailed) return;
 
+    const { shippingRates, shippingZone, zones } = values;
+
     const variables = {
-      name: values?.name,
-      display_name: values?.display_name,
-      active: values?.active,
-      free_shipping: values?.free_shipping,
-      rate_type: values?.rate_type?.type,
-      shipping_rates: values?.shipping_rates?.map((rate) => {
+      name: shippingZone?.name,
+      display_name: shippingZone?.display_name,
+      active: shippingZone?.active,
+      free_shipping: shippingZone?.free_shipping,
+      rate_type: shippingZone?.rate_type?.type,
+      shipping_rates: shippingRates?.map((rate) => {
         return {
           min_value: Number(rate?.min_value),
           max_value: rate?.no_max ? null : Number(rate?.max_value),
@@ -130,7 +154,7 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
           price: Number(rate?.price)
         };
       }),
-      zones: values?.zones?.map((zone) => {
+      zones: zones?.map((zone) => {
         return { id: zone.id };
       })
     };
@@ -159,13 +183,13 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
 
   const { fields, append, remove } = useFieldArray({
     control,
-    name: 'shipping_rates',
+    name: 'shippingRates',
     keyName: 'key'
   });
 
-  const shipping_rates = watch('shipping_rates');
+  const shipping_rates = watch('shippingRates');
   const zones = watch('zones');
-  const free_shipping = watch('free_shipping');
+  const free_shipping = watch('shippingZone.free_shipping');
 
   useEffect(() => {
     const exist = zones?.find((c) => c.name === 'Everywhere');
@@ -231,18 +255,20 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
           <div className="mb-5 flex items-center justify-between lg:flex-nowrap flex-wrap">
             <Input
               label={`${t('form:input-label-name')}*`}
-              {...register('name', { required: 'Name is required' })}
-              error={t(errors.name?.message!)}
+              {...register('shippingZone.name', {
+                required: 'Name is required'
+              })}
+              error={t(errors.shippingZone?.name?.message!)}
               placeholder="Name ( The name you'll remember )"
               variant="outline"
               className="w-full lg:mr-5 mr-0"
             />
             <Input
               label={`${t('form:input-label-display-name')}*`}
-              {...register('display_name', {
+              {...register('shippingZone.display_name', {
                 required: 'Display name is required'
               })}
-              error={t(errors.display_name?.message!)}
+              error={t(errors.shippingZone?.display_name?.message!)}
               placeholder="Name ( Name to be displayed to customers )"
               variant="outline"
               className="w-full"
@@ -251,12 +277,12 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
           <div className="mt-2">
             <Label>{t('form:input-label-status')}</Label>
             <Checkbox
-              {...register('free_shipping')}
+              {...register('shippingZone.free_shipping')}
               className="mb-4"
               label={t('form:input-label-free-shipping')}
             />
             <Checkbox
-              {...register('active')}
+              {...register('shippingZone.active')}
               label={t('form:input-label-activate-shipping')}
             />
           </div>
@@ -306,7 +332,7 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
             <div>
               <Label>{t('form:input-label-type')}</Label>
               <SelectInput
-                name="rate_type"
+                name="shippingZone.rate_type"
                 control={control}
                 getOptionLabel={(option: any) => option.name}
                 getOptionValue={(option: any) => option.type}
@@ -336,7 +362,7 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
               <Label>{t('form:input-label-rates')}</Label>
               {fields.map((item) => {
                 return (
-                  <ZoneComponent
+                  <RateComponent
                     register={register}
                     item={item}
                     key={item.key}

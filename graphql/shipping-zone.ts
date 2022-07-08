@@ -1,25 +1,14 @@
 import { gql } from '@apollo/client';
 
-export const SHIPPING = gql`
+export const SHIPPING_ZONE = gql`
   query ShippingZone($id: ID!) {
     shippingZone(id: $id) {
       id
       name
+      display_name
       active
       free_shipping
       rate_type
-      zones {
-        id
-        name
-        code
-      }
-      shipping_rates {
-        id
-        min_value
-        max_value
-        no_max
-        price
-      }
       created_at
       updated_at
       created_by {
@@ -40,6 +29,18 @@ export const SHIPPING = gql`
           placeholder
         }
       }
+    }
+    zones(id: $id) {
+      id
+      name
+      iso
+    }
+    shippingRates(id: $id) {
+      id
+      min_value
+      max_value
+      no_max
+      price
     }
   }
 `;

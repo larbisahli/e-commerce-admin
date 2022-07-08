@@ -3,21 +3,18 @@ import AppLayout from '@components/layouts/app';
 import CreateOrUpdateShippingForm from '@components/shipping/shipping-form';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
-import { SHIPPING } from '@graphql/shipping-zone';
+import { SHIPPING_ZONE } from '@graphql/shipping-zone';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetStaff } from '@hooks/useGetStaff';
 import { verifyAuth } from '@middleware/utils';
 import type { SSRProps } from '@ts-types/custom.types';
-import { Shipping } from '@ts-types/generated';
+import { ShippingZoneType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import type { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-interface TShipping {
-  shipping: Shipping;
-}
 interface ShippingVariable {
   id: string | string[];
 }
@@ -28,8 +25,8 @@ export default function UpdateShippingPage({ client }: SSRProps) {
 
   const { shippingId } = query;
 
-  const { data, loading, error } = useQuery<TShipping, ShippingVariable>(
-    SHIPPING,
+  const { data, loading, error } = useQuery<ShippingZoneType, ShippingVariable>(
+    SHIPPING_ZONE,
     {
       variables: { id: shippingId },
       fetchPolicy: 'cache-and-network'
@@ -38,8 +35,6 @@ export default function UpdateShippingPage({ client }: SSRProps) {
 
   useGetStaff(client?.staff_id);
   useErrorLogger(error);
-
-  const shipping = data?.shipping;
 
   if (loading) {
     return <Loader text={t('common:text-loading')} />;
@@ -56,7 +51,7 @@ export default function UpdateShippingPage({ client }: SSRProps) {
           {t('form:form-title-update-shipping')}
         </h1>
       </div>
-      <CreateOrUpdateShippingForm initialValues={shipping} />
+      <CreateOrUpdateShippingForm initialValues={data} />
     </>
   );
 }

@@ -164,14 +164,16 @@ export interface Coupon extends CreatedUpdatedByAt {
 }
 
 export interface ShippingZoneType extends CreatedUpdatedByAt {
-  id?: Scalars['ID'];
-  name?: Scalars['String'];
-  display_name?: Scalars['String'];
-  active?: Scalars['Boolean'];
-  free_shipping?: Scalars['Boolean'];
-  rate_type?: { id?: number; type?: string };
+  shippingZone: {
+    id?: Scalars['ID'];
+    name?: Scalars['String'];
+    display_name?: Scalars['String'];
+    active?: Scalars['Boolean'];
+    free_shipping?: Scalars['Boolean'];
+    rate_type?: { id?: number; name?: string; type?: string };
+  };
   zones?: CountriesType[];
-  shipping_rates?: ShippingRateType[];
+  shippingRates?: ShippingRateType[];
 }
 
 export interface ShippingRateType {
