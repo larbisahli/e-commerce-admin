@@ -28,6 +28,7 @@ import { useFieldArray, useForm } from 'react-hook-form';
 import RateComponent from './rate-component';
 import shippingRatesValidation from './shipping-rates-validation';
 import { shippingValidationSchema } from './shipping-validation-schema';
+import { updateVariable } from './variablesSubmission';
 
 const defaultValues = {
   shippingZone: {
@@ -38,7 +39,7 @@ const defaultValues = {
     rate_type: { id: 1, name: 'Weight', type: 'weight' }
   },
   zones: [],
-  shipping_rates: []
+  shippingRates: []
 };
 
 type FormValues = ShippingZoneType;
@@ -58,8 +59,6 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
   const [error, setError] = useState(null);
   const [unsavedChanges, setUnsavedChanges] = useState(true);
 
-  console.log('initialValues', initialValues);
-
   const {
     data,
     loading: loadingCountries,
@@ -77,6 +76,7 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
     watch,
     reset,
     setValue,
+    getValues,
     formState: { errors }
   } = useForm<FormValues>({
     shouldUnregister: true,
@@ -148,6 +148,7 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
       rate_type: shippingZone?.rate_type?.type,
       shipping_rates: shippingRates?.map((rate) => {
         return {
+          id: rate?.id,
           min_value: Number(rate?.min_value),
           max_value: rate?.no_max ? null : Number(rate?.max_value),
           no_max: rate?.no_max,
@@ -168,12 +169,13 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
         resetCreateMutation();
       });
     } else {
-      // updateShippingZone({
-      //   variables: { id: initialValues?.id, ...variables }
-      // }).catch((err) => {
-      //   setError(err);
-      //   resetUpdateMutation()
-      // });
+      const variablesUpdate = updateVariable(values, initialValues);
+      updateShippingZone({
+        variables: { id: initialValues?.shippingZone?.id, ...variablesUpdate }
+      }).catch((err) => {
+        setError(err);
+        resetUpdateMutation();
+      });
     }
   };
 
@@ -187,27 +189,30 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
     keyName: 'key'
   });
 
-  const shipping_rates = watch('shippingRates');
+  const shippingRates = watch('shippingRates');
   const zones = watch('zones');
   const free_shipping = watch('shippingZone.free_shipping');
 
   useEffect(() => {
     const exist = zones?.find((c) => c.name === 'Everywhere');
-    if (isEmpty(zones)) {
+
+    // Sometimes we get undefined when using watch('zones')
+    const upToDateZones = getValues('zones');
+    if (isEmpty(upToDateZones)) {
       setValue('zones', [{ id: '0', name: 'Everywhere', iso: 'XX' }]);
-    } else if (zones.length > 1 && exist) {
+    } else if (upToDateZones.length > 1 && exist) {
       setValue(
         'zones',
-        zones.filter((c) => c.name !== 'Everywhere')
+        upToDateZones.filter((c) => c.name !== 'Everywhere')
       );
     }
   }, [zones]);
 
   const handleRateAppend = () => {
-    const hasFields = !isEmpty(shipping_rates);
+    const hasFields = !isEmpty(shippingRates);
 
     const MaxMaxValueField = hasFields
-      ? shipping_rates?.reduce((acc, val) => {
+      ? shippingRates?.reduce((acc, val) => {
           return Number(acc.max_value) >= Number(val.max_value)
             ? { max_value: Number(acc.max_value) }
             : { max_value: Number(val.max_value) };
@@ -215,17 +220,18 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
       : { max_value: 0 };
 
     const MaxPriceValueField = hasFields
-      ? shipping_rates?.reduce((acc, val) => {
+      ? shippingRates?.reduce((acc, val) => {
           return Number(acc.price) > Number(val.price)
             ? { price: Number(acc.price), index: acc.index }
             : { price: Number(val.price), index: val.index };
         })
       : { price: 0, index: 0 };
 
-    const checkFailed = shippingRatesValidation(shipping_rates);
+    const checkFailed = shippingRatesValidation(shippingRates);
 
     if (!checkFailed) {
       append({
+        id: null,
         min_value: hasFields
           ? Number((Number(MaxMaxValueField.max_value) + 0.1).toFixed(1))
           : 0,
@@ -234,7 +240,7 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
         price: hasFields
           ? Number((Number(MaxPriceValueField.price) + 0.1).toFixed(1))
           : 0,
-        index: shipping_rates?.length
+        index: shippingRates?.length
       });
     }
   };
@@ -255,9 +261,7 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
           <div className="mb-5 flex items-center justify-between lg:flex-nowrap flex-wrap">
             <Input
               label={`${t('form:input-label-name')}*`}
-              {...register('shippingZone.name', {
-                required: 'Name is required'
-              })}
+              {...register('shippingZone.name')}
               error={t(errors.shippingZone?.name?.message!)}
               placeholder="Name ( The name you'll remember )"
               variant="outline"
@@ -265,9 +269,7 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
             />
             <Input
               label={`${t('form:input-label-display-name')}*`}
-              {...register('shippingZone.display_name', {
-                required: 'Display name is required'
-              })}
+              {...register('shippingZone.display_name')}
               error={t(errors.shippingZone?.display_name?.message!)}
               placeholder="Name ( Name to be displayed to customers )"
               variant="outline"

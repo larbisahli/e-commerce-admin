@@ -45,7 +45,6 @@ const creationVariable = (values: Product): Product => {
       dimension_depth: Number(values?.product_shipping_info?.dimension_depth),
       dimension_unit: values?.product_shipping_info?.dimension_unit
     },
-    shippings: values?.shippings,
     variations: values?.variations?.map((v) => {
       return {
         attribute: { id: v.attribute.id },
@@ -173,17 +172,7 @@ const updateVariable = (values: Product, initialValues: Product) => {
     ? {}
     : values?.product_shipping_info;
 
-  // 8) shippings block
-  const newShippingValue = values?.shippings;
-
-  const shippingsAdditions = differenceWith(
-    newShippingValue,
-    initialValues?.shippings,
-    isEqual
-  );
-
-  // 9) variation options block
-
+  // 8) variation options block
   const variation_options = values?.variation_options?.filter(
     (e) => e !== undefined
   );
@@ -205,7 +194,7 @@ const updateVariable = (values: Product, initialValues: Product) => {
     }
   );
 
-  // 10) variation block
+  // 9) variation block
 
   const variationAdditions = values?.variations
     ?.map((v) => {
@@ -290,7 +279,6 @@ const updateVariable = (values: Product, initialValues: Product) => {
       suppliers: suppliersAdditions?.map(({ id }) => {
         return { id };
       }),
-      shippings: shippingsAdditions,
       variation_options: variationOptionsAdditions?.map((vo) => {
         return {
           ...vo,

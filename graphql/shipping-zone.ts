@@ -134,8 +134,8 @@ export const UPDATE_SHIPPING = gql`
     $active: Boolean!
     $free_shipping: Boolean!
     $rate_type: String
-    $shipping_rates: [ShippingRateInput]
-    $zones: [ZonesInput]!
+    $additions: UpdateShippingZoneInput
+    $deletions: UpdateShippingZoneInput
   ) {
     updateShippingZone(
       id: $id
@@ -144,8 +144,8 @@ export const UPDATE_SHIPPING = gql`
       active: $active
       free_shipping: $free_shipping
       rate_type: $rate_type
-      shipping_rates: $shipping_rates
-      zones: $zones
+      additions: $additions
+      deletions: $deletions
     ) {
       id
     }

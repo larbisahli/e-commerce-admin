@@ -44,6 +44,8 @@ const RateComponent = ({
           </button>
         )}
       </div>
+      <input {...register(`shippingRates.${index}.id`)} type="hidden" />
+      <input {...register(`shippingRates.${index}.index`)} type="hidden" />
       <div
         style={{ background: '#f9f9f958' }}
         className="border border-solid border-gray-200 p-2 m-4 rounded-md"
