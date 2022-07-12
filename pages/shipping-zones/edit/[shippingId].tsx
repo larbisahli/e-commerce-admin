@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client';
 import AppLayout from '@components/layouts/app';
-import CreateOrUpdateShippingForm from '@components/shipping/shipping-form';
+import CreateOrUpdateShippingForm from '@components/shipping-zone/shipping-form';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { SHIPPING_ZONE } from '@graphql/shipping-zone';

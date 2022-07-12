@@ -129,21 +129,13 @@ export const CREATE_SHIPPING = gql`
 export const UPDATE_SHIPPING = gql`
   mutation UpdateShippingZone(
     $id: ID!
-    $name: String!
-    $display_name: String!
-    $active: Boolean!
-    $free_shipping: Boolean!
-    $rate_type: String
-    $additions: UpdateShippingZoneInput
-    $deletions: UpdateShippingZoneInput
+    $shippingZone: UpdateShippingZoneInput
+    $additions: UpdateRateAndZoneInput
+    $deletions: UpdateRateAndZoneInput
   ) {
     updateShippingZone(
       id: $id
-      name: $name
-      display_name: $display_name
-      active: $active
-      free_shipping: $free_shipping
-      rate_type: $rate_type
+      shippingZone: $shippingZone
       additions: $additions
       deletions: $deletions
     ) {

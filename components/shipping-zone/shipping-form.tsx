@@ -125,7 +125,7 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
     onCompleted: (data: { updateShippingZone: ShippingZoneType }) => {
       if (!isEmpty(data)) {
         notify(t('common:successfully-updated'), 'success');
-        router.push(ROUTES.SHIPPING_ZONES);
+        // router.push(ROUTES.SHIPPING_ZONES);
       }
     }
   });
@@ -160,7 +160,7 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
       })
     };
 
-    console.log('variables :>> ', variables);
+    console.log('initialValues :>', initialValues);
 
     setUnsavedChanges(false);
     if (isEmpty(initialValues)) {
@@ -170,6 +170,8 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
       });
     } else {
       const variablesUpdate = updateVariable(values, initialValues);
+
+      console.log('variablesUpdate', variablesUpdate);
       updateShippingZone({
         variables: { id: initialValues?.shippingZone?.id, ...variablesUpdate }
       }).catch((err) => {
@@ -265,7 +267,7 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
               error={t(errors.shippingZone?.name?.message!)}
               placeholder="Name ( The name you'll remember )"
               variant="outline"
-              className="w-full lg:mr-5 mr-0"
+              className="w-full lg:mr-5 mr-0 lg:mb-0 mb-5"
             />
             <Input
               label={`${t('form:input-label-display-name')}*`}

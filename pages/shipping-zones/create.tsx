@@ -1,5 +1,5 @@
 import AppLayout from '@components/layouts/app';
-import CreateOrUpdateShippingForm from '@components/shipping/shipping-form';
+import CreateOrUpdateShippingForm from '@components/shipping-zone/shipping-form';
 import { useGetStaff } from '@hooks/index';
 import { verifyAuth } from '@middleware/utils';
 import type { SSRProps } from '@ts-types/custom.types';
