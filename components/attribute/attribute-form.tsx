@@ -27,8 +27,8 @@ import { ChromePicker } from 'react-color';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 
 type FormValues = {
-  attribute_name?: Nullable<string>;
-  attribute_values: AttributeValue[];
+  name?: Nullable<string>;
+  values: AttributeValue[];
 };
 
 type IProps = {
@@ -51,14 +51,12 @@ export default function CreateOrUpdateAttributeForm({ initialValues }: IProps) {
     reset,
     formState: { errors }
   } = useForm<FormValues>({
-    defaultValues: initialValues
-      ? initialValues
-      : { attribute_name: null, attribute_values: [] }
+    defaultValues: initialValues ? initialValues : { name: null, values: [] }
   });
 
   const { fields, append, remove } = useFieldArray({
     control,
-    name: 'attribute_values',
+    name: 'values',
     keyName: 'key'
   });
 
@@ -92,11 +90,9 @@ export default function CreateOrUpdateAttributeForm({ initialValues }: IProps) {
 
   useErrorLogger(error);
 
-  const onSubmit = (values: FormValues) => {
-    if (!isEmpty(values?.attribute_values)) {
-      const hasEmptyField = values?.attribute_values.find(
-        (value) => value.attribute_value === ''
-      );
+  const onSubmit = (fields: FormValues) => {
+    if (!isEmpty(fields?.values)) {
+      const hasEmptyField = fields?.values.find(({ value }) => value === '');
       if (hasEmptyField) {
         notify(t('common:value-required'), 'warning');
         return;
@@ -104,16 +100,16 @@ export default function CreateOrUpdateAttributeForm({ initialValues }: IProps) {
     }
 
     if (isEmpty(initialValues)) {
-      createAttribute({ variables: values }).catch((err) => {
+      createAttribute({ variables: fields }).catch((err) => {
         setError(err);
       });
     } else {
-      const changes = initialValues?.attribute_values
+      const changes = initialValues?.values
         ?.map((att_value_init: AttributeValue) =>
-          values?.attribute_values.find((att_value) => {
+          fields?.values.find((att_value) => {
             return (
               att_value.id === att_value_init.id &&
-              (att_value.attribute_value != att_value_init.attribute_value ||
+              (att_value.value != att_value_init.value ||
                 att_value.color != att_value_init.color)
             );
           })
@@ -124,10 +120,10 @@ export default function CreateOrUpdateAttributeForm({ initialValues }: IProps) {
 
       const variables = {
         id: initialValues.id,
-        attribute_name: values?.attribute_name,
-        attribute_values: [
+        name: fields?.name,
+        values: [
           ...changes,
-          ...(values?.attribute_values.filter(function (value) {
+          ...(fields?.values.filter(function (value) {
             return !value.id;
           }) ?? [])
         ]
@@ -145,9 +141,9 @@ export default function CreateOrUpdateAttributeForm({ initialValues }: IProps) {
       deleteAttributeValue({
         variables: { id: item?.id },
         onCompleted: (data: { deleteAttributeValue: AttributeValue }) => {
-          const attribute_value = data?.deleteAttributeValue?.attribute_value;
+          const value = data?.deleteAttributeValue?.value;
 
-          if (!isEmpty(attribute_value)) {
+          if (!isEmpty(value)) {
             notify(t('common:successfully-deleted'), 'success');
             remove(index);
           }
@@ -186,8 +182,8 @@ export default function CreateOrUpdateAttributeForm({ initialValues }: IProps) {
           <Card className="w-full sm:w-8/12 md:w-2/3">
             <Input
               label={t('form:input-label-name')}
-              {...register('attribute_name', { required: 'Name is required' })}
-              error={t(errors.attribute_name?.message!)}
+              {...register('name', { required: 'Name is required' })}
+              error={t(errors.name?.message!)}
               variant="outline"
               className="mb-5"
             />
@@ -217,15 +213,13 @@ export default function CreateOrUpdateAttributeForm({ initialValues }: IProps) {
                       className="sm:col-span-2"
                       label={t('form:input-label-value')}
                       variant="outline"
-                      {...register(
-                        `attribute_values.${index}.attribute_value` as const
-                      )}
-                      defaultValue={item.attribute_value}
+                      {...register(`values.${index}.value` as const)}
+                      defaultValue={item.value}
                     />
                     <ColorPicker
                       control={control}
                       color={item.color}
-                      {...register(`attribute_values.${index}.color` as const)}
+                      {...register(`values.${index}.color` as const)}
                     ></ColorPicker>
                     <button
                       onClick={() => removeAttributeValue(item, index)}
@@ -249,7 +243,7 @@ export default function CreateOrUpdateAttributeForm({ initialValues }: IProps) {
 
             <Button
               type="button"
-              onClick={() => append({ attribute_value: '', color: '' })}
+              onClick={() => append({ value: '', color: '' })}
               className="w-full sm:w-auto"
             >
               {t('form:button-label-add-value')}

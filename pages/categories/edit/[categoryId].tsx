@@ -5,7 +5,7 @@ import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { CATEGORY } from '@graphql/category';
 import { useErrorLogger, useGetStaff } from '@hooks/index';
-import { verifyAuth } from '@middleware/utils';
+import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { Category } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
@@ -21,7 +21,11 @@ interface OptionsVariable {
   id: string | string[];
 }
 
-export default function UpdateCategoriesPage({ client }: SSRProps) {
+export default function UpdateCategoriesPage({
+  client,
+  csrfToken,
+  csrfError
+}: SSRProps) {
   const { query } = useRouter();
   const { t } = useTranslation();
 
@@ -35,7 +39,7 @@ export default function UpdateCategoriesPage({ client }: SSRProps) {
     }
   );
 
-  useGetStaff(client?.staff_id);
+  useGetStaff(client?.staff_id, { csrfToken, csrfError });
   useErrorLogger(error);
 
   if (loading) {
@@ -72,10 +76,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
+  const { csrfToken, csrfError } = await XSRFHandler(context);
+
   return {
     props: {
       ...(await serverSideTranslations(locale, ['form', 'common', 'error'])),
-      client
+      client,
+      csrfToken,
+      csrfError
     }
   };
 };

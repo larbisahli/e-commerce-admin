@@ -86,7 +86,7 @@ function SelectCategories({ control }: { control: Control<FormValues> }) {
       <SelectInput
         name="parent"
         control={control}
-        getOptionLabel={(option: Category) => option.category_name}
+        getOptionLabel={(option: Category) => option.name}
         getOptionValue={(option: Category) => option.id}
         options={categories}
         isClearable={true}
@@ -143,28 +143,35 @@ export default function CreateOrUpdateCategoriesForm({
     resolver: yupResolver(categoryValidationSchema)
   });
 
-  const [createCategory, { loading: creating }] = useMutation(CREATE_CATEGORY, {
-    context: {
-      headers: {
-        'x-csrf-token': csrfToken
+  const [createCategory, { loading: creating, reset: resetCreateMutation }] =
+    useMutation(CREATE_CATEGORY, {
+      context: {
+        headers: {
+          'x-csrf-token': csrfToken
+        }
+      },
+      onCompleted: (data: { createCategory: Category }) => {
+        if (!isEmpty(data)) {
+          notify(t('common:successfully-created'), 'success');
+          reset();
+          router.push(ROUTES.CATEGORIES);
+        }
       }
-    },
-    onCompleted: (data: { createCategory: Category }) => {
-      if (!isEmpty(data)) {
-        notify(t('common:successfully-created'), 'success');
-        reset();
-        router.push(ROUTES.CATEGORIES);
+    });
+  const [updateCategory, { loading: updating, reset: resetUpdateMutation }] =
+    useMutation(UPDATE_CATEGORY, {
+      context: {
+        headers: {
+          'x-csrf-token': csrfToken
+        }
+      },
+      onCompleted: (data: { updateCategory: Category }) => {
+        if (!isEmpty(data)) {
+          notify(t('common:successfully-updated'), 'success');
+          router.push(ROUTES.CATEGORIES);
+        }
       }
-    }
-  });
-  const [updateCategory, { loading: updating }] = useMutation(UPDATE_CATEGORY, {
-    onCompleted: (data: { updateCategory: Category }) => {
-      if (!isEmpty(data)) {
-        notify(t('common:successfully-updated'), 'success');
-        router.push(ROUTES.CATEGORIES);
-      }
-    }
-  });
+    });
 
   useErrorLogger(error);
 
@@ -175,28 +182,28 @@ export default function CreateOrUpdateCategoriesForm({
     }
 
     const variables = {
-      category_name: values.category_name,
-      category_description: values.category_description,
+      name: values.name,
+      description: values.description,
       thumbnail: {
         image: values.thumbnail?.image,
         placeholder: values.thumbnail?.placeholder
       },
-      // @ts-ignore
-      parent_id: isEmpty(values?.parent) ? null : values?.parent?.id,
+      parentId: isEmpty(values?.parent) ? null : values?.parent?.id,
       icon: (values.icon as unknown as { value: string })?.value ?? null
     };
 
+    setUnsavedChanges(false);
     if (isEmpty(initialValues)) {
       createCategory({ variables }).catch((err) => {
         setError(err);
+        resetCreateMutation();
       });
     } else {
-      setUnsavedChanges(false);
       updateCategory({
         variables: { id: initialValues?.id, ...variables }
       }).catch((err) => {
         setError(err);
-        setUnsavedChanges(true);
+        resetUpdateMutation();
       });
     }
   };
@@ -234,15 +241,15 @@ export default function CreateOrUpdateCategoriesForm({
           <Input
             label={t('form:input-label-name')}
             // @ts-ignore
-            {...register('category_name')}
-            error={t(errors.category_name?.message!)}
+            {...register('name')}
+            error={t(errors.name?.message!)}
             variant="outline"
             className="mb-5"
           />
 
           <TextArea
             label={t('form:input-label-details')}
-            {...register('category_description')}
+            {...register('description')}
             variant="outline"
             className="mb-5"
           />
@@ -261,7 +268,7 @@ export default function CreateOrUpdateCategoriesForm({
               </p>
             )}
           </div>
-          {!initialValues?.has_children && (
+          {!initialValues?.hasChildren && (
             <SelectCategories control={control} />
           )}
         </Card>

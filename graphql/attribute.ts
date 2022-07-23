@@ -1,30 +1,30 @@
 import { gql } from '@apollo/client';
 
 export const ATTRIBUTE = gql`
-  query attributes($id: ID!) {
+  query attribute($id: ID!) {
     attributeForAdmin(id: $id) {
       id
-      attribute_name
-      attribute_values {
+      name
+      values {
         id
-        attribute_value
+        value
         color
       }
-      created_at
-      updated_at
-      created_by {
+      createdAt
+      updatedAt
+      createdBy {
         id
-        first_name
-        last_name
+        firstName
+        lastName
         profile {
           image
           placeholder
         }
       }
-      updated_by {
+      updatedBy {
         id
-        first_name
-        last_name
+        firstName
+        lastName
         profile {
           image
           placeholder
@@ -51,29 +51,29 @@ export const ATTRIBUTES = gql`
       sortedBy: $sortedBy
     ) {
       id
-      attribute_name
-      attribute_values {
+      name
+      values {
         id
-        attribute_value
+        value
       }
-      created_at
-      updated_at
-      created_by {
+      createdAt
+      updatedAt
+      createdBy {
         id
-        first_name
-        last_name
+        firstName
+        lastName
       }
-      updated_by {
+      updatedBy {
         id
-        first_name
-        last_name
+        firstName
+        lastName
       }
     }
   }
 `;
 
 export const ATTRIBUTES_FOR_SELECT = gql`
-  query Attributes(
+  query AttributesForSelect(
     $page: Int!
     $limit: Int!
     $orderBy: String!
@@ -86,25 +86,19 @@ export const ATTRIBUTES_FOR_SELECT = gql`
       sortedBy: $sortedBy
     ) {
       id
-      attribute_name
-      attribute_values {
+      name
+      values {
         id
-        attribute_value
+        value
       }
     }
   }
 `;
 
 export const CREATE_ATTRIBUTE = gql`
-  mutation CreateAttribute(
-    $attribute_name: String!
-    $attribute_values: [AttributeValueInput]
-  ) {
-    createAttribute(
-      attribute_name: $attribute_name
-      attribute_values: $attribute_values
-    ) {
-      attribute_name
+  mutation CreateAttribute($name: String!, $values: [AttributeValueInput]) {
+    createAttribute(name: $name, values: $values) {
+      name
     }
   }
 `;
@@ -112,15 +106,11 @@ export const CREATE_ATTRIBUTE = gql`
 export const UPDATE_ATTRIBUTE = gql`
   mutation UpdateAttribute(
     $id: ID!
-    $attribute_name: String!
-    $attribute_values: [AttributeValueInput]
+    $name: String!
+    $values: [AttributeValueInput]
   ) {
-    updateAttribute(
-      id: $id
-      attribute_name: $attribute_name
-      attribute_values: $attribute_values
-    ) {
-      attribute_name
+    updateAttribute(id: $id, name: $name, values: $values) {
+      name
     }
   }
 `;
@@ -128,7 +118,7 @@ export const UPDATE_ATTRIBUTE = gql`
 export const DELETE_ATTRIBUTE = gql`
   mutation DeleteAttribute($id: ID!) {
     deleteAttribute(id: $id) {
-      attribute_name
+      name
     }
   }
 `;
@@ -136,7 +126,7 @@ export const DELETE_ATTRIBUTE = gql`
 export const DELETE_ATTRIBUTE_VALUE = gql`
   mutation DeleteAttributeValue($id: ID!) {
     deleteAttributeValue(id: $id) {
-      attribute_value
+      value
     }
   }
 `;

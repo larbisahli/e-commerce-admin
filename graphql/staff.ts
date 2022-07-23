@@ -4,9 +4,9 @@ export const STAFF = gql`
   query Staff($id: ID!) {
     staff(id: $id) {
       id
-      first_name
-      last_name
-      phone_number
+      firstName
+      lastName
+      phoneNumber
       email
       profile {
         image
@@ -14,24 +14,24 @@ export const STAFF = gql`
       }
       role {
         id
-        role_name
+        roleName
         privileges
       }
-      created_at
-      updated_at
-      created_by {
+      createdAt
+      updatedAt
+      createdBy {
         id
-        first_name
-        last_name
+        firstName
+        lastName
         profile {
           image
           placeholder
         }
       }
-      updated_by {
+      updatedBy {
         id
-        first_name
-        last_name
+        firstName
+        lastName
         profile {
           image
           placeholder
@@ -53,8 +53,8 @@ export const STAFFS = gql`
     }
     staffs(page: $page, limit: $limit, orderBy: $orderBy, sortedBy: $sortedBy) {
       id
-      first_name
-      last_name
+      firstName
+      lastName
       email
       profile {
         image
@@ -63,19 +63,19 @@ export const STAFFS = gql`
       active
       role {
         id
-        role_name
+        roleName
       }
-      created_at
-      updated_at
-      created_by {
+      createdAt
+      updatedAt
+      createdBy {
         id
-        first_name
-        last_name
+        firstName
+        lastName
       }
-      updated_by {
+      updatedBy {
         id
-        first_name
-        last_name
+        firstName
+        lastName
       }
     }
   }
@@ -85,33 +85,33 @@ export const ROLES_FOR_SELECT = gql`
   query Roles {
     roles {
       id
-      role_name
+      roleName
     }
   }
 `;
 
 export const CREATE_STAFF = gql`
   mutation CreateStaff(
-    $first_name: String!
-    $last_name: String!
-    $phone_number: String
+    $firstName: String!
+    $lastName: String!
+    $phoneNumber: String
     $email: String!
     $profile: IMGInput
     $password: String!
-    $role_id: Int!
+    $roleId: Int!
   ) {
     createStaff(
-      first_name: $first_name
-      last_name: $last_name
-      phone_number: $phone_number
+      firstName: $firstName
+      lastName: $lastName
+      phoneNumber: $phoneNumber
       email: $email
       profile: $profile
       password: $password
-      role_id: $role_id
+      roleId: $roleId
     ) {
       id
-      first_name
-      last_name
+      firstName
+      lastName
     }
   }
 `;
@@ -119,25 +119,25 @@ export const CREATE_STAFF = gql`
 export const UPDATE_STAFF = gql`
   mutation UpdateStaff(
     $id: ID!
-    $first_name: String!
-    $last_name: String!
-    $phone_number: String
+    $firstName: String!
+    $lastName: String!
+    $phoneNumber: String
     $email: String!
     $profile: IMGInput
-    $role_id: Int!
+    $roleId: Int!
   ) {
     updateStaff(
       id: $id
-      first_name: $first_name
-      last_name: $last_name
-      phone_number: $phone_number
+      firstName: $firstName
+      lastName: $lastName
+      phoneNumber: $phoneNumber
       email: $email
       profile: $profile
-      role_id: $role_id
+      roleId: $roleId
     ) {
       id
-      first_name
-      last_name
+      firstName
+      lastName
     }
   }
 `;
@@ -146,8 +146,8 @@ export const DELETE_STAFF = gql`
   mutation DeleteStaff($id: ID!) {
     deleteStaff(id: $id) {
       id
-      first_name
-      last_name
+      firstName
+      lastName
     }
   }
 `;
@@ -156,8 +156,8 @@ export const BAN_STAFF = gql`
   mutation BanStaff($id: ID!, $active: Boolean!) {
     banStaff(id: $id, active: $active) {
       id
-      first_name
-      last_name
+      firstName
+      lastName
     }
   }
 `;

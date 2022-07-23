@@ -22,7 +22,7 @@ const BanCustomerView = dynamic(
 );
 
 const ShippingDeleteView = dynamic(
-  () => import('@components/shipping/shipping-delete-view')
+  () => import('@components/shipping-zone/shipping-delete-view')
 );
 
 const CouponDeleteView = dynamic(

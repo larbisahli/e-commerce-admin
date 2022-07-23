@@ -2,21 +2,21 @@ import { gql } from '@apollo/client';
 
 export const CREATE_CATEGORY = gql`
   mutation CreateCategory(
-    $parent_id: ID
-    $category_name: String!
-    $category_description: String!
+    $parentId: ID
+    $name: String!
+    $description: String!
     $icon: String!
-    $thumbnail: IMGInput!
+    $thumbnail: ImageInput!
   ) {
     createCategory(
-      parent_id: $parent_id
-      category_name: $category_name
-      category_description: $category_description
+      parentId: $parentId
+      name: $name
+      description: $description
       icon: $icon
       thumbnail: $thumbnail
     ) {
       id
-      category_name
+      name
     }
   }
 `;
@@ -24,22 +24,22 @@ export const CREATE_CATEGORY = gql`
 export const UPDATE_CATEGORY = gql`
   mutation UpdateCategory(
     $id: ID!
-    $parent_id: ID
-    $category_name: String!
-    $category_description: String
+    $parentId: ID
+    $name: String!
+    $description: String
     $icon: String!
-    $thumbnail: IMGInput!
+    $thumbnail: ImageInput!
   ) {
     updateCategory(
       id: $id
-      parent_id: $parent_id
-      category_name: $category_name
-      category_description: $category_description
+      parentId: $parentId
+      name: $name
+      description: $description
       icon: $icon
       thumbnail: $thumbnail
     ) {
       id
-      category_name
+      name
     }
   }
 `;
@@ -61,40 +61,40 @@ export const CATEGORIES = gql`
       sortedBy: $sortedBy
     ) {
       id
-      parent_id
-      category_name
-      category_description
+      parentId
+      name
+      description
       icon
       children {
         id
-        parent_id
-        category_name
-        category_description
+        parentId
+        name
+        description
         icon
-        created_at
-        updated_at
-        created_by {
+        createdAt
+        updatedAt
+        createdBy {
           id
-          first_name
-          last_name
+          firstName
+          lastName
         }
-        updated_by {
+        updatedBy {
           id
-          first_name
-          last_name
+          firstName
+          lastName
         }
       }
-      created_at
-      updated_at
-      created_by {
+      createdAt
+      updatedAt
+      createdBy {
         id
-        first_name
-        last_name
+        firstName
+        lastName
       }
-      updated_by {
+      updatedBy {
         id
-        first_name
-        last_name
+        firstName
+        lastName
       }
     }
   }
@@ -104,34 +104,34 @@ export const CATEGORY = gql`
   query Category($id: ID!) {
     categoryForAdmin(id: $id) {
       id
-      parent_id
+      parentId
       parent {
         id
-        category_name
+        name
       }
-      category_name
-      category_description
+      name
+      description
       icon
       thumbnail {
         image
         placeholder
       }
-      has_children
-      created_at
-      updated_at
-      created_by {
+      hasChildren
+      createdAt
+      updatedAt
+      createdBy {
         id
-        first_name
-        last_name
+        firstName
+        lastName
         profile {
           image
           placeholder
         }
       }
-      updated_by {
+      updatedBy {
         id
-        first_name
-        last_name
+        firstName
+        lastName
         profile {
           image
           placeholder
@@ -155,7 +155,7 @@ export const CATEGORIES_FOR_SELECT = gql`
       orderBy: $orderBy
     ) {
       id
-      category_name
+      name
     }
   }
 `;
@@ -164,7 +164,7 @@ export const CATEGORIES_FOR_SELECT_ALL = gql`
   query CategoriesSelectAll($page: Int!, $limit: Int!, $orderBy: String!) {
     categoriesSelectAllForAdmin(page: $page, limit: $limit, orderBy: $orderBy) {
       id
-      category_name
+      name
     }
   }
 `;

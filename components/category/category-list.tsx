@@ -3,7 +3,7 @@ import * as categoriesIcon from '@components/icons/category';
 import Pagination from '@components/ui/pagination';
 import { Table } from '@components/ui/table';
 import { Nullable } from '@ts-types/custom.types';
-import { Category } from '@ts-types/generated';
+import { Category, CreatedUpdatedByAt } from '@ts-types/generated';
 import { getIcon } from '@utils/get-icon';
 import { useIsRTL } from '@utils/locals';
 import { ROUTES } from '@utils/routes';
@@ -34,16 +34,14 @@ const CategoryList = ({
   const columns = [
     {
       title: t('table:table-item-title'),
-      dataIndex: 'category_name',
-      key: 'category_name',
+      dataIndex: 'name',
+      key: 'name',
       align: alignLeft,
       width: 150,
       ellipsis: true,
-      render: (category_name: string) => {
+      render: (name: string) => {
         return (
-          <span className="font-semibold text-gray-800 capitalize">
-            {category_name}
-          </span>
+          <span className="font-semibold text-gray-800 capitalize">{name}</span>
         );
       }
     },
@@ -68,50 +66,50 @@ const CategoryList = ({
     },
     {
       title: t('table:table-item-details'),
-      dataIndex: 'category_description',
-      key: 'category_description',
+      dataIndex: 'description',
+      key: 'description',
       align: alignLeft,
       width: 150,
       ellipsis: true
     },
     {
       title: t('table:table-item-created-at'),
-      dataIndex: 'created_at',
-      key: 'created_at',
+      dataIndex: 'createdAt',
+      key: 'createdAt',
       align: alignLeft,
       width: 180,
-      render: (created_at: string | number) => {
-        return `${dayjs(created_at).format('MMM D, YYYY')} at ${dayjs(
-          created_at
+      render: (createdAt: CreatedUpdatedByAt['createdAt']) => {
+        return `${dayjs(createdAt).format('MMM D, YYYY')} at ${dayjs(
+          createdAt
         ).format('h:mm A')}`;
       }
     },
     {
       title: t('table:table-item-created-by'),
-      dataIndex: 'created_by',
-      key: 'created_by',
+      dataIndex: 'createdBy',
+      key: 'createdBy',
       align: alignLeft,
       width: 100,
       ellipsis: true,
-      render: (created_by: any) => {
+      render: (createdBy: CreatedUpdatedByAt['createdBy']) => {
         return (
-          <div>{`${created_by?.first_name ?? ''} ${
-            created_by?.last_name ?? ''
+          <div>{`${createdBy?.firstName ?? ''} ${
+            createdBy?.lastName ?? ''
           }`}</div>
         );
       }
     },
     {
       title: t('table:table-item-updated-by'),
-      dataIndex: 'updated_by',
-      key: 'updated_by',
+      dataIndex: 'updatedBy',
+      key: 'updatedBy',
       align: alignLeft,
       width: 140,
       ellipsis: true,
-      render: (updated_by: any) => {
+      render: (updatedBy: CreatedUpdatedByAt['updatedBy']) => {
         return (
-          <div>{`${updated_by?.first_name ?? ''} ${
-            updated_by?.last_name ?? ''
+          <div>{`${updatedBy?.firstName ?? ''} ${
+            updatedBy?.lastName ?? ''
           }`}</div>
         );
       }

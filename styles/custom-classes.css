@@ -91,3 +91,8 @@
 .checkbox-rounded + label:before {
   border-radius: 50% !important;
 }
+
+.rc-pagination-item {
+  padding: 0 2px;
+  width: auto !important;
+}

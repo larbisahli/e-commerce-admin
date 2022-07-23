@@ -17,7 +17,7 @@ import * as yup from 'yup';
 type FormValues = {
   email: string;
   password: string;
-  remember_me: boolean;
+  rememberMe: boolean;
   success: boolean;
 };
 
@@ -60,11 +60,11 @@ const LoginForm = () => {
 
   useErrorLogger(error);
 
-  async function onSubmit({ email, password, remember_me }: FormValues) {
+  async function onSubmit({ email, password, rememberMe }: FormValues) {
     const variables = {
       email,
       password,
-      remember_me
+      rememberMe
     };
     staffLogin({ variables }).catch((err) => {
       setError(err);
@@ -93,7 +93,7 @@ const LoginForm = () => {
         />
         <Checkbox
           label={t('form:input-label-remember-me')}
-          {...register('remember_me')}
+          {...register('rememberMe')}
           className="mb-4"
         />
         <Button

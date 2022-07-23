@@ -2,7 +2,11 @@ import ActionButtons from '@components/common/action-buttons';
 import Pagination from '@components/ui/pagination';
 import { Table } from '@components/ui/table';
 import { Nullable } from '@ts-types/custom.types';
-import { Attribute, AttributeValue } from '@ts-types/generated';
+import {
+  Attribute,
+  AttributeValue,
+  CreatedUpdatedByAt
+} from '@ts-types/generated';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
@@ -34,31 +38,29 @@ const AttributeList = ({
 
   let columns = [
     {
-      title: t('table:table-item-title'),
-      dataIndex: 'attribute_name',
-      key: 'attribute_name',
+      title: t('table:table-item-name'),
+      dataIndex: 'name',
+      key: 'name',
       align: alignLeft,
       width: 100,
       ellipsis: true,
-      render: (attribute_name: string) => {
+      render: (name: string) => {
         return (
-          <span className="font-semibold text-gray-800 capitalize">
-            {attribute_name}
-          </span>
+          <span className="font-semibold text-gray-800 capitalize">{name}</span>
         );
       }
     },
     {
       title: t('table:table-item-values'),
-      dataIndex: 'attribute_values',
-      key: 'attribute_values',
+      dataIndex: 'values',
+      key: 'values',
       align: alignLeft,
       ellipsis: true,
       width: 200,
       render: (values: AttributeValue[]) => {
         const att_values = values
-          ?.map(({ attribute_value }: AttributeValue, index: number) => {
-            return index > 0 ? `, ${attribute_value}` : `${attribute_value}`;
+          ?.map(({ value }: AttributeValue, index: number) => {
+            return index > 0 ? `, ${value}` : `${value}`;
           })
           ?.join('');
         return (
@@ -70,42 +72,42 @@ const AttributeList = ({
     },
     {
       title: t('table:table-item-created-at'),
-      dataIndex: 'created_at',
-      key: 'created_at',
+      dataIndex: 'createdAt',
+      key: 'createdAt',
       align: alignLeft,
       width: 200,
-      render: (created_at: string | number) => {
-        return `${dayjs(created_at).format('MMM D, YYYY')} at ${dayjs(
-          created_at
+      render: (createdAt: CreatedUpdatedByAt['createdAt']) => {
+        return `${dayjs(createdAt).format('MMM D, YYYY')} at ${dayjs(
+          createdAt
         ).format('h:mm A')}`;
       }
     },
     {
       title: t('table:table-item-created-by'),
-      dataIndex: 'created_by',
-      key: 'created_by',
+      dataIndex: 'createdBy',
+      key: 'createdBy',
       align: alignLeft,
       width: 100,
       ellipsis: true,
-      render: (created_by: any) => {
+      render: (createdBy: CreatedUpdatedByAt['createdBy']) => {
         return (
-          <div>{`${created_by?.first_name ?? ''} ${
-            created_by?.last_name ?? ''
+          <div>{`${createdBy?.firstName ?? ''} ${
+            createdBy?.lastName ?? ''
           }`}</div>
         );
       }
     },
     {
       title: t('table:table-item-updated-by'),
-      dataIndex: 'updated_by',
-      key: 'updated_by',
+      dataIndex: 'updatedBy',
+      key: 'updatedBy',
       align: alignLeft,
       width: 140,
       ellipsis: true,
-      render: (updated_by: any) => {
+      render: (updatedBy: CreatedUpdatedByAt['updatedBy']) => {
         return (
-          <div>{`${updated_by?.first_name ?? ''} ${
-            updated_by?.last_name ?? ''
+          <div>{`${updatedBy?.firstName ?? ''} ${
+            updatedBy?.lastName ?? ''
           }`}</div>
         );
       }

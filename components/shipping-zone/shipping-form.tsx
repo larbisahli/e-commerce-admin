@@ -160,8 +160,6 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
       })
     };
 
-    console.log('initialValues :>', initialValues);
-
     setUnsavedChanges(false);
     if (isEmpty(initialValues)) {
       createShippingZone({ variables }).catch((err) => {
@@ -170,8 +168,6 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
       });
     } else {
       const variablesUpdate = updateVariable(values, initialValues);
-
-      console.log('variablesUpdate', variablesUpdate);
       updateShippingZone({
         variables: { id: initialValues?.shippingZone?.id, ...variablesUpdate }
       }).catch((err) => {

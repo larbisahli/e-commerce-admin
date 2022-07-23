@@ -46,20 +46,20 @@ export declare enum WithdrawStatus {
   Processing = 'PROCESSING'
 }
 
-interface CreatedUpdatedByAt {
-  created_at?: Scalars['DateTime'];
-  updated_at?: Scalars['DateTime'];
-  created_by?: Nullable<{
+export interface CreatedUpdatedByAt {
+  createdAt?: Scalars['DateTime'];
+  updatedAt?: Scalars['DateTime'];
+  createdBy?: Nullable<{
     id: string;
-    first_name: string;
-    last_name: string;
-    profile?: IMGType;
+    firstName: string;
+    lastName: string;
+    profile?: ImageType;
   }>;
-  updated_by?: Nullable<{
+  updatedBy?: Nullable<{
     id: string;
-    first_name: string;
-    last_name: string;
-    profile?: IMGType;
+    firstName: string;
+    lastName: string;
+    profile?: ImageType;
   }>;
 }
 
@@ -76,7 +76,7 @@ export interface StaffType extends CreatedUpdatedByAt {
   confirm_password?: string;
   first_name: string;
   last_name: string;
-  profile: IMGType;
+  profile: ImageType;
   phone_number: Nullable<Scalars['Int']>;
   role: RoleType;
   role_id?: number;
@@ -87,14 +87,15 @@ export interface StaffType extends CreatedUpdatedByAt {
 
 export interface Category extends CreatedUpdatedByAt {
   id?: Scalars['ID'];
-  parent_id?: Nullable<Scalars['ID']>;
-  category_name?: Scalars['String'];
-  category_description?: Nullable<Scalars['String']>;
+  parentId?: Nullable<Scalars['ID']>;
+  name?: Scalars['String'];
+  description?: Nullable<Scalars['String']>;
   children?: Nullable<Array<Category>>;
   active?: Scalars['Boolean'];
-  thumbnail?: IMGType;
+  thumbnail?: ImageType;
   icon?: Nullable<Scalars['String']>;
-  has_children?: Scalars['Boolean'];
+  hasChildren?: Scalars['Boolean'];
+  parent?: Nullable<Category>;
 }
 
 export interface ProductShippingInfo {
@@ -110,28 +111,28 @@ export interface ProductShippingInfo {
   dimension_unit?: { unit: Scalars['String'] };
 }
 
-export interface ProductShippings {
-  product_shipping_id?: Nullable<Scalars['ID']>;
-  shipping_provider?: any;
-  shipping_zones?: {
-    id: Nullable<Scalars['ID']>;
-    zones: { name: string; code: string }[];
-    shipping_price: Scalars['Float'];
-  }[];
-  key?: string;
-}
+// export interface ProductShippings {
+//   product_shipping_id?: Nullable<Scalars['ID']>;
+//   shipping_provider?: any;
+//   shipping_zones?: {
+//     id: Nullable<Scalars['ID']>;
+//     zones: { name: string; code: string }[];
+//     shipping_price: Scalars['Float'];
+//   }[];
+//   key?: string;
+// }
 
 export interface AttributeValue {
   id?: Scalars['ID'];
-  attribute_id?: Scalars['ID'];
-  attribute_value?: Scalars['String'];
+  attributeId?: Scalars['ID'];
+  value?: Scalars['String'];
   color?: Nullable<Scalars['String']>;
 }
 
 export interface Attribute extends CreatedUpdatedByAt {
   id?: Scalars['ID'];
-  attribute_name?: Scalars['String'];
-  attribute_values?: AttributeValue[] | [];
+  name?: Scalars['String'];
+  values?: AttributeValue[] | [];
 }
 
 export interface Tag extends CreatedUpdatedByAt {
@@ -247,12 +248,11 @@ export interface Product extends CreatedUpdatedByAt {
   status?: 'draft' | 'publish';
   disable_out_of_stock?: Scalars['Boolean'];
   note?: Nullable<Scalars['String']>;
-  thumbnail?: IMGType;
-  gallery?: IMGType[];
+  thumbnail?: ImageType;
+  gallery?: ImageType[];
   categories?: Array<Category>;
   suppliers?: Nullable<Array<Nullable<Suppliers>>>;
   tags?: Nullable<Array<Nullable<Tag>>>;
-  shippings?: Nullable<Array<Nullable<ProductShippings>>>;
   product_shipping_info?: ProductShippingInfo;
   variation_options?: VariationOptionsType[];
   variations?: {
@@ -297,11 +297,11 @@ export interface VariationOptionsType {
   sku: Scalars['String'];
 }
 
-export interface IMGType {
+export interface ImageType {
   id?: Scalars['String'];
   image?: Scalars['String'];
   placeholder?: Scalars['String'];
-  is_thumbnail?: boolean;
+  isThumbnail?: boolean;
 }
 export interface Suppliers extends CreatedUpdatedByAt {
   id?: Scalars['ID'];
@@ -319,7 +319,7 @@ export interface Suppliers extends CreatedUpdatedByAt {
 export interface HeroCarouselType extends CreatedUpdatedByAt {
   id?: Scalars['ID'];
   destination_url?: Nullable<Scalars['String']>;
-  thumbnail?: IMGType;
+  thumbnail?: ImageType;
   title?: Scalars['String'];
   description?: Nullable<Scalars['String']>;
   btn_label?: Scalars['String'];
