@@ -5,7 +5,7 @@ import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { COUPON } from '@graphql/coupons';
 import { useErrorLogger, useGetStaff } from '@hooks/index';
-import { verifyAuth } from '@middleware/utils';
+import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { Coupon } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
@@ -35,7 +35,7 @@ export default function UpdateCouponPage({ client }: SSRProps) {
 
   const coupon = data?.couponForAdmin;
 
-  useGetStaff(client?.staff_id);
+  useGetStaff(client);
   useErrorLogger(error);
 
   if (loading) {
@@ -71,10 +71,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
+  const { csrfToken, csrfError } = await XSRFHandler(context);
+
   return {
     props: {
       ...(await serverSideTranslations(locale, ['form', 'common', 'error'])),
-      client
+      client: { ...(client ?? {}), csrfToken, csrfError }
     }
   };
 };

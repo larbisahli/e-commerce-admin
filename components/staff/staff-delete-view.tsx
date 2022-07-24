@@ -31,11 +31,11 @@ const StaffDeleteView = () => {
     deleteAttributeValue({
       variables: { id },
       onCompleted: ({ deleteStaff }: { deleteStaff: StaffType }) => {
-        const { first_name, last_name } = deleteStaff;
+        const { firstName, lastName } = deleteStaff;
         notify(
-          `${t(
-            'common:sidebar-nav-item-staff'
-          )} '${first_name} ${last_name}' ${t('common:successfully-deleted')}`,
+          `${t('common:sidebar-nav-item-staff')} '${firstName} ${lastName}' ${t(
+            'common:successfully-deleted'
+          )}`,
           'success'
         );
       }

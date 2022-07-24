@@ -5,25 +5,25 @@ export const SHIPPING_ZONE = gql`
     shippingZone(id: $id) {
       id
       name
-      display_name
+      displayName
       active
-      free_shipping
-      rate_type
-      created_at
-      updated_at
-      created_by {
+      freeShipping
+      rateType
+      createdAt
+      updatedAt
+      createdBy {
         id
-        first_name
-        last_name
+        firstName
+        lastName
         profile {
           image
           placeholder
         }
       }
-      updated_by {
+      updatedBy {
         id
-        first_name
-        last_name
+        firstName
+        lastName
         profile {
           image
           placeholder
@@ -37,9 +37,9 @@ export const SHIPPING_ZONE = gql`
     }
     shippingRates(id: $id) {
       id
-      min_value
-      max_value
-      no_max
+      minValue
+      maxValue
+      noMax
       price
     }
   }
@@ -64,19 +64,19 @@ export const SHIPPING_ZONES = gql`
       id
       name
       active
-      free_shipping
-      rate_type
-      created_at
-      updated_at
-      created_by {
+      freeShipping
+      rateType
+      createdAt
+      updatedAt
+      createdBy {
         id
-        first_name
-        last_name
+        firstName
+        lastName
       }
-      updated_by {
+      updatedBy {
         id
-        first_name
-        last_name
+        firstName
+        lastName
       }
     }
   }
@@ -92,33 +92,23 @@ export const COUNTRIES = gql`
   }
 `;
 
-// Remove this
-export const SHIPPINGS_FOR_SELECT = gql`
-  query ShippingsSelectForAdmin($page: Int!, $limit: Int!, $orderBy: String!) {
-    shippingsSelectForAdmin(page: $page, limit: $limit, orderBy: $orderBy) {
-      id
-      shipper_name
-    }
-  }
-`;
-
 export const CREATE_SHIPPING = gql`
   mutation CreateShippingZone(
     $name: String!
-    $display_name: String!
+    $displayName: String!
     $active: Boolean!
-    $free_shipping: Boolean!
-    $rate_type: String
-    $shipping_rates: [ShippingRateInput]
+    $freeShipping: Boolean!
+    $rateType: String
+    $shippingRates: [ShippingRateInput]
     $zones: [ZonesInput]!
   ) {
     createShippingZone(
       name: $name
-      display_name: $display_name
+      displayName: $displayName
       active: $active
-      free_shipping: $free_shipping
-      rate_type: $rate_type
-      shipping_rates: $shipping_rates
+      freeShipping: $freeShipping
+      rateType: $rateType
+      shippingRates: $shippingRates
       zones: $zones
     ) {
       id

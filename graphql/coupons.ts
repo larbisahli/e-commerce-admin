@@ -18,24 +18,24 @@ export const COUPONS = gql`
     ) {
       id
       code
-      order_amount_limit
-      discount_value
-      discount_type
-      times_used
-      max_usage
-      coupon_end_date
-      coupon_start_date
-      created_at
-      updated_at
-      created_by {
+      orderAmountLimit
+      discountValue
+      discountType
+      timesUsed
+      maxUsage
+      couponEndDate
+      couponStartDate
+      createdAt
+      updatedAt
+      createdBy {
         id
-        first_name
-        last_name
+        firstName
+        lastName
       }
-      updated_by {
+      updatedBy {
         id
-        first_name
-        last_name
+        firstName
+        lastName
       }
     }
   }
@@ -46,28 +46,28 @@ export const COUPON = gql`
     couponForAdmin(id: $id) {
       id
       code
-      order_amount_limit
-      discount_value
-      discount_type
-      times_used
-      max_usage
-      coupon_end_date
-      coupon_start_date
-      created_at
-      updated_at
-      created_by {
+      orderAmountLimit
+      discountValue
+      discountType
+      timesUsed
+      maxUsage
+      couponEndDate
+      couponStartDate
+      createdAt
+      updatedAt
+      createdBy {
         id
-        first_name
-        last_name
+        firstName
+        lastName
         profile {
           image
           placeholder
         }
       }
-      updated_by {
+      updatedBy {
         id
-        first_name
-        last_name
+        firstName
+        lastName
         profile {
           image
           placeholder
@@ -80,21 +80,21 @@ export const COUPON = gql`
 export const CREATE_COUPON = gql`
   mutation CreateCoupon(
     $code: String!
-    $order_amount_limit: Int!
-    $discount_value: Int!
-    $discount_type: String!
-    $max_usage: Int
-    $coupon_end_date: String!
-    $coupon_start_date: String!
+    $orderAmountLimit: Int!
+    $discountValue: Int!
+    $discountType: String!
+    $maxUsage: Int
+    $couponEndDate: String!
+    $couponStartDate: String!
   ) {
     createCoupon(
       code: $code
-      order_amount_limit: $order_amount_limit
-      discount_value: $discount_value
-      discount_type: $discount_type
-      max_usage: $max_usage
-      coupon_end_date: $coupon_end_date
-      coupon_start_date: $coupon_start_date
+      orderAmountLimit: $orderAmountLimit
+      discountValue: $discountValue
+      discountType: $discountType
+      maxUsage: $maxUsage
+      couponEndDate: $couponEndDate
+      couponStartDate: $couponStartDate
     ) {
       id
       code
@@ -106,22 +106,22 @@ export const UPDATE_COUPON = gql`
   mutation UpdateCoupon(
     $id: ID!
     $code: String!
-    $order_amount_limit: Int!
-    $discount_value: Int!
-    $discount_type: String!
-    $max_usage: Int
-    $coupon_end_date: String!
-    $coupon_start_date: String!
+    $orderAmountLimit: Int!
+    $discountValue: Int!
+    $discountType: String!
+    $maxUsage: Int
+    $couponEndDate: String!
+    $couponStartDate: String!
   ) {
     updateCoupon(
       id: $id
       code: $code
-      order_amount_limit: $order_amount_limit
-      discount_value: $discount_value
-      discount_type: $discount_type
-      max_usage: $max_usage
-      coupon_end_date: $coupon_end_date
-      coupon_start_date: $coupon_start_date
+      orderAmountLimit: $orderAmountLimit
+      discountValue: $discountValue
+      discountType: $discountType
+      maxUsage: $maxUsage
+      couponEndDate: $couponEndDate
+      couponStartDate: $couponStartDate
     ) {
       id
       code
@@ -130,7 +130,7 @@ export const UPDATE_COUPON = gql`
 `;
 
 export const DELETE_COUPON = gql`
-  mutation DeleteTag($id: ID!) {
+  mutation DeleteCoupon($id: ID!) {
     deleteCoupon(id: $id) {
       id
       code

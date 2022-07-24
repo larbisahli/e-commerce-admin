@@ -13,7 +13,11 @@ import {
   UPDATE_SHIPPING
 } from '@graphql/shipping-zone';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useErrorLogger, useWarnIfUnsavedChanges } from '@hooks/index';
+import {
+  useErrorLogger,
+  useGetStaff,
+  useWarnIfUnsavedChanges
+} from '@hooks/index';
 import { notify } from '@lib/notify';
 import { Nullable } from '@ts-types/custom.types';
 import type { CountriesType, ShippingZoneType } from '@ts-types/generated';
@@ -33,10 +37,10 @@ import { updateVariable } from './variablesSubmission';
 const defaultValues = {
   shippingZone: {
     name: '',
-    display_name: '',
+    displayName: '',
     active: false,
-    free_shipping: false,
-    rate_type: { id: 1, name: 'Weight', type: 'weight' }
+    freeShipping: false,
+    rateType: { id: 1, name: 'Weight', type: 'weight' }
   },
   zones: [],
   shippingRates: []
@@ -87,14 +91,14 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
           ...initialValues,
           shippingZone: {
             ...initialValues?.shippingZone,
-            rate_type:
-              initialValues?.shippingZone?.rate_type === 'weight'
+            rateType:
+              initialValues?.shippingZone?.rateType === 'weight'
                 ? { id: 1, name: 'Weight', type: 'weight' }
                 : { id: 0, name: 'Price', type: 'price' }
           },
           shippingRates: clone(initialValues?.shippingRates)
             ?.sort((a, b) =>
-              a.min_value > b.min_value ? 1 : b.min_value > a.min_value ? -1 : 0
+              a.minValue > b.minValue ? 1 : b.minValue > a.minValue ? -1 : 0
             )
             ?.map((rate, index) => {
               return {
@@ -105,10 +109,18 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
         }
   });
 
+  const { staffInfo } = useGetStaff();
+  const csrfToken = staffInfo?.csrfToken;
+
   const [
     createShippingZone,
     { loading: creating, reset: resetCreateMutation }
   ] = useMutation(CREATE_SHIPPING, {
+    context: {
+      headers: {
+        'x-csrf-token': csrfToken
+      }
+    },
     onCompleted: (data: { createShippingZone: ShippingZoneType }) => {
       if (!isEmpty(data)) {
         reset();
@@ -122,10 +134,15 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
     updateShippingZone,
     { loading: updating, reset: resetUpdateMutation }
   ] = useMutation(UPDATE_SHIPPING, {
+    context: {
+      headers: {
+        'x-csrf-token': csrfToken
+      }
+    },
     onCompleted: (data: { updateShippingZone: ShippingZoneType }) => {
       if (!isEmpty(data)) {
         notify(t('common:successfully-updated'), 'success');
-        // router.push(ROUTES.SHIPPING_ZONES);
+        router.push(ROUTES.SHIPPING_ZONES);
       }
     }
   });
@@ -142,16 +159,16 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
 
     const variables = {
       name: shippingZone?.name,
-      display_name: shippingZone?.display_name,
+      displayName: shippingZone?.displayName,
       active: shippingZone?.active,
-      free_shipping: shippingZone?.free_shipping,
-      rate_type: shippingZone?.rate_type?.type,
-      shipping_rates: shippingRates?.map((rate) => {
+      freeShipping: shippingZone?.freeShipping,
+      rateType: shippingZone?.rateType?.type,
+      shippingRates: shippingRates?.map((rate) => {
         return {
           id: rate?.id,
-          min_value: Number(rate?.min_value),
-          max_value: rate?.no_max ? null : Number(rate?.max_value),
-          no_max: rate?.no_max,
+          minValue: Number(rate?.minValue),
+          maxValue: rate?.noMax ? null : Number(rate?.maxValue),
+          noMax: rate?.noMax,
           price: Number(rate?.price)
         };
       }),
@@ -189,7 +206,7 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
 
   const shippingRates = watch('shippingRates');
   const zones = watch('zones');
-  const free_shipping = watch('shippingZone.free_shipping');
+  const freeShipping = watch('shippingZone.freeShipping');
 
   useEffect(() => {
     const exist = zones?.find((c) => c.name === 'Everywhere');
@@ -211,11 +228,11 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
 
     const MaxMaxValueField = hasFields
       ? shippingRates?.reduce((acc, val) => {
-          return Number(acc.max_value) >= Number(val.max_value)
-            ? { max_value: Number(acc.max_value) }
-            : { max_value: Number(val.max_value) };
+          return Number(acc.maxValue) >= Number(val.maxValue)
+            ? { maxValue: Number(acc.maxValue) }
+            : { maxValue: Number(val.maxValue) };
         })
-      : { max_value: 0 };
+      : { maxValue: 0 };
 
     const MaxPriceValueField = hasFields
       ? shippingRates?.reduce((acc, val) => {
@@ -230,11 +247,11 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
     if (!checkFailed) {
       append({
         id: null,
-        min_value: hasFields
-          ? Number((Number(MaxMaxValueField.max_value) + 0.1).toFixed(1))
+        minValue: hasFields
+          ? Number((Number(MaxMaxValueField.maxValue) + 0.1).toFixed(1))
           : 0,
-        max_value: null,
-        no_max: hasFields,
+        maxValue: null,
+        noMax: hasFields,
         price: hasFields
           ? Number((Number(MaxPriceValueField.price) + 0.1).toFixed(1))
           : 0,
@@ -267,8 +284,8 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
             />
             <Input
               label={`${t('form:input-label-display-name')}*`}
-              {...register('shippingZone.display_name')}
-              error={t(errors.shippingZone?.display_name?.message!)}
+              {...register('shippingZone.displayName')}
+              error={t(errors.shippingZone?.displayName?.message!)}
               placeholder="Name ( Name to be displayed to customers )"
               variant="outline"
               className="w-full"
@@ -277,7 +294,7 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
           <div className="mt-2">
             <Label>{t('form:input-label-status')}</Label>
             <Checkbox
-              {...register('shippingZone.free_shipping')}
+              {...register('shippingZone.freeShipping')}
               className="mb-4"
               label={t('form:input-label-free-shipping')}
             />
@@ -317,7 +334,7 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
         </Card>
       </div>
       {/* TYPES */}
-      {!free_shipping && (
+      {!freeShipping && (
         <div className="flex flex-wrap my-5 sm:my-8">
           <Description
             title={t('form:item-shipping-rate-type')}
@@ -332,7 +349,7 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
             <div>
               <Label>{t('form:input-label-type')}</Label>
               <SelectInput
-                name="shippingZone.rate_type"
+                name="shippingZone.rateType"
                 control={control}
                 getOptionLabel={(option: any) => option.name}
                 getOptionValue={(option: any) => option.type}
@@ -346,7 +363,7 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
         </div>
       )}
       {/* RATES */}
-      {!free_shipping && (
+      {!freeShipping && (
         <div className="flex flex-wrap my-5 sm:my-8">
           <Description
             title={t('form:item-shipping-rates')}

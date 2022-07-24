@@ -3,7 +3,11 @@ import Badge from '@components/ui/badge/badge';
 import Pagination from '@components/ui/pagination';
 import { Table } from '@components/ui/table';
 import { Nullable } from '@ts-types/custom.types';
-import { OrderStatus, PrivacyType } from '@ts-types/generated';
+import {
+  CreatedUpdatedByAt,
+  OrderStatus,
+  PrivacyType
+} from '@ts-types/generated';
 import { useIsRTL } from '@utils/locals';
 import { ROUTES } from '@utils/routes';
 import Color from 'color';
@@ -32,12 +36,12 @@ const OrderStatusList = ({
   const columns = [
     {
       title: t('table:table-item-title'),
-      dataIndex: 'status_name',
-      key: 'status_name',
+      dataIndex: 'name',
+      key: 'name',
       align: alignLeft,
       ellipsis: true,
       width: 120,
-      render: (status_name: string, record: OrderStatus) => (
+      render: (name: string, record: OrderStatus) => (
         <span
           className="font-semibold capitalize border border-solid shadow-sm"
           style={{
@@ -48,7 +52,7 @@ const OrderStatusList = ({
             borderRadius: '4px'
           }}
         >
-          {status_name}
+          {name}
         </span>
       )
     },
@@ -68,42 +72,42 @@ const OrderStatusList = ({
     },
     {
       title: t('table:table-item-created-at'),
-      dataIndex: 'created_at',
-      key: 'created_at',
+      dataIndex: 'createdAt',
+      key: 'createdAt',
       align: alignLeft,
       width: 200,
-      render: (created_at: string | number) => {
-        return `${dayjs(created_at).format('MMM D, YYYY')} at ${dayjs(
-          created_at
+      render: (createdAt: CreatedUpdatedByAt['createdAt']) => {
+        return `${dayjs(createdAt).format('MMM D, YYYY')} at ${dayjs(
+          createdAt
         ).format('h:mm A')}`;
       }
     },
     {
       title: t('table:table-item-created-by'),
-      dataIndex: 'created_by',
-      key: 'created_by',
+      dataIndex: 'createdBy',
+      key: 'createdBy',
       align: alignLeft,
       width: 100,
       ellipsis: true,
-      render: (created_by: any) => {
+      render: (createdBy: CreatedUpdatedByAt['createdBy']) => {
         return (
-          <div>{`${created_by?.first_name ?? ''} ${
-            created_by?.last_name ?? ''
+          <div>{`${createdBy?.firstName ?? ''} ${
+            createdBy?.lastName ?? ''
           }`}</div>
         );
       }
     },
     {
       title: t('table:table-item-updated-by'),
-      dataIndex: 'updated_by',
-      key: 'updated_by',
+      dataIndex: 'updatedBy',
+      key: 'updatedBy',
       align: alignLeft,
       width: 140,
       ellipsis: true,
-      render: (updated_by: any) => {
+      render: (updatedBy: CreatedUpdatedByAt['updatedBy']) => {
         return (
-          <div>{`${updated_by?.first_name ?? ''} ${
-            updated_by?.last_name ?? ''
+          <div>{`${updatedBy?.firstName ?? ''} ${
+            updatedBy?.lastName ?? ''
           }`}</div>
         );
       }

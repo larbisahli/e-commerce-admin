@@ -57,7 +57,7 @@ export default function OrderStatusPage({ client }: SSRProps) {
 
   const orderStatusCount = data?.orderStatusCount?.count;
 
-  useGetStaff(client?.staff_id);
+  useGetStaff(client);
   useErrorLogger(error);
 
   useEffect(() => {

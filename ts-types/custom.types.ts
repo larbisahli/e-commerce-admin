@@ -45,11 +45,11 @@ export declare type Scalars = {
 };
 
 export type SSRProps = {
-  csrfToken?: string | null;
-  csrfError?: string | null;
   token?: string | null;
   client?: {
-    staff_id: string;
+    staffId: string;
+    csrfToken?: string | null;
+    csrfError?: any;
   } | null;
 };
 

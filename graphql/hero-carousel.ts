@@ -2,23 +2,23 @@ import { gql } from '@apollo/client';
 
 export const CREATE_HERO_SLIDE = gql`
   mutation CreateHeroSlide(
-    $destination_url: String
+    $destinationUrl: String
     $thumbnail: IMGInput!
     $title: String
     $description: String
-    $btn_label: String
+    $btnLabel: String
     $styles: HeroBannerStyleInput
-    $display_order: Int!
+    $displayOrder: Int!
     $published: Boolean
   ) {
     createHeroSlide(
-      destination_url: $destination_url
+      destinationUrl: $destinationUrl
       thumbnail: $thumbnail
       title: $title
       description: $description
-      btn_label: $btn_label
+      btnLabel: $btnLabel
       styles: $styles
-      display_order: $display_order
+      displayOrder: $displayOrder
       published: $published
     ) {
       id
@@ -29,24 +29,24 @@ export const CREATE_HERO_SLIDE = gql`
 export const UPDATE_HERO_SLIDE = gql`
   mutation UpdateHeroSlide(
     $id: ID!
-    $destination_url: String
+    $destinationUrl: String
     $thumbnail: IMGInput!
     $title: String
     $description: String
-    $btn_label: String
+    $btnLabel: String
     $styles: HeroBannerStyleInput
-    $display_order: Int!
+    $displayOrder: Int!
     $published: Boolean
   ) {
     updateHeroSlide(
       id: $id
-      destination_url: $destination_url
+      destinationUrl: $destinationUrl
       thumbnail: $thumbnail
       title: $title
       description: $description
-      btn_label: $btn_label
+      btnLabel: $btnLabel
       styles: $styles
-      display_order: $display_order
+      displayOrder: $displayOrder
       published: $published
     ) {
       id
@@ -74,20 +74,20 @@ export const HERO_CAROUSEL_LIST = gql`
         placeholder
       }
       title
-      display_order
+      displayOrder
       published
       clicks
-      created_at
-      updated_at
-      created_by {
+      createdAt
+      updatedAt
+      createdBy {
         id
-        first_name
-        last_name
+        firstName
+        lastName
       }
-      updated_by {
+      updatedBy {
         id
-        first_name
-        last_name
+        firstName
+        lastName
       }
     }
   }
@@ -97,37 +97,37 @@ export const HERO_SLIDE = gql`
   query HeroSlide($id: ID!) {
     heroSlide(id: $id) {
       id
-      destination_url
+      destinationUrl
       thumbnail {
         image
         placeholder
       }
       title
       description
-      btn_label
+      btnLabel
       styles {
         text_color
-        btn_bgc
+        btnBgc
         btn_text_color
       }
-      display_order
+      displayOrder
       published
       clicks
-      created_at
-      updated_at
-      created_by {
+      createdAt
+      updatedAt
+      createdBy {
         id
-        first_name
-        last_name
+        firstName
+        lastName
         profile {
           image
           placeholder
         }
       }
-      updated_by {
+      updatedBy {
         id
-        first_name
-        last_name
+        firstName
+        lastName
         profile {
           image
           placeholder

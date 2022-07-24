@@ -65,7 +65,7 @@ export interface CreatedUpdatedByAt {
 
 export interface RoleType extends CreatedUpdatedByAt {
   id?: string;
-  role_name?: string;
+  roleName?: string;
   privileges?: PrivilegesType[];
 }
 
@@ -73,13 +73,13 @@ export interface StaffType extends CreatedUpdatedByAt {
   id: string;
   email: string;
   password: string;
-  confirm_password?: string;
-  first_name: string;
-  last_name: string;
+  confirmPassword?: string;
+  firstName: string;
+  lastName: string;
   profile: ImageType;
-  phone_number: Nullable<Scalars['Int']>;
+  phoneNumber: Nullable<Scalars['Int']>;
   role: RoleType;
-  role_id?: number;
+  roleId?: number;
   active: boolean;
   csrfToken?: string;
   csrfError?: string;
@@ -111,17 +111,6 @@ export interface ProductShippingInfo {
   dimension_unit?: { unit: Scalars['String'] };
 }
 
-// export interface ProductShippings {
-//   product_shipping_id?: Nullable<Scalars['ID']>;
-//   shipping_provider?: any;
-//   shipping_zones?: {
-//     id: Nullable<Scalars['ID']>;
-//     zones: { name: string; code: string }[];
-//     shipping_price: Scalars['Float'];
-//   }[];
-//   key?: string;
-// }
-
 export interface AttributeValue {
   id?: Scalars['ID'];
   attributeId?: Scalars['ID'];
@@ -137,13 +126,13 @@ export interface Attribute extends CreatedUpdatedByAt {
 
 export interface Tag extends CreatedUpdatedByAt {
   id?: Nullable<Scalars['ID']>;
-  tag_name?: Nullable<Scalars['String']>;
+  name?: Nullable<Scalars['String']>;
   icon?: Nullable<Scalars['String']>;
 }
 
 export interface OrderStatus extends CreatedUpdatedByAt {
   id?: Nullable<Scalars['ID']>;
-  status_name?: Nullable<Scalars['String']>;
+  name?: Nullable<Scalars['String']>;
   color?: Nullable<Scalars['String']>;
   privacy?: PrivacyType;
 }
@@ -151,27 +140,27 @@ export interface OrderStatus extends CreatedUpdatedByAt {
 export interface Coupon extends CreatedUpdatedByAt {
   id?: Nullable<Scalars['ID']>;
   code?: Nullable<Scalars['String']>;
-  discount_value?: Scalars['Int'];
-  discount_type?:
+  discountValue?: Scalars['Int'];
+  discountType?:
     | {
         value: CouponType;
       }
     | CouponType;
-  times_used?: Nullable<Scalars['Int']>;
-  max_usage?: Nullable<Scalars['Int']>;
-  order_amount_limit?: Nullable<Scalars['Int']>;
-  coupon_start_date?: Nullable<Scalars['Date']>;
-  coupon_end_date?: Nullable<Scalars['Date']>;
+  timesUsed?: Nullable<Scalars['Int']>;
+  maxUsage?: Nullable<Scalars['Int']>;
+  orderAmountLimit?: Nullable<Scalars['Int']>;
+  couponStartDate?: Nullable<Scalars['Date']>;
+  couponEndDate?: Nullable<Scalars['Date']>;
 }
 
 export interface ShippingZoneType extends CreatedUpdatedByAt {
   shippingZone: {
     id?: Scalars['ID'];
     name?: Scalars['String'];
-    display_name?: Scalars['String'];
+    displayName?: Scalars['String'];
     active?: Scalars['Boolean'];
-    free_shipping?: Scalars['Boolean'];
-    rate_type?: { id?: number; name?: string; type?: string };
+    freeShipping?: Scalars['Boolean'];
+    rateType?: { id?: number; name?: string; type?: string };
   };
   zones?: CountriesType[];
   shippingRates?: ShippingRateType[];
@@ -179,9 +168,9 @@ export interface ShippingZoneType extends CreatedUpdatedByAt {
 
 export interface ShippingRateType {
   id?: Scalars['ID'];
-  min_value?: Scalars['Int'];
-  max_value?: Nullable<Scalars['Int']>;
-  no_max?: Scalars['Boolean'];
+  minValue?: Scalars['Int'];
+  maxValue?: Nullable<Scalars['Int']>;
+  noMax?: Scalars['Boolean'];
   price?: Scalars['Int'];
   index?: Scalars['Int'];
 }
@@ -190,21 +179,10 @@ export interface CountriesType {
   id: Scalars['ID'];
   iso: Scalars['String'];
   name: Scalars['String'];
-  upper_name?: Scalars['String'];
+  upperName?: Scalars['String'];
   iso3?: Scalars['String'];
-  num_code?: Scalars['String'];
-  phone_code?: Scalars['String'];
-}
-
-export interface StoreSettingsOptions {
-  store_name?: Nullable<Scalars['String']>;
-  store_address: Scalars['String'];
-  currency?: Nullable<Scalars['String']>;
-  max_order_amount?: Nullable<Scalars['Float']>;
-  max_checkout_quantity?: Nullable<Scalars['Int']>;
-  logo?: Nullable<Scalars['String']>;
-  favicon?: Nullable<Scalars['String']>;
-  contactDetails?: Nullable<ContactDetails>;
+  numCode?: Scalars['String'];
+  phoneCode?: Scalars['String'];
 }
 
 export declare type ContactDetails = {
@@ -318,17 +296,17 @@ export interface Suppliers extends CreatedUpdatedByAt {
 
 export interface HeroCarouselType extends CreatedUpdatedByAt {
   id?: Scalars['ID'];
-  destination_url?: Nullable<Scalars['String']>;
+  destinationUrl?: Nullable<Scalars['String']>;
   thumbnail?: ImageType;
   title?: Scalars['String'];
   description?: Nullable<Scalars['String']>;
-  btn_label?: Scalars['String'];
+  btnLabel?: Scalars['String'];
   styles?: {
-    text_color?: string;
-    btn_bgc?: string;
-    btn_text_color?: string;
+    textColor?: string;
+    btnBgc?: string;
+    btnTextColor?: string;
   };
-  display_order?: Scalars['Int'];
+  displayOrder?: Scalars['Int'];
   published?: Scalars['Boolean'];
   status?: 'draft' | 'publish';
   clicks?: Scalars['Int'];

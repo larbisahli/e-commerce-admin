@@ -3,14 +3,14 @@ import Badge from '@components/ui/badge/badge';
 import Pagination from '@components/ui/pagination';
 import { Table } from '@components/ui/table';
 import { Nullable } from '@ts-types/custom.types';
-import { ShippingZoneType } from '@ts-types/generated';
+import { CreatedUpdatedByAt, ShippingZoneType } from '@ts-types/generated';
 import { useIsRTL } from '@utils/locals';
 import { ROUTES } from '@utils/routes';
 import dayjs from 'dayjs';
 import { useTranslation } from 'next-i18next';
 
 export type IProps = {
-  shipping_zones: ShippingZoneType[] | undefined;
+  shippingZones: ShippingZoneType[] | undefined;
   // eslint-disable-next-line no-unused-vars
   onPagination: (key: number) => void;
   total: Nullable<number>;
@@ -19,7 +19,7 @@ export type IProps = {
 };
 
 const ShippingList = ({
-  shipping_zones,
+  shippingZones,
   onPagination,
   total,
   currentPage,
@@ -44,15 +44,15 @@ const ShippingList = ({
     },
     {
       title: t('table:table-item-rate-type'),
-      dataIndex: 'rate_type',
-      key: 'rate_type',
+      dataIndex: 'rateType',
+      key: 'rateType',
       align: 'center',
       width: 90,
-      render: (rate_type: string, record: ShippingZoneType) => {
+      render: (rateType: string, record: ShippingZoneType) => {
         return (
           <Badge
             className="!text-sm text-gray-500 capitalize font-medium"
-            text={record?.free_shipping ? 'No Rate' : rate_type}
+            text={record?.shippingZone?.freeShipping ? 'No Rate' : rateType}
             color={'bg-gray-100'}
           />
         );
@@ -76,16 +76,16 @@ const ShippingList = ({
     },
     {
       title: t('table:table-item-free'),
-      dataIndex: 'free_shipping',
-      key: 'free_shipping',
+      dataIndex: 'freeShipping',
+      key: 'freeShipping',
       align: 'center',
       width: 90,
-      render: (free_shipping: boolean) => {
+      render: (freeShipping: boolean) => {
         return (
           <Badge
             className="!text-sm"
-            text={free_shipping ? 'Yes' : 'No'}
-            color={free_shipping ? 'bg-green-400' : 'bg-red-400'}
+            text={freeShipping ? 'Yes' : 'No'}
+            color={freeShipping ? 'bg-green-400' : 'bg-red-400'}
           />
         );
       }
@@ -96,9 +96,9 @@ const ShippingList = ({
       key: 'created_at',
       align: alignLeft,
       width: 180,
-      render: (created_at: string | number) => {
-        return `${dayjs(created_at).format('MMM D, YYYY')} at ${dayjs(
-          created_at
+      render: (createdAt: CreatedUpdatedByAt['createdAt']) => {
+        return `${dayjs(createdAt).format('MMM D, YYYY')} at ${dayjs(
+          createdAt
         ).format('h:mm A')}`;
       }
     },
@@ -109,10 +109,10 @@ const ShippingList = ({
       align: alignLeft,
       width: 100,
       ellipsis: true,
-      render: (created_by: any) => {
+      render: (createdBy: CreatedUpdatedByAt['createdBy']) => {
         return (
-          <div>{`${created_by?.first_name ?? ''} ${
-            created_by?.last_name ?? ''
+          <div>{`${createdBy?.firstName ?? ''} ${
+            createdBy?.lastName ?? ''
           }`}</div>
         );
       }
@@ -124,10 +124,10 @@ const ShippingList = ({
       align: alignLeft,
       width: 140,
       ellipsis: true,
-      render: (updated_by: any) => {
+      render: (updatedBy: CreatedUpdatedByAt['updatedBy']) => {
         return (
-          <div>{`${updated_by?.first_name ?? ''} ${
-            updated_by?.last_name ?? ''
+          <div>{`${updatedBy?.firstName ?? ''} ${
+            updatedBy?.lastName ?? ''
           }`}</div>
         );
       }
@@ -155,7 +155,7 @@ const ShippingList = ({
           //@ts-ignore
           columns={columns}
           emptyText={t('table:empty-table-data')}
-          data={shipping_zones}
+          data={shippingZones}
           rowKey="id"
           scroll={{ x: 900 }}
         />

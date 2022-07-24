@@ -59,7 +59,7 @@ export default function AttributePage({ client }: SSRProps) {
   const attributesCount = data?.attributesCount?.count;
   const attributes = data?.attributesForAdmin;
 
-  useGetStaff(client?.staff_id);
+  useGetStaff(client);
   useErrorLogger(error);
 
   const toggleVisible = () => {

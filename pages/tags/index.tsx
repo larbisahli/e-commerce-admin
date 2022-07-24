@@ -55,7 +55,7 @@ export default function Tags({ client }: SSRProps) {
 
   const tagsCount = data?.tagsCount?.count;
 
-  useGetStaff(client?.staff_id);
+  useGetStaff(client);
   useErrorLogger(error);
 
   useEffect(() => {

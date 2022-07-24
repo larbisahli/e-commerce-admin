@@ -12,6 +12,7 @@ import { useSettings } from '@contexts/settings.context';
 import { CREATE_COUPON, UPDATE_COUPON } from '@graphql/coupons';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useErrorLogger } from '@hooks/useErrorLogger';
+import { useGetStaff } from '@hooks/useGetStaff';
 import { notify } from '@lib/notify';
 import { Nullable, Scalars } from '@ts-types/custom.types';
 import { Coupon, CouponType } from '@ts-types/generated';
@@ -27,15 +28,15 @@ import { couponValidationSchema } from './coupon-validation-schema';
 
 type FormValues = {
   code: Scalars['String'];
-  discount_value: Scalars['Int'];
-  discount_type: {
+  discountValue: Scalars['Int'];
+  discountType: {
     value: CouponType;
     label: Nullable<Scalars['String']>;
   };
-  order_amount_limit?: Nullable<Scalars['Int']>;
-  max_usage: Scalars['Int'];
-  coupon_start_date: Scalars['Date'];
-  coupon_end_date: Scalars['Date'];
+  orderAmountLimit?: Nullable<Scalars['Int']>;
+  maxUsage: Scalars['Int'];
+  couponStartDate: Scalars['Date'];
+  couponEndDate: Scalars['Date'];
 };
 
 const defaultValues = {
@@ -75,7 +76,7 @@ function SelectTypes({
         getOptionValue={(option: any) => option.value}
         options={couponDiscountTypes!}
       />
-      <ValidationError message={t(errors.discount_type?.message)} />
+      <ValidationError message={t(errors.discountType?.message)} />
     </div>
   );
 }
@@ -98,25 +99,33 @@ export default function CreateOrUpdateCouponForm({ initialValues }: IProps) {
     defaultValues: initialValues
       ? {
           ...initialValues,
-          discount_type: couponDiscountTypes.find(
-            (e) => e.value === initialValues.discount_type
+          discountType: couponDiscountTypes.find(
+            (e) => e.value === initialValues.discountType
           ),
-          coupon_start_date: new Date(initialValues.coupon_start_date!),
-          coupon_end_date: new Date(initialValues.coupon_end_date!)
+          couponStartDate: new Date(initialValues.couponStartDate!),
+          couponEndDate: new Date(initialValues.couponEndDate!)
         }
       : defaultValues,
     resolver: yupResolver(couponValidationSchema)
   });
 
+  const { staffInfo } = useGetStaff();
+  const csrfToken = staffInfo?.csrfToken;
+
   const { currency } = useSettings();
 
-  const [coupon_start_date, coupon_end_date] = watch([
-    'coupon_start_date',
-    'coupon_end_date'
+  const [couponStartDate, couponEndDate] = watch([
+    'couponStartDate',
+    'couponEndDate'
   ]);
-  const couponType = watch('discount_type');
+  const couponType = watch('discountType');
 
   const [createCoupon, { loading: creating }] = useMutation(CREATE_COUPON, {
+    context: {
+      headers: {
+        'x-csrf-token': csrfToken
+      }
+    },
     onCompleted: (data: { createCoupon: Coupon }) => {
       if (!isEmpty(data)) {
         notify(t('common:successfully-created'), 'success');
@@ -127,6 +136,11 @@ export default function CreateOrUpdateCouponForm({ initialValues }: IProps) {
   });
 
   const [updateCoupon, { loading: updating }] = useMutation(UPDATE_COUPON, {
+    context: {
+      headers: {
+        'x-csrf-token': csrfToken
+      }
+    },
     onCompleted: (data: { updateCoupon: Coupon }) => {
       if (!isEmpty(data)) {
         notify(t('common:successfully-updated'), 'success');
@@ -138,19 +152,19 @@ export default function CreateOrUpdateCouponForm({ initialValues }: IProps) {
   useErrorLogger(error);
 
   const onSubmit = async (values: FormValues) => {
-    const discount_type = values.discount_type?.value;
+    const discountType = values.discountType?.value;
 
     const variables = {
       code: values.code,
-      order_amount_limit: Number(values.order_amount_limit),
-      discount_value:
-        discount_type === CouponType.FreeShipping
+      orderAmountLimit: Number(values.orderAmountLimit),
+      discountValue:
+        discountType === CouponType.FreeShipping
           ? 0
-          : Number(values.discount_value),
-      discount_type,
-      max_usage: Number(values.max_usage),
-      coupon_start_date: pgFormatDate(values.coupon_start_date),
-      coupon_end_date: pgFormatDate(values.coupon_end_date)
+          : Number(values.discountValue),
+      discountType,
+      maxUsage: Number(values.maxUsage),
+      couponStartDate: pgFormatDate(values.couponStartDate),
+      couponEndDate: pgFormatDate(values.couponEndDate)
     };
 
     if (isEmpty(initialValues)) {
@@ -189,10 +203,10 @@ export default function CreateOrUpdateCouponForm({ initialValues }: IProps) {
           />
           <Input
             label={`${t('form:order-amount-limit')} (${currency})`}
-            {...register('order_amount_limit')}
+            {...register('orderAmountLimit')}
             type={'number'}
             min={0}
-            error={t(errors.order_amount_limit?.message!)}
+            error={t(errors.orderAmountLimit?.message!)}
             variant="outline"
             className="mb-5"
           />
@@ -204,9 +218,9 @@ export default function CreateOrUpdateCouponForm({ initialValues }: IProps) {
               label={`${t('form:input-label-discount-value')} (${
                 couponType?.value === CouponType.Percentage ? '%' : currency
               })`}
-              {...register('discount_value')}
+              {...register('discountValue')}
               type="number"
-              error={t(errors.discount_value?.message!)}
+              error={t(errors.discountValue?.message!)}
               variant="outline"
               className="mb-5"
               min="0"
@@ -215,9 +229,9 @@ export default function CreateOrUpdateCouponForm({ initialValues }: IProps) {
           )}
           <Input
             label={`${t('form:input-label-usage-limit')}`}
-            {...register('max_usage')}
+            {...register('maxUsage')}
             type="number"
-            error={t(errors.max_usage?.message!)}
+            error={t(errors.maxUsage?.message!)}
             variant="outline"
             className="mb-5"
             min="0"
@@ -227,7 +241,7 @@ export default function CreateOrUpdateCouponForm({ initialValues }: IProps) {
               <Label>{t('form:coupon-active-from')}</Label>
               <Controller
                 control={control}
-                name="coupon_start_date"
+                name="couponStartDate"
                 render={({ field: { onChange, onBlur, value } }) => (
                   //@ts-ignore
                   <DatePicker
@@ -237,23 +251,21 @@ export default function CreateOrUpdateCouponForm({ initialValues }: IProps) {
                     selected={value}
                     selectsStart
                     minDate={new Date()}
-                    maxDate={coupon_end_date}
-                    startDate={coupon_start_date}
-                    endDate={coupon_end_date}
+                    maxDate={couponEndDate}
+                    startDate={couponStartDate}
+                    endDate={couponEndDate}
                     className="border border-border-base"
                   />
                 )}
               />
-              <ValidationError
-                message={t(errors.coupon_start_date?.message!)}
-              />
+              <ValidationError message={t(errors.couponStartDate?.message!)} />
             </div>
             <div className="w-full sm:w-1/2 p-0 sm:ps-2">
               <Label>{t('form:coupon-expire-at')}</Label>
 
               <Controller
                 control={control}
-                name="coupon_end_date"
+                name="couponEndDate"
                 render={({ field: { onChange, onBlur, value } }) => (
                   //@ts-ignore
                   <DatePicker
@@ -262,14 +274,14 @@ export default function CreateOrUpdateCouponForm({ initialValues }: IProps) {
                     onBlur={onBlur}
                     selected={value}
                     selectsEnd
-                    startDate={coupon_start_date}
-                    endDate={coupon_end_date}
-                    minDate={coupon_start_date}
+                    startDate={couponStartDate}
+                    endDate={couponEndDate}
+                    minDate={couponStartDate}
                     className="border border-border-base"
                   />
                 )}
               />
-              <ValidationError message={t(errors.coupon_end_date?.message!)} />
+              <ValidationError message={t(errors.couponEndDate?.message!)} />
             </div>
           </div>
         </Card>

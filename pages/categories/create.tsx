@@ -8,13 +8,9 @@ import type { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-export default function CreateCategoriesPage({
-  client,
-  csrfToken,
-  csrfError
-}: SSRProps) {
+export default function CreateCategoriesPage({ client }: SSRProps) {
   const { t } = useTranslation();
-  useGetStaff(client?.staff_id, { csrfToken, csrfError });
+  useGetStaff(client);
 
   return (
     <>
@@ -48,9 +44,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       ...(await serverSideTranslations(locale!, ['form', 'common', 'error'])),
-      client,
-      csrfToken,
-      csrfError
+      client: { ...(client ?? {}), csrfToken, csrfError }
     }
   };
 };

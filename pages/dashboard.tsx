@@ -11,7 +11,7 @@ const AdminDashboard = dynamic(() => import('@components/dashboard/admin'));
 // const OwnerDashboard = dynamic(() => import("@components/dashboard/owner"));
 
 export default function Dashboard({ client }: SSRProps) {
-  useGetStaff(client?.staff_id);
+  useGetStaff(client);
   return <AdminDashboard />;
 }
 

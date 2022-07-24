@@ -6,7 +6,7 @@ import Loader from '@components/ui/loader/loader';
 import { SHIPPING_ZONE } from '@graphql/shipping-zone';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetStaff } from '@hooks/useGetStaff';
-import { verifyAuth } from '@middleware/utils';
+import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import type { SSRProps } from '@ts-types/custom.types';
 import { ShippingZoneType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
@@ -33,7 +33,7 @@ export default function UpdateShippingPage({ client }: SSRProps) {
     }
   );
 
-  useGetStaff(client?.staff_id);
+  useGetStaff(client);
   useErrorLogger(error);
 
   if (loading) {
@@ -71,6 +71,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
+  const { csrfToken, csrfError } = await XSRFHandler(context);
+
   return {
     props: {
       ...(await serverSideTranslations(locale, [
@@ -79,7 +81,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         'form',
         'error'
       ])),
-      client
+      client: { ...(client ?? {}), csrfToken, csrfError }
     }
   };
 };

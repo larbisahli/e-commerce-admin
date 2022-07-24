@@ -55,8 +55,6 @@ export async function XSRFHandler(context: GetServerSidePropsContext) {
     // create new token
     csrfToken = tokens.create(csrfSecret);
 
-    console.log('csrf tokens :>', { csrfSecret, csrfToken });
-
     if (csrfSecret) {
       cookies.set(CookieNames.XSRF_TOKEN, csrfSecret, {
         httpOnly: true,

@@ -65,6 +65,8 @@ const ManagedModal = () => {
   const { isOpen, view } = useModalState();
   const { closeModal } = useModalAction();
 
+  console.log('view', { isOpen, view });
+
   return (
     <Modal open={isOpen} onClose={closeModal}>
       {view === DELETE_PRODUCT && <ProductDeleteView />}

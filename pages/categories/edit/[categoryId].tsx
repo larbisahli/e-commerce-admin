@@ -21,11 +21,7 @@ interface OptionsVariable {
   id: string | string[];
 }
 
-export default function UpdateCategoriesPage({
-  client,
-  csrfToken,
-  csrfError
-}: SSRProps) {
+export default function UpdateCategoriesPage({ client }: SSRProps) {
   const { query } = useRouter();
   const { t } = useTranslation();
 
@@ -39,7 +35,7 @@ export default function UpdateCategoriesPage({
     }
   );
 
-  useGetStaff(client?.staff_id, { csrfToken, csrfError });
+  useGetStaff(client);
   useErrorLogger(error);
 
   if (loading) {
@@ -81,9 +77,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       ...(await serverSideTranslations(locale, ['form', 'common', 'error'])),
-      client,
-      csrfToken,
-      csrfError
+      client: { ...(client ?? {}), csrfToken, csrfError }
     }
   };
 };

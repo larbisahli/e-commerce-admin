@@ -55,7 +55,7 @@ export default function Coupons({ client }: SSRProps) {
 
   const couponsCount = data?.couponsCount?.count;
 
-  useGetStaff(client?.staff_id);
+  useGetStaff(client);
   useErrorLogger(error);
 
   useEffect(() => {

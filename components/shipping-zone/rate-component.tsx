@@ -27,7 +27,7 @@ const RateComponent = ({
     remove(index);
   };
 
-  const hasNoMax = watch(`shippingRates.${index}.no_max`);
+  const hasNoMax = watch(`shippingRates.${index}.noMax`);
 
   return (
     <div className="relative border border-solid border-border-200 last:border-0 mt-4 rounded-md">
@@ -57,7 +57,7 @@ const RateComponent = ({
             type="number"
             disabled={true}
             variant="outline"
-            {...register(`shippingRates.${index}.min_value` as const)}
+            {...register(`shippingRates.${index}.minValue` as const)}
           />
           <Input
             className="sm:col-span-2 mx-2"
@@ -67,7 +67,7 @@ const RateComponent = ({
             step={0.1}
             disabled={hasNoMax}
             variant="outline"
-            {...register(`shippingRates.${index}.max_value` as const)}
+            {...register(`shippingRates.${index}.maxValue` as const)}
           />
           <Input
             className="sm:col-span-2"
@@ -82,7 +82,7 @@ const RateComponent = ({
         <div className="mt-4">
           <Checkbox
             disabled={fields?.length - 1 > index}
-            {...register(`shippingRates.${index}.no_max` as const)}
+            {...register(`shippingRates.${index}.noMax` as const)}
             className="mb-4"
             label={t('form:input-label-no-maximum')}
           />

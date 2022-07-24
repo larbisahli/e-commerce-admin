@@ -57,7 +57,7 @@ export default function ShippingZonesPage({ client }: SSRProps) {
   const shippingZonesCount = data?.shippingZonesCount?.count;
   const shippingZones = data?.shippingZones;
 
-  useGetStaff(client?.staff_id);
+  useGetStaff(client);
   useErrorLogger(error);
 
   const toggleVisible = () => {
@@ -110,7 +110,7 @@ export default function ShippingZonesPage({ client }: SSRProps) {
         </div>
       </Card>
       <ShippingList
-        shipping_zones={shippingZones}
+        shippingZones={shippingZones}
         onPagination={handlePagination}
         total={shippingZonesCount}
         currentPage={page}

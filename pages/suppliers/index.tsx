@@ -59,7 +59,7 @@ export default function SuppliersPage({ client }: SSRProps) {
   const suppliersCount = data?.suppliersCount?.count;
   const suppliers = data?.suppliers;
 
-  useGetStaff(client?.staff_id);
+  useGetStaff(client);
   useErrorLogger(error);
 
   const toggleVisible = () => {

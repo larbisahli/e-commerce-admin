@@ -9,12 +9,20 @@ interface TStaff {
   staff: StaffType;
 }
 
-export function useGetStaff(id?: string, rest?: { [key: string]: string }) {
+interface ClientType {
+  staffId: string;
+  csrfToken?: string;
+  csrfError?: any;
+}
+
+export function useGetStaff(client?: ClientType) {
   const { staffInfo, setStaffInfo } = useContext(StaffInfoContext);
 
+  const { staffId, ...rest } = client;
+
   const { error } = useQuery<TStaff>(STAFF, {
-    variables: { id },
-    skip: Boolean(!id) || !!(id && staffInfo?.id),
+    variables: { id: staffId },
+    skip: Boolean(!staffId) || !!(staffId && staffInfo?.id),
     onCompleted: (data: TStaff) => {
       const staff = data?.staff;
       setStaffInfo({ ...staff, ...(rest ?? {}) });
@@ -27,7 +35,7 @@ export function useGetStaff(id?: string, rest?: { [key: string]: string }) {
     setStaffInfo((prev) => {
       return { ...prev, ...(rest ?? {}) };
     });
-  }, [rest?.csrfToken]);
+  }, [rest, setStaffInfo]);
 
   return { staffInfo, setStaffInfo };
 }

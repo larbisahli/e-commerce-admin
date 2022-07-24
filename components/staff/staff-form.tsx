@@ -10,7 +10,11 @@ import PasswordInput from '@components/ui/password-input';
 import SelectInput from '@components/ui/select-input';
 import { CREATE_STAFF, ROLES_FOR_SELECT, UPDATE_STAFF } from '@graphql/staff';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useErrorLogger, useWarnIfUnsavedChanges } from '@hooks/index';
+import {
+  useErrorLogger,
+  useGetStaff,
+  useWarnIfUnsavedChanges
+} from '@hooks/index';
 import { notify } from '@lib/index';
 import { RoleType, StaffType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
@@ -56,7 +60,7 @@ function SelectRoles({ control }: { control: Control<FormValues> }) {
       <SelectInput
         name="role"
         control={control}
-        getOptionLabel={(option: RoleType) => option.role_name}
+        getOptionLabel={(option: RoleType) => option.roleName}
         getOptionValue={(option: RoleType) => option.id}
         options={roles}
         isClearable={true}
@@ -85,13 +89,21 @@ const StaffCreateUpdateForm = ({ initialValues }: IProps) => {
       ? {
           ...initialValues,
           password: 'test',
-          confirm_password: 'test'
+          confirmPassword: 'test'
         }
       : defaultValues,
     resolver: yupResolver(staffValidationSchema)
   });
 
+  const { staffInfo } = useGetStaff();
+  const csrfToken = staffInfo?.csrfToken;
+
   const [createStaff, { loading: creating }] = useMutation(CREATE_STAFF, {
+    context: {
+      headers: {
+        'x-csrf-token': csrfToken
+      }
+    },
     onCompleted: (data: { createStaff: StaffType }) => {
       if (!isEmpty(data)) {
         reset();
@@ -101,6 +113,11 @@ const StaffCreateUpdateForm = ({ initialValues }: IProps) => {
     }
   });
   const [updateStaff, { loading: updating }] = useMutation(UPDATE_STAFF, {
+    context: {
+      headers: {
+        'x-csrf-token': csrfToken
+      }
+    },
     onCompleted: (data: { updateStaff: StaffType }) => {
       if (!isEmpty(data)) {
         notify(t('common:successfully-updated'), 'success');
@@ -113,14 +130,14 @@ const StaffCreateUpdateForm = ({ initialValues }: IProps) => {
 
   async function onSubmit(values: FormValues) {
     const variables = {
-      first_name: values.first_name,
-      last_name: values.last_name,
-      phone_number: values.phone_number,
+      firstName: values.firstName,
+      lastName: values.lastName,
+      phoneNumber: values.phoneNumber,
       profile: {
         image: values?.profile?.image,
         placeholder: values?.profile?.placeholder
       },
-      role_id: values.role.id,
+      roleId: values.role.id,
       password: values.password,
       email: values.email
     };
@@ -168,27 +185,27 @@ const StaffCreateUpdateForm = ({ initialValues }: IProps) => {
         <Card className="w-full sm:w-8/12 md:w-2/3">
           <Input
             label={t('form:input-label-first-name')}
-            {...register('first_name')}
+            {...register('firstName')}
             type="text"
             variant="outline"
             className="mb-4"
-            error={t(errors.first_name?.message!)}
+            error={t(errors.firstName?.message!)}
           />
           <Input
             label={t('form:input-label-last-name')}
-            {...register('last_name')}
+            {...register('lastName')}
             type="text"
             variant="outline"
             className="mb-4"
-            error={t(errors.last_name?.message!)}
+            error={t(errors.lastName?.message!)}
           />
           <Input
             label={t('form:label-phone-number')}
-            {...register('phone_number')}
+            {...register('phoneNumber')}
             type="text"
             variant="outline"
             className="mb-4"
-            error={t(errors.phone_number?.message!)}
+            error={t(errors.phoneNumber?.message!)}
           />
           <Input
             label={t('form:input-label-email')}
@@ -209,8 +226,8 @@ const StaffCreateUpdateForm = ({ initialValues }: IProps) => {
               />
               <PasswordInput
                 label={t('form:input-label-confirm-password')}
-                {...register('confirm_password')}
-                error={t(errors?.confirm_password?.message!)}
+                {...register('confirmPassword')}
+                error={t(errors?.confirmPassword?.message!)}
                 variant="outline"
                 className="mb-4"
               />

@@ -6,7 +6,7 @@ import Loader from '@components/ui/loader/loader';
 import { ORDER_STATUS } from '@graphql/order-status';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetStaff } from '@hooks/useGetStaff';
-import { verifyAuth } from '@middleware/utils';
+import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { OrderStatus } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
@@ -75,6 +75,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
+  const { csrfToken, csrfError } = await XSRFHandler(context);
+
   return {
     props: {
       ...(await serverSideTranslations(locale, [
@@ -83,7 +85,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         'table',
         'error'
       ])),
-      client
+      client: { ...(client ?? {}), csrfToken, csrfError }
     }
   };
 };

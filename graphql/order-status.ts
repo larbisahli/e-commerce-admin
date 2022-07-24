@@ -17,20 +17,20 @@ export const ORDER_STATUSES = gql`
       sortedBy: $sortedBy
     ) {
       id
-      status_name
+      name
       color
       privacy
-      created_at
-      updated_at
-      created_by {
+      createdAt
+      updatedAt
+      createdBy {
         id
-        first_name
-        last_name
+        firstName
+        lastName
       }
-      updated_by {
+      updatedBy {
         id
-        first_name
-        last_name
+        firstName
+        lastName
       }
     }
   }
@@ -40,24 +40,24 @@ export const ORDER_STATUS = gql`
   query OrderStatusForAdmin($id: ID!) {
     orderStatusForAdmin(id: $id) {
       id
-      status_name
+      name
       color
       privacy
-      created_at
-      updated_at
-      created_by {
+      createdAt
+      updatedAt
+      createdBy {
         id
-        first_name
-        last_name
+        firstName
+        lastName
         profile {
           image
           placeholder
         }
       }
-      updated_by {
+      updatedBy {
         id
-        first_name
-        last_name
+        firstName
+        lastName
         profile {
           image
           placeholder
@@ -69,17 +69,13 @@ export const ORDER_STATUS = gql`
 
 export const CREATE_ORDER_STATUS = gql`
   mutation CreateOrderStatus(
-    $status_name: String!
+    $name: String!
     $color: String!
     $privacy: String!
   ) {
-    createOrderStatus(
-      status_name: $status_name
-      color: $color
-      privacy: $privacy
-    ) {
+    createOrderStatus(name: $name, color: $color, privacy: $privacy) {
       id
-      status_name
+      name
     }
   }
 `;
@@ -87,18 +83,13 @@ export const CREATE_ORDER_STATUS = gql`
 export const UPDATE_ORDER_STATUS = gql`
   mutation UpdateOrderStatus(
     $id: ID!
-    $status_name: String!
+    $name: String!
     $color: String!
     $privacy: String!
   ) {
-    updateOrderStatus(
-      id: $id
-      status_name: $status_name
-      color: $color
-      privacy: $privacy
-    ) {
+    updateOrderStatus(id: $id, name: $name, color: $color, privacy: $privacy) {
       id
-      status_name
+      name
     }
   }
 `;

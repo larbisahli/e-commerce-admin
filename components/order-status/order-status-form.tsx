@@ -14,6 +14,7 @@ import {
 } from '@graphql/order-status';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useErrorLogger } from '@hooks/useErrorLogger';
+import { useGetStaff } from '@hooks/useGetStaff';
 import { notify } from '@lib/notify';
 import { OrderStatus, PrivacyType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
@@ -26,12 +27,12 @@ import { useForm } from 'react-hook-form';
 import { orderStatusValidationSchema } from './order-status-validation-schema';
 
 type FormValues = {
-  status_name: string;
+  name: string;
   color: string;
   privacy: PrivacyType;
 };
 const defaultValues = {
-  status_name: '',
+  name: '',
   privacy: PrivacyType.Private,
   color: '#9cd864'
 };
@@ -56,9 +57,17 @@ export default function CreateOrUpdateOrderStatusForm({
     defaultValues: initialValues ?? defaultValues
   });
 
+  const { staffInfo } = useGetStaff();
+  const csrfToken = staffInfo?.csrfToken;
+
   const [createOrderStatus, { loading: creating }] = useMutation(
     CREATE_ORDER_STATUS,
     {
+      context: {
+        headers: {
+          'x-csrf-token': csrfToken
+        }
+      },
       onCompleted: (data: { createTag: OrderStatus }) => {
         if (!isEmpty(data)) {
           notify(t('common:successfully-created'), 'success');
@@ -72,6 +81,11 @@ export default function CreateOrUpdateOrderStatusForm({
   const [updateOrderStatus, { loading: updating }] = useMutation(
     UPDATE_ORDER_STATUS,
     {
+      context: {
+        headers: {
+          'x-csrf-token': csrfToken
+        }
+      },
       onCompleted: (data: { updateTag: OrderStatus }) => {
         if (!isEmpty(data)) {
           notify(t('common:successfully-updated'), 'success');
@@ -87,7 +101,7 @@ export default function CreateOrUpdateOrderStatusForm({
     if (isEmpty(initialValues)) {
       createOrderStatus({
         variables: {
-          status_name: values.status_name,
+          name: values.name,
           color: values.color,
           privacy: values.privacy
         }
@@ -97,8 +111,8 @@ export default function CreateOrUpdateOrderStatusForm({
     } else {
       updateOrderStatus({
         variables: {
-          // id: initialValues.id,
-          status_name: values.status_name,
+          id: initialValues.id,
+          name: values.name,
           color: values.color,
           privacy: values.privacy
         }
@@ -124,8 +138,8 @@ export default function CreateOrUpdateOrderStatusForm({
         <Card className="w-full sm:w-8/12 md:w-2/3">
           <Input
             label={t('form:input-label-name')}
-            {...register('status_name')}
-            error={t(errors.status_name?.message!)}
+            {...register('name')}
+            error={t(errors.name?.message!)}
             variant="outline"
             className="mb-5"
           />

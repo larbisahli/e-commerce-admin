@@ -6,7 +6,12 @@ import { Table } from '@components/ui/table';
 import { useGetStaff } from '@hooks/useGetStaff';
 import { siteSettings } from '@settings/site.settings';
 import { Nullable } from '@ts-types/custom.types';
-import { IMGType, RoleType, StaffType } from '@ts-types/generated';
+import {
+  CreatedUpdatedByAt,
+  ImageType,
+  RoleType,
+  StaffType
+} from '@ts-types/generated';
 import { useIsRTL } from '@utils/locals';
 import { ROUTES } from '@utils/routes';
 import dayjs from 'dayjs';
@@ -39,22 +44,10 @@ const StaffList = ({
       key: 'profile',
       align: 'center',
       width: 74,
-      render: (profile: IMGType, record: StaffType) => (
-        // <Image
-        //   src={
-        //     profile_img
-        //       ? `${mediaURL}/${profile_img}`
-        //       : siteSettings.avatar.placeholder
-        //   }
-        //   alt={`${record?.first_name} ${record?.last_name}`}
-        //   layout="fixed"
-        //   width={42}
-        //   height={42}
-        //   className="rounded-full overflow-hidden"
-        // />
+      render: (profile: ImageType, record: StaffType) => (
         <Avatar
           src={profile?.image ?? siteSettings.avatar.image}
-          alt={`${record?.first_name} ${record?.last_name}`}
+          alt={`${record?.firstName} ${record?.lastName}`}
           customPlaceholder={
             profile?.placeholder ?? siteSettings.avatar.placeholder
           }
@@ -63,13 +56,15 @@ const StaffList = ({
     },
     {
       title: t('table:table-item-title'),
-      dataIndex: 'first_name',
-      key: 'first_name',
+      dataIndex: 'firstName',
+      key: 'firstName',
       align: alignLeft,
       width: 120,
       ellipsis: true,
-      render: (first_name: string, record: StaffType) => (
-        <span className="font-semibold text-gray-800 capitalize">{`${first_name} ${record?.last_name}`}</span>
+      render: (firstName: string, record: StaffType) => (
+        <span className="font-semibold text-gray-800 capitalize">
+          {`${firstName} ${record?.lastName}`}
+        </span>
       )
     },
     {
@@ -86,7 +81,7 @@ const StaffList = ({
               style={{ width: 'fit-content' }}
               className="font-medium text-13px md:text-sm rounded block border border-sink-base px-2 py-1 bg-gray-100"
             >
-              {role.role_name}
+              {role.roleName}
             </span>
           </div>
         );
@@ -118,42 +113,42 @@ const StaffList = ({
     },
     {
       title: t('table:table-item-created-at'),
-      dataIndex: 'created_at',
-      key: 'created_at',
+      dataIndex: 'createdAt',
+      key: 'createdAt',
       align: alignLeft,
       width: 200,
-      render: (created_at: string | number) => {
-        return `${dayjs(created_at).format('MMM D, YYYY')} at ${dayjs(
-          created_at
+      render: (createdAt: CreatedUpdatedByAt['createdAt']) => {
+        return `${dayjs(createdAt).format('MMM D, YYYY')} at ${dayjs(
+          createdAt
         ).format('h:mm A')}`;
       }
     },
     {
       title: t('table:table-item-created-by'),
-      dataIndex: 'created_by',
-      key: 'created_by',
+      dataIndex: 'createdBy',
+      key: 'createdBy',
       align: alignLeft,
       width: 100,
       ellipsis: true,
-      render: (created_by: any) => {
+      render: (createdBy: CreatedUpdatedByAt['createdBy']) => {
         return (
-          <div className="ml-1">{`${created_by?.first_name ?? ''} ${
-            created_by?.last_name ?? ''
+          <div className="ml-1">{`${createdBy?.firstName ?? ''} ${
+            createdBy?.lastName ?? ''
           }`}</div>
         );
       }
     },
     {
       title: t('table:table-item-updated-by'),
-      dataIndex: 'updated_by',
-      key: 'updated_by',
+      dataIndex: 'updatedBy',
+      key: 'updatedBy',
       align: alignLeft,
       width: 140,
       ellipsis: true,
-      render: (updated_by: any) => {
+      render: (updatedBy: CreatedUpdatedByAt['updatedBy']) => {
         return (
-          <div>{`${updated_by?.first_name ?? ''} ${
-            updated_by?.last_name ?? ''
+          <div>{`${updatedBy?.firstName ?? ''} ${
+            updatedBy?.lastName ?? ''
           }`}</div>
         );
       }

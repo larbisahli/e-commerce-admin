@@ -10,6 +10,7 @@ import SelectInput from '@components/ui/select-input';
 import { CREATE_TAG, UPDATE_TAG } from '@graphql/tag';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useErrorLogger } from '@hooks/useErrorLogger';
+import { useGetStaff } from '@hooks/useGetStaff';
 import { notify } from '@lib/notify';
 import { Nullable } from '@ts-types/custom.types';
 import { Tag } from '@ts-types/generated';
@@ -41,12 +42,12 @@ export const updatedIcons = tagIcons.map((item: any) => {
 });
 
 type FormValues = {
-  tag_name: string;
+  name: string;
   icon: any;
 };
 
 const defaultValues = {
-  image: '',
+  name: '',
   icon: ''
 };
 
@@ -82,7 +83,15 @@ export default function CreateOrUpdateTagForm({ initialValues }: IProps) {
     resolver: yupResolver(tagValidationSchema)
   });
 
+  const { staffInfo } = useGetStaff();
+  const csrfToken = staffInfo?.csrfToken;
+
   const [createTag, { loading: creating }] = useMutation(CREATE_TAG, {
+    context: {
+      headers: {
+        'x-csrf-token': csrfToken
+      }
+    },
     onCompleted: (data: { createTag: Tag }) => {
       if (!isEmpty(data)) {
         notify(t('common:successfully-created'), 'success');
@@ -93,6 +102,11 @@ export default function CreateOrUpdateTagForm({ initialValues }: IProps) {
   });
 
   const [updateTag, { loading: updating }] = useMutation(UPDATE_TAG, {
+    context: {
+      headers: {
+        'x-csrf-token': csrfToken
+      }
+    },
     onCompleted: (data: { updateTag: Tag }) => {
       if (!isEmpty(data)) {
         notify(t('common:successfully-updated'), 'success');
@@ -105,7 +119,7 @@ export default function CreateOrUpdateTagForm({ initialValues }: IProps) {
 
   const onSubmit = async (values: FormValues) => {
     const input = {
-      tag_name: values.tag_name,
+      name: values.name,
       icon: values.icon?.value ?? null
     };
 
@@ -138,8 +152,8 @@ export default function CreateOrUpdateTagForm({ initialValues }: IProps) {
         <Card className="w-full sm:w-8/12 md:w-2/3">
           <Input
             label={t('form:input-label-name')}
-            {...register('tag_name')}
-            error={t(errors.tag_name?.message!)}
+            {...register('name')}
+            error={t(errors.name?.message!)}
             variant="outline"
             className="mb-5"
           />

@@ -62,7 +62,7 @@ export default function ProductsPage({ client }: SSRProps) {
   const productsCount = data?.productsCount?.count;
   const productsForAdmin = data?.productsForAdmin;
 
-  useGetStaff(client?.staff_id);
+  useGetStaff(client);
   useErrorLogger(error);
 
   const toggleVisible = () => {

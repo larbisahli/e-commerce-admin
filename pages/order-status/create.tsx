@@ -1,6 +1,6 @@
 import AppLayout from '@components/layouts/app';
 import CreateOrUpdateOrderStatusForm from '@components/order-status/order-status-form';
-import { verifyAuth } from '@middleware/utils';
+import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { ROUTES } from '@utils/routes';
 import type { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
@@ -35,6 +35,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
+  const { csrfToken, csrfError } = await XSRFHandler(context);
+
   return {
     props: {
       ...(await serverSideTranslations(locale, [
@@ -43,7 +45,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         'form',
         'error'
       ])),
-      client
+      client: { ...(client ?? {}), csrfToken, csrfError }
     }
   };
 };

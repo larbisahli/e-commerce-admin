@@ -1,13 +1,13 @@
 import * as yup from 'yup';
 
 export const staffValidationSchema = yup.object().shape({
-  first_name: yup.string().required('form:error-last-name-required'),
-  last_name: yup.string().required('form:error-first-name-required'),
+  firstName: yup.string().required('form:error-last-name-required'),
+  lastName: yup.string().required('form:error-first-name-required'),
   email: yup
     .string()
     .email('form:error-email-format')
     .required('form:error-email-required'),
-  confirm_password: yup
+  confirmPassword: yup
     .string()
     .oneOf([yup.ref('password'), null], 'form:error-match-passwords')
     .required('form:error-confirm-password'),

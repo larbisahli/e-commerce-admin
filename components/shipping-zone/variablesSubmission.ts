@@ -9,9 +9,9 @@ export const updateVariable = (
   const newShippingRates = values?.shippingRates?.map((rate) => {
     return {
       id: rate?.id,
-      min_value: Number(rate?.min_value),
-      max_value: rate?.no_max ? null : Number(rate?.max_value),
-      no_max: rate?.no_max,
+      minValue: Number(rate?.minValue),
+      maxValue: rate?.noMax ? null : Number(rate?.maxValue),
+      noMax: rate?.noMax,
       price: Number(rate?.price)
     };
   });
@@ -46,14 +46,14 @@ export const updateVariable = (
 
   const newShippingZone = {
     ...shippingZone,
-    rate_type: shippingZone?.rate_type?.type
+    rateType: shippingZone?.rateType?.type
   };
   const initShippingZone = {
     name: initialValues.shippingZone?.name,
-    display_name: initialValues.shippingZone?.display_name,
+    displayName: initialValues.shippingZone?.displayName,
     active: initialValues.shippingZone?.active,
-    free_shipping: initialValues.shippingZone?.free_shipping,
-    rate_type: initialValues.shippingZone?.rate_type
+    freeShipping: initialValues.shippingZone?.freeShipping,
+    rateType: initialValues.shippingZone?.rateType
   };
   const shippingZoneEqual = isEqual(initShippingZone, newShippingZone);
 
@@ -63,11 +63,11 @@ export const updateVariable = (
     shippingZone: shippingZoneMain,
     additions: {
       zones: zonesAdditions?.map((e) => ({ id: e.id })),
-      shipping_rates: shippingRatesAdditions
+      shippingRates: shippingRatesAdditions
     },
     deletions: {
       zones: zonesDeletion?.map((e) => ({ id: e })),
-      shipping_rates: shippingRatesDeletion?.map((e) => ({ id: e }))
+      shippingRates: shippingRatesDeletion?.map((e) => ({ id: e }))
     }
   };
 };

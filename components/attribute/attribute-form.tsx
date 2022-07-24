@@ -13,6 +13,7 @@ import {
   UPDATE_ATTRIBUTE
 } from '@graphql/attribute';
 import { useErrorLogger } from '@hooks/useErrorLogger';
+import { useGetStaff } from '@hooks/useGetStaff';
 import { notify } from '@lib/index';
 import { Nullable } from '@ts-types/custom.types';
 import { Attribute, AttributeValue } from '@ts-types/generated';
@@ -22,7 +23,7 @@ import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
-import React, { InputHTMLAttributes } from 'react';
+import React, { InputHTMLAttributes, useEffect } from 'react';
 import { ChromePicker } from 'react-color';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 
@@ -54,6 +55,9 @@ export default function CreateOrUpdateAttributeForm({ initialValues }: IProps) {
     defaultValues: initialValues ? initialValues : { name: null, values: [] }
   });
 
+  const { staffInfo } = useGetStaff();
+  const csrfToken = staffInfo?.csrfToken;
+
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'values',
@@ -63,6 +67,11 @@ export default function CreateOrUpdateAttributeForm({ initialValues }: IProps) {
   const [createAttribute, { loading: creating }] = useMutation(
     CREATE_ATTRIBUTE,
     {
+      context: {
+        headers: {
+          'x-csrf-token': csrfToken
+        }
+      },
       onCompleted: (data: { createAttribute: Attribute }) => {
         if (!isEmpty(data)) {
           notify(t('common:successfully-created'), 'success');
@@ -76,6 +85,11 @@ export default function CreateOrUpdateAttributeForm({ initialValues }: IProps) {
   const [updateAttribute, { loading: updating }] = useMutation(
     UPDATE_ATTRIBUTE,
     {
+      context: {
+        headers: {
+          'x-csrf-token': csrfToken
+        }
+      },
       onCompleted: (data: { updateAttribute: Attribute }) => {
         if (!isEmpty(data)) {
           notify(t('common:successfully-updated'), 'success');
@@ -86,7 +100,13 @@ export default function CreateOrUpdateAttributeForm({ initialValues }: IProps) {
   );
 
   const [deleteAttributeValue, { loading: deleteAttributeLoading }] =
-    useMutation(DELETE_ATTRIBUTE_VALUE);
+    useMutation(DELETE_ATTRIBUTE_VALUE, {
+      context: {
+        headers: {
+          'x-csrf-token': csrfToken
+        }
+      }
+    });
 
   useErrorLogger(error);
 
@@ -292,7 +312,7 @@ const ColorPicker = React.forwardRef<HTMLInputElement, Props>(
     ref
   ) => {
     const [displayColorPicker, setDisplayColorPicker] = useState(false);
-    const [currentColor, setCurrentColor] = useState(color ?? '');
+    const [currentColor, setCurrentColor] = useState('');
 
     const handleClick = (e) => {
       e.preventDefault();
@@ -303,6 +323,10 @@ const ColorPicker = React.forwardRef<HTMLInputElement, Props>(
       e.preventDefault();
       setDisplayColorPicker(false);
     };
+
+    useEffect(() => {
+      setCurrentColor(color ?? '');
+    }, [color]);
 
     return (
       <div className="flex items-end relative">

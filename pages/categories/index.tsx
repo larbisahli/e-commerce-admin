@@ -60,7 +60,7 @@ export default function Categories({ client }: SSRProps) {
   const categoriesCount = data?.categoriesCount?.count;
   const categoriesForAdmin = data?.categoriesForAdmin;
 
-  useGetStaff(client?.staff_id);
+  useGetStaff(client);
   useErrorLogger(error);
 
   const toggleVisible = () => {

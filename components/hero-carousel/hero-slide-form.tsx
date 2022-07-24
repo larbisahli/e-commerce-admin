@@ -12,10 +12,14 @@ import Label from '@components/ui/label';
 import Radio from '@components/ui/radio';
 import TextArea from '@components/ui/text-area';
 import { CREATE_HERO_SLIDE, UPDATE_HERO_SLIDE } from '@graphql/hero-carousel';
-import { useErrorLogger, useWarnIfUnsavedChanges } from '@hooks/index';
+import {
+  useErrorLogger,
+  useGetStaff,
+  useWarnIfUnsavedChanges
+} from '@hooks/index';
 import { notify } from '@lib/index';
 import { Nullable } from '@ts-types/custom.types';
-import { HeroCarouselType, IMGType } from '@ts-types/generated';
+import { HeroCarouselType, ImageType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import cloneDeep from 'lodash/cloneDeep';
 import isEmpty from 'lodash/isEmpty';
@@ -31,16 +35,16 @@ type FormValues = HeroCarouselType;
 
 const defaultValues = {
   title: '',
-  destination_url: null,
+  destinationUrl: null,
   thumbnail: null,
   description: null,
-  btn_label: null,
-  display_order: 0,
+  btnLabel: null,
+  displayOrder: 0,
   status: 'draft',
   styles: {
-    text_color: '#ffffff',
-    btn_bgc: '#dcdbdb',
-    btn_text_color: '#222121'
+    textColor: '#ffffff',
+    btnBgc: '#dcdbdb',
+    btnTextColor: '#222121'
   }
 };
 
@@ -71,15 +75,22 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
       : (defaultValues as HeroCarouselType)
   });
 
+  const { staffInfo } = useGetStaff();
+  const csrfToken = staffInfo?.csrfToken;
+
   const styles = watch('styles');
-  const thumbnail = watch('thumbnail') as IMGType;
-  const btn_label = watch('btn_label');
+  const thumbnail = watch('thumbnail') as ImageType;
+  const btnLabel = watch('btnLabel');
   const title = watch('title');
   const description = watch('description');
 
-  const [createHeroSlider, { loading: creating }] = useMutation(
-    CREATE_HERO_SLIDE,
-    {
+  const [createHeroSlider, { loading: creating, reset: resetCreateMutation }] =
+    useMutation(CREATE_HERO_SLIDE, {
+      context: {
+        headers: {
+          'x-csrf-token': csrfToken
+        }
+      },
       onCompleted: (data: { createHeroSlide: HeroCarouselType }) => {
         if (!isEmpty(data)) {
           notify(t('common:successfully-created'), 'success');
@@ -87,19 +98,21 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
           router.push(ROUTES.HERO_CAROUSEL);
         }
       }
-    }
-  );
-  const [updateHeroSlider, { loading: updating }] = useMutation(
-    UPDATE_HERO_SLIDE,
-    {
+    });
+  const [updateHeroSlider, { loading: updating, reset: resetUpdateMutation }] =
+    useMutation(UPDATE_HERO_SLIDE, {
+      context: {
+        headers: {
+          'x-csrf-token': csrfToken
+        }
+      },
       onCompleted: (data: { updateCategory: HeroCarouselType }) => {
         if (!isEmpty(data)) {
           notify(t('common:successfully-updated'), 'success');
           router.push(ROUTES.HERO_CAROUSEL);
         }
       }
-    }
-  );
+    });
 
   useErrorLogger(error);
 
@@ -111,29 +124,30 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
 
     const variables = {
       title: values.title,
-      destination_url: values.destination_url,
+      destinationUrl: values.destinationUrl,
       thumbnail: {
         image: values.thumbnail?.image,
         placeholder: values.thumbnail?.placeholder
       },
       description: values.description,
-      btn_label: values.btn_label,
-      display_order: Number(values.display_order),
+      btnLabel: values.btnLabel,
+      displayOrder: Number(values.displayOrder),
       published: values.status === 'publish',
       styles: values.styles
     };
 
+    setUnsavedChanges(false);
     if (isEmpty(initialValues)) {
       createHeroSlider({ variables }).catch((err) => {
         setError(err);
+        resetCreateMutation();
       });
     } else {
-      setUnsavedChanges(false);
       updateHeroSlider({
         variables: { id: initialValues?.id, ...variables }
       }).catch((err) => {
         setError(err);
-        setUnsavedChanges(true);
+        resetUpdateMutation();
       });
     }
   };
@@ -158,7 +172,7 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
               <div className="my-2 border-b border-dashed border-border-base"></div>
               <HeroBannerCard
                 thumbnail={thumbnail}
-                btn_label={btn_label}
+                btnLabel={btnLabel}
                 title={title}
                 description={description}
                 styles={styles}
@@ -194,13 +208,13 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
           />
           <Input
             label={t('form:input-label-destination-url')}
-            {...register('destination_url')}
+            {...register('destinationUrl')}
             variant="outline"
             className="mb-5"
           />
           <Input
             label={t('form:input-label-button-label')}
-            {...register('btn_label')}
+            {...register('btnLabel')}
             variant="outline"
             className="mb-5"
           />
@@ -208,8 +222,8 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
             label={`${t('form:input-label-display-order')}`}
             type="number"
             min={0}
-            {...register('display_order')}
-            error={t(errors.display_order?.message!)}
+            {...register('displayOrder')}
+            error={t(errors.displayOrder?.message!)}
             variant="outline"
             className="mb-5"
           />
@@ -245,26 +259,26 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
         <Card className="w-full sm:w-8/12 md:w-2/3">
           <ColorPicker
             label={t('form:input-text-color')}
-            {...register(`styles.text_color`)}
+            {...register(`styles.textColor`)}
             className="mt-5"
           >
-            <DisplayColorCode color={styles?.text_color} />
+            <DisplayColorCode color={styles?.textColor} />
           </ColorPicker>
 
           <ColorPicker
             label={t('form:input-button-text-color')}
-            {...register(`styles.btn_text_color`)}
+            {...register(`styles.btnTextColor`)}
             className="mt-5"
           >
-            <DisplayColorCode color={styles?.btn_text_color} />
+            <DisplayColorCode color={styles?.btnTextColor} />
           </ColorPicker>
 
           <ColorPicker
             label={t('form:input-button-background-color')}
-            {...register(`styles.btn_bgc`)}
+            {...register(`styles.btnBgc`)}
             className="mt-5"
           >
-            <DisplayColorCode color={styles?.btn_bgc} />
+            <DisplayColorCode color={styles?.btnBgc} />
           </ColorPicker>
         </Card>
       </div>

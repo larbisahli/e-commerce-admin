@@ -2,20 +2,20 @@ import { notify } from '@lib/notify';
 import { ShippingRateType } from '@ts-types/generated';
 
 export default function shippingRatesValidation(
-  shipping_rates: ShippingRateType[],
+  shippingRates: ShippingRateType[],
   noMaxValidation = true
 ) {
   let checkFailed = false;
   let prevFailed = {} as ShippingRateType;
 
   // ==== CHECKS ====
-  shipping_rates?.every((field, index) => {
-    if (!field?.max_value && !field?.no_max && noMaxValidation) {
+  shippingRates?.every((field, index) => {
+    if (!field?.maxValue && !field?.noMax && noMaxValidation) {
       notify(`Please set Max value (Rate #${index + 1})`, 'error');
       checkFailed = true;
       return false; // break
     } else if (
-      (Number(field?.min_value) > Number(field?.max_value) || field?.no_max) &&
+      (Number(field?.minValue) > Number(field?.maxValue) || field?.noMax) &&
       noMaxValidation
     ) {
       notify(
@@ -36,7 +36,7 @@ export default function shippingRatesValidation(
     }
 
     const diffMinMax = Number(
-      (Number(field?.min_value) - Number(prevFailed?.max_value)).toFixed(1)
+      (Number(field?.minValue) - Number(prevFailed?.maxValue)).toFixed(1)
     );
     if (!isNaN(diffMinMax) && 0 > diffMinMax) {
       notify(

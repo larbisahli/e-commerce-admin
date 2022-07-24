@@ -49,7 +49,7 @@ export default function HeroCarousel({ client }: SSRProps) {
   const heroCarouselListCount = data?.heroCarouselListCount?.count;
   const heroCarouselListForAdmin = data?.heroCarouselListForAdmin;
 
-  useGetStaff(client?.staff_id);
+  useGetStaff(client);
   useErrorLogger(error);
 
   const handlePagination = (current: number) => {

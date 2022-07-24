@@ -5,7 +5,7 @@ import Pagination from '@components/ui/pagination';
 import { Table } from '@components/ui/table';
 import { siteSettings } from '@settings/site.settings';
 import { Nullable } from '@ts-types/custom.types';
-import { HeroCarouselType } from '@ts-types/generated';
+import { CreatedUpdatedByAt, HeroCarouselType } from '@ts-types/generated';
 import { useIsRTL } from '@utils/locals';
 import { ROUTES } from '@utils/routes';
 import dayjs from 'dayjs';
@@ -80,8 +80,8 @@ const HeroCarouselList = ({
     },
     {
       title: t('table:table-item-display-order'),
-      dataIndex: 'display_order',
-      key: 'display_order',
+      dataIndex: 'displayOrder',
+      key: 'displayOrder',
       align: 'center',
       width: 120,
       ellipsis: true
@@ -101,42 +101,42 @@ const HeroCarouselList = ({
     },
     {
       title: t('table:table-item-created-at'),
-      dataIndex: 'created_at',
-      key: 'created_at',
+      dataIndex: 'createdAt',
+      key: 'createdAt',
       align: alignLeft,
       width: 180,
-      render: (created_at: string | number) => {
-        return `${dayjs(created_at).format('MMM D, YYYY')} at ${dayjs(
-          created_at
+      render: (createdAt: CreatedUpdatedByAt['createdAt']) => {
+        return `${dayjs(createdAt).format('MMM D, YYYY')} at ${dayjs(
+          createdAt
         ).format('h:mm A')}`;
       }
     },
     {
       title: t('table:table-item-created-by'),
-      dataIndex: 'created_by',
-      key: 'created_by',
+      dataIndex: 'createdBy',
+      key: 'createdBy',
       align: alignLeft,
       width: 140,
       ellipsis: true,
-      render: (created_by: any) => {
+      render: (createdBy: CreatedUpdatedByAt['createdBy']) => {
         return (
-          <div>{`${created_by?.first_name ?? ''} ${
-            created_by?.last_name ?? ''
+          <div>{`${createdBy?.firstName ?? ''} ${
+            createdBy?.lastName ?? ''
           }`}</div>
         );
       }
     },
     {
       title: t('table:table-item-updated-by'),
-      dataIndex: 'updated_by',
-      key: 'updated_by',
+      dataIndex: 'updatedBy',
+      key: 'updatedBy',
       align: alignLeft,
       width: 140,
       ellipsis: true,
-      render: (updated_by: any) => {
+      render: (updatedBy: CreatedUpdatedByAt['updatedBy']) => {
         return (
-          <div>{`${updated_by?.first_name ?? ''} ${
-            updated_by?.last_name ?? ''
+          <div>{`${updatedBy?.firstName ?? ''} ${
+            updatedBy?.lastName ?? ''
           }`}</div>
         );
       }
