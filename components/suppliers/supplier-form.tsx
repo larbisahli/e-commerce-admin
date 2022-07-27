@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/interactive-supports-focus */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import Card from '@components/common/card';
 import { SaveIcon } from '@components/icons/save-icon';
 import Alert from '@components/ui/alert';
@@ -11,33 +11,37 @@ import InputPhoneNumber from '@components/ui/input-phone-number';
 import Label from '@components/ui/label';
 import SelectInput from '@components/ui/select-input';
 import TextArea from '@components/ui/text-area';
+import { COUNTRIES } from '@graphql/shipping-zone';
 import { CREATE_SUPPLIER, UPDATE_SUPPLIER } from '@graphql/supplier';
 import { useErrorLogger } from '@hooks/useErrorLogger';
+import { useGetStaff } from '@hooks/useGetStaff';
 import { notify } from '@lib/index';
-import type { DialCodeType } from '@ts-types/custom.types';
-import { Nullable } from '@ts-types/custom.types';
-import { Suppliers } from '@ts-types/generated';
+import type { Nullable } from '@ts-types/custom.types';
+import type { CountriesType, Suppliers } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 
 type FormValues = Suppliers;
+
+type TCountries = {
+  countries: CountriesType[];
+};
 
 type IProps = {
   initialValues?: Nullable<Suppliers>;
 };
 
 const defaultValues = {
-  supplier_name: '',
+  name: '',
   company: null,
-  phone_number: null,
-  dial_code: null,
-  address_line1: '',
-  address_line2: null,
+  phoneNumber: null,
+  addressLine1: '',
+  addressLine2: null,
   country: null,
   city: null,
   note: null
@@ -48,28 +52,16 @@ export default function CreateOrUpdateSupplierForm({ initialValues }: IProps) {
 
   const [error, setError] = useState(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [dialCode, setDialCode] = useState<DialCodeType[]>([]);
-  const [countries, setCountries] = useState([]);
-  const [cities, setCities] = useState([]);
-  const [citiesLoading, setCitiesLoading] = useState(false);
 
-  // Get Dial code
-  useEffect(() => {
-    async function getDialCode() {
-      const { DIAL_CODE } = await import('@utils/countries-dial');
-      setDialCode(DIAL_CODE);
-    }
-    getDialCode();
-  }, []);
+  const {
+    data,
+    loading: loadingCountries,
+    error: queryError
+  } = useQuery<TCountries>(COUNTRIES, {
+    fetchPolicy: 'cache-and-network'
+  });
 
-  // Get Countries
-  useEffect(() => {
-    async function getCountries() {
-      const { Countries } = await import('@utils/countries');
-      setCountries(Countries);
-    }
-    getCountries();
-  }, []);
+  const countries = data?.countries;
 
   const { t } = useTranslation();
 
@@ -81,19 +73,18 @@ export default function CreateOrUpdateSupplierForm({ initialValues }: IProps) {
     reset,
     formState: { errors }
   } = useForm<FormValues>({
-    defaultValues: initialValues
-      ? {
-          ...initialValues,
-          country: { name: initialValues?.country } as { name: string },
-          dial_code: { dial_code: initialValues?.dial_code } as {
-            dial_code: string;
-          },
-          city: { name: initialValues?.city } as { name: string }
-        }
-      : defaultValues
+    defaultValues: initialValues ? { ...initialValues } : defaultValues
   });
 
+  const { staffInfo } = useGetStaff();
+  const csrfToken = staffInfo?.csrfToken;
+
   const [createSupplier, { loading: creating }] = useMutation(CREATE_SUPPLIER, {
+    context: {
+      headers: {
+        'x-csrf-token': csrfToken
+      }
+    },
     onCompleted: (data: { createSupplier: Suppliers }) => {
       if (!isEmpty(data)) {
         notify(t('common:successfully-created'), 'success');
@@ -104,6 +95,11 @@ export default function CreateOrUpdateSupplierForm({ initialValues }: IProps) {
   });
 
   const [updateSupplier, { loading: updating }] = useMutation(UPDATE_SUPPLIER, {
+    context: {
+      headers: {
+        'x-csrf-token': csrfToken
+      }
+    },
     onCompleted: (data: { updateSupplier: Suppliers }) => {
       if (!isEmpty(data)) {
         notify(t('common:successfully-updated'), 'success');
@@ -113,37 +109,17 @@ export default function CreateOrUpdateSupplierForm({ initialValues }: IProps) {
   });
 
   useErrorLogger(error);
+  useErrorLogger(queryError);
 
   const country = watch('country');
-
-  useEffect(() => {
-    async function getCity() {
-      const response = await fetch('/api/cities', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ country })
-      });
-      const city_ = await response.json();
-      const formattedCities =
-        city_?.cities?.map((c) => {
-          return { name: c };
-        }) ?? [];
-      setCities(formattedCities);
-      setCitiesLoading(false);
-    }
-    if (country) {
-      setCitiesLoading(true);
-      getCity();
-    }
-  }, [country]);
 
   const onSubmit = (values: FormValues) => {
     const variables = {
       ...values,
-      dial_code: (values?.dial_code as { dial_code: string })?.dial_code,
-      country: (values?.country as { name: string })?.name,
-      city: (values?.city as { name: string })?.name
+      country: { id: values?.country.id }
     };
+
+    console.log('variables', variables);
 
     if (isEmpty(initialValues)) {
       createSupplier({ variables }).catch((err) => {
@@ -185,8 +161,8 @@ export default function CreateOrUpdateSupplierForm({ initialValues }: IProps) {
             <div className="grid grid-cols-2 gap-5">
               <Input
                 label={`${t('form:input-label-supplier-name')}*`}
-                {...register('supplier_name', { required: 'Name is required' })}
-                error={t(errors.supplier_name?.message!)}
+                {...register('name', { required: 'Name is required' })}
+                error={t(errors.name?.message!)}
                 variant="outline"
                 className="mb-5"
               />
@@ -199,57 +175,59 @@ export default function CreateOrUpdateSupplierForm({ initialValues }: IProps) {
               />
               <Input
                 label={`${t('form:input-label-address-1')}*`}
-                {...register('address_line1', {
+                {...register('addressLine1', {
                   required: 'address 1 is required'
                 })}
-                error={t(errors.address_line1?.message!)}
+                error={t(errors.addressLine1?.message!)}
                 variant="outline"
                 className="mb-5"
               />
               <Input
                 label={t('form:input-label-address-2')}
-                {...register('address_line2')}
-                error={t(errors.address_line2?.message!)}
+                {...register('addressLine2')}
+                error={t(errors.addressLine2?.message!)}
                 variant="outline"
                 className="mb-5"
               />
-              <InputPhoneNumber
-                label={t('form:input-label-phone-number')}
-                {...register('phone_number')}
-                type="number"
-                placeholder="619080915..."
-                variant="outline"
-                className="mb-4"
-                error={t(errors?.phone_number?.message!)}
-              >
-                <SelectInput
-                  name="dial_code"
-                  control={control}
-                  getOptionLabel={(option: any) => option.dial_code}
-                  getOptionValue={(option: any) => option.dial_code}
-                  options={dialCode}
-                />
-              </InputPhoneNumber>
+
               <div>
                 <Label>{t('form:input-label-country')}</Label>
                 <SelectInput
                   name="country"
                   control={control}
                   getOptionLabel={(option: any) => option.name}
-                  getOptionValue={(option: any) => option.name}
+                  getOptionValue={(option: any) => option.id}
                   options={countries}
+                  isLoading={loadingCountries}
                 />
               </div>
+              <Input
+                label={t('form:input-label-city')}
+                {...register('city')}
+                error={t(errors.addressLine2?.message!)}
+                variant="outline"
+                className="mb-5"
+              />
               <div>
-                <Label>{t('form:input-label-city')}</Label>
-                <SelectInput
-                  name="city"
-                  control={control}
-                  getOptionLabel={(option: any) => option.name}
-                  getOptionValue={(option: any) => option.name}
-                  options={cities}
-                  isLoading={citiesLoading}
-                />
+                <InputPhoneNumber
+                  label={t('form:input-label-phone-number')}
+                  {...register('phoneNumber')}
+                  pattern={'^[0-9\\.\\-\\/]+$'}
+                  placeholder="123-4567-8901"
+                  type="tel"
+                  variant="outline"
+                  className="mb-4"
+                  error={t(errors?.phoneNumber?.message!)}
+                >
+                  {country?.phoneCode && (
+                    <div
+                      className="h-full border rounded flex justify-center items-center 
+                p-2 mr-1 text-gray-500 font-medium"
+                    >
+                      <span>+{country?.phoneCode}</span>
+                    </div>
+                  )}
+                </InputPhoneNumber>
               </div>
             </div>
             <TextArea

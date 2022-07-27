@@ -33,7 +33,7 @@ export function verifyAuth(context: GetServerSidePropsContext) {
     const client = jwt.verify(jwtToken, PublicKEY, {
       algorithms: Alg
     });
-    return { client, error: null };
+    return { client: { staffId: client?.staff_id }, error: null };
   } catch (error) {
     console.log('verifyAuth Error:>>', { error });
     return { client: null, error: { ...serializeError(error), jwtToken } };

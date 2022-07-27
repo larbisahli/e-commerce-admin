@@ -1,5 +1,5 @@
 import { verifyAuth } from '@middleware/utils';
-import cities from '@utils/cities.min.json';
+// import cities from '@utils/cities.min.json';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 const handler = (req: NextApiRequest, res: NextApiResponse) => {
@@ -13,7 +13,10 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
       res.status(403).json({});
     }
     if (req.method === 'POST') {
-      res.status(200).json({ cities: cities[country.name] });
+      res.status(200).json({
+        cities: []
+        // cities[country.name]
+      });
     } else {
       res.status(403).json({});
     }

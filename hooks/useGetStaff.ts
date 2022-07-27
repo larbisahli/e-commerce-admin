@@ -18,24 +18,28 @@ interface ClientType {
 export function useGetStaff(client?: ClientType) {
   const { staffInfo, setStaffInfo } = useContext(StaffInfoContext);
 
-  const { staffId, ...rest } = client;
+  const staffId = client?.staffId;
 
   const { error } = useQuery<TStaff>(STAFF, {
     variables: { id: staffId },
     skip: Boolean(!staffId) || !!(staffId && staffInfo?.id),
     onCompleted: (data: TStaff) => {
       const staff = data?.staff;
-      setStaffInfo({ ...staff, ...(rest ?? {}) });
+      const csrfToken = client?.csrfToken;
+      setStaffInfo({ ...staff, csrfToken });
     }
   });
 
   useErrorLogger(error);
 
   useEffect(() => {
-    setStaffInfo((prev) => {
-      return { ...prev, ...(rest ?? {}) };
-    });
-  }, [rest, setStaffInfo]);
+    const csrfToken = client?.csrfToken;
+    if(csrfToken){
+      setStaffInfo((prev) => {
+        return { ...prev, csrfToken };
+      });
+    }
+  }, [client, setStaffInfo]);
 
   return { staffInfo, setStaffInfo };
 }

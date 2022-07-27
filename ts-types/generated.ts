@@ -135,11 +135,14 @@ export interface OrderStatus extends CreatedUpdatedByAt {
   name?: Nullable<Scalars['String']>;
   color?: Nullable<Scalars['String']>;
   privacy?: PrivacyType;
+  // serial: Scalars['Int'];
 }
 
 export interface Coupon extends CreatedUpdatedByAt {
   id?: Nullable<Scalars['ID']>;
   code?: Nullable<Scalars['String']>;
+  // description: Scalars['String'];
+  // image: Scalars['String'];
   discountValue?: Scalars['Int'];
   discountType?:
     | {
@@ -220,6 +223,7 @@ export interface Product extends CreatedUpdatedByAt {
   max_price?: Scalars['Float'];
   min_price?: Scalars['Float'];
   quantity?: Scalars['Int'];
+  // in_stock?: Nullable<Scalars['Boolean']>;
   short_description?: Nullable<Scalars['String']>;
   product_description?: Scalars['String'];
   published?: Scalars['Boolean'];
@@ -275,6 +279,7 @@ export interface VariationOptionsType {
   sku: Scalars['String'];
 }
 
+// Attachment
 export interface ImageType {
   id?: Scalars['String'];
   image?: Scalars['String'];
@@ -283,13 +288,12 @@ export interface ImageType {
 }
 export interface Suppliers extends CreatedUpdatedByAt {
   id?: Scalars['ID'];
-  supplier_name?: Scalars['String'];
+  name?: Scalars['String'];
   company?: Nullable<Scalars['String']>;
-  phone_number?: Nullable<Scalars['String']>;
-  dial_code?: Nullable<Scalars['String']> | { dial_code: string };
-  address_line1?: Scalars['String'];
-  address_line2?: Nullable<Scalars['String']>;
-  country?: Nullable<Scalars['String']> | { name: string };
+  phoneNumber?: Nullable<Scalars['String']>;
+  addressLine1?: Scalars['String'];
+  addressLine2?: Nullable<Scalars['String']>;
+  country?: Nullable<CountriesType>;
   city?: Nullable<Scalars['String']> | { name: string };
   note?: Nullable<Scalars['String']>;
 }
@@ -376,29 +380,6 @@ export interface HeroCarouselType extends CreatedUpdatedByAt {
 //   shipping_address?: Maybe<UserAddress>;
 // };
 
-// export declare type OrderStatus = {
-//   id: Scalars['ID'];
-//   name: Scalars['String'];
-//   color: Scalars['String'];
-//   serial: Scalars['Int'];
-//   created_at: Scalars['DateTime'];
-//   updated_at: Scalars['DateTime'];
-// };
-
-// export declare type Coupon = {
-//   id: Scalars['ID'];
-//   code: Scalars['String'];
-//   description: Scalars['String'];
-//   orders: Array<Order>;
-//   type: Scalars['String'];
-//   image: Scalars['String'];
-//   amount: Scalars['Float'];
-//   active_from: Scalars['DateTime'];
-//   expire_at: Scalars['DateTime'];
-//   created_at: Scalars['DateTime'];
-//   updated_at: Scalars['DateTime'];
-// };
-
 // export declare type Variation = {
 //   __typename?: 'Variation';
 //   id?: Maybe<Scalars['ID']>;
@@ -411,24 +392,8 @@ export interface HeroCarouselType extends CreatedUpdatedByAt {
 //   options?: Maybe<Array<Maybe<VariationOption>>>;
 // };
 
-// export declare type VariationInput = {
-//   id?: Maybe<Scalars['ID']>;
-//   title?: Maybe<Scalars['String']>;
-//   sku?: Maybe<Scalars['String']>;
-//   is_disable?: Maybe<Scalars['Boolean']>;
-//   sale_price?: Maybe<Scalars['Float']>;
-//   price?: Maybe<Scalars['Float']>;
-//   quantity?: Maybe<Scalars['Int']>;
-//   options?: Maybe<Array<Maybe<VariationOptionInput>>>;
-// };
-
 // export declare type VariationOption = {
 //   __typename?: 'VariationOption';
-//   name?: Maybe<Scalars['String']>;
-//   value?: Maybe<Scalars['String']>;
-// };
-
-// export declare type VariationOptionInput = {
 //   name?: Maybe<Scalars['String']>;
 //   value?: Maybe<Scalars['String']>;
 // };
@@ -457,44 +422,12 @@ export interface HeroCarouselType extends CreatedUpdatedByAt {
 //   on_shipping?: Maybe<Scalars['Boolean']>;
 // };
 
-// export declare type ShippingInput = {
-//   name: Scalars['String'];
-//   amount: Scalars['Float'];
-//   is_global?: Maybe<Scalars['Boolean']>;
-//   type: ShippingType;
-// };
-
-// export declare type ShippingUpdateInput = {
-//   name?: Maybe<Scalars['String']>;
-//   amount?: Maybe<Scalars['Float']>;
-//   is_global?: Maybe<Scalars['Boolean']>;
-//   type?: ShippingType;
-// };
-
-// export declare type Attachment = {
-//   thumbnail?: Maybe<Scalars['String']>;
-//   original?: Maybe<Scalars['String']>;
-//   id?: Maybe<Scalars['ID']>;
-// };
-
 // export declare type AddressInput = {
 //   title: Scalars['String'];
 //   default?: Nullable<Scalars['Boolean']>;
 //   address: UserAddressInput;
 //   type: Scalars['String'];
 //   customer?: Nullable<ConnectBelongsTo>;
-// };
-
-// export declare type UserAddressInput = {
-//   country?: Maybe<Scalars['String']>;
-//   city?: Maybe<Scalars['String']>;
-//   state?: Maybe<Scalars['String']>;
-//   zip?: Maybe<Scalars['String']>;
-//   street_address?: Maybe<Scalars['String']>;
-// };
-
-// export declare type ConnectBelongsTo = {
-//   connect?: Maybe<Scalars['ID']>;
 // };
 
 // export declare type AttributeValueInput = {
@@ -507,32 +440,6 @@ export interface HeroCarouselType extends CreatedUpdatedByAt {
 //   name: Scalars['String'];
 //   shop_id: Scalars['Int'];
 //   values: AttributeValueInput;
-// };
-
-// export declare type AttributeValueCreateInput = {
-//   value: Scalars['String'];
-//   meta: Scalars['String'];
-//   attribute_id?: Scalars['ID'];
-// };
-
-// export declare type AttributeBelongTo = {
-//   connect: Scalars['ID'];
-// };
-
-// export declare type AttributeValueUpdateInput = {
-//   value?: Maybe<Scalars['String']>;
-//   meta?: Maybe<Scalars['String']>;
-//   attribute_id?: Scalars['ID'];
-// };
-
-// export declare type ConnectTypeBelongsTo = {
-//   connect?: Maybe<Scalars['ID']>;
-// };
-
-// export declare type AttachmentInput = {
-//   thumbnail?: Maybe<Scalars['String']>;
-//   original?: Maybe<Scalars['String']>;
-//   id?: Maybe<Scalars['ID']>;
 // };
 
 // export declare type CheckoutVerificationInput = {
@@ -555,14 +462,6 @@ export interface HeroCarouselType extends CreatedUpdatedByAt {
 //   unavailable_products: Array<Scalars['ID']>;
 // };
 
-// export type Shipping = {
-//   id?: Maybe<Scalars['ID']>;
-//   name?: Maybe<Scalars['String']>;
-//   amount?: Maybe<Scalars['Float']>;
-//   is_global?: Maybe<Scalars['Boolean']>;
-//   type?: ShippingType;
-// };
-
 // export type Tax = {
 //   id?: Maybe<Scalars['ID']>;
 //   name?: Maybe<Scalars['String']>;
@@ -576,117 +475,12 @@ export interface HeroCarouselType extends CreatedUpdatedByAt {
 //   on_shipping?: Maybe<Scalars['Boolean']>;
 // };
 
-// export declare type CouponInput = {
-//   code: Scalars['String'];
-//   type: CouponType;
-//   amount: Scalars['Float'];
-//   description?: Maybe<Scalars['String']>;
-//   image?: Maybe<AttachmentInput>;
-//   active_from: Scalars['DateTime'];
-//   expire_at: Scalars['DateTime'];
-// };
-
-// export declare type CouponUpdateInput = {
-//   code?: Maybe<Scalars['String']>;
-//   type?: Maybe<CouponType>;
-//   amount?: Maybe<Scalars['Float']>;
-//   description?: Maybe<Scalars['String']>;
-//   image?: Maybe<AttachmentInput>;
-//   active_from?: Maybe<Scalars['DateTime']>;
-//   expire_at?: Maybe<Scalars['DateTime']>;
-// };
-
-// export declare type Order = {
-//   tracking_number: Scalars['String'];
-//   customer_id: Scalars['Int'];
-//   status: Scalars['Int'];
-//   products: Array<ConnectProductOrderPivot>;
-//   amount: Scalars['Float'];
-//   sales_tax?: Maybe<Scalars['Float']>;
-//   total: Scalars['Float'];
-//   paid_total: Scalars['Float'];
-//   payment_id?: Maybe<Scalars['String']>;
-//   payment_gateway: Scalars['String'];
-//   coupon_id?: Maybe<Scalars['Int']>;
-//   discount?: Maybe<Scalars['Float']>;
-//   delivery_fee?: Maybe<Scalars['Float']>;
-//   delivery_time: Scalars['String'];
-//   card?: Maybe<CardInput>;
-//   billing_address?: Maybe<UserAddressInput>;
-//   shipping_address?: Maybe<UserAddressInput>;
-// };
-
 // export declare type CardInput = {
 //   number: Scalars['String'];
 //   expiryMonth: Scalars['String'];
 //   expiryYear: Scalars['String'];
 //   cvv: Scalars['String'];
 //   email?: Maybe<Scalars['String']>;
-// };
-
-// export declare type OrderStatusInput = {
-//   name: Scalars['String'];
-//   color: Scalars['String'];
-//   serial: Scalars['Int'];
-// };
-
-// export declare type OrderStatusUpdateInput = {
-//   id: Scalars['ID'];
-//   name: Scalars['String'];
-//   color: Scalars['String'];
-//   serial: Scalars['Int'];
-// };
-
-// export declare type Product = {
-//   name: Scalars['String'];
-//   type_id: Scalars['String'];
-//   price: Scalars['Float'];
-//   sale_price?: Maybe<Scalars['Float']>;
-//   quantity: Scalars['Int'];
-//   unit: Scalars['String'];
-//   description?: Maybe<Scalars['String']>;
-//   categories?: Maybe<Array<Scalars['ID']>>;
-//   variations?: Maybe<Array<AttributeProductPivot>>;
-//   in_stock?: Maybe<Scalars['Boolean']>;
-//   is_taxable?: Maybe<Scalars['Boolean']>;
-//   sku?: Maybe<Scalars['String']>;
-//   gallery?: Maybe<Array<Maybe<AttachmentInput>>>;
-//   image?: Maybe<AttachmentInput>;
-//   status?: Maybe<ProductStatus>;
-//   height?: Maybe<Scalars['String']>;
-//   length?: Maybe<Scalars['String']>;
-//   width?: Maybe<Scalars['String']>;
-// };
-
-// export declare type AttributeProductPivot = {
-//   id: Scalars['ID'];
-//   price?: Maybe<Scalars['Float']>;
-// };
-
-// export declare type ProfileInput = {
-//   avatar?: Maybe<Scalars['String']>;
-//   bio?: Maybe<Scalars['String']>;
-//   socials?: Maybe<Array<Maybe<SocialInput>>>;
-//   contact?: Maybe<Scalars['String']>;
-//   customer?: Maybe<ConnectBelongsTo>;
-// };
-
-// export declare type LoginInput = {
-//   email: Scalars['String'];
-//   password: Scalars['String'];
-// };
-
-// export declare type RegisterInput = {
-//   email: Scalars['String'];
-//   password: Scalars['String'];
-//   name: Scalars['String'];
-//   shop_id?: Scalars['Int'];
-//   permission: Permission;
-// };
-
-// export type ChangePasswordInput = {
-//   oldPassword: Scalars['String'];
-//   newPassword: Scalars['String'];
 // };
 
 // export type PasswordChangeResponse = {
@@ -709,32 +503,9 @@ export interface HeroCarouselType extends CreatedUpdatedByAt {
 //   password: Scalars['String'];
 // };
 
-// export type User = {
-//   name?: Maybe<Scalars['String']>;
-//   email: Scalars['String'];
-//   password: Scalars['String'];
-//   profile?: Maybe<UserProfileInput>;
-//   address?: Maybe<Array<Maybe<UserAddressUpsertInput>>>;
-// };
-
 // export type SocialInput = {
 //   type?: Maybe<Scalars['String']>;
 //   link?: Maybe<Scalars['String']>;
-// };
-
-// export type UserProfileInput = {
-//   id: Scalars['ID'];
-//   avatar?: Maybe<AttachmentInput>;
-//   bio?: Maybe<Scalars['String']>;
-//   socials?: Maybe<Array<Maybe<SocialInput>>>;
-//   contact?: Maybe<Scalars['String']>;
-// };
-
-// export type UserAddressUpsertInput = {
-//   title: Scalars['String'];
-//   default?: Maybe<Scalars['Boolean']>;
-//   address: UserAddressInput;
-//   type: Scalars['String'];
 // };
 
 // export declare type Analytics = {
@@ -749,13 +520,6 @@ export interface HeroCarouselType extends CreatedUpdatedByAt {
 // export declare type TotalYearSaleByMonth = {
 //   total?: Maybe<Scalars['Float']>;
 //   month?: Maybe<Scalars['String']>;
-// };
-
-// export type CreateTypeInput = {
-//   name: Scalars['String'];
-//   gallery?: Maybe<Array<AttachmentInput>>;
-//   icon?: Maybe<Scalars['String']>;
-//   banner_text?: Maybe<Scalars['String']>;
 // };
 
 // export declare type ApproveShopInput = {
@@ -795,13 +559,6 @@ export interface HeroCarouselType extends CreatedUpdatedByAt {
 // export declare type BalanceInput = {
 //   id?: Maybe<Scalars['ID']>;
 //   payment_info?: Maybe<PaymentInfoInput>;
-// };
-
-// export declare type AddStaffInput = {
-//   email: Scalars['String'];
-//   password: Scalars['String'];
-//   name: Scalars['String'];
-//   shop_id: Scalars['Int'];
 // };
 
 // export declare type Location = {

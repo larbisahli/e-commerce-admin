@@ -102,12 +102,6 @@ export type TagsQueryOptionsType = {
   sortedBy?: SortOrder;
 };
 
-export type DialCodeType = {
-  name: string;
-  dial_code: string;
-  code: string;
-};
-
 // export type ProductsQueryOptionsType = {
 //   page?: number;
 //   shop_id?: number;

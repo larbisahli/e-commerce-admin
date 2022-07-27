@@ -22,6 +22,9 @@ const classes = {
   shadow: 'focus:shadow'
 };
 
+// https://www.npmjs.com/package/libphonenumber-js
+// https://www.npmjs.com/package//phone
+
 const InputPhoneNumber = React.forwardRef<HTMLInputElement, Props>(
   (
     {
@@ -56,8 +59,8 @@ const InputPhoneNumber = React.forwardRef<HTMLInputElement, Props>(
         >
           {label}
         </label>
-        <div className="flex items-center justify-center duration-300 ease-in-out no-number-arrows">
-          <div className="mr-2 w-44">{children}</div>
+        <div className="flex justify-center duration-300 ease-in-out no-number-arrows">
+          <div>{children}</div>
           <input
             id={name}
             name={name}

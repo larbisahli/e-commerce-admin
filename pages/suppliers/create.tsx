@@ -1,7 +1,7 @@
 import AppLayout from '@components/layouts/app';
 import CreateOrUpdateSupplierForm from '@components/suppliers/supplier-form';
 import { useGetStaff } from '@hooks/index';
-import { verifyAuth } from '@middleware/utils';
+import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { ROUTES } from '@utils/routes';
 import type { GetServerSideProps } from 'next';
@@ -11,7 +11,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 export default function CreateSupplierPage({ client }: SSRProps) {
   const { t } = useTranslation();
 
-  useGetStaff(client?.staff_id);
+  useGetStaff(client);
 
   return (
     <>
@@ -40,6 +40,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
+  const { csrfToken, csrfError } = await XSRFHandler(context);
+
   return {
     props: {
       ...(await serverSideTranslations(locale!, [
@@ -48,7 +50,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         'form',
         'error'
       ])),
-      client
+      client: { ...(client ?? {}), csrfToken, csrfError }
     }
   };
 };
