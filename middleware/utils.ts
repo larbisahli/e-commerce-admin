@@ -25,7 +25,7 @@ export function verifyAuth(context: GetServerSidePropsContext) {
     if (!jwtToken) {
       return {
         client: null,
-        error: { message: 'No jwtToken Provided!', jwtToken }
+        error: { message: 'No jwtToken Provided!' }
       };
     }
     const Alg: Algorithm = 'RS256';
@@ -33,7 +33,7 @@ export function verifyAuth(context: GetServerSidePropsContext) {
     const client = jwt.verify(jwtToken, PublicKEY, {
       algorithms: Alg
     });
-    return { client: { staffId: client?.staff_id }, error: null };
+    return { client, error: null };
   } catch (error) {
     console.log('verifyAuth Error:>>', { error });
     return { client: null, error: { ...serializeError(error), jwtToken } };

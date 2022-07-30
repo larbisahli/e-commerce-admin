@@ -6,7 +6,7 @@ import Loader from '@components/ui/loader/loader';
 import { PRODUCT } from '@graphql/product';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetStaff } from '@hooks/useGetStaff';
-import { verifyAuth } from '@middleware/utils';
+import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import type { SSRProps } from '@ts-types/custom.types';
 import type { Product } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
@@ -36,10 +36,8 @@ export default function UpdateProductPage({ client }: SSRProps) {
     }
   );
 
-  useGetStaff(client?.staff_id);
+  useGetStaff(client);
   useErrorLogger(error);
-
-  console.log('data >>>>', data);
 
   const productForAdmin = data?.productForAdmin;
 
@@ -54,7 +52,9 @@ export default function UpdateProductPage({ client }: SSRProps) {
   return (
     <>
       <div className="py-5 sm:py-8 flex border-b border-dashed border-border-base">
-        <h1 className="text-lg font-semibold text-heading">Edit Product</h1>
+        <h1 className="text-lg font-semibold text-heading">
+          {t('form:edit-product')}
+        </h1>
       </div>
       <CreateOrUpdateProductForm initialValues={productForAdmin} />
     </>
@@ -76,10 +76,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
+  const { csrfToken, csrfError } = await XSRFHandler(context);
+
   return {
     props: {
       ...(await serverSideTranslations(locale, ['common', 'form', 'error'])),
-      client
+      client: { ...(client ?? {}), csrfToken, csrfError }
     }
   };
 };

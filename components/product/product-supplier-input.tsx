@@ -46,7 +46,7 @@ const ProductSupplierInput = ({ control }: Props) => {
         name="suppliers"
         isMulti
         control={control}
-        getOptionLabel={(option: any) => option.supplier_name}
+        getOptionLabel={(option: any) => option.name}
         getOptionValue={(option: any) => option.id}
         options={data?.suppliersForSelect ?? []}
         isLoading={loading}

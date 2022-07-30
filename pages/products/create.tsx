@@ -1,34 +1,24 @@
 import AppLayout from '@components/layouts/app';
 import CreateOrUpdateProductForm from '@components/product/product-form';
-import ErrorMessage from '@components/ui/error-message';
-import Loader from '@components/ui/loader/loader';
-import { verifyAuth } from '@middleware/utils';
+import { useGetStaff } from '@hooks/index';
+import { verifyAuth, XSRFHandler } from '@middleware/utils';
+import type { SSRProps } from '@ts-types/custom.types';
 import { ROUTES } from '@utils/routes';
 import type { GetServerSideProps } from 'next';
-import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-export default function CreateProductPage() {
+export default function CreateProductPage({ client }: SSRProps) {
   const { t } = useTranslation();
-  const { query } = useRouter();
 
-  // const {
-  //   data,
-  //   isLoading: loading,
-  //   error,
-  // } = useProductQuery(query.productId as string);
+  useGetStaff(client);
 
-  const data = [];
-  const loading = false;
-  const error = null;
-
-  if (loading) return <Loader text={t('common:text-loading')} />;
-  if (error) return <ErrorMessage message={error?.message as string} />;
   return (
     <>
       <div className="py-5 sm:py-8 flex border-b border-dashed border-border-base">
-        <h1 className="text-lg font-semibold text-heading">Create Product</h1>
+        <h1 className="text-lg font-semibold text-heading">
+          {t('form:create-product')}
+        </h1>
       </div>
       <CreateOrUpdateProductForm />
     </>
@@ -50,10 +40,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
+  const { csrfToken, csrfError } = await XSRFHandler(context);
+
   return {
     props: {
       ...(await serverSideTranslations(locale, ['common', 'form'])),
-      client
+      client: { ...(client ?? {}), csrfToken, csrfError }
     }
   };
 };

@@ -3,43 +3,44 @@ import Card from '@components/common/card';
 import Button from '@components/ui/button';
 import Description from '@components/ui/description';
 import Label from '@components/ui/label';
-import SelectInput from '@components/ui/select-input';
+import Loader from '@components/ui/loader/loader';
 import Title from '@components/ui/title';
 import { ATTRIBUTES_FOR_SELECT } from '@graphql/attribute';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import type { Product, VariationOptionsType } from '@ts-types/generated';
+import type { Product, VariationType } from '@ts-types/generated';
 import {
   Attribute,
-  AttributeValue,
   OrderBy,
   SortOrder,
-  VariationOptionActions
+  VariationActions
 } from '@ts-types/generated';
 import { cartesian } from '@utils/cartesian';
 import cloneDeep from 'lodash/cloneDeep';
 import differenceWith from 'lodash/differenceWith';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
+import { nanoid } from 'nanoid';
+import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
-import React, { memo, useEffect, useMemo, useState } from 'react';
-import { useFieldArray, useFormContext } from 'react-hook-form';
+import React, { memo, useEffect, useState } from 'react';
+import { useFormContext } from 'react-hook-form';
 
+import {
+  VariationAction,
+  VariationReducerType,
+  VariationTypeExtra
+} from '../variations-reducer';
 import CartesianProductComponent from './cartesian-product-component';
 
-interface VariationOptionAction {
-  type: VariationOptionActions;
-  payload: {
-    value?: any;
-    field?: string;
-    values?: any[];
-    extra?: any;
-  };
-}
+const Select = dynamic(() => import('@components/ui/select/select'), {
+  loading: () => <Loader height="100px" showText={false} />,
+  ssr: false
+});
 
 type IProps = {
   initialValues?: Product | null;
-  variationOptions?: VariationOptionsType[];
-  dispatchVariationOptions?: React.Dispatch<VariationOptionAction>;
+  variationState?: VariationReducerType;
+  dispatchVariationState?: React.Dispatch<VariationAction>;
 };
 
 interface TAttributeSelect {
@@ -55,22 +56,17 @@ interface OptionsVariable {
 
 interface CartesianType {
   id: string;
-  attribute_name: string;
-  attribute_value: string;
+  name: string;
+  value: string;
 }
 
-function getCartesianProduct(
-  values: {
-    attribute: Attribute;
-    attribute_values: AttributeValue[];
-  }[]
-) {
+function getCartesianProduct(values: VariationType[]) {
   const formattedValues = values
     ?.map((v) =>
-      v.attribute_values?.map((a) => ({
+      v.selectedValues?.map((a) => ({
         id: a.id,
-        attribute_name: v.attribute.attribute_name,
-        attribute_value: a.attribute_value
+        name: v.attribute.name,
+        value: a.value
       }))
     )
     .filter((i: any) => i !== undefined);
@@ -82,8 +78,8 @@ function getCartesianProduct(
 
 function ProductVariableForm({
   initialValues,
-  variationOptions,
-  dispatchVariationOptions
+  variationState,
+  dispatchVariationState
 }: IProps) {
   const { t } = useTranslation();
 
@@ -102,24 +98,22 @@ function ProductVariableForm({
 
   useErrorLogger(error);
 
-  const { control, watch, getValues } = useFormContext();
-
-  // This field array will keep all the attribute dropdown fields
-  const { fields, append, remove } = useFieldArray({
-    shouldUnregister: true,
-    control,
-    name: 'variations'
-  });
+  const { watch } = useFormContext();
 
   const [attributeValuesChangesState, setAttributeValuesChangesState] =
     useState([]);
   const [cartesianProduct, setCartesianProduct] = useState([]);
   const [init, setInit] = useState(false);
 
-  const variations = watch('variations');
+  const gallery = watch('gallery');
+  const variations = variationState.variations;
+  const variationOptions = variationState.variationsOptions;
+  const attributes = data?.attributesForAdmin ?? [];
+
+  console.log('variationState ----- :>> ', variationState);
 
   const attributeValuesChanges = [].concat(
-    ...(variations?.map((v) => v?.attribute_values) ?? [])
+    ...(variations?.map((v) => v?.selectedValues) ?? [])
   );
 
   useEffect(() => {
@@ -146,40 +140,40 @@ function ProductVariableForm({
   useEffect(() => {
     if (
       isEmpty(variationOptions) &&
-      !isEmpty(initialValues?.variation_options)
+      !isEmpty(initialValues?.variationOptions)
     ) {
-      const variation_options = cloneDeep(
-        initialValues?.variation_options ?? []
-      );
-      dispatchVariationOptions({
-        type: VariationOptionActions.INIT,
-        payload: {
-          value: variation_options
-        }
-      });
+      const variationOptions = cloneDeep(initialValues?.variationOptions ?? []);
+      // dispatchVariationState({
+      //   type: VariationActions.INIT,
+      //   payload: {
+      //     value: variationOptions
+      //   }
+      // });
     }
     setInit(true);
   }, []);
 
   useEffect(() => {
-    const sale_price = getValues('sale_price');
-    const compare_price = getValues('compare_price');
-    const buying_price = getValues('buying_price');
-
+    console.log('cartesianProduct', cartesianProduct);
     if (init) {
-      dispatchVariationOptions({
-        type: VariationOptionActions.CARTESIAN,
+      dispatchVariationState({
+        type: VariationActions.CARTESIAN,
         payload: {
-          values: cartesianProduct,
-          extra: { sale_price, compare_price, buying_price }
+          values: cartesianProduct
         }
       });
     }
-  }, [cartesianProduct]);
+  }, [cartesianProduct, init]);
 
-  const attributes = data?.attributesForAdmin ?? [];
-
-  const gallery = watch('gallery');
+  const appendVariant = (e: any) => {
+    e.preventDefault();
+    dispatchVariationState({
+      type: VariationActions.APPEND_VARIATION,
+      payload: {
+        value: { id: nanoid(), attribute: attributes[0], values: [] }
+      }
+    });
+  };
 
   return (
     <div className="flex flex-wrap pb-8 border-b border-dashed border-border-base my-5 sm:my-8">
@@ -198,15 +192,17 @@ function ProductVariableForm({
             {t('form:form-title-options')}
           </Title>
           <div>
-            {fields?.map((field: any, index: number) => {
+            {variations?.map((variant, index) => {
               return (
                 <VariationComponent
-                  key={index}
-                  field={field}
-                  index={index}
-                  attributes={attributes}
-                  loading={loading}
-                  remove={remove}
+                  key={variant.id}
+                  {...{
+                    variant,
+                    attributes,
+                    loading,
+                    index,
+                    dispatchVariationState
+                  }}
                 />
               );
             })}
@@ -214,11 +210,8 @@ function ProductVariableForm({
 
           <div className="px-5 md:px-8">
             <Button
-              disabled={fields.length === attributes?.length}
-              onClick={(e: any) => {
-                e.preventDefault();
-                append({ attribute: '', attribute_values: [] });
-              }}
+              disabled={variations.length === attributes?.length}
+              onClick={appendVariant}
               type="button"
             >
               {t('form:button-label-add-option')}
@@ -234,13 +227,13 @@ function ProductVariableForm({
                   ? t('form:total-variations-added')
                   : t('form:total-variation-added')}
               </Title>
-              {variationOptions.map((variationOption, index: number) => {
+              {variationOptions?.map((variationOption, index: number) => {
                 return (
                   <CartesianProductComponent
                     key={index}
                     gallery={gallery}
                     variationOption={variationOption}
-                    dispatchVariationOptions={dispatchVariationOptions}
+                    dispatchVariationState={dispatchVariationState}
                     index={index}
                   />
                 );
@@ -253,33 +246,63 @@ function ProductVariableForm({
   );
 }
 
-const VariationComponent = ({ field, index, attributes, remove, loading }) => {
+interface VCProps {
+  variant: VariationTypeExtra;
+  attributes: Attribute[];
+  index: number;
+  loading: boolean;
+  dispatchVariationState: React.Dispatch<VariationAction>;
+}
+
+const VariationComponent = ({
+  variant,
+  index,
+  attributes,
+  loading,
+  dispatchVariationState
+}: VCProps) => {
   const { t } = useTranslation();
 
-  const { control, watch } = useFormContext();
+  const remove = () => {
+    dispatchVariationState({
+      type: VariationActions.REMOVE_VARIATION,
+      payload: {
+        id: variant.id
+      }
+    });
+  };
 
-  const attId = watch(`variations[${index}].attribute.id`);
-  const av = useMemo(
-    () =>
-      attributes?.find((a) => {
-        return a.id === attId;
-      })?.attribute_values,
-    [attributes, attId]
-  );
+  const changeAttribute = (attribute) => {
+    dispatchVariationState({
+      type: VariationActions.CHANGE_VARIATION,
+      payload: {
+        value: attribute,
+        id: variant.id
+      }
+    });
+  };
+
+  const changeValues = (values) => {
+    dispatchVariationState({
+      type: VariationActions.CHANGE_VARIATION_VALUES,
+      payload: {
+        values,
+        id: variant.id
+      }
+    });
+  };
 
   return (
-    <div
-      key={field.id}
-      className="border-b border-dashed border-border-200 last:border-0 p-5 md:p-8"
-    >
+    <div className="border-b border-dashed border-border-200 last:border-0 p-5 md:p-8">
       <div className="flex items-center justify-between">
         <Title className="mb-0">
           {t('form:form-title-options')} {index + 1}
         </Title>
         <button
-          onClick={() => remove(index)}
+          onClick={remove}
           type="button"
-          className="text-sm text-red-500 hover:text-red-700 transition-colors duration-200 focus:outline-none"
+          className="text-sm text-red-500 hover:text-red-700 
+          transition-colors duration-200 focus:outline-none"
         >
           {t('form:button-label-remove')}
         </button>
@@ -288,27 +311,30 @@ const VariationComponent = ({ field, index, attributes, remove, loading }) => {
       <div className="grid grid-cols-fit gap-5">
         <div className="mt-5">
           <Label>{t('form:input-label-attribute-name')}*</Label>
-          <SelectInput
-            name={`variations[${index}].attribute`}
-            control={control}
-            value={field.attribute}
-            getOptionLabel={(option: any) => option.attribute_name}
+          <Select
+            value={variant.attribute}
+            getOptionLabel={(option: any) => option.name}
             getOptionValue={(option: any) => option.id}
-            options={attributes}
             isLoading={loading}
+            closeMenuOnSelect
+            hideSelectedOptions
+            options={attributes}
+            onChange={changeAttribute}
           />
         </div>
 
         <div className="mt-5 col-span-2">
           <Label>{t('form:input-label-attribute-value')}*</Label>
-          <SelectInput
-            isMulti
-            name={`variations[${index}].attribute_values`}
-            control={control}
-            value={field.value}
-            getOptionLabel={(option: any) => option.attribute_value}
+          <Select
+            value={variant.selectedValues}
+            getOptionLabel={(option: any) => option.value}
             getOptionValue={(option: any) => option.id}
-            options={av}
+            isMulti
+            isLoading={loading}
+            closeMenuOnSelect
+            hideSelectedOptions
+            options={variant.attribute.values}
+            onChange={changeValues}
           />
         </div>
       </div>

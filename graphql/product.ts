@@ -17,31 +17,31 @@ export const PRODUCTS_FOR_ADMIN = gql`
       sortedBy: $sortedBy
     ) {
       id
-      product_name
-      sale_price
-      max_price
-      min_price
+      name
+      salePrice
+      maxPrice
+      minPrice
       quantity
       published
       categories {
         id
-        category_name
+        name
       }
       thumbnail {
         id
         image
         placeholder
       }
-      created_at
-      created_by {
+      createdAt
+      createdBy {
         id
-        first_name
-        last_name
+        firstName
+        lastName
       }
-      updated_by {
+      updatedBy {
         id
-        first_name
-        last_name
+        firstName
+        lastName
       }
     }
   }
@@ -51,16 +51,16 @@ export const PRODUCT = gql`
   query ProductForAdmin($id: ID!) {
     productForAdmin(id: $id) {
       id
-      product_name
+      name
       sku
-      sale_price
-      compare_price
-      buying_price
+      salePrice
+      comparePrice
+      buyingPrice
       quantity
-      short_description
-      product_description
+      shortDescription
+      description
       published
-      disable_out_of_stock
+      disableOutOfStock
       note
       thumbnail {
         id
@@ -74,85 +74,70 @@ export const PRODUCT = gql`
       }
       categories {
         id
-        category_name
+        name
       }
       suppliers {
         id
-        supplier_name
+        name
       }
       tags {
         id
-        tag_name
+        name
       }
-      variation_options {
+      variationOptions {
         id
         title
-        is_disable
+        isDisable
         image
         options
-        sale_price
-        compare_price
-        buying_price
+        salePrice
+        comparePrice
+        buyingPrice
         quantity
         sku
       }
       variations {
         attribute {
           id
-          attribute_name
+          name
         }
-        attribute_values {
+        selectedValues {
           id
-          attribute_value
+          value
         }
       }
-      shippings {
-        product_shipping_id
-        shipping_provider {
-          id
-          shipper_name
-        }
-        shipping_zones {
-          id
-          shipping_price
-          zones {
-            name
-            code
-          }
-        }
-      }
-      product_shipping_info {
+      productShippingInfo {
         id
         weight
-        weight_unit {
+        weightUnit {
           unit
         }
         volume
-        volume_unit {
+        volumeUnit {
           unit
         }
-        dimension_width
-        dimension_height
-        dimension_depth
-        dimension_unit {
+        dimensionWidth
+        dimensionHeight
+        dimensionDepth
+        dimensionUnit {
           unit
         }
       }
-      created_at
-      updated_at
-      created_by {
+      createdAt
+      updatedAt
+      createdBy {
         id
-        first_name
-        last_name
+        firstName
+        lastName
         profile {
           image
           placeholder
         }
       }
-      updated_by {
+      updatedBy {
         id
-        first_name
-        last_name
+        firstName
+        lastName
         profile {
           image
           placeholder
@@ -164,15 +149,15 @@ export const PRODUCT = gql`
 
 export const CREATE_PRODUCT = gql`
   mutation CreateProduct(
-    $product_name: String!
-    $sale_price: Float!
-    $compare_price: Float
-    $buying_price: Float
+    $name: String!
+    $salePrice: Float!
+    $comparePrice: Float
+    $buyingPrice: Float
     $quantity: Int!
-    $short_description: String!
-    $product_description: String!
+    $shortDescription: String!
+    $description: String!
     $published: Boolean!
-    $disable_out_of_stock: Boolean!
+    $disableOutOfStock: Boolean!
     $note: String
     $sku: String
     $thumbnail: IMGInput
@@ -180,21 +165,21 @@ export const CREATE_PRODUCT = gql`
     $categories: [CategoryInput]
     $suppliers: [SupplierInput]
     $tags: [TagInput]
-    $variation_options: [VariationOptionInput]
+    $variationOptions: [VariationOptionInput]
     $variations: [VariationInput]
     $shippings: [ProductShippingInput]
-    $product_shipping_info: ProductShippingInfoInput
+    $productShippingInfo: ProductShippingInfoInput
   ) {
     createProduct(
-      product_name: $product_name
-      sale_price: $sale_price
-      compare_price: $compare_price
-      buying_price: $buying_price
+      name: $name
+      salePrice: $salePrice
+      comparePrice: $comparePrice
+      buyingPrice: $buyingPrice
       quantity: $quantity
-      short_description: $short_description
-      product_description: $product_description
+      shortDescription: $shortDescription
+      description: $description
       published: $published
-      disable_out_of_stock: $disable_out_of_stock
+      disableOutOfStock: $disableOutOfStock
       note: $note
       sku: $sku
       thumbnail: $thumbnail
@@ -202,12 +187,12 @@ export const CREATE_PRODUCT = gql`
       categories: $categories
       suppliers: $suppliers
       tags: $tags
-      variation_options: $variation_options
+      variationOptions: $variationOptions
       variations: $variations
       shippings: $shippings
-      product_shipping_info: $product_shipping_info
+      productShippingInfo: $productShippingInfo
     ) {
-      product_name
+      name
     }
   }
 `;
@@ -227,23 +212,7 @@ export const UPDATE_PRODUCT = gql`
 export const DELETE_ATTRIBUTE = gql`
   mutation DeleteProduct($id: ID!) {
     deleteProduct(id: $id) {
-      product_name
-    }
-  }
-`;
-
-export const DELETE_SHIPPING_ZONE = gql`
-  mutation DeleteShippingZone($id: ID!) {
-    deleteShippingZone(id: $id) {
-      id
-    }
-  }
-`;
-
-export const DELETE_SHIPPING = gql`
-  mutation DeleteShipping($product_shipping_id: ID!) {
-    deleteShipping(product_shipping_id: $product_shipping_id) {
-      product_shipping_id
+      name
     }
   }
 `;

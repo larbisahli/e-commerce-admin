@@ -1,52 +1,17 @@
-import { useQuery } from '@apollo/client';
 import Card from '@components/common/card';
-import Button from '@components/ui/button';
 import Description from '@components/ui/description';
 import ValidationError from '@components/ui/form-validation-error';
 import Input from '@components/ui/input';
 import Label from '@components/ui/label';
 import SelectInput from '@components/ui/select-input';
-import { SHIPPINGS_FOR_SELECT } from '@graphql/shipping-zone';
-import { useErrorLogger } from '@hooks/useErrorLogger';
-import {
-  OrderBy,
-  ProductShippings,
-  Shipping,
-  ShippingsActions
-} from '@ts-types/generated';
-import cloneDeep from 'lodash/cloneDeep';
-import { nanoid } from 'nanoid';
 import { useTranslation } from 'next-i18next';
-import React, { memo, useEffect } from 'react';
+import React, { memo } from 'react';
 import { Control, useFormContext } from 'react-hook-form';
-
-import ShippingsComponent from './shippings-component';
-
-interface ShippingsAction {
-  type: ShippingsActions;
-  payload: {
-    value?: any;
-    field?: string;
-    key?: string;
-  };
-}
 
 type IProps = {
   control: Control<any>;
   initialValues: any;
-  shippings: ProductShippings[];
-  dispatchShippings: React.Dispatch<ShippingsAction>;
 };
-
-interface ShippingsSelect {
-  shippingsSelectForAdmin: Shipping[];
-}
-
-interface OptionsVariable {
-  page: number;
-  limit: number;
-  orderBy: OrderBy;
-}
 
 const weight_units = [{ unit: 'kg' }, { unit: 'g' }, { unit: 't' }];
 
@@ -54,62 +19,13 @@ const volume_units = [{ unit: 'L' }, { unit: 'mL' }];
 
 const dimension_units = [{ unit: 'L' }, { unit: 'mL' }];
 
-function ProductShippingInfoForm({
-  control,
-  initialValues,
-  shippings,
-  dispatchShippings
-}: IProps) {
+function ProductShippingInfoForm({ control, initialValues }: IProps) {
   const { t } = useTranslation();
 
   const {
     register,
     formState: { errors }
   } = useFormContext();
-
-  const { data, loading, error } = useQuery<ShippingsSelect, OptionsVariable>(
-    SHIPPINGS_FOR_SELECT,
-    {
-      variables: {
-        page: 1,
-        limit: 999,
-        orderBy: OrderBy.CREATED_AT
-      },
-      fetchPolicy: 'cache-and-network'
-    }
-  );
-
-  const shippingProviders = data?.shippingsSelectForAdmin;
-
-  useErrorLogger(error);
-
-  useEffect(() => {
-    dispatchShippings({
-      type: ShippingsActions.INIT,
-      payload: {
-        value: cloneDeep(initialValues?.shippings ?? [])
-      }
-    });
-  }, []);
-
-  const addShipping = () => {
-    dispatchShippings({
-      type: ShippingsActions.ADD_SHIPPING,
-      payload: {
-        value: {
-          product_shipping_id: nanoid(10),
-          shipping_provider: {},
-          shipping_zones: [
-            {
-              id: nanoid(10),
-              zones: [{ name: 'Global', code: 'Global' }],
-              shipping_price: 0
-            }
-          ]
-        }
-      }
-    });
-  };
 
   return (
     <div className="flex flex-wrap my-5 sm:my-8">
@@ -124,19 +40,19 @@ function ProductShippingInfoForm({
       />
 
       <Card className="w-full sm:w-8/12 md:w-2/3">
-        <input {...register(`product_shipping_info.id`)} type="hidden" />
+        <input {...register(`productShippingInfo.id`)} type="hidden" />
         {/* Width */}
         <Label>{t('form:input-label-weight')}</Label>
         <div className="flex items-center mb-5">
           <Input
-            {...register('product_shipping_info.weight')}
+            {...register('productShippingInfo.weight')}
             type="number"
             variant="outline"
             className="mr-2"
           />
           <div className="w-36">
             <SelectInput
-              name="product_shipping_info.weight_unit"
+              name="productShippingInfo.weightUnit"
               control={control}
               getOptionLabel={(option: any) => option.unit}
               getOptionValue={(option: any) => option.unit}
@@ -146,20 +62,20 @@ function ProductShippingInfoForm({
           </div>
         </div>
         <ValidationError
-          message={t(errors.product_shipping_info?.weight?.message!)}
+          message={t(errors.productShippingInfo?.weight?.message!)}
         />
         {/* Volume */}
         <Label>{t('form:input-label-volume')}</Label>
         <div className="flex items-center mb-5">
           <Input
-            {...register('product_shipping_info.volume')}
+            {...register('productShippingInfo.volume')}
             type="number"
             variant="outline"
             className="mr-2"
           />
           <div className="w-36">
             <SelectInput
-              name={'product_shipping_info.volume_unit'}
+              name={'productShippingInfo.volumeUnit'}
               control={control}
               className="w-full"
               getOptionLabel={(option: any) => option.unit}
@@ -169,7 +85,7 @@ function ProductShippingInfoForm({
           </div>
         </div>
         <ValidationError
-          message={t(errors.product_shipping_info?.volume?.message!)}
+          message={t(errors.productShippingInfo?.volume?.message!)}
         />
         {/* Dimensions */}
         <Label className="mb-3">{t('form:input-label-dimensions')}</Label>
@@ -185,7 +101,7 @@ function ProductShippingInfoForm({
               {t('form:input-label-dimensions-width')}
             </Label>
             <Input
-              {...register('product_shipping_info.dimension_width')}
+              {...register('productShippingInfo.dimensionWidth')}
               type="number"
               variant="outline"
               className="w-24 mr-2"
@@ -202,7 +118,7 @@ function ProductShippingInfoForm({
               {t('form:input-label-dimensions-height')}
             </Label>
             <Input
-              {...register('product_shipping_info.dimension_height')}
+              {...register('productShippingInfo.dimensionHeight')}
               type="number"
               variant="outline"
               className="w-24 mr-2"
@@ -219,7 +135,7 @@ function ProductShippingInfoForm({
               {t('form:input-label-dimensions-depth')}
             </Label>
             <Input
-              {...register('product_shipping_info.dimension_depth')}
+              {...register('productShippingInfo.dimensionDepth')}
               type="number"
               variant="outline"
               className="w-24 mr-2"
@@ -236,7 +152,7 @@ function ProductShippingInfoForm({
               {t('form:input-label-dimensions-units')}
             </Label>
             <SelectInput
-              name="product_shipping_info.dimension_unit"
+              name="productShippingInfo.dimensionUnit"
               control={control}
               className="w-full"
               getOptionLabel={(option: any) => option.unit}
@@ -246,36 +162,11 @@ function ProductShippingInfoForm({
           </div>
           <ValidationError
             message={
-              t(errors.product_shipping_info?.dimension_depth?.message!) ||
-              t(errors.product_shipping_info?.dimension_height?.message!) ||
-              t(errors.product_shipping_info?.dimension_width?.message!)
+              t(errors.productShippingInfo?.dimensionDepth?.message!) ||
+              t(errors.productShippingInfo?.dimensionHeight?.message!) ||
+              t(errors.productShippingInfo?.dimensionWidth?.message!)
             }
           />
-        </div>
-
-        {/* ********************** Shippings ********************** */}
-        <div>
-          <Label>{t('form:input-label-shippings')}</Label>
-          <div>
-            {shippings?.map((item) => {
-              return (
-                <ShippingsComponent
-                  key={item?.product_shipping_id}
-                  item={item}
-                  shippingProviders={shippingProviders}
-                  dispatchShippings={dispatchShippings}
-                  loading={loading}
-                />
-              );
-            })}
-            <Button
-              type="button"
-              onClick={addShipping}
-              className="w-full sm:w-auto"
-            >
-              {t('form:button-label-add-shipping')}
-            </Button>
-          </div>
         </div>
       </Card>
     </div>

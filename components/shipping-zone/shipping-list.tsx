@@ -49,6 +49,12 @@ const ShippingList = ({
       align: 'center',
       width: 90,
       render: (rateType: string, record: ShippingZoneType) => {
+        if (!rateType)
+          return (
+            <div className="!text-sm text-gray-500 capitalize font-medium">
+              None
+            </div>
+          );
         return (
           <Badge
             className="!text-sm text-gray-500 capitalize font-medium"

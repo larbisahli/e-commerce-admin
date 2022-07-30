@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 export enum PATH {
   PRODUCTS = 'products',
   POPULAR_PRODUCTS = 'popular-products',

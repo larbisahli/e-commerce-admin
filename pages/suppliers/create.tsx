@@ -2,7 +2,7 @@ import AppLayout from '@components/layouts/app';
 import CreateOrUpdateSupplierForm from '@components/suppliers/supplier-form';
 import { useGetStaff } from '@hooks/index';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
-import { SSRProps } from '@ts-types/custom.types';
+import type { SSRProps } from '@ts-types/custom.types';
 import { ROUTES } from '@utils/routes';
 import type { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';

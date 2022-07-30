@@ -7,15 +7,22 @@ import Checkbox from '@components/ui/checkbox';
 import Description from '@components/ui/description';
 import FileInput from '@components/ui/file-input';
 import ValidationError from '@components/ui/form-validation-error';
+import Input from '@components/ui/input';
 import Label from '@components/ui/label';
 import Loader from '@components/ui/loader/loader';
 import Radio from '@components/ui/radio';
+import SelectInput from '@components/ui/select-input';
 import TextArea from '@components/ui/text-area';
 import { CREATE_PRODUCT, UPDATE_PRODUCT } from '@graphql/product';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useErrorLogger, useWarnIfUnsavedChanges } from '@hooks/index';
+import {
+  useErrorLogger,
+  useGetStaff,
+  useWarnIfUnsavedChanges
+} from '@hooks/index';
 import { notify } from '@lib/index';
 import type { Product } from '@ts-types/generated';
+import { ProductStatus, ProductType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import cloneDeep from 'lodash/cloneDeep';
 import isEmpty from 'lodash/isEmpty';
@@ -32,9 +39,8 @@ import ProductSupplierInput from './product-supplier-input';
 import ProductTagInput from './product-tag-input';
 import { productValidationSchema } from './product-validation-schema';
 import ProductVariableForm from './product-variable-form';
-import { ShippingsReducer } from './shippings-reducer';
 import { creationVariable, updateVariable } from './variablesSubmission';
-import { VariationOptionsReducer } from './variation-options-reducer';
+import { variationsReducer } from './variations-reducer';
 
 const Editor = dynamic(() => import('@components/ui/editor'), {
   loading: () => <Loader height="150px" text="Editor..." />,
@@ -44,16 +50,17 @@ const Editor = dynamic(() => import('@components/ui/editor'), {
 type FormValues = Product;
 
 const defaultValues = {
-  product_name: '',
+  name: '',
   sku: '',
-  sale_price: 0,
-  compare_price: 0,
-  buying_price: 0,
+  salePrice: 0,
+  comparePrice: 0,
+  buyingPrice: 0,
   quantity: 0,
-  short_description: '',
-  product_description: '',
-  status: 'draft',
-  disable_out_of_stock: true,
+  shortDescription: '',
+  description: '',
+  type: { id: ProductType.Simple, name: 'Simple' },
+  status: ProductStatus.Draft,
+  disableOutOfStock: true,
   note: '',
   thumbnail: [],
   gallery: [],
@@ -61,15 +68,15 @@ const defaultValues = {
   suppliers: [],
   variations: [],
   tags: [],
-  product_shipping_info: {
+  productShippingInfo: {
     weight: 0,
-    weight_unit: { unit: 'kg' },
+    weightUnit: { unit: 'kg' },
     volume: 0,
-    volume_unit: { unit: 'L' },
-    dimension_width: 0,
-    dimension_height: 0,
-    dimension_depth: 0,
-    dimension_unit: { unit: 'L' }
+    volumeUnit: { unit: 'L' },
+    dimensionWidth: 0,
+    dimensionHeight: 0,
+    dimensionDepth: 0,
+    dimensionUnit: { unit: 'L' }
   }
 };
 
@@ -82,11 +89,13 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
 
   const router = useRouter();
 
-  const [VariationOptions, dispatchVariationOptions] = useReducer(
-    VariationOptionsReducer,
-    []
+  const [variationState, dispatchVariationState] = useReducer(
+    variationsReducer,
+    {
+      variations: [],
+      variationsOptions: []
+    }
   );
-  const [shippings, dispatchShippings] = useReducer(ShippingsReducer, []);
   const [error, setError] = useState(null);
   const [shortDescription, setShortDescription] = useState(0);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -100,7 +109,9 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
     defaultValues: initialValues
       ? cloneDeep({
           ...initialValues,
-          status: initialValues?.published ? 'publish' : 'draft'
+          status: initialValues?.published
+            ? ProductStatus.Publish
+            : ProductStatus.Draft
         })
       : defaultValues
   });
@@ -110,11 +121,20 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
     handleSubmit,
     control,
     getValues,
+    watch,
     reset,
     formState: { errors }
   } = methods;
 
+  const { staffInfo } = useGetStaff();
+  const csrfToken = staffInfo?.csrfToken;
+
   const [createProduct, { loading: creating }] = useMutation(CREATE_PRODUCT, {
+    context: {
+      headers: {
+        'x-csrf-token': csrfToken
+      }
+    },
     onCompleted: (data: { createAttribute: Product }) => {
       if (!isEmpty(data)) {
         notify(t('common:successfully-created'), 'success');
@@ -125,6 +145,11 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
   });
 
   const [updateProduct, { loading: updating }] = useMutation(UPDATE_PRODUCT, {
+    context: {
+      headers: {
+        'x-csrf-token': csrfToken
+      }
+    },
     onCompleted: (data: { updateAttribute: Product }) => {
       if (!isEmpty(data)) {
         notify(t('common:successfully-updated'), 'success');
@@ -137,32 +162,22 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
 
   const onSubmit = async (values_: FormValues) => {
     const values = {
-      ...values_,
-      variation_options: VariationOptions,
-      shippings
+      ...values_
+      // variationOptions: VariationOptions
     };
 
     if (lockedSubmission) return;
 
     setLockedSubmission(true);
-
-    // Check if shipping_provider exist
-    const shippingProviderCheck = shippings?.find(
-      (v) => !v.shipping_provider?.id
-    );
-
-    if (!isEmpty(shippingProviderCheck)) {
-      notify('Please add a Shipping Provider', 'error');
-      return;
-    }
+    setUnsavedChanges(false);
 
     if (isEmpty(initialValues)) {
       const variables = creationVariable(values);
       createProduct({ variables }).catch((err) => {
         setError(err);
+        setUnsavedChanges(true);
       });
     } else {
-      setUnsavedChanges(false);
       const variables = updateVariable(values, initialValues);
       updateProduct({
         variables: {
@@ -179,6 +194,8 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
   useWarnIfUnsavedChanges(unsavedChanges, () => {
     return confirm(t('common:UNSAVED_CHANGES'));
   });
+
+  const currentProductType = watch('type') as { id: ProductType; name: string };
 
   return (
     <>
@@ -236,11 +253,8 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
             </Card>
           </div>
 
-          {/* Simple Type */}
-          <ProductInfoForm initialValues={initialValues} />
-
           {/* Description */}
-          <div className="flex flex-wrap my-5 sm:my-8">
+          <div className="flex flex-wrap my-5 sm:my-8 pb-8 border-b border-dashed border-border-base">
             <Description
               title={t('form:item-description')}
               details={`${
@@ -252,24 +266,31 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
             />
 
             <Card className="w-full sm:w-8/12 md:w-2/3">
+              <Input
+                label={`${t('form:input-label-name')}*`}
+                {...register('name')}
+                error={t(errors.name?.message!)}
+                placeholder="Title..."
+                variant="outline"
+                className="mb-5"
+              />
+
               <Label>{t('form:input-label-product-details')}*</Label>
               <Editor
                 control={control}
-                name="product_description"
+                name="description"
                 className="mb-5"
                 defaultValue=""
               />
-              <ValidationError
-                message={t(errors.product_description?.message)}
-              />
+              <ValidationError message={t(errors.description?.message)} />
               <TextArea
                 label={`${t('form:item-seo-description')}*`}
                 // @ts-ignore
-                {...register('short_description')}
+                {...register('shortDescription')}
                 onBlur={() =>
-                  setShortDescription(getValues('short_description').length)
+                  setShortDescription(getValues('shortDescription').length)
                 }
-                error={t(errors.short_description?.message!)}
+                error={t(errors.shortDescription?.message!)}
                 variant="outline"
               />
               <div style={{ fontSize: '.75rem' }} className="mb-5">
@@ -287,40 +308,71 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
                 <Label>{t('form:input-label-status')}</Label>
                 <Radio
                   {...register('status')}
-                  label={t('form:input-label-published')}
-                  id="published"
-                  value="publish"
+                  label={t('form:input-label-publish')}
+                  id={ProductStatus.Publish}
+                  value={ProductStatus.Publish}
                   className="mb-2"
                 />
                 <Radio
                   {...register('status')}
-                  id="draft"
+                  id={ProductStatus.Draft}
                   label={t('form:input-label-draft')}
-                  value="draft"
+                  value={ProductStatus.Draft}
                 />
               </div>
               <div className="my-5">
                 <Checkbox
-                  {...register('disable_out_of_stock')}
+                  {...register('disableOutOfStock')}
                   label={t('form:input-label-disable-out-of-stock')}
                 />
               </div>
             </Card>
           </div>
 
-          {/* Variation Type */}
-          <ProductVariableForm
-            initialValues={initialValues}
-            variationOptions={VariationOptions}
-            dispatchVariationOptions={dispatchVariationOptions}
-          />
+          {/* Product Type */}
+
+          <div className="flex flex-wrap my-5 sm:my-8 pb-8 border-b border-dashed border-border-base">
+            <Description
+              title={t('form:form-title-product-type')}
+              details={`${
+                initialValues
+                  ? t('form:item-description-edit')
+                  : t('form:item-description-add')
+              } ${t('form:product-type-help-text')}`}
+              className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
+            />
+            <Card className="w-full sm:w-8/12 md:w-2/3">
+              <Label>{t('form:input-label-attribute-name')}</Label>
+              <SelectInput
+                name={`type`}
+                control={control}
+                hideSelectedOptions={false}
+                getOptionLabel={(option: any) => option.name}
+                getOptionValue={(option: any) => option.id}
+                options={[
+                  { name: 'Simple Product', id: ProductType.Simple },
+                  { name: 'Variable Product', id: ProductType.Variable }
+                ]}
+              />
+            </Card>
+          </div>
+          {/* Variation Type & Simple Type */}
+
+          {!!currentProductType?.id &&
+            (currentProductType?.id === ProductType.Simple ? (
+              <ProductInfoForm initialValues={initialValues} />
+            ) : (
+              <ProductVariableForm
+                initialValues={initialValues}
+                variationState={variationState}
+                dispatchVariationState={dispatchVariationState}
+              />
+            ))}
 
           {/* Shipping Info */}
           <ProductShippingInfoForm
             control={control}
             initialValues={initialValues}
-            shippings={shippings}
-            dispatchShippings={dispatchShippings}
           />
 
           <div className="mb-4 text-end">

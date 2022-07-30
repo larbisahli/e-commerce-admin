@@ -3,8 +3,8 @@ import * as yup from 'yup';
 export const productValidationSchema = yup.object().shape({
   // thumbnail
   // gallery
-  product_name: yup.string().required('form:error-product-name-required'),
-  short_description: yup
+  name: yup.string().required('form:error-product-name-required'),
+  shortDescription: yup
     .string()
     .test(
       'len',
@@ -12,15 +12,13 @@ export const productValidationSchema = yup.object().shape({
       (val) => val.length < 160
     )
     .required('form:error-short-description-required'),
-  product_description: yup
-    .string()
-    .required('form:error-product-description-required'),
-  sale_price: yup
+  description: yup.string().required('form:error-product-description-required'),
+  salePrice: yup
     .number()
     .typeError('form:error-amount-must-number')
     .positive('form:error-price-must-positive')
     .required('form:error-sale-price-required'),
-  compare_price: yup
+  comparePrice: yup
     .number()
     .typeError('form:error-amount-must-number')
     .transform((value) => (isNaN(value) ? null : value)),
@@ -28,14 +26,14 @@ export const productValidationSchema = yup.object().shape({
     .number()
     .typeError('form:error-amount-must-number')
     .required('form:error-quantity-required'),
-  variation_options: yup.array().of(
+  variationOptions: yup.array().of(
     yup.object().shape({
-      sale_price: yup
+      salePrice: yup
         .number()
         .typeError('form:error-amount-must-number')
         .positive('form:error-price-must-positive')
         .required('form:error-price-required'),
-      compare_price: yup
+      comparePrice: yup
         .number()
         .typeError('form:error-amount-must-number')
         .transform((value) => (isNaN(value) ? null : value))
@@ -51,11 +49,11 @@ export const productValidationSchema = yup.object().shape({
     })
   ),
   categories: yup.array().min(1, 'Category Required'),
-  product_shipping_info: yup.object().shape({
+  productShippingInfo: yup.object().shape({
     weight: yup.number().typeError('form:error-amount-must-number'),
     volume: yup.number().typeError('form:error-amount-must-number'),
-    dimension_width: yup.number().typeError('form:error-amount-must-number'),
-    dimension_height: yup.number().typeError('form:error-amount-must-number'),
-    dimension_depth: yup.number().typeError('form:error-amount-must-number')
+    dimensionWidth: yup.number().typeError('form:error-amount-must-number'),
+    dimensionHeight: yup.number().typeError('form:error-amount-must-number'),
+    dimensionDepth: yup.number().typeError('form:error-amount-must-number')
   })
 });

@@ -23,7 +23,7 @@ function ProductInfoForm({ initialValues }: IProps) {
   return (
     <div className="flex flex-wrap pb-8 border-b border-dashed border-border-base my-5 sm:my-8">
       <Description
-        title={t('form:form-title-product-info')}
+        title={t('form:form-title-simple-product-info')}
         details={`${
           initialValues
             ? t('form:item-description-edit')
@@ -34,38 +34,29 @@ function ProductInfoForm({ initialValues }: IProps) {
 
       <Card className="w-full sm:w-8/12 md:w-2/3">
         <Input
-          label={`${t('form:input-label-name')}*`}
-          {...register('product_name')}
-          error={t(errors.product_name?.message!)}
-          placeholder="My product title"
-          variant="outline"
-          className="mb-5"
-        />
-
-        <Input
           label={`${t('form:input-label-sale-price')} (${currency})`}
-          {...register('sale_price')}
+          {...register('salePrice')}
           type="number"
           min={0}
-          error={t(errors.sale_price?.message!)}
+          error={t(errors.salePrice?.message!)}
           variant="outline"
           className="mb-5"
         />
         <Input
           label={`${t('form:input-label-compare-price')} (${currency})`}
-          {...register('compare_price')}
+          {...register('comparePrice')}
           type="number"
           min={0}
-          error={t(errors.compare_price?.message!)}
+          error={t(errors.comparePrice?.message!)}
           variant="outline"
           className="mb-5"
         />
         <Input
           label={`${t('form:input-label-buying-price')} (${currency})`}
-          {...register('buying_price')}
+          {...register('buyingPrice')}
           type="number"
           min={0}
-          error={t(errors.buying_price?.message!)}
+          error={t(errors.buyingPrice?.message!)}
           variant="outline"
           className="mb-5"
         />
@@ -90,7 +81,7 @@ function ProductInfoForm({ initialValues }: IProps) {
         <TextArea
           label={t('form:item-hidden-note')}
           {...register('note')}
-          placeholder="My hidden note"
+          placeholder="Hidden note"
           error={t(errors.note?.message!)}
           variant="outline"
           className="mb-5"

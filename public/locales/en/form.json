@@ -4,7 +4,8 @@
   "form-title-edit-product": "Edit Product",
   "form-title-create-type": "Create New Group",
   "form-title-product-type": "Product Type",
-  "form-title-product-info": "Product Information",
+  "product-type-help-text": "Select product type form here",
+  "form-title-simple-product-info": "Simple Product Information",
   "form-title-product-shipping-options": "Product Shipping Options",
   "form-description-simple-product-info": "your simple product description and necessary information from here",
   "form-title-variation-product-info": "Product Variation Information",
@@ -82,7 +83,8 @@
   "input-label-height": "Height",
   "input-label-length": "Length",
   "input-label-status": "Status",
-  "input-label-published": "Published",
+  "input-label-published": "Publish",
+  "input-label-publish": "Publish",
   "input-label-draft": "Draft",
   "input-label-select-icon": "Select Icon",
   "input-label-details": "Details",
@@ -402,5 +404,8 @@
   "button-label-add-rate": "Add rate",
   "input-label-min": "Min",
   "input-label-max": "Max",
-  "input-label-no-maximum": "No maximum"
+  "input-label-no-maximum": "No maximum",
+  "create-product": "Create Product",
+  "edit-product": "Edit Product",
+  "product-type": "Product Type"
 }

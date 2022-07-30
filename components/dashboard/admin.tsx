@@ -3,7 +3,7 @@ import { CoinIcon } from '@components/icons/coin-icon';
 import { DollarIcon } from '@components/icons/shops/dollar';
 import { ShopIcon } from '@components/icons/sidebar';
 import RecentOrders from '@components/order/recent-orders';
-import PopularProductList from '@components/product/popular-product-list';
+// import PopularProductList from '@components/product/popular-product-list';
 // import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import ColumnChart from '@components/widgets/column-chart';
@@ -154,10 +154,10 @@ export default function Dashboard() {
         </div> */}
       </div>
       <div className="w-full sm:pe-0 mb-6 xl:mb-0">
-        <PopularProductList
+        {/* <PopularProductList
           products={popularProductData}
           title={t('table:popular-products-table-title')}
-        />
+        /> */}
       </div>
     </>
   );

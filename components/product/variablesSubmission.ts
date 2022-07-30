@@ -5,17 +5,17 @@ import isEqual from 'lodash/isEqual';
 
 const creationVariable = (values: Product): Product => {
   return {
-    product_name: values.product_name,
-    short_description: values.short_description,
-    product_description: values.product_description,
+    name: values.name,
+    shortDescription: values.shortDescription,
+    description: values.description,
     sku: values.sku,
     published: values.status === 'publish',
     quantity: Number(values?.quantity),
-    sale_price: Number(values.sale_price),
-    compare_price: Number(values.compare_price),
-    buying_price: Number(values.buying_price),
+    salePrice: Number(values.salePrice),
+    comparePrice: Number(values.comparePrice),
+    buyingPrice: Number(values.buyingPrice),
     note: values.note,
-    disable_out_of_stock: values?.disable_out_of_stock,
+    disableOutOfStock: values?.disableOutOfStock,
     categories: values?.categories?.map(({ id }) => {
       return { id };
     }),
@@ -35,42 +35,41 @@ const creationVariable = (values: Product): Product => {
         placeholder: img?.placeholder
       };
     }),
-    product_shipping_info: {
-      weight: Number(values?.product_shipping_info?.weight),
-      weight_unit: values?.product_shipping_info?.weight_unit,
-      volume: Number(values?.product_shipping_info?.volume),
-      volume_unit: values?.product_shipping_info?.volume_unit,
-      dimension_width: Number(values?.product_shipping_info?.dimension_width),
-      dimension_height: Number(values?.product_shipping_info?.dimension_height),
-      dimension_depth: Number(values?.product_shipping_info?.dimension_depth),
-      dimension_unit: values?.product_shipping_info?.dimension_unit
+    productShippingInfo: {
+      weight: Number(values?.productShippingInfo?.weight),
+      weightUnit: values?.productShippingInfo?.weightUnit,
+      volume: Number(values?.productShippingInfo?.volume),
+      volumeUnit: values?.productShippingInfo?.volumeUnit,
+      dimensionWidth: Number(values?.productShippingInfo?.dimensionWidth),
+      dimensionHeight: Number(values?.productShippingInfo?.dimensionHeight),
+      dimensionDepth: Number(values?.productShippingInfo?.dimensionDepth),
+      dimensionUnit: values?.productShippingInfo?.dimensionUnit
     },
     variations: values?.variations?.map((v) => {
       return {
         attribute: { id: v.attribute.id },
-        attribute_values: v.attribute_values?.map((av) => {
+        values: v.values?.map((av) => {
           return { id: av.id };
         })
       };
     }),
-    variation_options: values?.variation_options?.map((vo) => {
+    variationOptions: values?.variationOptions?.map((vo) => {
       return {
         title: vo.title,
         options: vo.options,
         image: vo.image,
-        sale_price: Number(vo.sale_price),
-        compare_price: Number(vo.compare_price),
-        buying_price: Number(vo.buying_price),
+        salePrice: Number(vo.salePrice),
+        comparePrice: Number(vo.comparePrice),
+        buyingPrice: Number(vo.buyingPrice),
         quantity: Number(vo.quantity),
         sku: vo.sku,
-        active: !vo.is_disable
+        active: !vo.isDisable
       };
     })
   };
 };
 
 const updateVariable = (values: Product, initialValues: Product) => {
-  console.log('first', values, initialValues?.gallery);
   // 1) gallery block
   const galleryAdditions = differenceWith(
     values?.gallery,
@@ -133,64 +132,59 @@ const updateVariable = (values: Product, initialValues: Product) => {
 
   // 6) product main info block
   const newProductValues = {
-    product_name: values.product_name,
-    short_description: values.short_description,
-    product_description: values.product_description,
+    name: values.name,
+    shortDescription: values.shortDescription,
+    description: values.description,
     sku: values.sku,
     published: values.status === 'publish',
     quantity: Number(values?.quantity),
-    sale_price: Number(values.sale_price),
-    compare_price: Number(values.compare_price),
-    buying_price: Number(values.buying_price),
+    salePrice: Number(values?.salePrice),
+    comparePrice: Number(values?.comparePrice),
+    buyingPrice: Number(values?.buyingPrice),
     note: values.note,
-    disable_out_of_stock: values?.disable_out_of_stock
+    disableOutOfStock: values?.disableOutOfStock
   };
 
   const initProductValues = {
-    product_name: initialValues.product_name,
-    short_description: initialValues.short_description,
-    product_description: initialValues.product_description,
+    name: initialValues.name,
+    shortDescription: initialValues.shortDescription,
+    description: initialValues.description,
     sku: initialValues.sku,
     published: initialValues.published,
     quantity: Number(initialValues?.quantity),
-    sale_price: Number(initialValues.sale_price),
-    compare_price: Number(initialValues.compare_price),
-    buying_price: Number(initialValues.buying_price),
+    salePrice: Number(initialValues.salePrice),
+    comparePrice: Number(initialValues.comparePrice),
+    buyingPrice: Number(initialValues.buyingPrice),
     note: initialValues.note,
-    disable_out_of_stock: initialValues?.disable_out_of_stock
+    disableOutOfStock: initialValues?.disableOutOfStock
   };
   const productMainEqual = isEqual(initProductValues, newProductValues);
   const productMain = productMainEqual ? {} : newProductValues;
 
   // 7) product shipping info block
   const productShippingInfoEqual = isEqual(
-    initialValues?.product_shipping_info,
-    values?.product_shipping_info
+    initialValues?.productShippingInfo,
+    values?.productShippingInfo
   );
 
   const productShippingInfo = productShippingInfoEqual
     ? {}
-    : values?.product_shipping_info;
+    : values?.productShippingInfo;
 
   // 8) variation options block
-  const variation_options = values?.variation_options?.filter(
+  const variationOptions = values?.variationOptions?.filter(
     (e) => e !== undefined
   );
 
-  console.log('====>', {
-    variation_options,
-    init: initialValues?.variation_options
-  });
-
   const variationOptionsAdditions = differenceWith(
-    variation_options,
-    initialValues?.variation_options,
+    variationOptions,
+    initialValues?.variationOptions,
     isEqual
   );
 
-  const variationOptionsDeletions = initialValues?.variation_options?.filter(
+  const variationOptionsDeletions = initialValues?.variationOptions?.filter(
     (vo) => {
-      return isEmpty(variation_options?.find((v) => v?.id === vo?.id));
+      return isEmpty(variationOptions?.find((v) => v?.id === vo?.id));
     }
   );
 
@@ -203,22 +197,22 @@ const updateVariable = (values: Product, initialValues: Product) => {
       );
       if (!isEmpty(initVariation)) {
         const addedValues = differenceWith(
-          v?.attribute_values,
-          initVariation?.attribute_values,
+          v?.values,
+          initVariation?.values,
           isEqual
         );
         return isEmpty(addedValues)
           ? undefined
           : {
               attribute: { id: v.attribute.id },
-              attribute_values: addedValues?.map((av) => {
+              values: addedValues?.map((av) => {
                 return { id: av.id };
               })
             };
       } else {
         return {
           attribute: { id: v.attribute.id },
-          attribute_values: v.attribute_values?.map((av) => {
+          values: v.values?.map((av) => {
             return { id: av.id };
           })
         };
@@ -233,15 +227,15 @@ const updateVariable = (values: Product, initialValues: Product) => {
       );
       if (!isEmpty(valueVariation)) {
         const deletedValues = differenceWith(
-          v?.attribute_values,
-          valueVariation?.attribute_values,
+          v?.values,
+          valueVariation?.values,
           isEqual
         );
         return isEmpty(deletedValues)
           ? undefined
           : {
               attribute: { id: v.attribute.id },
-              attribute_values: deletedValues?.map((av) => {
+              values: deletedValues?.map((av) => {
                 return { id: av.id };
               })
             };
@@ -256,8 +250,8 @@ const updateVariable = (values: Product, initialValues: Product) => {
   return {
     id: initialValues?.id,
     additions: {
-      product_main: productMain,
-      product_shipping_info: productShippingInfo,
+      productMain,
+      productShippingInfo,
       gallery: galleryAdditions?.map((img) => {
         return {
           image: img?.image,
@@ -279,14 +273,14 @@ const updateVariable = (values: Product, initialValues: Product) => {
       suppliers: suppliersAdditions?.map(({ id }) => {
         return { id };
       }),
-      variation_options: variationOptionsAdditions?.map((vo) => {
+      variationOptions: variationOptionsAdditions?.map((vo) => {
         return {
           ...vo,
-          buying_price: Number(vo?.buying_price),
-          compare_price: Number(vo?.compare_price),
+          buyingPrice: Number(vo?.buyingPrice),
+          comparePrice: Number(vo?.comparePrice),
           quantity: Number(vo?.quantity),
-          sale_price: Number(vo?.sale_price),
-          active: !vo.is_disable
+          salePrice: Number(vo?.salePrice),
+          active: !vo.isDisable
         };
       }),
       variations: variationAdditions
@@ -309,7 +303,7 @@ const updateVariable = (values: Product, initialValues: Product) => {
       suppliers: suppliersDeletions?.map(({ id }) => {
         return { id };
       }),
-      variation_options: variationOptionsDeletions?.map((v) => {
+      variationOptions: variationOptionsDeletions?.map((v) => {
         return { id: v?.id };
       }),
       variations: variationDeletions

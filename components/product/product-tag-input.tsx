@@ -48,7 +48,7 @@ const ProductTagInput = ({ control }: Props) => {
         name="tags"
         isMulti
         control={control}
-        getOptionLabel={(option: any) => option.tag_name}
+        getOptionLabel={(option: any) => option.name}
         getOptionValue={(option: any) => option.id}
         // @ts-ignore
         options={tags}

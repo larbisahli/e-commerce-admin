@@ -17,19 +17,19 @@ export const TAGS = gql`
       sortedBy: $sortedBy
     ) {
       id
-      tag_name
+      name
       icon
-      created_at
-      updated_at
-      created_by {
+      createdAt
+      updatedAt
+      createdBy {
         id
-        first_name
-        last_name
+        firstName
+        lastName
       }
-      updated_by {
+      updatedBy {
         id
-        first_name
-        last_name
+        firstName
+        lastName
       }
     }
   }
@@ -39,23 +39,23 @@ export const TAG = gql`
   query TagForAdmin($id: ID!) {
     tagForAdmin(id: $id) {
       id
-      tag_name
+      name
       icon
-      created_at
-      updated_at
-      created_by {
+      createdAt
+      updatedAt
+      createdBy {
         id
-        first_name
-        last_name
+        firstName
+        lastName
         profile {
           image
           placeholder
         }
       }
-      updated_by {
+      updatedBy {
         id
-        first_name
-        last_name
+        firstName
+        lastName
         profile {
           image
           placeholder
@@ -69,25 +69,25 @@ export const TAGS_FOR_SELECT = gql`
   query TagsSelectForAdmin($page: Int!, $limit: Int!, $orderBy: String!) {
     tagsSelectForAdmin(page: $page, limit: $limit, orderBy: $orderBy) {
       id
-      tag_name
+      name
     }
   }
 `;
 
 export const CREATE_TAG = gql`
-  mutation CreateTag($tag_name: String!, $icon: String) {
-    createTag(tag_name: $tag_name, icon: $icon) {
+  mutation CreateTag($name: String!, $icon: String) {
+    createTag(name: $name, icon: $icon) {
       id
-      tag_name
+      name
     }
   }
 `;
 
 export const UPDATE_TAG = gql`
-  mutation UpdateTag($id: ID!, $tag_name: String!, $icon: String) {
-    updateTag(id: $id, tag_name: $tag_name, icon: $icon) {
+  mutation UpdateTag($id: ID!, $name: String!, $icon: String) {
+    updateTag(id: $id, name: $name, icon: $icon) {
       id
-      tag_name
+      name
     }
   }
 `;
@@ -96,7 +96,7 @@ export const DELETE_TAG = gql`
   mutation DeleteTag($id: ID!) {
     deleteTag(id: $id) {
       id
-      tag_name
+      name
     }
   }
 `;

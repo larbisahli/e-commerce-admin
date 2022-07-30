@@ -2,32 +2,24 @@ import Checkbox from '@components/ui/checkbox';
 import Input from '@components/ui/input';
 import Title from '@components/ui/title';
 import { useSettings } from '@contexts/settings.context';
-import type { IMGType, VariationOptionsType } from '@ts-types/generated';
-import { VariationOptionActions } from '@ts-types/generated';
+import type { ImageType, VariationOptionsType } from '@ts-types/generated';
+import { VariationActions } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
 import React, { memo, useMemo } from 'react';
 
+import { VariationAction } from '../variations-reducer';
 import VariationImages from './variation-images';
-
-interface VariationOptionAction {
-  type: VariationOptionActions;
-  payload: {
-    value?: any;
-    field?: string;
-    options?: string[];
-  };
-}
 
 interface CartesianProductProps {
   variationOption: VariationOptionsType;
-  dispatchVariationOptions?: React.Dispatch<VariationOptionAction>;
+  dispatchVariationState?: React.Dispatch<VariationAction>;
   index: number;
-  gallery: IMGType[];
+  gallery: ImageType[];
 }
 
 const CartesianProductComponent = ({
   variationOption,
-  dispatchVariationOptions,
+  dispatchVariationState,
   index,
   gallery
 }: CartesianProductProps) => {
@@ -49,8 +41,8 @@ const CartesianProductComponent = ({
     const value = target.type === 'checkbox' ? target['checked'] : target.value;
     const name = target.name;
 
-    dispatchVariationOptions({
-      type: VariationOptionActions.INSERT,
+    dispatchVariationState({
+      type: VariationActions.CHANGE_VARIATION_OPTION,
       payload: {
         value: target.type === 'number' ? Number(value) : value,
         field: name,
@@ -75,19 +67,19 @@ const CartesianProductComponent = ({
         <Input
           label={`${t('form:input-label-sale-price')} (${currency})*`}
           type="number"
-          id={`sale_price-${index}`}
-          name="sale_price"
+          id={`salePrice-${index}`}
+          name="salePrice"
           onChange={HandleInputChange}
-          value={variationOption.sale_price}
+          value={variationOption.salePrice}
           // error={t(errors.variation_options?.[index]?.sale_price?.message)}
           variant="outline"
           className="mb-5"
         />
         <Input
           label={`${t('form:input-label-compare-price')} (${currency})`}
-          name="compare_price"
+          name="comparePrice"
           onChange={HandleInputChange}
-          value={variationOption.compare_price}
+          value={variationOption.comparePrice}
           type="number"
           // error={t(errors.variation_options?.[index]?.compare_price?.message)}
           variant="outline"
@@ -96,9 +88,9 @@ const CartesianProductComponent = ({
         <Input
           label={`${t('form:input-label-buying-price')} (${currency})`}
           type="number"
-          name="buying_price"
+          name="buyingPrice"
           onChange={HandleInputChange}
-          value={variationOption.buying_price}
+          value={variationOption.buyingPrice}
           // error={t(errors.variation_options?.[index]?.buying_price?.message)}
           variant="outline"
           className="mb-5"
@@ -128,17 +120,17 @@ const CartesianProductComponent = ({
       <VariationImages
         gallery={gallery}
         selectedImage={variationOption.image}
-        dispatchVariationOptions={dispatchVariationOptions}
+        dispatchVariationState={dispatchVariationState}
         options={options}
       />
 
       <div className="mb-5 mt-5">
         <Checkbox
-          name="is_disable"
-          id={`${index}-is_disable`}
+          name="isDisable"
+          id={`${index}-isDisable`}
           onChange={HandleInputChange}
-          checked={variationOption.is_disable}
-          // error={t(errors.variation_options?.[index]?.is_disable?.message)}
+          checked={variationOption.isDisable}
+          // error={t(errors.variationOptions?.[index]?.isDisable?.message)}
           label={t('form:input-label-disable-variant')}
         />
       </div>

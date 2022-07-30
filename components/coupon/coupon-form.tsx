@@ -41,10 +41,10 @@ type FormValues = {
 
 const defaultValues = {
   discount_value: 0,
-  max_usage: 0,
-  order_amount_limit: 0,
-  coupon_start_date: new Date(),
-  coupon_end_date: new Date()
+  maxUsage: 0,
+  orderAmountLimit: 0,
+  couponStartDate: new Date(),
+  couponEndDate: new Date()
 };
 
 type IProps = {
@@ -70,7 +70,7 @@ function SelectTypes({
     <div className="mb-5">
       <Label>{t('form:input-label-discount-type')}</Label>
       <SelectInput
-        name="discount_type"
+        name="discountType"
         control={control}
         getOptionLabel={(option: any) => option.label}
         getOptionValue={(option: any) => option.value}

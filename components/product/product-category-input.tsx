@@ -48,7 +48,7 @@ const ProductCategoryInput = ({ control }: Props) => {
         name="categories"
         isMulti
         control={control}
-        getOptionLabel={(option: Category) => option.category_name}
+        getOptionLabel={(option: Category) => option.name}
         getOptionValue={(option: Category) => option.id}
         options={categories}
         isLoading={loading}

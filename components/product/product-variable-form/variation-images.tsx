@@ -5,33 +5,27 @@ import ImageComponent from '@components/ImageComponent';
 import Checkbox from '@components/ui/checkbox';
 import Label from '@components/ui/label';
 import { useId } from '@hooks/index';
-import type { IMGType } from '@ts-types/generated';
-import { VariationOptionActions } from '@ts-types/generated';
+import type { ImageType } from '@ts-types/generated';
+import { VariationActions } from '@ts-types/generated';
 import cn from 'classnames';
 import { isEmpty } from 'lodash';
 import { useTranslation } from 'next-i18next';
 import { memo } from 'react';
 import React from 'react';
 
-interface VariationOptionAction {
-  type: VariationOptionActions;
-  payload: {
-    value?: any;
-    field?: string;
-    options?: string[];
-  };
-}
+import { VariationAction } from '../variations-reducer';
+
 interface VariationImagesProps {
-  dispatchVariationOptions?: React.Dispatch<VariationOptionAction>;
+  dispatchVariationState?: React.Dispatch<VariationAction>;
   selectedImage: string | null;
   options: string[];
-  gallery: IMGType[];
+  gallery: ImageType[];
 }
 
 const VariationImages = ({
   gallery,
   selectedImage,
-  dispatchVariationOptions,
+  dispatchVariationState,
   options
 }: VariationImagesProps) => {
   const { t } = useTranslation();
@@ -45,8 +39,8 @@ const VariationImages = ({
     const target = e.target;
     const name = target.name;
 
-    dispatchVariationOptions({
-      type: VariationOptionActions.INSERT,
+    dispatchVariationState({
+      type: VariationActions.CHANGE_VARIATION_OPTION,
       payload: {
         value: target['checked'] ? image : null,
         field: name,

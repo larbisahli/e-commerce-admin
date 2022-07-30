@@ -46,6 +46,30 @@ export declare enum WithdrawStatus {
   Processing = 'PROCESSING'
 }
 
+export enum VariationActions {
+  APPEND_VARIATION = 'APPEND_VARIATION',
+  CHANGE_VARIATION = 'CHANGE_VARIATION',
+  REMOVE_VARIATION = 'REMOVE_VARIATION',
+  CHANGE_VARIATION_VALUES = 'CHANGE_VARIATION_VALUES',
+  CHANGE_VARIATION_OPTION = 'CHANGE_VARIATION_OPTION',
+  INIT = 'INIT',
+  CARTESIAN = 'CARTESIAN'
+}
+
+export enum ShippingsActions {
+  INSERT = 'INSERT',
+  INIT = 'INIT',
+  DELETE = 'DELETE',
+  ADD_SHIPPING = 'ADD_SHIPPING',
+  DELETE_SHIPPING = 'DELETE_SHIPPING',
+  ADD_SHIPPING_PROVIDER = 'ADD_SHIPPING_PROVIDER',
+  ADD_SHIPPING_ZONE = 'ADD_SHIPPING_ZONE',
+  ADD_ZONE = 'ADD_ZONE',
+  SHIPPING_PRICE = 'SHIPPING_PRICE',
+  CLEAR_GLOBAL = 'CLEAR_GLOBAL',
+  DELETE_SHIPPING_ZONE = 'DELETE_SHIPPING_ZONE'
+}
+
 export interface CreatedUpdatedByAt {
   createdAt?: Scalars['DateTime'];
   updatedAt?: Scalars['DateTime'];
@@ -90,7 +114,7 @@ export interface Category extends CreatedUpdatedByAt {
   parentId?: Nullable<Scalars['ID']>;
   name?: Scalars['String'];
   description?: Nullable<Scalars['String']>;
-  children?: Nullable<Array<Category>>;
+  children?: Nullable<Array<CategoryRef>>;
   active?: Scalars['Boolean'];
   thumbnail?: ImageType;
   icon?: Nullable<Scalars['String']>;
@@ -98,17 +122,28 @@ export interface Category extends CreatedUpdatedByAt {
   parent?: Nullable<Category>;
 }
 
+export interface CategoryRef extends CreatedUpdatedByAt {
+  id?: Scalars['ID'];
+  parentId?: Nullable<Scalars['ID']>;
+  name?: Scalars['String'];
+  description?: Nullable<Scalars['String']>;
+  active?: Scalars['Boolean'];
+  thumbnail?: ImageType;
+  icon?: Nullable<Scalars['String']>;
+  parent?: Nullable<Category>;
+}
+
 export interface ProductShippingInfo {
   id?: Scalars['ID'];
-  product_id?: Scalars['ID'];
+  productId?: Scalars['ID'];
   weight?: Scalars['Int'];
-  weight_unit?: { unit: Scalars['String'] };
+  weightUnit?: { unit: Scalars['String'] };
   volume?: Scalars['Int'];
-  volume_unit?: { unit: Scalars['String'] };
-  dimension_width?: Scalars['Int'];
-  dimension_height?: Scalars['Int'];
-  dimension_depth?: Scalars['Int'];
-  dimension_unit?: { unit: Scalars['String'] };
+  volumeUnit?: { unit: Scalars['String'] };
+  dimensionWidth?: Scalars['Int'];
+  dimensionHeight?: Scalars['Int'];
+  dimensionDepth?: Scalars['Int'];
+  dimensionUnit?: { unit: Scalars['String'] };
 }
 
 export interface AttributeValue {
@@ -215,66 +250,49 @@ export declare type LocationInput = {
 export interface Product extends CreatedUpdatedByAt {
   id?: Scalars['ID'];
   slug?: Scalars['String'];
-  product_name: Scalars['String'];
+  name: Scalars['String'];
   sku?: Nullable<Scalars['String']>;
-  sale_price?: Scalars['Float'];
-  compare_price?: Scalars['Float'];
-  buying_price?: Scalars['Float'];
-  max_price?: Scalars['Float'];
-  min_price?: Scalars['Float'];
+  salePrice?: Scalars['Float'];
+  comparePrice?: Scalars['Float'];
+  buyingPrice?: Scalars['Float'];
+  maxPrice?: Scalars['Float'];
+  minPrice?: Scalars['Float'];
   quantity?: Scalars['Int'];
-  // in_stock?: Nullable<Scalars['Boolean']>;
-  short_description?: Nullable<Scalars['String']>;
-  product_description?: Scalars['String'];
+  inStock?: Nullable<Scalars['Boolean']>;
+  shortDescription?: Nullable<Scalars['String']>;
+  description?: Scalars['String'];
+  type?: { id: ProductType; name: string };
   published?: Scalars['Boolean'];
-  status?: 'draft' | 'publish';
-  disable_out_of_stock?: Scalars['Boolean'];
+  status?: ProductStatus;
+  disableOutOfStock?: Scalars['Boolean'];
   note?: Nullable<Scalars['String']>;
-  thumbnail?: ImageType;
-  gallery?: ImageType[];
+  thumbnail?: Nullable<ImageType[]>;
+  gallery?: Nullable<ImageType[]>;
   categories?: Array<Category>;
-  suppliers?: Nullable<Array<Nullable<Suppliers>>>;
+  suppliers?: Nullable<Array<Suppliers>>;
   tags?: Nullable<Array<Nullable<Tag>>>;
-  product_shipping_info?: ProductShippingInfo;
-  variation_options?: VariationOptionsType[];
-  variations?: {
-    attribute: Attribute;
-    attribute_values: Array<Nullable<AttributeValue>>;
-  }[];
+  productShippingInfo?: ProductShippingInfo;
+  variationOptions?: VariationOptionsType[];
+  variations?: VariationType[];
   // [key: string]: any;
 }
 
-export enum VariationOptionActions {
-  INSERT = 'INSERT',
-  INIT = 'INIT',
-  CARTESIAN = 'CARTESIAN'
-}
-
-export enum ShippingsActions {
-  INSERT = 'INSERT',
-  INIT = 'INIT',
-  DELETE = 'DELETE',
-  ADD_SHIPPING = 'ADD_SHIPPING',
-  DELETE_SHIPPING = 'DELETE_SHIPPING',
-  ADD_SHIPPING_PROVIDER = 'ADD_SHIPPING_PROVIDER',
-  ADD_SHIPPING_ZONE = 'ADD_SHIPPING_ZONE',
-  ADD_ZONE = 'ADD_ZONE',
-  SHIPPING_PRICE = 'SHIPPING_PRICE',
-  CLEAR_GLOBAL = 'CLEAR_GLOBAL',
-  DELETE_SHIPPING_ZONE = 'DELETE_SHIPPING_ZONE'
+export interface VariationType {
+  attribute: Attribute;
+  selectedValues: Array<Nullable<AttributeValue>>;
 }
 
 export interface VariationOptionsType {
   id?: string;
   title: string;
   key?: string;
-  is_disable?: boolean;
+  isDisable?: boolean;
   active?: boolean;
   image: string;
   options: string[];
-  sale_price: Scalars['Float'];
-  compare_price: Scalars['Float'];
-  buying_price: Scalars['Float'];
+  salePrice: Scalars['Float'];
+  comparePrice: Scalars['Float'];
+  buyingPrice: Scalars['Float'];
   quantity: Scalars['Int'];
   sku: Scalars['String'];
 }

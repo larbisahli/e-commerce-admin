@@ -7,10 +7,10 @@ import {
   EditorState
 } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
-import React, { memo, useMemo, useEffect, useState } from 'react';
+import isEmpty from 'lodash/isEmpty';
+import React, { memo, useEffect, useMemo, useState } from 'react';
 import { Editor } from 'react-draft-wysiwyg';
 import { useFormContext } from 'react-hook-form';
-import isEmpty from 'lodash/isEmpty';
 
 const EditorComponent = (props) => {
   const { getValues } = useFormContext();
@@ -27,7 +27,7 @@ const EditorComponent = (props) => {
   const stateIsEmpty = useMemo(() => isEmpty(editorState), [editorState]);
 
   useEffect(() => {
-    const productDescription = getValues('product_description');
+    const productDescription = getValues('description');
 
     if (productDescription && stateIsEmpty) {
       const blocksFromHTML = convertFromHTML(productDescription);
@@ -39,7 +39,7 @@ const EditorComponent = (props) => {
     } else if (stateIsEmpty) {
       setEditorState(EditorState.createEmpty());
     }
-  }, [stateIsEmpty]);
+  }, [getValues, stateIsEmpty]);
 
   return (
     <div className={props.className}>
