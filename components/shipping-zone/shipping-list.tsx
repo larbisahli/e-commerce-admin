@@ -98,10 +98,10 @@ const ShippingList = ({
     },
     {
       title: t('table:table-item-created-at'),
-      dataIndex: 'created_at',
-      key: 'created_at',
+      dataIndex: 'createdAt',
+      key: 'createdAt',
       align: alignLeft,
-      width: 180,
+      width: 200,
       render: (createdAt: CreatedUpdatedByAt['createdAt']) => {
         return `${dayjs(createdAt).format('MMM D, YYYY')} at ${dayjs(
           createdAt
@@ -110,8 +110,8 @@ const ShippingList = ({
     },
     {
       title: t('table:table-item-created-by'),
-      dataIndex: 'created_by',
-      key: 'created_by',
+      dataIndex: 'createdBy',
+      key: 'createdBy',
       align: alignLeft,
       width: 100,
       ellipsis: true,
@@ -125,8 +125,8 @@ const ShippingList = ({
     },
     {
       title: t('table:table-item-updated-by'),
-      dataIndex: 'updated_by',
-      key: 'updated_by',
+      dataIndex: 'updatedBy',
+      key: 'updatedBy',
       align: alignLeft,
       width: 140,
       ellipsis: true,

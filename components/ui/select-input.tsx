@@ -27,7 +27,7 @@ const SelectInput = ({
   isClearable,
   isLoading,
   closeMenuOnSelect = true,
-  hideSelectedOptions = true,
+  hideSelectedOptions = false,
   // isSearchable=true,
   // isDisabled=false,
   // isOptionDisabled=false,

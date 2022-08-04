@@ -11,10 +11,8 @@ import SelectInput from '@components/ui/select-input';
 import TextArea from '@components/ui/text-area';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { siteSettings } from '@settings/site.settings';
-import { Shipping } from '@ts-types/generated';
 import { CURRENCY } from '@utils/currency';
 // import { getFormattedImage } from '@utils/get-formatted-image';
-import { getIcon } from '@utils/get-icon';
 // import omit from 'lodash/omit';
 import { useTranslation } from 'next-i18next';
 import {
@@ -31,7 +29,6 @@ type FormValues = {
   minimumOrderAmount: number;
   logo: any;
   // taxClass: Tax;
-  shippingClass: Shipping;
   // contactDetails: ContactDetailsInput;
   deliveryTime: {
     title: string;
@@ -79,14 +76,11 @@ const socialIcon = [
 ];
 
 export const updatedIcons = socialIcon.map((item: any) => {
+  const TagName = socialIcons[item.value];
   item.label = (
     <div className="flex space-s-4 items-center text-body">
       <span className="flex w-4 h-4 items-center justify-center">
-        {getIcon({
-          iconList: socialIcons,
-          iconName: item.value,
-          className: 'w-4 h-4'
-        })}
+        {TagName && <TagName className="w-4 h-4" />}
       </span>
       <span>{item.label}</span>
     </div>

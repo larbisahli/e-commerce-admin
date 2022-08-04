@@ -98,7 +98,7 @@ export const DELETE_ORDER_STATUS = gql`
   mutation DeleteOrderStatus($id: ID!) {
     deleteOrderStatus(id: $id) {
       id
-      status_name
+      name
     }
   }
 `;

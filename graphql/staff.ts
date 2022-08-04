@@ -96,7 +96,7 @@ export const CREATE_STAFF = gql`
     $lastName: String!
     $phoneNumber: String
     $email: String!
-    $profile: IMGInput
+    $profile: ImageInput
     $password: String!
     $roleId: Int!
   ) {
@@ -123,7 +123,7 @@ export const UPDATE_STAFF = gql`
     $lastName: String!
     $phoneNumber: String
     $email: String!
-    $profile: IMGInput
+    $profile: ImageInput
     $roleId: Int!
   ) {
     updateStaff(

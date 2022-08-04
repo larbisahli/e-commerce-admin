@@ -107,10 +107,8 @@ function ProductVariableForm({
 
   const gallery = watch('gallery');
   const variations = variationState.variations;
-  const variationOptions = variationState.variationsOptions;
+  const variationOptions = variationState.variationOptions;
   const attributes = data?.attributesForAdmin ?? [];
-
-  console.log('variationState ----- :>> ', variationState);
 
   const attributeValuesChanges = [].concat(
     ...(variations?.map((v) => v?.selectedValues) ?? [])
@@ -143,18 +141,18 @@ function ProductVariableForm({
       !isEmpty(initialValues?.variationOptions)
     ) {
       const variationOptions = cloneDeep(initialValues?.variationOptions ?? []);
-      // dispatchVariationState({
-      //   type: VariationActions.INIT,
-      //   payload: {
-      //     value: variationOptions
-      //   }
-      // });
+      const variations = cloneDeep(initialValues?.variations ?? []);
+      dispatchVariationState({
+        type: VariationActions.INIT,
+        payload: {
+          value: { variations, variationOptions }
+        }
+      });
     }
     setInit(true);
   }, []);
 
   useEffect(() => {
-    console.log('cartesianProduct', cartesianProduct);
     if (init) {
       dispatchVariationState({
         type: VariationActions.CARTESIAN,
@@ -163,14 +161,14 @@ function ProductVariableForm({
         }
       });
     }
-  }, [cartesianProduct, init]);
+  }, [cartesianProduct, dispatchVariationState, init]);
 
   const appendVariant = (e: any) => {
     e.preventDefault();
     dispatchVariationState({
       type: VariationActions.APPEND_VARIATION,
       payload: {
-        value: { id: nanoid(), attribute: attributes[0], values: [] }
+        value: { id: nanoid(), attribute: attributes[0], selectedValues: [] }
       }
     });
   };

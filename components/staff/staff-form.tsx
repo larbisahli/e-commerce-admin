@@ -142,12 +142,12 @@ const StaffCreateUpdateForm = ({ initialValues }: IProps) => {
       email: values.email
     };
 
+    setUnsavedChanges(false);
     if (isEmpty(initialValues)) {
       createStaff({ variables }).catch((err) => {
         setError(err);
       });
     } else {
-      setUnsavedChanges(false);
       updateStaff({ variables: { id: initialValues?.id, ...variables } }).catch(
         (err) => {
           setError(err);

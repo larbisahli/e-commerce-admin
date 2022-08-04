@@ -116,10 +116,8 @@ export default function CreateOrUpdateSupplierForm({ initialValues }: IProps) {
   const onSubmit = (values: FormValues) => {
     const variables = {
       ...values,
-      country: { id: values?.country.id }
+      country: { id: values?.country?.id }
     };
-
-    console.log('variables', variables);
 
     if (isEmpty(initialValues)) {
       createSupplier({ variables }).catch((err) => {

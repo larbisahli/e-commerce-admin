@@ -37,6 +37,9 @@ export const SHIPPING_ZONE = gql`
     }
     shippingRates(id: $id) {
       id
+      weightUnit {
+        unit
+      }
       minValue
       maxValue
       noMax

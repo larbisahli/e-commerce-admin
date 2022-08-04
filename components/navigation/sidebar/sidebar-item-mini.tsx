@@ -3,7 +3,6 @@
 import * as sidebarIcons from '@components/icons/sidebar';
 import ActiveLink from '@components/ui/activeLink';
 import { useUI } from '@contexts/ui.context';
-import { getIcon } from '@utils/get-icon';
 import cn from 'classnames';
 import classNames from 'classnames/bind';
 import isEmpty from 'lodash/isEmpty';
@@ -86,13 +85,11 @@ const SidebarItem = ({
 const SidebarLabel = ({ icon, label }: { icon: string; label: string }) => {
   const { closeSidebar } = useUI();
 
+  const TagName = sidebarIcons[icon];
+
   return (
     <React.Fragment>
-      {getIcon({
-        iconList: sidebarIcons,
-        iconName: icon,
-        className: 'w-5 h-5 me-4 ml-2'
-      })}
+      {TagName && <TagName className="w-5 h-5 me-4 ml-2" />}
       <span
         className={`${cx('mini-slider-container')}`}
         onClick={() => closeSidebar()}

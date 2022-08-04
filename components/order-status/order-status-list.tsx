@@ -10,7 +10,6 @@ import {
 } from '@ts-types/generated';
 import { useIsRTL } from '@utils/locals';
 import { ROUTES } from '@utils/routes';
-import Color from 'color';
 import dayjs from 'dayjs';
 import { useTranslation } from 'next-i18next';
 
@@ -40,17 +39,12 @@ const OrderStatusList = ({
       key: 'name',
       align: alignLeft,
       ellipsis: true,
-      width: 120,
+      width: 250,
       render: (name: string, record: OrderStatus) => (
         <span
-          className="font-semibold capitalize border border-solid shadow-sm"
-          style={{
-            color: Color(record?.color).darken(0.6),
-            background: record?.color,
-            borderColor: Color(record?.color).darken(0.1),
-            padding: '2px 6px',
-            borderRadius: '4px'
-          }}
+          className="font-semibold capitalize border border-solid 
+                     rounded-full bg-white py-[4px] px-[8px] shadow-md"
+          style={{ color: record?.color }}
         >
           {name}
         </span>

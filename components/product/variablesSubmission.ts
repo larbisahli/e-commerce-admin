@@ -1,19 +1,21 @@
-import { Product, Suppliers, Tag } from '@ts-types/generated';
+import { Product, ProductType, Suppliers, Tag } from '@ts-types/generated';
 import differenceWith from 'lodash/differenceWith';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
 
 const creationVariable = (values: Product): Product => {
+  const isVariable = values.type.id === ProductType.Variable;
   return {
     name: values.name,
     shortDescription: values.shortDescription,
     description: values.description,
-    sku: values.sku,
+    type: { id: values.type.id },
     published: values.status === 'publish',
-    quantity: Number(values?.quantity),
-    salePrice: Number(values.salePrice),
-    comparePrice: Number(values.comparePrice),
-    buyingPrice: Number(values.buyingPrice),
+    quantity: isVariable ? 1 : Number(values?.quantity),
+    salePrice: isVariable ? 1 : Number(values.salePrice),
+    comparePrice: isVariable ? 5 : Number(values.comparePrice),
+    buyingPrice: isVariable ? 12 : Number(values.buyingPrice),
+    sku: isVariable ? null : values.sku,
     note: values.note,
     disableOutOfStock: values?.disableOutOfStock,
     categories: values?.categories?.map(({ id }) => {
@@ -48,7 +50,7 @@ const creationVariable = (values: Product): Product => {
     variations: values?.variations?.map((v) => {
       return {
         attribute: { id: v.attribute.id },
-        values: v.values?.map((av) => {
+        selectedValues: v.selectedValues?.map((av) => {
           return { id: av.id };
         })
       };
@@ -58,10 +60,10 @@ const creationVariable = (values: Product): Product => {
         title: vo.title,
         options: vo.options,
         image: vo.image,
-        salePrice: Number(vo.salePrice),
-        comparePrice: Number(vo.comparePrice),
-        buyingPrice: Number(vo.buyingPrice),
-        quantity: Number(vo.quantity),
+        salePrice: vo.salePrice,
+        comparePrice: vo.comparePrice,
+        buyingPrice: vo.buyingPrice,
+        quantity: vo.quantity,
         sku: vo.sku,
         active: !vo.isDisable
       };
@@ -131,16 +133,19 @@ const updateVariable = (values: Product, initialValues: Product) => {
   );
 
   // 6) product main info block
+  const isVariable = values.type.id === ProductType.Variable;
+
   const newProductValues = {
     name: values.name,
     shortDescription: values.shortDescription,
     description: values.description,
-    sku: values.sku,
     published: values.status === 'publish',
-    quantity: Number(values?.quantity),
-    salePrice: Number(values?.salePrice),
-    comparePrice: Number(values?.comparePrice),
-    buyingPrice: Number(values?.buyingPrice),
+    type: { id: values.type.id },
+    quantity: isVariable ? 0 : Number(values?.quantity),
+    salePrice: isVariable ? 0 : Number(values.salePrice),
+    comparePrice: isVariable ? 0 : Number(values.comparePrice),
+    buyingPrice: isVariable ? 0 : Number(values.buyingPrice),
+    sku: isVariable ? null : values.sku,
     note: values.note,
     disableOutOfStock: values?.disableOutOfStock
   };
@@ -150,6 +155,7 @@ const updateVariable = (values: Product, initialValues: Product) => {
     shortDescription: initialValues.shortDescription,
     description: initialValues.description,
     sku: initialValues.sku,
+    type: initialValues.type,
     published: initialValues.published,
     quantity: Number(initialValues?.quantity),
     salePrice: Number(initialValues.salePrice),
@@ -196,23 +202,23 @@ const updateVariable = (values: Product, initialValues: Product) => {
         (vv) => vv?.attribute?.id === v?.attribute?.id
       );
       if (!isEmpty(initVariation)) {
-        const addedValues = differenceWith(
-          v?.values,
-          initVariation?.values,
+        const addedSelectedValues = differenceWith(
+          v?.selectedValues,
+          initVariation?.selectedValues,
           isEqual
         );
-        return isEmpty(addedValues)
+        return isEmpty(addedSelectedValues)
           ? undefined
           : {
               attribute: { id: v.attribute.id },
-              values: addedValues?.map((av) => {
+              selectedValues: addedSelectedValues?.map((av) => {
                 return { id: av.id };
               })
             };
       } else {
         return {
           attribute: { id: v.attribute.id },
-          values: v.values?.map((av) => {
+          selectedValues: v.selectedValues?.map((av) => {
             return { id: av.id };
           })
         };
@@ -226,16 +232,16 @@ const updateVariable = (values: Product, initialValues: Product) => {
         (vv) => vv?.attribute?.id === v?.attribute?.id
       );
       if (!isEmpty(valueVariation)) {
-        const deletedValues = differenceWith(
-          v?.values,
-          valueVariation?.values,
+        const deletedSelectedValues = differenceWith(
+          v?.selectedValues,
+          valueVariation?.selectedValues,
           isEqual
         );
-        return isEmpty(deletedValues)
+        return isEmpty(deletedSelectedValues)
           ? undefined
           : {
               attribute: { id: v.attribute.id },
-              values: deletedValues?.map((av) => {
+              selectedValues: deletedSelectedValues?.map((av) => {
                 return { id: av.id };
               })
             };

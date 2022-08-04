@@ -5,7 +5,6 @@ import { Minus } from '@components/icons/minus';
 import * as sidebarIcons from '@components/icons/sidebar';
 import ActiveLink from '@components/ui/activeLink';
 import { useUI } from '@contexts/ui.context';
-import { getIcon } from '@utils/get-icon';
 import cn from 'classnames';
 import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
@@ -173,15 +172,12 @@ const SidebarLabel = ({
     closeSidebar();
   };
 
+  const TagName = sidebarIcons[icon];
+
   return (
     <React.Fragment>
       <div className="flex items-center">
-        {icon &&
-          getIcon({
-            iconList: sidebarIcons,
-            iconName: icon,
-            className: 'w-5 h-5 me-4'
-          })}
+        {icon && TagName && <TagName className="w-5 h-5 me-4" />}
         <span style={{ paddingLeft: padding }} onClick={handleCloseSidebar}>
           {label}
         </span>

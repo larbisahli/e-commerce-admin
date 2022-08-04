@@ -20,7 +20,11 @@ import {
 } from '@hooks/index';
 import { notify } from '@lib/notify';
 import { Nullable } from '@ts-types/custom.types';
-import type { CountriesType, ShippingZoneType } from '@ts-types/generated';
+import {
+  CountriesType,
+  ShippingRateEnum,
+  ShippingZoneType
+} from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import clone from 'lodash/clone';
 import isEmpty from 'lodash/isEmpty';
@@ -166,6 +170,10 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
       shippingRates: shippingRates?.map((rate) => {
         return {
           id: rate?.id,
+          weightUnit:
+            shippingZone?.rateType?.type === ShippingRateEnum.Weight
+              ? rate?.weightUnit
+              : null,
           minValue: Number(rate?.minValue),
           maxValue: rate?.noMax ? null : Number(rate?.maxValue),
           noMax: rate?.noMax,
@@ -247,6 +255,7 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
     if (!checkFailed) {
       append({
         id: null,
+        weightUnit: { unit: 'g' },
         minValue: hasFields
           ? Number((Number(MaxMaxValueField.maxValue) + 0.1).toFixed(1))
           : 0,
@@ -354,8 +363,8 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
                 getOptionLabel={(option: any) => option.name}
                 getOptionValue={(option: any) => option.type}
                 options={[
-                  { id: 1, name: 'Price', type: 'price' },
-                  { id: 1, name: 'Weight', type: 'weight' }
+                  { id: 1, name: 'Price', type: ShippingRateEnum.Price },
+                  { id: 1, name: 'Weight', type: ShippingRateEnum.Weight }
                 ]}
               />
             </div>
@@ -381,6 +390,7 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
                 return (
                   <RateComponent
                     register={register}
+                    control={control}
                     item={item}
                     key={item.key}
                     fields={fields}

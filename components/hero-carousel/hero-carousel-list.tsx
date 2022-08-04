@@ -37,7 +37,7 @@ const HeroCarouselList = ({
       dataIndex: 'thumbnail',
       key: 'thumbnail',
       align: alignLeft,
-      width: 130,
+      width: 150,
       render: (thumbnail: { image: string; placeholder: string }) => (
         <div
           style={{ maxWidth: '100px' }}

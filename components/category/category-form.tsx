@@ -20,7 +20,6 @@ import { useGetStaff } from '@hooks/index';
 import { notify } from '@lib/index';
 import { Nullable } from '@ts-types/custom.types';
 import { Category, OrderBy } from '@ts-types/generated';
-import { getIcon } from '@utils/get-icon';
 import { ROUTES } from '@utils/routes';
 import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
@@ -32,14 +31,11 @@ import { categoryIcons } from './category-icons';
 import { categoryValidationSchema } from './category-validation-schema';
 
 export const updatedIcons = categoryIcons.map((item: any) => {
+  const TagName = categoriesIcon[item.value];
   item.label = (
     <div className="flex space-s-5 items-center">
       <span className="flex w-5 h-5 items-center justify-center">
-        {getIcon({
-          iconList: categoriesIcon,
-          iconName: item.value,
-          className: 'max-h-full max-w-full'
-        })}
+        {TagName && <TagName className="max-h-full max-w-full" />}
       </span>
       <span>{item.label}</span>
     </div>

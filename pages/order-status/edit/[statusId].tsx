@@ -36,7 +36,7 @@ export default function UpdateOrderStatusPage({ client }: SSRProps) {
     }
   );
 
-  useGetStaff(client?.staff_id);
+  useGetStaff(client);
   useErrorLogger(error);
 
   if (loading) {

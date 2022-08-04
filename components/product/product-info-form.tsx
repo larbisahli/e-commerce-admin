@@ -1,7 +1,6 @@
 import Card from '@components/common/card';
 import Description from '@components/ui/description';
 import Input from '@components/ui/input';
-import TextArea from '@components/ui/text-area';
 import { useSettings } from '@contexts/settings.context';
 import { useTranslation } from 'next-i18next';
 import { memo } from 'react';
@@ -75,14 +74,6 @@ function ProductInfoForm({ initialValues }: IProps) {
           {...register('sku')}
           placeholder="LEV-JN-BL-WM"
           error={t(errors.sku?.message!)}
-          variant="outline"
-          className="mb-5"
-        />
-        <TextArea
-          label={t('form:item-hidden-note')}
-          {...register('note')}
-          placeholder="Hidden note"
-          error={t(errors.note?.message!)}
           variant="outline"
           className="mb-5"
         />

@@ -9,7 +9,7 @@ export const useWarnIfUnsavedChanges = (
     const routeChangeStart = () => {
       if (unsavedChanges) {
         const ok = callback();
-        if (ok) {
+        if (!ok) {
           Router.events.emit('routeChangeError');
           // INFO ignore this error with sentry
           throw 'Abort route change. Please ignore this error.';

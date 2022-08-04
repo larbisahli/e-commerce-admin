@@ -1,13 +1,16 @@
 import AppLayout from '@components/layouts/app';
 import CreateOrUpdateOrderStatusForm from '@components/order-status/order-status-form';
+import { useGetStaff } from '@hooks/useGetStaff';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
+import { SSRProps } from '@ts-types/custom.types';
 import { ROUTES } from '@utils/routes';
 import type { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-export default function CreateOrderStatusPage() {
+export default function CreateOrderStatusPage({ client }: SSRProps) {
   const { t } = useTranslation();
+  useGetStaff(client);
   return (
     <>
       <div className="py-5 sm:py-8 flex border-b border-dashed border-border-base">

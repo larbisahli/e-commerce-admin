@@ -13,11 +13,11 @@ type IProps = {
   initialValues: any;
 };
 
-const weight_units = [{ unit: 'kg' }, { unit: 'g' }, { unit: 't' }];
+const weightUnits = [{ unit: 'kg' }, { unit: 'g' }];
 
-const volume_units = [{ unit: 'L' }, { unit: 'mL' }];
+const volumeUnits = [{ unit: 'L' }, { unit: 'mL' }];
 
-const dimension_units = [{ unit: 'L' }, { unit: 'mL' }];
+const dimensionUnits = [{ unit: 'L' }, { unit: 'mL' }];
 
 function ProductShippingInfoForm({ control, initialValues }: IProps) {
   const { t } = useTranslation();
@@ -56,7 +56,7 @@ function ProductShippingInfoForm({ control, initialValues }: IProps) {
               control={control}
               getOptionLabel={(option: any) => option.unit}
               getOptionValue={(option: any) => option.unit}
-              options={weight_units}
+              options={weightUnits}
               className="w-full"
             />
           </div>
@@ -80,7 +80,7 @@ function ProductShippingInfoForm({ control, initialValues }: IProps) {
               className="w-full"
               getOptionLabel={(option: any) => option.unit}
               getOptionValue={(option: any) => option.unit}
-              options={volume_units}
+              options={volumeUnits}
             />
           </div>
         </div>
@@ -157,7 +157,7 @@ function ProductShippingInfoForm({ control, initialValues }: IProps) {
               className="w-full"
               getOptionLabel={(option: any) => option.unit}
               getOptionValue={(option: any) => option.unit}
-              options={dimension_units}
+              options={dimensionUnits}
             />
           </div>
           <ValidationError

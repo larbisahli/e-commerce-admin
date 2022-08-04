@@ -1,4 +1,4 @@
-import { ShippingZoneType } from '@ts-types/generated';
+import { ShippingRateEnum, ShippingZoneType } from '@ts-types/generated';
 import differenceWith from 'lodash/differenceWith';
 import isEqual from 'lodash/isEqual';
 
@@ -6,9 +6,15 @@ export const updateVariable = (
   values: ShippingZoneType,
   initialValues: ShippingZoneType
 ) => {
+  const { shippingZone } = values;
+
   const newShippingRates = values?.shippingRates?.map((rate) => {
     return {
       id: rate?.id,
+      weightUnit:
+        shippingZone?.rateType?.type === ShippingRateEnum.Weight
+          ? rate?.weightUnit
+          : null,
       minValue: Number(rate?.minValue),
       maxValue: rate?.noMax ? null : Number(rate?.maxValue),
       noMax: rate?.noMax,
@@ -41,8 +47,6 @@ export const updateVariable = (
     values?.zones?.map((rate) => rate.id),
     isEqual
   );
-
-  const { shippingZone } = values;
 
   const newShippingZone = {
     ...shippingZone,

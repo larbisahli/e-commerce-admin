@@ -38,6 +38,11 @@ export enum ProductType {
   Variable = 'variable'
 }
 
+export enum ShippingRateEnum {
+  Weight = 'weight',
+  Price = 'price'
+}
+
 export declare enum WithdrawStatus {
   Approved = 'APPROVED',
   Pending = 'PENDING',
@@ -119,7 +124,7 @@ export interface Category extends CreatedUpdatedByAt {
   thumbnail?: ImageType;
   icon?: Nullable<Scalars['String']>;
   hasChildren?: Scalars['Boolean'];
-  parent?: Nullable<Category>;
+  parent?: Nullable<CategoryRef>;
 }
 
 export interface CategoryRef extends CreatedUpdatedByAt {
@@ -130,7 +135,7 @@ export interface CategoryRef extends CreatedUpdatedByAt {
   active?: Scalars['Boolean'];
   thumbnail?: ImageType;
   icon?: Nullable<Scalars['String']>;
-  parent?: Nullable<Category>;
+  // parent?: Nullable<Category>;
 }
 
 export interface ProductShippingInfo {
@@ -206,6 +211,7 @@ export interface ShippingZoneType extends CreatedUpdatedByAt {
 
 export interface ShippingRateType {
   id?: Scalars['ID'];
+  weightUnit?: { unit: Scalars['String'] };
   minValue?: Scalars['Int'];
   maxValue?: Nullable<Scalars['Int']>;
   noMax?: Scalars['Boolean'];
@@ -261,12 +267,12 @@ export interface Product extends CreatedUpdatedByAt {
   inStock?: Nullable<Scalars['Boolean']>;
   shortDescription?: Nullable<Scalars['String']>;
   description?: Scalars['String'];
-  type?: { id: ProductType; name: string };
+  type?: { id: ProductType; name?: string };
   published?: Scalars['Boolean'];
   status?: ProductStatus;
   disableOutOfStock?: Scalars['Boolean'];
   note?: Nullable<Scalars['String']>;
-  thumbnail?: Nullable<ImageType[]>;
+  thumbnail?: Nullable<ImageType>;
   gallery?: Nullable<ImageType[]>;
   categories?: Array<Category>;
   suppliers?: Nullable<Array<Suppliers>>;

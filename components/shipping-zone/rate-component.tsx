@@ -1,20 +1,26 @@
 import { CloseIcon } from '@components/icons/close-icon';
 import Checkbox from '@components/ui/checkbox';
 import Input from '@components/ui/input';
-import type { ShippingRateType } from '@ts-types/generated';
+import Label from '@components/ui/label';
+import SelectInput from '@components/ui/select-input';
+import { ShippingRateEnum, ShippingRateType } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
 
 interface ZoneProps {
   item: ShippingRateType;
   register: any;
+  control: any;
   fields: ShippingRateType[];
   remove: any;
   watch: any;
 }
 
+const weightUnits = [{ unit: 'kg' }, { unit: 'g' }];
+
 const RateComponent = ({
   item,
   register,
+  control,
   fields,
   remove,
   watch
@@ -28,6 +34,7 @@ const RateComponent = ({
   };
 
   const hasNoMax = watch(`shippingRates.${index}.noMax`);
+  const rateType = watch('shippingZone.rateType');
 
   return (
     <div className="relative border border-solid border-border-200 last:border-0 mt-4 rounded-md">
@@ -51,17 +58,30 @@ const RateComponent = ({
         className="border border-solid border-gray-200 p-2 m-4 rounded-md"
       >
         <div className="flex items-center">
+          {rateType.type === ShippingRateEnum.Weight && (
+            <div className="mr-2 min-w-fit">
+              <Label>{t('form:input-label-unit')}</Label>
+              <SelectInput
+                name={`shippingRates.${index}.weightUnit`}
+                control={control}
+                className="w-full"
+                getOptionLabel={(option: any) => option.unit}
+                getOptionValue={(option: any) => option.unit}
+                options={weightUnits}
+              />
+            </div>
+          )}
           <Input
-            className="sm:col-span-2"
-            label={t('form:input-label-min')}
+            className="sm:col-span-2 mr-2"
+            label={`${t('form:input-label-min')} ${rateType.type}`}
             type="number"
             disabled={true}
             variant="outline"
             {...register(`shippingRates.${index}.minValue` as const)}
           />
           <Input
-            className="sm:col-span-2 mx-2"
-            label={t('form:input-label-max')}
+            className="sm:col-span-2 mr-2"
+            label={`${t('form:input-label-max')} ${rateType.type}`}
             type="number"
             min={0}
             step={0.1}

@@ -22,7 +22,7 @@ export interface VariationTypeExtra extends VariationType {
 
 export interface VariationReducerType {
   variations: VariationTypeExtra[];
-  variationsOptions: VariationOptionsType[];
+  variationOptions: VariationOptionsType[];
 }
 
 export function variationsReducer(
@@ -66,7 +66,7 @@ export function variationsReducer(
     case VariationActions.CHANGE_VARIATION_OPTION:
       return {
         ...state,
-        variationsOptions: state.variationsOptions?.map((option) => {
+        variationOptions: state.variationOptions?.map((option) => {
           if (isEqual(payload?.options?.sort(), option?.options?.sort())) {
             return {
               ...option,
@@ -77,19 +77,23 @@ export function variationsReducer(
         })
       };
     case VariationActions.INIT:
-      return payload.value;
+      return {
+        variations: payload.value.variations as VariationTypeExtra[],
+        variationOptions: payload.value
+          .variationOptions as VariationOptionsType[]
+      };
     case VariationActions.CARTESIAN: {
       const payloadOptions = payload.values?.map((v) => {
         return Array.isArray(v) ? v?.map((av) => av.id) : [v.id];
       });
 
-      const stateOptions = state.variationsOptions?.map((av) => av.options);
+      const stateOptions = state.variationOptions?.map((av) => av.options);
 
       const added = differenceWith(payloadOptions, stateOptions, isEqual);
       const deleted = differenceWith(stateOptions, payloadOptions, isEqual);
 
       const cleanedState = !isEmpty(deleted)
-        ? state.variationsOptions
+        ? state.variationOptions
             ?.map((v) => {
               const combination = payload.values?.find((cart) => {
                 const options = Array.isArray(cart)
@@ -106,21 +110,20 @@ export function variationsReducer(
             ?.filter(function (element) {
               return element !== undefined;
             })
-        : state.variationsOptions;
+        : state.variationOptions;
 
       if (!isEmpty(added)) {
-        console.log('state >>>', state);
         return {
           ...state,
-          variationsOptions: [
+          variationOptions: [
             ...cleanedState,
-            ...payload.values
-              ?.map((v) => {
+            ...(payload.values ?? [])
+              .map((v) => {
                 const options = Array.isArray(v)
                   ? v?.map((av) => av.id)
                   : [v.id];
 
-                const combination = state.variationsOptions?.find((s) =>
+                const combination = state.variationOptions?.find((s) =>
                   isEqual(s.options?.sort(), options?.sort())
                 );
 
@@ -143,7 +146,7 @@ export function variationsReducer(
                 }
                 return undefined;
               })
-              ?.filter(function (element) {
+              .filter(function (element) {
                 return element !== undefined;
               })
           ]
@@ -151,9 +154,9 @@ export function variationsReducer(
       }
       return {
         ...state,
-        variationsOptions: !isEmpty(deleted)
+        variationOptions: !isEmpty(deleted)
           ? [...cleanedState]
-          : state.variationsOptions
+          : state.variationOptions
       };
     }
     default:

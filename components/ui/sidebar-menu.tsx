@@ -1,13 +1,12 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useRouter } from 'next/router';
-import cn from 'classnames';
 import { ExpandLessIcon } from '@components/icons/expand-less-icon';
 import { ExpandMoreIcon } from '@components/icons/expand-more-icon';
-import { getIcon } from '@utils/get-icon';
 import * as sidebarIcons from '@components/icons/sidebar';
 import { useUI } from '@contexts/ui.context';
+import cn from 'classnames';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
+import { useState } from 'react';
 
 function SidebarMenuItem({ className, item, depth = 0 }: any) {
   const router = useRouter();
@@ -34,6 +33,8 @@ function SidebarMenuItem({ className, item, depth = 0 }: any) {
     expandIcon = !isOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />;
   }
 
+  const TagName = sidebarIcons[icon];
+
   return (
     <>
       <motion.li
@@ -49,11 +50,7 @@ function SidebarMenuItem({ className, item, depth = 0 }: any) {
             className
           )}
         >
-          {getIcon({
-            iconList: sidebarIcons,
-            iconName: icon,
-            className: 'w-5 h-5 me-4'
-          })}
+          {TagName && <TagName className="w-5 h-5 me-4" />}
           <p className="flex-1">{t(labelTransKey)}</p>
           <span>{expandIcon}</span>
         </button>

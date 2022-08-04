@@ -59,6 +59,9 @@ export const PRODUCT = gql`
       quantity
       shortDescription
       description
+      type {
+        id
+      }
       published
       disableOutOfStock
       note
@@ -156,18 +159,18 @@ export const CREATE_PRODUCT = gql`
     $quantity: Int!
     $shortDescription: String!
     $description: String!
+    $type: productTypeInput!
     $published: Boolean!
     $disableOutOfStock: Boolean!
     $note: String
     $sku: String
-    $thumbnail: IMGInput
-    $gallery: [IMGInput]
+    $thumbnail: ImageInput
+    $gallery: [ImageInput]
     $categories: [CategoryInput]
     $suppliers: [SupplierInput]
     $tags: [TagInput]
     $variationOptions: [VariationOptionInput]
     $variations: [VariationInput]
-    $shippings: [ProductShippingInput]
     $productShippingInfo: ProductShippingInfoInput
   ) {
     createProduct(
@@ -178,6 +181,7 @@ export const CREATE_PRODUCT = gql`
       quantity: $quantity
       shortDescription: $shortDescription
       description: $description
+      type: $type
       published: $published
       disableOutOfStock: $disableOutOfStock
       note: $note
@@ -189,7 +193,6 @@ export const CREATE_PRODUCT = gql`
       tags: $tags
       variationOptions: $variationOptions
       variations: $variations
-      shippings: $shippings
       productShippingInfo: $productShippingInfo
     ) {
       name

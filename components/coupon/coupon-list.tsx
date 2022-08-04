@@ -81,7 +81,7 @@ const CouponList = ({
       key: 'discountValue',
       align: 'center',
       ellipsis: true,
-      width: 100,
+      width: 135,
       render: (discountValue: number, record: Coupon) => {
         const className =
           'font-medium bg-gray-100 w-fit text-13px md:text-sm rounded block border border-sink-base px-2 py-1';
@@ -92,7 +92,9 @@ const CouponList = ({
           return <span className={className}>{`- ${discountValue} USD`}</span>;
         } else {
           return (
-            <span className={className}>{t('form:input-label-free')}</span>
+            <span className={className}>
+              {t('form:input-label-free-shipping')}
+            </span>
           );
         }
       }

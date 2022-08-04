@@ -66,7 +66,6 @@ const defaultValues = {
   gallery: [],
   categories: [],
   suppliers: [],
-  variations: [],
   tags: [],
   productShippingInfo: {
     weight: 0,
@@ -93,7 +92,7 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
     variationsReducer,
     {
       variations: [],
-      variationsOptions: []
+      variationOptions: []
     }
   );
   const [error, setError] = useState(null);
@@ -160,10 +159,14 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
 
   useErrorLogger(error);
 
-  const onSubmit = async (values_: FormValues) => {
+  console.log('description', getValues('description'));
+
+  const onSubmit = async (_values: FormValues) => {
+    const isVariable = _values.type.id === ProductType.Variable;
     const values = {
-      ...values_
-      // variationOptions: VariationOptions
+      ..._values,
+      variations: isVariable ? variationState.variations : [],
+      variationOptions: isVariable ? variationState.variationOptions : []
     };
 
     if (lockedSubmission) return;
@@ -173,6 +176,7 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
 
     if (isEmpty(initialValues)) {
       const variables = creationVariable(values);
+      console.log('variables', variables);
       createProduct({ variables }).catch((err) => {
         setError(err);
         setUnsavedChanges(true);
@@ -195,7 +199,7 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
     return confirm(t('common:UNSAVED_CHANGES'));
   });
 
-  const currentProductType = watch('type') as { id: ProductType; name: string };
+  const currentProductType = watch('type');
 
   return (
     <>
@@ -304,6 +308,14 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
                   </span>
                 )}
               </div>
+              <TextArea
+                label={t('form:item-hidden-note')}
+                {...register('note')}
+                placeholder="Hidden note"
+                error={t(errors.note?.message!)}
+                variant="outline"
+                className="mb-5"
+              />
               <div>
                 <Label>{t('form:input-label-status')}</Label>
                 <Radio

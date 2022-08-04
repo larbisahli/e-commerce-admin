@@ -4,7 +4,6 @@ import Pagination from '@components/ui/pagination';
 import { Table } from '@components/ui/table';
 import { Nullable } from '@ts-types/custom.types';
 import { Category, CreatedUpdatedByAt } from '@ts-types/generated';
-import { getIcon } from '@utils/get-icon';
 import { useIsRTL } from '@utils/locals';
 import { ROUTES } from '@utils/routes';
 import dayjs from 'dayjs';
@@ -52,14 +51,11 @@ const CategoryList = ({
       align: 'center',
       width: 50,
       render: (icon: string) => {
+        const TagName = categoriesIcon[icon];
         if (!icon) return null;
         return (
           <span className="flex items-center justify-center">
-            {getIcon({
-              iconList: categoriesIcon,
-              iconName: icon,
-              className: 'w-5 h-5 max-h-full max-w-full'
-            })}
+            {TagName && <TagName className="w-5 h-5 max-h-full max-w-full" />}
           </span>
         );
       }

@@ -4,13 +4,13 @@ import { UploadIcon } from '@components/icons/upload-icon';
 import ImageComponent from '@components/ImageComponent';
 import Loader from '@components/ui/loader/loader';
 import { DELETE_IMAGE_OBJECT } from '@graphql/common';
-import { useErrorLogger } from '@hooks/index';
+import { useErrorLogger, useGetStaff } from '@hooks/index';
 import { notify } from '@lib/notify';
 import { apiURL } from '@utils/utils';
 import isArray from 'lodash/isArray';
 import isEmpty from 'lodash/isEmpty';
 import { useTranslation } from 'next-i18next';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 
 interface ImageType {
@@ -25,13 +25,26 @@ interface ImageType {
 export default function Uploader({ onChange, value, multiple }: any) {
   const { t } = useTranslation();
 
+  const imagesCache = useRef<string[]>([]);
+
   const [error, setError] = useState(null);
   const [images, setImages] = useState<ImageType | ImageType[]>(value);
-  const [deletedImage, setDeletedImage] = useState<string>(null);
+  const [deletedImage, setDeletedImage] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const [deleteImageObject, { loading: deleteLoading }] =
-    useMutation(DELETE_IMAGE_OBJECT);
+  const { staffInfo } = useGetStaff();
+  const csrfToken = staffInfo?.csrfToken;
+
+  const [deleteImageObject, { loading: deleteLoading }] = useMutation(
+    DELETE_IMAGE_OBJECT,
+    {
+      context: {
+        headers: {
+          'x-csrf-token': csrfToken
+        }
+      }
+    }
+  );
 
   useErrorLogger(error);
 
@@ -42,6 +55,8 @@ export default function Uploader({ onChange, value, multiple }: any) {
     onDrop: async (acceptedFiles) => {
       try {
         setLoading(true);
+        imagesCache.current = [];
+
         if (!isEmpty(images) && !multiple) {
           notify('You should remove the current image first', 'warning');
           setLoading(false);
@@ -61,8 +76,10 @@ export default function Uploader({ onChange, value, multiple }: any) {
             if (image.success) {
               if (multiple) {
                 setImages((prev) => [...((prev as ImageType[]) ?? []), image]);
+                imagesCache.current.push(image.image);
               } else {
                 setImages(image as ImageType);
+                setLoading(false);
               }
             }
 
@@ -72,7 +89,9 @@ export default function Uploader({ onChange, value, multiple }: any) {
               notify(image?.error?.message, 'error');
             }
 
-            setLoading(false);
+            if (acceptedFiles.length === imagesCache.current.length) {
+              setLoading(false);
+            }
             console.log(`<:FINISHED UPLOAD:>`, image);
           });
         }
@@ -98,7 +117,9 @@ export default function Uploader({ onChange, value, multiple }: any) {
   ) => {
     e.preventDefault();
 
-    setDeletedImage(image);
+    setDeletedImage((prev) => {
+      return [...prev, image];
+    });
 
     deleteImageObject({
       variables: { image, placeholder },
@@ -113,7 +134,7 @@ export default function Uploader({ onChange, value, multiple }: any) {
           }
           setImages(images_);
           onChange(images_);
-          setDeletedImage(null);
+          setDeletedImage([]);
           notify(t('common:successfully-deleted'), 'success');
         }
       }
@@ -134,7 +155,7 @@ export default function Uploader({ onChange, value, multiple }: any) {
             className="inline-flex flex-col overflow-hidden border border-border-200 rounded mt-2 me-2 relative"
             key={idx}
           >
-            {deletedImage === image && (
+            {deletedImage.includes(image) && (
               <div className="absolute top-0 right-0 left-0 bottom-0 w-16 h-16 z-40 bg-red-50 opacity-80 flex justify-center items-center">
                 <Loader
                   simple={true}
@@ -170,7 +191,7 @@ export default function Uploader({ onChange, value, multiple }: any) {
     } else {
       return (
         <div className="inline-flex flex-col overflow-hidden border border-border-200 rounded mt-2 me-2 relative">
-          {deletedImage && (
+          {deletedImage.includes(images?.image) && (
             <div className="absolute top-0 right-0 left-0 bottom-0 w-16 h-16 z-40 bg-red-50 opacity-80 flex justify-center items-center">
               <Loader
                 simple={true}

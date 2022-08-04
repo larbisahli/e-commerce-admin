@@ -8,7 +8,9 @@ interface Props {
   className?: string;
   orderValue?: string;
   showLabel?: boolean;
+  limit?: { id: number; value: number; label: number };
   onSortChange?: Function;
+  onLimitChange?: Function;
   onOrderChange: Function;
   options: {
     id?: number;
@@ -19,6 +21,8 @@ interface Props {
 
 const SortForm: React.FC<Props> = ({
   onSortChange,
+  onLimitChange,
+  limit,
   onOrderChange,
   orderValue,
   options,
@@ -29,6 +33,20 @@ const SortForm: React.FC<Props> = ({
 
   return (
     <div className={cn('flex items-end w-full', className)}>
+      {onLimitChange instanceof Function && (
+        <div className="w-[150px] mr-5">
+          <Select
+            options={[
+              { id: 1, value: 10, label: 10 },
+              { id: 2, value: 20, label: 20 },
+              { id: 3, value: 30, label: 30 }
+            ]}
+            onChange={onLimitChange}
+            value={limit}
+            name="Limit"
+          />
+        </div>
+      )}
       <div className="w-full">
         {showLabel && <Label>{t('filter-by-order')}</Label>}
         <Select

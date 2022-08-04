@@ -31,12 +31,11 @@ interface OptionsVariable {
   sortedBy: SortOrder;
 }
 
-const limit = 10;
-
 export default function OrderStatusPage({ client }: SSRProps) {
   const { t } = useTranslation();
 
   const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState({ id: 1, value: 10, label: 10 });
   const [orderBy, setOrder] = useState(OrderBy.CREATED_AT);
   const [orderStatuses, setOrderStatuses] = useState<OrderStatus[]>(
     [] as OrderStatus[]
@@ -48,7 +47,7 @@ export default function OrderStatusPage({ client }: SSRProps) {
   >(ORDER_STATUSES, {
     variables: {
       page,
-      limit,
+      limit: limit.value,
       orderBy,
       sortedBy: SortOrder.Desc
     },
@@ -99,6 +98,10 @@ export default function OrderStatusPage({ client }: SSRProps) {
           <SortForm
             className="md:ms-5"
             showLabel={false}
+            onLimitChange={(value) => {
+              setLimit(value);
+            }}
+            limit={limit}
             onOrderChange={({ value }: { value: OrderBy }) => {
               setOrder(value);
             }}
@@ -133,7 +136,7 @@ export default function OrderStatusPage({ client }: SSRProps) {
           onPagination={handlePagination}
           total={orderStatusCount}
           currentPage={page}
-          perPage={limit}
+          perPage={limit.value}
         />
       )}
     </>
