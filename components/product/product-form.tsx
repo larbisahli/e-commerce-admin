@@ -83,6 +83,11 @@ type IProps = {
   initialValues?: Product | null;
 };
 
+const productTypes = [
+  { name: 'Simple Product', id: ProductType.Simple },
+  { name: 'Variable Product', id: ProductType.Variable }
+];
+
 function CreateOrUpdateProductForm({ initialValues }: IProps) {
   const { t } = useTranslation();
 
@@ -110,7 +115,11 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
           ...initialValues,
           status: initialValues?.published
             ? ProductStatus.Publish
-            : ProductStatus.Draft
+            : ProductStatus.Draft,
+          type:
+            initialValues.type.id === ProductType.Simple
+              ? productTypes[0]
+              : productTypes[1]
         })
       : defaultValues
   });
@@ -159,8 +168,6 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
 
   useErrorLogger(error);
 
-  console.log('description', getValues('description'));
-
   const onSubmit = async (_values: FormValues) => {
     const isVariable = _values.type.id === ProductType.Variable;
     const values = {
@@ -171,12 +178,11 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
 
     if (lockedSubmission) return;
 
-    setLockedSubmission(true);
+    // setLockedSubmission(true);
     setUnsavedChanges(false);
 
     if (isEmpty(initialValues)) {
       const variables = creationVariable(values);
-      console.log('variables', variables);
       createProduct({ variables }).catch((err) => {
         setError(err);
         setUnsavedChanges(true);
@@ -200,6 +206,8 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
   });
 
   const currentProductType = watch('type');
+
+  const type = currentProductType?.id ?? getValues('type');
 
   return (
     <>
@@ -361,17 +369,14 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
                 hideSelectedOptions={false}
                 getOptionLabel={(option: any) => option.name}
                 getOptionValue={(option: any) => option.id}
-                options={[
-                  { name: 'Simple Product', id: ProductType.Simple },
-                  { name: 'Variable Product', id: ProductType.Variable }
-                ]}
+                options={productTypes}
               />
             </Card>
           </div>
           {/* Variation Type & Simple Type */}
 
-          {!!currentProductType?.id &&
-            (currentProductType?.id === ProductType.Simple ? (
+          {!!type &&
+            (type === ProductType.Simple ? (
               <ProductInfoForm initialValues={initialValues} />
             ) : (
               <ProductVariableForm

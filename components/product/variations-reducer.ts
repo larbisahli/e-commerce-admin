@@ -78,9 +78,8 @@ export function variationsReducer(
       };
     case VariationActions.INIT:
       return {
-        variations: payload.value.variations as VariationTypeExtra[],
-        variationOptions: payload.value
-          .variationOptions as VariationOptionsType[]
+        variations: payload.value.variations,
+        variationOptions: payload.value.variationOptions
       };
     case VariationActions.CARTESIAN: {
       const payloadOptions = payload.values?.map((v) => {

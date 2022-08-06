@@ -11,10 +11,10 @@ const creationVariable = (values: Product): Product => {
     description: values.description,
     type: { id: values.type.id },
     published: values.status === 'publish',
-    quantity: isVariable ? 1 : Number(values?.quantity),
-    salePrice: isVariable ? 1 : Number(values.salePrice),
-    comparePrice: isVariable ? 5 : Number(values.comparePrice),
-    buyingPrice: isVariable ? 12 : Number(values.buyingPrice),
+    quantity: isVariable ? 0 : Number(values?.quantity),
+    salePrice: isVariable ? 0 : Number(values.salePrice),
+    comparePrice: isVariable ? 0 : Number(values.comparePrice),
+    buyingPrice: isVariable ? 0 : Number(values.buyingPrice),
     sku: isVariable ? null : values.sku,
     note: values.note,
     disableOutOfStock: values?.disableOutOfStock,
@@ -178,13 +178,24 @@ const updateVariable = (values: Product, initialValues: Product) => {
     : values?.productShippingInfo;
 
   // 8) variation options block
-  const variationOptions = values?.variationOptions?.filter(
-    (e) => e !== undefined
+  const variationOptions = values?.variationOptions
+    ?.filter((e) => e !== undefined)
+    ?.map((op) => {
+      op.options?.sort();
+      return op;
+    });
+
+  const clonedVariationOption = JSON.parse(
+    JSON.stringify(initialValues?.variationOptions)
   );
+  const initVariationOption = clonedVariationOption?.map((op) => {
+    op.options?.sort();
+    return op;
+  });
 
   const variationOptionsAdditions = differenceWith(
     variationOptions,
-    initialValues?.variationOptions,
+    initVariationOption,
     isEqual
   );
 

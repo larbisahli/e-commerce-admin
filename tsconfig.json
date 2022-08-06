@@ -33,6 +33,12 @@
     },
     "incremental": true
   },
-  "include": ["next-env.d.ts", "additional.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": [
+    "next-env.d.ts",
+    "additional.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "pages/_error.js"
+  ],
   "exclude": ["node_modules"]
 }

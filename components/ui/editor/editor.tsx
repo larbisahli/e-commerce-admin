@@ -52,20 +52,20 @@ const EditorComponent = (props) => {
           options: [
             'inline',
             'blockType',
-            'fontSize',
-            'fontFamily',
+            // 'fontSize',
+            // 'fontFamily',
             'list',
-            'textAlign',
-            'colorPicker',
-            'emoji',
-            'link',
+            // 'textAlign',
+            // 'colorPicker',
+            // 'emoji',
+            // 'link',
             'history'
-          ],
-          inline: { inDropdown: true },
-          list: { inDropdown: true },
-          textAlign: { inDropdown: true },
-          link: { inDropdown: true },
-          history: { inDropdown: false }
+          ]
+          // inline: { inDropdown: true },
+          // list: { inDropdown: true },
+          // textAlign: { inDropdown: true },
+          // link: { inDropdown: true },
+          // history: { inDropdown: false }
         }}
       />
     </div>

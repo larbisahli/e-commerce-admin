@@ -21,6 +21,9 @@ export const PRODUCTS_FOR_ADMIN = gql`
       salePrice
       maxPrice
       minPrice
+      type {
+        id
+      }
       quantity
       published
       categories {

@@ -22,7 +22,7 @@ import isEqual from 'lodash/isEqual';
 import { nanoid } from 'nanoid';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useEffect, useMemo, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 
 import {
@@ -145,11 +145,19 @@ function ProductVariableForm({
       dispatchVariationState({
         type: VariationActions.INIT,
         payload: {
-          value: { variations, variationOptions }
+          value: {
+            variations: variations?.map((variation) => {
+              return {
+                id: nanoid(),
+                ...variation
+              };
+            }),
+            variationOptions
+          }
         }
       });
+      setInit(true);
     }
-    setInit(true);
   }, []);
 
   useEffect(() => {
@@ -161,7 +169,8 @@ function ProductVariableForm({
         }
       });
     }
-  }, [cartesianProduct, dispatchVariationState, init]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cartesianProduct]);
 
   const appendVariant = (e: any) => {
     e.preventDefault();
@@ -290,6 +299,13 @@ const VariationComponent = ({
     });
   };
 
+  const values = useMemo(
+    () =>
+      attributes?.find((attribute) => attribute.id === variant.attribute.id)
+        ?.values,
+    [variant.attribute, attributes]
+  );
+
   return (
     <div className="border-b border-dashed border-border-200 last:border-0 p-5 md:p-8">
       <div className="flex items-center justify-between">
@@ -331,7 +347,7 @@ const VariationComponent = ({
             isLoading={loading}
             closeMenuOnSelect
             hideSelectedOptions
-            options={variant.attribute.values}
+            options={values}
             onChange={changeValues}
           />
         </div>
