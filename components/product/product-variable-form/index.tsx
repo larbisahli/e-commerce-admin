@@ -156,6 +156,7 @@ function ProductVariableForm({
           }
         }
       });
+    } else if (isEmpty(initialValues?.variationOptions)) {
       setInit(true);
     }
   }, []);

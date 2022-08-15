@@ -11,6 +11,7 @@ const ENV = process.env;
 const PRODUCTION_ENV = ENV.NODE_ENV === 'production';
 
 const PublicKEY = process.env.JWTRS256_KEY_PUB;
+
 /*
  * @params {jwtToken} extracted from cookies
  * @return {object} object of extracted token

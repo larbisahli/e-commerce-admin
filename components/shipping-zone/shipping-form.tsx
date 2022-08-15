@@ -282,14 +282,14 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
           className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
         />
         <Card className="w-full sm:w-8/12 md:w-2/3">
-          <div className="mb-5 flex items-center justify-between lg:flex-nowrap flex-wrap">
+          <div className="mb-5">
             <Input
               label={`${t('form:input-label-name')}*`}
               {...register('shippingZone.name')}
               error={t(errors.shippingZone?.name?.message!)}
               placeholder="Name ( The name you'll remember )"
               variant="outline"
-              className="w-full lg:mr-5 mr-0 lg:mb-0 mb-5"
+              className="w-full mb-5"
             />
             <Input
               label={`${t('form:input-label-display-name')}*`}

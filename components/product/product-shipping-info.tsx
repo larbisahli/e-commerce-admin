@@ -15,9 +15,9 @@ type IProps = {
 
 const weightUnits = [{ unit: 'kg' }, { unit: 'g' }];
 
-const volumeUnits = [{ unit: 'L' }, { unit: 'mL' }];
+const volumeUnits = [{ unit: 'l' }, { unit: 'ml' }];
 
-const dimensionUnits = [{ unit: 'L' }, { unit: 'mL' }];
+const dimensionUnits = [{ unit: 'l' }, { unit: 'ml' }];
 
 function ProductShippingInfoForm({ control, initialValues }: IProps) {
   const { t } = useTranslation();

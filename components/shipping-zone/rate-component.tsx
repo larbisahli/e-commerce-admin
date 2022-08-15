@@ -75,7 +75,9 @@ const RateComponent = ({
             className="sm:col-span-2 mr-2"
             label={`${t('form:input-label-min')} ${rateType.type}`}
             type="number"
-            disabled={true}
+            // disabled={true}
+            min={0}
+            step={0.1}
             variant="outline"
             {...register(`shippingRates.${index}.minValue` as const)}
           />
