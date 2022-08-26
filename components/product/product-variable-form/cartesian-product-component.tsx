@@ -1,4 +1,4 @@
-import Checkbox from '@components/ui/checkbox';
+// import Checkbox from '@components/ui/checkbox';
 import Input from '@components/ui/input';
 import Title from '@components/ui/title';
 import { useSettings } from '@contexts/settings.context';
@@ -113,6 +113,7 @@ const CartesianProductComponent = ({
           // error={t(errors.variation_options?.[index]?.quantity?.message)}
           variant="outline"
           className="mb-5"
+          note={'Zero means out of stock'}
         />
       </div>
 
@@ -124,16 +125,16 @@ const CartesianProductComponent = ({
         options={options}
       />
 
-      <div className="mb-5 mt-5">
+      {/* <div className="mb-5 mt-5">
         <Checkbox
           name="isDisable"
           id={`${index}-isDisable`}
           onChange={HandleInputChange}
           checked={variationOption.isDisable}
           // error={t(errors.variationOptions?.[index]?.isDisable?.message)}
-          label={t('form:input-label-disable-variant')}
+          label={t('form:input-label-out-of-stock')}
         />
-      </div>
+      </div> */}
     </div>
   );
 };
