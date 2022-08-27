@@ -1,20 +1,20 @@
 import Card from '@components/common/card';
 import AppLayout from '@components/layouts/app';
 import Button from '@components/ui/button';
-import ErrorMessage from '@components/ui/error-message';
+// import ErrorMessage from '@components/ui/error-message';
 import ValidationError from '@components/ui/form-validation-error';
-import Loader from '@components/ui/loader/loader';
-import ProgressBox from '@components/ui/progress-box/progress-box';
+// import Loader from '@components/ui/loader/loader';
+// import ProgressBox from '@components/ui/progress-box/progress-box';
 import SelectInput from '@components/ui/select-input';
 import { Table } from '@components/ui/table';
 // import { useOrderQuery } from "@data/order/use-order.query";
 // import { useUpdateOrderMutation } from "@data/order/use-order-update.mutation";
 // import { useOrderStatusesQuery } from "@data/order-status/use-order-statuses.query";
 import { siteSettings } from '@settings/site.settings';
-import { Attachment } from '@ts-types/generated';
+// import { Attachment } from '@ts-types/generated';
 import { formatAddress } from '@utils/format-address';
 import { useIsRTL } from '@utils/locals';
-import usePrice from '@utils/use-price';
+// import usePrice from '@utils/use-price';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
@@ -174,10 +174,10 @@ export default function OrderDetailsPage() {
       </div>
 
       <div className="my-5 lg:my-10 flex justify-center items-center">
-        <ProgressBox
+        {/* <ProgressBox
           data={orderStatusData?.order_statuses?.data}
           status={data?.order?.status?.serial!}
-        />
+        /> */}
       </div>
 
       <div className="mb-10">
