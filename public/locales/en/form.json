@@ -407,5 +407,11 @@
   "input-label-no-maximum": "No maximum",
   "create-product": "Create Product",
   "edit-product": "Edit Product",
-  "product-type": "Product Type"
+  "product-type": "Product Type",
+  "input-label-store-link": "Store Link",
+  "input-label-store-info": "Store info",
+  "input-info-store-link": "It's your website link. Enter unique ID like your store name.",
+  "input-label-whatsapp-number": "WhatsApp number",
+  "input-info-whatsapp-number": "Customers send messages to this number",
+  "error-store-name-required":"Store name required"
 }

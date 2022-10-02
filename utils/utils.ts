@@ -1,4 +1,4 @@
-import { Category } from '@ts-types/generated';
+// import { Category } from '@ts-types/generated';
 import React from 'react';
 
 export const PRODUCTION_ENV = process.env.NODE_ENV === 'production';
@@ -49,86 +49,86 @@ export const replace = (array, index: number, replacerIndex: number) => {
 
 export const mediaURL = PRODUCTION_ENV
   ? process.env.MEDIA_URL
-  : 'http://127.0.0.1:5000/media';
+  : 'http://127.0.0.1:5001/media';
 
 export const apiURL = PRODUCTION_ENV
   ? process.env.API_URL
-  : 'http://127.0.0.1:5000';
+  : 'http://127.0.0.1:5001';
 
 // export const mediaURL = process.env.MEDIA_URL;
 
 // export const apiURL = process.env.API_URL;
 
-function searchTree(element: Category, matchingId: string) {
-  if (element?.id === matchingId) {
-    return element;
-  } else if (element?.children != null) {
-    let i: number;
-    let result = null;
-    for (i = 0; result == null && i < element.children.length; i++) {
-      result = searchTree(element.children[i], matchingId);
-    }
-    return result;
-  }
-  return null;
-}
+// function searchTree(element: Category, matchingId: string) {
+//   if (element?.id === matchingId) {
+//     return element;
+//   } else if (element?.children != null) {
+//     let i: number;
+//     let result = null;
+//     for (i = 0; result == null && i < element.children.length; i++) {
+//       result = searchTree(element.children[i], matchingId);
+//     }
+//     return result;
+//   }
+//   return null;
+// }
 
-function ancestorSearch(element: Category[], matchingId: string) {
-  return element?.find((ele) => {
-    if (ele?.id === matchingId) {
-      return true;
-    } else if (ele?.children != null) {
-      let i;
-      let result = null;
-      for (i = 0; result == null && i < ele.children.length; i++) {
-        result = searchTree(ele.children[i], matchingId);
-      }
-      return result;
-    }
-    return null;
-  });
-}
+// function ancestorSearch(element: Category[], matchingId: string) {
+//   return element?.find((ele) => {
+//     if (ele?.id === matchingId) {
+//       return true;
+//     } else if (ele?.children != null) {
+//       let i;
+//       let result = null;
+//       for (i = 0; result == null && i < ele.children.length; i++) {
+//         result = searchTree(ele.children[i], matchingId);
+//       }
+//       return result;
+//     }
+//     return null;
+//   });
+// }
 
-function appendChild(element: Category, matchingId: string, child: Category[]) {
-  if (element?.id === matchingId) {
-    return { ...element, children: [...(element?.children ?? []), ...child] };
-  } else {
-    return {
-      ...element,
-      children: element?.children?.map((ele) => {
-        if (ele?.id === matchingId) {
-          ele.children = [...(ele.children ?? []), ...child];
-        } else if (ele?.children != null) {
-          ele.children = ele.children?.map((child_ele) => {
-            return appendChild(child_ele, matchingId, child);
-          });
-        }
-        return ele;
-      })
-    };
-  }
-}
+// function appendChild(element: Category, matchingId: string, child: Category[]) {
+//   if (element?.id === matchingId) {
+//     return { ...element, children: [...(element?.children ?? []), ...child] };
+//   } else {
+//     return {
+//       ...element,
+//       children: element?.children?.map((ele) => {
+//         if (ele?.id === matchingId) {
+//           ele.children = [...(ele.children ?? []), ...child];
+//         } else if (ele?.children != null) {
+//           ele.children = ele.children?.map((child_ele) => {
+//             return appendChild(child_ele, matchingId, child);
+//           });
+//         }
+//         return ele;
+//       })
+//     };
+//   }
+// }
 
-// TODO UNIT TEST
-export const appendChildCategory = (
-  categories: Category[],
-  id: string,
-  child: Category[]
-) => {
-  try {
-    const children = ancestorSearch(categories, id);
-    const results = appendChild(children, id, child);
-    return categories?.map((category) => {
-      if (category?.id === results?.id) {
-        return results;
-      }
-      return category;
-    });
-  } catch (error) {
-    // INFO Log to sentry
-    return categories;
-  }
-};
+// // TODO UNIT TEST
+// export const appendChildCategory = (
+//   categories: Category[],
+//   id: string,
+//   child: Category[]
+// ) => {
+//   try {
+//     const children = ancestorSearch(categories, id);
+//     const results = appendChild(children, id, child);
+//     return categories?.map((category) => {
+//       if (category?.id === results?.id) {
+//         return results;
+//       }
+//       return category;
+//     });
+//   } catch (error) {
+//     // INFO Log to sentry
+//     return categories;
+//   }
+// };
 
 export function pgFormatDate(date) {
   return new Date(new Date(date))

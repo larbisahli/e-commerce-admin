@@ -96,3 +96,11 @@
   padding: 0 2px;
   width: auto !important;
 }
+
+.phone-number-class{
+  width: 100% !important;
+}
+
+.phone-number-class:focus{
+  @apply focus:border-accent
+}

@@ -1,8 +1,11 @@
+import 'react-phone-input-2/lib/style.css'
+
 import { useMutation } from '@apollo/client';
 import Alert from '@components/ui/alert';
 import Button from '@components/ui/button';
 import Checkbox from '@components/ui/checkbox';
-import Input from '@components/ui/input';
+import ValidationError from '@components/ui/form-validation-error';
+import Label from '@components/ui/label';
 import PasswordInput from '@components/ui/password-input';
 import { STAFF_LOGIN } from '@graphql/login';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -12,25 +15,27 @@ import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import PhoneInput from 'react-phone-input-2'
 import * as yup from 'yup';
 
+import FormFooter from './form-footer';
+
 type FormValues = {
-  email: string;
+  phoneNumber: string;
   password: string;
   rememberMe: boolean;
   success: boolean;
 };
 
 const loginFormSchema = yup.object().shape({
-  email: yup
+  phoneNumber: yup
     .string()
-    .email('form:error-email-format')
     .required('form:error-email-required'),
   password: yup.string().required('form:error-password-required')
 });
 
 const defaultValues = {
-  email: '',
+  phoneNumber: '',
   password: '',
   rememberMe: false
 };
@@ -44,6 +49,8 @@ const LoginForm = () => {
   const {
     register,
     handleSubmit,
+    watch,
+    setValue,
     formState: { errors }
   } = useForm<FormValues>({
     defaultValues,
@@ -60,9 +67,9 @@ const LoginForm = () => {
 
   useErrorLogger(error);
 
-  async function onSubmit({ email, password, rememberMe }: FormValues) {
+  async function onSubmit({ phoneNumber, password, rememberMe }: FormValues) {
     const variables = {
-      email,
+      phoneNumber,
       password,
       rememberMe
     };
@@ -71,19 +78,30 @@ const LoginForm = () => {
     });
   }
 
+  const phoneNumber = watch('phoneNumber')
+
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
-        <Input
-          label={t('form:input-label-email')}
-          {...register('email')}
-          type="email"
-          variant="outline"
-          className="mb-4"
-          error={t(errors?.email?.message!)}
-        />
+      <div className="mb-5 phone-number-class">
+          <PhoneInput
+            country={'ma'}
+            inputProps={{
+                name: 'phone',
+                required: true,
+                autoFocus: true
+              }}
+            disableSearchIcon
+            enableSearch
+            inputClass='phone-number-class py-5'
+            value={phoneNumber}
+            onChange={phone => setValue('phoneNumber', phone)}
+            />
+          {/* @ts-ignore */}
+          <ValidationError message={t(errors.phoneNumber?.message)} />
+        </div>
         <PasswordInput
-          label={t('form:input-label-password')}
+          placeholder={t('form:input-label-password')}
           forgotPassHelpText={t('form:input-forgot-password-label')}
           {...register('password')}
           error={t(errors?.password?.message!)}
@@ -114,6 +132,7 @@ const LoginForm = () => {
           />
         ) : null}
       </form>
+      <FormFooter/>
     </>
   );
 };

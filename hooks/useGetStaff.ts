@@ -25,8 +25,7 @@ export function useGetStaff(client?: ClientType) {
     skip: Boolean(!staffId) || !!(staffId && staffInfo?.id),
     onCompleted: (data: TStaff) => {
       const staff = data?.staff;
-      const csrfToken = client?.csrfToken;
-      setStaffInfo({ ...staff, csrfToken });
+      setStaffInfo(staff);
     }
   });
 
@@ -34,6 +33,7 @@ export function useGetStaff(client?: ClientType) {
 
   useEffect(() => {
     const csrfToken = client?.csrfToken;
+    console.log({client})
     if (csrfToken) {
       setStaffInfo((prev) => {
         return { ...prev, csrfToken };

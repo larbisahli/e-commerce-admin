@@ -51,7 +51,7 @@ export enum ErrorNames {
 }
 
 export enum CookieNames {
-  STAFF_TOKEN_NAME = 'GALA_STAFF_TOKEN',
-  CUSTOMER_SESSION_NAME = 'GALA_SESSION',
-  XSRF_TOKEN = 'XSRF_TOKEN'
+  STAFF_TOKEN_NAME = '_suid',
+  CUSTOMER_SESSION_NAME = '_cuid',
+  XSRF_TOKEN = 'xsrf-token',
 }

@@ -102,6 +102,16 @@ export type TagsQueryOptionsType = {
   sortedBy?: SortOrder;
 };
 
+export type CurrencyType = {
+  symbol: string;
+  name: string;
+  symbol_native: string;
+  decimal_digits: number;
+  rounding: number;
+  code: string;
+  name_plural: string;
+};
+
 // export type ProductsQueryOptionsType = {
 //   page?: number;
 //   shop_id?: number;

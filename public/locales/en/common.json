@@ -15,7 +15,7 @@
   "auth-menu-logout": "Logout",
   "join-button": "Join",
   "change-locale": "Switch to german",
-  "admin-login-title": "Login to admin",
+  "admin-login": "Admin login",
   "admin-register-title": "Register new account",
   "billing-address": "Billing Address",
   "shipping-address": "Shipping Address",
@@ -224,5 +224,6 @@
   "attribute-imported-successfully": "Attributes Imported Successfully",
   "product-imported-successfully": "Products Imported Successfully",
   "variation-options-imported-successfully": "Variation Options Imported Successfully",
-  "UNSAVED_CHANGES": "Warning! If you leave before saving, your changes will be lost."
+  "UNSAVED_CHANGES": "Warning! If you leave before saving, your changes will be lost.",
+  "sign-up": "Sign up"
 }

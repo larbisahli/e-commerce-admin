@@ -35,51 +35,15 @@ const LoginPage = () => {
           quality={100}
         />
       </div>
-      <div className="flex flex-col items-center justify-center h-screen">
-        <div className="m-auto max-w-[420px] w-full bg-light sm:shadow p-5 sm:p-8 rounded">
-          <h3 className="text-center text-base italic text-body mb-6 mt-4">
-            {t('admin-login-title')}
+      <div className="flex flex-col items-center justify-center h-fit">
+        <div className="m-auto max-w-lg w-full bg-white sm:shadow p-5 sm:p-8 rounded">
+          <h3 className="text-center mt-4 text-xl font-medium">
+            {t('admin-login')}
           </h3>
+          <div className="text-center mb-6 mt-2 font-normal">
+            <span className='mr-1'>OR</span><Link href='/signup'><a className='text-blue-500 text-base font-normal'>{t('sign-up')}</a></Link>
+          </div>
           <LoginForm />
-        </div>
-        <div className="mt-5 flex justify-center items-center text-white bg-black w-full bg-opacity-40 h-12">
-          <p>© dropgala 2022 All rights reserved</p>
-          <span
-            style={{ width: '1px', height: '20px' }}
-            className="mx-2 bg-white"
-          ></span>
-          <Link href="/" passHref>
-            <a>
-              <p>Contact Us</p>
-            </a>
-          </Link>
-          <span
-            style={{ width: '1px', height: '20px' }}
-            className="mx-2 bg-white"
-          ></span>
-          <Link href="/" passHref>
-            <a>
-              <p>Terms</p>
-            </a>
-          </Link>
-          <span
-            style={{ width: '1px', height: '20px' }}
-            className="mx-2 bg-white"
-          ></span>
-          <Link href="/" passHref>
-            <a>
-              <p>Terms</p>
-            </a>
-          </Link>
-          <span
-            style={{ width: '1px', height: '20px' }}
-            className="mx-2 bg-white"
-          ></span>
-          <Link href="/" passHref>
-            <a>
-              <p>Privacy</p>
-            </a>
-          </Link>
         </div>
       </div>
     </Fragment>
