@@ -1,6 +1,6 @@
-import 'react-phone-input-2/lib/style.css'
+import 'react-phone-input-2/lib/style.css';
 
-import { useLazyQuery,useMutation } from '@apollo/client';
+import { useLazyQuery, useMutation } from '@apollo/client';
 import { ArrowSync } from '@components/icons/arrow-sync';
 import EditSvg from '@components/icons/pen';
 import SecureX from '@components/icons/secure-x';
@@ -10,29 +10,33 @@ import Button from '@components/ui/button';
 import ValidationError from '@components/ui/form-validation-error';
 import Input from '@components/ui/input';
 import Label from '@components/ui/label';
-import { ALIAS_NAME_CHECK,CREATE_STORE } from '@graphql/create-store';
+import { ALIAS_NAME_CHECK, CREATE_STORE } from '@graphql/create-store';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetStaff } from '@hooks/useGetStaff';
+import { notify } from '@lib/notify';
 import { ROUTES } from '@utils/routes';
-import parsePhoneNumber, {isValidPhoneNumber} from 'libphonenumber-js'
+import parsePhoneNumber, { isValidPhoneNumber } from 'libphonenumber-js';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
-import React, { useEffect, useMemo, useRef,useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import PhoneInput from 'react-phone-input-2'
+import PhoneInput from 'react-phone-input-2';
 import * as yup from 'yup';
 
 import FormFooter from './form-footer';
 
-
 type FormValues = {
+  firstName: string;
+  lastName: string;
   aliasName: string;
   phoneNumber: string;
   storeName: string;
 };
 
 const registrationFormSchema = yup.object().shape({
+  firstName: yup.string().required('form:error-first-name-required'),
+  lastName: yup.string().required('form:error-last-name-required'),
   storeName: yup.string().required('form:error-store-name-required'),
   aliasName: yup
     .string()
@@ -43,9 +47,9 @@ const registrationFormSchema = yup.object().shape({
     )
     .required('form:error-store-name-required'),
   phoneNumber: yup
-    .number()
+    .string()
     .typeError('form:error-phone-number-required')
-    .required('form:error-phone-number-required'),
+    .required('form:error-phone-number-required')
 });
 
 const RegistrationForm = () => {
@@ -68,12 +72,21 @@ const RegistrationForm = () => {
     resolver: yupResolver(registrationFormSchema)
   });
 
+  const { staffInfo } = useGetStaff();
+
+  const csrfToken = staffInfo?.csrfToken;
+
   const [createStore, { loading, error }] = useMutation(CREATE_STORE, {
+    context: {
+      headers: {
+        'x-csrf-token': csrfToken
+      }
+    },
     onCompleted: (data: { createStore: FormValues }) => {
       if (data?.createStore?.aliasName) {
         reset();
-        router.push(ROUTES.LOGIN);
         setSuccessMessage('form:success-register');
+        router.push(ROUTES.LOGIN);
       }
     }
   });
@@ -81,25 +94,34 @@ const RegistrationForm = () => {
   useErrorLogger(error);
 
   async function onSubmit({
+    firstName,
+    lastName,
     aliasName,
     storeName,
-    phoneNumber,
+    phoneNumber
   }: FormValues) {
     const variables = {
+      firstName,
+      lastName,
       phoneNumber,
       aliasName,
       storeName,
+      country
     };
 
-    console.log({variables})
-    // createStore({ variables });
+    if (isValidPhoneNumber(phoneNumber)) {
+      console.log({ variables });
+      createStore({ variables });
+    } else {
+      notify('Invalid phone number', 'error');
+    }
   }
 
   const aliasName = watch('aliasName');
 
   const alias = useMemo(
     () =>
-     aliasName
+      aliasName
         ?.toString()
         ?.toLowerCase()
         .replace(/[^a-zA-Z0-9]/g, ''),
@@ -107,36 +129,66 @@ const RegistrationForm = () => {
   );
 
   useEffect(() => {
-    fetch("api/hi")
-    .then(response => response.json())
-    .then(data => setCountry(data?.country ?? 'ma'))
+    // Prefetch login bundle
+    router.prefetch(ROUTES.LOGIN);
+    // Get current country code
+    fetch('api/hi')
+      .then((response) => response.json())
+      .then((data) => setCountry(data?.country ?? 'ma'));
   }, []);
 
-  const phoneNumber = watch('phoneNumber')
+  const phoneNumber = watch('phoneNumber');
 
   return (
-    <div className='h-full'>
+    <div className="h-full">
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
+        <div className="flex items-center justify-between">
+          <Input
+            label={t('form:input-label-first-name')}
+            {...register('firstName')}
+            placeholder="John"
+            variant="outline"
+            className="mb-4 mr-2 w-full"
+            error={t(errors?.firstName?.message!)}
+          />
+          <Input
+            label={t('form:input-label-last-name')}
+            {...register('lastName')}
+            placeholder="Doe"
+            variant="outline"
+            className="mb-4 ml-2 w-full"
+            error={t(errors?.lastName?.message!)}
+          />
+        </div>
         <div className="mb-5 phone-number-class">
           <Label>{t('form:input-label-whatsapp-number')}</Label>
           <PhoneInput
             country={country?.toLowerCase()}
             inputProps={{
-                name: 'phone',
-                required: true,
-                autoFocus: true
-              }}
+              name: 'phone',
+              required: true,
+              autoFocus: true
+            }}
             disableSearchIcon
             enableSearch
-            inputClass='phone-number-class py-5'
-            value={phoneNumber}
-            isValid={(value) => isValidPhoneNumber(`+${value}`)}
-            onChange={phone => {
-              const phoneNumber = parsePhoneNumber(`+${phone}`).number?.replace(/\+/g, '')
-              setValue('phoneNumber', phoneNumber)
+            inputClass="phone-number-class py-5"
+            value={`+${phoneNumber}`}
+            isValid={(value, country: { dialCode: string }) => {
+              if (country?.dialCode != value) {
+                return isValidPhoneNumber(`+${value}`);
+              }
+              return true;
             }}
-            />
-           <p className='pt-1 text-gray-400 text-sm'>{t('form:input-info-whatsapp-number')}</p>
+            onChange={(phone) => {
+              setValue(
+                'phoneNumber',
+                parsePhoneNumber(`+${phone}`)?.number ?? phone
+              );
+            }}
+          />
+          <p className="pt-1 text-gray-400 text-sm">
+            {t('form:input-info-whatsapp-number')}
+          </p>
           {/* @ts-ignore */}
           <ValidationError message={t(errors.phoneNumber?.message)} />
         </div>
@@ -159,11 +211,10 @@ const RegistrationForm = () => {
           onKeyDown={() => setExecuteCheckQuery(false)}
           onKeyUp={() => setExecuteCheckQuery(true)}
         />
-        <p className='pt-1 mb-4 text-gray-400 text-sm'>{t('form:input-info-store-link')}</p>
-        <AliasViewer
-          aliasName={alias}
-          executeCheckQuery={executeCheckQuery}
-        />
+        <p className="pt-1 mb-4 text-gray-400 text-sm">
+          {t('form:input-info-store-link')}
+        </p>
+        <AliasViewer aliasName={alias} executeCheckQuery={executeCheckQuery} />
         <Button className="w-full" loading={loading} disabled={loading}>
           {t('common:sign-up')}
         </Button>
@@ -187,7 +238,7 @@ const RegistrationForm = () => {
           />
         ) : null}
       </form>
-      <FormFooter/>
+      <FormFooter isSignUp />
     </div>
   );
 };
@@ -199,13 +250,16 @@ const AliasViewer = ({ aliasName, executeCheckQuery }) => {
 
   const csrfToken = staffInfo?.csrfToken;
 
-  const [aliasCheck, { data, loading, error }] = useLazyQuery(ALIAS_NAME_CHECK, {
-    context: {
-      headers: {
-        'x-csrf-token': csrfToken
+  const [aliasCheck, { data, loading, error }] = useLazyQuery(
+    ALIAS_NAME_CHECK,
+    {
+      context: {
+        headers: {
+          'x-csrf-token': csrfToken
+        }
       }
     }
-  });
+  );
 
   const aliasCheckQueryResults = data?.aliasCheck as {
     exists: boolean;
@@ -256,12 +310,12 @@ const AliasViewer = ({ aliasName, executeCheckQuery }) => {
         ) : (
           <span style={{ color: '#12c508' }}>https://</span>
         )}
-
-        {exists ? (
-          <span style={{ color: '#e43a1c' }}>{aliasName}</span>
-        ) : (
-          <span style={{ color: '#006ce7' }}>{aliasName}</span>
-        )}
+        <span
+          style={{ color: exists ? '#e43a1c' : '#006ce7' }}
+          className="break-all"
+        >
+          {aliasName}
+        </span>
         <span>.ecomhost.shop</span>
       </div>
       <div style={{ color: '#919191' }} className="ml-2">

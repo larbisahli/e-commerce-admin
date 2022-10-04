@@ -33,7 +33,7 @@ export function useGetStaff(client?: ClientType) {
 
   useEffect(() => {
     const csrfToken = client?.csrfToken;
-    console.log({client})
+    console.log({ client });
     if (csrfToken) {
       setStaffInfo((prev) => {
         return { ...prev, csrfToken };

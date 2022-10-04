@@ -45,7 +45,7 @@ const moduleExports = {
     MEDIA_URL: 'https://media.dropgala.com',
     GTAG_MEASUREMENT_ID: 'G-TQMWTHM2FF',
     // NEXT_PUBLIC_GOOGLE_MAP_API_KEY: 'AIzaSyDB2j-G5LJM0yPNG0AqziJjgh1UOW10W7I',
-    FB_APPID: '',
+    FB_APPID: ''
     // SENTRY_DSN: '',
     // NEXT_PUBLIC_SENTRY_DSN: '',
     // SENTRY_AUTH_TOKEN: ''

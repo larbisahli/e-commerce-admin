@@ -1,21 +1,21 @@
-import 'react-phone-input-2/lib/style.css'
+import 'react-phone-input-2/lib/style.css';
 
 import { useMutation } from '@apollo/client';
 import Alert from '@components/ui/alert';
 import Button from '@components/ui/button';
 import Checkbox from '@components/ui/checkbox';
 import ValidationError from '@components/ui/form-validation-error';
-import Label from '@components/ui/label';
 import PasswordInput from '@components/ui/password-input';
 import { STAFF_LOGIN } from '@graphql/login';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { ROUTES } from '@utils/routes';
+import parsePhoneNumber, { isValidPhoneNumber } from 'libphonenumber-js';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import PhoneInput from 'react-phone-input-2'
+import PhoneInput from 'react-phone-input-2';
 import * as yup from 'yup';
 
 import FormFooter from './form-footer';
@@ -28,9 +28,7 @@ type FormValues = {
 };
 
 const loginFormSchema = yup.object().shape({
-  phoneNumber: yup
-    .string()
-    .required('form:error-email-required'),
+  phoneNumber: yup.string().required('form:error-email-required'),
   password: yup.string().required('form:error-password-required')
 });
 
@@ -45,6 +43,7 @@ const LoginForm = () => {
   const { t } = useTranslation();
 
   const [error, setError] = useState(null);
+  const [country, setCountry] = useState('ma');
 
   const {
     register,
@@ -78,25 +77,45 @@ const LoginForm = () => {
     });
   }
 
-  const phoneNumber = watch('phoneNumber')
+  useEffect(() => {
+    // Prefetch dashboard bundle
+    router.prefetch(ROUTES.DASHBOARD);
+    // Get current country code
+    fetch('api/hi')
+      .then((response) => response.json())
+      .then((data) => setCountry(data?.country ?? 'ma'));
+  }, []);
+
+  const phoneNumber = watch('phoneNumber');
 
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
-      <div className="mb-5 phone-number-class">
+        <div className="mb-5 phone-number-class">
           <PhoneInput
-            country={'ma'}
+            country={country?.toLowerCase()}
             inputProps={{
-                name: 'phone',
-                required: true,
-                autoFocus: true
-              }}
+              name: 'phone',
+              required: true,
+              autoFocus: true
+            }}
             disableSearchIcon
             enableSearch
-            inputClass='phone-number-class py-5'
-            value={phoneNumber}
-            onChange={phone => setValue('phoneNumber', phone)}
-            />
+            inputClass="phone-number-class py-5"
+            value={`+${phoneNumber}`}
+            isValid={(value, country: { dialCode: string }) => {
+              if (country?.dialCode != value) {
+                return isValidPhoneNumber(`+${value}`);
+              }
+              return true;
+            }}
+            onChange={(phone) => {
+              setValue(
+                'phoneNumber',
+                parsePhoneNumber(`+${phone}`)?.number ?? phone
+              );
+            }}
+          />
           {/* @ts-ignore */}
           <ValidationError message={t(errors.phoneNumber?.message)} />
         </div>
@@ -132,7 +151,7 @@ const LoginForm = () => {
           />
         ) : null}
       </form>
-      <FormFooter/>
+      <FormFooter />
     </>
   );
 };

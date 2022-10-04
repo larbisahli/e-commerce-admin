@@ -97,10 +97,10 @@
   width: auto !important;
 }
 
-.phone-number-class{
+.phone-number-class {
   width: 100% !important;
 }
 
-.phone-number-class:focus{
-  @apply focus:border-accent
+.phone-number-class:focus {
+  @apply focus:border-accent;
 }

@@ -79,14 +79,16 @@ const PasswordInput = React.forwardRef<HTMLInputElement, Props>(
             spellCheck="false"
             {...rest}
           />
-          {forgotPageLink && forgotPassHelpText && <div className='flex justify-end mt-1'>
-            <Link
-              href={forgotPageLink}
-              className="text-xs text-accent transition-colors duration-200 focus:outline-none focus:text-accent-700 focus:font-semibold hover:text-accent-hover"
-            >
-              {forgotPassHelpText}
-            </Link>
-          </div>}
+          {forgotPageLink && forgotPassHelpText && (
+            <div className="flex justify-end mt-1">
+              <Link
+                href={forgotPageLink}
+                className="text-xs text-accent transition-colors duration-200 focus:outline-none focus:text-accent-700 focus:font-semibold hover:text-accent-hover"
+              >
+                {forgotPassHelpText}
+              </Link>
+            </div>
+          )}
           <label
             htmlFor={name}
             className="absolute end-4 top-5 -mt-2 text-body"
@@ -107,6 +109,6 @@ const PasswordInput = React.forwardRef<HTMLInputElement, Props>(
   }
 );
 
-PasswordInput.displayName = 'PasswordInput'
+PasswordInput.displayName = 'PasswordInput';
 
 export default PasswordInput;

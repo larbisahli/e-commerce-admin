@@ -35,13 +35,18 @@ const LoginPage = () => {
           quality={100}
         />
       </div>
-      <div className="flex flex-col items-center justify-center h-fit">
-        <div className="m-auto max-w-lg w-full bg-white sm:shadow p-5 sm:p-8 rounded">
+      <div className="flex flex-col items-center justify-center min-h-screen h-fit">
+        <div className="border border-gray-100 mx-auto max-w-xl bg-white p-5 sm:p-8 min-h-screen h-fit w-full">
           <h3 className="text-center mt-4 text-xl font-medium">
             {t('admin-login')}
           </h3>
           <div className="text-center mb-6 mt-2 font-normal">
-            <span className='mr-1'>OR</span><Link href='/signup'><a className='text-blue-500 text-base font-normal'>{t('sign-up')}</a></Link>
+            <span className="mr-1">OR</span>
+            <Link href="/signup">
+              <a className="text-blue-500 text-base font-normal">
+                {t('sign-up')}
+              </a>
+            </Link>
           </div>
           <LoginForm />
         </div>
