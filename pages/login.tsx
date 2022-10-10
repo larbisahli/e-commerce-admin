@@ -1,9 +1,11 @@
 import LoginForm from '@components/auth/login-form';
-import { verifyAuth } from '@middleware/utils';
+import LogoSvg from '@components/icons/logo';
+import { useGetStaff } from '@hooks/useGetStaff';
+import { verifyAuth, XSRFHandler } from '@middleware/utils';
+import { SSRProps } from '@ts-types/custom.types';
 import { ROUTES } from '@utils/routes';
 import { GetServerSideProps } from 'next';
 import Image from 'next/image';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -11,12 +13,12 @@ import { Fragment, useEffect } from 'react';
 
 import shop from '../public/shop.jpg';
 
-const LoginPage = () => {
+const LoginPage = ({ client }: SSRProps) => {
   const router = useRouter();
   const { t } = useTranslation('common');
+  useGetStaff(client);
 
   useEffect(() => {
-    // Prefetch the dashboard page
     router.prefetch('/dashboard');
   }, []);
 
@@ -37,16 +39,11 @@ const LoginPage = () => {
       </div>
       <div className="flex flex-col items-center justify-center min-h-screen h-fit">
         <div className="border border-gray-100 mx-auto max-w-xl bg-white p-5 sm:p-8 min-h-screen h-fit w-full">
-          <h3 className="text-center mt-4 text-xl font-medium">
-            {t('admin-login')}
-          </h3>
-          <div className="text-center mb-6 mt-2 font-normal">
-            <span className="mr-1">OR</span>
-            <Link href="/signup">
-              <a className="text-blue-500 text-base font-normal">
-                {t('sign-up')}
-              </a>
-            </Link>
+          <div className='flex flex-col items-center justify-center'>
+            <LogoSvg width='5rem' height='5rem'/>
+            <h3 className="text-center text-xl font-medium mt-4 mb-10">
+             {t('admin-login-manage-store')}
+            </h3>
           </div>
           <LoginForm />
         </div>
@@ -67,10 +64,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       }
     };
   }
+  const { csrfToken, csrfError } = await XSRFHandler(context);
   return {
     props: {
-      ...(await serverSideTranslations(locale!, ['common', 'form'])),
-      error
+      ...(await serverSideTranslations(locale!, ['error', 'common', 'form'])),
+      error,
+      client: { ...(client ?? {}), csrfToken, csrfError }
     }
   };
 };

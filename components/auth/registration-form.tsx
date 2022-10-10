@@ -14,9 +14,9 @@ import { ALIAS_NAME_CHECK, CREATE_STORE } from '@graphql/create-store';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetStaff } from '@hooks/useGetStaff';
-import { notify } from '@lib/notify';
 import { ROUTES } from '@utils/routes';
 import parsePhoneNumber, { isValidPhoneNumber } from 'libphonenumber-js';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
@@ -67,7 +67,7 @@ const RegistrationForm = () => {
     watch,
     setValue,
     formState: { errors },
-    reset
+    resetField
   } = useForm<FormValues>({
     resolver: yupResolver(registrationFormSchema)
   });
@@ -83,15 +83,18 @@ const RegistrationForm = () => {
       }
     },
     onCompleted: (data: { createStore: FormValues }) => {
-      if (data?.createStore?.aliasName) {
-        reset();
+      if (data?.createStore?.storeName) {
+        resetField('firstName');
+        resetField('lastName');
+        resetField('storeName');
+        resetField('aliasName');
         setSuccessMessage('form:success-register');
         router.push(ROUTES.LOGIN);
       }
     }
   });
 
-  useErrorLogger(error);
+  useErrorLogger(error, false);
 
   async function onSubmit({
     firstName,
@@ -104,16 +107,20 @@ const RegistrationForm = () => {
       firstName,
       lastName,
       phoneNumber,
-      aliasName,
+      aliasName: aliasName?.toString()?.toLowerCase()?.replace(/[^a-zA-Z0-9]/g, ''),
       storeName,
       country
     };
 
+    setErrorMessage(null)
+
     if (isValidPhoneNumber(phoneNumber)) {
-      console.log({ variables });
-      createStore({ variables });
+      createStore({ variables }).catch(error=>{
+        const err = error?.graphQLErrors[0]
+        setErrorMessage(`error:${err?.t ?? 'SOMETHING_HAPPENED'}`);
+      })
     } else {
-      notify('Invalid phone number', 'error');
+      setErrorMessage('error:INVALID_PHONE_NUMBER');
     }
   }
 
@@ -142,24 +149,6 @@ const RegistrationForm = () => {
   return (
     <div className="h-full">
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
-        <div className="flex items-center justify-between">
-          <Input
-            label={t('form:input-label-first-name')}
-            {...register('firstName')}
-            placeholder="John"
-            variant="outline"
-            className="mb-4 mr-2 w-full"
-            error={t(errors?.firstName?.message!)}
-          />
-          <Input
-            label={t('form:input-label-last-name')}
-            {...register('lastName')}
-            placeholder="Doe"
-            variant="outline"
-            className="mb-4 ml-2 w-full"
-            error={t(errors?.lastName?.message!)}
-          />
-        </div>
         <div className="mb-5 phone-number-class">
           <Label>{t('form:input-label-whatsapp-number')}</Label>
           <PhoneInput
@@ -192,11 +181,27 @@ const RegistrationForm = () => {
           {/* @ts-ignore */}
           <ValidationError message={t(errors.phoneNumber?.message)} />
         </div>
+        <Label>{t('form:input-label-store-info')}</Label>
+        <div className="flex items-center justify-between">
+          <Input
+            {...register('firstName')}
+            placeholder={t('form:input-label-first-name')}
+            variant="outline"
+            className="mb-4 mr-2 w-full"
+            error={t(errors?.firstName?.message!)}
+          />
+          <Input
+            {...register('lastName')}
+            placeholder={t('form:input-label-last-name')}
+            variant="outline"
+            className="mb-4 ml-2 w-full"
+            error={t(errors?.lastName?.message!)}
+          />
+        </div>
         <div className="mb-5">
           <Input
-            label={t('form:input-label-store-info')}
             {...register('storeName')}
-            placeholder="Store name"
+            placeholder={t('form:input-label-store-name')}
             variant="outline"
             className="mb-4 mr-2 w-full"
             error={t(errors?.storeName?.message!)}
@@ -237,6 +242,13 @@ const RegistrationForm = () => {
             onClose={() => setSuccessMessage(null)}
           />
         ) : null}
+        <div className='shadow p-5 text-center border rounded-sm mt-12'>
+        <Link href={ROUTES.LOGIN}>
+              <a className="text-blue-500 font-normal text-sm">
+                {t('already-have-account')}
+              </a>
+        </Link>
+        </div>
       </form>
       <FormFooter isSignUp />
     </div>
@@ -257,7 +269,8 @@ const AliasViewer = ({ aliasName, executeCheckQuery }) => {
         headers: {
           'x-csrf-token': csrfToken
         }
-      }
+      },
+      fetchPolicy: 'no-cache'
     }
   );
 

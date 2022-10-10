@@ -15,7 +15,7 @@
   "auth-menu-logout": "Logout",
   "join-button": "Join",
   "change-locale": "Switch to german",
-  "admin-login": "Admin login",
+  "admin-login-manage-store": "Log in to manage your store",
   "admin-register-title": "Register new account",
   "billing-address": "Billing Address",
   "shipping-address": "Shipping Address",
@@ -225,5 +225,8 @@
   "product-imported-successfully": "Products Imported Successfully",
   "variation-options-imported-successfully": "Variation Options Imported Successfully",
   "UNSAVED_CHANGES": "Warning! If you leave before saving, your changes will be lost.",
-  "sign-up": "Sign up"
+  "sign-up-create-store": "Create your store and start selling now",
+  "create-your-store": "Create your store",
+  "already-have-account": "Already have an account ?",
+  "not-yet-registered": "Not yet registered ?"
 }

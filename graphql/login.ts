@@ -1,12 +1,16 @@
 import { gql } from '@apollo/client';
 
 export const STAFF_LOGIN = gql`
-  mutation StaffLogin(
-    $email: String!
+  mutation Login(
+    $aliasName: String!
+    $phoneNumber: String!
     $password: String!
-    $rememberMe: Boolean!
   ) {
-    staffLogin(email: $email, password: $password, rememberMe: $rememberMe) {
+    login(
+      aliasName: $aliasName,
+      phoneNumber: $phoneNumber,
+      password: $password
+      ) {
       success
     }
   }

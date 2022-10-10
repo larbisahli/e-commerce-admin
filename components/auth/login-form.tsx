@@ -3,14 +3,16 @@ import 'react-phone-input-2/lib/style.css';
 import { useMutation } from '@apollo/client';
 import Alert from '@components/ui/alert';
 import Button from '@components/ui/button';
-import Checkbox from '@components/ui/checkbox';
 import ValidationError from '@components/ui/form-validation-error';
+import InputSlug from '@components/ui/input-slug';
 import PasswordInput from '@components/ui/password-input';
 import { STAFF_LOGIN } from '@graphql/login';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useErrorLogger } from '@hooks/useErrorLogger';
+import { useGetStaff } from '@hooks/useGetStaff';
 import { ROUTES } from '@utils/routes';
 import parsePhoneNumber, { isValidPhoneNumber } from 'libphonenumber-js';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
@@ -21,13 +23,21 @@ import * as yup from 'yup';
 import FormFooter from './form-footer';
 
 type FormValues = {
+  aliasName: string;
   phoneNumber: string;
   password: string;
-  rememberMe: boolean;
   success: boolean;
 };
 
 const loginFormSchema = yup.object().shape({
+  aliasName: yup
+    .string()
+    .test(
+      'len',
+      'Store name must be less then 63 characters',
+      (val) => val.length <= 63 && val.length >= 2
+    )
+    .required('form:error-store-name-required'),
   phoneNumber: yup.string().required('form:error-email-required'),
   password: yup.string().required('form:error-password-required')
 });
@@ -35,7 +45,6 @@ const loginFormSchema = yup.object().shape({
 const defaultValues = {
   phoneNumber: '',
   password: '',
-  rememberMe: false
 };
 
 const LoginForm = () => {
@@ -56,9 +65,19 @@ const LoginForm = () => {
     resolver: yupResolver(loginFormSchema)
   });
 
+
+  const { staffInfo } = useGetStaff();
+
+  const csrfToken = staffInfo?.csrfToken;
+
   const [staffLogin, { loading }] = useMutation(STAFF_LOGIN, {
-    onCompleted: (data: { staffLogin: FormValues }) => {
-      if (data?.staffLogin?.success) {
+    context: {
+      headers: {
+        'x-csrf-token': csrfToken
+      }
+    },
+    onCompleted: (data: { login: FormValues }) => {
+      if (data?.login?.success) {
         router.push(ROUTES.DASHBOARD);
       }
     }
@@ -66,14 +85,16 @@ const LoginForm = () => {
 
   useErrorLogger(error);
 
-  async function onSubmit({ phoneNumber, password, rememberMe }: FormValues) {
+  async function onSubmit({ aliasName, phoneNumber, password }: FormValues) {
     const variables = {
+      aliasName,
       phoneNumber,
-      password,
-      rememberMe
+      password
     };
-    staffLogin({ variables }).catch((err) => {
-      setError(err);
+    console.log({ variables })
+    staffLogin({ variables }).catch((error) => {
+      const err = error?.graphQLErrors[0]
+      setError(`error:${err?.t ?? 'SOMETHING_HAPPENED'}`);
     });
   }
 
@@ -91,6 +112,15 @@ const LoginForm = () => {
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
+      <div className="mb-5">
+          <InputSlug
+            {...register('aliasName')}
+            placeholder={t('form:input-slug')}
+            variant="outline"
+            className="mb-4 mr-2 w-full"
+            error={t(errors?.aliasName?.message!)}
+          />
+        </div>
         <div className="mb-5 phone-number-class">
           <PhoneInput
             country={country?.toLowerCase()}
@@ -128,11 +158,6 @@ const LoginForm = () => {
           className="mb-4"
           forgotPageLink="/forgot-password"
         />
-        <Checkbox
-          label={t('form:input-label-remember-me')}
-          {...register('rememberMe')}
-          className="mb-4"
-        />
         <Button
           className="w-full"
           loading={loading && !error}
@@ -150,6 +175,14 @@ const LoginForm = () => {
             onClose={() => setError(null)}
           />
         ) : null}
+        <div className='shadow p-5 text-sm  text-center border rounded-sm mt-12'>
+        <span className='mr-1'>{t('not-yet-registered')}</span>
+        <Link href={ROUTES.SIGNUP}>
+              <a className="text-blue-500 font-normal">
+                {t('create-your-store')}
+              </a>
+        </Link>
+        </div>
       </form>
       <FormFooter />
     </>

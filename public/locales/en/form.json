@@ -71,8 +71,8 @@
   "input-label-order-id": "Order ID",
   "input-label-sku": "SKU",
   "input-label-name": "Name",
-  "input-label-first-name": "First Name",
-  "input-label-last-name": "Last Name",
+  "input-label-first-name": "First name",
+  "input-label-last-name": "Last name",
   "input-label-description": "Description",
   "input-label-product-details": "Product details",
   "input-label-price": "Price",
@@ -109,7 +109,7 @@
   "input-label-zip": "ZIP",
   "input-label-free": "Free",
   "input-label-fixed": "Fixed",
-  "input-label-store-name": "Store Name",
+  "input-label-store-name": "Store name",
   "input-label-store-contact-email": "Contact Email",
   "input-label-store-contact-number": "Contact Number",
   "input-label-currency": "Currency",
@@ -413,5 +413,6 @@
   "input-info-store-link": "It's your website link. Enter unique ID like your store name.",
   "input-label-whatsapp-number": "WhatsApp number",
   "input-info-whatsapp-number": "Customers send messages to this number",
-  "error-store-name-required": "Store name required"
+  "error-store-name-required": "Store name required",
+  "input-slug": "Slug"
 }
