@@ -11,11 +11,11 @@ const Logo: React.FC<React.AnchorHTMLAttributes<{}>> = ({
   return (
     <Link
       href={siteSettings.logo.href}
-      className={cn('inline-flex', className)}
+      className={'absolute top-0 left-0 right-0 flex'}
       {...props}
     >
-      <span
-        className="overflow-hidden relative"
+      <a
+        className="overflow-hidden"
         style={{
           width: siteSettings.logo.width,
           height: siteSettings.logo.height
@@ -28,7 +28,7 @@ const Logo: React.FC<React.AnchorHTMLAttributes<{}>> = ({
           objectFit="contain"
           loading="eager"
         />
-      </span>
+      </a>
     </Link>
   );
 };

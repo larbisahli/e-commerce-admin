@@ -7,10 +7,10 @@ export const STAFF_LOGIN = gql`
     $password: String!
   ) {
     login(
-      aliasName: $aliasName,
-      phoneNumber: $phoneNumber,
+      aliasName: $aliasName
+      phoneNumber: $phoneNumber
       password: $password
-      ) {
+    ) {
       success
     }
   }

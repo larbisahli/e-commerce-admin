@@ -1,3 +1,4 @@
+import Logo from '@components/ui/logo';
 import Scrollbar from '@components/ui/scrollbar';
 import { siteSettings } from '@settings/site.settings';
 import classNames from 'classnames';
@@ -17,11 +18,11 @@ const Sidebar: React.FC<Props> = ({ absolute = false }) => {
   return (
     <aside
       className={classNames(
-        'w-64 xl:w-64 overflow-y-auto bg-sidenav fixed start-0 bottom-0 h-full pt-22 nav-side-background',
+        'w-64 xl:w-64 overflow-y-auto bg-sidenav fixed start-0 bottom-0 h-full',
         { hidden: !absolute, 'lg:block': !absolute, block: absolute }
       )}
     >
-      <Scrollbar className="flex flex-col w-full h-full py-3">
+      <Scrollbar className="flex flex-col w-full h-full space-y-5">
         {siteSettings.sidebarLinks.admin.map(
           ({ id, href, label, icon, line, subLinks }) => (
             <SidebarItem

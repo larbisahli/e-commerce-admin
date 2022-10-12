@@ -44,7 +44,7 @@ const loginFormSchema = yup.object().shape({
 
 const defaultValues = {
   phoneNumber: '',
-  password: '',
+  password: ''
 };
 
 const LoginForm = () => {
@@ -64,7 +64,6 @@ const LoginForm = () => {
     defaultValues,
     resolver: yupResolver(loginFormSchema)
   });
-
 
   const { staffInfo } = useGetStaff();
 
@@ -91,9 +90,9 @@ const LoginForm = () => {
       phoneNumber,
       password
     };
-    console.log({ variables })
+    console.log({ variables });
     staffLogin({ variables }).catch((error) => {
-      const err = error?.graphQLErrors[0]
+      const err = error?.graphQLErrors[0];
       setError(`error:${err?.t ?? 'SOMETHING_HAPPENED'}`);
     });
   }
@@ -112,7 +111,7 @@ const LoginForm = () => {
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
-      <div className="mb-5">
+        <div className="mb-5">
           <InputSlug
             {...register('aliasName')}
             placeholder={t('form:input-slug')}
@@ -175,13 +174,13 @@ const LoginForm = () => {
             onClose={() => setError(null)}
           />
         ) : null}
-        <div className='shadow p-5 text-sm  text-center border rounded-sm mt-12'>
-        <span className='mr-1'>{t('not-yet-registered')}</span>
-        <Link href={ROUTES.SIGNUP}>
-              <a className="text-blue-500 font-normal">
-                {t('create-your-store')}
-              </a>
-        </Link>
+        <div className="shadow p-5 text-sm  text-center border rounded-sm mt-12">
+          <span className="mr-1">{t('not-yet-registered')}</span>
+          <Link href={ROUTES.SIGNUP}>
+            <a className="text-blue-500 font-normal">
+              {t('create-your-store')}
+            </a>
+          </Link>
         </div>
       </form>
       <FormFooter />

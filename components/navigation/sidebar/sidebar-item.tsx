@@ -20,6 +20,7 @@ interface Props {
   line?: boolean;
   margin?: boolean;
   showTriangle?: boolean;
+  isSublevel?: boolean;
   subLinks?: {
     id: string;
     href: string;
@@ -61,6 +62,7 @@ const SidebarItem = ({
   showTriangle,
   subLinks,
   padding,
+  isSublevel,
   showLinkId,
   setShowLinkId
 }: Props) => {
@@ -88,7 +90,7 @@ const SidebarItem = ({
       {hadSubLinks ? (
         <div
           className={cn(
-            'overflow-hidden cursor-pointer justify-between flex w-full pl-6 hover:bg-gray-700 p-2 items-center text-base text-sidenav-color text-start focus:text-accent hover:border-solid hover:border-green-300 hover:border-l-2 border-l-2 border-transparent border-solid',
+            'overflow-hidden cursor-pointer justify-between flex w-full pl-6 hover:bg-gray-700 p-2 items-center text-base text-sidenav-color text-start focus:text-accent hover:border-solid hover:border-green-300 hover:text-white hover:border-l-2 border-l-2 border-transparent border-solid',
             { 'nav-sub-links-bg': !!padding, '!text-white': linkOpenHighlight }
           )}
           onClick={handleShowLinkId}
@@ -113,8 +115,8 @@ const SidebarItem = ({
                 })
           }
           className={cn(
-            'overflow-hidden flex w-full pl-6 hover:bg-gray-700 p-2 items-center text-base text-sidenav-color text-start focus:text-accent hover:border-solid hover:border-green-300 hover:border-l-2 border-l-2 border-transparent border-solid',
-            { 'nav-sub-links-bg': !!padding }
+            'overflow-hidden flex w-full pl-6 hover:bg-gray-700 p-2 items-center text-base text-sidenav-color hover:text-white text-start focus:text-accent hover:border-solid hover:border-green-300 hover:border-l-2 border-l-2 border-transparent border-solid',
+            { 'nav-sub-links-bg': !!padding && !isSublevel }
           )}
           includes={includes}
         >
@@ -148,6 +150,7 @@ const SidebarItem = ({
             showTriangle
             showLinkId={showLinksLevel2}
             setShowLinkId={setShowLinksLevel2}
+            isSublevel={isSublevel}
           />
         ))}
       </div>

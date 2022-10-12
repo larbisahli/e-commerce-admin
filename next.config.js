@@ -43,7 +43,8 @@ const moduleExports = {
   env: {
     API_URL: 'https://api.dropgala.com',
     MEDIA_URL: 'https://media.dropgala.com',
-    GTAG_MEASUREMENT_ID: 'G-TQMWTHM2FF',
+    NEXT_PUBLIC_GTAG_MEASUREMENT_ID: 'G-TQMWTHM2FF',
+    TOKEN_ISSUER: 'ecomhost.shop',
     // NEXT_PUBLIC_GOOGLE_MAP_API_KEY: 'AIzaSyDB2j-G5LJM0yPNG0AqziJjgh1UOW10W7I',
     FB_APPID: ''
     // SENTRY_DSN: '',

@@ -4,7 +4,7 @@ import isEmpty from 'lodash/isEmpty';
 import { useTranslation } from 'next-i18next';
 import { useEffect } from 'react';
 
-export function useErrorLogger(error?: any, show:boolean = true) {
+export function useErrorLogger(error?: any, show: boolean = true) {
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -12,7 +12,7 @@ export function useErrorLogger(error?: any, show:boolean = true) {
       // Sentry Logs
       sentry(error);
       // Error Notification
-      if(show){
+      if (show) {
         error?.graphQLErrors?.forEach((err) => {
           notify(t(`error:${err.t ?? 'SOMETHING-HAPPENED'}`), 'error');
         });

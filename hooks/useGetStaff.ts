@@ -1,7 +1,8 @@
 import { useQuery } from '@apollo/client';
 import { StaffInfoContext } from '@contexts/staff.context';
-import { STAFF } from '@graphql/staff';
+import { STAFF_INFO } from '@graphql/staff';
 import { useErrorLogger } from '@hooks/index';
+import type { ClientType } from '@ts-types/custom.types';
 import type { StaffType } from '@ts-types/generated';
 import { useContext, useEffect } from 'react';
 
@@ -9,22 +10,17 @@ interface TStaff {
   staff: StaffType;
 }
 
-interface ClientType {
-  staffId: string;
-  csrfToken?: string;
-  csrfError?: any;
-}
-
 export function useGetStaff(client?: ClientType) {
   const { staffInfo, setStaffInfo } = useContext(StaffInfoContext);
 
-  const staffId = client?.staffId;
+  const staffId = client?.uid;
 
-  const { error } = useQuery<TStaff>(STAFF, {
+  const { error } = useQuery<TStaff>(STAFF_INFO, {
     variables: { id: staffId },
     skip: Boolean(!staffId) || !!(staffId && staffInfo?.id),
     onCompleted: (data: TStaff) => {
       const staff = data?.staff;
+      console.log(':=====>', staff);
       setStaffInfo(staff);
     }
   });

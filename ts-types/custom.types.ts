@@ -44,13 +44,22 @@ export declare type Scalars = {
   DateTimeTz: string | number | Date;
 };
 
+export interface JwtPayload {
+  uid: string;
+  iss: string;
+  iat: number;
+  exp: number;
+  ali: string;
+}
+
+export interface ClientType extends JwtPayload {
+  csrfToken?: string;
+  csrfError?: any;
+}
+
 export type SSRProps = {
   token?: string | null;
-  client?: {
-    staffId: string;
-    csrfToken?: string | null;
-    csrfError?: any;
-  } | null;
+  client?: ClientType | null;
 };
 
 export type PrivilegesType = (

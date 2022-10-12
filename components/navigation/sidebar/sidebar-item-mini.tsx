@@ -14,6 +14,7 @@ import styles from '../scss/index.module.scss';
 let cx = classNames.bind(styles);
 
 interface Props {
+  id: string;
   href: string;
   icon: string;
   label: string;
@@ -31,6 +32,7 @@ interface Props {
 }
 
 const SidebarItem = ({
+  id,
   href,
   icon,
   label,
@@ -41,7 +43,7 @@ const SidebarItem = ({
 }: Props) => {
   const { asPath } = useRouter();
 
-  const { toggleSidebar } = useUI();
+  const { openSublevelSidebar } = useUI();
   const hadSubLinks = useMemo(() => !isEmpty(subLinks), [subLinks]);
 
   const A = useMemo(() => asPath?.split('/'), [asPath]);
@@ -53,7 +55,7 @@ const SidebarItem = ({
       {hadSubLinks ? (
         <div
           className={cn(
-            'overflow-hidden flex relative justify-center w-full py-4 pb-6 hover:bg-gray-700 p-2 items-center text-base text-start text-sidenav-color focus:text-accent hover:border-green-300 hover:border-l-2 border-l-2 border-transparent border-solid cursor-pointer',
+            'overflow-hidden flex flex-col relative justify-center w-full py-4 pb-5 hover:bg-gray-700 p-2 items-center text-base text-start text-sidenav-color-secondary focus:text-accent hover:border-green-300 hover:border-l-2 border-l-2 border-transparent border-solid cursor-pointer',
             {
               'mb-12': margin,
               'sidebar-triangle': A[1] === B[1],
@@ -61,16 +63,16 @@ const SidebarItem = ({
               '!text-white': A[1] === B[1]
             }
           )}
-          onClick={toggleSidebar}
+          onClick={() => openSublevelSidebar(id)}
         >
           <SidebarLabel icon={icon} label={label} />
         </div>
       ) : (
         <ActiveLink
           href={href}
-          activeClassName="sidebar-triangle relative !bg-green-600 hover:!bg-green-500 !text-white"
+          activeClassName="sidebar-triangle relative !bg-sidenav-active-color hover:!bg-sidenav-active-hover-color !text-white"
           className={cn(
-            'overflow-hidden flex relative justify-center w-full py-4 pb-6 hover:bg-gray-700 p-2 items-center text-base text-start text-sidenav-color focus:text-accent hover:border-green-300 hover:border-l-2 border-l-2 border-transparent border-solid',
+            'overflow-hidden flex flex-col relative justify-center w-full pb-5 hover:bg-sidenav-active-hover-color p-2 items-center text-base text-start text-sidenav-color-secondary focus:text-accent hover:border-green-300 hover:border-l-2 border-l-2 border-transparent border-solid',
             { 'mb-12': margin }
           )}
           includes={includes}
@@ -83,16 +85,16 @@ const SidebarItem = ({
 };
 
 const SidebarLabel = ({ icon, label }: { icon: string; label: string }) => {
-  const { closeSidebar } = useUI();
+  const { closeSublevelSidebar } = useUI();
 
   const TagName = sidebarIcons[icon];
 
   return (
     <React.Fragment>
-      {TagName && <TagName className="w-5 h-5 me-4 ml-2" />}
+      {TagName && <TagName className="w-6 h-6" />}
       <span
         className={`${cx('mini-slider-container')}`}
-        onClick={() => closeSidebar()}
+        onClick={closeSublevelSidebar}
       >
         {label}
       </span>

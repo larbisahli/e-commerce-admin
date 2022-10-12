@@ -25,7 +25,7 @@ export default function NavNotification() {
       )}
       <Menu.Button
         className={cx(
-          'flex items-center border rounded-full focus:outline-none border-gray-500',
+          'flex items-center border rounded-full focus:outline-none',
           'border-hover'
         )}
       >

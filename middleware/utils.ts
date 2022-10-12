@@ -1,3 +1,4 @@
+import { JwtPayload } from '@ts-types/custom.types';
 import { CookieNames } from '@ts-types/enums';
 import Cookies from 'cookies';
 import Tokens from 'csrf';
@@ -10,7 +11,9 @@ const tokens = new Tokens();
 const ENV = process.env;
 const PRODUCTION_ENV = ENV.NODE_ENV === 'production';
 
-const PublicKEY = process.env.JWTRS256_KEY_PUB;
+const PublicKEY = Buffer.from(process.env.JWTRS256_KEY_PUB, 'base64').toString(
+  'ascii'
+);
 
 /*
  * @params {jwtToken} extracted from cookies
@@ -25,19 +28,28 @@ export function verifyAuth(context: GetServerSidePropsContext) {
   try {
     if (!jwtToken) {
       return {
-        client: null,
         error: { message: 'No jwtToken Provided!' }
       };
     }
     const Alg: Algorithm = 'RS256';
 
-    const client = jwt.verify(jwtToken, PublicKEY, {
+    const payload = jwt.verify(jwtToken, PublicKEY, {
       algorithms: Alg
-    });
-    return { client, error: null };
+    }) as JwtPayload;
+
+    if (
+      !payload ||
+      !payload.iss ||
+      !payload.ali ||
+      payload.iss !== process.env.TOKEN_ISSUER
+    ) {
+      return { error: 'Invalid Access Token' };
+    }
+
+    return { client: payload };
   } catch (error) {
     console.log('verifyAuth Error:>>', { error });
-    return { client: null, error: { ...serializeError(error), jwtToken } };
+    return { error: { ...serializeError(error), jwtToken } };
   }
 }
 

@@ -46,8 +46,11 @@ module.exports = {
         'gray-700': withOpacity('--color-gray-700'),
         'gray-800': withOpacity('--color-gray-800'),
         'gray-900': withOpacity('--color-gray-900'),
-        sidenav: '#151515',
-        'sidenav-color': '#a5a5a5',
+        sidenav: '#373330',
+        'sidenav-color': '#ccc',
+        'sidenav-active-color': '#524d49',
+        'sidenav-active-hover-color': '#474544',
+        'sidenav-color-secondary': '#aaa6a0',
         'sidenav-divider': 'rgba(255,255,255,0.2)',
         social: {
           facebook: '#3b5998',

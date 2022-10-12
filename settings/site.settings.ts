@@ -7,7 +7,7 @@ export const siteSettings = {
     url: '/logo.svg',
     alt: 'DropGala',
     href: '/',
-    width: 128,
+    width: 40,
     height: 40
   },
   defaultLanguage: 'en',

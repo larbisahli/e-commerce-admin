@@ -24,16 +24,12 @@ const Navbar = () => {
   });
 
   return (
-    <header style={{ zIndex: 100 }} className="bg-white shadow fixed w-full">
-      <nav
-        style={{ background: '#1a1a1a', borderBottom: '1px solid #636262' }}
-        className="px-5 md:px-8 py-2 flex items-center justify-between"
-      >
-        {/* <!-- Mobile menu button --> */}
+    <header className="w-full">
+      <nav className="px-5 md:px-8 py-2 flex items-center justify-between lg:justify-end md:justify-end">
         <motion.button
           whileTap={{ scale: 0.88 }}
           onClick={toggleSidebar}
-          className="flex relative h-full items-center justify-center focus:outline-none focus:text-accent lg:hidden"
+          className="relative items-center justify-center focus:outline-none flex lg:hidden md:hidden border h-[30px] w-[18px] p-5 rounded bg-white"
         >
           <div className={cx('menu-icon-container')}>
             <span className={menuSpanClass}></span>
@@ -41,9 +37,6 @@ const Navbar = () => {
             <span className={menuSpanClass}></span>
           </div>
         </motion.button>
-        <div className="hidden md:flex me-auto">
-          <Logo />
-        </div>
         <div className="flex items-center space-s-8">
           <LinkButton
             href={`${ROUTES.PRODUCTS}/create`}

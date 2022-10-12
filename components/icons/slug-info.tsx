@@ -1,4 +1,4 @@
-import * as React from "react"
+import * as React from 'react';
 
 const InfoSlug = (props) => (
   <svg
@@ -181,6 +181,6 @@ const InfoSlug = (props) => (
       />
     </defs>
   </svg>
-)
+);
 
-export default InfoSlug
+export default InfoSlug;

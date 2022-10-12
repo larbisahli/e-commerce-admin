@@ -2,6 +2,8 @@ import React, { FC, useMemo } from 'react';
 
 export interface State {
   displaySidebar: boolean;
+  displaySublevelSidebar: boolean;
+  SublevelSidebarId: string;
   displayModal: boolean;
   modalData: any;
   modalView: string;
@@ -9,6 +11,8 @@ export interface State {
 
 const initialState = {
   displaySidebar: false,
+  displaySublevelSidebar: false,
+  SublevelSidebarId: null,
   displayModal: false,
   modalView: 'LOGIN_VIEW',
   modalData: null
@@ -20,6 +24,13 @@ type Action =
     }
   | {
       type: 'CLOSE_SIDEBAR';
+    }
+  | {
+      type: 'OPEN_SUBLEVEL_SIDEBAR';
+      id: string;
+    }
+  | {
+      type: 'CLOSE_SUBLEVEL_SIDEBAR';
     }
   | {
       type: 'OPEN_MODAL';
@@ -62,6 +73,19 @@ function uiReducer(state: State, action: Action) {
         displaySidebar: false
       };
     }
+    case 'OPEN_SUBLEVEL_SIDEBAR': {
+      return {
+        ...state,
+        displaySublevelSidebar: true,
+        SublevelSidebarId: action.id
+      };
+    }
+    case 'CLOSE_SUBLEVEL_SIDEBAR': {
+      return {
+        ...state,
+        displaySublevelSidebar: false
+      };
+    }
     case 'OPEN_MODAL': {
       return {
         ...state,
@@ -94,10 +118,17 @@ export const UIProvider: FC = (props) => {
 
   const openSidebar = () => dispatch({ type: 'OPEN_SIDEBAR' });
   const closeSidebar = () => dispatch({ type: 'CLOSE_SIDEBAR' });
+
+  const openSublevelSidebar = (id: string) =>
+    dispatch({ type: 'OPEN_SUBLEVEL_SIDEBAR', id });
+  const closeSublevelSidebar = () =>
+    dispatch({ type: 'CLOSE_SUBLEVEL_SIDEBAR' });
+
   const toggleSidebar = () =>
     state.displaySidebar
       ? dispatch({ type: 'CLOSE_SIDEBAR' })
       : dispatch({ type: 'OPEN_SIDEBAR' });
+
   const closeSidebarIfPresent = () =>
     state.displaySidebar && dispatch({ type: 'CLOSE_SIDEBAR' });
 
@@ -113,6 +144,8 @@ export const UIProvider: FC = (props) => {
     () => ({
       ...state,
       openSidebar,
+      openSublevelSidebar,
+      closeSublevelSidebar,
       closeSidebar,
       toggleSidebar,
       closeSidebarIfPresent,

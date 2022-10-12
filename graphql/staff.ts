@@ -1,5 +1,47 @@
 import { gql } from '@apollo/client';
 
+export const STAFF_INFO = gql`
+  query StaffInfo($id: ID!) {
+    staffInfo(id: $id) {
+      id
+      firstName
+      lastName
+      phoneNumber
+      email
+      isTenant
+      profile {
+        image
+        placeholder
+      }
+      role {
+        id
+        roleName
+        privileges
+      }
+      createdAt
+      updatedAt
+      createdBy {
+        id
+        firstName
+        lastName
+        profile {
+          image
+          placeholder
+        }
+      }
+      updatedBy {
+        id
+        firstName
+        lastName
+        profile {
+          image
+          placeholder
+        }
+      }
+    }
+  }
+`;
+
 export const STAFF = gql`
   query Staff($id: ID!) {
     staff(id: $id) {
@@ -8,6 +50,7 @@ export const STAFF = gql`
       lastName
       phoneNumber
       email
+      isTenant
       profile {
         image
         placeholder

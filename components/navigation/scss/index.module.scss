@@ -5,6 +5,7 @@
   height: 18px;
   cursor: pointer;
   transition: 0.5s ease-in-out;
+  border-radius: 50%;
 
   .span {
     display: block;
@@ -12,7 +13,7 @@
     left: 0;
     height: 3px;
     width: 30px;
-    background: #ececec;
+    background: #505050;
     opacity: 1;
     transition: 0.25s all ease-in-out;
 
@@ -53,14 +54,17 @@
 }
 
 .mini-slider-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.75rem;
-  color: inherit;
+  text-align: center;
+  font-size: 0.7rem;
+  line-height: 0.75rem;
   width: 100%;
-  position: absolute;
+  margin: 5px 0;
   bottom: 0;
+  text-transform: uppercase;
+  letter-spacing: .025em;
+  text-decoration: none;
+  text-transform: uppercase;
+  word-wrap: break-word;
 }
 
 
@@ -117,7 +121,7 @@
 }
 
 .border-hover{
-  border: 2px solid #807f7f;
+  border: 2px solid #d7d7d7;
   box-shadow: 0 0 10px 2px #18181818;
 
   &:hover{

@@ -107,18 +107,21 @@ const RegistrationForm = () => {
       firstName,
       lastName,
       phoneNumber,
-      aliasName: aliasName?.toString()?.toLowerCase()?.replace(/[^a-zA-Z0-9]/g, ''),
+      aliasName: aliasName
+        ?.toString()
+        ?.toLowerCase()
+        ?.replace(/[^a-zA-Z0-9]/g, ''),
       storeName,
       country
     };
 
-    setErrorMessage(null)
+    setErrorMessage(null);
 
     if (isValidPhoneNumber(phoneNumber)) {
-      createStore({ variables }).catch(error=>{
-        const err = error?.graphQLErrors[0]
+      createStore({ variables }).catch((error) => {
+        const err = error?.graphQLErrors[0];
         setErrorMessage(`error:${err?.t ?? 'SOMETHING_HAPPENED'}`);
-      })
+      });
     } else {
       setErrorMessage('error:INVALID_PHONE_NUMBER');
     }
@@ -242,12 +245,12 @@ const RegistrationForm = () => {
             onClose={() => setSuccessMessage(null)}
           />
         ) : null}
-        <div className='shadow p-5 text-center border rounded-sm mt-12'>
-        <Link href={ROUTES.LOGIN}>
-              <a className="text-blue-500 font-normal text-sm">
-                {t('already-have-account')}
-              </a>
-        </Link>
+        <div className="shadow p-5 text-center border rounded-sm mt-12">
+          <Link href={ROUTES.LOGIN}>
+            <a className="text-blue-500 font-normal text-sm">
+              {t('already-have-account')}
+            </a>
+          </Link>
         </div>
       </form>
       <FormFooter isSignUp />
