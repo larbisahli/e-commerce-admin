@@ -14,7 +14,7 @@ const Logo: React.FC<React.AnchorHTMLAttributes<{}>> = ({
       className={'absolute top-0 left-0 right-0 flex'}
       {...props}
     >
-      <a
+      <div
         className="overflow-hidden"
         style={{
           width: siteSettings.logo.width,
@@ -28,7 +28,7 @@ const Logo: React.FC<React.AnchorHTMLAttributes<{}>> = ({
           objectFit="contain"
           loading="eager"
         />
-      </a>
+      </div>
     </Link>
   );
 };

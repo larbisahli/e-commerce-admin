@@ -36,7 +36,7 @@ const Sidebar: React.FC<Props> = ({ absolute = false }) => {
               subLinks={subLinks}
               showLinkId={showLinkIdLevel1}
               setShowLinkId={setShowLinkIdLevel1}
-              showTriangle
+              // showTriangle
             />
           )
         )}

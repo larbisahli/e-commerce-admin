@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import CouponCreateOrUpdateForm from '@components/coupon/coupon-form';
+import CouponCreateOrUpdateForm from '@components/ErrorBoundary/coupon/coupon-form';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';

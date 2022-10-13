@@ -1,3 +1,4 @@
+// import LogoSvg from '@components/icons/logo';
 import Logo from '@components/ui/logo';
 import Scrollbar from '@components/ui/scrollbar';
 import { siteSettings } from '@settings/site.settings';
@@ -15,10 +16,10 @@ const SidebarMini: React.FC = () => {
         <Logo />
       </div>
       <Scrollbar className="flex flex-col w-full h-full space-y-12">
-        <div className='flex justify-center my-2'>
-          <div className='h-[1px] w-[76%] bg-sidenav-divider'></div>
+        <div className="flex justify-center my-2">
+          <div className="h-[2px] w-[76%] bg-sidenav-divider"></div>
         </div>
-        {siteSettings.sidebarLinks.admin.map(
+        {siteSettings.sidebarLinks?.admin?.map(
           ({ id, href, label, icon, line, subLinks }) => (
             <SidebarItem
               key={id}

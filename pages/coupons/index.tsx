@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client';
 import Card from '@components/common/card';
 import SortForm from '@components/common/sort-form';
-import CouponList from '@components/coupon/coupon-list';
+import CouponList from '@components/ErrorBoundary/coupon/coupon-list';
 import { Add } from '@components/icons/add';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';

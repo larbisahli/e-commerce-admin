@@ -20,6 +20,7 @@ export const ROUTES = {
   STAFFS: '/staffs',
   APPS: '/apps',
   STORE_SETTINGS: '/store/store-settings',
+  WHATSAPP: '/whatsapp',
   SUPPORT: '/support',
   AFFILIATE: '/affiliate-program',
   COLORS: '/store/theme-settings/colors',
@@ -35,5 +36,6 @@ export const ROUTES = {
   INTEGRATIONS: '/store/integrations',
   PAYMENTS: '/store/payments',
   EMAIL_TEMPLATES: '/store/email-templates',
-  HERO_CAROUSEL: '/hero-carousel'
+  HERO_CAROUSEL: '/hero-carousel',
+  INVITE: '/hero-carousel'
 };

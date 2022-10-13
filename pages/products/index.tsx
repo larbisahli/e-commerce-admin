@@ -10,7 +10,7 @@ import ProductList from '@components/product/product-list';
 import ErrorMessage from '@components/ui/error-message';
 import LinkButton from '@components/ui/link-button';
 import Loader from '@components/ui/loader/loader';
-import { PRODUCTS_FOR_ADMIN } from '@graphql/product';
+import { PRODUCTS } from '@graphql/product';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetStaff } from '@hooks/useGetStaff';
 import { verifyAuth } from '@middleware/utils';
@@ -49,7 +49,7 @@ export default function ProductsPage({ client }: SSRProps) {
   const { data, loading, error, fetchMore } = useQuery<
     TProduct,
     ProductVariable
-  >(PRODUCTS_FOR_ADMIN, {
+  >(PRODUCTS, {
     variables: {
       page,
       limit,

@@ -43,6 +43,13 @@ export const siteSettings = {
         icon: 'OrdersIcon'
       },
       {
+        id: 'D2IcLt',
+        href: ROUTES.CUSTOMERS,
+        label: 'sidebar-nav-item-customers',
+        icon: 'UsersIcon',
+        line: true
+      },
+      {
         id: 'h4ifwC',
         href: ROUTES.PRODUCTS,
         label: 'sidebar-nav-item-products',
@@ -91,26 +98,73 @@ export const siteSettings = {
         icon: 'SuppliersIcon'
       },
       {
-        id: 'D2IcLt',
-        href: ROUTES.CUSTOMERS,
-        label: 'sidebar-nav-item-customers',
-        icon: 'UsersIcon'
-      },
-      {
-        id: 'JU3uYy',
-        href: ROUTES.STAFFS,
-        label: 'sidebar-nav-item-staffs',
-        icon: 'StaffsIcon'
-      },
-      {
         id: 'WaIqCI',
         href: ROUTES.HERO_CAROUSEL,
         label: 'sidebar-nav-item-hero-carousel',
         icon: 'ImageMultipleIcon'
       },
       {
+        id: 'JU3uYy',
+        href: ROUTES.STAFFS,
+        label: 'sidebar-nav-item-staffs',
+        icon: 'StaffsIcon',
+        line: true
+      },
+      {
+        id: 'JU3uxd',
+        href: '#',
+        label: 'sidebar-nav-item-store',
+        icon: 'ShopIcon',
+        subLinks: [
+          {
+            id: '9YcWhG',
+            href: ROUTES.ACCOUNT_INFORMATION,
+            label: 'sidebar-nav-item-account-information',
+            padding: '35px'
+          },
+          {
+            id: 'j6OQzo',
+            href: ROUTES.RECENT_LOGIN_HISTORY,
+            label: 'sidebar-nav-item-recent-login-history',
+            padding: '35px'
+          },
+          {
+            id: 'RVRg5S',
+            href: ROUTES.NOTIFICATIONS,
+            label: 'sidebar-nav-item-notifications',
+            padding: '35px'
+          }
+        ]
+      },
+      {
+        id: 'JrGuYy',
+        href: '#',
+        label: 'sidebar-nav-item-whatsapp',
+        icon: 'WhatsAppIcon',
+        subLinks: [
+          {
+            id: '9YcWhG',
+            href: ROUTES.ACCOUNT_INFORMATION,
+            label: 'sidebar-nav-item-account-information',
+            padding: '35px'
+          },
+          {
+            id: 'j6OQzo',
+            href: ROUTES.RECENT_LOGIN_HISTORY,
+            label: 'sidebar-nav-item-recent-login-history',
+            padding: '35px'
+          },
+          {
+            id: 'RVRg5S',
+            href: ROUTES.NOTIFICATIONS,
+            label: 'sidebar-nav-item-notifications',
+            padding: '35px'
+          }
+        ]
+      },
+      {
         id: 'nMtvIg',
-        href: '/settings',
+        href: '#',
         label: 'sidebar-nav-item-settings',
         icon: 'SettingsIcon',
         subLinks: [
@@ -133,6 +187,12 @@ export const siteSettings = {
             padding: '35px'
           }
         ]
+      },
+      {
+        id: 'WDIqEI',
+        href: ROUTES.INVITE,
+        label: 'sidebar-nav-item-invite-earn',
+        icon: 'AffiliateIcon'
       }
     ]
   },

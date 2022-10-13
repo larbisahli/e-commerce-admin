@@ -86,11 +86,10 @@ const SidebarItem = ({
 
   return (
     <React.Fragment>
-      {line && <div className="w-full h-px bg-sidenav-divider mt-2 mb-2"></div>}
       {hadSubLinks ? (
         <div
           className={cn(
-            'overflow-hidden cursor-pointer justify-between flex w-full pl-6 hover:bg-gray-700 p-2 items-center text-base text-sidenav-color text-start focus:text-accent hover:border-solid hover:border-green-300 hover:text-white hover:border-l-2 border-l-2 border-transparent border-solid',
+            'overflow-hidden cursor-pointer justify-between flex w-full pl-6 hover:!bg-sidenav-active-hover-color p-2 items-center text-base text-sidenav-color text-start focus:text-accent hover:border-solid hover:border-green-300 hover:text-white hover:border-l-2 border-l-2 border-transparent border-solid',
             { 'nav-sub-links-bg': !!padding, '!text-white': linkOpenHighlight }
           )}
           onClick={handleShowLinkId}
@@ -115,7 +114,7 @@ const SidebarItem = ({
                 })
           }
           className={cn(
-            'overflow-hidden flex w-full pl-6 hover:bg-gray-700 p-2 items-center text-base text-sidenav-color hover:text-white text-start focus:text-accent hover:border-solid hover:border-green-300 hover:border-l-2 border-l-2 border-transparent border-solid',
+            'overflow-hidden flex w-full pl-6 hover:bg-sidenav-active-hover-color p-2 items-center text-base text-sidenav-color hover:text-white text-start focus:text-white hover:border-solid hover:border-green-300 hover:border-l-2 border-l-2 border-transparent border-solid',
             { 'nav-sub-links-bg': !!padding && !isSublevel }
           )}
           includes={includes}
@@ -131,29 +130,35 @@ const SidebarItem = ({
         </ActiveLink>
       )}
 
-      <div
-        className={cn('sub-nav-height-transition', {
-          'sub-nav-height-transition-open': showLinkId === id
-        })}
-      >
-        {subLinks?.map(({ id, href, label, icon, padding, subLinks }) => (
-          <SidebarItem
-            key={id}
-            id={id}
-            href={href}
-            label={t(label)}
-            icon={icon}
-            includes={href}
-            line={false}
-            subLinks={subLinks}
-            padding={padding}
-            showTriangle
-            showLinkId={showLinksLevel2}
-            setShowLinkId={setShowLinksLevel2}
-            isSublevel={isSublevel}
-          />
-        ))}
-      </div>
+      {!isEmpty(subLinks) && (
+        <div
+          className={cn('sub-nav-height-transition', {
+            'sub-nav-height-transition-open': showLinkId === id
+          })}
+        >
+          {subLinks?.map(({ id, href, label, icon, padding, subLinks }) => (
+            <SidebarItem
+              key={id}
+              id={id}
+              href={href}
+              label={t(label)}
+              icon={icon}
+              includes={href}
+              subLinks={subLinks}
+              padding={padding}
+              // showTriangle
+              showLinkId={showLinksLevel2}
+              setShowLinkId={setShowLinksLevel2}
+              isSublevel={isSublevel}
+            />
+          ))}
+        </div>
+      )}
+      {line && (
+        <div className="flex justify-center my-3">
+          <div className="h-[1px] w-[90%] bg-sidenav-divider"></div>
+        </div>
+      )}
     </React.Fragment>
   );
 };

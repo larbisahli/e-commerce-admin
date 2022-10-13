@@ -1,16 +1,16 @@
 import { gql } from '@apollo/client';
 
-export const PRODUCTS_FOR_ADMIN = gql`
-  query ProductsForAdmin(
+export const PRODUCTS = gql`
+  query Products(
     $page: Int!
     $limit: Int!
     $orderBy: String!
     $sortedBy: String!
   ) {
-    productsCount {
+    getProductsCount {
       count
     }
-    productsForAdmin(
+    getProducts(
       page: $page
       limit: $limit
       orderBy: $orderBy

@@ -20,4 +20,5 @@ export { TagIcon } from '@components/icons/sidebar/tags';
 export { TaxesIcon } from '@components/icons/sidebar/taxes';
 export { TypesIcon } from '@components/icons/sidebar/types';
 export { UsersIcon } from '@components/icons/sidebar/users';
+export { WhatsAppIcon } from '@components/icons/sidebar/whatsApp';
 export { WithdrawIcon } from '@components/icons/sidebar/withdraw';

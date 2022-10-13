@@ -1,4 +1,4 @@
-import CouponCreateOrUpdateForm from '@components/coupon/coupon-form';
+import CouponCreateOrUpdateForm from '@components/ErrorBoundary/coupon/coupon-form';
 import AppLayout from '@components/layouts/app';
 import { useGetStaff } from '@hooks/index';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
