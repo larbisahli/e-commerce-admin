@@ -51,10 +51,10 @@ export const CATEGORIES = gql`
     $orderBy: String!
     $sortedBy: String!
   ) {
-    categoriesCount {
+    getCategoriesCount {
       count
     }
-    categoriesForAdmin(
+    getCategories(
       page: $page
       limit: $limit
       orderBy: $orderBy
@@ -148,7 +148,7 @@ export const CATEGORIES_FOR_SELECT = gql`
     $limit: Int!
     $orderBy: String!
   ) {
-    categoriesSelectForAdmin(
+    getCategoriesSelect(
       id: $id
       page: $page
       limit: $limit
@@ -162,7 +162,7 @@ export const CATEGORIES_FOR_SELECT = gql`
 
 export const CATEGORIES_FOR_SELECT_ALL = gql`
   query CategoriesSelectAll($page: Int!, $limit: Int!, $orderBy: String!) {
-    categoriesSelectAllForAdmin(page: $page, limit: $limit, orderBy: $orderBy) {
+    getCategoriesSelectAll(page: $page, limit: $limit, orderBy: $orderBy) {
       id
       name
     }

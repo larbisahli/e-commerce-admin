@@ -121,7 +121,7 @@ export interface Category extends CreatedUpdatedByAt {
   description?: Nullable<Scalars['String']>;
   children?: Nullable<Array<CategoryRef>>;
   active?: Scalars['Boolean'];
-  thumbnail?: ImageType;
+  thumbnail?: ImageType[];
   icon?: Nullable<Scalars['String']>;
   hasChildren?: Scalars['Boolean'];
   parent?: Nullable<CategoryRef>;
@@ -133,7 +133,7 @@ export interface CategoryRef extends CreatedUpdatedByAt {
   name?: Scalars['String'];
   description?: Nullable<Scalars['String']>;
   active?: Scalars['Boolean'];
-  thumbnail?: ImageType;
+  thumbnail?: ImageType[];
   icon?: Nullable<Scalars['String']>;
   // parent?: Nullable<Category>;
 }
@@ -304,7 +304,7 @@ export interface VariationOptionsType {
 }
 
 // Attachment
-export interface ImageType {
+export interface ImageType extends CreatedUpdatedByAt {
   id?: Scalars['String'];
   image?: Scalars['String'];
   placeholder?: Scalars['String'];

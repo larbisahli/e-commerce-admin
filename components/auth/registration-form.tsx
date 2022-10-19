@@ -15,7 +15,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetStaff } from '@hooks/useGetStaff';
 import { ROUTES } from '@utils/routes';
-import parsePhoneNumber, { isValidPhoneNumber } from 'libphonenumber-js';
+import { isValidPhoneNumber } from 'libphonenumber-js';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
@@ -117,7 +117,7 @@ const RegistrationForm = () => {
 
     setErrorMessage(null);
 
-    if (isValidPhoneNumber(phoneNumber)) {
+    if (isValidPhoneNumber(`+${phoneNumber}`)) {
       createStore({ variables }).catch((error) => {
         const err = error?.graphQLErrors[0];
         setErrorMessage(`error:${err?.t ?? 'SOMETHING_HAPPENED'}`);
@@ -172,10 +172,7 @@ const RegistrationForm = () => {
               return true;
             }}
             onChange={(phone) => {
-              setValue(
-                'phoneNumber',
-                parsePhoneNumber(`+${phone}`)?.number ?? phone
-              );
+              setValue('phoneNumber', phone);
             }}
           />
           <p className="pt-1 text-gray-400 text-sm">

@@ -53,10 +53,6 @@ const SliderDeleteView = dynamic(
   () => import('@components/hero-carousel/slider-delete-view')
 );
 
-// const ExportImportView = dynamic(
-//   () => import('@components/product/import-export-modal')
-// );
-
 // const AttributeExportImport = dynamic(
 //   () => import('@components/attribute/attribute-import-export')
 // );
@@ -64,8 +60,6 @@ const SliderDeleteView = dynamic(
 const ManagedModal = () => {
   const { isOpen, view } = useModalState();
   const { closeModal } = useModalAction();
-
-  console.log('view', { isOpen, view });
 
   return (
     <Modal open={isOpen} onClose={closeModal}>

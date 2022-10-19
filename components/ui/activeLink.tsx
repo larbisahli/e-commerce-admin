@@ -6,6 +6,7 @@ type Props = {
   activeClassName: string;
   includes: string;
   className: string;
+  children: React.ReactNode;
 };
 
 const ActiveLink: React.FC<NextLinkProps & Props> = ({
@@ -18,13 +19,18 @@ const ActiveLink: React.FC<NextLinkProps & Props> = ({
 }) => {
   const { asPath } = useRouter();
 
-  const A = useMemo(() => asPath?.split('/'), [asPath]);
-  const B = useMemo(() => includes?.split('/'), [includes]);
+  const A = useMemo(() => asPath?.split('/')?.filter((item) => item), [asPath]);
+  const B = useMemo(
+    () => includes?.split('/')?.filter((item) => item),
+    [includes]
+  );
+  const isIncluded = useMemo(
+    () => A.some((value) => B.includes(value)),
+    [A, B]
+  );
 
   const class_name =
-    asPath === href ||
-    asPath === props.as ||
-    A[A?.length - 1] === B[B?.length - 1]
+    asPath === href || asPath === props.as || isIncluded
       ? `${className} ${activeClassName}`.trim()
       : className;
 

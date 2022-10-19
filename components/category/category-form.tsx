@@ -2,9 +2,9 @@ import { useMutation, useQuery } from '@apollo/client';
 import Card from '@components/common/card';
 import * as categoriesIcon from '@components/icons/category';
 import { SaveIcon } from '@components/icons/save-icon';
+import ImageModal from '@components/image-modal';
 import Button from '@components/ui/button';
 import Description from '@components/ui/description';
-import FileInput from '@components/ui/file-input';
 import Input from '@components/ui/input';
 import Label from '@components/ui/label';
 import SelectInput from '@components/ui/select-input';
@@ -123,6 +123,8 @@ export default function CreateOrUpdateCategoriesForm({
     register,
     handleSubmit,
     control,
+    setValue,
+    watch,
     formState: { errors },
     reset
   } = useForm<FormValues>({
@@ -181,8 +183,8 @@ export default function CreateOrUpdateCategoriesForm({
       name: values.name,
       description: values.description,
       thumbnail: {
-        image: values.thumbnail?.image,
-        placeholder: values.thumbnail?.placeholder
+        image: values.thumbnail[0]?.image,
+        placeholder: values.thumbnail[0]?.placeholder
       },
       parentId: isEmpty(values?.parent) ? null : values?.parent?.id,
       icon: (values.icon as unknown as { value: string })?.value ?? null
@@ -208,6 +210,9 @@ export default function CreateOrUpdateCategoriesForm({
     return confirm(t('common:UNSAVED_CHANGES'));
   });
 
+  // @ts-ignore
+  const thumbnail = watch('thumbnail');
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-wrap pb-8 border-b border-dashed border-border-base my-5 sm:my-8">
@@ -216,9 +221,12 @@ export default function CreateOrUpdateCategoriesForm({
           details={t('form:category-image-helper-text')}
           className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
         />
-
         <Card className="w-full sm:w-8/12 md:w-2/3">
-          <FileInput name="thumbnail" control={control} multiple={false} />
+          <ImageModal
+            onSelect={(photo) => setValue('thumbnail', photo)}
+            selected={thumbnail}
+            isThumbnail
+          />
         </Card>
       </div>
 

@@ -11,7 +11,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetStaff } from '@hooks/useGetStaff';
 import { ROUTES } from '@utils/routes';
-import parsePhoneNumber, { isValidPhoneNumber } from 'libphonenumber-js';
+import { isValidPhoneNumber } from 'libphonenumber-js';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
@@ -139,10 +139,7 @@ const LoginForm = () => {
               return true;
             }}
             onChange={(phone) => {
-              setValue(
-                'phoneNumber',
-                parsePhoneNumber(`+${phone}`)?.number ?? phone
-              );
+              setValue('phoneNumber', phone);
             }}
           />
           {/* @ts-ignore */}

@@ -46,15 +46,14 @@ export default function Modal({ open, onClose, children }: any) {
             leaveFrom="opacity-100 scale-100"
             leaveTo="opacity-0 scale-95"
           >
-            <div className="inline-block min-w-content max-w-full overflow-hidden text-start align-middle transition-all  md:rounded-xl relative">
+            <div className="inline-block min-w-content max-w-full overflow-hidden text-start align-middle transition-all  md:rounded-md relative">
               <button
                 onClick={onClose}
                 aria-label="Close panel"
                 ref={cancelButtonRef}
-                className="inline-block md:hidden outline-none focus:outline-none absolute end-4 top-4 z-[60]"
+                className="inline-block outline-none focus:outline-none absolute end-4 top-4 z-[60] text-red-500"
               >
-                <span className="sr-only">{t('text-close')}</span>
-                <CloseIcon className="w-4 h-4" />
+                <CloseIcon className="w-7 h-7" />
               </button>
               {children}
             </div>

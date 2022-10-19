@@ -39,3 +39,5 @@ export const DELETE_STAFF = 'DELETE_STAFF';
 export type DELETE_STAFF_TYPE = typeof DELETE_STAFF;
 export const DELETE_SLIDER = 'DELETE_SLIDER';
 export type DELETE_SLIDER_TYPE = typeof DELETE_SLIDER;
+export const IMAGE_MODAL = 'IMAGE_MODAL';
+export type IMAGE_MODAL_TYPE = typeof IMAGE_MODAL;
