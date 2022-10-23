@@ -1,16 +1,11 @@
 import { gql } from '@apollo/client';
 
 export const TAGS = gql`
-  query TagsForAdmin(
-    $page: Int!
-    $limit: Int!
-    $orderBy: String!
-    $sortedBy: String!
-  ) {
-    tagsCount {
+  query Tags($page: Int!, $limit: Int!, $orderBy: String!, $sortedBy: String!) {
+    getTagsCount {
       count
     }
-    tagsForAdmin(
+    getTags(
       page: $page
       limit: $limit
       orderBy: $orderBy
@@ -36,8 +31,8 @@ export const TAGS = gql`
 `;
 
 export const TAG = gql`
-  query TagForAdmin($id: ID!) {
-    tagForAdmin(id: $id) {
+  query Tag($id: ID!) {
+    getTag(id: $id) {
       id
       name
       icon

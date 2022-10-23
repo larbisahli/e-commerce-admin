@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import NextLink, { LinkProps as NextLinkProps } from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useMemo } from 'react';
@@ -7,6 +9,7 @@ type Props = {
   includes: string;
   className: string;
   children: React.ReactNode;
+  isSubLink?: boolean;
 };
 
 const ActiveLink: React.FC<NextLinkProps & Props> = ({
@@ -15,6 +18,8 @@ const ActiveLink: React.FC<NextLinkProps & Props> = ({
   activeClassName,
   className,
   includes,
+  onClick,
+  isSubLink = false,
   ...props
 }) => {
   const { asPath } = useRouter();
@@ -25,8 +30,11 @@ const ActiveLink: React.FC<NextLinkProps & Props> = ({
     [includes]
   );
   const isIncluded = useMemo(
-    () => A.some((value) => B.includes(value)),
-    [A, B]
+    () =>
+      isSubLink
+        ? A.every((value) => B.includes(value))
+        : A.some((value) => B.includes(value)),
+    [isSubLink, A, B]
   );
 
   const class_name =
@@ -34,9 +42,17 @@ const ActiveLink: React.FC<NextLinkProps & Props> = ({
       ? `${className} ${activeClassName}`.trim()
       : className;
 
+  const isFunction = onClick instanceof Function;
+
   return (
     <NextLink href={href} passHref>
-      <a className={class_name}>{children}</a>
+      <a
+        onClick={onClick}
+        role={isFunction ? 'button' : null}
+        className={class_name}
+      >
+        {children}
+      </a>
     </NextLink>
   );
 };

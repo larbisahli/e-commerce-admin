@@ -6,7 +6,7 @@ export const CREATE_CATEGORY = gql`
     $name: String!
     $description: String!
     $icon: String!
-    $thumbnail: ImageInput!
+    $thumbnail: [ImageInput]
   ) {
     createCategory(
       parentId: $parentId
@@ -28,7 +28,7 @@ export const UPDATE_CATEGORY = gql`
     $name: String!
     $description: String
     $icon: String!
-    $thumbnail: ImageInput!
+    $thumbnail: [ImageInput]
   ) {
     updateCategory(
       id: $id
@@ -102,7 +102,7 @@ export const CATEGORIES = gql`
 
 export const CATEGORY = gql`
   query Category($id: ID!) {
-    categoryForAdmin(id: $id) {
+    getCategory(id: $id) {
       id
       parentId
       parent {
@@ -113,6 +113,7 @@ export const CATEGORY = gql`
       description
       icon
       thumbnail {
+        id
         image
         placeholder
       }

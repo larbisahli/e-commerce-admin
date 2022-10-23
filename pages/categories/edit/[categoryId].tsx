@@ -15,7 +15,7 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 interface TCategory {
-  categoryForAdmin: Category;
+  getCategory: Category;
 }
 interface OptionsVariable {
   id: string | string[];
@@ -52,7 +52,7 @@ export default function UpdateCategoriesPage({ client }: SSRProps) {
           {t('form:form-title-edit-category')}
         </h1>
       </div>
-      <CreateOrUpdateCategoriesForm initialValues={data?.categoryForAdmin} />
+      <CreateOrUpdateCategoriesForm initialValues={data?.getCategory} />
     </>
   );
 }
@@ -61,7 +61,7 @@ UpdateCategoriesPage.Layout = AppLayout;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { locale } = context;
-  const { client } = verifyAuth(context);
+  const { client } = await verifyAuth(context);
 
   if (!client) {
     return {

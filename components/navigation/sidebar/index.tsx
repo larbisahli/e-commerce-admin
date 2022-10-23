@@ -1,4 +1,3 @@
-import Logo from '@components/ui/logo';
 import Scrollbar from '@components/ui/scrollbar';
 import { siteSettings } from '@settings/site.settings';
 import classNames from 'classnames';

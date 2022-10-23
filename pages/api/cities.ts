@@ -1,4 +1,4 @@
-import { verifyAuth } from '@middleware/utils';
+import { verifyJWT } from '@middleware/utils';
 // import cities from '@utils/cities.min.json';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
@@ -7,7 +7,7 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
 
   try {
     // @ts-ignore
-    const { client } = verifyAuth({ req, res });
+    const { client } = verifyJWT({ req, res });
 
     if (!client) {
       res.status(403).json({});

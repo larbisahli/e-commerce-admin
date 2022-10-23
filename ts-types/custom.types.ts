@@ -18,7 +18,7 @@ import type {
   READ_TYPE,
   UPDATE_TYPE
 } from './constants';
-import { SortOrder } from './generated';
+import { SortOrder, StaffType } from './generated';
 
 // Nullable can be assigned to a value or can be assigned to null.
 export declare type Nullable<T> = T | null;
@@ -53,14 +53,9 @@ export interface JwtPayload {
   ali: string;
 }
 
-export interface ClientType extends JwtPayload {
-  csrfToken?: string;
-  csrfError?: any;
-}
-
 export type SSRProps = {
   token?: string | null;
-  client?: ClientType | null;
+  client?: StaffType | null;
 };
 
 export type PrivilegesType = (

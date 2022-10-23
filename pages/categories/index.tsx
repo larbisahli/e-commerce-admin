@@ -24,8 +24,8 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useState } from 'react';
 
 interface TCategories {
-  categoriesForAdmin: Category[];
-  categoriesCount: { count: number };
+  getCategories: Category[];
+  getCategoriesCount: { count: number };
 }
 
 interface OptionsVariable {
@@ -57,8 +57,8 @@ export default function Categories({ client }: SSRProps) {
     fetchPolicy: 'cache-and-network'
   });
 
-  const categoriesCount = data?.categoriesCount?.count;
-  const categoriesForAdmin = data?.categoriesForAdmin;
+  const categoriesCount = data?.getCategoriesCount?.count;
+  const categoriesForAdmin = data?.getCategories;
 
   useGetStaff(client);
   useErrorLogger(error);
@@ -167,7 +167,7 @@ Categories.Layout = AppLayout;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { locale } = context;
-  const { client } = verifyAuth(context);
+  const { client } = await verifyAuth(context);
 
   if (!client) {
     return {

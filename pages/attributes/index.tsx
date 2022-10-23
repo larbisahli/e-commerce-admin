@@ -23,8 +23,8 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useState } from 'react';
 
 interface TAttributes {
-  attributesForAdmin: Attribute[];
-  attributesCount: { count: number };
+  getAttributes: Attribute[];
+  getAttributesCount: { count: number };
 }
 
 interface OptionsVariable {
@@ -56,8 +56,8 @@ export default function AttributePage({ client }: SSRProps) {
     fetchPolicy: 'cache-and-network'
   });
 
-  const attributesCount = data?.attributesCount?.count;
-  const attributes = data?.attributesForAdmin;
+  const attributesCount = data?.getAttributesCount?.count;
+  const attributes = data?.getAttributes;
 
   useGetStaff(client);
   useErrorLogger(error);
@@ -165,7 +165,7 @@ AttributePage.Layout = AppLayout;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { locale } = context;
-  const { client } = verifyAuth(context);
+  const { client } = await verifyAuth(context);
 
   if (!client) {
     return {

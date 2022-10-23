@@ -16,7 +16,7 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 interface TAttribute {
-  attributeForAdmin: Attribute;
+  getAttribute: Attribute;
 }
 interface OptionsVariable {
   id: string | string[];
@@ -39,7 +39,7 @@ export default function UpdateAttributePage({ client }: SSRProps) {
   useGetStaff(client);
   useErrorLogger(error);
 
-  const attribute = data?.attributeForAdmin;
+  const attribute = data?.getAttribute;
 
   if (loading) {
     return <Loader text={t('common:text-loading')} />;
@@ -65,7 +65,7 @@ UpdateAttributePage.Layout = AppLayout;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { locale } = context;
-  const { client } = verifyAuth(context);
+  const { client } = await verifyAuth(context);
 
   if (!client) {
     return {

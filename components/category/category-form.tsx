@@ -24,27 +24,14 @@ import { ROUTES } from '@utils/routes';
 import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Control, useForm } from 'react-hook-form';
 
 import { categoryIcons } from './category-icons';
 import { categoryValidationSchema } from './category-validation-schema';
 
-export const updatedIcons = categoryIcons.map((item: any) => {
-  const TagName = categoriesIcon[item.value];
-  item.label = (
-    <div className="flex space-s-5 items-center">
-      <span className="flex w-5 h-5 items-center justify-center">
-        {TagName && <TagName className="max-h-full max-w-full" />}
-      </span>
-      <span>{item.label}</span>
-    </div>
-  );
-  return item;
-});
-
 interface TCategorySelect {
-  categoriesSelectForAdmin: Category[];
+  getCategoriesSelect: Category[];
 }
 
 interface OptionsVariable {
@@ -72,7 +59,7 @@ function SelectCategories({ control }: { control: Control<FormValues> }) {
     }
   );
 
-  const categories = data?.categoriesSelectForAdmin;
+  const categories = data?.getCategoriesSelect;
 
   useErrorLogger(error);
 
@@ -98,7 +85,7 @@ const defaultValues = {
   category_name: '',
   category_description: null,
   parent: null,
-  thumbnail: null,
+  thumbnail: [],
   icon: null
 };
 
@@ -182,10 +169,11 @@ export default function CreateOrUpdateCategoriesForm({
     const variables = {
       name: values.name,
       description: values.description,
-      thumbnail: {
-        image: values.thumbnail[0]?.image,
-        placeholder: values.thumbnail[0]?.placeholder
-      },
+      thumbnail: [
+        {
+          id: values.thumbnail[0]?.id
+        }
+      ],
       parentId: isEmpty(values?.parent) ? null : values?.parent?.id,
       icon: (values.icon as unknown as { value: string })?.value ?? null
     };
@@ -212,6 +200,21 @@ export default function CreateOrUpdateCategoriesForm({
 
   // @ts-ignore
   const thumbnail = watch('thumbnail');
+
+  const Icons = useMemo(() => {
+    return categoryIcons.map((item: any) => {
+      const TagName = categoriesIcon[item.value];
+      item.element = (
+        <div className="flex space-s-5 items-center">
+          <span className="flex w-5 h-5 items-center justify-center">
+            {TagName && <TagName className="max-h-full max-w-full" />}
+          </span>
+          <span>{item.label}</span>
+        </div>
+      );
+      return item;
+    });
+  }, []);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -263,7 +266,8 @@ export default function CreateOrUpdateCategoriesForm({
             <SelectInput
               name="icon"
               control={control}
-              options={updatedIcons}
+              getOptionLabel={(option: any) => option.element}
+              options={Icons}
               isClearable={true}
             />
             {t(errors.icon?.message!) && (
@@ -277,7 +281,7 @@ export default function CreateOrUpdateCategoriesForm({
           )}
         </Card>
       </div>
-      <div className="mb-4 text-end">
+      <div className="mb-4 flex justify-end">
         {initialValues && (
           <Button
             variant="outline"

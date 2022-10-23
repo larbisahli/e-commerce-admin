@@ -1,10 +1,11 @@
 import LinkButton from '@components/ui/link-button';
-import Logo from '@components/ui/logo';
 import { useUI } from '@contexts/ui.context';
+import { useMediaQuery } from '@hooks/useMediaQuery';
 import { ROUTES } from '@utils/routes';
 import classNames from 'classnames/bind';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'next-i18next';
+import { useEffect } from 'react';
 
 import NavMenu from './menu';
 import NavNotification from './notification';
@@ -14,7 +15,7 @@ let cx = classNames.bind(styles);
 
 const Navbar = () => {
   const { t } = useTranslation();
-  const { toggleSidebar } = useUI();
+  const { toggleSidebar, closeSidebarIfPresent } = useUI();
 
   const menuIsOpen = false;
 
@@ -22,6 +23,18 @@ const Navbar = () => {
     'span--open': menuIsOpen,
     'span--close': !menuIsOpen
   });
+
+  const closeSideBar = useMediaQuery('min-width', 768);
+
+  /**
+   * Close sidebar when mini side bar appears
+   */
+  useEffect(() => {
+    if (closeSideBar) {
+      closeSidebarIfPresent();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [closeSideBar]);
 
   return (
     <header className="w-full">

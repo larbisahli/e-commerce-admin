@@ -1,8 +1,6 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-to-interactive-role */
 import { useQuery } from '@apollo/client';
 import Uploader from '@components/common/uploader';
-import { CheckMark } from '@components/icons/checkmark';
-import ImageComponent from '@components/ImageComponent';
 import Button from '@components/ui/button';
 import Loader from '@components/ui/loader/loader';
 import Modal from '@components/ui/modal/modal';
@@ -18,7 +16,9 @@ import { ImageType, OrderBy, SortOrder } from '@ts-types/generated';
 import isEmpty from 'lodash/isEmpty';
 import { useTranslation } from 'next-i18next';
 import Pagination from 'rc-pagination';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
+
+import ImageThumbs from './thumbs';
 
 interface TPhotos {
   getPhotos: ImageType[];
@@ -92,57 +92,18 @@ const ImageModal = ({ onSelect, selected, isThumbnail }: Props) => {
     });
   }
 
-  // ----------------------------------
-
-  const thumbs = useMemo(() => {
-    if (isEmpty(photos)) {
-      return null;
-    }
-
-    return photos?.map(({ id, image, placeholder }) => {
-      return (
-        // eslint-disable-next-line jsx-a11y/click-events-have-key-events
-        <li
-          className="rounded-sm mt-2 me-2 relative cursor-pointer"
-          key={id}
-          onClick={() => {
-            if (isThumbnail) {
-              setSelectedImages([{ id, image, placeholder }]);
-            } else {
-              setSelectedImages((prev) => [
-                ...prev,
-                { id, image, placeholder }
-              ]);
-            }
-            onSelect;
-          }}
-          role="button"
-        >
-          {!isEmpty(selectedImages?.find((value) => value.id === id)) && (
-            <div className="absolute top-0 right-0 left-0 bottom-0 w-24 h-24 z-40 flex justify-center items-center text-white">
-              <CheckMark simple={true} className="w-8 h-8 z-50" />
-            </div>
-          )}
-
-          <div className="relative min-w-0 w-24 h-24 overflow-hidden rounded-sm">
-            <ImageComponent
-              src={image}
-              customPlaceholder={placeholder}
-              layout="fill"
-              objectFit="cover"
-            />
-          </div>
-        </li>
-      );
-    });
-  }, [isThumbnail, onSelect, photos, selectedImages]);
-
   return (
     <div className="h-full w-full">
       {/* BUTTON */}
       <div className="flex items-center justify-between border-b pb-5">
         <div className="font-medium">Add product images</div>
-        <Button onClick={() => openModal(IMAGE_MODAL)} variant="outline">
+        <Button
+          onClick={(e) => {
+            e.preventDefault();
+            openModal(IMAGE_MODAL);
+          }}
+          variant="outline"
+        >
           Manage
         </Button>
       </div>
@@ -160,9 +121,9 @@ const ImageModal = ({ onSelect, selected, isThumbnail }: Props) => {
               {loadingPhotos && (
                 <Loader height="40vh" text={t('common:text-loading')} />
               )}
-              {(!!thumbs || loadingPhotos) && (
+              {(!isEmpty(photos) || loadingPhotos) && (
                 <div className="overflow-y-auto md:h-[350px] h-full">
-                  <ul className="flex flex-wrap items-center justify-center md:justify-start">
+                  <ul className="flex flex-wrap items-center justify-center md:justify-start px-[8px]">
                     {loading && (
                       <li className="rounded-sm mt-2 me-2 relative">
                         <div className="relative min-w-0 w-24 h-24 overflow-hidden rounded-sm">
@@ -172,18 +133,29 @@ const ImageModal = ({ onSelect, selected, isThumbnail }: Props) => {
                         </div>
                       </li>
                     )}
-                    {!!thumbs && thumbs}
+                    {!isEmpty(photos) && (
+                      <ImageThumbs
+                        {...{
+                          photos,
+                          setSelectedImages,
+                          selectedImages,
+                          isThumbnail
+                        }}
+                      />
+                    )}
                   </ul>
                 </div>
               )}
               {!!photosCount && (
-                <div className="flex justify-end items-center mt-3">
-                  <Pagination
-                    total={photosCount}
-                    current={page}
-                    pageSize={limit}
-                    onChange={handlePagination}
-                  />
+                <div className="flex items-center mt-3 justify-between">
+                  <div className="flex-1">
+                    <Pagination
+                      total={photosCount}
+                      current={page}
+                      pageSize={limit}
+                      onChange={handlePagination}
+                    />
+                  </div>
                   <Button
                     onClick={() => {
                       onSelect(selectedImages);

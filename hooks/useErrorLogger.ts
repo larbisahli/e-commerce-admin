@@ -18,5 +18,5 @@ export function useErrorLogger(error?: any, show: boolean = true) {
         });
       }
     }
-  }, [error]);
+  }, [error, show]);
 }

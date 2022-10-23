@@ -17,11 +17,11 @@ import isEmpty from 'lodash/isEmpty';
 import type { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 interface TTags {
-  tagsForAdmin: Tag[];
-  tagsCount: { count: number };
+  getTags: Tag[];
+  getTagsCount: { count: number };
 }
 
 interface OptionsVariable {
@@ -38,7 +38,6 @@ export default function Tags({ client }: SSRProps) {
 
   const [page, setPage] = useState(1);
   const [orderBy, setOrder] = useState(OrderBy.CREATED_AT);
-  const [tags, setTags] = useState<Tag[]>([] as Tag[]);
 
   const { data, loading, error, fetchMore } = useQuery<TTags, OptionsVariable>(
     TAGS,
@@ -53,17 +52,11 @@ export default function Tags({ client }: SSRProps) {
     }
   );
 
-  const tagsCount = data?.tagsCount?.count;
+  const tagsCount = data?.getTagsCount?.count;
+  const tags = data?.getTags;
 
   useGetStaff(client);
   useErrorLogger(error);
-
-  useEffect(() => {
-    const tagsForAdmin = data?.tagsForAdmin;
-    if (!isEmpty(tagsForAdmin)) {
-      setTags(() => tagsForAdmin);
-    }
-  }, [data]);
 
   function handlePagination(current: any) {
     setPage(current);
@@ -138,7 +131,7 @@ Tags.Layout = AppLayout;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { locale } = context;
-  const { client } = verifyAuth(context);
+  const { client } = await verifyAuth(context);
 
   if (!client) {
     return {

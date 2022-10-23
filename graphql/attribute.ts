@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 
 export const ATTRIBUTE = gql`
   query attribute($id: ID!) {
-    attributeForAdmin(id: $id) {
+    getAttribute(id: $id) {
       id
       name
       values {
@@ -41,10 +41,10 @@ export const ATTRIBUTES = gql`
     $orderBy: String!
     $sortedBy: String!
   ) {
-    attributesCount {
+    getAttributesCount {
       count
     }
-    attributesForAdmin(
+    getAttributes(
       page: $page
       limit: $limit
       orderBy: $orderBy

@@ -4,14 +4,7 @@ import '@fontsource/open-sans/600.css';
 import '@fontsource/open-sans/700.css';
 import '@styles/main.css';
 
-import {
-  ApolloClient,
-  ApolloProvider,
-  from,
-  HttpLink,
-  InMemoryCache
-} from '@apollo/client';
-import { RetryLink } from '@apollo/client/link/retry';
+import { ApolloProvider } from '@apollo/client';
 import ErrorBoundary from '@components/ErrorBoundary';
 import DefaultSeo from '@components/ui/default-seo';
 import LoadingBar from '@components/ui/loading-bar';
@@ -21,8 +14,8 @@ import { ModalProvider } from '@components/ui/modal/modal.context';
 import { StaffInfoProvider } from '@contexts/staff.context';
 // import { SettingsProvider } from "@contexts/settings.context";
 import { UIProvider } from '@contexts/ui.context';
+import apolloClient from '@lib/apollo-client';
 // import PageLoader from "@components/ui/page-loader/page-loader";
-import { apiURL } from '@utils/utils';
 // import { useSettingsQuery } from "@graphql/settings.graphql";
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
@@ -31,34 +24,9 @@ import { appWithTranslation } from 'next-i18next';
 import React, { Fragment } from 'react';
 import { Slide, ToastContainer } from 'react-toastify';
 
-const httpLink = new HttpLink({
-  uri: `${apiURL}/graphql`,
-  credentials: 'include'
-});
-
-const retryLink = new RetryLink({
-  delay: {
-    initial: 1000,
-    max: Infinity,
-    jitter: true
-  },
-  attempts: {
-    max: 5,
-    retryIf: (error, _operation) => {
-      console.log(`retryIf`, { error, _operation });
-      return !!error;
-    }
-  }
-});
-
-const client = new ApolloClient({
-  link: from([retryLink, httpLink]),
-  cache: new InMemoryCache({
-    addTypename: false
-  })
-});
-
-const Noop: React.FC = ({ children }) => <>{children}</>;
+const Noop: React.FC = ({ children }: { children: React.ReactNode }) => (
+  <>{children}</>
+);
 
 // const AppSettings: React.FC = (props) => {
 //   // const { data, loading, error } = useSettingsQuery();
@@ -111,7 +79,7 @@ function App({ Component, pageProps }: AppProps) {
         transition={Slide}
       />
       <ErrorBoundary>
-        <ApolloProvider client={client}>
+        <ApolloProvider client={apolloClient}>
           <StaffInfoProvider>
             <LoadingBar />
             {/* <AppSettings> */}

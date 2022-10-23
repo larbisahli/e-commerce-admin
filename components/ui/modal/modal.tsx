@@ -1,19 +1,26 @@
 import { CloseIcon } from '@components/icons/close-icon';
 import { Dialog, Transition } from '@headlessui/react';
-import { useTranslation } from 'next-i18next';
-import { Fragment, useRef } from 'react';
+import { Fragment, useEffect, useRef } from 'react';
 
 export default function Modal({ open, onClose, children }: any) {
   const cancelButtonRef = useRef(null);
-  const { t } = useTranslation('common');
+
+  useEffect(() => {
+    if (!open) {
+      document.documentElement.style.paddingRight = '0px';
+      document.documentElement.style.overflow = 'auto';
+    }
+  }, [open]);
 
   return (
     <Transition show={open} as={Fragment}>
+      {/* @ts-ignore */}
       <Dialog
         as="div"
         className="fixed inset-0 z-50 overflow-y-auto"
         initialFocus={cancelButtonRef}
         static
+        unmount={false}
         open={open}
         onClose={onClose}
       >

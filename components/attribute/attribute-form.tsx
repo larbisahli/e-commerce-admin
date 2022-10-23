@@ -271,7 +271,7 @@ export default function CreateOrUpdateAttributeForm({ initialValues }: IProps) {
           </Card>
         </div>
 
-        <div className="mb-4 text-end">
+        <div className="mb-4 flex justify-end">
           {initialValues && (
             <Button
               variant="outline"
@@ -337,8 +337,8 @@ const ColorPicker = React.forwardRef<HTMLInputElement, Props>(
         >
           <span>Pick Color</span>
           <span
-            style={{ background: currentColor, width: '15px', height: '15px' }}
-            className={cn('absolute top-0 left-0 rounded-full', {
+            style={{ background: currentColor, height: '15px' }}
+            className={cn('absolute top-0 left-0 rounded-full w-full', {
               shadow: !isEmpty(currentColor),
               'border-gray-400': !isEmpty(currentColor),
               border: !isEmpty(currentColor)

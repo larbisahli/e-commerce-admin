@@ -1,7 +1,8 @@
 import { useUI } from '@contexts/ui.context';
+import { useMediaQuery } from '@hooks/useMediaQuery';
 import { siteSettings } from '@settings/site.settings';
 import { useTranslation } from 'next-i18next';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import Drawer from '../ui/drawer';
 import DrawerWrapper from '../ui/drawer-wrapper';
@@ -12,6 +13,7 @@ interface Props {
   href: string;
   icon?: string;
   label?: string;
+  isSubLink?: boolean;
   subLinks?: {
     id: string;
     href: string;
@@ -19,6 +21,7 @@ interface Props {
     label: string;
     line?: boolean;
     padding: string;
+    isSubLink?: boolean;
     subLinks?: {
       id: string;
       href: string;
@@ -26,6 +29,7 @@ interface Props {
       label: string;
       line?: boolean;
       padding: string;
+      isSubLink?: boolean;
     }[];
   }[];
 }
@@ -44,41 +48,52 @@ const SublevelNavigation: React.FC = () => {
     [SublevelSidebarId]
   );
 
+  const closeSublevel = useMediaQuery('max-width', 768);
+
+  /**
+   * Close sidebar when mini side bar disappears
+   */
+  useEffect(() => {
+    if (closeSublevel) {
+      closeSublevelSidebar();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [closeSublevel]);
+
   return (
-    <div>
-      <Drawer
-        open={displaySublevelSidebar}
+    <Drawer
+      open={displaySublevelSidebar}
+      onClose={closeSublevelSidebar}
+      variant="left"
+    >
+      <DrawerWrapper
         onClose={closeSublevelSidebar}
-        variant="left"
+        label={t(SublevelBarLinks?.label)}
+        className="pl-22 xl:pl-76"
       >
-        <DrawerWrapper
-          onClose={closeSublevelSidebar}
-          label={t(SublevelBarLinks?.label)}
-        >
-          <div className="flex flex-col py-3">
-            {SublevelBarLinks?.subLinks?.map(
-              //#8c8c8c
-              ({ id, href, label, icon, subLinks }: Props) => (
-                <SidebarItem
-                  id={id}
-                  key={id}
-                  href={href}
-                  label={t(label)}
-                  icon={icon}
-                  includes={href}
-                  subLinks={subLinks}
-                  showLinkId={showLinkIdLevel1}
-                  setShowLinkId={setShowLinkIdLevel1}
-                  padding={'10px'}
-                  isSublevel
-                />
-              )
-            )}
-            <div className="w-full h-32"></div>
-          </div>
-        </DrawerWrapper>
-      </Drawer>
-    </div>
+        <div className="flex flex-col py-3">
+          {SublevelBarLinks?.subLinks?.map(
+            ({ id, href, label, icon, subLinks, isSubLink }: Props) => (
+              <SidebarItem
+                id={id}
+                key={id}
+                href={href}
+                label={t(label)}
+                icon={icon}
+                includes={href}
+                subLinks={subLinks}
+                isSubLink={isSubLink}
+                showLinkId={showLinkIdLevel1}
+                setShowLinkId={setShowLinkIdLevel1}
+                padding={'10px'}
+                isSublevel
+              />
+            )
+          )}
+          <div className="w-full h-32"></div>
+        </div>
+      </DrawerWrapper>
+    </Drawer>
   );
 };
 export default SublevelNavigation;

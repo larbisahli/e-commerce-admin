@@ -112,7 +112,7 @@ export const siteSettings = {
       },
       {
         id: 'JU3uxd',
-        href: '#',
+        href: 'store',
         label: 'sidebar-nav-item-store',
         icon: 'ShopIcon',
         subLinks: [
@@ -120,25 +120,28 @@ export const siteSettings = {
             id: '9YcWhG',
             href: ROUTES.ACCOUNT_INFORMATION,
             label: 'sidebar-nav-item-account-information',
-            padding: '35px'
+            padding: '35px',
+            isSubLink: true
           },
           {
             id: 'j6OQzo',
             href: ROUTES.RECENT_LOGIN_HISTORY,
             label: 'sidebar-nav-item-recent-login-history',
-            padding: '35px'
+            padding: '35px',
+            isSubLink: true
           },
           {
             id: 'RVRg5S',
             href: ROUTES.NOTIFICATIONS,
             label: 'sidebar-nav-item-notifications',
-            padding: '35px'
+            padding: '35px',
+            isSubLink: true
           }
         ]
       },
       {
         id: 'JrGuYy',
-        href: '#',
+        href: '/whatsapp',
         label: 'sidebar-nav-item-whatsapp',
         icon: 'WhatsAppIcon',
         subLinks: [
@@ -146,25 +149,28 @@ export const siteSettings = {
             id: '9YcWhG',
             href: ROUTES.ACCOUNT_INFORMATION,
             label: 'sidebar-nav-item-account-information',
-            padding: '35px'
+            padding: '35px',
+            isSubLink: true
           },
           {
             id: 'j6OQzo',
             href: ROUTES.RECENT_LOGIN_HISTORY,
             label: 'sidebar-nav-item-recent-login-history',
-            padding: '35px'
+            padding: '35px',
+            isSubLink: true
           },
           {
             id: 'RVRg5S',
             href: ROUTES.NOTIFICATIONS,
             label: 'sidebar-nav-item-notifications',
-            padding: '35px'
+            padding: '35px',
+            isSubLink: true
           }
         ]
       },
       {
         id: 'nMtvIg',
-        href: '#',
+        href: '/settings',
         label: 'sidebar-nav-item-settings',
         icon: 'SettingsIcon',
         subLinks: [
@@ -172,19 +178,22 @@ export const siteSettings = {
             id: '9YcWhG',
             href: ROUTES.ACCOUNT_INFORMATION,
             label: 'sidebar-nav-item-account-information',
-            padding: '35px'
+            padding: '35px',
+            isSubLink: true
           },
           {
             id: 'j6OQzo',
             href: ROUTES.RECENT_LOGIN_HISTORY,
             label: 'sidebar-nav-item-recent-login-history',
-            padding: '35px'
+            padding: '35px',
+            isSubLink: true
           },
           {
             id: 'RVRg5S',
             href: ROUTES.NOTIFICATIONS,
             label: 'sidebar-nav-item-notifications',
-            padding: '35px'
+            padding: '35px',
+            isSubLink: true
           }
         ]
       },

@@ -164,7 +164,7 @@ export default function CreateOrUpdateTagForm({ initialValues }: IProps) {
           </div>
         </Card>
       </div>
-      <div className="mb-4 text-end">
+      <div className="mb-4 flex justify-end">
         {initialValues && (
           <Button
             variant="outline"

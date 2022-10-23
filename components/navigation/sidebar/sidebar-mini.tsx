@@ -11,7 +11,7 @@ const SidebarMini: React.FC = () => {
   const { t } = useTranslation();
 
   return (
-    <aside className="w-22 xl:w-76 hidden h-full lg:block md:block overflow-y-auto bg-sidenav fixed start-0 bottom-0 pt-4">
+    <aside className="w-22 xl:w-76 hidden h-full lg:block md:block overflow-y-auto bg-sidenav fixed start-0 bottom-0 pt-4 z-50">
       <div className="relative">
         <Logo />
       </div>

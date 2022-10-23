@@ -12,7 +12,7 @@ const Thumbs = ({ photos }) => {
   }
 
   return (
-    <ul className="flex flex-wrap items-center justify-center md:justify-start">
+    <ul className="flex flex-wrap items-center">
       {photos?.map(({ id, image, placeholder }) => {
         return (
           // eslint-disable-next-line jsx-a11y/click-events-have-key-events

@@ -7,7 +7,6 @@ import ActiveLink from '@components/ui/activeLink';
 import { useUI } from '@contexts/ui.context';
 import cn from 'classnames';
 import isEmpty from 'lodash/isEmpty';
-import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import React, { Dispatch, SetStateAction, useMemo, useState } from 'react';
 
@@ -21,6 +20,7 @@ interface Props {
   margin?: boolean;
   showTriangle?: boolean;
   isSublevel?: boolean;
+  isSubLink?: boolean;
   subLinks?: {
     id: string;
     href: string;
@@ -28,6 +28,7 @@ interface Props {
     label: string;
     line?: boolean;
     padding: string;
+    isSubLink?: boolean;
     subLinks?: {
       id: string;
       href: string;
@@ -35,6 +36,7 @@ interface Props {
       label: string;
       line?: boolean;
       padding: string;
+      isSubLink?: boolean;
     }[];
   }[];
   padding?: string;
@@ -64,10 +66,12 @@ const SidebarItem = ({
   padding,
   isSublevel,
   showLinkId,
+  isSubLink,
   setShowLinkId
 }: Props) => {
   const { t } = useTranslation();
-  const { asPath } = useRouter();
+
+  const { closeSublevelSidebar } = useUI();
   const [showLinksLevel2, setShowLinksLevel2] = useState<string>('');
 
   const hadSubLinks = useMemo(() => !isEmpty(subLinks), [subLinks]);
@@ -79,18 +83,19 @@ const SidebarItem = ({
     });
   };
 
-  const currentLink = useMemo(() => asPath?.split('/'), [asPath]);
-  const inLink = useMemo(() => href?.split('/'), [href]);
-
-  const linkOpenHighlight = currentLink[0] === inLink[0] && showLinkId === id;
+  const sublevelOpen = showLinkId === id;
 
   return (
     <React.Fragment>
       {hadSubLinks ? (
         <div
           className={cn(
-            'overflow-hidden cursor-pointer justify-between flex w-full pl-6 hover:!bg-sidenav-active-hover-color p-2 items-center text-base text-sidenav-color text-start focus:text-accent hover:border-solid hover:border-green-300 hover:text-white hover:border-l-2 border-l-2 border-transparent border-solid',
-            { 'nav-sub-links-bg': !!padding, '!text-white': linkOpenHighlight }
+            'overflow-hidden cursor-pointer justify-between flex w-full pl-6 hover:!bg-sidenav-active-hover-color p-2 items-center text-base text-sidenav-color text-start focus:text-accent hover:border-solid hover:border-green-300 hover:text-white border-l-2 border-transparent border-solid',
+            {
+              'nav-sub-links-bg': !!padding,
+              '!text-white !bg-sidenav-active-hover-color border-green-300 border-solid':
+                sublevelOpen
+            }
           )}
           onClick={handleShowLinkId}
         >
@@ -106,6 +111,7 @@ const SidebarItem = ({
       ) : (
         <ActiveLink
           href={href}
+          onClick={closeSublevelSidebar}
           activeClassName={
             hadSubLinks
               ? ''
@@ -118,6 +124,7 @@ const SidebarItem = ({
             { 'nav-sub-links-bg': !!padding && !isSublevel }
           )}
           includes={includes}
+          isSubLink={isSubLink}
         >
           <SidebarLabel
             id={id}
@@ -136,22 +143,25 @@ const SidebarItem = ({
             'sub-nav-height-transition-open': showLinkId === id
           })}
         >
-          {subLinks?.map(({ id, href, label, icon, padding, subLinks }) => (
-            <SidebarItem
-              key={id}
-              id={id}
-              href={href}
-              label={t(label)}
-              icon={icon}
-              includes={href}
-              subLinks={subLinks}
-              padding={padding}
-              // showTriangle
-              showLinkId={showLinksLevel2}
-              setShowLinkId={setShowLinksLevel2}
-              isSublevel={isSublevel}
-            />
-          ))}
+          {subLinks?.map(
+            ({ id, href, label, icon, padding, subLinks, isSubLink }) => (
+              <SidebarItem
+                key={id}
+                id={id}
+                href={href}
+                label={t(label)}
+                icon={icon}
+                includes={href}
+                subLinks={subLinks}
+                padding={padding}
+                // showTriangle
+                showLinkId={showLinksLevel2}
+                isSubLink={isSubLink}
+                setShowLinkId={setShowLinksLevel2}
+                isSublevel={isSublevel}
+              />
+            )
+          )}
         </div>
       )}
       {line && (

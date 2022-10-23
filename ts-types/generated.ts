@@ -112,6 +112,12 @@ export interface StaffType extends CreatedUpdatedByAt {
   active: boolean;
   csrfToken?: string;
   csrfError?: string;
+  // JWT
+  uid?: string;
+  iss?: string;
+  iat?: number;
+  exp?: number;
+  ali?: string;
 }
 
 export interface Category extends CreatedUpdatedByAt {

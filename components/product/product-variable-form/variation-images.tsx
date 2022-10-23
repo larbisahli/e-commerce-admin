@@ -98,7 +98,7 @@ const GalleryShowcase = ({
         }}
       >
         <ImageComponent
-          src={image ?? '/placeholders/no-image.svg'}
+          src={image}
           customPlaceholder={placeholder}
           layout="fill"
           objectFit="cover"
