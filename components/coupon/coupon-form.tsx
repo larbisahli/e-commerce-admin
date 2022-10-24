@@ -76,7 +76,7 @@ function SelectTypes({
         getOptionValue={(option: any) => option.value}
         options={couponDiscountTypes!}
       />
-      <ValidationError message={t(errors.discountType?.message)} />
+      <ValidationError message={t(errors?.discountType?.message)} />
     </div>
   );
 }
@@ -286,7 +286,7 @@ export default function CreateOrUpdateCouponForm({ initialValues }: IProps) {
           </div>
         </Card>
       </div>
-      <div className="mb-4 text-end">
+      <div className="mb-4 flex justify-end items-center">
         {initialValues && (
           <Button
             variant="outline"

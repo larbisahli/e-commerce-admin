@@ -18,26 +18,6 @@ export const STAFF_INFO = gql`
         roleName
         privileges
       }
-      createdAt
-      updatedAt
-      createdBy {
-        id
-        firstName
-        lastName
-        profile {
-          image
-          placeholder
-        }
-      }
-      updatedBy {
-        id
-        firstName
-        lastName
-        profile {
-          image
-          placeholder
-        }
-      }
     }
   }
 `;
@@ -59,26 +39,6 @@ export const STAFF = gql`
         id
         roleName
         privileges
-      }
-      createdAt
-      updatedAt
-      createdBy {
-        id
-        firstName
-        lastName
-        profile {
-          image
-          placeholder
-        }
-      }
-      updatedBy {
-        id
-        firstName
-        lastName
-        profile {
-          image
-          placeholder
-        }
       }
     }
   }
@@ -114,11 +74,19 @@ export const STAFFS = gql`
         id
         firstName
         lastName
+        profile {
+          image
+          placeholder
+        }
       }
       updatedBy {
         id
         firstName
         lastName
+        profile {
+          image
+          placeholder
+        }
       }
     }
   }

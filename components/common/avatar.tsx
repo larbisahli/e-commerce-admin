@@ -8,8 +8,8 @@ type AvatarProps = {
   src: string;
   customPlaceholder: string;
   alt?: string;
-  width?: number;
-  height?: number;
+  width?: string;
+  height?: string;
 };
 
 const Avatar: React.FC<AvatarProps> = ({
@@ -17,13 +17,17 @@ const Avatar: React.FC<AvatarProps> = ({
   customPlaceholder,
   className,
   alt = 'Avatar',
+  width = 'w-10',
+  height = 'h-10',
   ...rest
 }) => {
   return (
     <div
       className={cn(
-        'relative cursor-pointer w-10 h-10 overflow-hidden rounded-full',
-        className
+        'relative cursor-pointer overflow-hidden rounded-full',
+        className,
+        width,
+        height
       )}
       {...rest}
     >

@@ -40,11 +40,19 @@ export const PRODUCTS = gql`
         id
         firstName
         lastName
+        profile {
+          image
+          placeholder
+        }
       }
       updatedBy {
         id
         firstName
         lastName
+        profile {
+          image
+          placeholder
+        }
       }
     }
   }
@@ -127,26 +135,6 @@ export const PRODUCT = gql`
         dimensionDepth
         dimensionUnit {
           unit
-        }
-      }
-      createdAt
-      updatedAt
-      createdBy {
-        id
-        firstName
-        lastName
-        profile {
-          image
-          placeholder
-        }
-      }
-      updatedBy {
-        id
-        firstName
-        lastName
-        profile {
-          image
-          placeholder
         }
       }
     }

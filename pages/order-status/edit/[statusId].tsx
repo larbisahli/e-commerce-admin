@@ -16,7 +16,7 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 interface TOrderStatus {
-  orderStatusForAdmin: OrderStatus;
+  getOrderStatus: OrderStatus;
 }
 interface OptionsVariable {
   id: string | string[];
@@ -53,9 +53,7 @@ export default function UpdateOrderStatusPage({ client }: SSRProps) {
           {t('form:form-title-edit-order-status')}
         </h1>
       </div>
-      <CreateOrUpdateOrderStatusForm
-        initialValues={data?.orderStatusForAdmin}
-      />
+      <CreateOrUpdateOrderStatusForm initialValues={data?.getOrderStatus} />
     </>
   );
 }

@@ -17,11 +17,11 @@ import isEmpty from 'lodash/isEmpty';
 import type { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 interface TOrderStatus {
-  orderStatusesForAdmin: OrderStatus[];
-  orderStatusCount: { count: number };
+  getOrderStatuses: OrderStatus[];
+  getOrderStatusCount: { count: number };
 }
 
 interface OptionsVariable {
@@ -37,9 +37,6 @@ export default function OrderStatusPage({ client }: SSRProps) {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState({ id: 1, value: 10, label: 10 });
   const [orderBy, setOrder] = useState(OrderBy.CREATED_AT);
-  const [orderStatuses, setOrderStatuses] = useState<OrderStatus[]>(
-    [] as OrderStatus[]
-  );
 
   const { data, loading, error, fetchMore } = useQuery<
     TOrderStatus,
@@ -54,17 +51,11 @@ export default function OrderStatusPage({ client }: SSRProps) {
     fetchPolicy: 'cache-and-network'
   });
 
-  const orderStatusCount = data?.orderStatusCount?.count;
+  const orderStatusCount = data?.getOrderStatusCount?.count;
+  const orderStatuses = data?.getOrderStatuses;
 
   useGetStaff(client);
   useErrorLogger(error);
-
-  useEffect(() => {
-    const orderStatusesForAdmin = data?.orderStatusesForAdmin;
-    if (!isEmpty(orderStatusesForAdmin)) {
-      setOrderStatuses(() => orderStatusesForAdmin);
-    }
-  }, [data]);
 
   function handlePagination(current: any) {
     setPage(current);

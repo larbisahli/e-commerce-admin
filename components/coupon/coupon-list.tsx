@@ -4,6 +4,7 @@ import ActionButtons from '@components/common/action-buttons';
 import { CopyIcon } from '@components/icons/copy';
 import Badge from '@components/ui/badge/badge';
 import Pagination from '@components/ui/pagination';
+import ProfileCart from '@components/ui/profile-card';
 import { Table } from '@components/ui/table';
 import { notify } from '@lib/index';
 import { Nullable } from '@ts-types/custom.types';
@@ -68,7 +69,7 @@ const CouponList = ({
       key: 'orderAmountLimit',
       align: 'center',
       ellipsis: true,
-      width: 150,
+      width: 180,
       render: (orderAmountLimit: number) => (
         <span className="whitespace-nowrap">
           {orderAmountLimit ? `${orderAmountLimit} USD` : 'Any'}
@@ -173,14 +174,10 @@ const CouponList = ({
       dataIndex: 'createdBy',
       key: 'createdBy',
       align: alignLeft,
-      width: 100,
+      width: 140,
       ellipsis: true,
-      render: (createdBy: CreatedUpdatedByAt['createdBy']) => {
-        return (
-          <div>{`${createdBy?.firstName ?? ''} ${
-            createdBy?.lastName ?? ''
-          }`}</div>
-        );
+      render: (createdBy: CreatedUpdatedByAt['createdBy'], record: Coupon) => {
+        return <ProfileCart staff={createdBy} createdAt={record?.createdAt} />;
       }
     },
     {
@@ -190,12 +187,8 @@ const CouponList = ({
       align: alignLeft,
       width: 140,
       ellipsis: true,
-      render: (updatedBy: CreatedUpdatedByAt['updatedBy']) => {
-        return (
-          <div>{`${updatedBy?.firstName ?? ''} ${
-            updatedBy?.lastName ?? ''
-          }`}</div>
-        );
+      render: (updatedBy: CreatedUpdatedByAt['updatedBy'], record: Coupon) => {
+        return <ProfileCart staff={updatedBy} updatedAt={record?.updatedAt} />;
       }
     },
     {

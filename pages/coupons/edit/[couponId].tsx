@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import CouponCreateOrUpdateForm from '@components/ErrorBoundary/coupon/coupon-form';
+import CouponCreateOrUpdateForm from '@components/coupon/coupon-form';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
@@ -15,7 +15,7 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 interface TCoupon {
-  couponForAdmin: Coupon;
+  getCoupon: Coupon;
 }
 
 interface OptionsVariable {
@@ -33,7 +33,7 @@ export default function UpdateCouponPage({ client }: SSRProps) {
     fetchPolicy: 'cache-and-network'
   });
 
-  const coupon = data?.couponForAdmin;
+  const coupon = data?.getCoupon;
 
   useGetStaff(client);
   useErrorLogger(error);

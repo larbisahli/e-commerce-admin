@@ -20,11 +20,19 @@ export const TAGS = gql`
         id
         firstName
         lastName
+        profile {
+          image
+          placeholder
+        }
       }
       updatedBy {
         id
         firstName
         lastName
+        profile {
+          image
+          placeholder
+        }
       }
     }
   }
@@ -36,26 +44,6 @@ export const TAG = gql`
       id
       name
       icon
-      createdAt
-      updatedAt
-      createdBy {
-        id
-        firstName
-        lastName
-        profile {
-          image
-          placeholder
-        }
-      }
-      updatedBy {
-        id
-        firstName
-        lastName
-        profile {
-          image
-          placeholder
-        }
-      }
     }
   }
 `;

@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client';
 import Card from '@components/common/card';
 import SortForm from '@components/common/sort-form';
-import CouponList from '@components/ErrorBoundary/coupon/coupon-list';
+import CouponList from '@components/coupon/coupon-list';
 import { Add } from '@components/icons/add';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
@@ -17,11 +17,11 @@ import isEmpty from 'lodash/isEmpty';
 import type { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 interface TCoupon {
-  couponsForAdmin: Coupon[];
-  couponsCount: { count: number };
+  getCoupons: Coupon[];
+  getCouponsCount: { count: number };
 }
 
 interface OptionsVariable {
@@ -38,7 +38,6 @@ export default function Coupons({ client }: SSRProps) {
 
   const [page, setPage] = useState(1);
   const [orderBy, setOrder] = useState(OrderBy.CREATED_AT);
-  const [couponsData, setCouponsData] = useState<Coupon[]>([] as Coupon[]);
 
   const { data, loading, error, fetchMore } = useQuery<
     TCoupon,
@@ -53,17 +52,11 @@ export default function Coupons({ client }: SSRProps) {
     fetchPolicy: 'cache-and-network'
   });
 
-  const couponsCount = data?.couponsCount?.count;
+  const couponsCount = data?.getCouponsCount?.count;
+  const coupons = data?.getCoupons;
 
   useGetStaff(client);
   useErrorLogger(error);
-
-  useEffect(() => {
-    const couponsForAdmin = data?.couponsForAdmin;
-    if (!isEmpty(couponsForAdmin)) {
-      setCouponsData(() => couponsForAdmin);
-    }
-  }, [data]);
 
   function handlePagination(current: any) {
     setPage(current);
@@ -123,7 +116,7 @@ export default function Coupons({ client }: SSRProps) {
         </div>
       </Card>
       <CouponList
-        coupons={couponsData}
+        coupons={coupons}
         onPagination={handlePagination}
         total={couponsCount}
         currentPage={page}

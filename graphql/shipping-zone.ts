@@ -9,26 +9,6 @@ export const SHIPPING_ZONE = gql`
       active
       freeShipping
       rateType
-      createdAt
-      updatedAt
-      createdBy {
-        id
-        firstName
-        lastName
-        profile {
-          image
-          placeholder
-        }
-      }
-      updatedBy {
-        id
-        firstName
-        lastName
-        profile {
-          image
-          placeholder
-        }
-      }
     }
     zones(id: $id) {
       id
@@ -75,11 +55,19 @@ export const SHIPPING_ZONES = gql`
         id
         firstName
         lastName
+        profile {
+          image
+          placeholder
+        }
       }
       updatedBy {
         id
         firstName
         lastName
+        profile {
+          image
+          placeholder
+        }
       }
     }
   }

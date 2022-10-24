@@ -1,6 +1,7 @@
 import ActionButtons from '@components/common/action-buttons';
 import * as categoriesIcon from '@components/icons/category';
 import Pagination from '@components/ui/pagination';
+import ProfileCart from '@components/ui/profile-card';
 import { Table } from '@components/ui/table';
 import { Nullable } from '@ts-types/custom.types';
 import { Category, CreatedUpdatedByAt } from '@ts-types/generated';
@@ -85,14 +86,13 @@ const CategoryList = ({
       dataIndex: 'createdBy',
       key: 'createdBy',
       align: alignLeft,
-      width: 100,
+      width: 140,
       ellipsis: true,
-      render: (createdBy: CreatedUpdatedByAt['createdBy']) => {
-        return (
-          <div>{`${createdBy?.firstName ?? ''} ${
-            createdBy?.lastName ?? ''
-          }`}</div>
-        );
+      render: (
+        createdBy: CreatedUpdatedByAt['createdBy'],
+        record: Category
+      ) => {
+        return <ProfileCart staff={createdBy} createdAt={record?.createdAt} />;
       }
     },
     {
@@ -102,12 +102,11 @@ const CategoryList = ({
       align: alignLeft,
       width: 140,
       ellipsis: true,
-      render: (updatedBy: CreatedUpdatedByAt['updatedBy']) => {
-        return (
-          <div>{`${updatedBy?.firstName ?? ''} ${
-            updatedBy?.lastName ?? ''
-          }`}</div>
-        );
+      render: (
+        updatedBy: CreatedUpdatedByAt['updatedBy'],
+        record: Category
+      ) => {
+        return <ProfileCart staff={updatedBy} updatedAt={record?.updatedAt} />;
       }
     },
     {

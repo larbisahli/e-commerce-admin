@@ -1,6 +1,7 @@
 import ActionButtons from '@components/common/action-buttons';
 import Badge from '@components/ui/badge/badge';
 import Pagination from '@components/ui/pagination';
+import ProfileCart from '@components/ui/profile-card';
 import { Table } from '@components/ui/table';
 import { Nullable } from '@ts-types/custom.types';
 import {
@@ -81,14 +82,13 @@ const OrderStatusList = ({
       dataIndex: 'createdBy',
       key: 'createdBy',
       align: alignLeft,
-      width: 100,
+      width: 140,
       ellipsis: true,
-      render: (createdBy: CreatedUpdatedByAt['createdBy']) => {
-        return (
-          <div>{`${createdBy?.firstName ?? ''} ${
-            createdBy?.lastName ?? ''
-          }`}</div>
-        );
+      render: (
+        createdBy: CreatedUpdatedByAt['createdBy'],
+        record: OrderStatus
+      ) => {
+        return <ProfileCart staff={createdBy} createdAt={record?.createdAt} />;
       }
     },
     {
@@ -98,12 +98,11 @@ const OrderStatusList = ({
       align: alignLeft,
       width: 140,
       ellipsis: true,
-      render: (updatedBy: CreatedUpdatedByAt['updatedBy']) => {
-        return (
-          <div>{`${updatedBy?.firstName ?? ''} ${
-            updatedBy?.lastName ?? ''
-          }`}</div>
-        );
+      render: (
+        updatedBy: CreatedUpdatedByAt['updatedBy'],
+        record: OrderStatus
+      ) => {
+        return <ProfileCart staff={updatedBy} updatedAt={record?.updatedAt} />;
       }
     },
     {

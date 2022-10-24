@@ -20,6 +20,15 @@ export const PHOTOS = gql`
       image
       placeholder
       createdAt
+      updatedBy {
+        id
+        firstName
+        lastName
+        profile {
+          image
+          placeholder
+        }
+      }
     }
   }
 `;

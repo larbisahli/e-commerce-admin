@@ -170,7 +170,7 @@ export default function CreateOrUpdateOrderStatusForm({
         </Card>
       </div>
 
-      <div className="mb-4 text-end">
+      <div className="mb-4 flex items-center justify-end">
         {initialValues && (
           <Button
             variant="outline"

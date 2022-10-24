@@ -10,26 +10,6 @@ export const ATTRIBUTE = gql`
         value
         color
       }
-      createdAt
-      updatedAt
-      createdBy {
-        id
-        firstName
-        lastName
-        profile {
-          image
-          placeholder
-        }
-      }
-      updatedBy {
-        id
-        firstName
-        lastName
-        profile {
-          image
-          placeholder
-        }
-      }
     }
   }
 `;
@@ -62,11 +42,19 @@ export const ATTRIBUTES = gql`
         id
         firstName
         lastName
+        profile {
+          image
+          placeholder
+        }
       }
       updatedBy {
         id
         firstName
         lastName
+        profile {
+          image
+          placeholder
+        }
       }
     }
   }

@@ -83,11 +83,19 @@ export const HERO_CAROUSEL_LIST = gql`
         id
         firstName
         lastName
+        profile {
+          image
+          placeholder
+        }
       }
       updatedBy {
         id
         firstName
         lastName
+        profile {
+          image
+          placeholder
+        }
       }
     }
   }
@@ -113,26 +121,6 @@ export const HERO_SLIDE = gql`
       displayOrder
       published
       clicks
-      createdAt
-      updatedAt
-      createdBy {
-        id
-        firstName
-        lastName
-        profile {
-          image
-          placeholder
-        }
-      }
-      updatedBy {
-        id
-        firstName
-        lastName
-        profile {
-          image
-          placeholder
-        }
-      }
     }
   }
 `;

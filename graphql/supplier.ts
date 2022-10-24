@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 
 export const SUPPLIER = gql`
-  query attributes($id: ID!) {
+  query Supplier($id: ID!) {
     supplier(id: $id) {
       id
       name
@@ -16,26 +16,6 @@ export const SUPPLIER = gql`
       }
       city
       note
-      createdAt
-      updatedAt
-      createdBy {
-        id
-        firstName
-        lastName
-        profile {
-          image
-          placeholder
-        }
-      }
-      updatedBy {
-        id
-        firstName
-        lastName
-        profile {
-          image
-          placeholder
-        }
-      }
     }
   }
 `;
@@ -72,11 +52,19 @@ export const SUPPLIERS = gql`
         id
         firstName
         lastName
+        profile {
+          image
+          placeholder
+        }
       }
       updatedBy {
         id
         firstName
         lastName
+        profile {
+          image
+          placeholder
+        }
       }
     }
   }
