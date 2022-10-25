@@ -16,7 +16,7 @@ interface ImageType {
   error?: any;
 }
 
-export default function Uploader({ setLoading }: any) {
+export default function Uploader({ setLoading, setPhotos }: any) {
   const { t } = useTranslation();
 
   const [error, setError] = useState(null);
@@ -43,6 +43,9 @@ export default function Uploader({ setLoading }: any) {
 
               if (image.success) {
                 setLoading(false);
+                setPhotos((prev) => {
+                  return [...prev, image];
+                });
               }
 
               // @ts-ignore

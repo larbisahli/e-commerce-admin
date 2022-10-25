@@ -7,6 +7,7 @@ import { Nullable } from '@ts-types/custom.types';
 import { Category, CreatedUpdatedByAt } from '@ts-types/generated';
 import { useIsRTL } from '@utils/locals';
 import { ROUTES } from '@utils/routes';
+import cn from 'classnames';
 import dayjs from 'dayjs';
 import isEmpty from 'lodash/isEmpty';
 import { useTranslation } from 'next-i18next';
@@ -39,9 +40,16 @@ const CategoryList = ({
       align: alignLeft,
       width: 150,
       ellipsis: true,
-      render: (name: string) => {
+      render: (name: string, record: Category) => {
         return (
-          <span className="font-semibold text-gray-800 capitalize">{name}</span>
+          <span
+            className={cn('font-semibold text-gray-800 capitalize', {
+              'pl-3': !!record?.parentId,
+              'text-gray-600': !!record?.parentId
+            })}
+          >
+            {name}
+          </span>
         );
       }
     },

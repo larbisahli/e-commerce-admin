@@ -1,7 +1,7 @@
 import LoginForm from '@components/auth/login-form';
 import LogoSvg from '@components/icons/logo';
 import { useGetStaff } from '@hooks/useGetStaff';
-import { verifyJWT, XSRFHandler } from '@middleware/utils';
+import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { ROUTES } from '@utils/routes';
 import { GetServerSideProps } from 'next';
@@ -54,7 +54,7 @@ const LoginPage = ({ client }: SSRProps) => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { locale } = context;
-  const { client, error } = verifyJWT(context);
+  const { client, error } = await verifyAuth(context);
 
   if (client) {
     return {
@@ -64,7 +64,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       }
     };
   }
+
   const { csrfToken, csrfError } = await XSRFHandler(context);
+
   return {
     props: {
       ...(await serverSideTranslations(locale!, ['error', 'common', 'form'])),

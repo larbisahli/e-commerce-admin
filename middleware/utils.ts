@@ -6,6 +6,7 @@ import { StaffType } from '@ts-types/generated';
 import Cookies from 'cookies';
 import Tokens from 'csrf';
 import jwt, { Algorithm } from 'jsonwebtoken';
+import isEmpty from 'lodash/isEmpty';
 import { GetServerSidePropsContext } from 'next';
 import { serializeError } from 'serialize-error';
 
@@ -45,7 +46,7 @@ export async function verifyAuth(context: GetServerSidePropsContext) {
 
     if (
       !payload ||
-      !payload.iss ||
+      !payload?.uid ||
       !payload.ali ||
       payload.iss !== process.env.TOKEN_ISSUER
     ) {
@@ -67,10 +68,19 @@ export async function verifyAuth(context: GetServerSidePropsContext) {
 
     const client = data?.staffInfo;
 
-    return { client: { ...(client ?? {}), ...payload } };
+    return {
+      client: { ...(client ?? {}), ...(!isEmpty(client) ? payload : {}) }
+    };
   } catch (error) {
     console.log('verifyAuth Error:>>', { error });
-    return { error: { ...serializeError(error), jwtToken } };
+    const cookies = new Cookies(req, res);
+    cookies.set(CookieNames.STAFF_TOKEN_NAME, '', {
+      httpOnly: true,
+      maxAge: 0,
+      sameSite: 'strict',
+      secure: PRODUCTION_ENV
+    });
+    return { error: { message: error?.message, jwtToken } };
   }
 }
 

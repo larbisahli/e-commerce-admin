@@ -43,6 +43,7 @@ const defaultValues = {
   discount_value: 0,
   maxUsage: 0,
   orderAmountLimit: 0,
+  discountValue: 0,
   couponStartDate: new Date(),
   couponEndDate: new Date()
 };
@@ -160,7 +161,7 @@ export default function CreateOrUpdateCouponForm({ initialValues }: IProps) {
       discountValue:
         discountType === CouponType.FreeShipping
           ? 0
-          : Number(values.discountValue),
+          : Number(values.discountValue ?? 0),
       discountType,
       maxUsage: Number(values.maxUsage),
       couponStartDate: pgFormatDate(values.couponStartDate),
@@ -223,7 +224,7 @@ export default function CreateOrUpdateCouponForm({ initialValues }: IProps) {
               error={t(errors.discountValue?.message!)}
               variant="outline"
               className="mb-5"
-              min="0"
+              min={0}
               max={couponType?.value === CouponType.Percentage ? 100 : null}
             />
           )}

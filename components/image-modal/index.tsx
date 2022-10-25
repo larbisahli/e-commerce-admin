@@ -13,7 +13,6 @@ import { PHOTOS } from '@graphql/photo';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { IMAGE_MODAL } from '@ts-types/constants';
 import { ImageType, OrderBy, SortOrder } from '@ts-types/generated';
-import isEmpty from 'lodash/isEmpty';
 import { useTranslation } from 'next-i18next';
 import Pagination from 'rc-pagination';
 import { useEffect, useState } from 'react';
@@ -48,6 +47,7 @@ const ImageModal = ({ onSelect, selected, isThumbnail }: Props) => {
   const { isOpen, view } = useModalState();
 
   const [loading, setLoading] = useState<boolean>(false);
+  const [photos, setPhotos] = useState<ImageType[]>([]);
   const [selectedImages, setSelectedImages] = useState<ImageType[]>(
     () => selected
   );
@@ -76,7 +76,12 @@ const ImageModal = ({ onSelect, selected, isThumbnail }: Props) => {
   });
 
   const photosCount = data?.getPhotosCount?.count;
-  const photos = data?.getPhotos;
+
+  useEffect(() => {
+    setPhotos((prev) => {
+      return [...prev, ...(data?.getPhotos ?? [])];
+    });
+  }, [data]);
 
   useErrorLogger(error);
 
@@ -115,37 +120,33 @@ const ImageModal = ({ onSelect, selected, isThumbnail }: Props) => {
           <div className="bg-white min-h-[600px] h-full w-full md:w-[80vw]">
             <div className="w-fit p-4 font-semibold text-lg">Store Images</div>
             <div className="m-4">
-              <Uploader setLoading={setLoading} />
+              <Uploader setLoading={setLoading} setPhotos={setPhotos} />
             </div>
             <div className="flex flex-col justify-between p-4 relative my-5 min-h-full">
               {loadingPhotos && (
                 <Loader height="40vh" text={t('common:text-loading')} />
               )}
-              {(!isEmpty(photos) || loadingPhotos) && (
-                <div className="overflow-y-auto md:h-[350px] h-full">
-                  <ul className="flex flex-wrap items-center justify-center md:justify-start px-[8px]">
-                    {loading && (
-                      <li className="rounded-sm mt-2 me-2 relative">
-                        <div className="relative min-w-0 w-24 h-24 overflow-hidden rounded-sm">
-                          <div className="h-16 flex items-center justify-center mt-2 ms-2">
-                            <Loader simple={true} className="w-6 h-6" />
-                          </div>
+              <div className="overflow-y-auto md:h-[350px] h-full">
+                <ul className="flex flex-wrap items-center justify-center md:justify-start px-[8px]">
+                  {loading && (
+                    <li className="rounded-sm mt-2 me-2 relative">
+                      <div className="relative min-w-0 w-24 h-24 overflow-hidden rounded-sm">
+                        <div className="h-16 flex items-center justify-center mt-2 ms-2">
+                          <Loader simple={true} className="w-6 h-6" />
                         </div>
-                      </li>
-                    )}
-                    {!isEmpty(photos) && (
-                      <ImageThumbs
-                        {...{
-                          photos,
-                          setSelectedImages,
-                          selectedImages,
-                          isThumbnail
-                        }}
-                      />
-                    )}
-                  </ul>
-                </div>
-              )}
+                      </div>
+                    </li>
+                  )}
+                  <ImageThumbs
+                    {...{
+                      photos,
+                      setSelectedImages,
+                      selectedImages,
+                      isThumbnail
+                    }}
+                  />
+                </ul>
+              </div>
               {!!photosCount && (
                 <div className="flex items-center mt-3 justify-between">
                   <div className="flex-1">
