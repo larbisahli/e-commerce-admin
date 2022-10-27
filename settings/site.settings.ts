@@ -27,7 +27,6 @@ export const siteSettings = {
       labelTransKey: 'authorized-nav-item-logout'
     }
   ],
-  currencyCode: 'USD',
   sidebarLinks: {
     admin: [
       {
@@ -53,37 +52,72 @@ export const siteSettings = {
         id: 'h4ifwC',
         href: ROUTES.PRODUCTS,
         label: 'sidebar-nav-item-products',
-        icon: 'ProductsIcon'
-      },
-      {
-        id: '489yLk',
-        href: ROUTES.CATEGORIES,
-        label: 'sidebar-nav-item-categories',
-        icon: 'CategoriesIcon'
-      },
-      {
-        id: 'vGN6vK',
-        href: ROUTES.ATTRIBUTES,
-        label: 'sidebar-nav-item-attributes',
-        icon: 'AttributeIcon'
-      },
-      {
-        id: 'yNqHtb',
-        href: ROUTES.TAGS,
-        label: 'sidebar-nav-item-tags',
-        icon: 'TagIcon'
-      },
-      {
-        id: 'tWw2Tg',
-        href: ROUTES.ORDER_STATUS,
-        label: 'sidebar-nav-item-order-status',
-        icon: 'OrdersStatusIcon'
+        icon: 'TagIcon',
+        subLinks: [
+          {
+            id: '4855yLk',
+            href: ROUTES.PRODUCTS,
+            label: 'sidebar-nav-item-all-products',
+            padding: '35px'
+          },
+          {
+            id: '48x5DLk',
+            href: `${ROUTES.PRODUCTS}/create`,
+            label: 'sidebar-nav-item-new-product',
+            padding: '35px'
+          },
+          {
+            id: '4859yLk',
+            href: ROUTES.CATEGORIES,
+            label: 'sidebar-nav-item-categories',
+            padding: '35px'
+          },
+          {
+            id: 'vGN65vK',
+            href: ROUTES.ATTRIBUTES,
+            label: 'sidebar-nav-item-attributes',
+            isSubLink: true,
+            padding: '35px'
+          },
+          {
+            id: 'yNqHtb',
+            href: ROUTES.TAGS,
+            label: 'sidebar-nav-item-tags',
+            padding: '35px'
+          },
+          {
+            id: 'D2IcKt',
+            href: ROUTES.SUPPLIERS,
+            label: 'sidebar-nav-item-suppliers',
+            padding: '35px'
+          },
+          {
+            id: 'D2IXKt',
+            href: ROUTES.SUPPLIERS,
+            label: 'sidebar-nav-item-reviews',
+            padding: '35px'
+          }
+        ]
       },
       {
         id: 'Qk3MiG',
         href: ROUTES.COUPONS,
         label: 'sidebar-nav-item-coupons',
-        icon: 'CouponsIcon'
+        icon: 'CouponsIcon',
+        subLinks: [
+          {
+            id: '9sYcWhG',
+            href: ROUTES.COUPONS,
+            label: 'sidebar-nav-item-all-coupons',
+            padding: '35px'
+          },
+          {
+            id: 'C6OQzo',
+            href: `${ROUTES.COUPONS}/create`,
+            label: 'sidebar-nav-item-new-coupon',
+            padding: '35px'
+          }
+        ]
       },
       {
         id: 'JiCQsO',
@@ -92,10 +126,10 @@ export const siteSettings = {
         icon: 'ShippingsIcon'
       },
       {
-        id: 'D2IcKt',
-        href: ROUTES.SUPPLIERS,
-        label: 'sidebar-nav-item-suppliers',
-        icon: 'SuppliersIcon'
+        id: 'tWw2Tg',
+        href: ROUTES.ORDER_STATUS,
+        label: 'sidebar-nav-item-order-status',
+        icon: 'OrdersStatusIcon'
       },
       {
         id: 'WaIqCI',
@@ -120,22 +154,19 @@ export const siteSettings = {
             id: '9YcWhG',
             href: ROUTES.ACCOUNT_INFORMATION,
             label: 'sidebar-nav-item-account-information',
-            padding: '35px',
-            isSubLink: true
+            padding: '35px'
           },
           {
             id: 'j6OQzo',
             href: ROUTES.RECENT_LOGIN_HISTORY,
             label: 'sidebar-nav-item-recent-login-history',
-            padding: '35px',
-            isSubLink: true
+            padding: '35px'
           },
           {
             id: 'RVRg5S',
             href: ROUTES.NOTIFICATIONS,
             label: 'sidebar-nav-item-notifications',
-            padding: '35px',
-            isSubLink: true
+            padding: '35px'
           }
         ]
       },
@@ -149,22 +180,19 @@ export const siteSettings = {
             id: '9YcWhG',
             href: ROUTES.ACCOUNT_INFORMATION,
             label: 'sidebar-nav-item-account-information',
-            padding: '35px',
-            isSubLink: true
+            padding: '35px'
           },
           {
             id: 'j6OQzo',
             href: ROUTES.RECENT_LOGIN_HISTORY,
             label: 'sidebar-nav-item-recent-login-history',
-            padding: '35px',
-            isSubLink: true
+            padding: '35px'
           },
           {
             id: 'RVRg5S',
             href: ROUTES.NOTIFICATIONS,
             label: 'sidebar-nav-item-notifications',
-            padding: '35px',
-            isSubLink: true
+            padding: '35px'
           }
         ]
       },
@@ -178,22 +206,19 @@ export const siteSettings = {
             id: '9YcWhG',
             href: ROUTES.ACCOUNT_INFORMATION,
             label: 'sidebar-nav-item-account-information',
-            padding: '35px',
-            isSubLink: true
+            padding: '35px'
           },
           {
             id: 'j6OQzo',
             href: ROUTES.RECENT_LOGIN_HISTORY,
             label: 'sidebar-nav-item-recent-login-history',
-            padding: '35px',
-            isSubLink: true
+            padding: '35px'
           },
           {
             id: 'RVRg5S',
             href: ROUTES.NOTIFICATIONS,
             label: 'sidebar-nav-item-notifications',
-            padding: '35px',
-            isSubLink: true
+            padding: '35px'
           }
         ]
       },

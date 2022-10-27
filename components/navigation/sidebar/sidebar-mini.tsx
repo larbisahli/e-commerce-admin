@@ -11,11 +11,11 @@ const SidebarMini: React.FC = () => {
   const { t } = useTranslation();
 
   return (
-    <aside className="w-22 xl:w-76 hidden h-full lg:block md:block overflow-y-auto bg-sidenav fixed start-0 bottom-0 pt-4 z-50">
-      <div className="relative">
-        <Logo />
-      </div>
-      <Scrollbar className="flex flex-col w-full h-full space-y-12">
+    <aside className="w-22 lg:hidden md:block hidden h-full overflow-y-auto bg-sidenav fixed start-0 bottom-0 pt-4 z-50">
+      <Scrollbar className="flex flex-col w-full h-full space-y-3">
+        <div className="relative">
+          <Logo />
+        </div>
         <div className="flex justify-center my-2">
           <div className="h-[2px] w-[76%] bg-sidenav-divider"></div>
         </div>

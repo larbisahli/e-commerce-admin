@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import type { Nullable, PrivilegesType, Scalars } from './custom.types';
+import { RateType } from './enums';
 
 export enum SortOrder {
   Asc = 'ASC',
@@ -36,11 +37,6 @@ export enum PrivacyType {
 export enum ProductType {
   Simple = 'simple',
   Variable = 'variable'
-}
-
-export enum ShippingRateEnum {
-  Weight = 'weight',
-  Price = 'price'
 }
 
 export declare enum WithdrawStatus {
@@ -209,7 +205,7 @@ export interface ShippingZoneType extends CreatedUpdatedByAt {
     displayName?: Scalars['String'];
     active?: Scalars['Boolean'];
     freeShipping?: Scalars['Boolean'];
-    rateType?: { id?: number; name?: string; type?: string };
+    rateType?: { id?: number; name?: string; type?: RateType };
   };
   zones?: CountriesType[];
   shippingRates?: ShippingRateType[];
@@ -226,13 +222,13 @@ export interface ShippingRateType {
 }
 
 export interface CountriesType {
-  id: Scalars['ID'];
-  iso: Scalars['String'];
-  name: Scalars['String'];
-  upperName?: Scalars['String'];
-  iso3?: Scalars['String'];
-  numCode?: Scalars['String'];
-  phoneCode?: Scalars['String'];
+  id?: Scalars['ID'];
+  currency?: Scalars['String'];
+  name?: Scalars['String'];
+  phone_code?: Scalars['String'];
+  iso2?: Scalars['String'];
+  region?: Scalars['String'];
+  subregion?: Scalars['String'];
 }
 
 export declare type ContactDetails = {
@@ -310,11 +306,12 @@ export interface VariationOptionsType {
 }
 
 // Attachment
-export interface ImageType extends CreatedUpdatedByAt {
+export interface ImageType {
   id?: Scalars['String'];
   image?: Scalars['String'];
   placeholder?: Scalars['String'];
   isThumbnail?: boolean;
+  createdAt?: Scalars['DateTime'];
 }
 export interface Suppliers extends CreatedUpdatedByAt {
   id?: Scalars['ID'];
@@ -344,6 +341,24 @@ export interface HeroCarouselType extends CreatedUpdatedByAt {
   published?: Scalars['Boolean'];
   status?: 'draft' | 'publish';
   clicks?: Scalars['Int'];
+}
+
+export interface SettingsType {
+  siteTitle: Scalars['String'];
+  siteSubtitle: Scalars['String'];
+  currency: {
+    symbol: Scalars['String'];
+    name: Scalars['String'];
+    symbol_native: Scalars['String'];
+    decimal_digits: Scalars['Int'];
+    rounding: Scalars['Int'];
+    code: Scalars['String'];
+    name_plural: Scalars['String'];
+  };
+  logo: {
+    thumbnail: Scalars['String'];
+    original: Scalars['String'];
+  };
 }
 
 // export declare type Address = {

@@ -3,7 +3,9 @@ import Checkbox from '@components/ui/checkbox';
 import Input from '@components/ui/input';
 import Label from '@components/ui/label';
 import SelectInput from '@components/ui/select-input';
-import { ShippingRateEnum, ShippingRateType } from '@ts-types/generated';
+import { useSettings } from '@contexts/settings.context';
+import { RateType } from '@ts-types/enums';
+import { ShippingRateType } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
 
 interface ZoneProps {
@@ -36,6 +38,11 @@ const RateComponent = ({
   const hasNoMax = watch(`shippingRates.${index}.noMax`);
   const rateType = watch('shippingZone.rateType');
 
+  const { currency } = useSettings();
+
+  const currencySymbol =
+    rateType.type === RateType.PRICE ? `(${currency.symbol})` : '';
+
   return (
     <div className="relative border border-solid border-border-200 last:border-0 mt-4 rounded-md">
       <div className="border-b flex items-center justify-between py-2 px-4">
@@ -58,7 +65,7 @@ const RateComponent = ({
         className="border border-solid border-gray-200 p-2 m-4 rounded-md"
       >
         <div className="flex items-center">
-          {rateType.type === ShippingRateEnum.Weight && (
+          {rateType.type === RateType.WEIGHT && (
             <div className="mr-2 min-w-fit">
               <Label>{t('form:input-label-unit')}</Label>
               <SelectInput
@@ -73,7 +80,9 @@ const RateComponent = ({
           )}
           <Input
             className="sm:col-span-2 mr-2"
-            label={`${t('form:input-label-min')} ${rateType.type}`}
+            label={`${t('form:input-label-min')} ${
+              rateType.type
+            } ${currencySymbol}`}
             type="number"
             // disabled={true}
             min={0}
@@ -83,7 +92,9 @@ const RateComponent = ({
           />
           <Input
             className="sm:col-span-2 mr-2"
-            label={`${t('form:input-label-max')} ${rateType.type}`}
+            label={`${t('form:input-label-max')} ${
+              rateType.type
+            } ${currencySymbol}`}
             type="number"
             min={0}
             step={0.1}
@@ -93,7 +104,7 @@ const RateComponent = ({
           />
           <Input
             className="sm:col-span-2"
-            label={t('form:input-label-price')}
+            label={`${t('form:input-label-price')} ${currencySymbol}`}
             type="number"
             min={0}
             step={0.1}

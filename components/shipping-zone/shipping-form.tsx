@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import Card from '@components/common/card';
 import { SaveIcon } from '@components/icons/save-icon';
 import Button from '@components/ui/button';
@@ -7,11 +7,7 @@ import Description from '@components/ui/description';
 import Input from '@components/ui/input';
 import Label from '@components/ui/label';
 import SelectInput from '@components/ui/select-input';
-import {
-  COUNTRIES,
-  CREATE_SHIPPING,
-  UPDATE_SHIPPING
-} from '@graphql/shipping-zone';
+import { CREATE_SHIPPING, UPDATE_SHIPPING } from '@graphql/shipping-zone';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   useErrorLogger,
@@ -20,11 +16,8 @@ import {
 } from '@hooks/index';
 import { notify } from '@lib/notify';
 import { Nullable } from '@ts-types/custom.types';
-import {
-  CountriesType,
-  ShippingRateEnum,
-  ShippingZoneType
-} from '@ts-types/generated';
+import { RateType } from '@ts-types/enums';
+import { ShippingZoneType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import clone from 'lodash/clone';
 import isEmpty from 'lodash/isEmpty';
@@ -44,17 +37,13 @@ const defaultValues = {
     displayName: '',
     active: false,
     freeShipping: false,
-    rateType: { id: 1, name: 'Weight', type: 'weight' }
+    rateType: { id: 1, name: 'Weight', type: RateType.WEIGHT }
   },
   zones: [],
   shippingRates: []
 };
 
 type FormValues = ShippingZoneType;
-
-type TCountries = {
-  countries: CountriesType[];
-};
 
 type IProps = {
   initialValues?: Nullable<ShippingZoneType>;
@@ -66,16 +55,16 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
 
   const [error, setError] = useState(null);
   const [unsavedChanges, setUnsavedChanges] = useState(true);
+  const [countries, setCountries] = useState([]);
 
-  const {
-    data,
-    loading: loadingCountries,
-    error: queryError
-  } = useQuery<TCountries>(COUNTRIES, {
-    fetchPolicy: 'cache-and-network'
-  });
-
-  const countries = data?.countries;
+  // Get Countries
+  useEffect(() => {
+    async function getCountries() {
+      const { Countries } = await import('@utils/countries');
+      setCountries(Countries);
+    }
+    getCountries();
+  }, []);
 
   const {
     register,
@@ -96,9 +85,9 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
           shippingZone: {
             ...initialValues?.shippingZone,
             rateType:
-              initialValues?.shippingZone?.rateType === 'weight'
-                ? { id: 1, name: 'Weight', type: 'weight' }
-                : { id: 0, name: 'Price', type: 'price' }
+              initialValues?.shippingZone?.rateType.type === RateType.WEIGHT
+                ? { id: 1, name: 'Weight', type: RateType.WEIGHT }
+                : { id: 0, name: 'Price', type: RateType.PRICE }
           },
           shippingRates: clone(initialValues?.shippingRates)
             ?.sort((a, b) =>
@@ -152,7 +141,6 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
   });
 
   useErrorLogger(error);
-  useErrorLogger(queryError);
 
   const onSubmit = async (values: ShippingZoneType) => {
     const checkFailed = shippingRatesValidation(values.shippingRates, false);
@@ -171,7 +159,7 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
         return {
           id: rate?.id,
           weightUnit:
-            shippingZone?.rateType?.type === ShippingRateEnum.Weight
+            shippingZone?.rateType?.type === RateType.WEIGHT
               ? rate?.weightUnit
               : null,
           minValue: Number(rate?.minValue),
@@ -181,9 +169,12 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
         };
       }),
       zones: zones?.map((zone) => {
-        return { id: zone.id };
+        return { iso: zone.iso2 };
       })
     };
+
+    console.log({ variables });
+    return;
 
     setUnsavedChanges(false);
     if (isEmpty(initialValues)) {
@@ -222,7 +213,7 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
     // Sometimes we get undefined when using watch('zones')
     const upToDateZones = getValues('zones');
     if (isEmpty(upToDateZones)) {
-      setValue('zones', [{ id: '0', name: 'Everywhere', iso: 'XX' }]);
+      setValue('zones', [{ id: '0', name: 'Everywhere', iso2: 'ALL' }]);
     } else if (upToDateZones.length > 1 && exist) {
       setValue(
         'zones',
@@ -333,9 +324,8 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
               control={control}
               isMulti
               getOptionLabel={(option: any) => option.name}
-              getOptionValue={(option: any) => option.name}
+              getOptionValue={(option: any) => option.iso2}
               options={countries}
-              isLoading={loadingCountries}
               closeMenuOnSelect={false}
               hideSelectedOptions={false}
             />
@@ -363,8 +353,8 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
                 getOptionLabel={(option: any) => option.name}
                 getOptionValue={(option: any) => option.type}
                 options={[
-                  { id: 1, name: 'Price', type: ShippingRateEnum.Price },
-                  { id: 1, name: 'Weight', type: ShippingRateEnum.Weight }
+                  { id: 0, name: 'Price', type: RateType.PRICE },
+                  { id: 1, name: 'Weight', type: RateType.WEIGHT }
                 ]}
               />
             </div>

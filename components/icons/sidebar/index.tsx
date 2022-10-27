@@ -1,4 +1,5 @@
 export { AffiliateIcon } from '@components/icons/sidebar/affiliate';
+export { AllProductsIcon } from '@components/icons/sidebar/all-products';
 export { AppsIcon } from '@components/icons/sidebar/apps';
 export { AttributeIcon } from '@components/icons/sidebar/attribute';
 export { AttributeValueIcon } from '@components/icons/sidebar/attribute-value';

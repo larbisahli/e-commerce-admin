@@ -1,19 +1,11 @@
 import Link from '@components/ui/link';
 import { siteSettings } from '@settings/site.settings';
-import cn from 'classnames';
 import Image from 'next/image';
 import React from 'react';
 
-const Logo: React.FC<React.AnchorHTMLAttributes<{}>> = ({
-  className,
-  ...props
-}) => {
+const Logo: React.FC<React.AnchorHTMLAttributes<{}>> = ({ ...props }) => {
   return (
-    <Link
-      href={siteSettings.logo.href}
-      className={'absolute top-0 left-0 right-0 flex'}
-      {...props}
-    >
+    <Link href={siteSettings.logo.href} {...props}>
       <div
         className="overflow-hidden"
         style={{

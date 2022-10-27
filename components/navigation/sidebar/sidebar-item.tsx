@@ -20,7 +20,6 @@ interface Props {
   margin?: boolean;
   showTriangle?: boolean;
   isSublevel?: boolean;
-  isSubLink?: boolean;
   subLinks?: {
     id: string;
     href: string;
@@ -28,7 +27,6 @@ interface Props {
     label: string;
     line?: boolean;
     padding: string;
-    isSubLink?: boolean;
     subLinks?: {
       id: string;
       href: string;
@@ -36,7 +34,6 @@ interface Props {
       label: string;
       line?: boolean;
       padding: string;
-      isSubLink?: boolean;
     }[];
   }[];
   padding?: string;
@@ -66,7 +63,6 @@ const SidebarItem = ({
   padding,
   isSublevel,
   showLinkId,
-  isSubLink,
   setShowLinkId
 }: Props) => {
   const { t } = useTranslation();
@@ -124,7 +120,6 @@ const SidebarItem = ({
             { 'nav-sub-links-bg': !!padding && !isSublevel }
           )}
           includes={includes}
-          isSubLink={isSubLink}
         >
           <SidebarLabel
             id={id}
@@ -143,25 +138,21 @@ const SidebarItem = ({
             'sub-nav-height-transition-open': showLinkId === id
           })}
         >
-          {subLinks?.map(
-            ({ id, href, label, icon, padding, subLinks, isSubLink }) => (
-              <SidebarItem
-                key={id}
-                id={id}
-                href={href}
-                label={t(label)}
-                icon={icon}
-                includes={href}
-                subLinks={subLinks}
-                padding={padding}
-                // showTriangle
-                showLinkId={showLinksLevel2}
-                isSubLink={isSubLink}
-                setShowLinkId={setShowLinksLevel2}
-                isSublevel={isSublevel}
-              />
-            )
-          )}
+          {subLinks?.map(({ id, href, label, icon, padding, subLinks }) => (
+            <SidebarItem
+              key={id}
+              id={id}
+              href={href}
+              label={t(label)}
+              icon={icon}
+              includes={href}
+              subLinks={subLinks}
+              padding={padding}
+              showLinkId={showLinksLevel2}
+              setShowLinkId={setShowLinksLevel2}
+              isSublevel={isSublevel}
+            />
+          ))}
         </div>
       )}
       {line && (
@@ -194,11 +185,9 @@ const SidebarLabel = ({
 
   return (
     <React.Fragment>
-      <div className="flex items-center">
+      <div className="flex items-center" style={{ paddingLeft: padding }}>
         {icon && TagName && <TagName className="w-5 h-5 me-4" />}
-        <span style={{ paddingLeft: padding }} onClick={handleCloseSidebar}>
-          {label}
-        </span>
+        <span onClick={handleCloseSidebar}>{label}</span>
       </div>
       {hadSubLinks && (
         <div className="mr-2">

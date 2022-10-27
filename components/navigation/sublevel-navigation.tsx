@@ -13,7 +13,6 @@ interface Props {
   href: string;
   icon?: string;
   label?: string;
-  isSubLink?: boolean;
   subLinks?: {
     id: string;
     href: string;
@@ -21,7 +20,6 @@ interface Props {
     label: string;
     line?: boolean;
     padding: string;
-    isSubLink?: boolean;
     subLinks?: {
       id: string;
       href: string;
@@ -29,7 +27,6 @@ interface Props {
       label: string;
       line?: boolean;
       padding: string;
-      isSubLink?: boolean;
     }[];
   }[];
 }
@@ -48,7 +45,9 @@ const SublevelNavigation: React.FC = () => {
     [SublevelSidebarId]
   );
 
-  const closeSublevel = useMediaQuery('max-width', 768);
+  const closeSublevelMd = useMediaQuery('max-width', 768);
+  const closeSublevelLg = useMediaQuery('min-width', 1024);
+  const closeSublevel = closeSublevelMd || closeSublevelLg;
 
   /**
    * Close sidebar when mini side bar disappears
@@ -69,11 +68,11 @@ const SublevelNavigation: React.FC = () => {
       <DrawerWrapper
         onClose={closeSublevelSidebar}
         label={t(SublevelBarLinks?.label)}
-        className="pl-22 xl:pl-76"
+        className="pl-22 xl:pl-76 lg:block"
       >
         <div className="flex flex-col py-3">
           {SublevelBarLinks?.subLinks?.map(
-            ({ id, href, label, icon, subLinks, isSubLink }: Props) => (
+            ({ id, href, label, icon, subLinks }: Props) => (
               <SidebarItem
                 id={id}
                 key={id}
@@ -82,7 +81,6 @@ const SublevelNavigation: React.FC = () => {
                 icon={icon}
                 includes={href}
                 subLinks={subLinks}
-                isSubLink={isSubLink}
                 showLinkId={showLinkIdLevel1}
                 setShowLinkId={setShowLinkIdLevel1}
                 padding={'10px'}

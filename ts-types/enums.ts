@@ -55,3 +55,8 @@ export enum CookieNames {
   CUSTOMER_SESSION_NAME = '_cuid',
   XSRF_TOKEN = 'xsrf-token'
 }
+
+export enum RateType {
+  WEIGHT = 'weight',
+  PRICE = 'price'
+}

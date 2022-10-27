@@ -1,20 +1,25 @@
+import { SettingsType } from '@ts-types/generated';
 import React, { useMemo } from 'react';
-export interface State {
-  settings: any;
-}
 
 const initialState = {
   siteTitle: 'DropGala',
   siteSubtitle: '',
-  currency: '$',
+  currency: {
+    symbol: '$',
+    name: 'US Dollar',
+    symbol_native: '$',
+    decimal_digits: 2,
+    rounding: 0,
+    code: 'USD',
+    name_plural: 'US dollars'
+  },
   logo: {
-    id: 1,
     thumbnail: '/logo.svg',
     original: '/logo.svg'
   }
 };
 
-export const SettingsContext = React.createContext<State | any>(initialState);
+export const SettingsContext = React.createContext<SettingsType>(initialState);
 
 SettingsContext.displayName = 'SettingsContext';
 

@@ -203,7 +203,7 @@ export default function CreateOrUpdateCouponForm({ initialValues }: IProps) {
             className="mb-5"
           />
           <Input
-            label={`${t('form:order-amount-limit')} (${currency})`}
+            label={`${t('form:order-amount-limit')} (${currency.symbol})`}
             {...register('orderAmountLimit')}
             type={'number'}
             min={0}
@@ -217,7 +217,9 @@ export default function CreateOrUpdateCouponForm({ initialValues }: IProps) {
           {couponType?.value !== CouponType.FreeShipping && (
             <Input
               label={`${t('form:input-label-discount-value')} (${
-                couponType?.value === CouponType.Percentage ? '%' : currency
+                couponType?.value === CouponType.Percentage
+                  ? '%'
+                  : currency.symbol
               })`}
               {...register('discountValue')}
               type="number"

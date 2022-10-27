@@ -1,7 +1,7 @@
 import SublevelNavigation from '@components/navigation/sublevel-navigation';
 import React from 'react';
 
-import { Navbar, SidebarMini } from '../navigation/index';
+import { Navbar, Sidebar, SidebarMini } from '../navigation/index';
 import MobileNavigation from '../navigation/mobile-navigation';
 
 type Props = {
@@ -15,7 +15,8 @@ const AppLayout: React.FC = ({ children }: Props) => {
       <SublevelNavigation />
       <div className="flex flex-1 pt-5">
         <SidebarMini />
-        <main className="w-full h-full md:ps-20 lg:ps-20 xl:ps-20">
+        <Sidebar />
+        <main className="w-full h-full md:ps-20 nlg:ps-20 nxl:ps-20 lg:ps-72 xl:ps-76">
           <Navbar />
           <div className="p-5 md:p-8 overflow-y-auto h-full">{children}</div>
         </main>

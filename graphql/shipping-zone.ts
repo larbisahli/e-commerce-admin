@@ -73,17 +73,6 @@ export const SHIPPING_ZONES = gql`
   }
 `;
 
-export const COUNTRIES = gql`
-  {
-    countries {
-      id
-      iso
-      name
-      phoneCode
-    }
-  }
-`;
-
 export const CREATE_SHIPPING = gql`
   mutation CreateShippingZone(
     $name: String!

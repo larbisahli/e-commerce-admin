@@ -9,7 +9,6 @@ type Props = {
   includes: string;
   className: string;
   children: React.ReactNode;
-  isSubLink?: boolean;
 };
 
 const ActiveLink: React.FC<NextLinkProps & Props> = ({
@@ -19,7 +18,6 @@ const ActiveLink: React.FC<NextLinkProps & Props> = ({
   className,
   includes,
   onClick,
-  isSubLink = false,
   ...props
 }) => {
   const { asPath } = useRouter();
@@ -30,11 +28,8 @@ const ActiveLink: React.FC<NextLinkProps & Props> = ({
     [includes]
   );
   const isIncluded = useMemo(
-    () =>
-      isSubLink
-        ? A.every((value) => B.includes(value))
-        : A.some((value) => B.includes(value)),
-    [isSubLink, A, B]
+    () => asPath === includes, //|| A.every((value) => B.includes(value)),
+    [A, B, asPath, includes]
   );
 
   const class_name =

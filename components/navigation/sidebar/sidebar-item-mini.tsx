@@ -28,7 +28,6 @@ interface Props {
     icon?: string;
     label: string;
     padding: string;
-    isSubLink: boolean;
   }[];
 }
 
@@ -92,7 +91,6 @@ const SidebarItem = ({
             { 'mb-12': margin }
           )}
           includes={includes}
-          hadSubLinks={hadSubLinks}
         >
           <SidebarLabel icon={icon} label={label} />
         </ActiveLink>

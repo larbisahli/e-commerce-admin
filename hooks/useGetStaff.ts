@@ -5,7 +5,6 @@ import { useContext, useEffect } from 'react';
 
 export function useGetStaff(client?: StaffType) {
   const { staffInfo, setStaffInfo } = useContext(StaffInfoContext);
-  console.log('-->', { client });
   useErrorLogger(client?.csrfError);
   useEffect(() => {
     if (client) {

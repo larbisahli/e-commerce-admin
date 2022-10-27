@@ -1,3 +1,4 @@
+import Logo from '@components/ui/logo';
 import Scrollbar from '@components/ui/scrollbar';
 import { siteSettings } from '@settings/site.settings';
 import classNames from 'classnames';
@@ -17,11 +18,17 @@ const Sidebar: React.FC<Props> = ({ absolute = false }) => {
   return (
     <aside
       className={classNames(
-        'w-64 xl:w-64 overflow-y-auto bg-sidenav fixed start-0 bottom-0 h-full',
+        'w-64 xl:w-64 overflow-y-auto bg-sidenav fixed start-0 bottom-0 h-full z-50',
         { hidden: !absolute, 'lg:block': !absolute, block: absolute }
       )}
     >
-      <Scrollbar className="flex flex-col w-full h-full space-y-5">
+      <Scrollbar className="flex flex-col w-full h-full">
+        <div className="py-3 pl-6 flex bg-blue-600 items-center">
+          <div className="relative">
+            <Logo />
+          </div>
+          <div className="px-2 text-white font-semibold text-lg">Ecomhost</div>
+        </div>
         {siteSettings.sidebarLinks.admin.map(
           ({ id, href, label, icon, line, subLinks }) => (
             <SidebarItem
@@ -35,7 +42,7 @@ const Sidebar: React.FC<Props> = ({ absolute = false }) => {
               subLinks={subLinks}
               showLinkId={showLinkIdLevel1}
               setShowLinkId={setShowLinkIdLevel1}
-              // showTriangle
+              showTriangle
             />
           )
         )}

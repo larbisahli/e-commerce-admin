@@ -230,5 +230,10 @@
   "sign-up": "Sign up",
   "create-your-store": "Create your store",
   "already-have-account": "Already have an account ?",
-  "not-yet-registered": "Not yet registered ?"
+  "not-yet-registered": "Not yet registered ?",
+  "sidebar-nav-item-all-products": "All Products",
+  "sidebar-nav-item-new-product": "New Product",
+  "sidebar-nav-item-reviews": "Reviews",
+  "sidebar-nav-item-all-coupons": "All Coupons",
+  "sidebar-nav-item-new-coupon": "New Coupon"
 }

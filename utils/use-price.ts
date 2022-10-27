@@ -1,6 +1,7 @@
-import { useMemo } from 'react';
-import { siteSettings } from '@settings/site.settings';
 import { useSettings } from '@contexts/settings.context';
+import { siteSettings } from '@settings/site.settings';
+import { useMemo } from 'react';
+
 export function formatPrice({
   amount,
   currencyCode,
@@ -49,7 +50,7 @@ type PriceProps = {
 };
 export default function usePrice(data?: PriceProps | null) {
   const { currency } = useSettings();
-  const { amount, baseAmount, currencyCode = currency } = data ?? {};
+  const { amount, baseAmount, currencyCode = currency.code } = data ?? {};
   const locale = siteSettings.defaultLanguage;
   const value = useMemo(() => {
     if (typeof amount !== 'number' || !currencyCode) return '';
