@@ -13,6 +13,7 @@ interface Props {
   href: string;
   icon?: string;
   label?: string;
+  isSubLink?: boolean;
   subLinks?: {
     id: string;
     href: string;
@@ -20,14 +21,7 @@ interface Props {
     label: string;
     line?: boolean;
     padding: string;
-    subLinks?: {
-      id: string;
-      href: string;
-      icon?: string;
-      label: string;
-      line?: boolean;
-      padding: string;
-    }[];
+    isSubLink?: boolean;
   }[];
 }
 
@@ -72,7 +66,7 @@ const SublevelNavigation: React.FC = () => {
       >
         <div className="flex flex-col py-3">
           {SublevelBarLinks?.subLinks?.map(
-            ({ id, href, label, icon, subLinks }: Props) => (
+            ({ id, href, label, icon, subLinks, isSubLink }: Props) => (
               <SidebarItem
                 id={id}
                 key={id}
@@ -85,6 +79,7 @@ const SublevelNavigation: React.FC = () => {
                 setShowLinkId={setShowLinkIdLevel1}
                 padding={'10px'}
                 isSublevel
+                isSubLink={isSubLink}
               />
             )
           )}

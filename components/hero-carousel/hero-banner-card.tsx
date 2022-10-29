@@ -4,7 +4,7 @@ import { ImageType } from '@ts-types/generated';
 import cn from 'classnames';
 
 interface ShowCaseProps {
-  thumbnail: ImageType;
+  thumbnail: ImageType[];
   btnLabel?: string;
   title?: string;
   description?: string;
@@ -21,7 +21,7 @@ const HeroBannerCard = ({
   return (
     <div
       className={cn(
-        'relative w-full  bg-no-repeat bg-cover bg-center flex items-center h-[300px]'
+        'relative w-full bg-no-repeat bg-cover bg-center flex items-center h-[300px]'
       )}
       style={{ zIndex: 0 }}
     >
@@ -30,8 +30,8 @@ const HeroBannerCard = ({
         style={{ zIndex: -1, borderRadius: '3px' }}
       >
         <ImageComponent
-          src={thumbnail?.image}
-          customPlaceholder={thumbnail?.placeholder}
+          src={thumbnail[0]?.image}
+          customPlaceholder={thumbnail[0]?.placeholder}
           layout="fill"
           objectFit="cover"
         />

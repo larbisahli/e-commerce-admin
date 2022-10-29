@@ -3,11 +3,11 @@ import { gql } from '@apollo/client';
 export const CREATE_HERO_SLIDE = gql`
   mutation CreateHeroSlide(
     $destinationUrl: String
-    $thumbnail: ImageInput!
+    $thumbnail:  [ImageInput!]
     $title: String
     $description: String
     $btnLabel: String
-    $styles: HeroBannerStyleInput
+    $styles: HeroBannerStyleInput!
     $displayOrder: Int!
     $published: Boolean
   ) {
@@ -28,9 +28,9 @@ export const CREATE_HERO_SLIDE = gql`
 
 export const UPDATE_HERO_SLIDE = gql`
   mutation UpdateHeroSlide(
-    $id: ID!
+    $id: Int!
     $destinationUrl: String
-    $thumbnail: ImageInput!
+    $thumbnail: [ImageInput!]
     $title: String
     $description: String
     $btnLabel: String
@@ -55,7 +55,7 @@ export const UPDATE_HERO_SLIDE = gql`
 `;
 
 export const DELETE_HERO_SLIDE = gql`
-  mutation DeleteHeroSlide($id: ID!) {
+  mutation DeleteHeroSlide($id: Int!) {
     deleteHeroSlide(id: $id) {
       id
     }
@@ -64,10 +64,10 @@ export const DELETE_HERO_SLIDE = gql`
 
 export const HERO_CAROUSEL_LIST = gql`
   query HeroCarouselList($page: Int!, $limit: Int!) {
-    heroCarouselListCount {
+    getHeroCarouselListCount {
       count
     }
-    heroCarouselListForAdmin(page: $page, limit: $limit) {
+    getHeroCarouselList(page: $page, limit: $limit) {
       id
       thumbnail {
         image
@@ -103,10 +103,11 @@ export const HERO_CAROUSEL_LIST = gql`
 
 export const HERO_SLIDE = gql`
   query HeroSlide($id: ID!) {
-    heroSlide(id: $id) {
+    getHeroSlide(id: $id) {
       id
       destinationUrl
       thumbnail {
+        id
         image
         placeholder
       }
@@ -120,7 +121,6 @@ export const HERO_SLIDE = gql`
       }
       displayOrder
       published
-      clicks
     }
   }
 `;

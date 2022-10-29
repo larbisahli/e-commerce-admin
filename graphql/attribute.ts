@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 
 export const ATTRIBUTE = gql`
-  query attribute($id: ID!) {
+  query attribute($id: Int!) {
     getAttribute(id: $id) {
       id
       name
@@ -93,7 +93,7 @@ export const CREATE_ATTRIBUTE = gql`
 
 export const UPDATE_ATTRIBUTE = gql`
   mutation UpdateAttribute(
-    $id: ID!
+    $id: Int!
     $name: String!
     $values: [AttributeValueInput]
   ) {
@@ -104,7 +104,7 @@ export const UPDATE_ATTRIBUTE = gql`
 `;
 
 export const DELETE_ATTRIBUTE = gql`
-  mutation DeleteAttribute($id: ID!) {
+  mutation DeleteAttribute($id: Int!) {
     deleteAttribute(id: $id) {
       name
     }
@@ -112,7 +112,7 @@ export const DELETE_ATTRIBUTE = gql`
 `;
 
 export const DELETE_ATTRIBUTE_VALUE = gql`
-  mutation DeleteAttributeValue($id: ID!) {
+  mutation DeleteAttributeValue($id: Int!) {
     deleteAttributeValue(id: $id) {
       value
     }

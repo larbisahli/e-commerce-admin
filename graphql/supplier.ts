@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 
 export const SUPPLIER = gql`
-  query Supplier($id: ID!) {
+  query Supplier($id: Int!) {
     supplier(id: $id) {
       id
       name
@@ -107,7 +107,7 @@ export const CREATE_SUPPLIER = gql`
 
 export const UPDATE_SUPPLIER = gql`
   mutation UpdateSupplier(
-    $id: ID!
+    $id: Int!
     $name: String!
     $company: String
     $phoneNumber: String
@@ -134,7 +134,7 @@ export const UPDATE_SUPPLIER = gql`
 `;
 
 export const DELETE_SUPPLIER = gql`
-  mutation DeleteSupplier($id: ID!) {
+  mutation DeleteSupplier($id: Int!) {
     deleteSupplier(id: $id) {
       name
     }

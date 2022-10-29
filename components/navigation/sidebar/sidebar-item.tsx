@@ -20,6 +20,7 @@ interface Props {
   margin?: boolean;
   showTriangle?: boolean;
   isSublevel?: boolean;
+  isSubLink?: boolean;
   subLinks?: {
     id: string;
     href: string;
@@ -27,6 +28,7 @@ interface Props {
     label: string;
     line?: boolean;
     padding: string;
+    isSubLink?: boolean;
     subLinks?: {
       id: string;
       href: string;
@@ -34,6 +36,7 @@ interface Props {
       label: string;
       line?: boolean;
       padding: string;
+      isSubLink?: boolean;
     }[];
   }[];
   padding?: string;
@@ -63,7 +66,8 @@ const SidebarItem = ({
   padding,
   isSublevel,
   showLinkId,
-  setShowLinkId
+  setShowLinkId,
+  isSubLink
 }: Props) => {
   const { t } = useTranslation();
 
@@ -120,6 +124,7 @@ const SidebarItem = ({
             { 'nav-sub-links-bg': !!padding && !isSublevel }
           )}
           includes={includes}
+          isSubLink={isSubLink}
         >
           <SidebarLabel
             id={id}
@@ -138,7 +143,7 @@ const SidebarItem = ({
             'sub-nav-height-transition-open': showLinkId === id
           })}
         >
-          {subLinks?.map(({ id, href, label, icon, padding, subLinks }) => (
+          {subLinks?.map(({ id, href, label, icon, padding, subLinks, isSubLink}) => (
             <SidebarItem
               key={id}
               id={id}
@@ -151,6 +156,7 @@ const SidebarItem = ({
               showLinkId={showLinksLevel2}
               setShowLinkId={setShowLinksLevel2}
               isSublevel={isSublevel}
+              isSubLink={isSubLink}
             />
           ))}
         </div>

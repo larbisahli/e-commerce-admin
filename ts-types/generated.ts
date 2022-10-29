@@ -328,7 +328,7 @@ export interface Suppliers extends CreatedUpdatedByAt {
 export interface HeroCarouselType extends CreatedUpdatedByAt {
   id?: Scalars['ID'];
   destinationUrl?: Nullable<Scalars['String']>;
-  thumbnail?: ImageType;
+  thumbnail?: ImageType[];
   title?: Scalars['String'];
   description?: Nullable<Scalars['String']>;
   btnLabel?: Scalars['String'];

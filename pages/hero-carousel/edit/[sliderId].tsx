@@ -7,7 +7,7 @@ import { HERO_SLIDE } from '@graphql/hero-carousel';
 import { useErrorLogger, useGetStaff } from '@hooks/index';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
-import { Category } from '@ts-types/generated';
+import { HeroCarouselType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import type { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
@@ -15,7 +15,7 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 interface THeroSlider {
-  heroSlide: Category;
+  getHeroSlide: HeroCarouselType;
 }
 interface OptionsVariable {
   id: string | string[];
@@ -53,7 +53,7 @@ export default function UpdateHeroSliderPage({ client }: SSRProps) {
           {t('form:form-title-edit-hero-slider')}
         </h1>
       </div>
-      <CreateOrUpdateSlideForm initialValues={data?.heroSlide} />
+      <CreateOrUpdateSlideForm initialValues={data?.getHeroSlide} />
     </>
   );
 }

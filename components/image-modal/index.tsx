@@ -98,7 +98,7 @@ const ImageModal = ({ onSelect, selected, isThumbnail }: Props) => {
   }
 
   return (
-    <div className="h-full w-full">
+    <div className="w-full">
       {/* BUTTON */}
       <div className="flex items-center justify-between border-b pb-5">
         <div className="font-medium">Add product images</div>

@@ -3,10 +3,10 @@
 import { useMutation } from '@apollo/client';
 import Card from '@components/common/card';
 import { SaveIcon } from '@components/icons/save-icon';
+import ImageModal from '@components/image-modal';
 import Button from '@components/ui/button';
 import ColorPicker from '@components/ui/color-picker/color-picker';
 import Description from '@components/ui/description';
-import FileInput from '@components/ui/file-input';
 import Input from '@components/ui/input';
 import Label from '@components/ui/label';
 import Radio from '@components/ui/radio';
@@ -36,7 +36,7 @@ type FormValues = HeroCarouselType;
 const defaultValues = {
   title: '',
   destinationUrl: null,
-  thumbnail: null,
+  thumbnail: [],
   description: null,
   btnLabel: null,
   displayOrder: 0,
@@ -63,7 +63,7 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
     watch,
     register,
     handleSubmit,
-    control,
+    setValue,
     formState: { errors },
     reset
   } = useForm<FormValues>({
@@ -79,7 +79,7 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
   const csrfToken = staffInfo?.csrfToken;
 
   const styles = watch('styles');
-  const thumbnail = watch('thumbnail') as ImageType;
+  const thumbnail = watch('thumbnail') as ImageType[];
   const btnLabel = watch('btnLabel');
   const title = watch('title');
   const description = watch('description');
@@ -122,13 +122,13 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
       return;
     }
 
+
     const variables = {
       title: values.title,
       destinationUrl: values.destinationUrl,
-      thumbnail: {
-        image: values.thumbnail?.image,
-        placeholder: values.thumbnail?.placeholder
-      },
+      thumbnail: [{
+        id: values.thumbnail[0]?.id
+      }],
       description: values.description,
       btnLabel: values.btnLabel,
       displayOrder: Number(values.displayOrder),
@@ -166,9 +166,14 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
         />
 
         <Card className="w-full sm:w-8/12 md:w-2/3">
-          <FileInput name="thumbnail" control={control} multiple={false} />
-          {!!thumbnail?.image && (
-            <div>
+          <ImageModal
+            onSelect={(photo) => setValue('thumbnail', photo)}
+            selected={thumbnail}
+            isThumbnail
+          />
+          <div className='w-full'>
+          {!isEmpty(thumbnail) && (
+            <div className='relative'>
               <div className="my-2 border-b border-dashed border-border-base"></div>
               <HeroBannerCard
                 thumbnail={thumbnail}
@@ -179,6 +184,7 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
               />
             </div>
           )}
+          </div>
         </Card>
       </div>
 
@@ -282,7 +288,7 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
           </ColorPicker>
         </Card>
       </div>
-      <div className="mb-4 text-end">
+      <div className="mb-4 flex items-center justify-end">
         {initialValues && (
           <Button
             variant="outline"

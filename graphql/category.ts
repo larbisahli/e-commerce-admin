@@ -2,11 +2,11 @@ import { gql } from '@apollo/client';
 
 export const CREATE_CATEGORY = gql`
   mutation CreateCategory(
-    $parentId: ID
+    $parentId: Int
     $name: String!
     $description: String!
     $icon: String!
-    $thumbnail: [ImageInput]
+    $thumbnail: [ImageInput!]
   ) {
     createCategory(
       parentId: $parentId
@@ -23,12 +23,12 @@ export const CREATE_CATEGORY = gql`
 
 export const UPDATE_CATEGORY = gql`
   mutation UpdateCategory(
-    $id: ID!
-    $parentId: ID
+    $id: Int!
+    $parentId: Int
     $name: String!
     $description: String
     $icon: String!
-    $thumbnail: [ImageInput]
+    $thumbnail:  [ImageInput!]
   ) {
     updateCategory(
       id: $id
@@ -117,7 +117,7 @@ export const CATEGORIES = gql`
 `;
 
 export const CATEGORY = gql`
-  query Category($id: ID!) {
+  query Category($id: Int!) {
     getCategory(id: $id) {
       id
       parentId
@@ -140,7 +140,7 @@ export const CATEGORY = gql`
 
 export const CATEGORIES_FOR_SELECT = gql`
   query CategoriesSelect(
-    $id: ID
+    $id: Int
     $page: Int!
     $limit: Int!
     $orderBy: String!

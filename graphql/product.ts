@@ -59,7 +59,7 @@ export const PRODUCTS = gql`
 `;
 
 export const PRODUCT = gql`
-  query ProductForAdmin($id: ID!) {
+  query ProductForAdmin($id: Int!) {
     productForAdmin(id: $id) {
       id
       name
@@ -193,7 +193,7 @@ export const CREATE_PRODUCT = gql`
 
 export const UPDATE_PRODUCT = gql`
   mutation UpdateProduct(
-    $id: ID!
+    $id: Int!
     $additions: UpdateProductInput!
     $deletions: UpdateProductInput!
   ) {
@@ -204,7 +204,7 @@ export const UPDATE_PRODUCT = gql`
 `;
 
 export const DELETE_ATTRIBUTE = gql`
-  mutation DeleteProduct($id: ID!) {
+  mutation DeleteProduct($id: Int!) {
     deleteProduct(id: $id) {
       name
     }

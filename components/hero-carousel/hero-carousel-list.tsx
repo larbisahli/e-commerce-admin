@@ -2,6 +2,7 @@ import ActionButtons from '@components/common/action-buttons';
 import ImageComponent from '@components/ImageComponent';
 import Badge from '@components/ui/badge/badge';
 import Pagination from '@components/ui/pagination';
+import ProfileCart from '@components/ui/profile-card';
 import { Table } from '@components/ui/table';
 import { siteSettings } from '@settings/site.settings';
 import { Nullable } from '@ts-types/custom.types';
@@ -9,6 +10,7 @@ import { CreatedUpdatedByAt, HeroCarouselType } from '@ts-types/generated';
 import { useIsRTL } from '@utils/locals';
 import { ROUTES } from '@utils/routes';
 import dayjs from 'dayjs';
+import isEmpty from 'lodash/isEmpty';
 import { useTranslation } from 'next-i18next';
 import React from 'react';
 
@@ -44,9 +46,9 @@ const HeroCarouselList = ({
           className="rounded shadow min-w-0 overflow-hidden"
         >
           <ImageComponent
-            src={thumbnail?.image ?? siteSettings.product.image}
+            src={!isEmpty(thumbnail)? thumbnail[0]?.image: siteSettings.product.image}
             customPlaceholder={
-              thumbnail?.placeholder ?? siteSettings.product.placeholder
+              !isEmpty(thumbnail) ? thumbnail[0]?.placeholder : siteSettings.product.placeholder
             }
             layout="fill"
             objectFit="contain"
@@ -118,12 +120,8 @@ const HeroCarouselList = ({
       align: alignLeft,
       width: 140,
       ellipsis: true,
-      render: (createdBy: CreatedUpdatedByAt['createdBy']) => {
-        return (
-          <div>{`${createdBy?.firstName ?? ''} ${
-            createdBy?.lastName ?? ''
-          }`}</div>
-        );
+      render: (createdBy: CreatedUpdatedByAt['createdBy'], record:HeroCarouselType) => {
+        return <ProfileCart staff={createdBy} createdAt={record?.createdAt} />
       }
     },
     {
@@ -133,12 +131,8 @@ const HeroCarouselList = ({
       align: alignLeft,
       width: 140,
       ellipsis: true,
-      render: (updatedBy: CreatedUpdatedByAt['updatedBy']) => {
-        return (
-          <div>{`${updatedBy?.firstName ?? ''} ${
-            updatedBy?.lastName ?? ''
-          }`}</div>
-        );
+      render: (updatedBy: CreatedUpdatedByAt['updatedBy'], record:HeroCarouselType) => {
+        return <ProfileCart staff={updatedBy} updatedAt={record?.updatedAt} />
       }
     },
     {
