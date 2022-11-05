@@ -109,32 +109,32 @@ export const siteSettings = {
         id: 'Qk3MiG',
         href: ROUTES.COUPONS,
         label: 'sidebar-nav-item-coupons',
-        icon: 'CouponsIcon',
+        icon: 'CouponsIcon'
       },
       {
         id: 'JiCQsO',
         href: ROUTES.SHIPPING_ZONES,
         label: 'sidebar-nav-item-shipping-zones',
-        icon: 'ShippingsIcon',
+        icon: 'ShippingsIcon'
       },
       {
         id: 'tWw2Tg',
         href: ROUTES.ORDER_STATUS,
         label: 'sidebar-nav-item-order-status',
-        icon: 'OrdersStatusIcon',
+        icon: 'OrdersStatusIcon'
       },
       {
         id: 'WaIqCI',
         href: ROUTES.HERO_CAROUSEL,
         label: 'sidebar-nav-item-hero-carousel',
-        icon: 'ImageMultipleIcon',
+        icon: 'ImageMultipleIcon'
       },
       {
         id: 'JU3uYy',
         href: ROUTES.STAFFS,
         label: 'sidebar-nav-item-staffs',
         icon: 'StaffsIcon',
-        line: true,
+        line: true
       },
       {
         id: 'JU3uxd',

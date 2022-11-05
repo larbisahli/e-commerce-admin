@@ -12,7 +12,6 @@ export const SUPPLIER = gql`
       country {
         id
         name
-        phoneCode
       }
       city
       note
@@ -44,7 +43,6 @@ export const SUPPLIERS = gql`
       country {
         id
         name
-        phoneCode
       }
       createdAt
       updatedAt

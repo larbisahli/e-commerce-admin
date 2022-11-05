@@ -28,7 +28,7 @@ export const UPDATE_CATEGORY = gql`
     $name: String!
     $description: String
     $icon: String!
-    $thumbnail:  [ImageInput!]
+    $thumbnail: [ImageInput!]
   ) {
     updateCategory(
       id: $id

@@ -3,7 +3,7 @@ import { gql } from '@apollo/client';
 export const CREATE_HERO_SLIDE = gql`
   mutation CreateHeroSlide(
     $destinationUrl: String
-    $thumbnail:  [ImageInput!]
+    $thumbnail: [ImageInput!]
     $title: String
     $description: String
     $btnLabel: String

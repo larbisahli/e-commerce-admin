@@ -173,9 +173,6 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
       })
     };
 
-    console.log({ variables });
-    return;
-
     setUnsavedChanges(false);
     if (isEmpty(initialValues)) {
       createShippingZone({ variables }).catch((err) => {

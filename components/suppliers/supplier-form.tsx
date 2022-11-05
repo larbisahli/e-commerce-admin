@@ -1,36 +1,34 @@
 /* eslint-disable jsx-a11y/interactive-supports-focus */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import { useMutation, useQuery } from '@apollo/client';
+import 'react-phone-input-2/lib/style.css';
+
+import { useMutation } from '@apollo/client';
 import Card from '@components/common/card';
 import { SaveIcon } from '@components/icons/save-icon';
 import Alert from '@components/ui/alert';
 import Button from '@components/ui/button';
 import Description from '@components/ui/description';
 import Input from '@components/ui/input';
-import InputPhoneNumber from '@components/ui/input-phone-number';
 import Label from '@components/ui/label';
 import SelectInput from '@components/ui/select-input';
 import TextArea from '@components/ui/text-area';
-import { COUNTRIES } from '@graphql/shipping-zone';
 import { CREATE_SUPPLIER, UPDATE_SUPPLIER } from '@graphql/supplier';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetStaff } from '@hooks/useGetStaff';
 import { notify } from '@lib/index';
 import type { Nullable } from '@ts-types/custom.types';
-import type { CountriesType, Suppliers } from '@ts-types/generated';
+import type { Suppliers } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
+import { isValidPhoneNumber } from 'libphonenumber-js';
 import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import PhoneInput from 'react-phone-input-2';
 
 type FormValues = Suppliers;
-
-type TCountries = {
-  countries: CountriesType[];
-};
 
 type IProps = {
   initialValues?: Nullable<Suppliers>;
@@ -53,15 +51,16 @@ export default function CreateOrUpdateSupplierForm({ initialValues }: IProps) {
   const [error, setError] = useState(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const {
-    data,
-    loading: loadingCountries,
-    error: queryError
-  } = useQuery<TCountries>(COUNTRIES, {
-    fetchPolicy: 'cache-and-network'
-  });
+  const [countries, setCountries] = useState([]);
 
-  const countries = data?.countries;
+  // Get Countries
+  useEffect(() => {
+    async function getCountries() {
+      const { Countries } = await import('@utils/countries');
+      setCountries(Countries);
+    }
+    getCountries();
+  }, []);
 
   const { t } = useTranslation();
 
@@ -70,6 +69,7 @@ export default function CreateOrUpdateSupplierForm({ initialValues }: IProps) {
     handleSubmit,
     control,
     watch,
+    setValue,
     reset,
     formState: { errors }
   } = useForm<FormValues>({
@@ -109,14 +109,12 @@ export default function CreateOrUpdateSupplierForm({ initialValues }: IProps) {
   });
 
   useErrorLogger(error);
-  useErrorLogger(queryError);
 
   const country = watch('country');
 
   const onSubmit = (values: FormValues) => {
     const variables = {
-      ...values,
-      country: { id: values?.country?.id }
+      ...values
     };
 
     if (isEmpty(initialValues)) {
@@ -131,6 +129,8 @@ export default function CreateOrUpdateSupplierForm({ initialValues }: IProps) {
       });
     }
   };
+
+  const phoneNumber = watch('phoneNumber');
 
   return (
     <>
@@ -196,7 +196,7 @@ export default function CreateOrUpdateSupplierForm({ initialValues }: IProps) {
                   getOptionLabel={(option: any) => option.name}
                   getOptionValue={(option: any) => option.id}
                   options={countries}
-                  isLoading={loadingCountries}
+                  isLoading={isEmpty(countries)}
                 />
               </div>
               <Input
@@ -207,25 +207,28 @@ export default function CreateOrUpdateSupplierForm({ initialValues }: IProps) {
                 className="mb-5"
               />
               <div>
-                <InputPhoneNumber
-                  label={t('form:input-label-phone-number')}
-                  {...register('phoneNumber')}
-                  pattern={'^[0-9\\.\\-\\/]+$'}
-                  placeholder="123-4567-8901"
-                  type="tel"
-                  variant="outline"
-                  className="mb-4"
-                  error={t(errors?.phoneNumber?.message!)}
-                >
-                  {country?.phoneCode && (
-                    <div
-                      className="h-full border rounded flex justify-center items-center 
-                p-2 mr-1 text-gray-500 font-medium"
-                    >
-                      <span>+{country?.phoneCode}</span>
-                    </div>
-                  )}
-                </InputPhoneNumber>
+                <Label>{t('form:input-label-phone')}</Label>
+                <PhoneInput
+                  country={country?.iso2?.toLowerCase()}
+                  inputProps={{
+                    name: 'phone',
+                    required: true,
+                    autoFocus: true
+                  }}
+                  disableSearchIcon
+                  enableSearch
+                  inputClass="phone-number-class py-5"
+                  value={`+${phoneNumber}`}
+                  isValid={(value, country: { dialCode: string }) => {
+                    if (country?.dialCode != value) {
+                      return isValidPhoneNumber(`+${value}`);
+                    }
+                    return true;
+                  }}
+                  onChange={(phone) => {
+                    setValue('phoneNumber', phone);
+                  }}
+                />
               </div>
             </div>
             <TextArea

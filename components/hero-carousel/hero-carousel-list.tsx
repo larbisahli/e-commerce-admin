@@ -46,9 +46,15 @@ const HeroCarouselList = ({
           className="rounded shadow min-w-0 overflow-hidden"
         >
           <ImageComponent
-            src={!isEmpty(thumbnail)? thumbnail[0]?.image: siteSettings.product.image}
+            src={
+              !isEmpty(thumbnail)
+                ? thumbnail[0]?.image
+                : siteSettings.product.image
+            }
             customPlaceholder={
-              !isEmpty(thumbnail) ? thumbnail[0]?.placeholder : siteSettings.product.placeholder
+              !isEmpty(thumbnail)
+                ? thumbnail[0]?.placeholder
+                : siteSettings.product.placeholder
             }
             layout="fill"
             objectFit="contain"
@@ -120,8 +126,11 @@ const HeroCarouselList = ({
       align: alignLeft,
       width: 140,
       ellipsis: true,
-      render: (createdBy: CreatedUpdatedByAt['createdBy'], record:HeroCarouselType) => {
-        return <ProfileCart staff={createdBy} createdAt={record?.createdAt} />
+      render: (
+        createdBy: CreatedUpdatedByAt['createdBy'],
+        record: HeroCarouselType
+      ) => {
+        return <ProfileCart staff={createdBy} createdAt={record?.createdAt} />;
       }
     },
     {
@@ -131,8 +140,11 @@ const HeroCarouselList = ({
       align: alignLeft,
       width: 140,
       ellipsis: true,
-      render: (updatedBy: CreatedUpdatedByAt['updatedBy'], record:HeroCarouselType) => {
-        return <ProfileCart staff={updatedBy} updatedAt={record?.updatedAt} />
+      render: (
+        updatedBy: CreatedUpdatedByAt['updatedBy'],
+        record: HeroCarouselType
+      ) => {
+        return <ProfileCart staff={updatedBy} updatedAt={record?.updatedAt} />;
       }
     },
     {

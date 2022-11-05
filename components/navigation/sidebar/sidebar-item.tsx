@@ -143,22 +143,24 @@ const SidebarItem = ({
             'sub-nav-height-transition-open': showLinkId === id
           })}
         >
-          {subLinks?.map(({ id, href, label, icon, padding, subLinks, isSubLink}) => (
-            <SidebarItem
-              key={id}
-              id={id}
-              href={href}
-              label={t(label)}
-              icon={icon}
-              includes={href}
-              subLinks={subLinks}
-              padding={padding}
-              showLinkId={showLinksLevel2}
-              setShowLinkId={setShowLinksLevel2}
-              isSublevel={isSublevel}
-              isSubLink={isSubLink}
-            />
-          ))}
+          {subLinks?.map(
+            ({ id, href, label, icon, padding, subLinks, isSubLink }) => (
+              <SidebarItem
+                key={id}
+                id={id}
+                href={href}
+                label={t(label)}
+                icon={icon}
+                includes={href}
+                subLinks={subLinks}
+                padding={padding}
+                showLinkId={showLinksLevel2}
+                setShowLinkId={setShowLinksLevel2}
+                isSublevel={isSublevel}
+                isSubLink={isSubLink}
+              />
+            )
+          )}
         </div>
       )}
       {line && (

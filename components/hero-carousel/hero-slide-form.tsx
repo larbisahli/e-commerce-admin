@@ -122,13 +122,14 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
       return;
     }
 
-
     const variables = {
       title: values.title,
       destinationUrl: values.destinationUrl,
-      thumbnail: [{
-        id: values.thumbnail[0]?.id
-      }],
+      thumbnail: [
+        {
+          id: values.thumbnail[0]?.id
+        }
+      ],
       description: values.description,
       btnLabel: values.btnLabel,
       displayOrder: Number(values.displayOrder),
@@ -171,19 +172,19 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
             selected={thumbnail}
             isThumbnail
           />
-          <div className='w-full'>
-          {!isEmpty(thumbnail) && (
-            <div className='relative'>
-              <div className="my-2 border-b border-dashed border-border-base"></div>
-              <HeroBannerCard
-                thumbnail={thumbnail}
-                btnLabel={btnLabel}
-                title={title}
-                description={description}
-                styles={styles}
-              />
-            </div>
-          )}
+          <div className="w-full">
+            {!isEmpty(thumbnail) && (
+              <div className="relative">
+                <div className="my-2 border-b border-dashed border-border-base"></div>
+                <HeroBannerCard
+                  thumbnail={thumbnail}
+                  btnLabel={btnLabel}
+                  title={title}
+                  description={description}
+                  styles={styles}
+                />
+              </div>
+            )}
           </div>
         </Card>
       </div>

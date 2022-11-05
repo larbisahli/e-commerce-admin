@@ -207,7 +207,7 @@ export interface ShippingZoneType extends CreatedUpdatedByAt {
     freeShipping?: Scalars['Boolean'];
     rateType?: { id?: number; name?: string; type?: RateType };
   };
-  zones?: CountriesType[];
+  zones?: CountryType[];
   shippingRates?: ShippingRateType[];
 }
 
@@ -221,7 +221,7 @@ export interface ShippingRateType {
   index?: Scalars['Int'];
 }
 
-export interface CountriesType {
+export interface CountryType {
   id?: Scalars['ID'];
   currency?: Scalars['String'];
   name?: Scalars['String'];
@@ -320,7 +320,7 @@ export interface Suppliers extends CreatedUpdatedByAt {
   phoneNumber?: Nullable<Scalars['String']>;
   addressLine1?: Scalars['String'];
   addressLine2?: Nullable<Scalars['String']>;
-  country?: Nullable<CountriesType>;
+  country?: Nullable<CountryType>;
   city?: Nullable<Scalars['String']> | { name: string };
   note?: Nullable<Scalars['String']>;
 }

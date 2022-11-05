@@ -1,5 +1,6 @@
 import ActionButtons from '@components/common/action-buttons';
 import Pagination from '@components/ui/pagination';
+import ProfileCart from '@components/ui/profile-card';
 import { Table } from '@components/ui/table';
 import { Nullable } from '@ts-types/custom.types';
 import { CreatedUpdatedByAt, Suppliers } from '@ts-types/generated';
@@ -70,13 +71,10 @@ const SuppliersList = ({
       align: alignLeft,
       width: 150,
       ellipsis: true,
-      render: (phoneNumber: string, record: Suppliers) => {
+      render: (phoneNumber: string) => {
         return (
-          <span
-            title={`+${record.country?.phoneCode} ${phoneNumber}`}
-            className="text-gray-800 capitalize"
-          >
-            {`+${record.country?.phoneCode} ${phoneNumber}`}
+          <span title={`+${phoneNumber}`} className="text-gray-800 capitalize">
+            {`+${phoneNumber}`}
           </span>
         );
       }
@@ -100,12 +98,11 @@ const SuppliersList = ({
       align: alignLeft,
       width: 100,
       ellipsis: true,
-      render: (createdBy: CreatedUpdatedByAt['createdBy']) => {
-        return (
-          <div>{`${createdBy?.firstName ?? ''} ${
-            createdBy?.lastName ?? ''
-          }`}</div>
-        );
+      render: (
+        createdBy: CreatedUpdatedByAt['createdBy'],
+        record: Suppliers
+      ) => {
+        return <ProfileCart staff={createdBy} createdAt={record?.createdAt} />;
       }
     },
     {
@@ -115,12 +112,11 @@ const SuppliersList = ({
       align: alignLeft,
       width: 140,
       ellipsis: true,
-      render: (updatedBy: CreatedUpdatedByAt['updatedBy']) => {
-        return (
-          <div>{`${updatedBy?.firstName ?? ''} ${
-            updatedBy?.lastName ?? ''
-          }`}</div>
-        );
+      render: (
+        updatedBy: CreatedUpdatedByAt['updatedBy'],
+        record: Suppliers
+      ) => {
+        return <ProfileCart staff={updatedBy} updatedAt={record?.updatedAt} />;
       }
     },
     {
