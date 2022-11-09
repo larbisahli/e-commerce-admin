@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+message Role {
+  int32 id = 1;
+  string roleName = 2;
+  repeated string privileges = 3;
+}
+
+message Staff {
+  string id = 1;
+  string firstName = 2;
+  string lastName = 3;
+  string phoneNumber = 4;
+  string email = 5;
+  Role role = 6;
+  bool active = 7;
+  bool isTenant = 8;
+}
+
+message StaffRequest {
+  string id = 1;
+  string aliasName = 2;
+}

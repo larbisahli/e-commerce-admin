@@ -52,6 +52,7 @@ const LoginForm = () => {
   const { t } = useTranslation();
 
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [country, setCountry] = useState('ma');
 
   const {
@@ -69,13 +70,14 @@ const LoginForm = () => {
 
   const csrfToken = staffInfo?.csrfToken;
 
-  const [staffLogin, { loading }] = useMutation(STAFF_LOGIN, {
+  const [staffLogin] = useMutation(STAFF_LOGIN, {
     context: {
       headers: {
         'x-csrf-token': csrfToken
       }
     },
     onCompleted: (data: { login: FormValues }) => {
+      setLoading(false);
       if (data?.login?.success) {
         router.push(ROUTES.DASHBOARD);
       }
@@ -90,9 +92,16 @@ const LoginForm = () => {
       phoneNumber,
       password
     };
-    console.log({ variables });
+
+    if (!isValidPhoneNumber(`+${phoneNumber}`)) {
+      setError('error:INVALID_PHONE_NUMBER');
+      return;
+    }
+
+    setLoading(true);
     staffLogin({ variables }).catch((error) => {
       const err = error?.graphQLErrors[0];
+      setLoading(false);
       setError(`error:${err?.t ?? 'SOMETHING_HAPPENED'}`);
     });
   }
@@ -157,7 +166,7 @@ const LoginForm = () => {
         <Button
           className="w-full"
           loading={loading && !error}
-          disabled={loading && !error}
+          disabled={loading}
         >
           {t('form:button-label-login')}
         </Button>

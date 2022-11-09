@@ -1,14 +1,13 @@
-import { STAFF_INFO } from '@graphql/staff';
-import apolloClient from '@lib/apollo-client';
 import { JwtPayload } from '@ts-types/custom.types';
 import { CookieNames } from '@ts-types/enums';
-import { StaffType } from '@ts-types/generated';
 import Cookies from 'cookies';
 import Tokens from 'csrf';
 import jwt, { Algorithm } from 'jsonwebtoken';
 import isEmpty from 'lodash/isEmpty';
 import { GetServerSidePropsContext } from 'next';
 import { serializeError } from 'serialize-error';
+
+import { StaffService } from '../services/grpc-service';
 
 const tokens = new Tokens();
 
@@ -19,9 +18,6 @@ const PublicKEY = Buffer.from(process.env.JWTRS256_KEY_PUB, 'base64').toString(
   'ascii'
 );
 
-interface TStaff {
-  staffInfo: StaffType;
-}
 /*
  * @params {jwtToken} extracted from cookies
  * @return {object} object of extracted token and client info
@@ -55,21 +51,23 @@ export async function verifyAuth(context: GetServerSidePropsContext) {
 
     // fetch for client info
     const staffId = payload?.uid;
+    const aliasName = payload?.ali;
 
-    const { data } = await apolloClient.query<TStaff>({
-      query: STAFF_INFO,
-      variables: { id: staffId },
-      context: {
-        headers: {
-          authorization: jwtToken ? `Bearer ${jwtToken}` : ''
-        }
-      }
-    });
+    const authService = new StaffService();
+    const result = await authService.getStaffInfo(staffId, aliasName);
 
-    const client = data?.staffInfo;
+    const staff = result?.data;
+    const staffError = result?.error;
 
+    if(!isEmpty(staffError)){
+      console.log({staffError})
+      return {
+        error: {message: staffError.message}
+      };
+    }
+    
     return {
-      client: { ...(client ?? {}), ...(!isEmpty(client) ? payload : {}) }
+      client: { ...staff, ...payload }
     };
   } catch (error) {
     console.log('verifyAuth Error:>>', { error });

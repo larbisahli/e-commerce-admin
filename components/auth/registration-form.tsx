@@ -57,7 +57,7 @@ const RegistrationForm = () => {
   const { t } = useTranslation();
 
   const [executeCheckQuery, setExecuteCheckQuery] = useState(false);
-  const [country, setCountry] = useState('ma');
+  const [iso2, setIso2] = useState('ma');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
@@ -112,7 +112,7 @@ const RegistrationForm = () => {
         ?.toLowerCase()
         ?.replace(/[^a-zA-Z0-9]/g, ''),
       storeName,
-      country
+      country: { iso2 }
     };
 
     setErrorMessage(null);
@@ -144,7 +144,7 @@ const RegistrationForm = () => {
     // Get current country code
     fetch('api/hi')
       .then((response) => response.json())
-      .then((data) => setCountry(data?.country ?? 'ma'));
+      .then((data) => setIso2(data?.iso2 ?? 'ma'));
   }, []);
 
   const phoneNumber = watch('phoneNumber');
@@ -155,7 +155,7 @@ const RegistrationForm = () => {
         <div className="mb-5 phone-number-class">
           <Label>{t('form:input-label-whatsapp-number')}</Label>
           <PhoneInput
-            country={country?.toLowerCase()}
+            country={iso2?.toLowerCase()}
             inputProps={{
               name: 'phone',
               required: true,

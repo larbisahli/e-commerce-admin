@@ -7,7 +7,7 @@ export const CREATE_STORE = gql`
     $phoneNumber: String!
     $storeName: String!
     $aliasName: String!
-    $country: String!
+    $country: CountryInput!
   ) {
     createStore(
       firstName: $firstName

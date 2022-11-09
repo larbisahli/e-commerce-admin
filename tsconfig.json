@@ -29,6 +29,8 @@
       "@graphql/*": ["graphql/*"],
       "@settings/*": ["settings/*"],
       "@ts-types/*": ["ts-types/*"],
+      "@proto/*": ["proto/*"],
+      "@services/*": ["services/*"],
       "@test-utils": ["__tests__/test-utils"]
     },
     "incremental": true
