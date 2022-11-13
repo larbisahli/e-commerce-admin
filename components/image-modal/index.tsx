@@ -78,8 +78,8 @@ const ImageModal = ({ onSelect, selected, isThumbnail }: Props) => {
   const photosCount = data?.getPhotosCount?.count;
 
   useEffect(() => {
-    setPhotos((prev) => {
-      return [...prev, ...(data?.getPhotos ?? [])];
+    setPhotos(() => {
+      return [...(data?.getPhotos ?? [])];
     });
   }, [data]);
 
@@ -147,27 +147,25 @@ const ImageModal = ({ onSelect, selected, isThumbnail }: Props) => {
                   />
                 </ul>
               </div>
-              {!!photosCount && (
-                <div className="flex items-center mt-3 justify-between">
-                  <div className="flex-1">
-                    <Pagination
-                      total={photosCount}
-                      current={page}
-                      pageSize={limit}
-                      onChange={handlePagination}
-                    />
-                  </div>
-                  <Button
-                    onClick={() => {
-                      onSelect(selectedImages);
-                      setSelectedImages([]);
-                      closeModal();
-                    }}
-                  >
-                    Select
-                  </Button>
+              <div className="flex items-center mt-3 justify-between">
+                <div className="flex-1">
+                  <Pagination
+                    total={photosCount}
+                    current={page}
+                    pageSize={limit}
+                    onChange={handlePagination}
+                  />
                 </div>
-              )}
+                <Button
+                  onClick={() => {
+                    onSelect(selectedImages);
+                    setSelectedImages([]);
+                    closeModal();
+                  }}
+                >
+                  Select
+                </Button>
+              </div>
             </div>
           </div>
         )}

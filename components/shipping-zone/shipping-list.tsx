@@ -57,9 +57,10 @@ const ShippingList = ({
           );
         return (
           <Badge
-            className="!text-sm text-gray-500 capitalize font-medium"
+            className="!text-sm capitalize font-semibold"
             text={record?.shippingZone?.freeShipping ? 'No Rate' : rateType}
             color={'bg-gray-100'}
+            textColor={'text-gray-500'}
           />
         );
       }

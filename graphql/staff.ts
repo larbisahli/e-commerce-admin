@@ -59,6 +59,7 @@ export const STAFFS = gql`
       firstName
       lastName
       email
+      phoneNumber
       profile {
         image
         placeholder

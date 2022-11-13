@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 
 export const SHIPPING_ZONE = gql`
-  query ShippingZone($id: Int!) {
+  query ShippingZone($id: ID!) {
     shippingZone(id: $id) {
       id
       name
@@ -12,8 +12,9 @@ export const SHIPPING_ZONE = gql`
     }
     zones(id: $id) {
       id
+      zoneId
       name
-      iso
+      iso2
     }
     shippingRates(id: $id) {
       id
@@ -81,7 +82,7 @@ export const CREATE_SHIPPING = gql`
     $freeShipping: Boolean!
     $rateType: String
     $shippingRates: [ShippingRateInput]
-    $zones: [ZonesInput]!
+    $zones: [CountryInput]!
   ) {
     createShippingZone(
       name: $name
@@ -116,8 +117,8 @@ export const UPDATE_SHIPPING = gql`
 `;
 
 export const DELETE_SHIPPING = gql`
-  mutation DeleteShipping($id: Int!) {
-    deleteShipping(id: $id) {
+  mutation DeleteShippingZone($id: Int!) {
+    deleteShippingZone(id: $id) {
       id
     }
   }

@@ -112,6 +112,26 @@ const StaffList = ({
       ellipsis: true
     },
     {
+      title: t('table:table-item-phone'),
+      dataIndex: 'phoneNumber',
+      key: 'phoneNumber',
+      align: alignLeft,
+      width: 200,
+      ellipsis: true,
+      render: (phoneNumber: number) => {
+        return (
+          <div>
+            <span
+              style={{ width: 'fit-content' }}
+              className="font-medium text-13px md:text-sm rounded block border border-sink-base px-2 py-1 bg-gray-100"
+            >
+              {'+' + phoneNumber}
+            </span>
+          </div>
+        );
+      }
+    },
+    {
       title: t('table:table-item-created-at'),
       dataIndex: 'createdAt',
       key: 'createdAt',

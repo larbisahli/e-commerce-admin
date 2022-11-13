@@ -25,7 +25,7 @@ export declare type Nullable<T> = T | null;
 
 /** Built-in and custom scalars are mapped to their actual values */
 export declare type Scalars = {
-  ID: string;
+  ID: string | number;
   String: string;
   Boolean: boolean;
   Int: number;

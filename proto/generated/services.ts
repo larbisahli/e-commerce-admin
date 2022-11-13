@@ -14,6 +14,7 @@ type SubtypeConstructor<
 };
 
 export interface ProtoGrpcType {
+  Profile: MessageTypeDefinition;
   Role: MessageTypeDefinition;
   Staff: MessageTypeDefinition;
   StaffRequest: MessageTypeDefinition;

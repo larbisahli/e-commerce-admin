@@ -23,11 +23,14 @@ const Sidebar: React.FC<Props> = ({ absolute = false }) => {
       )}
     >
       <Scrollbar className="flex flex-col w-full h-full">
-        <div className="py-3 pl-6 flex bg-blue-600 items-center">
+        <div className="py-3 pl-6 flex items-center">
           <div className="relative">
             <Logo />
           </div>
           <div className="px-2 text-white font-semibold text-lg">Ecomhost</div>
+        </div>
+        <div className="flex justify-center mb-3">
+          <div className="h-[1px] w-[90%] bg-sidenav-divider"></div>
         </div>
         {siteSettings.sidebarLinks.admin.map(
           ({ id, href, label, icon, line, subLinks }) => (

@@ -4,7 +4,7 @@ import {
   useModalAction,
   useModalState
 } from '@components/ui/modal/modal.context';
-import { DELETE_SHIPPING, SHIPPINGS } from '@graphql/shipping-zone';
+import { DELETE_SHIPPING, SHIPPING_ZONES } from '@graphql/shipping-zone';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useState } from 'react';
 
@@ -12,7 +12,7 @@ const ShippingDeleteView = () => {
   const [error, setError] = useState(null);
   const [deleteShipping, { loading }] = useMutation(DELETE_SHIPPING, {
     refetchQueries: [
-      SHIPPINGS,
+      SHIPPING_ZONES,
       'Shippings' // Query name
     ]
   });

@@ -28,7 +28,7 @@ export const CREATE_HERO_SLIDE = gql`
 
 export const UPDATE_HERO_SLIDE = gql`
   mutation UpdateHeroSlide(
-    $id: Int!
+    $id: ID!
     $destinationUrl: String
     $thumbnail: [ImageInput!]
     $title: String
@@ -55,7 +55,7 @@ export const UPDATE_HERO_SLIDE = gql`
 `;
 
 export const DELETE_HERO_SLIDE = gql`
-  mutation DeleteHeroSlide($id: Int!) {
+  mutation DeleteHeroSlide($id: ID!) {
     deleteHeroSlide(id: $id) {
       id
     }

@@ -53,19 +53,19 @@ export async function verifyAuth(context: GetServerSidePropsContext) {
     const staffId = payload?.uid;
     const aliasName = payload?.ali;
 
-    const authService = new StaffService();
-    const result = await authService.getStaffInfo(staffId, aliasName);
+    const staffService = new StaffService();
+    const result = await staffService.getStaffInfo(staffId, aliasName);
 
     const staff = result?.data;
     const staffError = result?.error;
 
-    if(!isEmpty(staffError)){
-      console.log({staffError})
+    if (!isEmpty(staffError)) {
+      console.log({ staffError });
       return {
-        error: {message: staffError.message}
+        error: { message: staffError.message }
       };
     }
-    
+
     return {
       client: { ...staff, ...payload }
     };

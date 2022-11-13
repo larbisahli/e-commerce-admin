@@ -39,7 +39,7 @@ export const TAGS = gql`
 `;
 
 export const TAG = gql`
-  query Tag($id: Int!) {
+  query Tag($id: ID!) {
     getTag(id: $id) {
       id
       name
@@ -67,7 +67,7 @@ export const CREATE_TAG = gql`
 `;
 
 export const UPDATE_TAG = gql`
-  mutation UpdateTag($id: Int!, $name: String!, $icon: String) {
+  mutation UpdateTag($id: ID!, $name: String!, $icon: String) {
     updateTag(id: $id, name: $name, icon: $icon) {
       id
       name
@@ -76,7 +76,7 @@ export const UPDATE_TAG = gql`
 `;
 
 export const DELETE_TAG = gql`
-  mutation DeleteTag($id: Int!) {
+  mutation DeleteTag($id: ID!) {
     deleteTag(id: $id) {
       id
       name

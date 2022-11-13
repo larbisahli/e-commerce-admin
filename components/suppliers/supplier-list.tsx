@@ -54,7 +54,7 @@ const SuppliersList = ({
       dataIndex: 'company',
       key: 'company',
       align: alignLeft,
-      width: 100,
+      width: 160,
       ellipsis: true,
       render: (company: string) => {
         return (
@@ -84,7 +84,7 @@ const SuppliersList = ({
       dataIndex: 'createdAt',
       key: 'createdAt',
       align: alignLeft,
-      width: 170,
+      width: 190,
       render: (createdAt: CreatedUpdatedByAt['updatedAt']) => {
         return `${dayjs(createdAt).format('MMM D, YYYY')} at ${dayjs(
           createdAt
@@ -96,7 +96,7 @@ const SuppliersList = ({
       dataIndex: 'createdBy',
       key: 'createdBy',
       align: alignLeft,
-      width: 100,
+      width: 140,
       ellipsis: true,
       render: (
         createdBy: CreatedUpdatedByAt['createdBy'],

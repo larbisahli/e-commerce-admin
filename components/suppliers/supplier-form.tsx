@@ -40,7 +40,7 @@ const defaultValues = {
   phoneNumber: null,
   addressLine1: '',
   addressLine2: null,
-  country: null,
+  country: { iso2: 'US' },
   city: null,
   note: null
 };
@@ -213,7 +213,7 @@ export default function CreateOrUpdateSupplierForm({ initialValues }: IProps) {
                   inputProps={{
                     name: 'phone',
                     required: true,
-                    autoFocus: true
+                    autoFocus: false
                   }}
                   disableSearchIcon
                   enableSearch
@@ -241,7 +241,7 @@ export default function CreateOrUpdateSupplierForm({ initialValues }: IProps) {
           </Card>
         </div>
 
-        <div className="mb-4 text-end">
+        <div className="mb-4 flex justify-end">
           {initialValues && (
             <Button
               variant="outline"

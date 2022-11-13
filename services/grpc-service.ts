@@ -13,7 +13,7 @@ export class StaffService extends StaffServiceRoutes {
   public async getStaffInfo(
     id: string,
     aliasName: string
-  ): Promise<{ data: Staff, error:Error }> {
+  ): Promise<{ data: Staff; error: Error }> {
     const staff = promisify(this.staffInfo).bind(this);
     return await staff({ id, aliasName })
       .then((data) => ({ data }))

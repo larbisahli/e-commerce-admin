@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 
 export function useGetDataUrl(customPlaceholder: string) {
   const [Base64Placeholder, setBase64Placeholder] = useState<string>(
-    'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8+utrPQAJNQNlcqdyCgAAAABJRU5ErkJggg=='
+    'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFklEQVR42mM8/mpzHAMRgHFUIX0VAgAY9xufdSPNgAAAAABJRU5ErkJggg=='
   );
 
   useEffect(() => {

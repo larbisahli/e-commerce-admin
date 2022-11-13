@@ -223,6 +223,7 @@ export interface ShippingRateType {
 
 export interface CountryType {
   id?: Scalars['ID'];
+  zoneId?: Scalars['ID'];
   currency?: Scalars['String'];
   name?: Scalars['String'];
   phone_code?: Scalars['String'];

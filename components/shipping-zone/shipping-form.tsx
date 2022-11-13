@@ -85,7 +85,7 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
           shippingZone: {
             ...initialValues?.shippingZone,
             rateType:
-              initialValues?.shippingZone?.rateType.type === RateType.WEIGHT
+              initialValues?.shippingZone?.rateType === RateType.WEIGHT
                 ? { id: 1, name: 'Weight', type: RateType.WEIGHT }
                 : { id: 0, name: 'Price', type: RateType.PRICE }
           },
@@ -168,9 +168,12 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
           price: Number(rate?.price)
         };
       }),
-      zones: zones?.map((zone) => {
-        return { iso: zone.iso2 };
-      })
+      zones: zones?.map(({ id, zoneId, name, iso2 }) => ({
+        id,
+        zoneId,
+        name,
+        iso2
+      }))
     };
 
     setUnsavedChanges(false);
@@ -181,6 +184,7 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
       });
     } else {
       const variablesUpdate = updateVariable(values, initialValues);
+      console.log('=====>', { variablesUpdate, values, initialValues });
       updateShippingZone({
         variables: { id: initialValues?.shippingZone?.id, ...variablesUpdate }
       }).catch((err) => {
@@ -204,17 +208,19 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
   const zones = watch('zones');
   const freeShipping = watch('shippingZone.freeShipping');
 
+  console.log({ zones, initialValues });
+
   useEffect(() => {
-    const exist = zones?.find((c) => c.name === 'Everywhere');
+    const exist = zones?.find((c) => c.iso2 === 'XX');
 
     // Sometimes we get undefined when using watch('zones')
     const upToDateZones = getValues('zones');
     if (isEmpty(upToDateZones)) {
-      setValue('zones', [{ id: '0', name: 'Everywhere', iso2: 'ALL' }]);
+      setValue('zones', [{ id: 0, name: 'Global', iso2: 'XX' }]);
     } else if (upToDateZones.length > 1 && exist) {
       setValue(
         'zones',
-        upToDateZones.filter((c) => c.name !== 'Everywhere')
+        upToDateZones.filter((c) => c.iso2 !== 'XX')
       );
     }
   }, [zones]);
@@ -398,7 +404,7 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
         </div>
       )}
 
-      <div className="mb-4 text-end">
+      <div className="mb-4 flex justify-end">
         {initialValues && (
           <Button
             variant="outline"

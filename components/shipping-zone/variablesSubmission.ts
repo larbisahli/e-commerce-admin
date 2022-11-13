@@ -1,4 +1,5 @@
-import { ShippingRateEnum, ShippingZoneType } from '@ts-types/generated';
+import { RateType } from '@ts-types/enums';
+import { ShippingZoneType } from '@ts-types/generated';
 import differenceWith from 'lodash/differenceWith';
 import isEqual from 'lodash/isEqual';
 
@@ -12,7 +13,7 @@ export const updateVariable = (
     return {
       id: rate?.id,
       weightUnit:
-        shippingZone?.rateType?.type === ShippingRateEnum.Weight
+        shippingZone?.rateType?.type === RateType.WEIGHT
           ? rate?.weightUnit
           : null,
       minValue: Number(rate?.minValue),
@@ -21,8 +22,6 @@ export const updateVariable = (
       price: Number(rate?.price)
     };
   });
-
-  const newZones = values?.zones;
 
   const shippingRatesAdditions = differenceWith(
     newShippingRates,
@@ -37,16 +36,24 @@ export const updateVariable = (
   );
 
   const zonesAdditions = differenceWith(
-    newZones,
+    values?.zones,
     initialValues?.zones,
     isEqual
   );
 
   const zonesDeletion = differenceWith(
-    initialValues?.zones?.map((rate) => rate.id),
-    values?.zones?.map((rate) => rate.id),
+    initialValues?.zones?.map((zone) => zone.iso2),
+    values?.zones?.map((zone) => zone.iso2),
     isEqual
   );
+
+  const zonesDeletionMapToZoneId = initialValues?.zones
+    ?.map((zone) => {
+      if (zonesDeletion.includes(zone.iso2)) {
+        return zone;
+      }
+    })
+    ?.filter((e) => e !== undefined);
 
   const newShippingZone = {
     ...shippingZone,
@@ -66,11 +73,11 @@ export const updateVariable = (
   return {
     shippingZone: shippingZoneMain,
     additions: {
-      zones: zonesAdditions?.map((e) => ({ id: e.id })),
+      zones: zonesAdditions?.map(({ id, name, iso2 }) => ({ id, name, iso2 })),
       shippingRates: shippingRatesAdditions
     },
     deletions: {
-      zones: zonesDeletion?.map((e) => ({ id: e })),
+      zones: zonesDeletionMapToZoneId?.map(({ zoneId }) => ({ zoneId })),
       shippingRates: shippingRatesDeletion?.map((e) => ({ id: e }))
     }
   };
