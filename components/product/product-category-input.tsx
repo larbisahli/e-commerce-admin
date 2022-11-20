@@ -3,17 +3,17 @@ import Label from '@components/ui/label';
 import SelectInput from '@components/ui/select-input';
 import { CATEGORIES_FOR_SELECT_ALL } from '@graphql/category';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { Category, OrderBy } from '@ts-types/generated';
+import { Category, OrderBy, Product } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
 import { memo } from 'react';
 import { Control } from 'react-hook-form';
 
 interface Props {
-  control: Control<any>;
+  control: Control<Product, any>;
 }
 
 interface TCategorySelect {
-  categoriesSelectAllForAdmin: Category[];
+  getCategoriesSelectAll: Category[];
 }
 
 interface OptionsVariable {
@@ -37,7 +37,7 @@ const ProductCategoryInput = ({ control }: Props) => {
     }
   );
 
-  const categories = data?.categoriesSelectAllForAdmin;
+  const categories = data?.getCategoriesSelectAll;
 
   useErrorLogger(error);
 

@@ -17,6 +17,7 @@ export const PRODUCTS = gql`
       sortedBy: $sortedBy
     ) {
       id
+      sku
       name
       salePrice
       maxPrice
@@ -40,19 +41,11 @@ export const PRODUCTS = gql`
         id
         firstName
         lastName
-        profile {
-          image
-          placeholder
-        }
       }
       updatedBy {
         id
         firstName
         lastName
-        profile {
-          image
-          placeholder
-        }
       }
     }
   }

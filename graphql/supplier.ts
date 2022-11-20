@@ -50,19 +50,11 @@ export const SUPPLIERS = gql`
         id
         firstName
         lastName
-        profile {
-          image
-          placeholder
-        }
       }
       updatedBy {
         id
         firstName
         lastName
-        profile {
-          image
-          placeholder
-        }
       }
     }
   }

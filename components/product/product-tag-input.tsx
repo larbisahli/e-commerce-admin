@@ -3,17 +3,17 @@ import Label from '@components/ui/label';
 import SelectInput from '@components/ui/select-input';
 import { TAGS_FOR_SELECT } from '@graphql/tag';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { OrderBy, Tag } from '@ts-types/generated';
+import { OrderBy, Product, Tag } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
 import { memo } from 'react';
 import { Control } from 'react-hook-form';
 
 interface Props {
-  control: Control<any>;
+  control: Control<Product, any>;
 }
 
 interface TagSelect {
-  tagsSelectForAdmin: Tag[];
+  getTagsSelect: Tag[];
 }
 
 interface OptionsVariable {
@@ -37,7 +37,7 @@ const ProductTagInput = ({ control }: Props) => {
     }
   );
 
-  const tags = data?.tagsSelectForAdmin;
+  const tags = data?.getTagsSelect;
 
   useErrorLogger(error);
 

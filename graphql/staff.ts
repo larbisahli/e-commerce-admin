@@ -32,6 +32,7 @@ export const STAFF = gql`
       email
       isTenant
       profile {
+        id
         image
         placeholder
       }
@@ -75,19 +76,11 @@ export const STAFFS = gql`
         id
         firstName
         lastName
-        profile {
-          image
-          placeholder
-        }
       }
       updatedBy {
         id
         firstName
         lastName
-        profile {
-          image
-          placeholder
-        }
       }
     }
   }
@@ -106,11 +99,12 @@ export const CREATE_STAFF = gql`
   mutation CreateStaff(
     $firstName: String!
     $lastName: String!
-    $phoneNumber: String
-    $email: String!
-    $profile: ImageInput
+    $phoneNumber: String!
+    $email: String
+    $profile: [ImageInput]
     $password: String!
     $roleId: Int!
+    $notify: Boolean
   ) {
     createStaff(
       firstName: $firstName
@@ -120,6 +114,7 @@ export const CREATE_STAFF = gql`
       profile: $profile
       password: $password
       roleId: $roleId
+      notify: $notify
     ) {
       id
       firstName
@@ -133,9 +128,9 @@ export const UPDATE_STAFF = gql`
     $id: ID!
     $firstName: String!
     $lastName: String!
-    $phoneNumber: String
-    $email: String!
-    $profile: ImageInput
+    $phoneNumber: String!
+    $email: String
+    $profile: [ImageInput]
     $roleId: Int!
   ) {
     updateStaff(

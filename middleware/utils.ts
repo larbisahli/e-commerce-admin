@@ -66,6 +66,12 @@ export async function verifyAuth(context: GetServerSidePropsContext) {
       };
     }
 
+    if (!staff?.active) {
+      return {
+        error: { message: 'User not active!' }
+      };
+    }
+
     return {
       client: { ...staff, ...payload }
     };

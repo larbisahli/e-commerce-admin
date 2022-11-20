@@ -77,19 +77,11 @@ export const CATEGORIES = gql`
           id
           firstName
           lastName
-          profile {
-            image
-            placeholder
-          }
         }
         updatedBy {
           id
           firstName
           lastName
-          profile {
-            image
-            placeholder
-          }
         }
       }
       createdAt
@@ -98,19 +90,11 @@ export const CATEGORIES = gql`
         id
         firstName
         lastName
-        profile {
-          image
-          placeholder
-        }
       }
       updatedBy {
         id
         firstName
         lastName
-        profile {
-          image
-          placeholder
-        }
       }
     }
   }

@@ -13,7 +13,7 @@ export interface Staff {
   phoneNumber?: string;
   email?: string;
   role?: _Role | null;
-  profile?: _Profile | null;
+  profile?: _Profile[];
   active?: boolean;
   isTenant?: boolean;
 }
@@ -25,7 +25,7 @@ export interface Staff__Output {
   phoneNumber: string;
   email: string;
   role: _Role__Output | null;
-  profile: _Profile__Output | null;
+  profile: _Profile__Output[];
   active: boolean;
   isTenant: boolean;
 }

@@ -20,19 +20,11 @@ export const TAGS = gql`
         id
         firstName
         lastName
-        profile {
-          image
-          placeholder
-        }
       }
       updatedBy {
         id
         firstName
         lastName
-        profile {
-          image
-          placeholder
-        }
       }
     }
   }
@@ -49,8 +41,8 @@ export const TAG = gql`
 `;
 
 export const TAGS_FOR_SELECT = gql`
-  query TagsSelectForAdmin($page: Int!, $limit: Int!, $orderBy: String!) {
-    tagsSelectForAdmin(page: $page, limit: $limit, orderBy: $orderBy) {
+  query GetTagsSelect($page: Int!, $limit: Int!, $orderBy: String!) {
+    getTagsSelect(page: $page, limit: $limit, orderBy: $orderBy) {
       id
       name
     }

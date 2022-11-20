@@ -4,12 +4,13 @@ import ValidationError from '@components/ui/form-validation-error';
 import Input from '@components/ui/input';
 import Label from '@components/ui/label';
 import SelectInput from '@components/ui/select-input';
+import { Product } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
 import React, { memo } from 'react';
 import { Control, useFormContext } from 'react-hook-form';
 
 type IProps = {
-  control: Control<any>;
+  control: Control<Product, any>;
   initialValues: any;
 };
 
@@ -30,7 +31,6 @@ function ProductShippingInfoForm({ control, initialValues }: IProps) {
   return (
     <div className="flex flex-wrap my-5 sm:my-8">
       <Description
-        title={t('form:form-title-product-shipping-info')}
         details={`${
           initialValues
             ? t('form:item-description-edit')

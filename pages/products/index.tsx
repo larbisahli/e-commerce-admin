@@ -26,8 +26,8 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useState } from 'react';
 
 interface TProduct {
-  productsForAdmin: Product[];
-  productsCount: { count: number };
+  getProducts: Product[];
+  getProductsCount: { count: number };
 }
 
 interface ProductVariable {
@@ -59,8 +59,8 @@ export default function ProductsPage({ client }: SSRProps) {
     fetchPolicy: 'cache-and-network'
   });
 
-  const productsCount = data?.productsCount?.count;
-  const productsForAdmin = data?.productsForAdmin;
+  const getProductsCount = data?.getProductsCount?.count;
+  const getProducts = data?.getProducts;
 
   useGetStaff(client);
   useErrorLogger(error);
@@ -173,9 +173,9 @@ export default function ProductsPage({ client }: SSRProps) {
         </div> */}
       </Card>
       <ProductList
-        products={productsForAdmin}
+        products={getProducts}
         onPagination={handlePagination}
-        total={productsCount}
+        total={getProductsCount}
         currentPage={page}
         perPage={limit}
       />

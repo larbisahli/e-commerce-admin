@@ -36,15 +36,21 @@ interface Props {
   onSelect: ([{ id, image, placeholder }]: ImageType[]) => void;
   selected: ImageType[];
   isThumbnail?: boolean;
+  modalId?: string;
 }
 
 const limit = 20;
 
-const ImageModal = ({ onSelect, selected, isThumbnail }: Props) => {
+const ImageModal = ({
+  onSelect,
+  selected,
+  isThumbnail,
+  modalId = 'image_modal'
+}: Props) => {
   const { t } = useTranslation();
 
   const { closeModal, openModal } = useModalAction();
-  const { isOpen, view } = useModalState();
+  const { isOpen, view, id } = useModalState();
 
   const [loading, setLoading] = useState<boolean>(false);
   const [photos, setPhotos] = useState<ImageType[]>([]);
@@ -97,6 +103,8 @@ const ImageModal = ({ onSelect, selected, isThumbnail }: Props) => {
     });
   }
 
+  const isCurrentModal = modalId === id;
+
   return (
     <div className="w-full">
       {/* BUTTON */}
@@ -105,7 +113,7 @@ const ImageModal = ({ onSelect, selected, isThumbnail }: Props) => {
         <Button
           onClick={(e) => {
             e.preventDefault();
-            openModal(IMAGE_MODAL);
+            openModal(IMAGE_MODAL, modalId);
           }}
           variant="outline"
         >
@@ -113,9 +121,9 @@ const ImageModal = ({ onSelect, selected, isThumbnail }: Props) => {
         </Button>
       </div>
       {/* SELECTED IMAGES */}
-      <Thumbs photos={selected} />
+      <Thumbs photos={selected} modalId={modalId} />
       {/* MODEL */}
-      <Modal open={isOpen} onClose={closeModal}>
+      <Modal open={isOpen && isCurrentModal} onClose={closeModal}>
         {view === IMAGE_MODAL && (
           <div className="bg-white min-h-[600px] h-full w-full md:w-[80vw]">
             <div className="w-fit p-4 font-semibold text-lg">Store Images</div>

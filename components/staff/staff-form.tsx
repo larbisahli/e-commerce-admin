@@ -1,9 +1,13 @@
+import 'react-phone-input-2/lib/style.css';
+
 import { useMutation, useQuery } from '@apollo/client';
 import Card from '@components/common/card';
 import { SaveIcon } from '@components/icons/save-icon';
+import ImageModal from '@components/image-modal';
 import Button from '@components/ui/button';
+import Checkbox from '@components/ui/checkbox';
 import Description from '@components/ui/description';
-import FileInput from '@components/ui/file-input';
+import ValidationError from '@components/ui/form-validation-error';
 import Input from '@components/ui/input';
 import Label from '@components/ui/label';
 import PasswordInput from '@components/ui/password-input';
@@ -18,15 +22,19 @@ import {
 import { notify } from '@lib/index';
 import { RoleType, StaffType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
+import { isValidPhoneNumber } from 'libphonenumber-js';
 import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
 import { Control, useForm } from 'react-hook-form';
+import PhoneInput from 'react-phone-input-2';
 
 import { staffValidationSchema } from './staff-validation-schema';
 
-type FormValues = StaffType;
+interface FormValues extends StaffType {
+  notify: boolean;
+}
 
 const defaultValues = {};
 
@@ -82,6 +90,8 @@ const StaffCreateUpdateForm = ({ initialValues }: IProps) => {
     handleSubmit,
     control,
     reset,
+    watch,
+    setValue,
     formState: { errors }
   } = useForm<FormValues>({
     // @ts-ignore
@@ -89,7 +99,8 @@ const StaffCreateUpdateForm = ({ initialValues }: IProps) => {
       ? {
           ...initialValues,
           password: 'test',
-          confirmPassword: 'test'
+          confirmPassword: 'test',
+          notify: false
         }
       : defaultValues,
     resolver: yupResolver(staffValidationSchema)
@@ -133,14 +144,18 @@ const StaffCreateUpdateForm = ({ initialValues }: IProps) => {
       firstName: values.firstName,
       lastName: values.lastName,
       phoneNumber: values.phoneNumber,
-      profile: {
-        image: values?.profile?.image,
-        placeholder: values?.profile?.placeholder
-      },
+      profile: [
+        {
+          id: values.profile[0]?.id
+        }
+      ],
       roleId: values.role.id,
       password: values.password,
-      email: values.email
+      email: values.email,
+      notify: values.notify
     };
+
+    console.log({ variables, initialValues });
 
     setUnsavedChanges(false);
     if (isEmpty(initialValues)) {
@@ -161,6 +176,9 @@ const StaffCreateUpdateForm = ({ initialValues }: IProps) => {
     return confirm(t('common:UNSAVED_CHANGES'));
   });
 
+  const phoneNumber = watch('phoneNumber');
+  const profile = watch('profile');
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate>
       <div className="flex flex-wrap pb-8 border-b border-dashed border-border-base my-5 sm:my-8">
@@ -171,7 +189,11 @@ const StaffCreateUpdateForm = ({ initialValues }: IProps) => {
         />
 
         <Card className="w-full sm:w-8/12 md:w-2/3">
-          <FileInput name="profile" control={control} multiple={false} />
+          <ImageModal
+            onSelect={(photo) => setValue('profile', photo)}
+            selected={profile}
+            isThumbnail
+          />
         </Card>
       </div>
 
@@ -199,14 +221,32 @@ const StaffCreateUpdateForm = ({ initialValues }: IProps) => {
             className="mb-4"
             error={t(errors.lastName?.message!)}
           />
-          <Input
-            label={t('form:label-phone-number')}
-            {...register('phoneNumber')}
-            type="text"
-            variant="outline"
-            className="mb-4"
-            error={t(errors.phoneNumber?.message!)}
-          />
+          <div className="mb-4">
+            <Label>{t('form:input-label-phone')}</Label>
+            <PhoneInput
+              country="us"
+              inputProps={{
+                name: 'phone',
+                required: true,
+                autoFocus: false
+              }}
+              disableSearchIcon
+              enableSearch
+              inputClass="phone-number-class py-5"
+              value={`+${phoneNumber}`}
+              isValid={(value, country: { dialCode: string }) => {
+                if (country?.dialCode != value) {
+                  return isValidPhoneNumber(`+${value}`);
+                }
+                return true;
+              }}
+              onChange={(phone) => {
+                setValue('phoneNumber', phone);
+              }}
+            />
+            {/* @ts-ignore */}
+            <ValidationError message={t(errors.phoneNumber?.message)} />
+          </div>
           <Input
             label={t('form:input-label-email')}
             {...register('email')}
@@ -239,6 +279,16 @@ const StaffCreateUpdateForm = ({ initialValues }: IProps) => {
               {/* @ts-ignore */}
               {t(errors?.role?.message!)}
             </p>
+          )}
+          {isEmpty(initialValues) && (
+            <div className="mt-4">
+              <Label>{t('form:input-label-notification')}</Label>
+              <Checkbox
+                {...register('notify')}
+                className="mb-4"
+                label={t('form:input-label-notify')}
+              />
+            </div>
           )}
         </Card>
       </div>

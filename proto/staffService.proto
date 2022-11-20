@@ -18,7 +18,7 @@ message Staff {
   string phoneNumber = 4;
   string email = 5;
   Role role = 6;
-  Profile profile = 7;
+  repeated Profile profile = 7;
   bool active = 8;
   bool isTenant = 9;
 }

@@ -1,4 +1,3 @@
-import Avatar from '@components/common/avatar';
 import { CreatedUpdatedByAt } from '@ts-types/generated';
 import dayjs from 'dayjs';
 
@@ -22,14 +21,6 @@ const ProfileCart = ({
       }
       className="flex items-center min-w-max"
     >
-      {staff?.profile?.image && (
-        <Avatar
-          width="w-6"
-          height="h-6"
-          src={staff?.profile?.image}
-          customPlaceholder={staff?.profile?.placeholder}
-        />
-      )}
       <div className="px-1 font-medium">
         {`${staff?.firstName ?? ''} ${staff?.lastName ?? ''}`}
       </div>

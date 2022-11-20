@@ -3,13 +3,13 @@ import Label from '@components/ui/label';
 import SelectInput from '@components/ui/select-input';
 import { SUPPLIERS_FOR_SELECT } from '@graphql/supplier';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { OrderBy, Suppliers } from '@ts-types/generated';
+import { OrderBy, Product, Suppliers } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
 import { memo } from 'react';
 import { Control } from 'react-hook-form';
 
 interface Props {
-  control: Control<any>;
+  control: Control<Product, any>;
 }
 
 interface TSupplierSelect {

@@ -101,8 +101,8 @@ export interface StaffType extends CreatedUpdatedByAt {
   confirmPassword?: string;
   firstName: string;
   lastName: string;
-  profile: ImageType;
-  phoneNumber: Nullable<Scalars['Int']>;
+  profile: ImageType[];
+  phoneNumber: string;
   role: RoleType;
   roleId?: number;
   active: boolean;
@@ -275,7 +275,7 @@ export interface Product extends CreatedUpdatedByAt {
   status?: ProductStatus;
   disableOutOfStock?: Scalars['Boolean'];
   note?: Nullable<Scalars['String']>;
-  thumbnail?: Nullable<ImageType>;
+  thumbnail?: Nullable<ImageType[]>;
   gallery?: Nullable<ImageType[]>;
   categories?: Array<Category>;
   suppliers?: Nullable<Array<Suppliers>>;

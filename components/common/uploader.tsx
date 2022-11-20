@@ -44,7 +44,7 @@ export default function Uploader({ setLoading, setPhotos }: any) {
               if (image.success) {
                 setLoading(false);
                 setPhotos((prev) => {
-                  return [...prev, image];
+                  return [...(prev ?? []), image];
                 });
               }
 

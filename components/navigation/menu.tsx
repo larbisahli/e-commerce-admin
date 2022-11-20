@@ -17,6 +17,8 @@ export default function NavMenu() {
 
   const { staffInfo } = useGetStaff();
 
+  const profile = (staffInfo?.profile && staffInfo?.profile[0]) ?? {};
+
   return (
     <Menu as="div" className="relative inline-block text-left">
       <Menu.Button
@@ -26,9 +28,9 @@ export default function NavMenu() {
         )}
       >
         <Avatar
-          src={staffInfo?.profile?.image ?? siteSettings.avatar.image}
+          src={profile?.image ?? siteSettings.avatar.image}
           customPlaceholder={
-            staffInfo?.profile?.placeholder ?? siteSettings.avatar.placeholder
+            profile?.placeholder ?? siteSettings.avatar.placeholder
           }
         />
       </Menu.Button>

@@ -5,7 +5,7 @@ import React from 'react';
 
 import { useModalAction } from './modal/modal.context';
 
-const Thumbs = ({ photos }) => {
+const Thumbs = ({ photos, modalId }) => {
   const { openModal } = useModalAction();
   if (isEmpty(photos)) {
     return null;
@@ -19,7 +19,7 @@ const Thumbs = ({ photos }) => {
           <li
             className="rounded-sm mt-2 me-2 relative cursor-pointer"
             key={id}
-            onClick={() => openModal(IMAGE_MODAL)}
+            onClick={() => openModal(IMAGE_MODAL, modalId)}
             // eslint-disable-next-line jsx-a11y/no-noninteractive-element-to-interactive-role
             role="button"
           >

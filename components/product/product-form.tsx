@@ -1,11 +1,12 @@
 import { useMutation } from '@apollo/client';
 import Card from '@components/common/card';
 import { SaveIcon } from '@components/icons/save-icon';
+import ImageModal from '@components/image-modal';
+import Accordion from '@components/ui/accordion';
 import Alert from '@components/ui/alert';
 import Button from '@components/ui/button';
 import Checkbox from '@components/ui/checkbox';
 import Description from '@components/ui/description';
-import FileInput from '@components/ui/file-input';
 import ValidationError from '@components/ui/form-validation-error';
 import Input from '@components/ui/input';
 import Label from '@components/ui/label';
@@ -110,7 +111,7 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
     resolver: yupResolver(productValidationSchema),
     shouldUnregister: true,
     //@ts-ignore
-    defaultValues: initialValues
+    defaultValues: !isEmpty(initialValues)
       ? cloneDeep({
           ...initialValues,
           status: initialValues?.published
@@ -129,6 +130,7 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
     handleSubmit,
     control,
     getValues,
+    setValue,
     watch,
     reset,
     formState: { errors }
@@ -205,9 +207,13 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
     return confirm(t('common:UNSAVED_CHANGES'));
   });
 
+  // MORE WORK HERE
   const currentProductType = watch('type');
 
   const type = currentProductType?.id ?? getValues('type');
+
+  const thumbnail = watch('thumbnail');
+  const gallery = watch('gallery');
 
   return (
     <>
@@ -231,10 +237,17 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
             />
 
             <Card className="w-full sm:w-8/12 md:w-2/3">
-              <FileInput name="thumbnail" control={control} multiple={false} />
+              <ImageModal
+                onSelect={(photo) => {
+                  console.log('thumbnail', photo);
+                  setValue('thumbnail', photo);
+                }}
+                selected={thumbnail}
+                isThumbnail
+                modalId="thumbnail"
+              />
             </Card>
           </div>
-
           {/* Gallery */}
           <div className="flex flex-wrap pb-8 border-b border-dashed border-border-base my-5 sm:my-8">
             <Description
@@ -244,114 +257,17 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
             />
 
             <Card className="w-full sm:w-8/12 md:w-2/3">
-              <FileInput name="gallery" control={control} />
-            </Card>
-          </div>
-
-          {/* Tags, Category and Suppliers*/}
-          <div className="flex flex-wrap pb-8 border-b border-dashed border-border-base my-5 sm:my-8">
-            <Description
-              title={t('form:type-and-category')}
-              details={t('form:type-and-category-help-text')}
-              className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
-            />
-
-            <Card className="w-full sm:w-8/12 md:w-2/3">
-              <ProductCategoryInput control={control} />
-              {/* @ts-ignore */}
-              <ValidationError message={t(errors.categories?.message)} />
-              <ProductSupplierInput control={control} />
-              <ProductTagInput control={control} />
-            </Card>
-          </div>
-
-          {/* Description */}
-          <div className="flex flex-wrap my-5 sm:my-8 pb-8 border-b border-dashed border-border-base">
-            <Description
-              title={t('form:item-description')}
-              details={`${
-                initialValues
-                  ? t('form:item-description-edit')
-                  : t('form:item-description-add')
-              } ${t('form:product-description-help-text')}`}
-              className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
-            />
-
-            <Card className="w-full sm:w-8/12 md:w-2/3">
-              <Input
-                label={`${t('form:input-label-name')}*`}
-                {...register('name')}
-                error={t(errors.name?.message!)}
-                placeholder="Title..."
-                variant="outline"
-                className="mb-5"
+              <ImageModal
+                onSelect={(photo) => setValue('gallery', photo)}
+                selected={gallery}
+                modalId="gallery"
               />
-
-              <Label>{t('form:input-label-product-details')}*</Label>
-              <Editor
-                control={control}
-                name="description"
-                className="mb-5"
-                defaultValue=""
-              />
-              <ValidationError message={t(errors.description?.message)} />
-              <TextArea
-                label={`${t('form:item-seo-description')}*`}
-                // @ts-ignore
-                {...register('shortDescription')}
-                onBlur={() =>
-                  setShortDescription(getValues('shortDescription').length)
-                }
-                error={t(errors.shortDescription?.message!)}
-                variant="outline"
-              />
-              <div style={{ fontSize: '.75rem' }} className="mb-5">
-                {shortDescription <= 160 ? (
-                  <span className="text-green-600 ">
-                    {`(${shortDescription}/160 characters max)`}
-                  </span>
-                ) : (
-                  <span className="text-red-600">
-                    {`(${shortDescription}/160 characters max)`}
-                  </span>
-                )}
-              </div>
-              <TextArea
-                label={t('form:item-hidden-note')}
-                {...register('note')}
-                placeholder="Hidden note"
-                error={t(errors.note?.message!)}
-                variant="outline"
-                className="mb-5"
-              />
-              <div>
-                <Label>{t('form:input-label-status')}</Label>
-                <Radio
-                  {...register('status')}
-                  label={t('form:input-label-publish')}
-                  id={ProductStatus.Publish}
-                  value={ProductStatus.Publish}
-                  className="mb-2"
-                />
-                <Radio
-                  {...register('status')}
-                  id={ProductStatus.Draft}
-                  label={t('form:input-label-draft')}
-                  value={ProductStatus.Draft}
-                />
-              </div>
-              <div className="my-5">
-                <Checkbox
-                  {...register('disableOutOfStock')}
-                  label={t('form:input-label-disable-out-of-stock')}
-                />
-              </div>
             </Card>
           </div>
 
           {/* Product Type */}
 
-          <div className="flex flex-wrap my-5 sm:my-8 pb-8 border-b border-dashed border-border-base">
+          <div className="flex flex-wrap pb-8 border-b border-dashed border-border-base my-5 sm:my-8">
             <Description
               title={t('form:form-title-product-type')}
               details={`${
@@ -373,24 +289,175 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
               />
             </Card>
           </div>
-          {/* Variation Type & Simple Type */}
-
-          {!!type &&
-            (type === ProductType.Simple ? (
-              <ProductInfoForm initialValues={initialValues} />
-            ) : (
-              <ProductVariableForm
-                initialValues={initialValues}
-                variationState={variationState}
-                dispatchVariationState={dispatchVariationState}
+          {/* Content */}
+          <Accordion title={t('form:item-label-content')}>
+            <div className="flex flex-wrap my-5 sm:my-8">
+              <Description
+                details={`${
+                  initialValues
+                    ? t('form:item-description-edit')
+                    : t('form:item-description-add')
+                } ${t('form:product-description-help-text')}`}
+                className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
               />
-            ))}
 
+              <Card className="w-full sm:w-8/12 md:w-2/3">
+                <Input
+                  label={`${t('form:input-label-name')}*`}
+                  {...register('name')}
+                  error={t(errors.name?.message!)}
+                  placeholder="Title..."
+                  variant="outline"
+                  className="mb-5"
+                />
+
+                <Label>{t('form:input-label-product-details')}*</Label>
+                <Editor
+                  control={control}
+                  name="description"
+                  className="mb-5"
+                  defaultValue=""
+                />
+                <ValidationError message={t(errors.description?.message)} />
+                <TextArea
+                  label={t('form:item-hidden-note')}
+                  {...register('note')}
+                  placeholder="Hidden note"
+                  error={t(errors.note?.message!)}
+                  variant="outline"
+                  className="mb-5"
+                />
+                <div>
+                  <Label>{t('form:input-label-status')}</Label>
+                  <Radio
+                    {...register('status')}
+                    label={t('form:input-label-publish')}
+                    id={ProductStatus.Publish}
+                    value={ProductStatus.Publish}
+                    className="mb-2"
+                  />
+                  <Radio
+                    {...register('status')}
+                    id={ProductStatus.Draft}
+                    label={t('form:input-label-draft')}
+                    value={ProductStatus.Draft}
+                  />
+                </div>
+                <div className="my-5">
+                  <Checkbox
+                    {...register('disableOutOfStock')}
+                    label={t('form:input-label-disable-out-of-stock')}
+                  />
+                </div>
+              </Card>
+            </div>
+          </Accordion>
+
+          {/* Variation Type & Simple Type */}
+          <Accordion
+            title={
+              type === ProductType.Simple
+                ? t('form:form-title-simple-product-info')
+                : t('form:form-title-variation-product-info')
+            }
+          >
+            {!!type &&
+              (type === ProductType.Simple ? (
+                <ProductInfoForm initialValues={initialValues} />
+              ) : (
+                <ProductVariableForm
+                  initialValues={initialValues}
+                  variationState={variationState}
+                  dispatchVariationState={dispatchVariationState}
+                />
+              ))}
+          </Accordion>
+
+          {/* Tags, Category and Suppliers*/}
+          <Accordion title={t('form:type-and-category')}>
+            <div className="flex flex-wrap my-5 sm:my-8">
+              <Description
+                details={t('form:type-and-category-help-text')}
+                className="w-full px-0 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
+              />
+              <Card className="w-full sm:w-8/12 md:w-2/3">
+                <ProductCategoryInput control={control} />
+                {/* @ts-ignore */}
+                <ValidationError message={t(errors.categories?.message)} />
+                <ProductSupplierInput control={control} />
+                <ProductTagInput control={control} />
+              </Card>
+            </div>
+          </Accordion>
+          {/* Variation Type & Simple Type */}
+          <Accordion title={t('form:form-title-seo')}>
+            <div className="flex flex-wrap my-5 sm:my-8">
+              <Description
+                details={t('form:type-and-category-help-text')}
+                className="w-full px-0 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
+              />
+              <Card className="w-full sm:w-8/12 md:w-2/3">
+                <Input
+                  label={`${t('form:input-label-url-key')}*`}
+                  {...register('urlKey')}
+                  error={t(errors.urlKey?.message!)}
+                  placeholder="Title..."
+                  variant="outline"
+                  className="mb-5"
+                />
+                <Input
+                  label={`${t('form:input-label-meta-title')}*`}
+                  {...register('metaTitle')}
+                  error={t(errors.metaTitle?.message!)}
+                  placeholder="Title..."
+                  variant="outline"
+                  className="mb-5"
+                />
+                <TextArea
+                  label={`${t('form:input-label-meta-keywords')}*`}
+                  // @ts-ignore
+                  {...register('metaKeywords')}
+                  onBlur={() =>
+                    setShortDescription(getValues('metaKeywords').length)
+                  }
+                  error={t(errors.metaKeywords?.message!)}
+                  variant="outline"
+                  className="mb-5"
+                  placeholder="Products, keywords, ..."
+                />
+                <TextArea
+                  label={`${t('form:item-seo-description')}*`}
+                  // @ts-ignore
+                  {...register('shortDescription')}
+                  onBlur={() =>
+                    setShortDescription(getValues('shortDescription').length)
+                  }
+                  error={t(errors.shortDescription?.message!)}
+                  variant="outline"
+                />
+                <div style={{ fontSize: '.75rem' }} className="mb-5">
+                  {shortDescription <= 160 ? (
+                    <span className="text-green-600 ">
+                      {`(${shortDescription}/160 characters max)`}
+                    </span>
+                  ) : (
+                    <span className="text-red-600">
+                      {`(${shortDescription}/160 characters max)`}
+                    </span>
+                  )}
+                </div>
+              </Card>
+            </div>
+          </Accordion>
           {/* Shipping Info */}
-          <ProductShippingInfoForm
-            control={control}
-            initialValues={initialValues}
-          />
+          <div className="mb-12">
+            <Accordion title={t('form:form-title-product-shipping-info')}>
+              <ProductShippingInfoForm
+                control={control}
+                initialValues={initialValues}
+              />
+            </Accordion>
+          </div>
 
           <div className="mb-4 text-end">
             {initialValues && (

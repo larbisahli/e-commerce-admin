@@ -2,6 +2,7 @@ import ActionButtons from '@components/common/action-buttons';
 import Avatar from '@components/common/avatar';
 import Badge from '@components/ui/badge/badge';
 import Pagination from '@components/ui/pagination';
+import ProfileCart from '@components/ui/profile-card';
 import { Table } from '@components/ui/table';
 import { useGetStaff } from '@hooks/useGetStaff';
 import { siteSettings } from '@settings/site.settings';
@@ -44,15 +45,16 @@ const StaffList = ({
       key: 'profile',
       align: 'center',
       width: 74,
-      render: (profile: ImageType, record: StaffType) => (
-        <Avatar
-          src={profile?.image ?? siteSettings.avatar.image}
-          alt={`${record?.firstName} ${record?.lastName}`}
-          customPlaceholder={
-            profile?.placeholder ?? siteSettings.avatar.placeholder
-          }
-        />
-      )
+      render: (profile: ImageType, record: StaffType) => {
+        const { image, placeholder } = profile[0] ?? {};
+        return (
+          <Avatar
+            src={image ?? siteSettings.avatar.image}
+            alt={`${record?.firstName} ${record?.lastName}`}
+            customPlaceholder={placeholder ?? siteSettings.avatar.placeholder}
+          />
+        );
+      }
     },
     {
       title: t('table:table-item-title'),
@@ -150,12 +152,11 @@ const StaffList = ({
       align: alignLeft,
       width: 100,
       ellipsis: true,
-      render: (createdBy: CreatedUpdatedByAt['createdBy']) => {
-        return (
-          <div className="ml-1">{`${createdBy?.firstName ?? ''} ${
-            createdBy?.lastName ?? ''
-          }`}</div>
-        );
+      render: (
+        createdBy: CreatedUpdatedByAt['createdBy'],
+        record: StaffType
+      ) => {
+        return <ProfileCart staff={createdBy} createdAt={record?.createdAt} />;
       }
     },
     {
@@ -165,12 +166,11 @@ const StaffList = ({
       align: alignLeft,
       width: 140,
       ellipsis: true,
-      render: (updatedBy: CreatedUpdatedByAt['updatedBy']) => {
-        return (
-          <div>{`${updatedBy?.firstName ?? ''} ${
-            updatedBy?.lastName ?? ''
-          }`}</div>
-        );
+      render: (
+        updatedBy: CreatedUpdatedByAt['updatedBy'],
+        record: StaffType
+      ) => {
+        return <ProfileCart staff={updatedBy} updatedAt={record?.updatedAt} />;
       }
     },
     {

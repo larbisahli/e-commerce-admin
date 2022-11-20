@@ -198,7 +198,6 @@ export default function CreateOrUpdateCategoriesForm({
     return confirm(t('common:UNSAVED_CHANGES'));
   });
 
-  // @ts-ignore
   const thumbnail = watch('thumbnail');
 
   const Icons = useMemo(() => {

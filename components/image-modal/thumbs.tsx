@@ -32,10 +32,10 @@ const ImageThumbs = ({
       }
     } else {
       if (checked) {
-        setSelectedImages((prev) => [...prev, photo]);
+        setSelectedImages((prev) => [...(prev ?? []), photo]);
       } else {
         setSelectedImages((prev) => [
-          ...(prev?.filter((img) => img.id !== photo?.id) ?? [])
+          ...((prev ?? [])?.filter((img) => img.id !== photo?.id) ?? [])
         ]);
       }
     }

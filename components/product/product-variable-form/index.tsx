@@ -184,9 +184,8 @@ function ProductVariableForm({
   };
 
   return (
-    <div className="flex flex-wrap pb-8 border-b border-dashed border-border-base my-5 sm:my-8">
+    <div className="flex flex-wrap pb-8 my-5 sm:my-8">
       <Description
-        title={t('form:form-title-variation-product-info')}
         details={`${
           initialValues
             ? t('form:item-description-update')

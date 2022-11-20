@@ -17,6 +17,7 @@ const ImageComponent = ({ src, customPlaceholder, ...props }: Props) => {
       placeholder="blur"
       alt={props.alt}
       src={`${mediaURL}/${src}`}
+      className="pointer-events-none"
       {...props}
     />
   );
