@@ -44,7 +44,7 @@ type IProps = {
 };
 
 interface TAttributeSelect {
-  attributesForAdmin: Attribute[];
+  getAttributes: Attribute[];
 }
 
 interface OptionsVariable {
@@ -108,7 +108,7 @@ function ProductVariableForm({
   const gallery = watch('gallery');
   const variations = variationState.variations;
   const variationOptions = variationState.variationOptions;
-  const attributes = data?.attributesForAdmin ?? [];
+  const attributes = data?.getAttributes ?? [];
 
   const attributeValuesChanges = [].concat(
     ...(variations?.map((v) => v?.selectedValues) ?? [])
@@ -194,7 +194,7 @@ function ProductVariableForm({
         className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
       />
       <Card className="w-full sm:w-8/12 md:w-2/3 p-0 md:p-0">
-        <div className="border-t border-dashed border-border-200 mb-5 md:mb-8">
+        <div className="border-t border-dashed border-border-200">
           <Title className="text-lg uppercase text-center px-5 md:px-8 mb-0 mt-8">
             {t('form:form-title-options')}
           </Title>
@@ -215,7 +215,7 @@ function ProductVariableForm({
             })}
           </div>
 
-          <div className="px-5 md:px-8">
+          <div className="px-5 pb-5 md:px-8">
             <Button
               disabled={variations.length === attributes?.length}
               onClick={appendVariant}

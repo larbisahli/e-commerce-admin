@@ -53,13 +53,13 @@ export const ATTRIBUTES = gql`
 `;
 
 export const ATTRIBUTES_FOR_SELECT = gql`
-  query AttributesForSelect(
+  query GetAttributes(
     $page: Int!
     $limit: Int!
     $orderBy: String!
     $sortedBy: String!
   ) {
-    attributesForAdmin(
+    getAttributes(
       page: $page
       limit: $limit
       orderBy: $orderBy

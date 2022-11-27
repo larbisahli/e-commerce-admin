@@ -4,12 +4,12 @@ import cn from 'classnames';
 import React, { useState } from 'react';
 
 type CollapseProps = {
-  title: string;
+  Title: React.FC;
   children: React.ReactNode;
   variant?: 'gray' | 'transparent';
 };
 
-export const Accordion: React.FC<CollapseProps> = ({ title, children }) => {
+export const Accordion: React.FC<CollapseProps> = ({ Title, children }) => {
   const [open, setOpen] = useState(false);
 
   const onChange = (e) => {
@@ -30,7 +30,9 @@ export const Accordion: React.FC<CollapseProps> = ({ title, children }) => {
             )}
             onClick={onChange}
           >
-            <div>{title}</div>
+            <div>
+              <Title />
+            </div>
             <div
               className={cn('text-gray-400 transition', {
                 'rotate-180': open

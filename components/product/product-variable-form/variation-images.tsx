@@ -54,7 +54,7 @@ const VariationImages = ({
   return (
     <div className="mb-5 mt-5">
       <Label>{t('form:input-label-select-image')}</Label>
-      <div className="flex items-center">
+      <div className="flex items-center flex-wrap">
         {gallery?.map(({ image, placeholder }, idx) => {
           return (
             <GalleryShowcase

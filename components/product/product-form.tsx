@@ -290,7 +290,7 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
             </Card>
           </div>
           {/* Content */}
-          <Accordion title={t('form:item-label-content')}>
+          <Accordion Title={() => <>{t('form:item-label-content')}</>}>
             <div className="flex flex-wrap my-5 sm:my-8">
               <Description
                 details={`${
@@ -355,11 +355,13 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
 
           {/* Variation Type & Simple Type */}
           <Accordion
-            title={
-              type === ProductType.Simple
-                ? t('form:form-title-simple-product-info')
-                : t('form:form-title-variation-product-info')
-            }
+            Title={() => (
+              <>
+                {type === ProductType.Simple
+                  ? t('form:form-title-simple-product-info')
+                  : t('form:form-title-variation-product-info')}
+              </>
+            )}
           >
             {!!type &&
               (type === ProductType.Simple ? (
@@ -374,7 +376,7 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
           </Accordion>
 
           {/* Tags, Category and Suppliers*/}
-          <Accordion title={t('form:type-and-category')}>
+          <Accordion Title={() => t('form:type-and-category')}>
             <div className="flex flex-wrap my-5 sm:my-8">
               <Description
                 details={t('form:type-and-category-help-text')}
@@ -390,7 +392,7 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
             </div>
           </Accordion>
           {/* Variation Type & Simple Type */}
-          <Accordion title={t('form:form-title-seo')}>
+          <Accordion Title={() => t('form:form-title-seo')}>
             <div className="flex flex-wrap my-5 sm:my-8">
               <Description
                 details={t('form:type-and-category-help-text')}
@@ -451,7 +453,7 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
           </Accordion>
           {/* Shipping Info */}
           <div className="mb-12">
-            <Accordion title={t('form:form-title-product-shipping-info')}>
+            <Accordion Title={() => t('form:form-title-product-shipping-info')}>
               <ProductShippingInfoForm
                 control={control}
                 initialValues={initialValues}
