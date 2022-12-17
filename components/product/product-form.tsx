@@ -245,6 +245,7 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
                 selected={thumbnail}
                 isThumbnail
                 modalId="thumbnail"
+                label='form:label-add-product-thumbnail'
               />
             </Card>
           </div>
@@ -261,6 +262,7 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
                 onSelect={(photo) => setValue('gallery', photo)}
                 selected={gallery}
                 modalId="gallery"
+                label="form:label-add-product-images"
               />
             </Card>
           </div>

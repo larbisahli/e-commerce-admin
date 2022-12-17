@@ -15,7 +15,11 @@ export const StaffInfoContext = React.createContext<State>(initialState);
 
 StaffInfoContext.displayName = 'StaffInfoContext';
 
-export const StaffInfoProvider: React.FC = ({ ...props }) => {
+interface Props {
+  children: React.ReactNode;
+}
+
+export const StaffInfoProvider: React.FC<Props> = (props) => {
   const [staffInfo, setStaffInfo] = useState<StaffType | null>(null);
   return (
     <StaffInfoContext.Provider value={{ staffInfo, setStaffInfo }} {...props} />

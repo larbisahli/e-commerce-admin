@@ -420,5 +420,8 @@
   "form-title-seo": "Search Engine Optimization",
   "input-label-url-key": "URL Key",
   "input-label-meta-keywords": "Meta keywords",
-  "item-label-content": "Content"
+  "item-label-content": "Content",
+  "label-add-product-images": "Add Product Images",
+  "label-add-product-thumbnail": "Add Product Thumbnail",
+  "label-add-variant-thumbnail": "Add Variant Thumbnail"
 }

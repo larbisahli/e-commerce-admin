@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-to-interactive-role */
-import { useQuery } from '@apollo/client';
+import 'rc-pagination/assets/index.css';
+
 import Uploader from '@components/common/uploader';
 import Button from '@components/ui/button';
 import Loader from '@components/ui/loader/loader';
@@ -8,28 +9,17 @@ import {
   useModalAction,
   useModalState
 } from '@components/ui/modal/modal.context';
+import Pagination from '@components/ui/pagination';
 import Thumbs from '@components/ui/thumbs';
-import { PHOTOS } from '@graphql/photo';
-import { useErrorLogger } from '@hooks/useErrorLogger';
+import { usePhotos } from '@hooks/usePhotos';
 import { IMAGE_MODAL } from '@ts-types/constants';
-import { ImageType, OrderBy, SortOrder } from '@ts-types/generated';
+import { ImageType } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
-import Pagination from 'rc-pagination';
 import { useEffect, useState } from 'react';
 
 import ImageThumbs from './thumbs';
 
-interface TPhotos {
-  getPhotos: ImageType[];
-  getPhotosCount: { count: number };
-}
-
-interface OptionsVariable {
-  page: number;
-  limit: number;
-  orderBy: OrderBy;
-  sortedBy: SortOrder;
-}
+const limit = 20;
 
 interface Props {
   // eslint-disable-next-line no-unused-vars
@@ -37,15 +27,15 @@ interface Props {
   selected: ImageType[];
   isThumbnail?: boolean;
   modalId?: string;
+  label?: string
 }
-
-const limit = 20;
 
 const ImageModal = ({
   onSelect,
   selected,
   isThumbnail,
-  modalId = 'image_modal'
+  modalId = 'image_modal',
+  label = 'Add product images'
 }: Props) => {
   const { t } = useTranslation();
 
@@ -53,13 +43,18 @@ const ImageModal = ({
   const { isOpen, view, id } = useModalState();
 
   const [loading, setLoading] = useState<boolean>(false);
-  const [photos, setPhotos] = useState<ImageType[]>([]);
   const [selectedImages, setSelectedImages] = useState<ImageType[]>(
     () => selected
   );
-  const [page, setPage] = useState(1);
-  // eslint-disable-next-line no-unused-vars
-  const [orderBy, setOrder] = useState(OrderBy.CREATED_AT);
+
+  const {
+     photos:{items},
+     currentPage,
+     photosCount,
+     loadingPhotos,
+     handlePagination,
+     setPhotoContext
+    } = usePhotos({limit})
 
   useEffect(() => {
     if (!isOpen) {
@@ -67,49 +62,13 @@ const ImageModal = ({
     }
   }, [isOpen, selected]);
 
-  const {
-    data,
-    loading: loadingPhotos,
-    error,
-    fetchMore
-  } = useQuery<TPhotos, OptionsVariable>(PHOTOS, {
-    variables: {
-      page,
-      limit,
-      orderBy,
-      sortedBy: SortOrder.Desc
-    }
-  });
-
-  const photosCount = data?.getPhotosCount?.count;
-
-  useEffect(() => {
-    setPhotos(() => {
-      return [...(data?.getPhotos ?? [])];
-    });
-  }, [data]);
-
-  useErrorLogger(error);
-
-  function handlePagination(current: any) {
-    setPage(current);
-    fetchMore({
-      variables: {
-        page: current,
-        limit,
-        orderBy,
-        sortedBy: SortOrder.Desc
-      }
-    });
-  }
-
   const isCurrentModal = modalId === id;
 
   return (
     <div className="w-full">
       {/* BUTTON */}
       <div className="flex items-center justify-between border-b pb-5">
-        <div className="font-medium">Add product images</div>
+        <div className="font-medium">{t(label)}</div>
         <Button
           onClick={(e) => {
             e.preventDefault();
@@ -128,7 +87,7 @@ const ImageModal = ({
           <div className="bg-white min-h-[600px] h-full w-full md:w-[80vw]">
             <div className="w-fit p-4 font-semibold text-lg">Store Images</div>
             <div className="m-4">
-              <Uploader setLoading={setLoading} setPhotos={setPhotos} />
+              <Uploader setLoading={setLoading} setPhotos={setPhotoContext} />
             </div>
             <div className="flex flex-col justify-between p-4 relative my-5 min-h-full">
               {loadingPhotos && (
@@ -146,8 +105,8 @@ const ImageModal = ({
                     </li>
                   )}
                   <ImageThumbs
+                    photos={items}
                     {...{
-                      photos,
                       setSelectedImages,
                       selectedImages,
                       isThumbnail
@@ -159,7 +118,7 @@ const ImageModal = ({
                 <div className="flex-1">
                   <Pagination
                     total={photosCount}
-                    current={page}
+                    current={currentPage}
                     pageSize={limit}
                     onChange={handlePagination}
                   />

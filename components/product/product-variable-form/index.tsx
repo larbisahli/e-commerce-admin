@@ -23,7 +23,6 @@ import { nanoid } from 'nanoid';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
 import React, { memo, useEffect, useMemo, useState } from 'react';
-import { useFormContext } from 'react-hook-form';
 
 import {
   VariationAction,
@@ -55,7 +54,7 @@ interface OptionsVariable {
 }
 
 interface CartesianType {
-  id: string;
+  id: string | number;
   name: string;
   value: string;
 }
@@ -98,14 +97,11 @@ function ProductVariableForm({
 
   useErrorLogger(error);
 
-  const { watch } = useFormContext();
-
   const [attributeValuesChangesState, setAttributeValuesChangesState] =
     useState([]);
   const [cartesianProduct, setCartesianProduct] = useState([]);
   const [init, setInit] = useState(false);
 
-  const gallery = watch('gallery');
   const variations = variationState.variations;
   const variationOptions = variationState.variationOptions;
   const attributes = data?.getAttributes ?? [];
@@ -220,6 +216,7 @@ function ProductVariableForm({
               disabled={variations.length === attributes?.length}
               onClick={appendVariant}
               type="button"
+              loading={loading}
             >
               {t('form:button-label-add-option')}
             </Button>
@@ -238,7 +235,6 @@ function ProductVariableForm({
                 return (
                   <CartesianProductComponent
                     key={index}
-                    gallery={gallery}
                     variationOption={variationOption}
                     dispatchVariationState={dispatchVariationState}
                     index={index}

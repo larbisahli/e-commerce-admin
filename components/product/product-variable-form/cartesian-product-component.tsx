@@ -1,4 +1,5 @@
 // import Checkbox from '@components/ui/checkbox';
+import ImageModal from '@components/image-modal';
 import Accordion from '@components/ui/accordion';
 import Input from '@components/ui/input';
 import Title from '@components/ui/title';
@@ -9,20 +10,17 @@ import { useTranslation } from 'next-i18next';
 import React, { memo, useMemo } from 'react';
 
 import { VariationAction } from '../variations-reducer';
-import VariationImages from './variation-images';
 
 interface CartesianProductProps {
   variationOption: VariationOptionsType;
   dispatchVariationState?: React.Dispatch<VariationAction>;
   index: number;
-  gallery: ImageType[];
 }
 
 const CartesianProductComponent = ({
   variationOption,
   dispatchVariationState,
   index,
-  gallery
 }: CartesianProductProps) => {
   const { t } = useTranslation();
 
@@ -52,6 +50,17 @@ const CartesianProductComponent = ({
     });
   };
 
+  const handleSelectedImage = (photo: ImageType[]) => {
+    dispatchVariationState({
+      type: VariationActions.CHANGE_VARIATION_OPTION,
+      payload: {
+        value: photo,
+        field: 'image',
+        options
+      }
+    });
+  }
+
   return (
     <Accordion
       Title={() => (
@@ -67,7 +76,7 @@ const CartesianProductComponent = ({
         key={`fieldAttributeValues-${index}`}
         className="border-b last:border-0 border-dashed border-border-200 p-5 md:p-8 md:last:pb-0 mb-5 last:mb-8 mt-5"
       >
-        <div className="grid grid-cols-3 gap-5">
+        <div className="grid grid-cols-3 gap-3">
           <Input
             label={`${t('form:input-label-sale-price')} (${currency.symbol})*`}
             type="number"
@@ -77,7 +86,7 @@ const CartesianProductComponent = ({
             value={variationOption.salePrice}
             // error={t(errors.variation_options?.[index]?.sale_price?.message)}
             variant="outline"
-            className="mb-5"
+            className="mb-2 ml-1"
           />
           <Input
             label={`${t('form:input-label-compare-price')} (${
@@ -89,7 +98,7 @@ const CartesianProductComponent = ({
             type="number"
             // error={t(errors.variation_options?.[index]?.compare_price?.message)}
             variant="outline"
-            className="mb-5"
+            className="mb-2 ml-1"
           />
           <Input
             label={`${t('form:input-label-buying-price')} (${currency.symbol})`}
@@ -99,7 +108,7 @@ const CartesianProductComponent = ({
             value={variationOption.buyingPrice}
             // error={t(errors.variation_options?.[index]?.buying_price?.message)}
             variant="outline"
-            className="mb-5"
+            className="mb-2 ml-1"
           />
           <Input
             label={`${t('form:input-label-quantity')}*`}
@@ -109,7 +118,7 @@ const CartesianProductComponent = ({
             value={variationOption.quantity}
             // error={t(errors.variation_options?.[index]?.quantity?.message)}
             variant="outline"
-            className="mb-5"
+            className="mb-2 ml-1"
             note={'Zero means out of stock'}
           />
           <Input
@@ -119,16 +128,16 @@ const CartesianProductComponent = ({
             value={variationOption.sku}
             // error={t(errors.variation_options?.[index]?.sku?.message)}
             variant="outline"
-            className="mb-5"
+            className="mb-2 ml-1"
           />
         </div>
 
-        {/* use dynamic import */}
-        <VariationImages
-          gallery={gallery}
-          selectedImage={variationOption.image}
-          dispatchVariationState={dispatchVariationState}
-          options={options}
+        <ImageModal
+            isThumbnail
+            onSelect={handleSelectedImage}
+            selected={variationOption.image ?? []}
+            modalId={`fieldAttributeValues-modal-${index}`}
+            label='form:label-add-variant-thumbnail'
         />
 
         {/* <div className="mb-5 mt-5">

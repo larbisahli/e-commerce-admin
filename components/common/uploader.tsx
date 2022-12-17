@@ -2,6 +2,7 @@ import { UploadIcon } from '@components/icons/upload-icon';
 import { useErrorLogger } from '@hooks/index';
 import { notify } from '@lib/notify';
 import { apiURL } from '@utils/utils';
+import cloneDeep from 'lodash/cloneDeep';
 import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
 import { useDropzone } from 'react-dropzone';
@@ -44,7 +45,17 @@ export default function Uploader({ setLoading, setPhotos }: any) {
               if (image.success) {
                 setLoading(false);
                 setPhotos((prev) => {
-                  return [...(prev ?? []), image];
+                  return {
+                    ...prev,
+                    storePhotos: prev.storePhotos?.map((storePhoto)=>{
+                      if(storePhoto.page === prev.currentPage){
+                        const clonedItems = cloneDeep (storePhoto.items)
+                        storePhoto.items = [image, ...clonedItems]
+                        return storePhoto
+                      }
+                      return storePhoto
+                    })
+                  }
                 });
               }
 

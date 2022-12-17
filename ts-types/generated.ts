@@ -297,7 +297,7 @@ export interface VariationOptionsType {
   key?: string;
   isDisable?: boolean;
   active?: boolean;
-  image: string;
+  image: ImageType[];
   options: string[];
   salePrice: Scalars['Float'];
   comparePrice: Scalars['Float'];

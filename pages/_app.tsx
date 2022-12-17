@@ -11,6 +11,7 @@ import LoadingBar from '@components/ui/loading-bar';
 // import ErrorMessage from "@components/ui/error-message";
 import ManagedModal from '@components/ui/modal/managed-modal';
 import { ModalProvider } from '@components/ui/modal/modal.context';
+import { PhotosProvider } from '@contexts/photos.context';
 import { StaffInfoProvider } from '@contexts/staff.context';
 // import { SettingsProvider } from "@contexts/settings.context";
 import { UIProvider } from '@contexts/ui.context';
@@ -80,20 +81,22 @@ function App({ Component, pageProps }: AppProps) {
       />
       <ErrorBoundary>
         <ApolloProvider client={apolloClient}>
-          <StaffInfoProvider>
-            <LoadingBar />
-            {/* <AppSettings> */}
-            <UIProvider>
-              <ModalProvider>
-                <ManagedModal />
-                <DefaultSeo />
-                <Layout {...pageProps}>
-                  <Component {...pageProps} />
-                </Layout>
-              </ModalProvider>
-            </UIProvider>
-            {/* </AppSettings> */}
-          </StaffInfoProvider>
+          <PhotosProvider>
+            <StaffInfoProvider>
+              <LoadingBar />
+              {/* <AppSettings> */}
+              <UIProvider>
+                <ModalProvider>
+                  <ManagedModal />
+                  <DefaultSeo />
+                  <Layout {...pageProps}>
+                    <Component {...pageProps} />
+                  </Layout>
+                </ModalProvider>
+              </UIProvider>
+              {/* </AppSettings> */}
+            </StaffInfoProvider>
+          </PhotosProvider>
         </ApolloProvider>
       </ErrorBoundary>
     </Fragment>
