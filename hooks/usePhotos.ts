@@ -25,17 +25,19 @@ interface PhotosType {
   items: ImageType[];
 }
 
-export function usePhotos({limit}:{limit: number}) {
-
-  const { storePhotos, currentPage, photosCount, setPhotoContext } = useContext(PhotosContext);
+export function usePhotos({ limit }: { limit: number }) {
+  const { storePhotos, currentPage, photosCount, setPhotoContext } =
+    useContext(PhotosContext);
   const [orderBy, setOrder] = useState(OrderBy.CREATED_AT);
 
+  const findPage = (items: PhotosType[], currentPage: number) =>
+    items?.find(({ page }) => page === currentPage);
 
-  const findPage = (items:PhotosType[], currentPage: number)=> items?.find((({page}) => page === currentPage))
-
-  const photos = useMemo(()=>{
-    return findPage(storePhotos, currentPage) ?? {page: 1, total:0, items:[]}
-  }, [storePhotos, currentPage])
+  const photos = useMemo(() => {
+    return (
+      findPage(storePhotos, currentPage) ?? { page: 1, total: 0, items: [] }
+    );
+  }, [storePhotos, currentPage]);
 
   const {
     data,
@@ -53,43 +55,46 @@ export function usePhotos({limit}:{limit: number}) {
 
   useErrorLogger(error);
 
-  console.log('====>',{data, storePhotos, currentPage, photosCount})
-
   useEffect(() => {
-    if(!isEmpty(data?.getPhotos)){
+    if (!isEmpty(data?.getPhotos)) {
       // data?.getPhotosCount?.count
       setPhotoContext((prev) => {
-        const PageExist = !isEmpty(findPage(prev.storePhotos, prev.currentPage))
-        console.log({PageExist})
+        const PageExist = !isEmpty(
+          findPage(prev.storePhotos, prev.currentPage)
+        );
+        console.log({ PageExist });
         return {
           ...prev,
           photosCount: data.getPhotosCount?.count,
-          storePhotos: PageExist ? prev.storePhotos?.map((storePhoto)=>{
-            if(storePhoto.page === currentPage){
-              storePhoto.total = data.getPhotos?.length
-              storePhoto.items = data.getPhotos
-            }
-            return storePhoto
-          }): [...prev.storePhotos,
-            {
-              page: currentPage,
-              total: data.getPhotos?.length,
-              items: data.getPhotos
-            }]
-        }
+          storePhotos: PageExist
+            ? prev.storePhotos?.map((storePhoto) => {
+                if (storePhoto.page === currentPage) {
+                  storePhoto.total = data.getPhotos?.length;
+                  storePhoto.items = data.getPhotos;
+                }
+                return storePhoto;
+              })
+            : [
+                ...prev.storePhotos,
+                {
+                  page: currentPage,
+                  total: data.getPhotos?.length,
+                  items: data.getPhotos
+                }
+              ]
+        };
       });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, setPhotoContext]);
 
-
   function handlePagination(currentPage: any) {
-    setPhotoContext((prev)=>{
+    setPhotoContext((prev) => {
       return {
         ...prev,
         currentPage
-      }
-    })
+      };
+    });
     fetchMore({
       variables: {
         page: currentPage,
@@ -100,5 +105,12 @@ export function usePhotos({limit}:{limit: number}) {
     });
   }
 
-  return { photos, currentPage, photosCount, loadingPhotos, handlePagination, setPhotoContext };
+  return {
+    photos,
+    currentPage,
+    photosCount,
+    loadingPhotos,
+    handlePagination,
+    setPhotoContext
+  };
 }

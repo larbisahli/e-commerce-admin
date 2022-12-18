@@ -20,7 +20,7 @@ interface CartesianProductProps {
 const CartesianProductComponent = ({
   variationOption,
   dispatchVariationState,
-  index,
+  index
 }: CartesianProductProps) => {
   const { t } = useTranslation();
 
@@ -59,7 +59,7 @@ const CartesianProductComponent = ({
         options
       }
     });
-  }
+  };
 
   return (
     <Accordion
@@ -133,11 +133,11 @@ const CartesianProductComponent = ({
         </div>
 
         <ImageModal
-            isThumbnail
-            onSelect={handleSelectedImage}
-            selected={variationOption.image ?? []}
-            modalId={`fieldAttributeValues-modal-${index}`}
-            label='form:label-add-variant-thumbnail'
+          isThumbnail
+          onSelect={handleSelectedImage}
+          selected={variationOption.image ?? []}
+          modalId={`fieldAttributeValues-modal-${index}`}
+          label="form:label-add-variant-thumbnail"
         />
 
         {/* <div className="mb-5 mt-5">

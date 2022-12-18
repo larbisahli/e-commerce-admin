@@ -40,7 +40,7 @@ const defaultValues = {
   phoneNumber: null,
   addressLine1: '',
   addressLine2: null,
-  country: { iso2: 'US' },
+  country: null,
   city: null,
   note: null
 };
@@ -52,15 +52,6 @@ export default function CreateOrUpdateSupplierForm({ initialValues }: IProps) {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const [countries, setCountries] = useState([]);
-
-  // Get Countries
-  useEffect(() => {
-    async function getCountries() {
-      const { Countries } = await import('@utils/countries');
-      setCountries(Countries);
-    }
-    getCountries();
-  }, []);
 
   const { t } = useTranslation();
 
@@ -75,6 +66,19 @@ export default function CreateOrUpdateSupplierForm({ initialValues }: IProps) {
   } = useForm<FormValues>({
     defaultValues: initialValues ? { ...initialValues } : defaultValues
   });
+
+  // Get Countries
+  useEffect(() => {
+    async function getCountries() {
+      const { Countries } = await import('@utils/countries');
+      setCountries(Countries);
+      setValue(
+        'country',
+        Countries?.find(({ iso2 }) => iso2 == 'US')
+      );
+    }
+    getCountries();
+  }, []);
 
   const { staffInfo } = useGetStaff();
   const csrfToken = staffInfo?.csrfToken;
@@ -188,7 +192,7 @@ export default function CreateOrUpdateSupplierForm({ initialValues }: IProps) {
                 className="mb-5"
               />
 
-              <div>
+              <div className="mb-5">
                 <Label>{t('form:input-label-country')}</Label>
                 <SelectInput
                   name="country"

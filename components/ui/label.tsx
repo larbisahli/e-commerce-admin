@@ -9,7 +9,7 @@ const Label: React.FC<Props> = ({ className, ...rest }) => {
   return (
     <label
       className={cn(
-        'block text-body-dark font-semibold text-sm leading-none mb-3',
+        'block text-body-dark font-semibold text-sm leading-none mb-2',
         className
       )}
       {...rest}

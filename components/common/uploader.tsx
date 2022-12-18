@@ -47,15 +47,15 @@ export default function Uploader({ setLoading, setPhotos }: any) {
                 setPhotos((prev) => {
                   return {
                     ...prev,
-                    storePhotos: prev.storePhotos?.map((storePhoto)=>{
-                      if(storePhoto.page === prev.currentPage){
-                        const clonedItems = cloneDeep (storePhoto.items)
-                        storePhoto.items = [image, ...clonedItems]
-                        return storePhoto
+                    storePhotos: prev.storePhotos?.map((storePhoto) => {
+                      if (storePhoto.page === prev.currentPage) {
+                        const clonedItems = cloneDeep(storePhoto.items);
+                        storePhoto.items = [image, ...clonedItems];
+                        return storePhoto;
                       }
-                      return storePhoto
+                      return storePhoto;
                     })
-                  }
+                  };
                 });
               }
 

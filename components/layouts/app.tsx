@@ -18,7 +18,7 @@ const AppLayout: React.FC = ({ children }: Props) => {
         <Sidebar />
         <main className="w-full h-full md:ps-20 nlg:ps-20 nxl:ps-20 lg:ps-72 xl:ps-76">
           <Navbar />
-          <div className="p-5 md:p-8 overflow-y-auto h-full">{children}</div>
+          <div className="p-4 md:p-8 overflow-y-auto h-full">{children}</div>
         </main>
       </div>
     </div>

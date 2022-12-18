@@ -275,8 +275,8 @@ export interface Product extends CreatedUpdatedByAt {
   status?: ProductStatus;
   disableOutOfStock?: Scalars['Boolean'];
   note?: Nullable<Scalars['String']>;
-  thumbnail?: Nullable<ImageType[]>;
-  gallery?: Nullable<ImageType[]>;
+  thumbnail?: ImageType[];
+  gallery?: ImageType[];
   categories?: Array<Category>;
   suppliers?: Nullable<Array<Suppliers>>;
   tags?: Nullable<Array<Nullable<Tag>>>;
@@ -308,7 +308,7 @@ export interface VariationOptionsType {
 
 // Attachment
 export interface ImageType {
-  id?: Scalars['String'];
+  id?: Scalars['ID'];
   image?: Scalars['String'];
   placeholder?: Scalars['String'];
   isThumbnail?: boolean;

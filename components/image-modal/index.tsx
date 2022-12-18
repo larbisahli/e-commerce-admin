@@ -19,7 +19,7 @@ import { useEffect, useState } from 'react';
 
 import ImageThumbs from './thumbs';
 
-const limit = 20;
+const limit = 45;
 
 interface Props {
   // eslint-disable-next-line no-unused-vars
@@ -27,7 +27,7 @@ interface Props {
   selected: ImageType[];
   isThumbnail?: boolean;
   modalId?: string;
-  label?: string
+  label?: string;
 }
 
 const ImageModal = ({
@@ -48,13 +48,13 @@ const ImageModal = ({
   );
 
   const {
-     photos:{items},
-     currentPage,
-     photosCount,
-     loadingPhotos,
-     handlePagination,
-     setPhotoContext
-    } = usePhotos({limit})
+    photos: { items },
+    currentPage,
+    photosCount,
+    loadingPhotos,
+    handlePagination,
+    setPhotoContext
+  } = usePhotos({ limit });
 
   useEffect(() => {
     if (!isOpen) {
@@ -84,17 +84,19 @@ const ImageModal = ({
       {/* MODEL */}
       <Modal open={isOpen && isCurrentModal} onClose={closeModal}>
         {view === IMAGE_MODAL && (
-          <div className="bg-white min-h-[600px] h-full w-full md:w-[80vw]">
-            <div className="w-fit p-4 font-semibold text-lg">Store Images</div>
-            <div className="m-4">
+          <div className="flex flex-col p-4 bg-white md:min-h-[600px] min-h-[100vh] h-full w-full md:w-[80vw] w-[100vw] 2xl:w-[70vw]">
+            <div className="w-fit font-semibold text-lg">Store Images</div>
+            <div className="py-4 m-2">
               <Uploader setLoading={setLoading} setPhotos={setPhotoContext} />
             </div>
-            <div className="flex flex-col justify-between p-4 relative my-5 min-h-full">
-              {loadingPhotos && (
-                <Loader height="40vh" text={t('common:text-loading')} />
-              )}
-              <div className="overflow-y-auto md:h-[350px] h-full">
-                <ul className="flex flex-wrap items-center justify-center md:justify-start px-[8px]">
+            <div className="flex m-2 flex-col justify-between relative my-5 min-h-full flex-1">
+              <div className="absolute z-10 top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                {loadingPhotos && (
+                  <Loader height="20vh" text={t('common:text-loading')} />
+                )}
+              </div>
+              <div className="overflow-y-auto h-full">
+                <ul className="flex flex-wrap items-center md:justify-start px-[8px]">
                   {loading && (
                     <li className="rounded-sm mt-2 me-2 relative">
                       <div className="relative min-w-0 w-24 h-24 overflow-hidden rounded-sm">

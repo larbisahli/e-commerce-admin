@@ -185,20 +185,22 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
 
     if (isEmpty(initialValues)) {
       const variables = creationVariable(values);
-      createProduct({ variables }).catch((err) => {
-        setError(err);
-        setUnsavedChanges(true);
-      });
+      console.log({ variables });
+      // createProduct({ variables }).catch((err) => {
+      //   setError(err);
+      //   setUnsavedChanges(true);
+      // });
     } else {
       const variables = updateVariable(values, initialValues);
-      updateProduct({
-        variables: {
-          ...variables
-        }
-      }).catch((err) => {
-        setError(err);
-        setUnsavedChanges(true);
-      });
+      console.log({ variables });
+      // updateProduct({
+      //   variables: {
+      //     ...variables
+      //   }
+      // }).catch((err) => {
+      //   setError(err);
+      //   setUnsavedChanges(true);
+      // });
     }
     setLockedSubmission(false);
   };
@@ -245,7 +247,7 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
                 selected={thumbnail}
                 isThumbnail
                 modalId="thumbnail"
-                label='form:label-add-product-thumbnail'
+                label="form:label-add-product-thumbnail"
               />
             </Card>
           </div>

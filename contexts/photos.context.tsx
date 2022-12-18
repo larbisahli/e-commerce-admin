@@ -2,13 +2,14 @@ import type { ImageType } from '@ts-types/generated';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 
 interface Photos {
-  storePhotos:{
-    page: number
-    total: number
-    items: ImageType[]
-  }[],
-  currentPage: number,
-  photosCount: number}
+  storePhotos: {
+    page: number;
+    total: number;
+    items: ImageType[];
+  }[];
+  currentPage: number;
+  photosCount: number;
+}
 
 export interface State extends Photos {
   setPhotoContext: Dispatch<SetStateAction<Photos>>;
@@ -30,9 +31,12 @@ interface Props {
 }
 
 export const PhotosProvider: React.FC<Props> = (props) => {
-  const [{storePhotos, currentPage, photosCount}, setPhotoContext] = useState<Photos>(
-    {storePhotos:[], currentPage:1, photosCount: 0});
+  const [{ storePhotos, currentPage, photosCount }, setPhotoContext] =
+    useState<Photos>({ storePhotos: [], currentPage: 1, photosCount: 0 });
   return (
-    <PhotosContext.Provider value={{ storePhotos, currentPage, photosCount, setPhotoContext }} {...props}/>
+    <PhotosContext.Provider
+      value={{ storePhotos, currentPage, photosCount, setPhotoContext }}
+      {...props}
+    />
   );
 };

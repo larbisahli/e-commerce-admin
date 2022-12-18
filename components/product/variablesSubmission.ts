@@ -27,14 +27,14 @@ const creationVariable = (values: Product): Product => {
     suppliers: values?.suppliers?.map(({ id }: Suppliers) => {
       return { id };
     }),
-    thumbnail: {
-      image: values?.thumbnail?.image,
-      placeholder: values?.thumbnail?.placeholder
-    },
+    thumbnail: values.thumbnail?.map((img) => {
+      return {
+        id: img?.id
+      };
+    }),
     gallery: values.gallery?.map((img) => {
       return {
-        image: img?.image,
-        placeholder: img?.placeholder
+        id: img?.id
       };
     }),
     productShippingInfo: {
@@ -271,16 +271,16 @@ const updateVariable = (values: Product, initialValues: Product) => {
       productShippingInfo,
       gallery: galleryAdditions?.map((img) => {
         return {
-          image: img?.image,
-          placeholder: img?.placeholder
+          id: img?.id
         };
       }),
       thumbnail: isEmpty(thumbnailDeletion)
         ? null
-        : {
-            image: thumbnailAddition[0]?.image,
-            placeholder: thumbnailAddition[0]?.placeholder
-          },
+        : [
+            {
+              id: thumbnailAddition[0]?.id
+            }
+          ],
       categories: categoriesAdditions?.map(({ id }) => {
         return { id };
       }),
