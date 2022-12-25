@@ -8,7 +8,8 @@ import React from 'react';
 const Pagination: React.FC<PaginationProps> = (props) => {
   return (
     <RCPagination
-      className="px-1"
+      simple
+      showTitle={false}
       nextIcon={<ArrowNext />}
       prevIcon={<ArrowPrev />}
       {...props}

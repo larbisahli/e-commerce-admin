@@ -420,7 +420,7 @@
 .rc-pagination .rc-pagination-next,
 .rc-pagination.rc-pagination-simple .rc-pagination-prev,
 .rc-pagination.rc-pagination-simple .rc-pagination-next {
-  @apply w-8 h-8 me-2 mt-2 flex items-center justify-center rounded border border-border-base bg-gray-50 hover:border-accent  hover:text-accent focus:border-accent focus:text-accent;
+  @apply w-8 h-8 me-2 flex items-center justify-center rounded border border-border-base bg-gray-50 hover:border-accent  hover:text-accent focus:border-accent focus:text-accent;
 }
 
 .rc-pagination .rc-pagination-prev.rc-pagination-disabled,

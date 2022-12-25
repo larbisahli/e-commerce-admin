@@ -1,5 +1,6 @@
 import { useQuery } from '@apollo/client';
-import Card from '@components/common/card';
+import PageMainAction from '@components/common/PageMainAction';
+import PageMainHeader from '@components/common/PageMainHeader';
 import SortForm from '@components/common/sort-form';
 import { Add } from '@components/icons/add';
 import AppLayout from '@components/layouts/app';
@@ -78,49 +79,22 @@ export default function OrderStatusPage({ client }: SSRProps) {
 
   return (
     <>
-      <Card className="flex flex-col xl:flex-row items-center mb-8">
-        <div className="md:w-1/4 mb-4 xl:mb-0">
-          <h1 className="text-lg font-semibold text-heading pb-3">
-            {t('form:input-label-order-status')}
-          </h1>
-        </div>
-
-        <div className="w-full xl:w-3/4 flex flex-col md:flex-row space-y-4 md:space-y-0 items-center ms-auto">
-          <SortForm
-            className="md:ms-5"
-            showLabel={false}
-            onLimitChange={(value) => {
-              setLimit(value);
-            }}
-            limit={limit}
-            onOrderChange={({ value }: { value: OrderBy }) => {
-              setOrder(value);
-            }}
-            options={[
-              { id: 1, value: 'created_at', label: 'Created At' },
-              { id: 2, value: 'updated_at', label: 'Updated At' }
-            ]}
-          />
-          <LinkButton
-            href={`${ROUTES.ORDER_STATUS}/create`}
-            className="h-12 ms-4 md:ms-6"
-          >
-            <div className="w-full flex items-center justify-center">
-              <div className="hidden md:flex items-center justify-center">
-                <Add width="1rem" height="1rem" />
-                <span className="m-1">
-                  {t('form:button-label-add-order-status')}
-                </span>
-              </div>
-              <div className="md:hidden flex items-center justify-center">
-                <Add width="1rem" height="1rem" />
-                <span className="m-1">{t('form:button-label-add')}</span>
-              </div>
-            </div>
-          </LinkButton>
-        </div>
-      </Card>
-
+      <PageMainAction
+        href={`${ROUTES.ORDER_STATUS}/create`}
+        title={t('form:input-label-order-status')}
+        label={t('form:button-label-add-order-status')}
+      />
+      <PageMainHeader
+        onLimitChange={(value) => {
+          setLimit(value);
+        }}
+        limit={limit}
+        onPagination={handlePagination}
+        total={100}
+        // total={orderStatusCount}
+        currentPage={page}
+        perPage={limit.value}
+      />
       {loading ? null : (
         <OrderStatusList
           orderStatuses={orderStatuses}
@@ -161,3 +135,21 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
   };
 };
+
+{
+  /* <SortForm
+            className="md:ms-5"
+            showLabel={false}
+            onLimitChange={(value) => {
+              setLimit(value);
+            }}
+            limit={limit}
+            onOrderChange={({ value }: { value: OrderBy }) => {
+              setOrder(value);
+            }}
+            options={[
+              { id: 1, value: 'created_at', label: 'Created At' },
+              { id: 2, value: 'updated_at', label: 'Updated At' }
+            ]}
+          /> */
+}

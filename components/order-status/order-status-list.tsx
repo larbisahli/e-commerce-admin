@@ -1,9 +1,7 @@
 import ActionButtons from '@components/common/action-buttons';
 import Badge from '@components/ui/badge/badge';
-import Pagination from '@components/ui/pagination';
 import ProfileCart from '@components/ui/profile-card';
 import { Table } from '@components/ui/table';
-import { Nullable } from '@ts-types/custom.types';
 import {
   CreatedUpdatedByAt,
   OrderStatus,
@@ -16,19 +14,8 @@ import { useTranslation } from 'next-i18next';
 
 export type IProps = {
   orderStatuses: OrderStatus[] | undefined | null;
-  // eslint-disable-next-line no-unused-vars
-  onPagination: (key: number) => void;
-  total: Nullable<number>;
-  currentPage: Nullable<number>;
-  perPage: Nullable<number>;
 };
-const OrderStatusList = ({
-  orderStatuses,
-  onPagination,
-  total,
-  currentPage,
-  perPage
-}: IProps) => {
+const OrderStatusList = ({ orderStatuses }: IProps) => {
   const { t } = useTranslation();
 
   const { alignLeft, alignRight } = useIsRTL();
@@ -133,17 +120,6 @@ const OrderStatusList = ({
           scroll={{ x: 600 }}
         />
       </div>
-
-      {!!total && (
-        <div className="flex justify-end items-center">
-          <Pagination
-            total={total}
-            current={currentPage}
-            pageSize={perPage}
-            onChange={onPagination}
-          />
-        </div>
-      )}
     </>
   );
 };

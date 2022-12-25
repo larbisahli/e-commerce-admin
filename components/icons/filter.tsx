@@ -1,5 +1,5 @@
 import React from 'react';
-export const ArrowDown = ({ color = 'currentColor', ...props }) => {
+export const FilterIcon = ({ color = 'currentColor', ...props }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -8,7 +8,7 @@ export const ArrowDown = ({ color = 'currentColor', ...props }) => {
       viewBox="0 0 24 24"
       {...props}
     >
-      <path fill={color} d="m12 15.4-6-6L7.4 8l4.6 4.6L16.6 8 18 9.4Z" />
+      <path fill={color} d="M14 13v7h-4v-7L2.95 4h18.1Z" />
     </svg>
   );
 };
