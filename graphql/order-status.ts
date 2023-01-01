@@ -1,16 +1,16 @@
 import { gql } from '@apollo/client';
 
 export const ORDER_STATUSES = gql`
-  query getOrderStatuses(
+  query orderStatuses(
     $page: Int!
     $limit: Int!
     $orderBy: String!
     $sortedBy: String!
   ) {
-    getOrderStatusCount {
+    orderStatusCount {
       count
     }
-    getOrderStatuses(
+    orderStatuses(
       page: $page
       limit: $limit
       orderBy: $orderBy
@@ -26,19 +26,11 @@ export const ORDER_STATUSES = gql`
         id
         firstName
         lastName
-        profile {
-          image
-          placeholder
-        }
       }
       updatedBy {
         id
         firstName
         lastName
-        profile {
-          image
-          placeholder
-        }
       }
     }
   }
@@ -46,7 +38,7 @@ export const ORDER_STATUSES = gql`
 
 export const ORDER_STATUS = gql`
   query GetOrderStatus($id: ID!) {
-    getOrderStatus(id: $id) {
+    orderStatus(id: $id) {
       id
       name
       color

@@ -64,10 +64,10 @@ export const DELETE_HERO_SLIDE = gql`
 
 export const HERO_CAROUSEL_LIST = gql`
   query HeroCarouselList($page: Int!, $limit: Int!) {
-    getHeroCarouselListCount {
+    heroSlideListCount {
       count
     }
-    getHeroCarouselList(page: $page, limit: $limit) {
+    heroSlideList(page: $page, limit: $limit) {
       id
       thumbnail {
         image
@@ -95,7 +95,7 @@ export const HERO_CAROUSEL_LIST = gql`
 
 export const HERO_SLIDE = gql`
   query HeroSlide($id: ID!) {
-    getHeroSlide(id: $id) {
+    heroSlide(id: $id) {
       id
       destinationUrl
       thumbnail {

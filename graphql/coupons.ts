@@ -1,16 +1,16 @@
 import { gql } from '@apollo/client';
 
 export const COUPONS = gql`
-  query getCoupons(
+  query Coupons(
     $page: Int!
     $limit: Int!
     $orderBy: String!
     $sortedBy: String!
   ) {
-    getCouponsCount {
+    couponCount {
       count
     }
-    getCoupons(
+    coupons(
       page: $page
       limit: $limit
       orderBy: $orderBy
@@ -42,8 +42,8 @@ export const COUPONS = gql`
 `;
 
 export const COUPON = gql`
-  query getCoupon($id: Int!) {
-    getCoupon(id: $id) {
+  query Coupon($id: Int!) {
+    coupon(id: $id) {
       id
       code
       orderAmountLimit

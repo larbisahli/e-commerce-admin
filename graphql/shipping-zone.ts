@@ -36,7 +36,7 @@ export const SHIPPING_ZONES = gql`
     $orderBy: String!
     $sortedBy: String!
   ) {
-    shippingZonesCount {
+    shippingZoneCount {
       count
     }
     shippingZones(

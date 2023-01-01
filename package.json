@@ -31,6 +31,7 @@
     "body-scroll-lock": "^4.0.0-beta.0",
     "classnames": "^2.3.1",
     "cookies": "^0.8.0",
+    "crypto-hash": "^2.0.1",
     "csrf": "^3.1.0",
     "dayjs": "^1.11.4",
     "draft-js": "^0.11.7",

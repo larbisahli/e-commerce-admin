@@ -24,7 +24,7 @@ import { useState } from 'react';
 
 interface TSupplier {
   suppliers: Suppliers[];
-  suppliersCount: { count: number };
+  supplierCount: { count: number };
 }
 
 interface OptionsVariable {
@@ -56,8 +56,8 @@ export default function SuppliersPage({ client }: SSRProps) {
     fetchPolicy: 'cache-and-network'
   });
 
-  const suppliersCount = data?.suppliersCount?.count;
-  const suppliers = data?.suppliers;
+  const { suppliers = [], supplierCount: { count } = { count: 0 } } =
+    data ?? {};
 
   useGetStaff(client);
   useErrorLogger(error);
@@ -152,7 +152,7 @@ export default function SuppliersPage({ client }: SSRProps) {
       <div></div>
       <SuppliersList
         suppliers={suppliers}
-        total={suppliersCount}
+        total={count}
         onPagination={handlePagination}
         currentPage={page}
         perPage={limit}

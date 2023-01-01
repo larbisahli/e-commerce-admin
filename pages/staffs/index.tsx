@@ -17,11 +17,11 @@ import isEmpty from 'lodash/isEmpty';
 import type { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 interface TStaff {
   staffs: StaffType[];
-  staffsCount: { count: number };
+  staffCount: { count: number };
 }
 
 interface OptionsVariable {
@@ -38,7 +38,6 @@ export default function Staff({ client }: SSRProps) {
 
   const [page, setPage] = useState(1);
   const [orderBy, setOrder] = useState(OrderBy.CREATED_AT);
-  const [staffsData, setStaffsData] = useState<StaffType[]>([] as StaffType[]);
 
   const { data, loading, error, fetchMore } = useQuery<TStaff, OptionsVariable>(
     STAFFS,
@@ -53,17 +52,10 @@ export default function Staff({ client }: SSRProps) {
     }
   );
 
-  const couponsCount = data?.staffsCount?.count;
+  const { staffs = [], staffCount: { count } = { count: 0 } } = data ?? {};
 
   useGetStaff(client);
   useErrorLogger(error);
-
-  useEffect(() => {
-    const staffs = data?.staffs;
-    if (!isEmpty(staffs)) {
-      setStaffsData(() => staffs);
-    }
-  }, [data]);
 
   function handlePagination(current: any) {
     setPage(current);
@@ -122,9 +114,9 @@ export default function Staff({ client }: SSRProps) {
         </div>
       </Card>
       <StaffList
-        staffs={staffsData}
+        staffs={staffs}
         onPagination={handlePagination}
-        total={couponsCount}
+        total={count}
         currentPage={page}
         perPage={limit}
       />

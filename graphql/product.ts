@@ -7,10 +7,10 @@ export const PRODUCTS = gql`
     $orderBy: String!
     $sortedBy: String!
   ) {
-    getProductsCount {
+    productCount {
       count
     }
-    getProducts(
+    products(
       page: $page
       limit: $limit
       orderBy: $orderBy
@@ -52,8 +52,8 @@ export const PRODUCTS = gql`
 `;
 
 export const PRODUCT = gql`
-  query ProductForAdmin($id: Int!) {
-    productForAdmin(id: $id) {
+  query Product($id: Int!) {
+    product(id: $id) {
       id
       name
       sku

@@ -20,8 +20,8 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useState } from 'react';
 
 interface TCoupon {
-  getCoupons: Coupon[];
-  getCouponsCount: { count: number };
+  coupons: Coupon[];
+  couponCount: { count: number };
 }
 
 interface OptionsVariable {
@@ -52,8 +52,7 @@ export default function Coupons({ client }: SSRProps) {
     fetchPolicy: 'cache-and-network'
   });
 
-  const couponsCount = data?.getCouponsCount?.count;
-  const coupons = data?.getCoupons;
+  const { coupons = [], couponCount: { count } = { count: 0 } } = data ?? {};
 
   useGetStaff(client);
   useErrorLogger(error);
@@ -118,7 +117,7 @@ export default function Coupons({ client }: SSRProps) {
       <CouponList
         coupons={coupons}
         onPagination={handlePagination}
-        total={couponsCount}
+        total={count}
         currentPage={page}
         perPage={limit}
       />

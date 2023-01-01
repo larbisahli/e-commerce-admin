@@ -19,8 +19,8 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useState } from 'react';
 
 interface THeroCarousel {
-  getHeroCarouselList: HeroCarouselType[];
-  getHeroCarouselListCount: { count: number };
+  heroCarouselList: HeroCarouselType[];
+  heroCarouselListCount: { count: number };
 }
 
 interface OptionsVariable {
@@ -46,8 +46,10 @@ export default function HeroCarousel({ client }: SSRProps) {
     fetchPolicy: 'cache-and-network'
   });
 
-  const heroCarouselListCount = data?.getHeroCarouselListCount?.count;
-  const heroCarouselList = data?.getHeroCarouselList;
+  const {
+    heroCarouselList = [],
+    heroCarouselListCount: { count } = { count: 0 }
+  } = data ?? {};
 
   useGetStaff(client);
   useErrorLogger(error);
@@ -103,7 +105,7 @@ export default function HeroCarousel({ client }: SSRProps) {
       </Card>
       <HeroCarouselList
         heroCarouselList={heroCarouselList}
-        total={heroCarouselListCount}
+        total={count}
         onPagination={handlePagination}
         currentPage={page}
         perPage={limit}

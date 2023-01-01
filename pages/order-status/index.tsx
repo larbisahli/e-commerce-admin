@@ -21,8 +21,8 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useState } from 'react';
 
 interface TOrderStatus {
-  getOrderStatuses: OrderStatus[];
-  getOrderStatusCount: { count: number };
+  orderStatuses: OrderStatus[];
+  orderStatusCount: { count: number };
 }
 
 interface OptionsVariable {
@@ -52,8 +52,8 @@ export default function OrderStatusPage({ client }: SSRProps) {
     fetchPolicy: 'cache-and-network'
   });
 
-  const orderStatusCount = data?.getOrderStatusCount?.count;
-  const orderStatuses = data?.getOrderStatuses;
+  const { orderStatuses = [], orderStatusCount: { count = 0 } = { count: 0 } } =
+    data ?? {};
 
   useGetStaff(client);
   useErrorLogger(error);
@@ -99,7 +99,7 @@ export default function OrderStatusPage({ client }: SSRProps) {
         <OrderStatusList
           orderStatuses={orderStatuses}
           onPagination={handlePagination}
-          total={orderStatusCount}
+          total={count}
           currentPage={page}
           perPage={limit.value}
         />

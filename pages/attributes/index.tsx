@@ -23,8 +23,8 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useState } from 'react';
 
 interface TAttributes {
-  getAttributes: Attribute[];
-  getAttributesCount: { count: number };
+  attributes: Attribute[];
+  attributesCount: { count: number };
 }
 
 interface OptionsVariable {
@@ -56,8 +56,8 @@ export default function AttributePage({ client }: SSRProps) {
     fetchPolicy: 'cache-and-network'
   });
 
-  const attributesCount = data?.getAttributesCount?.count;
-  const attributes = data?.getAttributes;
+  const { attributes = [], attributesCount: { count } = { count: 0 } } =
+    data ?? {};
 
   useGetStaff(client);
   useErrorLogger(error);
@@ -152,7 +152,7 @@ export default function AttributePage({ client }: SSRProps) {
       <div></div>
       <AttributeList
         attributes={attributes}
-        total={attributesCount}
+        total={count}
         onPagination={handlePagination}
         currentPage={page}
         perPage={limit}

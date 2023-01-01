@@ -24,8 +24,8 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useState } from 'react';
 
 interface TCategories {
-  getCategories: Category[];
-  getCategoriesCount: { count: number };
+  categories: Category[];
+  categoryCount: { count: number };
 }
 
 interface OptionsVariable {
@@ -57,8 +57,8 @@ export default function Categories({ client }: SSRProps) {
     fetchPolicy: 'cache-and-network'
   });
 
-  const categoriesCount = data?.getCategoriesCount?.count;
-  const categoriesForAdmin = data?.getCategories;
+  const { categories = [], categoryCount: { count } = { count: 0 } } =
+    data ?? {};
 
   useGetStaff(client);
   useErrorLogger(error);
@@ -153,8 +153,8 @@ export default function Categories({ client }: SSRProps) {
         </div>
       </Card>
       <CategoryList
-        categories={categoriesForAdmin}
-        total={categoriesCount}
+        categories={categories}
+        total={count}
         onPagination={handlePagination}
         currentPage={page}
         perPage={limit}

@@ -22,7 +22,7 @@ import { useState } from 'react';
 
 interface TShipping {
   shippingZones: ShippingZoneType[];
-  shippingZonesCount: { count: number };
+  shippingZoneCount: { count: number };
 }
 
 interface ShippingVariable {
@@ -54,8 +54,8 @@ export default function ShippingZonesPage({ client }: SSRProps) {
     fetchPolicy: 'cache-and-network'
   });
 
-  const shippingZonesCount = data?.shippingZonesCount?.count;
-  const shippingZones = data?.shippingZones;
+  const { shippingZones = [], shippingZoneCount: { count } = { count: 0 } } =
+    data ?? {};
 
   useGetStaff(client);
   useErrorLogger(error);
@@ -112,7 +112,7 @@ export default function ShippingZonesPage({ client }: SSRProps) {
       <ShippingList
         shippingZones={shippingZones}
         onPagination={handlePagination}
-        total={shippingZonesCount}
+        total={count}
         currentPage={page}
         perPage={limit}
       />

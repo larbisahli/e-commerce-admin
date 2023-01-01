@@ -2,15 +2,10 @@ import { gql } from '@apollo/client';
 
 export const TAGS = gql`
   query Tags($page: Int!, $limit: Int!, $orderBy: String!, $sortedBy: String!) {
-    getTagsCount {
+    tagCount {
       count
     }
-    getTags(
-      page: $page
-      limit: $limit
-      orderBy: $orderBy
-      sortedBy: $sortedBy
-    ) {
+    tags(page: $page, limit: $limit, orderBy: $orderBy, sortedBy: $sortedBy) {
       id
       name
       icon
@@ -32,7 +27,7 @@ export const TAGS = gql`
 
 export const TAG = gql`
   query Tag($id: ID!) {
-    getTag(id: $id) {
+    tag(id: $id) {
       id
       name
       icon
@@ -42,7 +37,7 @@ export const TAG = gql`
 
 export const TAGS_FOR_SELECT = gql`
   query GetTagsSelect($page: Int!, $limit: Int!, $orderBy: String!) {
-    getTagsSelect(page: $page, limit: $limit, orderBy: $orderBy) {
+    tagSelect(page: $page, limit: $limit, orderBy: $orderBy) {
       id
       name
     }

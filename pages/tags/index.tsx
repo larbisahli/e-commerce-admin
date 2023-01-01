@@ -20,8 +20,8 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useState } from 'react';
 
 interface TTags {
-  getTags: Tag[];
-  getTagsCount: { count: number };
+  tags: Tag[];
+  tagCount: { count: number };
 }
 
 interface OptionsVariable {
@@ -52,8 +52,7 @@ export default function Tags({ client }: SSRProps) {
     }
   );
 
-  const tagsCount = data?.getTagsCount?.count;
-  const tags = data?.getTags;
+  const { tags = [], tagCount: { count } = { count: 0 } } = data ?? {};
 
   useGetStaff(client);
   useErrorLogger(error);
@@ -119,7 +118,7 @@ export default function Tags({ client }: SSRProps) {
       <TagList
         tags={tags}
         onPagination={handlePagination}
-        total={tagsCount}
+        total={count}
         currentPage={page}
         perPage={limit}
       />

@@ -7,15 +7,10 @@ export const PHOTOS = gql`
     $orderBy: String!
     $sortedBy: String!
   ) {
-    getPhotosCount {
+    photosCount {
       count
     }
-    getPhotos(
-      page: $page
-      limit: $limit
-      orderBy: $orderBy
-      sortedBy: $sortedBy
-    ) {
+    photos(page: $page, limit: $limit, orderBy: $orderBy, sortedBy: $sortedBy) {
       id
       image
       placeholder

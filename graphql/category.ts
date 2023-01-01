@@ -51,10 +51,10 @@ export const CATEGORIES = gql`
     $orderBy: String!
     $sortedBy: String!
   ) {
-    getCategoriesCount {
+    categoryCount {
       count
     }
-    getCategories(
+    categories(
       page: $page
       limit: $limit
       orderBy: $orderBy
@@ -102,7 +102,7 @@ export const CATEGORIES = gql`
 
 export const CATEGORY = gql`
   query Category($id: ID!) {
-    getCategory(id: $id) {
+    category(id: $id) {
       id
       parentId
       parent {
@@ -129,12 +129,7 @@ export const CATEGORIES_FOR_SELECT = gql`
     $limit: Int!
     $orderBy: String!
   ) {
-    getCategoriesSelect(
-      id: $id
-      page: $page
-      limit: $limit
-      orderBy: $orderBy
-    ) {
+    categorySelect(id: $id, page: $page, limit: $limit, orderBy: $orderBy) {
       id
       name
     }
@@ -142,8 +137,8 @@ export const CATEGORIES_FOR_SELECT = gql`
 `;
 
 export const CATEGORIES_FOR_SELECT_ALL = gql`
-  query CategoriesSelectAll($page: Int!, $limit: Int!, $orderBy: String!) {
-    getCategoriesSelectAll(page: $page, limit: $limit, orderBy: $orderBy) {
+  query CategorySelectAll($page: Int!, $limit: Int!, $orderBy: String!) {
+    categorySelectAll(page: $page, limit: $limit, orderBy: $orderBy) {
       id
       name
     }

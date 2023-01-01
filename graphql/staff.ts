@@ -52,7 +52,7 @@ export const STAFFS = gql`
     $orderBy: String!
     $sortedBy: String!
   ) {
-    staffsCount {
+    staffCount {
       count
     }
     staffs(page: $page, limit: $limit, orderBy: $orderBy, sortedBy: $sortedBy) {
