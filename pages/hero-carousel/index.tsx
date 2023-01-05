@@ -1,16 +1,16 @@
 import { useQuery } from '@apollo/client';
-import Card from '@components/common/card';
+import PageMainHeader from '@components/common/page-main-header';
+import PageMainAction from '@components/common/PageMainAction';
 import HeroCarouselList from '@components/hero-carousel/hero-carousel-list';
-import { Add } from '@components/icons/add';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
-import LinkButton from '@components/ui/link-button';
 import Loader from '@components/ui/loader/loader';
 import { HERO_CAROUSEL_LIST } from '@graphql/hero-carousel';
 import { useErrorLogger, useGetStaff } from '@hooks/index';
 import { verifyAuth } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { HeroCarouselType } from '@ts-types/generated';
+import { COLUMNS } from '@utils/data/table-columns';
 import { ROUTES } from '@utils/routes';
 import isEmpty from 'lodash/isEmpty';
 import type { GetServerSideProps } from 'next';
@@ -28,12 +28,22 @@ interface OptionsVariable {
   limit: number;
 }
 
-const limit = 10;
-
 export default function HeroCarousel({ client }: SSRProps) {
   const { t } = useTranslation();
 
   const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState({ id: 1, value: 10, label: 10 });
+  const [selectedColumns, setSelectedColumns] = useState([
+    { label: 'Thumbnail', key: 'thumbnail' },
+    { label: 'Title', key: 'title' },
+    { label: 'Clicks', key: 'clicks' },
+    { label: 'Display Order', key: 'displayOrder' },
+    { label: 'Status', key: 'published' },
+    { label: 'Creation Date', key: 'createdAt' },
+    { label: 'Placed By', key: 'createdBy' },
+    { label: 'Updated By', key: 'updatedBy' },
+    { label: 'Actions', key: 'actions' }
+  ]);
 
   const { data, loading, error, fetchMore } = useQuery<
     THeroCarousel,
@@ -41,7 +51,7 @@ export default function HeroCarousel({ client }: SSRProps) {
   >(HERO_CAROUSEL_LIST, {
     variables: {
       page,
-      limit
+      limit: limit.value
     },
     fetchPolicy: 'cache-and-network'
   });
@@ -73,42 +83,27 @@ export default function HeroCarousel({ client }: SSRProps) {
 
   return (
     <>
-      <Card className="flex flex-col mb-8">
-        <div className="w-full flex flex-col md:flex-row justify-between items-center">
-          <div className="md:w-1/4 mb-4 md:mb-0">
-            <h1 className="text-xl font-semibold text-heading pb-3">
-              {t('form:input-label-hero-carousel')}
-            </h1>
-          </div>
-          <div className="flex items-center flex-col md:flex-row">
-            <div className="w-full flex items-center">
-              <LinkButton
-                href={`${ROUTES.HERO_CAROUSEL}/create`}
-                className="h-12 m-1 md:ms-6"
-              >
-                <div className="w-full flex items-center justify-center">
-                  <div className="hidden md:flex items-center justify-center">
-                    <Add width="1rem" height="1rem" />
-                    <span className="m-1">
-                      {t('form:button-label-add-slide')}
-                    </span>
-                  </div>
-                  <div className="md:hidden flex items-center justify-center">
-                    <Add width="1rem" height="1rem" />
-                    <span className="m-1">{t('form:button-label-add')}</span>
-                  </div>
-                </div>
-              </LinkButton>
-            </div>
-          </div>
-        </div>
-      </Card>
+      <PageMainAction
+        href={`${ROUTES.HERO_CAROUSEL}/create`}
+        title={t('form:input-label-hero-carousel')}
+        label={t('form:button-label-add-slide')}
+      />
+      <PageMainHeader
+        columns={COLUMNS['hero-carousel']}
+        selectedColumns={selectedColumns}
+        setSelectedColumns={setSelectedColumns}
+        onLimitChange={(value) => {
+          setLimit(value);
+        }}
+        limit={limit}
+        onPagination={handlePagination}
+        total={count}
+        currentPage={page}
+        perPage={limit.value}
+      />
       <HeroCarouselList
         heroCarouselList={heroCarouselList}
-        total={count}
-        onPagination={handlePagination}
-        currentPage={page}
-        perPage={limit}
+        selectedColumns={selectedColumns}
       />
     </>
   );

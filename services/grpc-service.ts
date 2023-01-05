@@ -4,6 +4,7 @@ import { Staff } from '@proto/generated/Staff';
 import { promisify } from 'util';
 
 const target = 'localhost:50051';
+// const target = '192.168.1.102:50051';
 
 export class StaffService extends StaffServiceRoutes {
   constructor() {

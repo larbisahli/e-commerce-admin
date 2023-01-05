@@ -1,10 +1,9 @@
 import { useQuery } from '@apollo/client';
-import Card from '@components/common/card';
-import { Add } from '@components/icons/add';
+import PageMainHeader from '@components/common/page-main-header';
+import PageMainAction from '@components/common/PageMainAction';
 import AppLayout from '@components/layouts/app';
 import ShippingList from '@components/shipping-zone/shipping-list';
 import ErrorMessage from '@components/ui/error-message';
-import LinkButton from '@components/ui/link-button';
 import Loader from '@components/ui/loader/loader';
 import { SHIPPING_ZONES } from '@graphql/shipping-zone';
 import { useErrorLogger } from '@hooks/useErrorLogger';
@@ -13,6 +12,7 @@ import { verifyAuth } from '@middleware/utils';
 import type { SSRProps } from '@ts-types/custom.types';
 import type { ShippingZoneType } from '@ts-types/generated';
 import { OrderBy, SortOrder } from '@ts-types/generated';
+import { COLUMNS } from '@utils/data/table-columns';
 import { ROUTES } from '@utils/routes';
 import isEmpty from 'lodash/isEmpty';
 import type { GetServerSideProps } from 'next';
@@ -32,14 +32,23 @@ interface ShippingVariable {
   sortedBy: SortOrder;
 }
 
-const limit = 10;
-
 export default function ShippingZonesPage({ client }: SSRProps) {
   const { t } = useTranslation();
 
   const [page, setPage] = useState(1);
-  const [visible, setVisible] = useState(false);
+  const [limit, setLimit] = useState({ id: 1, value: 10, label: 10 });
   const [orderBy, setOrder] = useState(OrderBy.CREATED_AT);
+  const [selectedColumns, setSelectedColumns] = useState([
+    { label: 'Name', key: 'name' },
+    { label: 'Company', key: 'company' },
+    { label: 'Rate Type', key: 'rateType' },
+    { label: 'Status', key: 'active' },
+    { label: 'Free', key: 'freeShipping' },
+    { label: 'Creation Date', key: 'createdAt' },
+    { label: 'Placed By', key: 'createdBy' },
+    { label: 'Updated By', key: 'updatedBy' },
+    { label: 'Actions', key: 'actions' }
+  ]);
 
   const { data, loading, error, fetchMore } = useQuery<
     TShipping,
@@ -47,7 +56,7 @@ export default function ShippingZonesPage({ client }: SSRProps) {
   >(SHIPPING_ZONES, {
     variables: {
       page,
-      limit,
+      limit: limit.value,
       orderBy,
       sortedBy: SortOrder.Desc
     },
@@ -59,10 +68,6 @@ export default function ShippingZonesPage({ client }: SSRProps) {
 
   useGetStaff(client);
   useErrorLogger(error);
-
-  const toggleVisible = () => {
-    setVisible((v) => !v);
-  };
 
   const handlePagination = (current: number) => {
     setPage(current);
@@ -85,36 +90,27 @@ export default function ShippingZonesPage({ client }: SSRProps) {
 
   return (
     <>
-      <Card className="flex flex-col md:flex-row items-center mb-8">
-        <div className="md:w-1/4 mb-4 md:mb-0">
-          <h1 className="text-xl font-semibold text-heading pb-3">
-            {t('form:input-label-shipping-zones')}
-          </h1>
-        </div>
-        <div className="w-full flex md:justify-end justify-center items-center">
-          <LinkButton
-            href={`${ROUTES.SHIPPING_ZONES}/create`}
-            className="h-12 ms-4 md:ms-6"
-          >
-            <div className="hidden md:flex items-center justify-center">
-              <Add width="1rem" height="1rem" />
-              <span className="m-1">
-                {t('form:button-label-add-shipping-zone')}
-              </span>
-            </div>
-            <div className="md:hidden flex items-center justify-center">
-              <Add width="1rem" height="1rem" />
-              <span className="m-1">{t('form:button-label-add')}</span>
-            </div>
-          </LinkButton>
-        </div>
-      </Card>
-      <ShippingList
-        shippingZones={shippingZones}
+      <PageMainAction
+        href={`${ROUTES.SHIPPING_ZONES}/create`}
+        title={t('form:button-label-add-shipping-zone')}
+        label={t('form:input-label-shipping-zones')}
+      />
+      <PageMainHeader
+        columns={COLUMNS['shipping-zone']}
+        selectedColumns={selectedColumns}
+        setSelectedColumns={setSelectedColumns}
+        onLimitChange={(value) => {
+          setLimit(value);
+        }}
+        limit={limit}
         onPagination={handlePagination}
         total={count}
         currentPage={page}
-        perPage={limit}
+        perPage={limit.value}
+      />
+      <ShippingList
+        shippingZones={shippingZones}
+        selectedColumns={selectedColumns}
       />
     </>
   );

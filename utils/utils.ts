@@ -55,9 +55,9 @@ export const apiURL = PRODUCTION_ENV
   ? process.env.API_URL
   : 'http://127.0.0.1:5001';
 
-// export const mediaURL = process.env.MEDIA_URL;
+// export const mediaURL = 'http://192.168.1.102:5001/media';
 
-// export const apiURL = process.env.API_URL;
+// export const apiURL = 'http://192.168.1.102:5001';
 
 // function searchTree(element: Category, matchingId: string) {
 //   if (element?.id === matchingId) {

@@ -1,17 +1,16 @@
 import { useQuery } from '@apollo/client';
-import Card from '@components/common/card';
-import SortForm from '@components/common/sort-form';
-import { Add } from '@components/icons/add';
+import PageMainHeader from '@components/common/page-main-header';
+import PageMainAction from '@components/common/PageMainAction';
 import AppLayout from '@components/layouts/app';
 import TagList from '@components/tag/tag-list';
 import ErrorMessage from '@components/ui/error-message';
-import LinkButton from '@components/ui/link-button';
 import Loader from '@components/ui/loader/loader';
 import { TAGS } from '@graphql/tag';
 import { useErrorLogger, useGetStaff } from '@hooks/index';
 import { verifyAuth } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { OrderBy, SortOrder, Tag } from '@ts-types/generated';
+import { COLUMNS } from '@utils/data/table-columns';
 import { ROUTES } from '@utils/routes';
 import isEmpty from 'lodash/isEmpty';
 import type { GetServerSideProps } from 'next';
@@ -31,20 +30,27 @@ interface OptionsVariable {
   sortedBy: SortOrder;
 }
 
-const limit = 10;
-
 export default function Tags({ client }: SSRProps) {
   const { t } = useTranslation();
 
   const [page, setPage] = useState(1);
   const [orderBy, setOrder] = useState(OrderBy.CREATED_AT);
+  const [limit, setLimit] = useState({ id: 1, value: 10, label: 10 });
+  const [selectedColumns, setSelectedColumns] = useState([
+    { label: 'Icon', key: 'icon' },
+    { label: 'Name', key: 'name' },
+    { label: 'Creation Date', key: 'createdAt' },
+    { label: 'Placed By', key: 'createdBy' },
+    { label: 'Updated By', key: 'updatedBy' },
+    { label: 'Actions', key: 'actions' }
+  ]);
 
   const { data, loading, error, fetchMore } = useQuery<TTags, OptionsVariable>(
     TAGS,
     {
       variables: {
         page,
-        limit,
+        limit: limit.value,
         orderBy,
         sortedBy: SortOrder.Desc
       },
@@ -78,50 +84,25 @@ export default function Tags({ client }: SSRProps) {
 
   return (
     <>
-      <Card className="flex flex-col xl:flex-row items-center mb-8">
-        <div className="md:w-1/4 mb-4 xl:mb-0">
-          <h1 className="text-xl font-semibold text-heading">
-            {t('common:sidebar-nav-item-tags')}
-          </h1>
-        </div>
-
-        <div className="w-full xl:w-3/4 flex flex-col md:flex-row space-y-4 md:space-y-0 items-center ms-auto">
-          <SortForm
-            className="md:ms-5"
-            showLabel={false}
-            onOrderChange={({ value }: { value: OrderBy }) => {
-              setOrder(value);
-            }}
-            options={[
-              { id: 1, value: 'created_at', label: 'Created At' },
-              { id: 2, value: 'updated_at', label: 'Updated At' }
-            ]}
-          />
-          <LinkButton
-            href={`${ROUTES.TAGS}/create`}
-            className="h-12 md:ms-6 w-full md:w-auto"
-          >
-            <div className="w-full flex items-center justify-center">
-              <div className="hidden md:flex items-center justify-center">
-                <Add width="1rem" height="1rem" />
-                <span className="m-1">{t('form:button-label-add-tag')}</span>
-              </div>
-              <div className="md:hidden flex items-center justify-center">
-                <Add width="1rem" height="1rem" />
-                <span className="m-1">{t('form:button-label-add')}</span>
-              </div>
-            </div>
-          </LinkButton>
-        </div>
-      </Card>
-
-      <TagList
-        tags={tags}
+      <PageMainAction
+        href={`${ROUTES.TAGS}/create`}
+        title={t('common:sidebar-nav-item-tags')}
+        label={t('form:button-label-add-tag')}
+      />
+      <PageMainHeader
+        columns={COLUMNS['tag']}
+        selectedColumns={selectedColumns}
+        setSelectedColumns={setSelectedColumns}
+        onLimitChange={(value) => {
+          setLimit(value);
+        }}
+        limit={limit}
         onPagination={handlePagination}
         total={count}
         currentPage={page}
-        perPage={limit}
+        perPage={limit.value}
       />
+      <TagList tags={tags} selectedColumns={selectedColumns} />
     </>
   );
 }

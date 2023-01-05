@@ -1,154 +1,152 @@
 import ActionButtons from '@components/common/action-buttons';
-import Pagination from '@components/ui/pagination';
 import ProfileCart from '@components/ui/profile-card';
 import { Table } from '@components/ui/table';
-import { Nullable } from '@ts-types/custom.types';
 import {
   Attribute,
   AttributeValue,
   CreatedUpdatedByAt
 } from '@ts-types/generated';
+import { useIsRTL } from '@utils/locals';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
-import React from 'react';
+import React, { useMemo } from 'react';
 
 type IProps = {
   attributes: Attribute[];
-  // eslint-disable-next-line no-unused-vars
-  onPagination: (key: number) => void;
-  total: Nullable<number>;
-  currentPage: Nullable<number>;
-  perPage: Nullable<number>;
+  selectedColumns: { label: string; key: string }[];
 };
 
-const AttributeList = ({
-  attributes,
-  onPagination,
-  total,
-  currentPage,
-  perPage
-}: IProps) => {
+const AttributeList = ({ attributes, selectedColumns }: IProps) => {
   const { t } = useTranslation();
   const router = useRouter();
 
-  const alignLeft =
-    router.locale === 'ar' || router.locale === 'he' ? 'right' : 'left';
-  const alignRight =
-    router.locale === 'ar' || router.locale === 'he' ? 'left' : 'right';
+  const { alignLeft, alignRight } = useIsRTL();
 
-  let columns = [
-    {
-      title: t('table:table-item-name'),
-      dataIndex: 'name',
-      key: 'name',
-      align: alignLeft,
-      width: 100,
-      ellipsis: true,
-      render: (name: string) => {
-        return (
-          <span className="font-semibold text-gray-800 capitalize">{name}</span>
-        );
+  let columns = useMemo(() => {
+    return [
+      {
+        title: t('table:table-item-id'),
+        dataIndex: 'id',
+        key: 'id',
+        align: alignLeft,
+        width: 50,
+        ellipsis: true
+      },
+      {
+        title: t('table:table-item-name'),
+        dataIndex: 'name',
+        key: 'name',
+        align: alignLeft,
+        width: 100,
+        ellipsis: true,
+        render: (name: string) => {
+          return (
+            <span className="font-semibold text-gray-800 capitalize">
+              {name}
+            </span>
+          );
+        }
+      },
+      {
+        title: t('table:table-item-values'),
+        dataIndex: 'values',
+        key: 'values',
+        align: alignLeft,
+        ellipsis: true,
+        width: 200,
+        render: (values: AttributeValue[]) => {
+          const att_values = values
+            ?.map(({ value }: AttributeValue, index: number) => {
+              return index > 0 ? `, ${value}` : `${value}`;
+            })
+            ?.join('');
+          return (
+            <span title={att_values} className="whitespace-nowrap">
+              {att_values}
+            </span>
+          );
+        }
+      },
+      {
+        title: t('table:table-item-created-at'),
+        dataIndex: 'createdAt',
+        key: 'createdAt',
+        align: alignLeft,
+        width: 200,
+        render: (createdAt: CreatedUpdatedByAt['createdAt']) => {
+          return `${dayjs(createdAt).format('MMM D, YYYY')} at ${dayjs(
+            createdAt
+          ).format('h:mm A')}`;
+        }
+      },
+      {
+        title: t('table:table-item-created-by'),
+        dataIndex: 'createdBy',
+        key: 'createdBy',
+        align: alignLeft,
+        width: 140,
+        ellipsis: true,
+        render: (
+          createdBy: CreatedUpdatedByAt['createdBy'],
+          record: Attribute
+        ) => {
+          return (
+            <ProfileCart staff={createdBy} createdAt={record?.updatedAt} />
+          );
+        }
+      },
+      {
+        title: t('table:table-item-updated-by'),
+        dataIndex: 'updatedBy',
+        key: 'updatedBy',
+        align: alignLeft,
+        width: 140,
+        ellipsis: true,
+        render: (
+          updatedBy: CreatedUpdatedByAt['updatedBy'],
+          record: Attribute
+        ) => {
+          return (
+            <ProfileCart staff={updatedBy} updatedAt={record?.updatedAt} />
+          );
+        }
+      },
+      {
+        title: t('table:table-item-actions'),
+        dataIndex: 'id',
+        key: 'actions',
+        align: alignRight,
+        width: 80,
+        render: (id: string) => (
+          <ActionButtons
+            id={id}
+            editUrl={`${router.asPath}/edit/${id}`}
+            deleteModalView="DELETE_ATTRIBUTE"
+          />
+        )
       }
-    },
-    {
-      title: t('table:table-item-values'),
-      dataIndex: 'values',
-      key: 'values',
-      align: alignLeft,
-      ellipsis: true,
-      width: 200,
-      render: (values: AttributeValue[]) => {
-        const att_values = values
-          ?.map(({ value }: AttributeValue, index: number) => {
-            return index > 0 ? `, ${value}` : `${value}`;
-          })
-          ?.join('');
-        return (
-          <span title={att_values} className="whitespace-nowrap">
-            {att_values}
-          </span>
-        );
-      }
-    },
-    {
-      title: t('table:table-item-created-at'),
-      dataIndex: 'createdAt',
-      key: 'createdAt',
-      align: alignLeft,
-      width: 200,
-      render: (createdAt: CreatedUpdatedByAt['createdAt']) => {
-        return `${dayjs(createdAt).format('MMM D, YYYY')} at ${dayjs(
-          createdAt
-        ).format('h:mm A')}`;
-      }
-    },
-    {
-      title: t('table:table-item-created-by'),
-      dataIndex: 'createdBy',
-      key: 'createdBy',
-      align: alignLeft,
-      width: 140,
-      ellipsis: true,
-      render: (
-        createdBy: CreatedUpdatedByAt['createdBy'],
-        record: Attribute
-      ) => {
-        return <ProfileCart staff={createdBy} createdAt={record?.updatedAt} />;
-      }
-    },
-    {
-      title: t('table:table-item-updated-by'),
-      dataIndex: 'updatedBy',
-      key: 'updatedBy',
-      align: alignLeft,
-      width: 140,
-      ellipsis: true,
-      render: (
-        updatedBy: CreatedUpdatedByAt['updatedBy'],
-        record: Attribute
-      ) => {
-        return <ProfileCart staff={updatedBy} updatedAt={record?.updatedAt} />;
-      }
-    },
-    {
-      title: t('table:table-item-actions'),
-      dataIndex: 'id',
-      key: 'actions',
-      align: alignRight,
-      width: 80,
-      render: (id: string) => (
-        <ActionButtons
-          id={id}
-          editUrl={`${router.asPath}/edit/${id}`}
-          deleteModalView="DELETE_ATTRIBUTE"
-        />
-      )
-    }
-  ];
+    ];
+  }, [alignLeft, alignRight, router.asPath, t]);
+
+  const tableColumns = useMemo(() => {
+    return columns?.filter(({ key }) => {
+      return key === 'id' || selectedColumns.some((c) => c.key === key);
+    });
+  }, [columns, selectedColumns]);
 
   return (
     <React.Fragment>
       <div className="card overflow-hidden mb-6">
         <Table
           // @ts-ignore
-          columns={columns}
+          columns={tableColumns}
           emptyText={t('table:empty-table-data')}
           data={attributes}
           rowKey="id"
-          scroll={{ x: 380 }}
+          scroll={{ x: 800 }}
         />
       </div>
-      {!!total && (
-        <div className="flex justify-end items-center">
-          <Pagination
-            total={total}
-            current={currentPage}
-            pageSize={perPage}
-            onChange={onPagination}
-          />
-        </div>
-      )}
     </React.Fragment>
   );
 };

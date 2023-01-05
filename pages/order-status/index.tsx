@@ -1,18 +1,16 @@
 import { useQuery } from '@apollo/client';
+import PageMainHeader from '@components/common/page-main-header';
 import PageMainAction from '@components/common/PageMainAction';
-import PageMainHeader from '@components/common/PageMainHeader';
-import SortForm from '@components/common/sort-form';
-import { Add } from '@components/icons/add';
 import AppLayout from '@components/layouts/app';
 import OrderStatusList from '@components/order-status/order-status-list';
 import ErrorMessage from '@components/ui/error-message';
-import LinkButton from '@components/ui/link-button';
 import Loader from '@components/ui/loader/loader';
 import { ORDER_STATUSES } from '@graphql/order-status';
 import { useErrorLogger, useGetStaff } from '@hooks/index';
 import { verifyAuth } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { OrderBy, OrderStatus, SortOrder } from '@ts-types/generated';
+import { COLUMNS } from '@utils/data/table-columns';
 import { ROUTES } from '@utils/routes';
 import isEmpty from 'lodash/isEmpty';
 import type { GetServerSideProps } from 'next';
@@ -38,6 +36,14 @@ export default function OrderStatusPage({ client }: SSRProps) {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState({ id: 1, value: 10, label: 10 });
   const [orderBy, setOrder] = useState(OrderBy.CREATED_AT);
+  const [selectedColumns, setSelectedColumns] = useState([
+    { label: 'Name', key: 'name' },
+    { label: 'Status', key: 'privacy' },
+    { label: 'Creation Date', key: 'createdAt' },
+    { label: 'Placed By', key: 'createdBy' },
+    { label: 'Last Updated By', key: 'updatedBy' },
+    { label: 'Actions', key: 'actions' }
+  ]);
 
   const { data, loading, error, fetchMore } = useQuery<
     TOrderStatus,
@@ -85,25 +91,22 @@ export default function OrderStatusPage({ client }: SSRProps) {
         label={t('form:button-label-add-order-status')}
       />
       <PageMainHeader
+        columns={COLUMNS['order-status']}
+        selectedColumns={selectedColumns}
+        setSelectedColumns={setSelectedColumns}
         onLimitChange={(value) => {
           setLimit(value);
         }}
         limit={limit}
         onPagination={handlePagination}
-        total={100}
-        // total={orderStatusCount}
+        total={count}
         currentPage={page}
         perPage={limit.value}
       />
-      {loading ? null : (
-        <OrderStatusList
-          orderStatuses={orderStatuses}
-          onPagination={handlePagination}
-          total={count}
-          currentPage={page}
-          perPage={limit.value}
-        />
-      )}
+      <OrderStatusList
+        selectedColumns={selectedColumns}
+        orderStatuses={orderStatuses}
+      />
     </>
   );
 }

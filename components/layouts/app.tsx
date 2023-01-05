@@ -1,3 +1,4 @@
+import AdminFooter from '@components/common/admin-footer';
 import SublevelNavigation from '@components/navigation/sublevel-navigation';
 import React from 'react';
 
@@ -21,6 +22,7 @@ const AppLayout: React.FC = ({ children }: Props) => {
           <div className="p-4 md:p-8 overflow-y-auto h-full">{children}</div>
         </main>
       </div>
+      <AdminFooter />
     </div>
   );
 };

@@ -7,3 +7,7 @@ export function useIsRTL() {
   }
   return { isRTL: false, alignLeft: 'left', alignRight: 'right' };
 }
+// const alignLeft =
+// router.locale === 'ar' || router.locale === 'he' ? 'right' : 'left';
+// const alignRight =
+// router.locale === 'ar' || router.locale === 'he' ? 'left' : 'right';

@@ -26,7 +26,7 @@ export const SUPPLIERS = gql`
     $orderBy: String!
     $sortedBy: String!
   ) {
-    suppliersCount {
+    supplierCount {
       count
     }
     suppliers(

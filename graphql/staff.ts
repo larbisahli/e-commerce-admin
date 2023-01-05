@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const STAFF_INFO = gql`
-  query StaffInfo($id: ID!) {
-    staffInfo(id: $id) {
+  query StaffInfo($id: ID!, $payload: ID!) {
+    staffInfo(id: $id, payload: $payload) {
       id
       firstName
       lastName

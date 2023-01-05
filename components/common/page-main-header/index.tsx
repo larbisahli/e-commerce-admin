@@ -1,3 +1,5 @@
+import SortForm from '@components/common/sort-form';
+import { Add } from '@components/icons/add';
 import { ArrowDown } from '@components/icons/arrow-down';
 import { ExportIcon } from '@components/icons/export';
 import { FilterIcon } from '@components/icons/filter';
@@ -6,9 +8,18 @@ import Pagination from '@components/ui/pagination';
 import Select from '@components/ui/select/select';
 import SelectInput from '@components/ui/select-input';
 import { Nullable } from '@ts-types/custom.types';
+import cn from 'classnames';
 import { useTranslation } from 'next-i18next';
+import React, { useState } from 'react';
+
+import ColumnsComponent from './ColumnsComponent';
 
 interface Props {
+  columns: { label: string; key: string }[];
+  selectedColumns: { label: string; key: string }[];
+  setSelectedColumns: React.Dispatch<
+    React.SetStateAction<{ label: string; key: string }[]>
+  >;
   // eslint-disable-next-line no-unused-vars
   onPagination: (key: number) => void;
   total: Nullable<number>;
@@ -19,6 +30,9 @@ interface Props {
 }
 
 const PageMainHeader = ({
+  columns,
+  selectedColumns,
+  setSelectedColumns,
   onLimitChange,
   limit,
   onPagination,
@@ -28,46 +42,93 @@ const PageMainHeader = ({
 }: Props) => {
   const { t } = useTranslation();
 
+  const [openDrop, setOpenDrop] = useState('');
+
+  console.log({ openDrop });
+
+  const handleOpenDrop = (column) => {
+    setOpenDrop((prev) => {
+      return prev === column ? '' : column;
+    });
+  };
+
   return (
     <div className="p-3 mb-8">
       {/* ----- */}
       <div className="py-2 flex items-center justify-end">
-        <button className="text-sub-heading p-2 flex items-center cursor-pointer">
+        <button
+          onClick={() => handleOpenDrop('filter')}
+          className="text-sub-heading p-2 flex items-center cursor-pointer"
+        >
           <div className="mr-2">
             <FilterIcon height="1.2em" width="1.2em" />
           </div>
           <span className="">Filter</span>
           <div className="ml-2">
-            <ArrowDown height="1.2em" width="1.2em" />
+            <ArrowDown
+              height="1.2em"
+              width="1.2em"
+              className={cn('transition', {
+                'rotate-180': openDrop === 'filter'
+              })}
+            />
           </div>
         </button>
         <div className="w-[1px] h-[40px] bg-gray-300 mx-2"></div>
-        <div className="text-sub-heading p-2 flex items-center cursor-pointer">
+        <button
+          onClick={() => handleOpenDrop('columns')}
+          className="text-sub-heading p-2 flex items-center cursor-pointer"
+        >
           <div className="mr-2">
             <SettingsIcon height="1.2em" width="1.2em" />
           </div>
           <span className="">Columns</span>
           <div className="ml-2">
-            <ArrowDown height="1.2em" width="1.2em" />
+            <ArrowDown
+              height="1.2em"
+              width="1.2em"
+              className={cn('transition', {
+                'rotate-180': openDrop === 'columns'
+              })}
+            />
           </div>
-        </div>
+        </button>
         <div className="w-[1px] h-[40px] bg-gray-300 mx-2"></div>
-        <div className="text-sub-heading p-2 flex items-center cursor-pointer">
+        <button
+          onClick={() => handleOpenDrop('exports')}
+          className="text-sub-heading p-2 flex items-center cursor-pointer"
+        >
           <div className="mr-2">
             <ExportIcon height="1.2em" width="1.2em" />
           </div>
           <span className="">Exports</span>
           <div className="ml-2">
-            <ArrowDown height="1.2em" width="1.2em" />
+            <ArrowDown
+              height="1.2em"
+              width="1.2em"
+              className={cn('transition', {
+                'rotate-180': openDrop === 'exports'
+              })}
+            />
           </div>
-        </div>
+        </button>
       </div>
-      {/* ------ */}
+      {/* --- Applied Filters --- */}
       <div className="border-y border-gray-300 py-3 my-5 flex items-center justify-between">
         <div>
           <div className="text-base text-sub-heading">Active filters:</div>
         </div>
         <button className="text-blue-500 font-medium">Clear All</button>
+      </div>
+      {/* --- Dropdown --- */}
+      <div className="mb-5">
+        {openDrop === 'columns' && (
+          <ColumnsComponent
+            columns={columns}
+            selectedColumns={selectedColumns}
+            setSelectedColumns={setSelectedColumns}
+          />
+        )}
       </div>
       {/* ----- */}
       <div className="flex items-center justify-end">
