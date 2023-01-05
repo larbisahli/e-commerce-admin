@@ -33,7 +33,7 @@ type FormValues = {
 };
 
 type IProps = {
-  initialValues?: Nullable<Attribute>;
+  initialValues?: Attribute | any[];
 };
 
 export default function CreateOrUpdateAttributeForm({ initialValues }: IProps) {

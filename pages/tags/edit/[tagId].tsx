@@ -15,22 +15,24 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 interface TTag {
-  getTag: Tag;
+  tag: Tag;
 }
 interface OptionsVariable {
-  id: string | string[];
+  id: number;
 }
 
 export default function UpdateTagPage({ client }: SSRProps) {
   const { t } = useTranslation();
   const { query } = useRouter();
 
-  const { tagId } = query;
+  const tagId = parseInt(query.tagId as string, 10);
 
   const { data, loading, error } = useQuery<TTag, OptionsVariable>(TAG, {
     variables: { id: tagId },
     fetchPolicy: 'cache-and-network'
   });
+
+  const { tag = [] } = data ?? {};
 
   useGetStaff(client);
   useErrorLogger(error);
@@ -50,7 +52,7 @@ export default function UpdateTagPage({ client }: SSRProps) {
         </h1>
       </div>
 
-      <CreateOrUpdateTagForm initialValues={data?.getTag} />
+      <CreateOrUpdateTagForm initialValues={tag} />
     </>
   );
 }

@@ -15,17 +15,17 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 interface THeroSlider {
-  getHeroSlide: HeroCarouselType;
+  heroSlide: HeroCarouselType;
 }
 interface OptionsVariable {
-  id: string | string[];
+  id: number;
 }
 
 export default function UpdateHeroSliderPage({ client }: SSRProps) {
   const { query } = useRouter();
   const { t } = useTranslation();
 
-  const { sliderId } = query;
+  const sliderId = parseInt(query.sliderId as string, 10);
 
   const { data, loading, error } = useQuery<THeroSlider, OptionsVariable>(
     HERO_SLIDE,
@@ -34,6 +34,8 @@ export default function UpdateHeroSliderPage({ client }: SSRProps) {
       fetchPolicy: 'cache-and-network'
     }
   );
+
+  const { heroSlide = [] } = data ?? {};
 
   useGetStaff(client);
 
@@ -53,7 +55,7 @@ export default function UpdateHeroSliderPage({ client }: SSRProps) {
           {t('form:form-title-edit-hero-slider')}
         </h1>
       </div>
-      <CreateOrUpdateSlideForm initialValues={data?.getHeroSlide} />
+      <CreateOrUpdateSlideForm initialValues={heroSlide} />
     </>
   );
 }

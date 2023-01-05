@@ -81,7 +81,7 @@ const defaultValues = {
 };
 
 type IProps = {
-  initialValues?: Product | null;
+  initialValues?: Product | any[];
 };
 
 const productTypes = [

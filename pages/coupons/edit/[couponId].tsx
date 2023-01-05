@@ -15,25 +15,25 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 interface TCoupon {
-  getCoupon: Coupon;
+  coupon: Coupon;
 }
 
 interface OptionsVariable {
-  id: string | string[];
+  id: number;
 }
 
 export default function UpdateCouponPage({ client }: SSRProps) {
   const { query } = useRouter();
   const { t } = useTranslation();
 
-  const { couponId } = query;
+  const couponId = parseInt(query.couponId as string, 10);
 
   const { data, loading, error } = useQuery<TCoupon, OptionsVariable>(COUPON, {
     variables: { id: couponId },
     fetchPolicy: 'cache-and-network'
   });
 
-  const coupon = data?.getCoupon;
+  const { coupon = [] } = data ?? {};
 
   useGetStaff(client);
   useErrorLogger(error);

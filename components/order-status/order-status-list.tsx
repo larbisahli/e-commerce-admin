@@ -38,7 +38,7 @@ const OrderStatusList = ({ orderStatuses, selectedColumns }: IProps) => {
         key: 'name',
         align: alignLeft,
         ellipsis: true,
-        width: 100,
+        width: 150,
         render: (name: string, record: OrderStatus) => (
           <span
             className="font-semibold capitalize border border-solid

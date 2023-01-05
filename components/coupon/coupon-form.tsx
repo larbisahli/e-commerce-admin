@@ -49,7 +49,7 @@ const defaultValues = {
 };
 
 type IProps = {
-  initialValues?: Coupon | null;
+  initialValues?: Coupon | any[];
 };
 
 const couponDiscountTypes = [
@@ -156,7 +156,7 @@ export default function CreateOrUpdateCouponForm({ initialValues }: IProps) {
     const discountType = values.discountType?.value;
 
     const variables = {
-      code: values.code,
+      code: values.code?.toUpperCase(),
       orderAmountLimit: Number(values.orderAmountLimit),
       discountValue:
         discountType === CouponType.FreeShipping
@@ -201,6 +201,7 @@ export default function CreateOrUpdateCouponForm({ initialValues }: IProps) {
             error={t(errors.code?.message!)}
             variant="outline"
             className="mb-5"
+            inputClassName="uppercase"
           />
           <Input
             label={`${t('form:order-amount-limit')} (${currency.symbol})`}

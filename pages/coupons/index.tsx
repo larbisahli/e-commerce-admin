@@ -90,7 +90,7 @@ export default function Coupons({ client }: SSRProps) {
   return (
     <>
       <PageMainAction
-        href={`${ROUTES.TAGS}/create`}
+        href={`${ROUTES.COUPONS}/create`}
         title={t('form:input-label-coupons')}
         label={t('form:button-label-add-coupon')}
       />

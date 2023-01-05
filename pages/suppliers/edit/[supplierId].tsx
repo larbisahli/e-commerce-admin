@@ -19,14 +19,14 @@ interface TAttribute {
   supplier: Suppliers;
 }
 interface OptionsVariable {
-  id: string | string[];
+  id: number;
 }
 
 export default function UpdateSupplierPage({ client }: SSRProps) {
   const { t } = useTranslation();
   const { query } = useRouter();
 
-  const { supplierId } = query;
+  const supplierId = parseInt(query.supplierId as string, 10);
 
   const { data, loading, error } = useQuery<TAttribute, OptionsVariable>(
     SUPPLIER,
@@ -36,10 +36,10 @@ export default function UpdateSupplierPage({ client }: SSRProps) {
     }
   );
 
+  const { supplier = [] } = data ?? {};
+
   useGetStaff(client);
   useErrorLogger(error);
-
-  const supplier = data?.supplier;
 
   if (loading) {
     return <Loader text={t('common:text-loading')} />;

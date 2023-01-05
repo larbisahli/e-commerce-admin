@@ -16,14 +16,14 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 interface ShippingVariable {
-  id: string | string[];
+  id: number;
 }
 
 export default function UpdateShippingPage({ client }: SSRProps) {
   const { t } = useTranslation();
   const { query } = useRouter();
 
-  const { shippingId } = query;
+  const shippingId = parseInt(query.shippingId as string, 10);
 
   const { data, loading, error } = useQuery<ShippingZoneType, ShippingVariable>(
     SHIPPING_ZONE,

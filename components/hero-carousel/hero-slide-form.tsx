@@ -49,7 +49,7 @@ const defaultValues = {
 };
 
 type IProps = {
-  initialValues?: Nullable<HeroCarouselType>;
+  initialValues?: HeroCarouselType | any[];
 };
 
 export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {

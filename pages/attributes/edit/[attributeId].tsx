@@ -16,17 +16,17 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 interface TAttribute {
-  getAttribute: Attribute;
+  attribute: Attribute;
 }
 interface OptionsVariable {
-  id: string | string[];
+  id: number;
 }
 
 export default function UpdateAttributePage({ client }: SSRProps) {
   const { t } = useTranslation();
   const { query } = useRouter();
 
-  const { attributeId } = query;
+  const attributeId = parseInt(query.attributeId as string, 10);
 
   const { data, loading, error } = useQuery<TAttribute, OptionsVariable>(
     ATTRIBUTE,
@@ -39,7 +39,7 @@ export default function UpdateAttributePage({ client }: SSRProps) {
   useGetStaff(client);
   useErrorLogger(error);
 
-  const attribute = data?.getAttribute;
+  const { attribute = [] } = data ?? {};
 
   if (loading) {
     return <Loader text={t('common:text-loading')} />;

@@ -16,17 +16,17 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 interface TOrderStatus {
-  getOrderStatus: OrderStatus;
+  orderStatus: OrderStatus;
 }
 interface OptionsVariable {
-  id: string | string[];
+  id: number;
 }
 
 export default function UpdateOrderStatusPage({ client }: SSRProps) {
   const { query } = useRouter();
   const { t } = useTranslation();
 
-  const { statusId } = query;
+  const statusId = parseInt(query.statusId as string, 10);
 
   const { data, loading, error } = useQuery<TOrderStatus, OptionsVariable>(
     ORDER_STATUS,
@@ -35,6 +35,8 @@ export default function UpdateOrderStatusPage({ client }: SSRProps) {
       fetchPolicy: 'cache-and-network'
     }
   );
+
+  const { orderStatus = [] } = data ?? {};
 
   useGetStaff(client);
   useErrorLogger(error);
@@ -53,7 +55,7 @@ export default function UpdateOrderStatusPage({ client }: SSRProps) {
           {t('form:form-title-edit-order-status')}
         </h1>
       </div>
-      <CreateOrUpdateOrderStatusForm initialValues={data?.getOrderStatus} />
+      <CreateOrUpdateOrderStatusForm initialValues={orderStatus} />
     </>
   );
 }

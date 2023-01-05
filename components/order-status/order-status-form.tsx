@@ -39,7 +39,7 @@ const defaultValues = {
 export default function CreateOrUpdateOrderStatusForm({
   initialValues
 }: {
-  initialValues?: OrderStatus;
+  initialValues?: OrderStatus | any[];
 }) {
   const router = useRouter();
   const { t } = useTranslation();

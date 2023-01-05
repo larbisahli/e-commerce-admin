@@ -39,7 +39,7 @@ interface FormValues extends StaffType {
 const defaultValues = {};
 
 type IProps = {
-  initialValues?: StaffType | null;
+  initialValues?: StaffType | any[];
 };
 
 interface TRolesSelect {

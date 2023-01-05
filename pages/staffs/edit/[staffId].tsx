@@ -19,19 +19,21 @@ interface TStaff {
 }
 
 interface OptionsVariable {
-  id: string | string[];
+  id: number;
 }
 
 export default function EditStaffPage({ client }: SSRProps) {
   const { t } = useTranslation();
   const { query } = useRouter();
 
-  const { staffId } = query;
+  const staffId = parseInt(query.staffId as string, 10);
 
   const { data, loading, error } = useQuery<TStaff, OptionsVariable>(STAFF, {
     variables: { id: staffId },
     fetchPolicy: 'cache-and-network'
   });
+
+  const { staff = [] } = data ?? {};
 
   useGetStaff(client);
   useErrorLogger(error);
@@ -50,7 +52,7 @@ export default function EditStaffPage({ client }: SSRProps) {
           {t('form:form-title-create-staff')}
         </h1>
       </div>
-      <StaffCreateUpdateForm initialValues={data?.staff} />
+      <StaffCreateUpdateForm initialValues={staff} />
     </>
   );
 }

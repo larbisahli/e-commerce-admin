@@ -15,17 +15,17 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 interface TCategory {
-  getCategory: Category;
+  category: Category;
 }
 interface OptionsVariable {
-  id: string | string[];
+  id: number;
 }
 
 export default function UpdateCategoriesPage({ client }: SSRProps) {
   const { query } = useRouter();
   const { t } = useTranslation();
 
-  const { categoryId } = query;
+  const categoryId = parseInt(query.categoryId as string, 10);
 
   const { data, loading, error } = useQuery<TCategory, OptionsVariable>(
     CATEGORY,
@@ -34,6 +34,8 @@ export default function UpdateCategoriesPage({ client }: SSRProps) {
       fetchPolicy: 'cache-and-network'
     }
   );
+
+  const { category = [] } = data ?? {};
 
   useGetStaff(client);
   useErrorLogger(error);
@@ -52,7 +54,7 @@ export default function UpdateCategoriesPage({ client }: SSRProps) {
           {t('form:form-title-edit-category')}
         </h1>
       </div>
-      <CreateOrUpdateCategoriesForm initialValues={data?.getCategory} />
+      <CreateOrUpdateCategoriesForm initialValues={category} />
     </>
   );
 }

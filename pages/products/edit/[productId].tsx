@@ -16,17 +16,17 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 interface TProduct {
-  productForAdmin: Product;
+  product: Product;
 }
 interface productVariable {
-  id: string | string[];
+  id: number;
 }
 
 export default function UpdateProductPage({ client }: SSRProps) {
   const { t } = useTranslation();
   const { query } = useRouter();
 
-  const { productId } = query;
+  const productId = parseInt(query.productId as string, 10);
 
   const { data, loading, error } = useQuery<TProduct, productVariable>(
     PRODUCT,
@@ -39,7 +39,7 @@ export default function UpdateProductPage({ client }: SSRProps) {
   useGetStaff(client);
   useErrorLogger(error);
 
-  const productForAdmin = data?.productForAdmin;
+  const { product = [] } = data ?? {};
 
   if (loading) {
     return <Loader text={t('common:text-loading')} />;
@@ -56,7 +56,7 @@ export default function UpdateProductPage({ client }: SSRProps) {
           {t('form:edit-product')}
         </h1>
       </div>
-      <CreateOrUpdateProductForm initialValues={productForAdmin} />
+      <CreateOrUpdateProductForm initialValues={product} />
     </>
   );
 }

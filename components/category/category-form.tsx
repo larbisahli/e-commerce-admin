@@ -90,7 +90,7 @@ const defaultValues = {
 };
 
 type IProps = {
-  initialValues?: Nullable<Category>;
+  initialValues?: Category | any[];
 };
 
 export default function CreateOrUpdateCategoriesForm({
