@@ -75,7 +75,7 @@ export const COLUMNS = {
     { label: 'Code', key: 'code' },
     { label: 'Order Amount Limit', key: 'orderAmountLimit' },
     { label: 'Value', key: 'discountValue' },
-    { label: 'Status', key: 'couponEndDate' },
+    { label: 'Status', key: 'active' },
     { label: 'Time Used', key: 'timesUsed' },
     { label: 'Usage limit', key: 'maxUsage' },
     { label: 'Start Date', key: 'couponStartDate' },

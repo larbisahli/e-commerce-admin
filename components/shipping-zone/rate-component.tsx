@@ -3,7 +3,7 @@ import Checkbox from '@components/ui/checkbox';
 import Input from '@components/ui/input';
 import Label from '@components/ui/label';
 import SelectInput from '@components/ui/select-input';
-import { useSettings } from '@contexts/settings.context';
+import { useSettings } from '@hooks/useSettings';
 import { RateType } from '@ts-types/enums';
 import { ShippingRateType } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';

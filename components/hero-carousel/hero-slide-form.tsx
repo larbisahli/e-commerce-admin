@@ -18,7 +18,6 @@ import {
   useWarnIfUnsavedChanges
 } from '@hooks/index';
 import { notify } from '@lib/index';
-import { Nullable } from '@ts-types/custom.types';
 import { HeroCarouselType, ImageType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import cloneDeep from 'lodash/cloneDeep';
@@ -70,7 +69,9 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
     defaultValues: initialValues
       ? cloneDeep({
           ...initialValues,
-          status: initialValues?.published ? 'publish' : 'draft'
+          status: (initialValues as HeroCarouselType)?.published
+            ? 'publish'
+            : 'draft'
         })
       : (defaultValues as HeroCarouselType)
   });
@@ -134,7 +135,11 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
       btnLabel: values.btnLabel,
       displayOrder: Number(values.displayOrder),
       published: values.status === 'publish',
-      styles: values.styles
+      styles: {
+        textColor: values.styles.textColor,
+        btnBgc: values.styles.btnBgc,
+        btnTextColor: values.styles.btnTextColor
+      }
     };
 
     setUnsavedChanges(false);
@@ -144,8 +149,9 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
         resetCreateMutation();
       });
     } else {
+      const { id = null } = initialValues as HeroCarouselType;
       updateHeroSlider({
-        variables: { id: initialValues?.id, ...variables }
+        variables: { id, ...variables }
       }).catch((err) => {
         setError(err);
         resetUpdateMutation();

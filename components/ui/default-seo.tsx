@@ -1,11 +1,11 @@
-import { useSettings } from '@contexts/settings.context';
+import { useSettings } from '@hooks/useSettings';
 import { DefaultSeo as NextDefaultSeo } from 'next-seo';
 
 const DefaultSeo = () => {
   const settings = useSettings();
   return (
     <NextDefaultSeo
-      title={settings.siteTitle ?? 'PickBazar'}
+      title={settings?.siteTitle ?? 'PickBazar'}
       titleTemplate={`%s | ${settings?.seo?.metaTitle ?? 'E-Commerce'}`}
       description={settings?.seo?.metaDescription || settings?.siteSubtitle}
       canonical={settings?.seo?.canonicalUrl}

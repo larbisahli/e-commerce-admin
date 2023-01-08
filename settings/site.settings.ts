@@ -130,7 +130,13 @@ export const siteSettings = {
         icon: 'ImageMultipleIcon'
       },
       {
-        id: 'JU3uYy',
+        id: 'Wa09XCI',
+        href: ROUTES.FILES,
+        label: 'sidebar-nav-item-files',
+        icon: 'ImageFolder'
+      },
+      {
+        id: 'JU99uXy',
         href: ROUTES.STAFFS,
         label: 'sidebar-nav-item-staffs',
         icon: 'StaffsIcon',

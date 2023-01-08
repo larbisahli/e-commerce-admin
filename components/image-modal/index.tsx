@@ -2,6 +2,7 @@
 import 'rc-pagination/assets/index.css';
 
 import Uploader from '@components/common/uploader';
+import { ImagesSvg } from '@components/icons/images';
 import Button from '@components/ui/button';
 import Loader from '@components/ui/loader/loader';
 import Modal from '@components/ui/modal/modal';
@@ -9,9 +10,9 @@ import {
   useModalAction,
   useModalState
 } from '@components/ui/modal/modal.context';
-import Pagination from '@components/ui/pagination';
+import Pagination2 from '@components/ui/pagination2';
 import Thumbs from '@components/ui/thumbs';
-import { usePhotos } from '@hooks/usePhotos';
+import { useFiles } from '@hooks/useFiles';
 import { IMAGE_MODAL } from '@ts-types/constants';
 import { ImageType } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
@@ -52,9 +53,8 @@ const ImageModal = ({
     currentPage,
     photosCount,
     loadingPhotos,
-    handlePagination,
-    setPhotoContext
-  } = usePhotos({ limit });
+    handlePagination
+  } = useFiles({ limit });
 
   useEffect(() => {
     if (!isOpen) {
@@ -76,7 +76,12 @@ const ImageModal = ({
           }}
           variant="outline"
         >
-          Manage
+          <div className="flex items-center">
+            <div className="mr-2">
+              <ImagesSvg />
+            </div>
+            <div className="font-medium">Manage</div>
+          </div>
         </Button>
       </div>
       {/* SELECTED IMAGES */}
@@ -85,9 +90,9 @@ const ImageModal = ({
       <Modal open={isOpen && isCurrentModal} onClose={closeModal}>
         {view === IMAGE_MODAL && (
           <div className="flex flex-col p-4 bg-white md:min-h-[600px] min-h-[100vh] h-full w-full md:w-[80vw] w-[100vw] 2xl:w-[70vw]">
-            <div className="w-fit font-semibold text-lg">Store Images</div>
+            <div className="w-fit font-semibold text-lg">Your Image Store</div>
             <div className="py-4 m-2">
-              <Uploader setLoading={setLoading} setPhotos={setPhotoContext} />
+              <Uploader setLoading={setLoading} />
             </div>
             <div className="flex m-2 flex-col justify-between relative my-5 min-h-full flex-1">
               <div className="absolute z-10 top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
@@ -118,7 +123,7 @@ const ImageModal = ({
               </div>
               <div className="flex items-center mt-3 justify-between">
                 <div className="flex-1">
-                  <Pagination
+                  <Pagination2
                     total={photosCount}
                     current={currentPage}
                     pageSize={limit}

@@ -1,7 +1,7 @@
 import Card from '@components/common/card';
 import Description from '@components/ui/description';
 import Input from '@components/ui/input';
-import { useSettings } from '@contexts/settings.context';
+import { useSettings } from '@hooks/useSettings';
 import { useTranslation } from 'next-i18next';
 import { memo } from 'react';
 import { useFormContext } from 'react-hook-form';

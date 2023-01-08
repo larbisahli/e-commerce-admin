@@ -37,7 +37,7 @@ const Navbar = () => {
   }, [closeSideBar]);
 
   return (
-    <header className="w-full">
+    <header className="w-full mt-5 mb-12">
       <nav className="px-5 md:px-8 py-2 flex items-center justify-between lg:justify-end md:justify-end">
         <motion.button
           whileTap={{ scale: 0.88 }}
@@ -58,6 +58,13 @@ const Navbar = () => {
           >
             {t('common:text-create-product')}
           </LinkButton>
+          <div className="text-body-black font-medium flex items-center shadow justify-center border rounded-full py-1 px-3">
+            <div className="font-medium text-gray-600 mr-1">Balance:</div>
+            <div className="text-green-600 font-medium">$100</div>
+          </div>
+          <div className="text-body-black font-medium flex items-center  bg-orange-400 shadow justify-center border rounded-full py-1 px-3">
+            <div className="font-bold text-orange-900 mr-1">Pro</div>
+          </div>
           <NavNotification />
           <NavMenu />
         </div>

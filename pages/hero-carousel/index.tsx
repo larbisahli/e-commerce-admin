@@ -19,8 +19,8 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useState } from 'react';
 
 interface THeroCarousel {
-  heroCarouselList: HeroCarouselType[];
-  heroCarouselListCount: { count: number };
+  heroSlideList: HeroCarouselType[];
+  heroSlideListCount: { count: number };
 }
 
 interface OptionsVariable {
@@ -56,10 +56,8 @@ export default function HeroCarousel({ client }: SSRProps) {
     fetchPolicy: 'cache-and-network'
   });
 
-  const {
-    heroCarouselList = [],
-    heroCarouselListCount: { count } = { count: 0 }
-  } = data ?? {};
+  const { heroSlideList = [], heroSlideListCount: { count } = { count: 0 } } =
+    data ?? {};
 
   useGetStaff(client);
   useErrorLogger(error);
@@ -102,7 +100,7 @@ export default function HeroCarousel({ client }: SSRProps) {
         perPage={limit.value}
       />
       <HeroCarouselList
-        heroCarouselList={heroCarouselList}
+        heroCarouselList={heroSlideList}
         selectedColumns={selectedColumns}
       />
     </>

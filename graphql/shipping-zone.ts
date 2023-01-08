@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 
 export const SHIPPING_ZONE = gql`
-  query ShippingZone($id: ID!) {
+  query ShippingZone($id: Int!) {
     shippingZone(id: $id) {
       id
       name

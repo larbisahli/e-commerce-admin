@@ -1,19 +1,25 @@
-import { StaffInfoContext } from '@contexts/staff.context';
 import { useErrorLogger } from '@hooks/index';
+import type { AppDispatch, AppState } from '@store/index';
+import { updateStaff } from '@store/staff';
 import type { StaffType } from '@ts-types/generated';
 import isEmpty from 'lodash/isEmpty';
-import { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
+import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
+
+export const useAppDispatch = () => useDispatch<AppDispatch>();
+export const useAppSelector: TypedUseSelectorHook<AppState> = useSelector;
 
 export function useGetStaff(client?: StaffType) {
-  const { staffInfo, setStaffInfo } = useContext(StaffInfoContext);
+  const staffInfo = useAppSelector((state) => state.staffInfo);
+  const dispatch = useAppDispatch();
+
   useErrorLogger(client?.csrfError);
 
   useEffect(() => {
     if (!isEmpty(client)) {
-      console.log({ client });
-      setStaffInfo(client);
+      dispatch(updateStaff(client));
     }
-  }, [client, setStaffInfo]);
+  }, [client, dispatch]);
 
-  return { staffInfo, setStaffInfo };
+  return { staffInfo };
 }

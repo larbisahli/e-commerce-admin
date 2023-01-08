@@ -1,4 +1,4 @@
-import { useSettings } from '@contexts/settings.context';
+import { useSettings } from '@hooks/useSettings';
 import { siteSettings } from '@settings/site.settings';
 import { useMemo } from 'react';
 

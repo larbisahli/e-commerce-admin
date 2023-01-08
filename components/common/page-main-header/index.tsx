@@ -14,12 +14,18 @@ import React, { useState } from 'react';
 
 import ColumnsComponent from './ColumnsComponent';
 
+interface Parameter {
+  id: string;
+  append: boolean;
+  remove: boolean;
+  column: { label: string; key: string };
+}
+
 interface Props {
   columns: { label: string; key: string }[];
   selectedColumns: { label: string; key: string }[];
-  setSelectedColumns: React.Dispatch<
-    React.SetStateAction<{ label: string; key: string }[]>
-  >;
+  // eslint-disable-next-line no-unused-vars
+  handleColumnChange: (a: Parameter) => void;
   // eslint-disable-next-line no-unused-vars
   onPagination: (key: number) => void;
   total: Nullable<number>;
@@ -32,7 +38,7 @@ interface Props {
 const PageMainHeader = ({
   columns,
   selectedColumns,
-  setSelectedColumns,
+  handleColumnChange,
   onLimitChange,
   limit,
   onPagination,
@@ -126,7 +132,7 @@ const PageMainHeader = ({
           <ColumnsComponent
             columns={columns}
             selectedColumns={selectedColumns}
-            setSelectedColumns={setSelectedColumns}
+            handleColumnChange={handleColumnChange}
           />
         )}
       </div>

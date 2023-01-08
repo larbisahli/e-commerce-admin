@@ -8,34 +8,21 @@ import { ApolloProvider } from '@apollo/client';
 import ErrorBoundary from '@components/ErrorBoundary';
 import DefaultSeo from '@components/ui/default-seo';
 import LoadingBar from '@components/ui/loading-bar';
-// import ErrorMessage from "@components/ui/error-message";
 import ManagedModal from '@components/ui/modal/managed-modal';
 import { ModalProvider } from '@components/ui/modal/modal.context';
-import { PhotosProvider } from '@contexts/photos.context';
-import { StaffInfoProvider } from '@contexts/staff.context';
-// import { SettingsProvider } from "@contexts/settings.context";
 import { UIProvider } from '@contexts/ui.context';
 import apolloClient from '@lib/apollo-client';
-// import PageLoader from "@components/ui/page-loader/page-loader";
-// import { useSettingsQuery } from "@graphql/settings.graphql";
+import store from '@store/index';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
-// import { useRouter } from 'next/router';
 import { appWithTranslation } from 'next-i18next';
 import React, { Fragment } from 'react';
+import { Provider } from 'react-redux';
 import { Slide, ToastContainer } from 'react-toastify';
 
 const Noop: React.FC = ({ children }: { children: React.ReactNode }) => (
   <>{children}</>
 );
-
-// const AppSettings: React.FC = (props) => {
-//   // const { data, loading, error } = useSettingsQuery();
-//   const data ={}
-//   // if (loading) return <PageLoader />;
-//   // if (error) return <ErrorMessage message={error.message} />;
-//   return <SettingsProvider initialValue={data?.settings?.options} {...props} />;
-// };
 
 function App({ Component, pageProps }: AppProps) {
   // const { asPath } = useRouter();
@@ -80,24 +67,20 @@ function App({ Component, pageProps }: AppProps) {
         transition={Slide}
       />
       <ErrorBoundary>
-        <ApolloProvider client={apolloClient}>
-          <PhotosProvider>
-            <StaffInfoProvider>
-              <LoadingBar />
-              {/* <AppSettings> */}
-              <UIProvider>
-                <ModalProvider>
-                  <ManagedModal />
-                  <DefaultSeo />
-                  <Layout {...pageProps}>
-                    <Component {...pageProps} />
-                  </Layout>
-                </ModalProvider>
-              </UIProvider>
-              {/* </AppSettings> */}
-            </StaffInfoProvider>
-          </PhotosProvider>
-        </ApolloProvider>
+        <Provider store={store}>
+          <ApolloProvider client={apolloClient}>
+            <LoadingBar />
+            <UIProvider>
+              <ModalProvider>
+                <ManagedModal />
+                <DefaultSeo />
+                <Layout {...pageProps}>
+                  <Component {...pageProps} />
+                </Layout>
+              </ModalProvider>
+            </UIProvider>
+          </ApolloProvider>
+        </Provider>
       </ErrorBoundary>
     </Fragment>
   );

@@ -7,7 +7,7 @@ export const PHOTOS = gql`
     $orderBy: String!
     $sortedBy: String!
   ) {
-    photosCount {
+    photoCount {
       count
     }
     photos(page: $page, limit: $limit, orderBy: $orderBy, sortedBy: $sortedBy) {

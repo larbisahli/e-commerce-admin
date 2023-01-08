@@ -33,6 +33,7 @@ import { useTranslation } from 'next-i18next';
 import { memo, useReducer, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
+import CrossSellProducts from './cross-sell-products';
 import ProductCategoryInput from './product-category-input';
 import ProductInfoForm from './product-info-form';
 import ProductShippingInfoForm from './product-shipping-info';
@@ -40,6 +41,8 @@ import ProductSupplierInput from './product-supplier-input';
 import ProductTagInput from './product-tag-input';
 import { productValidationSchema } from './product-validation-schema';
 import ProductVariableForm from './product-variable-form';
+import RelatedProducts from './related-products';
+import UpSellProducts from './up-sell-products';
 import { creationVariable, updateVariable } from './variablesSubmission';
 import { variationsReducer } from './variations-reducer';
 
@@ -395,7 +398,7 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
               </Card>
             </div>
           </Accordion>
-          {/* Variation Type & Simple Type */}
+          {/* SEO */}
           <Accordion Title={() => t('form:form-title-seo')}>
             <div className="flex flex-wrap my-5 sm:my-8">
               <Description
@@ -405,7 +408,7 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
               <Card className="w-full sm:w-8/12 md:w-2/3">
                 <Input
                   label={`${t('form:input-label-url-key')}*`}
-                  {...register('urlKey')}
+                  {...register('slug')}
                   error={t(errors.urlKey?.message!)}
                   placeholder="Title..."
                   variant="outline"
@@ -432,25 +435,61 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
                   placeholder="Products, keywords, ..."
                 />
                 <TextArea
-                  label={`${t('form:item-seo-description')}*`}
+                  label={`${t('form:item-meta-description')}*`}
                   // @ts-ignore
-                  {...register('shortDescription')}
+                  {...register('MetaDescription')}
                   onBlur={() =>
-                    setShortDescription(getValues('shortDescription').length)
+                    setShortDescription(getValues('MetaDescription')?.length)
                   }
                   error={t(errors.shortDescription?.message!)}
                   variant="outline"
                 />
-                <div style={{ fontSize: '.75rem' }} className="mb-5">
+                <div
+                  style={{ fontSize: '.75rem' }}
+                  className="mb-5 flex items-center"
+                >
+                  <p className="text-body mr-2">
+                    Meta Description should optimally be between 150-160
+                    characters
+                  </p>
                   {shortDescription <= 160 ? (
-                    <span className="text-green-600 ">
-                      {`(${shortDescription}/160 characters max)`}
-                    </span>
+                    <span className="text-green-600">{`(${shortDescription}/160 characters max)`}</span>
                   ) : (
                     <span className="text-red-600">
                       {`(${shortDescription}/160 characters max)`}
                     </span>
                   )}
+                </div>
+                <div className="my-5">
+                  <ImageModal
+                    onSelect={(photo) => setValue('metaImage', photo)}
+                    isThumbnail
+                    selected={thumbnail}
+                    modalId="metaImage"
+                    label="form:label-add-meta-images"
+                  />
+                </div>
+              </Card>
+            </div>
+          </Accordion>
+          {/* Related Products, Up-Sells, and Cross-Sells  */}
+          <Accordion
+            Title={() => t('form:related-up-sells-cross-sells-product')}
+          >
+            <div className="flex flex-wrap my-5 sm:my-8">
+              <Description
+                details={t('form:type-and-category-help-text')}
+                className="w-full px-0 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
+              />
+              <Card className="w-full sm:w-8/12 md:w-2/3">
+                <div className="m-4">
+                  <RelatedProducts />
+                </div>
+                <div className="m-4">
+                  <UpSellProducts />
+                </div>
+                <div className="m-4">
+                  <CrossSellProducts />
                 </div>
               </Card>
             </div>

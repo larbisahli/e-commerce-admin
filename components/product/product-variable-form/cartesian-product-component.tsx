@@ -3,7 +3,7 @@ import ImageModal from '@components/image-modal';
 import Accordion from '@components/ui/accordion';
 import Input from '@components/ui/input';
 import Title from '@components/ui/title';
-import { useSettings } from '@contexts/settings.context';
+import { useSettings } from '@hooks/useSettings';
 import type { ImageType, VariationOptionsType } from '@ts-types/generated';
 import { VariationActions } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';

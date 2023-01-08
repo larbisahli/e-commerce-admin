@@ -102,13 +102,13 @@ const CouponList = ({ coupons, selectedColumns }: IProps) => {
       },
       {
         title: t('table:table-item-status'),
-        dataIndex: 'couponEndDate',
-        key: 'couponEndDate',
+        dataIndex: 'active',
+        key: 'active',
         align: 'center',
         ellipsis: true,
         width: 100,
-        render: (coupon_end_date: string, recode: Coupon) => {
-          const expired = Date.now() >= Number(coupon_end_date.valueOf());
+        render: (active: string, recode: Coupon) => {
+          const expired = Date.now() >= Number(recode.couponEndDate.valueOf());
           const limited = recode.timesUsed === recode.maxUsage;
           return (
             <Badge

@@ -1,0 +1,33 @@
+import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit';
+import FilesReducer from '@store/files';
+import SettingsReducer from '@store/settings';
+import StaffReducer from '@store/staff';
+import TableReducer from '@store/table';
+import { PRODUCTION_ENV } from '@utils/utils';
+
+export function makeStore() {
+  return configureStore({
+    reducer: {
+      settings: SettingsReducer,
+      staffInfo: StaffReducer,
+      files: FilesReducer,
+      tables: TableReducer
+    },
+    devTools: !PRODUCTION_ENV
+  });
+}
+
+const store = makeStore();
+
+export type AppState = ReturnType<typeof store.getState>;
+
+export type AppDispatch = typeof store.dispatch;
+
+export type AppThunk<ReturnType = void> = ThunkAction<
+  ReturnType,
+  AppState,
+  unknown,
+  Action<string>
+>;
+
+export default store;

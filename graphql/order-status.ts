@@ -37,7 +37,7 @@ export const ORDER_STATUSES = gql`
 `;
 
 export const ORDER_STATUS = gql`
-  query GetOrderStatus($id: ID!) {
+  query GetOrderStatus($id: Int!) {
     orderStatus(id: $id) {
       id
       name
@@ -62,7 +62,7 @@ export const CREATE_ORDER_STATUS = gql`
 
 export const UPDATE_ORDER_STATUS = gql`
   mutation UpdateOrderStatus(
-    $id: ID!
+    $id: Int!
     $name: String!
     $color: String!
     $privacy: String!
@@ -75,7 +75,7 @@ export const UPDATE_ORDER_STATUS = gql`
 `;
 
 export const DELETE_ORDER_STATUS = gql`
-  mutation DeleteOrderStatus($id: ID!) {
+  mutation DeleteOrderStatus($id: Int!) {
     deleteOrderStatus(id: $id) {
       id
       name

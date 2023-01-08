@@ -329,7 +329,7 @@
   "input-label-suppliers": "Suppliers",
   "input-label-compare-price": "Compare Price",
   "input-label-buying-price": "Buying Price",
-  "item-seo-description": "SEO description",
+  "item-meta-description": "Meta description",
   "input-label-volume": "Volume",
   "input-label-dimensions": "Dimensions",
   "input-label-dimensions-width": "Width",
@@ -423,5 +423,7 @@
   "item-label-content": "Content",
   "label-add-product-images": "Add Product Images",
   "label-add-product-thumbnail": "Add Product Thumbnail",
-  "label-add-variant-thumbnail": "Add Variant Thumbnail"
+  "label-add-variant-thumbnail": "Add Variant Thumbnail",
+  "related-up-sells-cross-sells-product": "Related Products, Up-Sells, and Cross-Sells",
+  "label-add-meta-images": "Add Meta Image"
 }

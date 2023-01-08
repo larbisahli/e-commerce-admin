@@ -1,35 +1,37 @@
+/* eslint-disable no-unused-vars */
 import Checkbox from '@components/ui/checkbox';
 import isEmpty from 'lodash/isEmpty';
 import React, { useMemo } from 'react';
+
+interface Parameter {
+  id: string;
+  append: boolean;
+  remove: boolean;
+  column: { label: string; key: string };
+}
 
 interface Props {
   // eslint-disable-next-line no-unused-vars
   columns: { label: string; key: string }[];
   selectedColumns: { label: string; key: string }[];
-  setSelectedColumns: React.Dispatch<
-    React.SetStateAction<{ label: string; key: string }[]>
-  >;
+  handleColumnChange: (a: Parameter) => void;
 }
 
 const ColumnsComponent = ({
   columns = [],
   selectedColumns,
-  setSelectedColumns
+  handleColumnChange
 }: Props) => {
   const handleCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
     const id = e.target.id;
     const checked = e.target.checked;
     const column = columns?.find((column) => column.key === id);
-    console.log({ id, checked, column });
-    if (checked) {
-      setSelectedColumns((prev) => {
-        return [...prev, column];
-      });
-    } else if (!checked && selectedColumns?.length > 1) {
-      setSelectedColumns((prev) => {
-        return [...(prev?.filter((column) => column.key !== id) ?? [])];
-      });
-    }
+    handleColumnChange({
+      id,
+      append: checked,
+      remove: !checked && selectedColumns?.length > 1,
+      column
+    });
   };
 
   return (

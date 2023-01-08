@@ -121,7 +121,7 @@ const TagList = ({ tags, selectedColumns }: IProps) => {
 
   const tableColumns = useMemo(() => {
     return columns?.filter(({ key }) => {
-      return key === 'id' || selectedColumns.some((c) => c.key === key);
+      return key === 'id' || selectedColumns?.some((c) => c.key === key);
     });
   }, [columns, selectedColumns]);
 

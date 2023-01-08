@@ -7,6 +7,7 @@ import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { TAGS } from '@graphql/tag';
 import { useErrorLogger, useGetStaff } from '@hooks/index';
+import { useTableColumn } from '@hooks/useTableColumn';
 import { verifyAuth } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { OrderBy, SortOrder, Tag } from '@ts-types/generated';
@@ -36,14 +37,8 @@ export default function Tags({ client }: SSRProps) {
   const [page, setPage] = useState(1);
   const [orderBy, setOrder] = useState(OrderBy.CREATED_AT);
   const [limit, setLimit] = useState({ id: 1, value: 10, label: 10 });
-  const [selectedColumns, setSelectedColumns] = useState([
-    { label: 'Icon', key: 'icon' },
-    { label: 'Name', key: 'name' },
-    { label: 'Creation Date', key: 'createdAt' },
-    { label: 'Placed By', key: 'createdBy' },
-    { label: 'Updated By', key: 'updatedBy' },
-    { label: 'Actions', key: 'actions' }
-  ]);
+
+  const { selectedTableColumns, handleColumnChange } = useTableColumn('tags');
 
   const { data, loading, error, fetchMore } = useQuery<TTags, OptionsVariable>(
     TAGS,
@@ -91,8 +86,8 @@ export default function Tags({ client }: SSRProps) {
       />
       <PageMainHeader
         columns={COLUMNS['tag']}
-        selectedColumns={selectedColumns}
-        setSelectedColumns={setSelectedColumns}
+        selectedColumns={selectedTableColumns}
+        handleColumnChange={handleColumnChange}
         onLimitChange={(value) => {
           setLimit(value);
         }}
@@ -102,7 +97,7 @@ export default function Tags({ client }: SSRProps) {
         currentPage={page}
         perPage={limit.value}
       />
-      <TagList tags={tags} selectedColumns={selectedColumns} />
+      <TagList tags={tags} selectedColumns={selectedTableColumns} />
     </>
   );
 }

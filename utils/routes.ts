@@ -37,5 +37,6 @@ export const ROUTES = {
   PAYMENTS: '/store/payments',
   EMAIL_TEMPLATES: '/store/email-templates',
   HERO_CAROUSEL: '/hero-carousel',
-  INVITE: '/hero-carousel'
+  INVITE: '/hero-carousel',
+  FILES: '/file'
 };
