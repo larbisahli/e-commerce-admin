@@ -12,7 +12,7 @@ import { useMemo } from 'react';
 
 export type IProps = {
   shippingZones: ShippingZoneType[] | undefined;
-  selectedColumns: { label: string; key: string }[];
+  selectedColumns: string[];
 };
 
 const ShippingList = ({ shippingZones, selectedColumns }: IProps) => {
@@ -160,7 +160,9 @@ const ShippingList = ({ shippingZones, selectedColumns }: IProps) => {
 
   const tableColumns = useMemo(() => {
     return columns?.filter(({ key }) => {
-      return key === 'id' || selectedColumns.some((c) => c.key === key);
+      return (
+        key === 'id' || selectedColumns?.some((columnKey) => columnKey === key)
+      );
     });
   }, [columns, selectedColumns]);
 

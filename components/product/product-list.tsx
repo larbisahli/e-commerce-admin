@@ -18,7 +18,7 @@ import { useMemo } from 'react';
 
 type IProps = {
   products: Nullable<Product[]>;
-  selectedColumns: { label: string; key: string }[];
+  selectedColumns: string[];
 };
 
 const ProductList = ({ products, selectedColumns }: IProps) => {
@@ -198,7 +198,9 @@ const ProductList = ({ products, selectedColumns }: IProps) => {
 
   const tableColumns = useMemo(() => {
     return columns?.filter(({ key }) => {
-      return key === 'id' || selectedColumns.some((c) => c.key === key);
+      return (
+        key === 'id' || selectedColumns?.some((columnKey) => columnKey === key)
+      );
     });
   }, [columns, selectedColumns]);
 

@@ -2,22 +2,11 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AppState } from '@store/index';
 import isEmpty from 'lodash/isEmpty';
 
-interface TableColumns {
-  [key: string]: { columns: { label: string; key: string }[] | [] };
-}
+import { initialState } from './data';
 
-const initialState = {
-  tags: {
-    columns: [
-      { label: 'Icon', key: 'icon' },
-      { label: 'Name', key: 'name' },
-      { label: 'Creation Date', key: 'createdAt' },
-      { label: 'Placed By', key: 'createdBy' },
-      { label: 'Updated By', key: 'updatedBy' },
-      { label: 'Actions', key: 'actions' }
-    ]
-  }
-};
+interface TableColumns {
+  [key: string]: { columns: string[] | [] };
+}
 
 const isObjectLiked = (value) =>
   value.constructor.name === 'Array' || value.constructor.name === 'Object';
@@ -45,7 +34,7 @@ export const TableSlice = createSlice({
       const newState = {
         ...state,
         [tableName]: {
-          columns: [...(state[tableName]?.columns ?? []), column]
+          columns: [...(state[tableName]?.columns ?? []), column?.key]
         }
       };
       window?.localStorage.setItem('@echo-tables', hydrate(newState));
@@ -62,9 +51,24 @@ export const TableSlice = createSlice({
         [tableName]: {
           columns: [
             ...(state[tableName]?.columns?.filter(
-              (column) => column.key !== id
+              (columnKey) => columnKey !== id
             ) ?? [])
           ]
+        }
+      };
+      window?.localStorage.setItem('@echo-tables', hydrate(newState));
+      return newState;
+    },
+    resetColumn: (
+      state: TableColumns,
+      action: PayloadAction<{ tableName: string }>
+    ) => {
+      const tableName = action.payload.tableName;
+      const { columns } = initialState[tableName];
+      const newState = {
+        ...state,
+        [tableName]: {
+          columns
         }
       };
       window?.localStorage.setItem('@echo-tables', hydrate(newState));
@@ -80,7 +84,8 @@ export const TableSlice = createSlice({
   }
 });
 
-export const { appendColumn, removeColumn, rehydrate } = TableSlice.actions;
+export const { appendColumn, removeColumn, resetColumn, rehydrate } =
+  TableSlice.actions;
 
 export const tables = (state: AppState) => state.tables;
 

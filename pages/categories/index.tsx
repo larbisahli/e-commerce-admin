@@ -7,6 +7,7 @@ import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { CATEGORIES } from '@graphql/category';
 import { useErrorLogger, useGetStaff } from '@hooks/index';
+import { useTableColumn } from '@hooks/useTableColumn';
 import { verifyAuth } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { OrderBy, SortOrder } from '@ts-types/generated';
@@ -37,15 +38,10 @@ export default function Categories({ client }: SSRProps) {
   const [page, setPage] = useState(1);
   const [orderBy, setOrder] = useState(OrderBy.CREATED_AT);
   const [limit, setLimit] = useState({ id: 1, value: 10, label: 10 });
-  const [selectedColumns, setSelectedColumns] = useState([
-    { label: 'Name', key: 'name' },
-    { label: 'Icon', key: 'icon' },
-    { label: 'Details', key: 'description' },
-    { label: 'Creation Date', key: 'createdAt' },
-    { label: 'Placed By', key: 'createdBy' },
-    { label: 'Last Updated By', key: 'updatedBy' },
-    { label: 'Actions', key: 'actions' }
-  ]);
+
+  const { selectedTableColumns, handleColumnChange } =
+    useTableColumn('category');
+
   const { data, loading, error, fetchMore } = useQuery<
     TCategories,
     OptionsVariable
@@ -93,8 +89,8 @@ export default function Categories({ client }: SSRProps) {
       />
       <PageMainHeader
         columns={COLUMNS['category']}
-        selectedColumns={selectedColumns}
-        setSelectedColumns={setSelectedColumns}
+        selectedColumns={selectedTableColumns}
+        handleColumnChange={handleColumnChange}
         onLimitChange={(value) => {
           setLimit(value);
         }}
@@ -104,7 +100,10 @@ export default function Categories({ client }: SSRProps) {
         currentPage={page}
         perPage={limit.value}
       />
-      <CategoryList categories={categories} selectedColumns={selectedColumns} />
+      <CategoryList
+        categories={categories}
+        selectedColumns={selectedTableColumns}
+      />
     </>
   );
 }

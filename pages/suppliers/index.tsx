@@ -7,6 +7,7 @@ import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { SUPPLIERS } from '@graphql/supplier';
 import { useErrorLogger, useGetStaff } from '@hooks/index';
+import { useTableColumn } from '@hooks/useTableColumn';
 import { verifyAuth } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { OrderBy, SortOrder, Suppliers } from '@ts-types/generated';
@@ -36,15 +37,9 @@ export default function SuppliersPage({ client }: SSRProps) {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState({ id: 1, value: 10, label: 10 });
   const [orderBy, setOrder] = useState(OrderBy.CREATED_AT);
-  const [selectedColumns, setSelectedColumns] = useState([
-    { label: 'Name', key: 'name' },
-    { label: 'Company', key: 'company' },
-    { label: 'Phone', key: 'phoneNumber' },
-    { label: 'Creation Date', key: 'createdAt' },
-    { label: 'Placed By', key: 'createdBy' },
-    { label: 'Updated By', key: 'updatedBy' },
-    { label: 'Actions', key: 'actions' }
-  ]);
+
+  const { selectedTableColumns, handleColumnChange } =
+    useTableColumn('supplier');
 
   const { data, loading, error, fetchMore } = useQuery<
     TSupplier,
@@ -93,8 +88,8 @@ export default function SuppliersPage({ client }: SSRProps) {
       />
       <PageMainHeader
         columns={COLUMNS['supplier']}
-        selectedColumns={selectedColumns}
-        setSelectedColumns={setSelectedColumns}
+        selectedColumns={selectedTableColumns}
+        handleColumnChange={handleColumnChange}
         onLimitChange={(value) => {
           setLimit(value);
         }}
@@ -104,7 +99,10 @@ export default function SuppliersPage({ client }: SSRProps) {
         currentPage={page}
         perPage={limit.value}
       />
-      <SuppliersList selectedColumns={selectedColumns} suppliers={suppliers} />
+      <SuppliersList
+        selectedColumns={selectedTableColumns}
+        suppliers={suppliers}
+      />
     </>
   );
 }

@@ -16,7 +16,7 @@ import { useMemo } from 'react';
 
 type IProps = {
   coupons: Coupon[] | null | undefined;
-  selectedColumns: { label: string; key: string }[];
+  selectedColumns: string[];
 };
 
 const CouponList = ({ coupons, selectedColumns }: IProps) => {
@@ -220,7 +220,9 @@ const CouponList = ({ coupons, selectedColumns }: IProps) => {
 
   const tableColumns = useMemo(() => {
     return columns?.filter(({ key }) => {
-      return key === 'id' || selectedColumns.some((c) => c.key === key);
+      return (
+        key === 'id' || selectedColumns?.some((columnKey) => columnKey === key)
+      );
     });
   }, [columns, selectedColumns]);
 

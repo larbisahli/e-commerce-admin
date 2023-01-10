@@ -7,6 +7,7 @@ import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { HERO_CAROUSEL_LIST } from '@graphql/hero-carousel';
 import { useErrorLogger, useGetStaff } from '@hooks/index';
+import { useTableColumn } from '@hooks/useTableColumn';
 import { verifyAuth } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { HeroCarouselType } from '@ts-types/generated';
@@ -33,17 +34,9 @@ export default function HeroCarousel({ client }: SSRProps) {
 
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState({ id: 1, value: 10, label: 10 });
-  const [selectedColumns, setSelectedColumns] = useState([
-    { label: 'Thumbnail', key: 'thumbnail' },
-    { label: 'Title', key: 'title' },
-    { label: 'Clicks', key: 'clicks' },
-    { label: 'Display Order', key: 'displayOrder' },
-    { label: 'Status', key: 'published' },
-    { label: 'Creation Date', key: 'createdAt' },
-    { label: 'Placed By', key: 'createdBy' },
-    { label: 'Updated By', key: 'updatedBy' },
-    { label: 'Actions', key: 'actions' }
-  ]);
+
+  const { selectedTableColumns, handleColumnChange } =
+    useTableColumn('hero-carousel');
 
   const { data, loading, error, fetchMore } = useQuery<
     THeroCarousel,
@@ -88,8 +81,8 @@ export default function HeroCarousel({ client }: SSRProps) {
       />
       <PageMainHeader
         columns={COLUMNS['hero-carousel']}
-        selectedColumns={selectedColumns}
-        setSelectedColumns={setSelectedColumns}
+        selectedColumns={selectedTableColumns}
+        handleColumnChange={handleColumnChange}
         onLimitChange={(value) => {
           setLimit(value);
         }}
@@ -101,7 +94,7 @@ export default function HeroCarousel({ client }: SSRProps) {
       />
       <HeroCarouselList
         heroCarouselList={heroSlideList}
-        selectedColumns={selectedColumns}
+        selectedColumns={selectedTableColumns}
       />
     </>
   );

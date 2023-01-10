@@ -1,20 +1,22 @@
 /* eslint-disable no-unused-vars */
+import { ResetIcon } from '@components/icons/reset';
+import Button from '@components/ui/button';
 import Checkbox from '@components/ui/checkbox';
 import isEmpty from 'lodash/isEmpty';
 import React, { useMemo } from 'react';
 
 interface Parameter {
-  id: string;
-  append: boolean;
-  remove: boolean;
-  column: { label: string; key: string };
+  id?: string;
+  append?: boolean;
+  remove?: boolean;
+  column?: { label: string; key: string };
 }
 
 interface Props {
   // eslint-disable-next-line no-unused-vars
   columns: { label: string; key: string }[];
-  selectedColumns: { label: string; key: string }[];
-  handleColumnChange: (a: Parameter) => void;
+  selectedColumns: string[];
+  handleColumnChange: (a: Parameter, reset?: boolean) => void;
 }
 
 const ColumnsComponent = ({
@@ -34,18 +36,30 @@ const ColumnsComponent = ({
     });
   };
 
+  const handleReset = () => {
+    handleColumnChange({}, true);
+  };
+
   return (
-    <div className="flex items-center flex-wrap">
-      {columns?.map((column) => {
-        return (
-          <Column
-            key={column.key}
-            column={column}
-            handleCheck={handleCheck}
-            selectedColumns={selectedColumns}
-          />
-        );
-      })}
+    <div className="flex items-center justify-between">
+      <div className="flex items-center flex-wrap flex-1">
+        {columns?.map((column) => {
+          return (
+            <Column
+              key={column.key}
+              column={column}
+              handleCheck={handleCheck}
+              selectedColumns={selectedColumns}
+            />
+          );
+        })}
+      </div>
+      <div className="">
+        <Button size="small" onClick={handleReset}>
+          <ResetIcon />
+          <span className="mx-1">Reset</span>
+        </Button>
+      </div>
     </div>
   );
 };
@@ -57,10 +71,12 @@ const Column = ({
 }: {
   column: { label: string; key: string };
   handleCheck: Function;
-  selectedColumns: { label: string; key: string }[];
+  selectedColumns: string[];
 }) => {
   const selected = useMemo(() => {
-    return !isEmpty(selectedColumns?.find((c) => c.key === column.key));
+    return !isEmpty(
+      selectedColumns?.find((columnKey) => columnKey === column.key)
+    );
   }, [selectedColumns, column]);
   return (
     <div key={column.key} className="mr-3 my-4">

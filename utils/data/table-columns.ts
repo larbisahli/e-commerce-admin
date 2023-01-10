@@ -1,5 +1,5 @@
 export const COLUMNS = {
-  'order-statu': [
+  'order-status': [
     { label: 'Name', key: 'name' },
     { label: 'Status', key: 'privacy' },
     { label: 'Creation Date', key: 'createdAt' },

@@ -1,5 +1,10 @@
 import type { AppDispatch, AppState } from '@store/index';
-import { appendColumn, rehydrate, removeColumn } from '@store/table';
+import {
+  appendColumn,
+  rehydrate,
+  removeColumn,
+  resetColumn
+} from '@store/table';
 import { useEffect, useMemo } from 'react';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 
@@ -45,7 +50,13 @@ export function useTableColumn(tableName: string) {
     dispatch(rehydrate(restoredValue));
   }, []);
 
-  function handleColumnChange({ id, append, remove, column }: fn) {
+  function handleColumnChange(
+    { id, append, remove, column }: fn,
+    reset = false
+  ) {
+    if (reset) {
+      dispatch(resetColumn({ tableName }));
+    }
     if (append) {
       dispatch(appendColumn({ column, tableName }));
     } else if (remove) {

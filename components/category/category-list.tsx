@@ -13,7 +13,7 @@ import React, { useMemo } from 'react';
 
 export type IProps = {
   categories: Category[];
-  selectedColumns: { label: string; key: string }[];
+  selectedColumns: string[];
 };
 
 const CategoryList = ({ categories, selectedColumns }: IProps) => {
@@ -133,7 +133,9 @@ const CategoryList = ({ categories, selectedColumns }: IProps) => {
 
   const tableColumns = useMemo(() => {
     return columns?.filter(({ key }) => {
-      return key === 'id' || selectedColumns.some((c) => c.key === key);
+      return (
+        key === 'id' || selectedColumns?.some((columnKey) => columnKey === key)
+      );
     });
   }, [columns, selectedColumns]);
 

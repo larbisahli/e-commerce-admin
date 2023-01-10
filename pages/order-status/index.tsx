@@ -7,6 +7,7 @@ import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { ORDER_STATUSES } from '@graphql/order-status';
 import { useErrorLogger, useGetStaff } from '@hooks/index';
+import { useTableColumn } from '@hooks/useTableColumn';
 import { verifyAuth } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { OrderBy, OrderStatus, SortOrder } from '@ts-types/generated';
@@ -36,14 +37,9 @@ export default function OrderStatusPage({ client }: SSRProps) {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState({ id: 1, value: 10, label: 10 });
   const [orderBy, setOrder] = useState(OrderBy.CREATED_AT);
-  const [selectedColumns, setSelectedColumns] = useState([
-    { label: 'Name', key: 'name' },
-    { label: 'Status', key: 'privacy' },
-    { label: 'Creation Date', key: 'createdAt' },
-    { label: 'Placed By', key: 'createdBy' },
-    { label: 'Last Updated By', key: 'updatedBy' },
-    { label: 'Actions', key: 'actions' }
-  ]);
+
+  const { selectedTableColumns, handleColumnChange } =
+    useTableColumn('order-status');
 
   const { data, loading, error, fetchMore } = useQuery<
     TOrderStatus,
@@ -92,8 +88,8 @@ export default function OrderStatusPage({ client }: SSRProps) {
       />
       <PageMainHeader
         columns={COLUMNS['order-status']}
-        selectedColumns={selectedColumns}
-        setSelectedColumns={setSelectedColumns}
+        selectedColumns={selectedTableColumns}
+        handleColumnChange={handleColumnChange}
         onLimitChange={(value) => {
           setLimit(value);
         }}
@@ -104,7 +100,7 @@ export default function OrderStatusPage({ client }: SSRProps) {
         perPage={limit.value}
       />
       <OrderStatusList
-        selectedColumns={selectedColumns}
+        selectedColumns={selectedTableColumns}
         orderStatuses={orderStatuses}
       />
     </>

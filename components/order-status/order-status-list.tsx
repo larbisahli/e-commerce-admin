@@ -15,7 +15,7 @@ import { useMemo } from 'react';
 
 export type IProps = {
   orderStatuses: OrderStatus[] | undefined | null;
-  selectedColumns: { label: string; key: string }[];
+  selectedColumns: string[];
 };
 const OrderStatusList = ({ orderStatuses, selectedColumns }: IProps) => {
   const { t } = useTranslation();
@@ -128,7 +128,9 @@ const OrderStatusList = ({ orderStatuses, selectedColumns }: IProps) => {
 
   const tableColumns = useMemo(() => {
     return columns?.filter(({ key }) => {
-      return key === 'id' || selectedColumns.some((c) => c.key === key);
+      return (
+        key === 'id' || selectedColumns?.some((columnKey) => columnKey === key)
+      );
     });
   }, [columns, selectedColumns]);
 

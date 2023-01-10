@@ -7,6 +7,7 @@ import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { COUPONS } from '@graphql/coupons';
 import { useErrorLogger, useGetStaff } from '@hooks/index';
+import { useTableColumn } from '@hooks/useTableColumn';
 import { verifyAuth } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { Coupon, OrderBy, SortOrder } from '@ts-types/generated';
@@ -36,19 +37,8 @@ export default function Coupons({ client }: SSRProps) {
   const [page, setPage] = useState(1);
   const [orderBy, setOrder] = useState(OrderBy.CREATED_AT);
   const [limit, setLimit] = useState({ id: 1, value: 10, label: 10 });
-  const [selectedColumns, setSelectedColumns] = useState([
-    { label: 'Code', key: 'code' },
-    { label: 'Order Amount Limit', key: 'orderAmountLimit' },
-    { label: 'Value', key: 'discountValue' },
-    { label: 'Status', key: 'active' },
-    { label: 'Time Used', key: 'timesUsed' },
-    { label: 'Usage limit', key: 'maxUsage' },
-    { label: 'Start Date', key: 'couponStartDate' },
-    { label: 'End Date', key: 'couponEndDate' },
-    { label: 'Placed By', key: 'createdBy' },
-    { label: 'Last Updated By', key: 'updatedBy' },
-    { label: 'Actions', key: 'actions' }
-  ]);
+
+  const { selectedTableColumns, handleColumnChange } = useTableColumn('coupon');
 
   const { data, loading, error, fetchMore } = useQuery<
     TCoupon,
@@ -96,8 +86,8 @@ export default function Coupons({ client }: SSRProps) {
       />
       <PageMainHeader
         columns={COLUMNS['coupon']}
-        selectedColumns={selectedColumns}
-        setSelectedColumns={setSelectedColumns}
+        selectedColumns={selectedTableColumns}
+        handleColumnChange={handleColumnChange}
         onLimitChange={(value) => {
           setLimit(value);
         }}
@@ -107,7 +97,7 @@ export default function Coupons({ client }: SSRProps) {
         currentPage={page}
         perPage={limit.value}
       />
-      <CouponList coupons={coupons} selectedColumns={selectedColumns} />
+      <CouponList coupons={coupons} selectedColumns={selectedTableColumns} />
     </>
   );
 }

@@ -8,6 +8,7 @@ import Loader from '@components/ui/loader/loader';
 import { SHIPPING_ZONES } from '@graphql/shipping-zone';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetStaff } from '@hooks/useGetStaff';
+import { useTableColumn } from '@hooks/useTableColumn';
 import { verifyAuth } from '@middleware/utils';
 import type { SSRProps } from '@ts-types/custom.types';
 import type { ShippingZoneType } from '@ts-types/generated';
@@ -38,17 +39,9 @@ export default function ShippingZonesPage({ client }: SSRProps) {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState({ id: 1, value: 10, label: 10 });
   const [orderBy, setOrder] = useState(OrderBy.CREATED_AT);
-  const [selectedColumns, setSelectedColumns] = useState([
-    { label: 'Name', key: 'name' },
-    { label: 'Company', key: 'company' },
-    { label: 'Rate Type', key: 'rateType' },
-    { label: 'Status', key: 'active' },
-    { label: 'Free', key: 'freeShipping' },
-    { label: 'Creation Date', key: 'createdAt' },
-    { label: 'Placed By', key: 'createdBy' },
-    { label: 'Updated By', key: 'updatedBy' },
-    { label: 'Actions', key: 'actions' }
-  ]);
+
+  const { selectedTableColumns, handleColumnChange } =
+    useTableColumn('shipping-zone');
 
   const { data, loading, error, fetchMore } = useQuery<
     TShipping,
@@ -97,8 +90,8 @@ export default function ShippingZonesPage({ client }: SSRProps) {
       />
       <PageMainHeader
         columns={COLUMNS['shipping-zone']}
-        selectedColumns={selectedColumns}
-        setSelectedColumns={setSelectedColumns}
+        selectedColumns={selectedTableColumns}
+        handleColumnChange={handleColumnChange}
         onLimitChange={(value) => {
           setLimit(value);
         }}
@@ -110,7 +103,7 @@ export default function ShippingZonesPage({ client }: SSRProps) {
       />
       <ShippingList
         shippingZones={shippingZones}
-        selectedColumns={selectedColumns}
+        selectedColumns={selectedTableColumns}
       />
     </>
   );

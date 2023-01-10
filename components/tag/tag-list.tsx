@@ -11,7 +11,7 @@ import { useMemo } from 'react';
 
 export type IProps = {
   tags: Tag[] | undefined | null;
-  selectedColumns: { label: string; key: string }[];
+  selectedColumns: string[];
 };
 
 const TagList = ({ tags, selectedColumns }: IProps) => {
@@ -121,7 +121,9 @@ const TagList = ({ tags, selectedColumns }: IProps) => {
 
   const tableColumns = useMemo(() => {
     return columns?.filter(({ key }) => {
-      return key === 'id' || selectedColumns?.some((c) => c.key === key);
+      return (
+        key === 'id' || selectedColumns?.some((columnKey) => columnKey === key)
+      );
     });
   }, [columns, selectedColumns]);
 

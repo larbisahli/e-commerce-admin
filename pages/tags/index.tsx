@@ -38,7 +38,7 @@ export default function Tags({ client }: SSRProps) {
   const [orderBy, setOrder] = useState(OrderBy.CREATED_AT);
   const [limit, setLimit] = useState({ id: 1, value: 10, label: 10 });
 
-  const { selectedTableColumns, handleColumnChange } = useTableColumn('tags');
+  const { selectedTableColumns, handleColumnChange } = useTableColumn('tag');
 
   const { data, loading, error, fetchMore } = useQuery<TTags, OptionsVariable>(
     TAGS,

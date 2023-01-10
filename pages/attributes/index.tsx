@@ -7,6 +7,7 @@ import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { ATTRIBUTES } from '@graphql/attribute';
 import { useErrorLogger, useGetStaff } from '@hooks/index';
+import { useTableColumn } from '@hooks/useTableColumn';
 import { verifyAuth } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { Attribute, OrderBy, SortOrder } from '@ts-types/generated';
@@ -36,14 +37,9 @@ export default function AttributePage({ client }: SSRProps) {
   const [page, setPage] = useState(1);
   const [orderBy, setOrder] = useState(OrderBy.CREATED_AT);
   const [limit, setLimit] = useState({ id: 1, value: 10, label: 10 });
-  const [selectedColumns, setSelectedColumns] = useState([
-    { label: 'Name', key: 'name' },
-    { label: 'Values', key: 'values' },
-    { label: 'Creation Date', key: 'createdAt' },
-    { label: 'Placed By', key: 'createdBy' },
-    { label: 'Last Updated By', key: 'updatedBy' },
-    { label: 'Actions', key: 'actions' }
-  ]);
+
+  const { selectedTableColumns, handleColumnChange } =
+    useTableColumn('attribute');
 
   const { data, loading, error, fetchMore } = useQuery<
     TAttributes,
@@ -92,8 +88,8 @@ export default function AttributePage({ client }: SSRProps) {
       />
       <PageMainHeader
         columns={COLUMNS['attribute']}
-        selectedColumns={selectedColumns}
-        setSelectedColumns={setSelectedColumns}
+        selectedColumns={selectedTableColumns}
+        handleColumnChange={handleColumnChange}
         onLimitChange={(value) => {
           setLimit(value);
         }}
@@ -105,7 +101,7 @@ export default function AttributePage({ client }: SSRProps) {
       />
       <AttributeList
         attributes={attributes}
-        selectedColumns={selectedColumns}
+        selectedColumns={selectedTableColumns}
       />
     </>
   );

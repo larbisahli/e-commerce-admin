@@ -8,6 +8,7 @@ import Loader from '@components/ui/loader/loader';
 import { PRODUCTS } from '@graphql/product';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetStaff } from '@hooks/useGetStaff';
+import { useTableColumn } from '@hooks/useTableColumn';
 import { verifyAuth } from '@middleware/utils';
 import type { SSRProps } from '@ts-types/custom.types';
 import type { Product } from '@ts-types/generated';
@@ -38,19 +39,10 @@ export default function ProductsPage({ client }: SSRProps) {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState({ id: 1, value: 10, label: 10 });
   const [orderBy, setOrder] = useState(OrderBy.CREATED_AT);
-  const [selectedColumns, setSelectedColumns] = useState([
-    { label: 'sku', key: 'sku' },
-    { label: 'Image', key: 'thumbnail' },
-    { label: 'Name', key: 'name' },
-    { label: 'Categories', key: 'categories' },
-    { label: 'Price/Unit', key: 'salePrice' },
-    { label: 'Quantity', key: 'quantity' },
-    { label: 'Status', key: 'published' },
-    { label: 'Creation Date', key: 'createdAt' },
-    { label: 'Placed By', key: 'createdBy' },
-    { label: 'Updated By', key: 'updatedBy' },
-    { label: 'Actions', key: 'actions' }
-  ]);
+
+  const { selectedTableColumns, handleColumnChange } =
+    useTableColumn('product');
+
   const { data, loading, error, fetchMore } = useQuery<
     TProduct,
     ProductVariable
@@ -97,8 +89,8 @@ export default function ProductsPage({ client }: SSRProps) {
       />
       <PageMainHeader
         columns={COLUMNS['product']}
-        selectedColumns={selectedColumns}
-        setSelectedColumns={setSelectedColumns}
+        selectedColumns={selectedTableColumns}
+        handleColumnChange={handleColumnChange}
         onLimitChange={(value) => {
           setLimit(value);
         }}
@@ -108,7 +100,7 @@ export default function ProductsPage({ client }: SSRProps) {
         currentPage={page}
         perPage={limit.value}
       />
-      <ProductList products={products} selectedColumns={selectedColumns} />
+      <ProductList products={products} selectedColumns={selectedTableColumns} />
     </>
   );
 }

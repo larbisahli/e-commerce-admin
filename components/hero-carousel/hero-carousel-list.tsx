@@ -1,7 +1,6 @@
 import ActionButtons from '@components/common/action-buttons';
 import ImageComponent from '@components/ImageComponent';
 import Badge from '@components/ui/badge/badge';
-import Pagination from '@components/ui/pagination';
 import ProfileCart from '@components/ui/profile-card';
 import { Table } from '@components/ui/table';
 import { siteSettings } from '@settings/site.settings';
@@ -15,7 +14,7 @@ import React, { useMemo } from 'react';
 
 export type IProps = {
   heroCarouselList: HeroCarouselType[];
-  selectedColumns: { label: string; key: string }[];
+  selectedColumns: string[];
 };
 
 const HeroCarouselList = ({ heroCarouselList, selectedColumns }: IProps) => {
@@ -168,7 +167,9 @@ const HeroCarouselList = ({ heroCarouselList, selectedColumns }: IProps) => {
 
   const tableColumns = useMemo(() => {
     return columns?.filter(({ key }) => {
-      return key === 'id' || selectedColumns.some((c) => c.key === key);
+      return (
+        key === 'id' || selectedColumns?.some((columnKey) => columnKey === key)
+      );
     });
   }, [columns, selectedColumns]);
 
