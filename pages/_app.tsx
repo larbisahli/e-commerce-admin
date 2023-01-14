@@ -10,7 +10,6 @@ import DefaultSeo from '@components/ui/default-seo';
 import LoadingBar from '@components/ui/loading-bar';
 import ManagedModal from '@components/ui/modal/managed-modal';
 import { ModalProvider } from '@components/ui/modal/modal.context';
-import { UIProvider } from '@contexts/ui.context';
 import apolloClient from '@lib/apollo-client';
 import store from '@store/index';
 import type { AppProps } from 'next/app';
@@ -25,10 +24,7 @@ const Noop: React.FC = ({ children }: { children: React.ReactNode }) => (
 );
 
 function App({ Component, pageProps }: AppProps) {
-  // const { asPath } = useRouter();
-
   const Layout = (Component as any).Layout || Noop;
-
   return (
     <Fragment>
       <Head>
@@ -70,15 +66,13 @@ function App({ Component, pageProps }: AppProps) {
         <Provider store={store}>
           <ApolloProvider client={apolloClient}>
             <LoadingBar />
-            <UIProvider>
-              <ModalProvider>
-                <ManagedModal />
-                <DefaultSeo />
-                <Layout {...pageProps}>
-                  <Component {...pageProps} />
-                </Layout>
-              </ModalProvider>
-            </UIProvider>
+            <ModalProvider>
+              <ManagedModal />
+              <DefaultSeo />
+              <Layout {...pageProps}>
+                <Component {...pageProps} />
+              </Layout>
+            </ModalProvider>
           </ApolloProvider>
         </Provider>
       </ErrorBoundary>

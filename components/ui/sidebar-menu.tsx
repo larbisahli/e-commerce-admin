@@ -1,7 +1,7 @@
 import { ExpandLessIcon } from '@components/icons/expand-less-icon';
 import { ExpandMoreIcon } from '@components/icons/expand-more-icon';
 import * as sidebarIcons from '@components/icons/sidebar';
-import { useUI } from '@contexts/ui.context';
+import { useUI } from '@hooks/useUI';
 import cn from 'classnames';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useRouter } from 'next/router';
@@ -13,7 +13,10 @@ function SidebarMenuItem({ className, item, depth = 0 }: any) {
   const { t } = useTranslation('common');
   const [isOpen, setOpen] = useState(() => router.pathname === item.href);
   const { href, labelTransKey, items, icon } = item;
-  const { displaySidebar, closeSidebar } = useUI();
+  const {
+    ui: { displaySidebar },
+    handleSidebar
+  } = useUI();
 
   function toggleCollapse() {
     setOpen((prevValue) => !prevValue);
@@ -24,7 +27,7 @@ function SidebarMenuItem({ className, item, depth = 0 }: any) {
       toggleCollapse();
     } else {
       router.push(href);
-      displaySidebar && closeSidebar();
+      displaySidebar && handleSidebar({ display: false });
     }
   }
 

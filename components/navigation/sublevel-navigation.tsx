@@ -1,5 +1,5 @@
-import { useUI } from '@contexts/ui.context';
 import { useMediaQuery } from '@hooks/useMediaQuery';
+import { useUI } from '@hooks/useUI';
 import { siteSettings } from '@settings/site.settings';
 import { useTranslation } from 'next-i18next';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -26,8 +26,10 @@ interface Props {
 }
 
 const SublevelNavigation: React.FC = () => {
-  const { displaySublevelSidebar, SublevelSidebarId, closeSublevelSidebar } =
-    useUI();
+  const {
+    ui: { SublevelSidebarId, displaySublevelSidebar },
+    closeSublevelSidebar
+  } = useUI();
   const { t } = useTranslation();
   const [showLinkIdLevel1, setShowLinkIdLevel1] = useState<string>('');
 

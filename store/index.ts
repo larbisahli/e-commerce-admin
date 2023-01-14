@@ -3,6 +3,7 @@ import FilesReducer from '@store/files';
 import SettingsReducer from '@store/settings';
 import StaffReducer from '@store/staff';
 import TableReducer from '@store/table';
+import UIReducer from '@store/ui';
 import { PRODUCTION_ENV } from '@utils/utils';
 
 export function makeStore() {
@@ -11,7 +12,8 @@ export function makeStore() {
       settings: SettingsReducer,
       staffInfo: StaffReducer,
       files: FilesReducer,
-      tables: TableReducer
+      tables: TableReducer,
+      ui: UIReducer
     },
     devTools: !PRODUCTION_ENV
   });

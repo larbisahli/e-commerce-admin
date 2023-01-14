@@ -4,7 +4,7 @@ import { Add } from '@components/icons/add';
 import { Minus } from '@components/icons/minus';
 import * as sidebarIcons from '@components/icons/sidebar';
 import ActiveLink from '@components/ui/activeLink';
-import { useUI } from '@contexts/ui.context';
+import { useUI } from '@hooks/useUI';
 import cn from 'classnames';
 import isEmpty from 'lodash/isEmpty';
 import { useTranslation } from 'next-i18next';
@@ -180,13 +180,13 @@ const SidebarLabel = ({
   showLinkId,
   hadSubLinks
 }: LabelProps) => {
-  const { closeSidebar } = useUI();
+  const { handleSidebar } = useUI();
 
   const handleCloseSidebar = () => {
     if (hadSubLinks) {
       return;
     }
-    closeSidebar();
+    handleSidebar({ display: false });
   };
 
   const TagName = sidebarIcons[icon];

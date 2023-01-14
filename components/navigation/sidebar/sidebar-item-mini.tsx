@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import * as sidebarIcons from '@components/icons/sidebar';
 import ActiveLink from '@components/ui/activeLink';
-import { useUI } from '@contexts/ui.context';
+import { useUI } from '@hooks/useUI';
 import cn from 'classnames';
 import classNames from 'classnames/bind';
 import isEmpty from 'lodash/isEmpty';
@@ -44,9 +44,8 @@ const SidebarItem = ({
   const { asPath } = useRouter();
 
   const {
-    displaySublevelSidebar,
+    ui: { SublevelSidebarId, displaySublevelSidebar },
     openSublevelSidebar,
-    SublevelSidebarId,
     closeSublevelSidebar
   } = useUI();
   const hadSubLinks = useMemo(() => !isEmpty(subLinks), [subLinks]);
@@ -72,7 +71,7 @@ const SidebarItem = ({
                 sublevelOpen || linkHighlight
             }
           )}
-          onClick={() => openSublevelSidebar(id)}
+          onClick={() => openSublevelSidebar({ id })}
         >
           <SidebarLabel icon={icon} label={label} />
         </div>

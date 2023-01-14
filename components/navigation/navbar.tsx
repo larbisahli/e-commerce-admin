@@ -1,6 +1,6 @@
 import LinkButton from '@components/ui/link-button';
-import { useUI } from '@contexts/ui.context';
 import { useMediaQuery } from '@hooks/useMediaQuery';
+import { useUI } from '@hooks/useUI';
 import { ROUTES } from '@utils/routes';
 import classNames from 'classnames/bind';
 import { motion } from 'framer-motion';
