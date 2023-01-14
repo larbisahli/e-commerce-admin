@@ -9,7 +9,7 @@ export const staffSlice = createSlice({
   initialState,
   reducers: {
     updateStaff: (state: StaffType, action: PayloadAction<StaffType>) => {
-      return (state = action.payload);
+      return action.payload;
     }
   }
 });

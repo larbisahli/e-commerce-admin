@@ -35,66 +35,42 @@ export const UISlice = createSlice({
       state: State,
       action: PayloadAction<{ display: boolean }>
     ) => {
-      return {
-        ...state,
-        displaySidebar: action.payload.display
-      };
+      state.displaySidebar = action.payload.display;
     },
     toggleSidebar: (state: State) => {
-      return {
-        ...state,
-        displaySidebar: !state.displaySidebar
-      };
+      state.displaySidebar = !state.displaySidebar;
     },
     openSublevelSidebar: (
       state: State,
       action: PayloadAction<{ id: string }>
     ) => {
-      return {
-        ...state,
-        displaySublevelSidebar: true,
-        SublevelSidebarId: action.payload.id
-      };
+      (state.displaySublevelSidebar = true),
+        (state.SublevelSidebarId = action.payload.id);
     },
     closeSublevelSidebar: (state: State) => {
-      return {
-        ...state,
-        displaySublevelSidebar: false
-      };
+      state.displaySublevelSidebar = false;
     },
     closeSidebarIfPresent: (state: State) => {
       if (!state.displaySidebar) return state;
-      return {
-        ...state,
-        displaySidebar: false
-      };
+      state.displaySidebar = false;
     },
     handleModal: (
       state: State,
       action: PayloadAction<{ display: boolean }>
     ) => {
-      return {
-        ...state,
-        displayModal: action.payload.display
-      };
+      state.displayModal = action.payload.display;
     },
     setModalView: (
       state: State,
       action: PayloadAction<{ view: MODAL_VIEWS }>
     ) => {
-      return {
-        ...state,
-        modalView: action.payload.view
-      };
+      state.modalView = action.payload.view;
     },
     setModalData: (
       state: State,
       action: PayloadAction<{ data: MODAL_DATA }>
     ) => {
-      return {
-        ...state,
-        modalData: action.payload.data
-      };
+      state.modalData = action.payload.data;
     }
   }
 });

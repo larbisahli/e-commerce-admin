@@ -31,14 +31,11 @@ export const TableSlice = createSlice({
     ) => {
       const tableName = action.payload.tableName;
       const column = action.payload.column;
-      const newState = {
-        ...state,
-        [tableName]: {
-          columns: [...(state[tableName]?.columns ?? []), column?.key]
-        }
-      };
-      window?.localStorage.setItem('@echo-tables', hydrate(newState));
-      return newState;
+      state[tableName].columns = [
+        ...(state[tableName]?.columns ?? []),
+        column?.key
+      ];
+      window?.localStorage.setItem('@echo-tables', hydrate(state));
     },
     removeColumn: (
       state: TableColumns,
@@ -46,18 +43,10 @@ export const TableSlice = createSlice({
     ) => {
       const tableName = action.payload.tableName;
       const id = action.payload.id;
-      const newState = {
-        ...state,
-        [tableName]: {
-          columns: [
-            ...(state[tableName]?.columns?.filter(
-              (columnKey) => columnKey !== id
-            ) ?? [])
-          ]
-        }
-      };
-      window?.localStorage.setItem('@echo-tables', hydrate(newState));
-      return newState;
+      state[tableName].columns =
+        state[tableName]?.columns?.filter((columnKey) => columnKey !== id) ??
+        [];
+      window?.localStorage.setItem('@echo-tables', hydrate(state));
     },
     resetColumn: (
       state: TableColumns,
@@ -65,19 +54,13 @@ export const TableSlice = createSlice({
     ) => {
       const tableName = action.payload.tableName;
       const { columns } = initialState[tableName];
-      const newState = {
-        ...state,
-        [tableName]: {
-          columns
-        }
-      };
-      window?.localStorage.setItem('@echo-tables', hydrate(newState));
-      return newState;
+      state[tableName].columns = columns;
+      window?.localStorage.setItem('@echo-tables', hydrate(state));
     },
     rehydrate: (state: TableColumns, action: PayloadAction<TableColumns>) => {
       console.log({ state });
       if (!isEmpty(action.payload)) {
-        return (state = action.payload);
+        return action.payload;
       }
       return state;
     }

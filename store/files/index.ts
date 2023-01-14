@@ -37,10 +37,8 @@ export const FilesSlice = createSlice({
 
       const images = action.payload.images;
 
-      return (state = {
-        ...state,
-        fileCount: action.payload.count,
-        fileStore: PageExist
+      (state.fileCount = action.payload.count),
+        (state.fileStore = PageExist
           ? state.fileStore?.map((storePhoto) => {
               if (storePhoto.page === state.currentPage) {
                 storePhoto.total = images?.length;
@@ -55,34 +53,27 @@ export const FilesSlice = createSlice({
                 total: images?.length,
                 items: images
               }
-            ]
-      });
+            ]);
     },
     appendFile: (
       state: FilesState,
       action: PayloadAction<{ image: ImageType }>
     ) => {
       const image = action.payload.image;
-      return (state = {
-        ...state,
-        fileStore: state.fileStore?.map((storePhoto) => {
-          if (storePhoto.page === state.currentPage) {
-            const clonedItems = cloneDeep(storePhoto.items);
-            storePhoto.items = [image, ...clonedItems];
-            return storePhoto;
-          }
+      state.fileStore?.map((storePhoto) => {
+        if (storePhoto.page === state.currentPage) {
+          const clonedItems = cloneDeep(storePhoto.items);
+          storePhoto.items = [image, ...clonedItems];
           return storePhoto;
-        })
+        }
+        return storePhoto;
       });
     },
     setCurrentPage: (
       state: FilesState,
       action: PayloadAction<{ currentPage: number }>
     ) => {
-      return (state = {
-        ...state,
-        currentPage: action.payload.currentPage
-      });
+      state.currentPage = action.payload.currentPage;
     }
   }
 });
