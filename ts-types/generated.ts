@@ -313,6 +313,7 @@ export interface ImageType {
   placeholder?: Scalars['String'];
   isThumbnail?: boolean;
   createdAt?: Scalars['DateTime'];
+  size?: Scalars['Int']
 }
 export interface Suppliers extends CreatedUpdatedByAt {
   id?: Scalars['ID'];

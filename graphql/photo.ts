@@ -15,6 +15,7 @@ export const PHOTOS = gql`
       image
       placeholder
       createdAt
+      size
     }
   }
 `;

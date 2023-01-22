@@ -3,6 +3,7 @@ import 'rc-pagination/assets/index.css';
 
 import Uploader from '@components/common/uploader';
 import { ImagesSvg } from '@components/icons/images';
+import { UploadIcon } from '@components/icons/upload-icon';
 import Button from '@components/ui/button';
 import Loader from '@components/ui/loader/loader';
 import Modal from '@components/ui/modal/modal';
@@ -20,7 +21,7 @@ import { useEffect, useState } from 'react';
 
 import ImageThumbs from './thumbs';
 
-const limit = 45;
+const limit = 40;
 
 interface Props {
   // eslint-disable-next-line no-unused-vars
@@ -44,6 +45,7 @@ const ImageModal = ({
   const { isOpen, view, id } = useModalState();
 
   const [loading, setLoading] = useState<boolean>(false);
+  const [uploadVisible, setUploadVisible] = useState<boolean>(false);
   const [selectedImages, setSelectedImages] = useState<ImageType[]>(
     () => selected
   );
@@ -63,6 +65,12 @@ const ImageModal = ({
   }, [isOpen, selected]);
 
   const isCurrentModal = modalId === id;
+
+  useEffect(() => {
+    if (!isOpen) {
+      setUploadVisible(false);
+    }
+  }, [isOpen]);
 
   return (
     <div className="w-full">
@@ -89,56 +97,77 @@ const ImageModal = ({
       {/* MODEL */}
       <Modal open={isOpen && isCurrentModal} onClose={closeModal}>
         {view === IMAGE_MODAL && (
-          <div className="flex flex-col p-4 bg-white md:min-h-[600px] min-h-[100vh] h-full w-full md:w-[80vw] w-[100vw] 2xl:w-[70vw]">
-            <div className="w-fit font-semibold text-lg">Your Image Store</div>
-            <div className="py-4 m-2">
-              <Uploader setLoading={setLoading} />
+          <div className="flex overflow-y-auto flex-col bg-white md:h-fit h-[100vh] w-[100vw] md:w-[70vw] 2xl:w-[60vw]">
+            <div className="p-4 font-semibold text-lg bg-green-600 text-white uppercase">
+              Images
             </div>
-            <div className="flex m-2 flex-col justify-between relative my-5 min-h-full flex-1">
-              <div className="absolute z-10 top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                {loadingPhotos && (
-                  <Loader height="20vh" text={t('common:text-loading')} />
-                )}
+            <div className="p-4 h-fit min-h-[400px] w-full">
+              <div className="w-fit text-gray-500 text-sm">
+                Your files are encrypted for security reasons and only accessed
+                by you.
               </div>
-              <div className="overflow-y-auto h-full">
-                <ul className="flex flex-wrap items-center md:justify-start px-[8px]">
-                  {loading && (
-                    <li className="rounded-sm mt-2 me-2 relative">
-                      <div className="relative min-w-0 w-24 h-24 overflow-hidden rounded-sm">
-                        <div className="h-16 flex items-center justify-center mt-2 ms-2">
-                          <Loader simple={true} className="w-6 h-6" />
-                        </div>
-                      </div>
-                    </li>
-                  )}
-                  <ImageThumbs
-                    photos={items}
-                    {...{
-                      setSelectedImages,
-                      selectedImages,
-                      isThumbnail
-                    }}
-                  />
-                </ul>
-              </div>
-              <div className="flex items-center mt-3 justify-between">
-                <div className="flex-1">
-                  <Pagination2
-                    total={photosCount}
-                    current={currentPage}
-                    pageSize={limit}
-                    onChange={handlePagination}
-                  />
-                </div>
+              <div className="flex justify-end pt-5 pb-2">
                 <Button
-                  onClick={() => {
-                    onSelect(selectedImages);
-                    setSelectedImages([]);
-                    closeModal();
-                  }}
+                  className="flex items-center justify-center"
+                  onClick={() => setUploadVisible(true)}
                 >
-                  Select
+                  <div className="mx-2">
+                    <UploadIcon width="30px" height="30px" />
+                  </div>
+                  <div>Upload Images</div>
                 </Button>
+              </div>
+              {uploadVisible && (
+                <div className="py-4 m-2">
+                  <Uploader setLoading={setLoading} />
+                </div>
+              )}
+              <div className="flex flex-col justify-between relative my-5 flex-1">
+                <div className="absolute z-10 top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                  {loadingPhotos && (
+                    <Loader height="20vh" text={t('common:text-loading')} />
+                  )}
+                </div>
+                <div className="h-full w-full min-h-[400px]">
+                  <ul className="my-4 image-grid-col-auto grid grid-flow-row gap-4 w-full">
+                    {loading && (
+                      <li className="rounded-sm mt-2 me-2 relative">
+                        <div className="relative min-w-0 w-24 h-24 overflow-hidden rounded-sm">
+                          <div className="h-16 flex items-center justify-center mt-2 ms-2">
+                            <Loader simple={true} className="w-6 h-6" />
+                          </div>
+                        </div>
+                      </li>
+                    )}
+                    <ImageThumbs
+                      photos={items}
+                      {...{
+                        setSelectedImages,
+                        selectedImages,
+                        isThumbnail
+                      }}
+                    />
+                  </ul>
+                </div>
+                <div className="flex items-center mt-3 md:mb-0 justify-between mb-16">
+                  <div className="flex-1">
+                    <Pagination2
+                      total={photosCount}
+                      current={currentPage}
+                      pageSize={limit}
+                      onChange={handlePagination}
+                    />
+                  </div>
+                  <Button
+                    onClick={() => {
+                      onSelect(selectedImages);
+                      setSelectedImages([]);
+                      closeModal();
+                    }}
+                  >
+                    Select
+                  </Button>
+                </div>
               </div>
             </div>
           </div>

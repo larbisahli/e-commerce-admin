@@ -45,19 +45,22 @@ const ImageThumbs = ({
     return null;
   }
 
+
   return (
     <React.Fragment>
       {photos?.map((photo) => {
         const isCurrentImage = !isEmpty(
           selectedImages?.find((value) => value.id === photo?.id)
         );
+        const size = photo?.size?.formatBytes()
         return (
           <li
             key={photo?.id}
-            className="relative mt-5 me-2 w-24 h-24 rounded-sm"
+            className="relative me-2 w-24 h-24 rounded-sm"
           >
             <label
-              htmlFor={photo?.id}
+              htmlFor={photo?.id?.toString()}
+              title={size? `size: ${size}`:''}
               className={cn(
                 'flex transition-all overflow-hidden border-2 w-24 h-24 border-border-200 rounded relative cursor-pointer',
                 {
@@ -78,7 +81,7 @@ const ImageThumbs = ({
             </label>
             <Checkbox
               name="image"
-              id={photo?.id}
+              id={photo?.id?.toString()}
               className="transition-all absolute"
               inputClassName="checkbox-rounded"
               onChange={(e) => handleSelectImage(e, photo)}

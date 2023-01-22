@@ -3,7 +3,9 @@ import { Add } from '@components/icons/add';
 import { ArrowDown } from '@components/icons/arrow-down';
 import { ExportIcon } from '@components/icons/export';
 import { FilterIcon } from '@components/icons/filter';
+import { RefreshIcon } from '@components/icons/refresh';
 import { SettingsIcon } from '@components/icons/sidebar';
+import Button from '@components/ui/button';
 import Pagination from '@components/ui/pagination';
 import Select from '@components/ui/select/select';
 import SelectInput from '@components/ui/select-input';
@@ -118,6 +120,9 @@ const PageMainHeader = ({
             />
           </div>
         </button>
+        <Button className='rounded-full bg-white' size='small'>
+          <RefreshIcon width='25px' height='25px'/>
+        </Button>
       </div>
       {/* --- Applied Filters --- */}
       <div className="border-y border-gray-300 py-3 my-5 flex items-center justify-between">

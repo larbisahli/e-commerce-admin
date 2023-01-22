@@ -2,4 +2,5 @@
 interface Number {
   toCommas(): string;
   secondsToHm(): string;
+  formatBytes(): string;
 }

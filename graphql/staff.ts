@@ -31,6 +31,7 @@ export const STAFF = gql`
       phoneNumber
       email
       isTenant
+      active
       profile {
         id
         image
