@@ -44,7 +44,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   return {
     props: {
-      ...(await serverSideTranslations(locale, ['common', 'form'])),
+      ...(await serverSideTranslations(locale, ['table', 'common', 'form'])),
       client: { ...(client ?? {}), csrfToken, csrfError }
     }
   };

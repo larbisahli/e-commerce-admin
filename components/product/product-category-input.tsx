@@ -13,7 +13,7 @@ interface Props {
 }
 
 interface TCategorySelect {
-  getCategoriesSelectAll: Category[];
+  categorySelectAll: Category[];
 }
 
 interface OptionsVariable {
@@ -37,7 +37,7 @@ const ProductCategoryInput = ({ control }: Props) => {
     }
   );
 
-  const categories = data?.getCategoriesSelectAll;
+  const { categorySelectAll: categories = [] } = data ?? {};
 
   useErrorLogger(error);
 

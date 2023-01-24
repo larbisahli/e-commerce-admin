@@ -15,6 +15,7 @@ import type {
   DELETE_TAG_TYPE,
   DELETE_TYPE,
   IMAGE_MODAL_TYPE,
+  PRODUCT_MODAL_TYPE,
   READ_TYPE,
   UPDATE_TYPE
 } from './constants';
@@ -79,7 +80,8 @@ export type ModalView =
   | DELETE_STAFF_TYPE
   | DELETE_SUPPLIER_TYPE
   | DELETE_SLIDER_TYPE
-  | IMAGE_MODAL_TYPE;
+  | IMAGE_MODAL_TYPE
+  | PRODUCT_MODAL_TYPE;
 
 export type CategoryQueryOptionsType = {
   id?: Scalars['ID'];

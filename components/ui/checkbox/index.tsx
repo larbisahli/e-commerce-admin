@@ -8,11 +8,22 @@ export interface Props extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
   error?: string;
   inputClassName?: string;
+  labelClassName?: string;
 }
 
 const Checkbox = React.forwardRef<HTMLInputElement, Props>(
   (
-    { className, inputClassName, style, label, id, name, error, ...rest },
+    {
+      className,
+      inputClassName,
+      style,
+      label,
+      id,
+      name,
+      error,
+      labelClassName,
+      ...rest
+    },
     ref
   ) => {
     return (
@@ -27,7 +38,10 @@ const Checkbox = React.forwardRef<HTMLInputElement, Props>(
             {...rest}
           />
 
-          <label htmlFor={id ?? name} className="text-body text-sm">
+          <label
+            htmlFor={id ?? name}
+            className={`${labelClassName ?? ''} text-body text-sm`}
+          >
             {label}
           </label>
         </div>

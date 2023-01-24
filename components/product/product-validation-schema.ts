@@ -4,14 +4,6 @@ export const productValidationSchema = yup.object().shape({
   // thumbnail
   // gallery
   name: yup.string().required('form:error-product-name-required'),
-  shortDescription: yup
-    .string()
-    .test(
-      'len',
-      'Description Must be less than 160 characters',
-      (val) => val.length < 160
-    )
-    .required('form:error-short-description-required'),
   description: yup.string().required('form:error-product-description-required'),
   // salePrice: yup
   //   .number()
@@ -27,6 +19,17 @@ export const productValidationSchema = yup.object().shape({
   //   .typeError('form:error-amount-must-number')
   //   .required('form:error-quantity-required'),
   categories: yup.array().min(1, 'Category Required'),
+  productSeo: yup.object().shape({
+    metaDescription: yup
+      .string()
+      .test(
+        'len',
+        'Description Must be less than 160 characters',
+        (val) => val?.length < 160
+      )
+      .required('form:error-short-description-required')
+    // image_id
+  }),
   productShippingInfo: yup.object().shape({
     weight: yup.number().typeError('form:error-amount-must-number'),
     volume: yup.number().typeError('form:error-amount-must-number'),

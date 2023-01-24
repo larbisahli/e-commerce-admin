@@ -2,6 +2,7 @@ import { useMutation } from '@apollo/client';
 import Card from '@components/common/card';
 import { SaveIcon } from '@components/icons/save-icon';
 import ImageModal from '@components/image-modal';
+import ProductModal from '@components/products-modal';
 import Accordion from '@components/ui/accordion';
 import Alert from '@components/ui/alert';
 import Button from '@components/ui/button';
@@ -30,7 +31,7 @@ import isEmpty from 'lodash/isEmpty';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
-import { memo, useReducer, useState } from 'react';
+import { memo, useEffect, useReducer, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import CrossSellProducts from './cross-sell-products';
@@ -60,7 +61,6 @@ const defaultValues = {
   comparePrice: 0,
   buyingPrice: 0,
   quantity: 0,
-  shortDescription: '',
   description: '',
   type: { id: ProductType.Simple, name: 'Simple' },
   status: ProductStatus.Draft,
@@ -80,7 +80,16 @@ const defaultValues = {
     dimensionHeight: 0,
     dimensionDepth: 0,
     dimensionUnit: { unit: 'L' }
-  }
+  },
+  productSeo: {
+    metaTitle: '',
+    metaKeywords: '',
+    metaDescription: '',
+    metaImage: []
+  },
+  relatedProducts: [],
+  upsellProduct: [],
+  crossSellProduct: []
 };
 
 type IProps = {
@@ -105,7 +114,7 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
     }
   );
   const [error, setError] = useState(null);
-  const [shortDescription, setShortDescription] = useState(0);
+  const [metaDescriptionLength, setMetaDescriptionLength] = useState(0);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [unsavedChanges, setUnsavedChanges] = useState(true);
   const [lockedSubmission, setLockedSubmission] = useState(false);
@@ -186,6 +195,8 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
     // setLockedSubmission(true);
     setUnsavedChanges(false);
 
+    console.log({ _values });
+
     if (isEmpty(initialValues)) {
       const variables = creationVariable(values);
       console.log({ variables });
@@ -195,7 +206,7 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
       // });
     } else {
       const variables = updateVariable(values, initialValues);
-      console.log({ variables });
+      console.log({ variables, _values });
       // updateProduct({
       //   variables: {
       //     ...variables
@@ -218,7 +229,15 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
   const type = currentProductType?.id ?? getValues('type');
 
   const thumbnail = watch('thumbnail');
+  const metaImage = watch('productSeo.metaImage');
   const gallery = watch('gallery');
+
+  useEffect(() => {
+    console.log({ metaImage, thumbnail });
+    if (isEmpty(metaImage)) {
+      setValue('productSeo.metaImage', thumbnail);
+    }
+  }, [metaImage, setValue, thumbnail]);
 
   return (
     <>
@@ -407,29 +426,23 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
               />
               <Card className="w-full sm:w-8/12 md:w-2/3">
                 <Input
-                  label={`${t('form:input-label-url-key')}*`}
-                  {...register('slug')}
-                  error={t(errors.urlKey?.message!)}
-                  placeholder="Title..."
-                  variant="outline"
-                  className="mb-5"
-                />
-                <Input
                   label={`${t('form:input-label-meta-title')}*`}
-                  {...register('metaTitle')}
-                  error={t(errors.metaTitle?.message!)}
+                  {...register('productSeo.metaTitle')}
                   placeholder="Title..."
                   variant="outline"
                   className="mb-5"
+                  onFocus={() => {
+                    const productName = getValues('name');
+                    const metaTitle = getValues('productSeo.metaTitle');
+                    if (isEmpty(metaTitle)) {
+                      setValue('productSeo.metaTitle', productName);
+                    }
+                  }}
                 />
                 <TextArea
                   label={`${t('form:input-label-meta-keywords')}*`}
                   // @ts-ignore
-                  {...register('metaKeywords')}
-                  onBlur={() =>
-                    setShortDescription(getValues('metaKeywords').length)
-                  }
-                  error={t(errors.metaKeywords?.message!)}
+                  {...register('productSeo.metaKeywords')}
                   variant="outline"
                   className="mb-5"
                   placeholder="Products, keywords, ..."
@@ -437,11 +450,13 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
                 <TextArea
                   label={`${t('form:item-meta-description')}*`}
                   // @ts-ignore
-                  {...register('MetaDescription')}
+                  {...register('productSeo.metaDescription')}
                   onBlur={() =>
-                    setShortDescription(getValues('MetaDescription')?.length)
+                    setMetaDescriptionLength(
+                      getValues('productSeo.metaDescription')?.length
+                    )
                   }
-                  error={t(errors.shortDescription?.message!)}
+                  error={t(errors.productSeo?.metaDescription?.message!)}
                   variant="outline"
                 />
                 <div
@@ -452,19 +467,21 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
                     Meta Description should optimally be between 150-160
                     characters
                   </p>
-                  {shortDescription <= 160 ? (
-                    <span className="text-green-600">{`(${shortDescription}/160 characters max)`}</span>
+                  {metaDescriptionLength <= 160 ? (
+                    <span className="text-green-600">{`(${metaDescriptionLength}/160 characters max)`}</span>
                   ) : (
                     <span className="text-red-600">
-                      {`(${shortDescription}/160 characters max)`}
+                      {`(${metaDescriptionLength}/160 characters max)`}
                     </span>
                   )}
                 </div>
                 <div className="my-5">
                   <ImageModal
-                    onSelect={(photo) => setValue('metaImage', photo)}
+                    onSelect={(photo) =>
+                      setValue('productSeo.metaImage', photo)
+                    }
                     isThumbnail
-                    selected={thumbnail}
+                    selected={metaImage}
                     modalId="metaImage"
                     label="form:label-add-meta-images"
                   />
@@ -491,6 +508,7 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
                 <div className="m-4">
                   <CrossSellProducts />
                 </div>
+                <ProductModal />
               </Card>
             </div>
           </Accordion>

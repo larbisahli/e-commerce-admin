@@ -80,7 +80,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   return {
     props: {
-      ...(await serverSideTranslations(locale, ['common', 'form', 'error'])),
+      ...(await serverSideTranslations(locale, [
+        'table',
+        'common',
+        'form',
+        'error'
+      ])),
       client: { ...(client ?? {}), csrfToken, csrfError }
     }
   };

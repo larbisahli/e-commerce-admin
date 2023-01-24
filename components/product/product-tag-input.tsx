@@ -13,7 +13,7 @@ interface Props {
 }
 
 interface TagSelect {
-  getTagsSelect: Tag[];
+  tagSelect: Tag[];
 }
 
 interface OptionsVariable {
@@ -37,7 +37,7 @@ const ProductTagInput = ({ control }: Props) => {
     }
   );
 
-  const tags = data?.getTagsSelect;
+  const { tagSelect: tags = [] } = data ?? {};
 
   useErrorLogger(error);
 

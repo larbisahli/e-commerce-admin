@@ -283,7 +283,16 @@ export interface Product extends CreatedUpdatedByAt {
   productShippingInfo?: ProductShippingInfo;
   variationOptions?: VariationOptionsType[];
   variations?: VariationType[];
+  productSeo: ProductSeo;
   // [key: string]: any;
+}
+
+export interface ProductSeo {
+  slug: string;
+  metaTitle: string;
+  metaKeywords: string;
+  metaDescription: string;
+  metaImage: ImageType[];
 }
 
 export interface VariationType {
@@ -313,7 +322,7 @@ export interface ImageType {
   placeholder?: Scalars['String'];
   isThumbnail?: boolean;
   createdAt?: Scalars['DateTime'];
-  size?: Scalars['Int']
+  size?: Scalars['Int'];
 }
 export interface Suppliers extends CreatedUpdatedByAt {
   id?: Scalars['ID'];

@@ -4,11 +4,11 @@ interface State {
   view?: ModalView;
   id?: Nullable<String>;
   isOpen: boolean;
-  meta: Nullable<String>;
+  meta: Nullable<any>;
 }
 type Action =
-  | { type: 'open'; view?: ModalView; id?: String; meta?: String }
-  | { type: 'close' };
+  | { type: 'close'; view?: ModalView; id?: String; meta?: String }
+  | { type: 'open'; view?: ModalView; id?: String; meta?: String };
 
 const initialState: State = {
   view: undefined,
@@ -18,26 +18,13 @@ const initialState: State = {
 };
 
 function modalReducer(state: State, action: Action): State {
-  switch (action.type) {
-    case 'open':
-      return {
-        ...state,
-        view: action.view,
-        id: action.id,
-        isOpen: true,
-        meta: action.meta
-      };
-    case 'close':
-      return {
-        ...state,
-        view: undefined,
-        id: null,
-        isOpen: false,
-        meta: null
-      };
-    default:
-      throw new Error('Unknown Modal Action!');
-  }
+  return {
+    ...state,
+    view: action.view,
+    id: action.id,
+    isOpen: action.type === 'open',
+    meta: action.meta
+  };
 }
 
 const ModalStateContext = React.createContext<State>(initialState);
@@ -79,11 +66,11 @@ export function useModalAction() {
     throw new Error(`useModalAction must be used within a ModalProvider`);
   }
   return {
-    openModal(view?: ModalView, id?: String, meta?: String) {
-      dispatch({ type: 'open', view, id, meta });
+    closeModal(view?: ModalView, id?: String, meta?: any) {
+      dispatch({ type: 'close', view, id, meta });
     },
-    closeModal() {
-      dispatch({ type: 'close' });
+    openModal(view?: ModalView, id?: String, meta?: any) {
+      dispatch({ type: 'open', view, id, meta });
     }
   };
 }

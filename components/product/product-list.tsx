@@ -36,14 +36,6 @@ const ProductList = ({ products, selectedColumns }: IProps) => {
         ellipsis: true
       },
       {
-        title: t('table:table-item-sku'),
-        dataIndex: 'sku',
-        key: 'sku',
-        align: alignLeft,
-        width: 80,
-        ellipsis: true
-      },
-      {
         title: t('table:table-item-image'),
         dataIndex: 'thumbnail',
         key: 'thumbnail',
@@ -69,6 +61,14 @@ const ProductList = ({ products, selectedColumns }: IProps) => {
         key: 'name',
         align: alignLeft,
         width: 200,
+        ellipsis: true
+      },
+      {
+        title: t('table:table-item-sku'),
+        dataIndex: 'sku',
+        key: 'sku',
+        align: alignLeft,
+        width: 80,
         ellipsis: true
       },
       {

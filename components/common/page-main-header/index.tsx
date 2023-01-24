@@ -120,8 +120,8 @@ const PageMainHeader = ({
             />
           </div>
         </button>
-        <Button className='rounded-full bg-white' size='small'>
-          <RefreshIcon width='25px' height='25px'/>
+        <Button className="rounded-full bg-white" size="small">
+          <RefreshIcon width="25px" height="25px" />
         </Button>
       </div>
       {/* --- Applied Filters --- */}
