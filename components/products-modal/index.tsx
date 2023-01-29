@@ -24,10 +24,6 @@ import { ImageType, Product } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
 
-interface Props {
-  selected: ImageType[];
-}
-
 interface TProduct {
   products: Product[];
   productCount: { count: number };
@@ -40,7 +36,7 @@ interface ProductVariable {
   sortedBy: SortOrder;
 }
 
-const ProductModal = ({ selected }: Props) => {
+const ProductModal = () => {
   const { t } = useTranslation();
 
   const { closeModal, openModal } = useModalAction();

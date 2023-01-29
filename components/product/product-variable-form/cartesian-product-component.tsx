@@ -63,6 +63,7 @@ const CartesianProductComponent = ({
 
   return (
     <Accordion
+      btnClassName="mt-1"
       Title={() => (
         <Title className="!text-lg">
           {t('form:form-title-variant')}:{' '}

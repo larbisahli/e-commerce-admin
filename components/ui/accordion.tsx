@@ -7,9 +7,14 @@ type CollapseProps = {
   Title: React.FC;
   children: React.ReactNode;
   variant?: 'gray' | 'transparent';
+  btnClassName?: string;
 };
 
-export const Accordion: React.FC<CollapseProps> = ({ Title, children }) => {
+export const Accordion: React.FC<CollapseProps> = ({
+  Title,
+  children,
+  btnClassName
+}) => {
   const [open, setOpen] = useState(false);
 
   const onChange = (e) => {
@@ -23,9 +28,11 @@ export const Accordion: React.FC<CollapseProps> = ({ Title, children }) => {
         <div>
           <button
             className={cn(
+              btnClassName,
               'flex bg-white border-b border-solid border-border-base  shadow-sm justify-between w-full px-5 py-4 2xl:px-6 2xl:py-6 text-base font-medium text-start text-skin-base focus:outline-none cursor-pointer',
               {
-                '!border-none': open
+                '!border-none': open,
+                'shadow-lg': open
               }
             )}
             onClick={onChange}

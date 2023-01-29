@@ -49,7 +49,7 @@ const defaultValues = {
 };
 
 type IProps = {
-  initialValues?: Coupon | any[];
+  initialValues?: Coupon | any;
 };
 
 const couponDiscountTypes = [

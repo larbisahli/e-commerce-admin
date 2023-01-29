@@ -43,7 +43,7 @@ type IProps = {
 };
 
 interface TAttributeSelect {
-  getAttributes: Attribute[];
+  attributes: Attribute[];
 }
 
 interface OptionsVariable {
@@ -104,7 +104,8 @@ function ProductVariableForm({
 
   const variations = variationState.variations;
   const variationOptions = variationState.variationOptions;
-  const attributes = data?.getAttributes ?? [];
+
+  const { attributes = [] } = data ?? {};
 
   const attributeValuesChanges = [].concat(
     ...(variations?.map((v) => v?.selectedValues) ?? [])

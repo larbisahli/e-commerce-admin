@@ -22,6 +22,7 @@ import {
   useGetStaff,
   useWarnIfUnsavedChanges
 } from '@hooks/index';
+import { useFormError } from '@hooks/useFormError';
 import { notify } from '@lib/index';
 import type { Product } from '@ts-types/generated';
 import { ProductStatus, ProductType } from '@ts-types/generated';
@@ -31,7 +32,7 @@ import isEmpty from 'lodash/isEmpty';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
-import { memo, useEffect, useReducer, useState } from 'react';
+import { memo, useReducer, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import CrossSellProducts from './cross-sell-products';
@@ -42,6 +43,7 @@ import ProductSupplierInput from './product-supplier-input';
 import ProductTagInput from './product-tag-input';
 import { productValidationSchema } from './product-validation-schema';
 import ProductVariableForm from './product-variable-form';
+import ProductSeo from './products-seo';
 import RelatedProducts from './related-products';
 import UpSellProducts from './up-sell-products';
 import { creationVariable, updateVariable } from './variablesSubmission';
@@ -82,6 +84,7 @@ const defaultValues = {
     dimensionUnit: { unit: 'L' }
   },
   productSeo: {
+    slug: '',
     metaTitle: '',
     metaKeywords: '',
     metaDescription: '',
@@ -93,7 +96,7 @@ const defaultValues = {
 };
 
 type IProps = {
-  initialValues?: Product | any[];
+  initialValues?: Product | any;
 };
 
 const productTypes = [
@@ -114,7 +117,6 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
     }
   );
   const [error, setError] = useState(null);
-  const [metaDescriptionLength, setMetaDescriptionLength] = useState(0);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [unsavedChanges, setUnsavedChanges] = useState(true);
   const [lockedSubmission, setLockedSubmission] = useState(false);
@@ -181,6 +183,9 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
   });
 
   useErrorLogger(error);
+  useFormError(errors);
+
+  console.log({ errors });
 
   const onSubmit = async (_values: FormValues) => {
     const isVariable = _values.type.id === ProductType.Variable;
@@ -189,21 +194,18 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
       variations: isVariable ? variationState.variations : [],
       variationOptions: isVariable ? variationState.variationOptions : []
     };
-
     if (lockedSubmission) return;
 
-    // setLockedSubmission(true);
+    setLockedSubmission(true);
     setUnsavedChanges(false);
-
-    console.log({ _values });
 
     if (isEmpty(initialValues)) {
       const variables = creationVariable(values);
-      console.log({ variables });
-      // createProduct({ variables }).catch((err) => {
-      //   setError(err);
-      //   setUnsavedChanges(true);
-      // });
+      console.log({ _values, variables });
+      createProduct({ variables }).catch((err) => {
+        setError(err);
+        setUnsavedChanges(true);
+      });
     } else {
       const variables = updateVariable(values, initialValues);
       console.log({ variables, _values });
@@ -229,15 +231,7 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
   const type = currentProductType?.id ?? getValues('type');
 
   const thumbnail = watch('thumbnail');
-  const metaImage = watch('productSeo.metaImage');
   const gallery = watch('gallery');
-
-  useEffect(() => {
-    console.log({ metaImage, thumbnail });
-    if (isEmpty(metaImage)) {
-      setValue('productSeo.metaImage', thumbnail);
-    }
-  }, [metaImage, setValue, thumbnail]);
 
   return (
     <>
@@ -419,75 +413,7 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
           </Accordion>
           {/* SEO */}
           <Accordion Title={() => t('form:form-title-seo')}>
-            <div className="flex flex-wrap my-5 sm:my-8">
-              <Description
-                details={t('form:type-and-category-help-text')}
-                className="w-full px-0 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
-              />
-              <Card className="w-full sm:w-8/12 md:w-2/3">
-                <Input
-                  label={`${t('form:input-label-meta-title')}*`}
-                  {...register('productSeo.metaTitle')}
-                  placeholder="Title..."
-                  variant="outline"
-                  className="mb-5"
-                  onFocus={() => {
-                    const productName = getValues('name');
-                    const metaTitle = getValues('productSeo.metaTitle');
-                    if (isEmpty(metaTitle)) {
-                      setValue('productSeo.metaTitle', productName);
-                    }
-                  }}
-                />
-                <TextArea
-                  label={`${t('form:input-label-meta-keywords')}*`}
-                  // @ts-ignore
-                  {...register('productSeo.metaKeywords')}
-                  variant="outline"
-                  className="mb-5"
-                  placeholder="Products, keywords, ..."
-                />
-                <TextArea
-                  label={`${t('form:item-meta-description')}*`}
-                  // @ts-ignore
-                  {...register('productSeo.metaDescription')}
-                  onBlur={() =>
-                    setMetaDescriptionLength(
-                      getValues('productSeo.metaDescription')?.length
-                    )
-                  }
-                  error={t(errors.productSeo?.metaDescription?.message!)}
-                  variant="outline"
-                />
-                <div
-                  style={{ fontSize: '.75rem' }}
-                  className="mb-5 flex items-center"
-                >
-                  <p className="text-body mr-2">
-                    Meta Description should optimally be between 150-160
-                    characters
-                  </p>
-                  {metaDescriptionLength <= 160 ? (
-                    <span className="text-green-600">{`(${metaDescriptionLength}/160 characters max)`}</span>
-                  ) : (
-                    <span className="text-red-600">
-                      {`(${metaDescriptionLength}/160 characters max)`}
-                    </span>
-                  )}
-                </div>
-                <div className="my-5">
-                  <ImageModal
-                    onSelect={(photo) =>
-                      setValue('productSeo.metaImage', photo)
-                    }
-                    isThumbnail
-                    selected={metaImage}
-                    modalId="metaImage"
-                    label="form:label-add-meta-images"
-                  />
-                </div>
-              </Card>
-            </div>
+            <ProductSeo />
           </Accordion>
           {/* Related Products, Up-Sells, and Cross-Sells  */}
           <Accordion

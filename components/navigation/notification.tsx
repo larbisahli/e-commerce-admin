@@ -48,27 +48,29 @@ export default function NavNotification() {
       >
         <Menu.Items
           as="ul"
-          className="absolute shadow right-0 w-48 py-4 mt-1 origin-top-right bg-white rounded shadow-700 focus:outline-none"
+          className="absolute shadow notificationContainer right-0 w-64 py-4 mt-1 origin-top-right bg-white focus:outline-none"
         >
-          {siteSettings.authorizedLinks.map(({ href, labelTransKey }) => (
-            <Menu.Item key={`${href}${labelTransKey}`}>
-              {({ active }) => (
-                <li className="border-b border-gray-100 cursor-pointer last:border-0">
-                  <Link
-                    href={href}
-                    className={cn(
-                      'block px-4 py-3 text-sm capitalize font-semibold transition duration-200 hover:text-accent',
-                      active ? 'text-accent' : 'text-heading'
-                    )}
-                  >
-                    {t(labelTransKey)}
-                  </Link>
-                </li>
-              )}
-            </Menu.Item>
-          ))}
+          <div className="notificationWrapper">
+            <div className="notificationWrapper">
+              <NotificationEmpty />
+            </div>
+          </div>
         </Menu.Items>
       </Transition>
     </Menu>
+  );
+}
+
+function NotificationEmpty() {
+  return (
+    <div className="overflow-hidden text-sm h-40 px-5 flex flex-col items-center justify-center">
+      <div className="uppercase text-green-700 font-semibold">
+        There is no notifications
+      </div>
+      <div className="h-[1px] w-[50%] bg-gray-200 my-2"></div>
+      <div className="text-gray-500 text-center">
+        We will make sure to notify you when something happens
+      </div>
+    </div>
   );
 }

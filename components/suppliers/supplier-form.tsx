@@ -31,7 +31,7 @@ import PhoneInput from 'react-phone-input-2';
 type FormValues = Suppliers;
 
 type IProps = {
-  initialValues?: Suppliers | any[];
+  initialValues?: Suppliers | any;
 };
 
 const defaultValues = {

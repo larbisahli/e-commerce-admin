@@ -141,21 +141,24 @@ export const CREATE_PRODUCT = gql`
     $comparePrice: Float
     $buyingPrice: Float
     $quantity: Int!
-    $shortDescription: String!
     $description: String!
-    $type: productTypeInput!
+    $type: ProductTypeInput!
     $published: Boolean!
     $disableOutOfStock: Boolean!
     $note: String
     $sku: String
-    $thumbnail: ImageInput
-    $gallery: [ImageInput]
-    $categories: [CategoryInput]
+    $thumbnail: [ImageInput!]!
+    $gallery: [ImageInput!]!
+    $categories: [CategoryInput!]!
     $suppliers: [SupplierInput]
     $tags: [TagInput]
     $variationOptions: [VariationOptionInput]
     $variations: [VariationInput]
     $productShippingInfo: ProductShippingInfoInput
+    $productSeo: ProductSeoInput!
+    $relatedProducts: [ProductInput]
+    $upsellProduct: [ProductInput]
+    $crossSellProduct: [ProductInput]
   ) {
     createProduct(
       name: $name
@@ -163,7 +166,6 @@ export const CREATE_PRODUCT = gql`
       comparePrice: $comparePrice
       buyingPrice: $buyingPrice
       quantity: $quantity
-      shortDescription: $shortDescription
       description: $description
       type: $type
       published: $published
@@ -178,7 +180,12 @@ export const CREATE_PRODUCT = gql`
       variationOptions: $variationOptions
       variations: $variations
       productShippingInfo: $productShippingInfo
+      productSeo: $productSeo
+      relatedProducts: $relatedProducts
+      upsellProduct: $upsellProduct
+      crossSellProduct: $crossSellProduct
     ) {
+      id
       name
     }
   }

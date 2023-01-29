@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AppState } from '@store/index';
 import { StaffType } from '@ts-types/generated';
 
-const initialState = null;
+const initialState = {} as StaffType;
 
 export const staffSlice = createSlice({
   name: 'staff',

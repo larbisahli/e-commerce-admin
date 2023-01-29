@@ -259,7 +259,7 @@ export declare type LocationInput = {
 export interface Product extends CreatedUpdatedByAt {
   id?: Scalars['ID'];
   slug?: Scalars['String'];
-  name: Scalars['String'];
+  name?: Scalars['String'];
   sku?: Nullable<Scalars['String']>;
   salePrice?: Scalars['Float'];
   comparePrice?: Scalars['Float'];
@@ -283,8 +283,24 @@ export interface Product extends CreatedUpdatedByAt {
   productShippingInfo?: ProductShippingInfo;
   variationOptions?: VariationOptionsType[];
   variations?: VariationType[];
-  productSeo: ProductSeo;
+  productSeo?: ProductSeo;
+  relatedProducts?: Nullable<Array<Nullable<ProductRef>>>;
+  upsellProduct?: Nullable<Array<Nullable<ProductRef>>>;
+  crossSellProduct?: Nullable<Array<Nullable<ProductRef>>>;
   // [key: string]: any;
+}
+
+interface ProductRef {
+  id?: Scalars['ID'];
+  slug?: Scalars['String'];
+  name?: Scalars['String'];
+  sku?: Nullable<Scalars['String']>;
+  salePrice?: Scalars['Float'];
+  comparePrice?: Scalars['Float'];
+  buyingPrice?: Scalars['Float'];
+  maxPrice?: Scalars['Float'];
+  minPrice?: Scalars['Float'];
+  quantity?: Scalars['Int'];
 }
 
 export interface ProductSeo {

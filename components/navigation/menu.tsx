@@ -15,24 +15,25 @@ let cx = classNames.bind(styles);
 export default function NavMenu() {
   const { t } = useTranslation('common');
 
-  const { staffInfo } = useGetStaff();
-
-  const profile = (staffInfo?.profile && staffInfo?.profile[0]) ?? {};
+  const {
+    staffInfo: { profile = [], firstName, lastName }
+  } = useGetStaff();
+  const { image = null, placeholder = null } = profile[0] ?? {};
 
   return (
     <Menu as="div" className="relative inline-block text-left">
       <Menu.Button
         className={cx(
-          'flex items-center shadow border rounded-full focus:outline-none',
+          'flex items-center shadow-lg border rounded-full focus:outline-none',
           'border-hover'
         )}
       >
         <Avatar
-          src={profile?.image ?? siteSettings.avatar.image}
-          customPlaceholder={
-            profile?.placeholder ?? siteSettings.avatar.placeholder
-          }
+          className="shadow-lg"
+          src={image ?? siteSettings.avatar.image}
+          customPlaceholder={placeholder ?? siteSettings.avatar.placeholder}
         />
+        <div className="pl-1 pr-2 text-gray-500 font-medium">{`${firstName} ${lastName}`}</div>
       </Menu.Button>
 
       <Transition

@@ -62,9 +62,9 @@ const Navbar = () => {
             <div className="font-medium text-gray-600 mr-1">Balance:</div>
             <div className="text-green-600 font-medium">$100</div>
           </div>
-          <div className="text-body-black font-medium flex items-center  bg-orange-400 shadow justify-center border rounded-full py-1 px-3">
+          {/* <div className="text-body-black font-medium flex items-center  bg-orange-400 shadow justify-center border rounded-full py-1 px-3">
             <div className="font-bold text-orange-900 mr-1">Pro</div>
-          </div>
+          </div> */}
           <NavNotification />
           <NavMenu />
         </div>

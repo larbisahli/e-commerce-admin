@@ -48,7 +48,7 @@ const defaultValues = {
 };
 
 type IProps = {
-  initialValues?: Tag | any[];
+  initialValues?: Tag | any;
 };
 
 export default function CreateOrUpdateTagForm({ initialValues }: IProps) {

@@ -7,7 +7,6 @@ const creationVariable = (values: Product): Product => {
   const isVariable = values.type.id === ProductType.Variable;
   return {
     name: values.name,
-    shortDescription: values.shortDescription,
     description: values.description,
     type: { id: values.type.id },
     published: values.status === 'publish',
@@ -18,6 +17,14 @@ const creationVariable = (values: Product): Product => {
     sku: isVariable ? null : values.sku,
     note: values.note,
     disableOutOfStock: values?.disableOutOfStock,
+    productSeo: {
+      ...values.productSeo,
+      metaImage: values.productSeo.metaImage?.map((img) => {
+        return {
+          id: img?.id
+        };
+      })
+    },
     categories: values?.categories?.map(({ id }) => {
       return { id };
     }),
@@ -67,7 +74,10 @@ const creationVariable = (values: Product): Product => {
         sku: vo.sku,
         active: !vo.isDisable
       };
-    })
+    }),
+    relatedProducts: values.relatedProducts.map(({ id }) => ({ id })),
+    upsellProduct: values.upsellProduct.map(({ id }) => ({ id })),
+    crossSellProduct: values.crossSellProduct.map(({ id }) => ({ id }))
   };
 };
 
