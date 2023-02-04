@@ -136,7 +136,7 @@ export function variationsReducer(
                     buyingPrice: 0,
                     comparePrice: 0,
                     id: null,
-                    image: [],
+                    thumbnail: [],
                     isDisable: false,
                     quantity: 1,
                     salePrice: 0,

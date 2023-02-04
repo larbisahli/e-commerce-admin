@@ -46,7 +46,7 @@ module.exports = {
         'gray-700': withOpacity('--color-gray-700'),
         'gray-800': withOpacity('--color-gray-800'),
         'gray-900': withOpacity('--color-gray-900'),
-        sidenav: '#373330',
+        sidenav: '#020024',
         'sidenav-color': '#ccc',
         'sidenav-active-color': '#524d49',
         'sidenav-active-hover-color': '#474544',

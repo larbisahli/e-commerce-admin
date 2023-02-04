@@ -78,7 +78,7 @@ const InputSlug = React.forwardRef<HTMLInputElement, Props>(
             {...rest}
           />
           <div className="relative flex justify-center items-center">
-            <span className="pr-3 text-accent">.ecomhost.shop</span>
+            <span className="pr-3 text-accent">.dropgala.com</span>
             <div className="pr-3 text-gray-500">
               <PopoverInfo />
             </div>

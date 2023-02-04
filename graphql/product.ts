@@ -61,7 +61,6 @@ export const PRODUCT = gql`
       comparePrice
       buyingPrice
       quantity
-      shortDescription
       description
       type {
         id
@@ -95,7 +94,11 @@ export const PRODUCT = gql`
         id
         title
         isDisable
-        image
+        thumbnail {
+          id
+          image
+          placeholder
+        }
         options
         salePrice
         comparePrice
@@ -157,8 +160,8 @@ export const CREATE_PRODUCT = gql`
     $productShippingInfo: ProductShippingInfoInput
     $productSeo: ProductSeoInput!
     $relatedProducts: [ProductInput]
-    $upsellProduct: [ProductInput]
-    $crossSellProduct: [ProductInput]
+    $upsellProducts: [ProductInput]
+    $crossSellProducts: [ProductInput]
   ) {
     createProduct(
       name: $name
@@ -182,8 +185,8 @@ export const CREATE_PRODUCT = gql`
       productShippingInfo: $productShippingInfo
       productSeo: $productSeo
       relatedProducts: $relatedProducts
-      upsellProduct: $upsellProduct
-      crossSellProduct: $crossSellProduct
+      upsellProducts: $upsellProducts
+      crossSellProducts: $crossSellProducts
     ) {
       id
       name

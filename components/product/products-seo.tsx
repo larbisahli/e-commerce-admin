@@ -33,12 +33,16 @@ const ProductSeo = () => {
     }
   }, [metaImage, setValue, thumbnail]);
 
-  useEffect(() => {
-    const value = slugify(slug?.replace(/[^A-Za-z0-9\s!?]/g, '-'), {
+  const generateSlug = (slug = '') => {
+    return slugify(slug?.replace(/[^A-Za-z0-9\s!?]/g, '-'), {
       trim: false,
       replacement: '-',
       lower: true
     });
+  };
+
+  useEffect(() => {
+    const value = generateSlug(slug);
     setValue('productSeo.slug', value);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug]);
@@ -56,6 +60,13 @@ const ProductSeo = () => {
           placeholder="Slug..."
           variant="outline"
           className="mb-5"
+          onFocus={() => {
+            const productName = getValues('name');
+            const metaTitle = getValues('productSeo.slug');
+            if (isEmpty(metaTitle)) {
+              setValue('productSeo.slug', generateSlug(productName));
+            }
+          }}
         />
         <Input
           label={`${t('form:input-label-meta-title')}*`}

@@ -285,8 +285,8 @@ export interface Product extends CreatedUpdatedByAt {
   variations?: VariationType[];
   productSeo?: ProductSeo;
   relatedProducts?: Nullable<Array<Nullable<ProductRef>>>;
-  upsellProduct?: Nullable<Array<Nullable<ProductRef>>>;
-  crossSellProduct?: Nullable<Array<Nullable<ProductRef>>>;
+  upsellProducts?: Nullable<Array<Nullable<ProductRef>>>;
+  crossSellProducts?: Nullable<Array<Nullable<ProductRef>>>;
   // [key: string]: any;
 }
 
@@ -322,7 +322,7 @@ export interface VariationOptionsType {
   key?: string;
   isDisable?: boolean;
   active?: boolean;
-  image: ImageType[];
+  thumbnail: ImageType[];
   options: string[];
   salePrice: Scalars['Float'];
   comparePrice: Scalars['Float'];

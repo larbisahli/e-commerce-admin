@@ -70,7 +70,7 @@ const FormFooter = ({ isSignUp = false }) => {
           </Link>
         </div>
         <p className="italic m-3 text-gray-700 text-center">
-          WhatsApp Ordering Made Easy with Ecomhost
+          WhatsApp Ordering Made Easy with dropgala
         </p>
         <p>© dropgala 2022 All rights reserved</p>
       </div>

@@ -19,7 +19,7 @@ const UpSellProducts = () => {
   const { openModal } = useModalAction();
   const { id, meta } = useModalState();
 
-  const selectedProducts = watch('upsellProduct');
+  const selectedProducts = watch('upsellProducts');
 
   const handleClick = (e) => {
     e.preventDefault();
@@ -29,7 +29,7 @@ const UpSellProducts = () => {
   useEffect(() => {
     const { selectedProducts = [] } = meta ?? {};
     if (id === UPSELL_PRODUCTS && !isEmpty(selectedProducts)) {
-      setValue('upsellProduct', selectedProducts);
+      setValue('upsellProducts', selectedProducts);
     }
   }, [id, meta]);
 

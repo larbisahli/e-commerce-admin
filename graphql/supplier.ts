@@ -72,8 +72,8 @@ export const SUPPLIERS_FOR_SELECT = gql`
 export const CREATE_SUPPLIER = gql`
   mutation CreateSupplier(
     $name: String!
-    $company: String
-    $phoneNumber: String
+    $company: String!
+    $phoneNumber: String!
     $addressLine1: String!
     $addressLine2: String
     $country: CountryInput

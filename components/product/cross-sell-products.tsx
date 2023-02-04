@@ -19,7 +19,7 @@ const CrossSellProducts = () => {
   const { openModal } = useModalAction();
   const { id, meta } = useModalState();
 
-  const selectedProducts = watch('crossSellProduct');
+  const selectedProducts = watch('crossSellProducts');
 
   const handleClick = (e) => {
     e.preventDefault();
@@ -29,7 +29,7 @@ const CrossSellProducts = () => {
   useEffect(() => {
     const { selectedProducts = [] } = meta ?? {};
     if (id === CROSS_SELL_PRODUCTS && !isEmpty(selectedProducts)) {
-      setValue('crossSellProduct', selectedProducts);
+      setValue('crossSellProducts', selectedProducts);
     }
   }, [id, meta]);
 

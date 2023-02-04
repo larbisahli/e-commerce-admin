@@ -1,4 +1,4 @@
-import { Product, ProductType, Suppliers, Tag } from '@ts-types/generated';
+import { Product, ProductType } from '@ts-types/generated';
 import differenceWith from 'lodash/differenceWith';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
@@ -19,54 +19,40 @@ const creationVariable = (values: Product): Product => {
     disableOutOfStock: values?.disableOutOfStock,
     productSeo: {
       ...values.productSeo,
-      metaImage: values.productSeo.metaImage?.map((img) => {
-        return {
-          id: img?.id
-        };
-      })
+      metaImage: values.productSeo.metaImage?.map(({ id }) => ({ id }))
     },
-    categories: values?.categories?.map(({ id }) => {
-      return { id };
-    }),
-    tags: values?.tags?.map(({ id }: Tag) => {
-      return { id };
-    }),
-    suppliers: values?.suppliers?.map(({ id }: Suppliers) => {
-      return { id };
-    }),
-    thumbnail: values.thumbnail?.map((img) => {
-      return {
-        id: img?.id
-      };
-    }),
-    gallery: values.gallery?.map((img) => {
-      return {
-        id: img?.id
-      };
-    }),
+    categories: values?.categories?.map(({ id }) => ({ id })),
+    tags: values?.tags?.map(({ id }) => ({ id })),
+    suppliers: values?.suppliers?.map(({ id }) => ({ id })),
+    thumbnail: values.thumbnail?.map(({ id }) => ({ id })),
+    gallery: values.gallery?.map(({ id }) => ({ id })),
     productShippingInfo: {
       weight: Number(values?.productShippingInfo?.weight),
-      weightUnit: values?.productShippingInfo?.weightUnit,
+      weightUnit: {
+        unit: values?.productShippingInfo?.weightUnit?.unit
+      },
       volume: Number(values?.productShippingInfo?.volume),
-      volumeUnit: values?.productShippingInfo?.volumeUnit,
+      volumeUnit: {
+        unit: values?.productShippingInfo?.volumeUnit?.unit
+      },
       dimensionWidth: Number(values?.productShippingInfo?.dimensionWidth),
       dimensionHeight: Number(values?.productShippingInfo?.dimensionHeight),
       dimensionDepth: Number(values?.productShippingInfo?.dimensionDepth),
-      dimensionUnit: values?.productShippingInfo?.dimensionUnit
+      dimensionUnit: {
+        unit: values?.productShippingInfo?.dimensionUnit?.unit
+      }
     },
     variations: values?.variations?.map((v) => {
       return {
         attribute: { id: v.attribute.id },
-        selectedValues: v.selectedValues?.map((av) => {
-          return { id: av.id };
-        })
+        selectedValues: v.selectedValues?.map(({ id }) => ({ id }))
       };
     }),
     variationOptions: values?.variationOptions?.map((vo) => {
       return {
         title: vo.title,
         options: vo.options,
-        image: vo.image,
+        thumbnail: vo.thumbnail?.map(({ id }) => ({ id })),
         salePrice: vo.salePrice,
         comparePrice: vo.comparePrice,
         buyingPrice: vo.buyingPrice,
@@ -75,9 +61,10 @@ const creationVariable = (values: Product): Product => {
         active: !vo.isDisable
       };
     }),
-    relatedProducts: values.relatedProducts.map(({ id }) => ({ id })),
-    upsellProduct: values.upsellProduct.map(({ id }) => ({ id })),
-    crossSellProduct: values.crossSellProduct.map(({ id }) => ({ id }))
+    relatedProducts: values?.relatedProducts?.map(({ id }) => ({ id })) ?? [],
+    upsellProducts: values?.upsellProducts?.map(({ id }) => ({ id })) ?? [],
+    crossSellProducts:
+      values?.crossSellProducts?.map(({ id }) => ({ id })) ?? []
   };
 };
 

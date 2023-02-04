@@ -55,7 +55,7 @@ const CartesianProductComponent = ({
       type: VariationActions.CHANGE_VARIATION_OPTION,
       payload: {
         value: photo,
-        field: 'image',
+        field: 'thumbnail',
         options
       }
     });
@@ -136,7 +136,7 @@ const CartesianProductComponent = ({
         <ImageModal
           isThumbnail
           onSelect={handleSelectedImage}
-          selected={variationOption.image ?? []}
+          selected={variationOption.thumbnail ?? []}
           modalId={`fieldAttributeValues-modal-${index}`}
           label="form:label-add-variant-thumbnail"
         />

@@ -1,5 +1,4 @@
 import ImageComponent from '@components/ImageComponent';
-import Badge from '@components/ui/badge/badge';
 import Checkbox from '@components/ui/checkbox';
 import { Table } from '@components/ui/table';
 import { siteSettings } from '@settings/site.settings';
@@ -99,81 +98,6 @@ const ProductListMini = ({
     ];
   }, [selectedProducts]);
 
-  const productsss = [
-    {
-      id: 1,
-      name: 'flex overflow-y-auto flex-col bg-white-1',
-      sku: 'A',
-      published: true,
-      quantity: 23
-    },
-    {
-      id: 2,
-      name: 'flex overflow-y-auto flex-col bg-white-2',
-      sku: 'B',
-      published: false,
-      quantity: 23
-    },
-    {
-      id: 3,
-      name: 'flex overflow-y-auto flex-col bg-white-1',
-      sku: 'A',
-      published: true,
-      quantity: 23
-    },
-    {
-      id: 4,
-      name: 'product-2',
-      sku: 'B',
-      published: false,
-      quantity: 23
-    },
-    {
-      id: 5,
-      name: 'flex overflow-y-auto flex-col bg-white-1',
-      sku: 'A',
-      quantity: 23,
-      published: true
-    },
-    {
-      id: 6,
-      name: 'product-2',
-      sku: 'B',
-      published: false,
-      quantity: 23
-    },
-    {
-      id: 7,
-      name: 'flex overflow-y-auto flex-col bg-white-1',
-      sku: 'A',
-      published: true
-    },
-    {
-      id: 8,
-      name: 'product-2',
-      sku: 'B',
-      published: false
-    },
-    {
-      id: 9,
-      name: 'product-2',
-      sku: 'BVY-DNY-MW',
-      published: false
-    },
-    {
-      id: 10,
-      name: 'flex overflow-y-auto flex-col bg-white flex overflow-y-auto flex-col bg-white-1',
-      sku: 'A',
-      published: true
-    },
-    {
-      id: 11,
-      name: 'product-2',
-      sku: 'B',
-      published: false
-    }
-  ];
-
   return (
     <>
       <div className="card overflow-hidden mb-6">
@@ -181,7 +105,7 @@ const ProductListMini = ({
           /* @ts-ignore */
           columns={tableColumns}
           emptyText={t('table:empty-table-data')}
-          data={productsss}
+          data={products}
           rowKey="id"
           scroll={{ x: 400 }}
         />

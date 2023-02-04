@@ -11,7 +11,7 @@ export const SUPER_ADMIN_PRIVILEGE = 'super_admin_privilege';
 export type ADMIN_TYPE = typeof SUPER_ADMIN_PRIVILEGE;
 
 // Cookies Name
-export const STAFF_TOKEN_NAME = 'ECOMHOST_STAFF_TOKEN';
+export const STAFF_TOKEN_NAME = '_suid';
 export type STAFF_TOKEN_TYPE = typeof STAFF_TOKEN_NAME;
 
 // Modal Views

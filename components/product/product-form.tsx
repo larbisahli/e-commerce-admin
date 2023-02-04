@@ -32,7 +32,7 @@ import isEmpty from 'lodash/isEmpty';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
-import { memo, useReducer, useState } from 'react';
+import { memo, useEffect, useReducer, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import CrossSellProducts from './cross-sell-products';
@@ -75,13 +75,13 @@ const defaultValues = {
   tags: [],
   productShippingInfo: {
     weight: 0,
-    weightUnit: { unit: 'kg' },
+    weightUnit: { unit: 'kg', label: 'kg' },
     volume: 0,
-    volumeUnit: { unit: 'L' },
+    volumeUnit: { unit: 'l', label: 'L' },
     dimensionWidth: 0,
     dimensionHeight: 0,
     dimensionDepth: 0,
-    dimensionUnit: { unit: 'L' }
+    dimensionUnit: { unit: 'l', label: 'L' }
   },
   productSeo: {
     slug: '',
@@ -91,8 +91,8 @@ const defaultValues = {
     metaImage: []
   },
   relatedProducts: [],
-  upsellProduct: [],
-  crossSellProduct: []
+  upsellProducts: [],
+  crossSellProducts: []
 };
 
 type IProps = {
@@ -194,6 +194,8 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
       variations: isVariable ? variationState.variations : [],
       variationOptions: isVariable ? variationState.variationOptions : []
     };
+
+    console.log({ values });
     if (lockedSubmission) return;
 
     setLockedSubmission(true);
@@ -230,8 +232,29 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
 
   const type = currentProductType?.id ?? getValues('type');
 
-  const thumbnail = watch('thumbnail');
-  const gallery = watch('gallery');
+  const [thumbnail, setThumbnail] = useState([]);
+  const [gallery, setGallery] = useState([]);
+
+  const watchThumbnail = watch('thumbnail');
+  const watchGallery = watch('gallery');
+
+  useEffect(() => {
+    // When the initialValues is not empty the watchThumbnail
+    // doesn't initially update itself same for gallery
+    if (!isEmpty(initialValues) && isEmpty(watchThumbnail)) {
+      setThumbnail(getValues('thumbnail'));
+    } else {
+      setThumbnail(watchThumbnail);
+    }
+  }, [getValues, initialValues, watchThumbnail]);
+
+  useEffect(() => {
+    if (!isEmpty(initialValues) && isEmpty(watchGallery)) {
+      setGallery(getValues('gallery'));
+    } else {
+      setGallery(watchGallery);
+    }
+  }, [getValues, initialValues, watchGallery]);
 
   return (
     <>

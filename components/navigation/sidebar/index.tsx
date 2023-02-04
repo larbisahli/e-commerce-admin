@@ -27,7 +27,7 @@ const Sidebar: React.FC<Props> = ({ absolute = false }) => {
           <div className="relative">
             <Logo />
           </div>
-          <div className="px-2 text-white font-semibold text-lg">Ecomhost</div>
+          <div className="px-2 text-white font-semibold text-lg">Dropgala</div>
         </div>
         <div className="flex justify-center mb-3">
           <div className="h-[1px] w-[90%] bg-sidenav-divider"></div>

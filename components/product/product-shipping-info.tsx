@@ -14,11 +14,20 @@ type IProps = {
   initialValues: any;
 };
 
-const weightUnits = [{ unit: 'kg' }, { unit: 'g' }];
+const weightUnits = [
+  { unit: 'kg', label: 'kg' },
+  { unit: 'g', label: 'g' }
+];
 
-const volumeUnits = [{ unit: 'l' }, { unit: 'ml' }];
+const volumeUnits = [
+  { unit: 'l', label: 'L' },
+  { unit: 'ml', label: 'ml' }
+];
 
-const dimensionUnits = [{ unit: 'l' }, { unit: 'ml' }];
+const dimensionUnits = [
+  { unit: 'l', label: 'L' },
+  { unit: 'ml', label: 'ml' }
+];
 
 function ProductShippingInfoForm({ control, initialValues }: IProps) {
   const { t } = useTranslation();
@@ -54,7 +63,7 @@ function ProductShippingInfoForm({ control, initialValues }: IProps) {
             <SelectInput
               name="productShippingInfo.weightUnit"
               control={control}
-              getOptionLabel={(option: any) => option.unit}
+              getOptionLabel={(option: any) => option.label}
               getOptionValue={(option: any) => option.unit}
               options={weightUnits}
               className="w-full"
@@ -78,7 +87,7 @@ function ProductShippingInfoForm({ control, initialValues }: IProps) {
               name={'productShippingInfo.volumeUnit'}
               control={control}
               className="w-full"
-              getOptionLabel={(option: any) => option.unit}
+              getOptionLabel={(option: any) => option.label}
               getOptionValue={(option: any) => option.unit}
               options={volumeUnits}
             />
@@ -155,7 +164,7 @@ function ProductShippingInfoForm({ control, initialValues }: IProps) {
               name="productShippingInfo.dimensionUnit"
               control={control}
               className="w-full"
-              getOptionLabel={(option: any) => option.unit}
+              getOptionLabel={(option: any) => option.label}
               getOptionValue={(option: any) => option.unit}
               options={dimensionUnits}
             />

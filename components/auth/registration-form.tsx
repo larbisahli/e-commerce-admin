@@ -329,7 +329,7 @@ const AliasViewer = ({ aliasName, executeCheckQuery }) => {
         >
           {aliasName}
         </span>
-        <span>.ecomhost.shop</span>
+        <span>.dropgala.com</span>
       </div>
       <div style={{ color: '#919191' }} className="ml-2">
         <EditSvg width={25} height={25} />

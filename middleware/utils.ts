@@ -70,6 +70,8 @@ export async function verifyAuth(context: GetServerSidePropsContext) {
 
     const { staff, error } = data ?? {};
 
+    console.log({ data, staffId });
+
     if (!isEmpty(error) || isEmpty(staff)) {
       console.log('Auth Error:>>', { error });
       return {

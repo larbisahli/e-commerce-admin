@@ -5,7 +5,7 @@ const AdminFooter = () => {
     <div className="border border-t-gray-300 bg-gray-200 mt-16 pb-10 w-full h-full md:ps-20 nlg:ps-20 nxl:ps-20 lg:ps-72 xl:ps-76 ">
       <div className="flex items-center justify-between p-5 flex-wrap">
         <p className="text-gray-500">
-          Copyright © {new Date().getFullYear()} ECOMHOST. ALL RIGHTS RESERVED.
+          Copyright © {new Date().getFullYear()} dropgala. ALL RIGHTS RESERVED.
         </p>
         <div className="flex items-center">
           <Link href={'/#'}>
