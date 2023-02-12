@@ -1,17 +1,25 @@
 'rc-collapse/assets/index.css';
 import { ArrowCircleDown } from '@components/icons/arrow-circle-down';
+import EditInfoIcon from '@components/icons/edit-info';
+import styles from '@styles/loader.module.css';
 import cn from 'classnames';
 import React, { useState } from 'react';
 
 type CollapseProps = {
   Title: React.FC;
   children: React.ReactNode;
+  disabled?: boolean;
+  loading?: boolean;
+  isUpdated?: boolean;
   variant?: 'gray' | 'transparent';
   btnClassName?: string;
 };
 
 export const Accordion: React.FC<CollapseProps> = ({
   Title,
+  loading = false,
+  isUpdated = false,
+  disabled = false,
   children,
   btnClassName
 }) => {
@@ -19,6 +27,7 @@ export const Accordion: React.FC<CollapseProps> = ({
 
   const onChange = (e) => {
     e.preventDefault();
+    if (disabled) return;
     setOpen((prev) => !prev);
   };
 
@@ -32,20 +41,34 @@ export const Accordion: React.FC<CollapseProps> = ({
               'flex bg-white border-b border-solid border-border-base  shadow-sm justify-between w-full px-5 py-4 2xl:px-6 2xl:py-6 text-base font-medium text-start text-skin-base focus:outline-none cursor-pointer',
               {
                 '!border-none': open,
-                'shadow-lg': open
+                'shadow-lg': open,
+                'pointer-events-none bg-gray-100 text-gray-400': disabled,
+                'pointer-events-none': loading
               }
             )}
             onClick={onChange}
           >
-            <div>
+            <div className="flex items-end">
               <Title />
+              {isUpdated && (
+                <div
+                  className="pl-3 pb-1"
+                  title="Changes have been made to this section that have not been saved."
+                >
+                  <EditInfoIcon />
+                </div>
+              )}
             </div>
             <div
               className={cn('text-gray-400 transition', {
                 'rotate-180': open
               })}
             >
-              <ArrowCircleDown width={'2em'} height={'2em'} />
+              {loading ? (
+                <div className={styles.loading_small}></div>
+              ) : (
+                <ArrowCircleDown width={'2em'} height={'2em'} />
+              )}
             </div>
           </button>
           <div

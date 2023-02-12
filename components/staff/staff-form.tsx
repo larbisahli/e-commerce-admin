@@ -281,7 +281,7 @@ const StaffCreateUpdateForm = ({ initialValues }: IProps) => {
             </p>
           )}
           {isEmpty(initialValues) && (
-            <div className="mt-4">
+            <div className="mt-8">
               <Label>{t('form:input-label-notification')}</Label>
               <Checkbox
                 {...register('notify')}

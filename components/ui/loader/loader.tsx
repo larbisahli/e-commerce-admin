@@ -1,6 +1,5 @@
+import styles from '@styles/loader.module.css';
 import cn from 'classnames';
-
-import styles from './loader.module.css';
 
 interface Props {
   className?: string;

@@ -39,7 +39,7 @@ export default function UpdateProductPage({ client }: SSRProps) {
   useGetStaff(client);
   useErrorLogger(error);
 
-  const { product = [] } = data ?? {};
+  const { product = {} } = data ?? {};
 
   if (loading) {
     return <Loader text={t('common:text-loading')} />;

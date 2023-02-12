@@ -34,7 +34,11 @@ export default function Uploader({ setLoading }: any) {
         setLoading(true);
 
         for await (const file of acceptedFiles) {
-          if (['image/png', 'image/jpeg'].includes(file.type)) {
+          if (
+            ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'].includes(
+              file.type
+            )
+          ) {
             var formData = new FormData();
             formData.append('image', file);
             fetch(`${apiURL}/upload`, {

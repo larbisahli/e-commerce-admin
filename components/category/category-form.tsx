@@ -225,6 +225,7 @@ export default function CreateOrUpdateCategoriesForm({
         />
         <Card className="w-full sm:w-8/12 md:w-2/3">
           <ImageModal
+            label="form:label-add-category-image"
             onSelect={(photo) => setValue('thumbnail', photo)}
             selected={thumbnail}
             isThumbnail

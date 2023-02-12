@@ -1,7 +1,10 @@
 import Card from '@components/common/card';
+import { SaveIcon } from '@components/icons/save-icon';
+import Button from '@components/ui/button';
 import Description from '@components/ui/description';
 import Input from '@components/ui/input';
 import { useSettings } from '@hooks/useSettings';
+import isEmpty from 'lodash/isEmpty';
 import { useTranslation } from 'next-i18next';
 import { memo } from 'react';
 import { useFormContext } from 'react-hook-form';
@@ -10,7 +13,7 @@ type IProps = {
   initialValues: any;
 };
 
-function ProductInfoForm({ initialValues }: IProps) {
+function ProductSimpleForm({ initialValues }: IProps) {
   const {
     register,
     formState: { errors }
@@ -76,9 +79,22 @@ function ProductInfoForm({ initialValues }: IProps) {
           variant="outline"
           className="mb-5"
         />
+        {!isEmpty(initialValues) && (
+          <div className="mt-11 flex justify-end border-t pt-4">
+            <Button
+            // loading={updating || creating}
+            // disabled={updating || creating}
+            >
+              <div className="mr-1">
+                <SaveIcon width="1.3rem" height="1.3rem" />
+              </div>
+              <div>{t('form:button-label-save')}</div>
+            </Button>
+          </div>
+        )}
       </Card>
     </div>
   );
 }
 
-export default memo(ProductInfoForm);
+export default memo(ProductSimpleForm);

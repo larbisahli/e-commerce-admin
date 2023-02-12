@@ -426,5 +426,6 @@
   "label-add-variant-thumbnail": "Add Variant Thumbnail",
   "related-up-sells-cross-sells-product": "Related Products, Up-Sells, and Cross-Sells",
   "label-add-meta-images": "Add Meta Image",
-  "input-label-meta-slug": "Slug"
+  "input-label-meta-slug": "Slug",
+  "label-add-category-image": "Add Category Image"
 }

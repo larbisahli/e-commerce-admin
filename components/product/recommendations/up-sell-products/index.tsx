@@ -3,33 +3,41 @@ import {
   useModalAction,
   useModalState
 } from '@components/ui/modal/modal.context';
-import { CROSS_SELL_PRODUCTS, PRODUCT_MODAL } from '@ts-types/constants';
+import { PRODUCT_MODAL, UPSELL_PRODUCTS } from '@ts-types/constants';
+import { Product } from '@ts-types/generated';
 import isEmpty from 'lodash/isEmpty';
 import { useTranslation } from 'next-i18next';
 import { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import ProductList from './product-list';
+import ProductList from '../../product-list';
 
-const CrossSellProducts = () => {
+interface Props {
+  initialValues: Product | any;
+}
+
+const UpSellProducts = ({ initialValues }: Props) => {
   const { t } = useTranslation();
 
-  const { setValue, watch } = useFormContext();
+  const { setValue, getValues, watch } = useFormContext();
 
   const { openModal } = useModalAction();
   const { id, meta } = useModalState();
 
-  const selectedProducts = watch('crossSellProducts');
+  const selectedProducts =
+    watch('upsellProducts') ?? !isEmpty(initialValues)
+      ? getValues('upsellProducts')
+      : [];
 
   const handleClick = (e) => {
     e.preventDefault();
-    openModal(PRODUCT_MODAL, CROSS_SELL_PRODUCTS, { selectedProducts });
+    openModal(PRODUCT_MODAL, UPSELL_PRODUCTS, { selectedProducts });
   };
 
   useEffect(() => {
     const { selectedProducts = [] } = meta ?? {};
-    if (id === CROSS_SELL_PRODUCTS && !isEmpty(selectedProducts)) {
-      setValue('crossSellProducts', selectedProducts);
+    if (id === UPSELL_PRODUCTS && !isEmpty(selectedProducts)) {
+      setValue('upsellProducts', selectedProducts);
     }
   }, [id, meta]);
 
@@ -37,8 +45,12 @@ const CrossSellProducts = () => {
     <>
       <div className="flex items-end justify-between flex-wrap xl:flex-nowrap">
         <div className="xl:mb-0 mb-3">
-          <span className="font-medium text-base">Cross-Sell Products</span>
-          <p className="text-sm text-body xl:max-w-[75%] max-w-full">{`These "impulse-buy" products appear next to the shopping cart as cross-sells to the items already in the shopping cart.`}</p>
+          <span className="font-medium text-base">Up-Sell Products</span>
+          <p className="text-sm text-body xl:max-w-[75%] max-w-full">
+            An up-sell item is offered to the customer as a pricier or
+            higher-quality alternative to the product the customer is looking
+            at.
+          </p>
         </div>
         <div className="ml-0 xl:ml-2">
           <Button
@@ -48,7 +60,7 @@ const CrossSellProducts = () => {
             className="w-max"
             onClick={handleClick}
           >
-            <div>Add Cross-Sell Products</div>
+            <div>Add Up-Sell Products</div>
           </Button>
         </div>
       </div>
@@ -70,4 +82,4 @@ const CrossSellProducts = () => {
   );
 };
 
-export default CrossSellProducts;
+export default UpSellProducts;

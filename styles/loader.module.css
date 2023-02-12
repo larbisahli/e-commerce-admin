@@ -36,6 +36,16 @@
   animation: spin 1s infinite linear;
 }
 
+.loading_small {
+  border-radius: 50%;
+  width: 2em;
+  height: 2em;
+  border: 3px solid rgba(0, 159, 127, 0.3);
+  border-top-color: rgba(0, 159, 127, 1);
+  -webkit-animation: spin 1s infinite linear;
+  animation: spin 1s infinite linear;
+}
+
 .simple_loading {
   border-radius: 50%;
   border: 3px solid rgba(0, 159, 127, 0.3);

@@ -1,20 +1,11 @@
 import { useMutation } from '@apollo/client';
 import Card from '@components/common/card';
 import { SaveIcon } from '@components/icons/save-icon';
-import ImageModal from '@components/image-modal';
-import ProductModal from '@components/products-modal';
-import Accordion from '@components/ui/accordion';
 import Alert from '@components/ui/alert';
 import Button from '@components/ui/button';
-import Checkbox from '@components/ui/checkbox';
 import Description from '@components/ui/description';
-import ValidationError from '@components/ui/form-validation-error';
-import Input from '@components/ui/input';
 import Label from '@components/ui/label';
-import Loader from '@components/ui/loader/loader';
-import Radio from '@components/ui/radio';
 import SelectInput from '@components/ui/select-input';
-import TextArea from '@components/ui/text-area';
 import { CREATE_PRODUCT, UPDATE_PRODUCT } from '@graphql/product';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
@@ -29,30 +20,22 @@ import { ProductStatus, ProductType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import cloneDeep from 'lodash/cloneDeep';
 import isEmpty from 'lodash/isEmpty';
-import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
-import { memo, useEffect, useReducer, useState } from 'react';
+import { memo, useReducer, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import CrossSellProducts from './cross-sell-products';
-import ProductCategoryInput from './product-category-input';
-import ProductInfoForm from './product-info-form';
+import ProductContent from './product-content';
+import ProductGallery from './product-gallery';
+import ProductSelectGroup from './product-select-group';
 import ProductShippingInfoForm from './product-shipping-info';
-import ProductSupplierInput from './product-supplier-input';
-import ProductTagInput from './product-tag-input';
+import ProductThumbnail from './product-thumbnail';
+import ProductTypeComponent from './product-type';
 import { productValidationSchema } from './product-validation-schema';
-import ProductVariableForm from './product-variable-form';
 import ProductSeo from './products-seo';
-import RelatedProducts from './related-products';
-import UpSellProducts from './up-sell-products';
+import Recommendations from './recommendations';
 import { creationVariable, updateVariable } from './variablesSubmission';
 import { variationsReducer } from './variations-reducer';
-
-const Editor = dynamic(() => import('@components/ui/editor'), {
-  loading: () => <Loader height="150px" text="Editor..." />,
-  ssr: false
-});
 
 type FormValues = Product;
 
@@ -140,12 +123,8 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
   });
 
   const {
-    register,
     handleSubmit,
     control,
-    getValues,
-    setValue,
-    watch,
     reset,
     formState: { errors }
   } = methods;
@@ -184,8 +163,6 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
 
   useErrorLogger(error);
   useFormError(errors);
-
-  console.log({ errors });
 
   const onSubmit = async (_values: FormValues) => {
     const isVariable = _values.type.id === ProductType.Variable;
@@ -227,35 +204,6 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
     return confirm(t('common:UNSAVED_CHANGES'));
   });
 
-  // MORE WORK HERE
-  const currentProductType = watch('type');
-
-  const type = currentProductType?.id ?? getValues('type');
-
-  const [thumbnail, setThumbnail] = useState([]);
-  const [gallery, setGallery] = useState([]);
-
-  const watchThumbnail = watch('thumbnail');
-  const watchGallery = watch('gallery');
-
-  useEffect(() => {
-    // When the initialValues is not empty the watchThumbnail
-    // doesn't initially update itself same for gallery
-    if (!isEmpty(initialValues) && isEmpty(watchThumbnail)) {
-      setThumbnail(getValues('thumbnail'));
-    } else {
-      setThumbnail(watchThumbnail);
-    }
-  }, [getValues, initialValues, watchThumbnail]);
-
-  useEffect(() => {
-    if (!isEmpty(initialValues) && isEmpty(watchGallery)) {
-      setGallery(getValues('gallery'));
-    } else {
-      setGallery(watchGallery);
-    }
-  }, [getValues, initialValues, watchGallery]);
-
   return (
     <>
       {errorMessage ? (
@@ -276,18 +224,8 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
               details={t('form:featured-image-help-text')}
               className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
             />
-
             <Card className="w-full sm:w-8/12 md:w-2/3">
-              <ImageModal
-                onSelect={(photo) => {
-                  console.log('thumbnail', photo);
-                  setValue('thumbnail', photo);
-                }}
-                selected={thumbnail}
-                isThumbnail
-                modalId="thumbnail"
-                label="form:label-add-product-thumbnail"
-              />
+              <ProductThumbnail initialValues={initialValues} />
             </Card>
           </div>
           {/* Gallery */}
@@ -297,14 +235,8 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
               details={t('form:gallery-help-text')}
               className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
             />
-
             <Card className="w-full sm:w-8/12 md:w-2/3">
-              <ImageModal
-                onSelect={(photo) => setValue('gallery', photo)}
-                selected={gallery}
-                modalId="gallery"
-                label="form:label-add-product-images"
-              />
+              <ProductGallery initialValues={initialValues} />
             </Card>
           </div>
 
@@ -333,146 +265,26 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
             </Card>
           </div>
           {/* Content */}
-          <Accordion Title={() => <>{t('form:item-label-content')}</>}>
-            <div className="flex flex-wrap my-5 sm:my-8">
-              <Description
-                details={`${
-                  initialValues
-                    ? t('form:item-description-edit')
-                    : t('form:item-description-add')
-                } ${t('form:product-description-help-text')}`}
-                className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
-              />
-
-              <Card className="w-full sm:w-8/12 md:w-2/3">
-                <Input
-                  label={`${t('form:input-label-name')}*`}
-                  {...register('name')}
-                  error={t(errors.name?.message!)}
-                  placeholder="Title..."
-                  variant="outline"
-                  className="mb-5"
-                />
-
-                <Label>{t('form:input-label-product-details')}*</Label>
-                <Editor
-                  control={control}
-                  name="description"
-                  className="mb-5"
-                  defaultValue=""
-                />
-                <ValidationError message={t(errors.description?.message)} />
-                <TextArea
-                  label={t('form:item-hidden-note')}
-                  {...register('note')}
-                  placeholder="Hidden note"
-                  error={t(errors.note?.message!)}
-                  variant="outline"
-                  className="mb-5"
-                />
-                <div>
-                  <Label>{t('form:input-label-status')}</Label>
-                  <Radio
-                    {...register('status')}
-                    label={t('form:input-label-publish')}
-                    id={ProductStatus.Publish}
-                    value={ProductStatus.Publish}
-                    className="mb-2"
-                  />
-                  <Radio
-                    {...register('status')}
-                    id={ProductStatus.Draft}
-                    label={t('form:input-label-draft')}
-                    value={ProductStatus.Draft}
-                  />
-                </div>
-                <div className="my-5">
-                  <Checkbox
-                    {...register('disableOutOfStock')}
-                    label={t('form:input-label-disable-out-of-stock')}
-                  />
-                </div>
-              </Card>
-            </div>
-          </Accordion>
-
+          <ProductContent initialValues={initialValues} />
           {/* Variation Type & Simple Type */}
-          <Accordion
-            Title={() => (
-              <>
-                {type === ProductType.Simple
-                  ? t('form:form-title-simple-product-info')
-                  : t('form:form-title-variation-product-info')}
-              </>
-            )}
-          >
-            {!!type &&
-              (type === ProductType.Simple ? (
-                <ProductInfoForm initialValues={initialValues} />
-              ) : (
-                <ProductVariableForm
-                  initialValues={initialValues}
-                  variationState={variationState}
-                  dispatchVariationState={dispatchVariationState}
-                />
-              ))}
-          </Accordion>
-
+          <ProductTypeComponent
+            initialValues={initialValues}
+            variationState={variationState}
+            dispatchVariationState={dispatchVariationState}
+          />
           {/* Tags, Category and Suppliers*/}
-          <Accordion Title={() => t('form:type-and-category')}>
-            <div className="flex flex-wrap my-5 sm:my-8">
-              <Description
-                details={t('form:type-and-category-help-text')}
-                className="w-full px-0 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
-              />
-              <Card className="w-full sm:w-8/12 md:w-2/3">
-                <ProductCategoryInput control={control} />
-                {/* @ts-ignore */}
-                <ValidationError message={t(errors.categories?.message)} />
-                <ProductSupplierInput control={control} />
-                <ProductTagInput control={control} />
-              </Card>
-            </div>
-          </Accordion>
+          <ProductSelectGroup initialValues={initialValues} />
           {/* SEO */}
-          <Accordion Title={() => t('form:form-title-seo')}>
-            <ProductSeo />
-          </Accordion>
+          <ProductSeo initialValues={initialValues} />
           {/* Related Products, Up-Sells, and Cross-Sells  */}
-          <Accordion
-            Title={() => t('form:related-up-sells-cross-sells-product')}
-          >
-            <div className="flex flex-wrap my-5 sm:my-8">
-              <Description
-                details={t('form:type-and-category-help-text')}
-                className="w-full px-0 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
-              />
-              <Card className="w-full sm:w-8/12 md:w-2/3">
-                <div className="m-4">
-                  <RelatedProducts />
-                </div>
-                <div className="m-4">
-                  <UpSellProducts />
-                </div>
-                <div className="m-4">
-                  <CrossSellProducts />
-                </div>
-                <ProductModal />
-              </Card>
-            </div>
-          </Accordion>
+          <Recommendations initialValues={initialValues} />
           {/* Shipping Info */}
           <div className="mb-12">
-            <Accordion Title={() => t('form:form-title-product-shipping-info')}>
-              <ProductShippingInfoForm
-                control={control}
-                initialValues={initialValues}
-              />
-            </Accordion>
+            <ProductShippingInfoForm initialValues={initialValues} />
           </div>
 
           <div className="mb-4 text-end">
-            {initialValues && (
+            {!isEmpty(initialValues) && (
               <Button
                 variant="outline"
                 onClick={router.back}
@@ -482,15 +294,17 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
                 {t('form:button-label-back')}
               </Button>
             )}
-            <Button
-              loading={updating || creating}
-              disabled={updating || creating}
-            >
-              <div className="mr-1">
-                <SaveIcon width="1.3rem" height="1.3rem" />
-              </div>
-              <div>{t('form:button-label-save')}</div>
-            </Button>
+            {isEmpty(initialValues) && (
+              <Button
+                loading={updating || creating}
+                disabled={updating || creating}
+              >
+                <div className="mr-1">
+                  <SaveIcon width="1.3rem" height="1.3rem" />
+                </div>
+                <div>{t('form:button-label-save')}</div>
+              </Button>
+            )}
           </div>
         </form>
       </FormProvider>

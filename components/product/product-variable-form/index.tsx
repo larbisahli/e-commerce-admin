@@ -1,5 +1,6 @@
 import { useQuery } from '@apollo/client';
 import Card from '@components/common/card';
+import { SaveIcon } from '@components/icons/save-icon';
 import Button from '@components/ui/button';
 import Description from '@components/ui/description';
 import Label from '@components/ui/label';
@@ -245,6 +246,19 @@ function ProductVariableForm({
             </div>
           )}
         </div>
+        {!isEmpty(initialValues) && (
+          <div className="mt-12 flex justify-end p-5">
+            <Button
+            // loading={updating || creating}
+            // disabled={updating || creating}
+            >
+              <div className="mr-1">
+                <SaveIcon width="1.3rem" height="1.3rem" />
+              </div>
+              <div>{t('form:button-label-save')}</div>
+            </Button>
+          </div>
+        )}
       </Card>
     </div>
   );

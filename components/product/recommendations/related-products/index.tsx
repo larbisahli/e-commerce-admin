@@ -3,33 +3,41 @@ import {
   useModalAction,
   useModalState
 } from '@components/ui/modal/modal.context';
-import { PRODUCT_MODAL, UPSELL_PRODUCTS } from '@ts-types/constants';
+import { PRODUCT_MODAL, RELATED_PRODUCTS } from '@ts-types/constants';
+import { Product } from '@ts-types/generated';
 import isEmpty from 'lodash/isEmpty';
 import { useTranslation } from 'next-i18next';
 import { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import ProductList from './product-list';
+import ProductList from '../../product-list';
 
-const UpSellProducts = () => {
+interface Props {
+  initialValues: Product | any;
+}
+
+const RelatedProducts = ({ initialValues }: Props) => {
   const { t } = useTranslation();
 
-  const { setValue, watch } = useFormContext();
+  const { setValue, getValues, watch } = useFormContext();
 
   const { openModal } = useModalAction();
   const { id, meta } = useModalState();
 
-  const selectedProducts = watch('upsellProducts');
+  const selectedProducts =
+    watch('relatedProducts') ?? !isEmpty(initialValues)
+      ? getValues('relatedProducts')
+      : [];
 
   const handleClick = (e) => {
     e.preventDefault();
-    openModal(PRODUCT_MODAL, UPSELL_PRODUCTS, { selectedProducts });
+    openModal(PRODUCT_MODAL, RELATED_PRODUCTS, { selectedProducts });
   };
 
   useEffect(() => {
     const { selectedProducts = [] } = meta ?? {};
-    if (id === UPSELL_PRODUCTS && !isEmpty(selectedProducts)) {
-      setValue('upsellProducts', selectedProducts);
+    if (id === RELATED_PRODUCTS && !isEmpty(selectedProducts)) {
+      setValue('relatedProducts', selectedProducts);
     }
   }, [id, meta]);
 
@@ -37,11 +45,10 @@ const UpSellProducts = () => {
     <>
       <div className="flex items-end justify-between flex-wrap xl:flex-nowrap">
         <div className="xl:mb-0 mb-3">
-          <span className="font-medium text-base">Up-Sell Products</span>
+          <span className="font-medium text-base">Related Products</span>
           <p className="text-sm text-body xl:max-w-[75%] max-w-full">
-            An up-sell item is offered to the customer as a pricier or
-            higher-quality alternative to the product the customer is looking
-            at.
+            Related products are shown to customers in addition to the item the
+            customer is looking at.
           </p>
         </div>
         <div className="ml-0 xl:ml-2">
@@ -52,7 +59,7 @@ const UpSellProducts = () => {
             className="w-max"
             onClick={handleClick}
           >
-            <div>Add Up-Sell Products</div>
+            <div>Add Related Products</div>
           </Button>
         </div>
       </div>
@@ -74,4 +81,4 @@ const UpSellProducts = () => {
   );
 };
 
-export default UpSellProducts;
+export default RelatedProducts;

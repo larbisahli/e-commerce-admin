@@ -6,7 +6,7 @@ import { useErrorLogger } from '@hooks/useErrorLogger';
 import { OrderBy, Product, Suppliers } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
 import { memo } from 'react';
-import { Control } from 'react-hook-form';
+import { Control, useFormContext } from 'react-hook-form';
 
 interface Props {
   control: Control<Product, any>;
@@ -22,8 +22,9 @@ interface OptionsVariable {
   orderBy: OrderBy;
 }
 
-const ProductSupplierInput = ({ control }: Props) => {
+const ProductSupplier = () => {
   const { t } = useTranslation();
+  const { control } = useFormContext();
 
   const { data, loading, error } = useQuery<TSupplierSelect, OptionsVariable>(
     SUPPLIERS_FOR_SELECT,
@@ -55,4 +56,4 @@ const ProductSupplierInput = ({ control }: Props) => {
   );
 };
 
-export default memo(ProductSupplierInput);
+export default memo(ProductSupplier);

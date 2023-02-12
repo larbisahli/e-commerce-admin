@@ -133,6 +133,69 @@ export const PRODUCT = gql`
           unit
         }
       }
+
+      productSeo {
+        id
+        slug
+        metaTitle
+        metaKeywords
+        metaDescription
+        metaImage {
+          id
+          image
+          placeholder
+        }
+      }
+    }
+  }
+`;
+
+export const RECOMMENDATIONS = gql`
+  query Product($id: Int!) {
+    relatedProducts(id: $id) {
+      id
+      sku
+      name
+      type {
+        id
+      }
+      quantity
+      published
+      thumbnail {
+        id
+        image
+        placeholder
+      }
+    }
+    upsellProducts(id: $id) {
+      id
+      sku
+      name
+      type {
+        id
+      }
+      quantity
+      published
+      thumbnail {
+        id
+        image
+        placeholder
+      }
+    }
+    crossSellProducts(id: $id) {
+      id
+      sku
+      name
+      type {
+        id
+      }
+      quantity
+      published
+      thumbnail {
+        id
+        image
+        placeholder
+      }
     }
   }
 `;

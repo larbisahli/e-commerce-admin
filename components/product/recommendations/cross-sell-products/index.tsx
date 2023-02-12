@@ -3,15 +3,20 @@ import {
   useModalAction,
   useModalState
 } from '@components/ui/modal/modal.context';
-import { PRODUCT_MODAL, RELATED_PRODUCTS } from '@ts-types/constants';
+import { CROSS_SELL_PRODUCTS, PRODUCT_MODAL } from '@ts-types/constants';
+import { Product } from '@ts-types/generated';
 import isEmpty from 'lodash/isEmpty';
 import { useTranslation } from 'next-i18next';
 import { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 
-import ProductList from './product-list';
+import ProductList from '../../product-list';
 
-const RelatedProducts = () => {
+interface Props {
+  initialValues: Product | any;
+}
+
+const CrossSellProducts = ({ initialValues }: Props) => {
   const { t } = useTranslation();
 
   const { setValue, getValues, watch } = useFormContext();
@@ -19,17 +24,20 @@ const RelatedProducts = () => {
   const { openModal } = useModalAction();
   const { id, meta } = useModalState();
 
-  const selectedProducts = watch('relatedProducts');
+  const selectedProducts =
+    watch('crossSellProducts') ?? !isEmpty(initialValues)
+      ? getValues('crossSellProducts')
+      : [];
 
   const handleClick = (e) => {
     e.preventDefault();
-    openModal(PRODUCT_MODAL, RELATED_PRODUCTS, { selectedProducts });
+    openModal(PRODUCT_MODAL, CROSS_SELL_PRODUCTS, { selectedProducts });
   };
 
   useEffect(() => {
     const { selectedProducts = [] } = meta ?? {};
-    if (id === RELATED_PRODUCTS && !isEmpty(selectedProducts)) {
-      setValue('relatedProducts', selectedProducts);
+    if (id === CROSS_SELL_PRODUCTS && !isEmpty(selectedProducts)) {
+      setValue('crossSellProducts', selectedProducts);
     }
   }, [id, meta]);
 
@@ -37,11 +45,8 @@ const RelatedProducts = () => {
     <>
       <div className="flex items-end justify-between flex-wrap xl:flex-nowrap">
         <div className="xl:mb-0 mb-3">
-          <span className="font-medium text-base">Related Products</span>
-          <p className="text-sm text-body xl:max-w-[75%] max-w-full">
-            Related products are shown to customers in addition to the item the
-            customer is looking at.
-          </p>
+          <span className="font-medium text-base">Cross-Sell Products</span>
+          <p className="text-sm text-body xl:max-w-[75%] max-w-full">{`These "impulse-buy" products appear next to the shopping cart as cross-sells to the items already in the shopping cart.`}</p>
         </div>
         <div className="ml-0 xl:ml-2">
           <Button
@@ -51,7 +56,7 @@ const RelatedProducts = () => {
             className="w-max"
             onClick={handleClick}
           >
-            <div>Add Related Products</div>
+            <div>Add Cross-Sell Products</div>
           </Button>
         </div>
       </div>
@@ -73,4 +78,4 @@ const RelatedProducts = () => {
   );
 };
 
-export default RelatedProducts;
+export default CrossSellProducts;

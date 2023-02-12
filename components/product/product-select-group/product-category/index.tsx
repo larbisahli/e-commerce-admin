@@ -1,16 +1,13 @@
 import { useQuery } from '@apollo/client';
+import ValidationError from '@components/ui/form-validation-error';
 import Label from '@components/ui/label';
 import SelectInput from '@components/ui/select-input';
 import { CATEGORIES_FOR_SELECT_ALL } from '@graphql/category';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { Category, OrderBy, Product } from '@ts-types/generated';
+import { Category, OrderBy } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
 import { memo } from 'react';
-import { Control } from 'react-hook-form';
-
-interface Props {
-  control: Control<Product, any>;
-}
+import { useFormContext } from 'react-hook-form';
 
 interface TCategorySelect {
   categorySelectAll: Category[];
@@ -22,8 +19,13 @@ interface OptionsVariable {
   orderBy: OrderBy;
 }
 
-const ProductCategoryInput = ({ control }: Props) => {
+const ProductCategory = () => {
   const { t } = useTranslation('common');
+
+  const {
+    formState: { errors },
+    control
+  } = useFormContext();
 
   const { data, loading, error } = useQuery<TCategorySelect, OptionsVariable>(
     CATEGORIES_FOR_SELECT_ALL,
@@ -53,8 +55,10 @@ const ProductCategoryInput = ({ control }: Props) => {
         options={categories}
         isLoading={loading}
       />
+      {/* @ts-ignore */}
+      <ValidationError message={t(errors.categories?.message)} />
     </div>
   );
 };
 
-export default memo(ProductCategoryInput);
+export default memo(ProductCategory);

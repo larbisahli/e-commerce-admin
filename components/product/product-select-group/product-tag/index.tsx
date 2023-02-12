@@ -6,7 +6,7 @@ import { useErrorLogger } from '@hooks/useErrorLogger';
 import { OrderBy, Product, Tag } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
 import { memo } from 'react';
-import { Control } from 'react-hook-form';
+import { Control, useFormContext } from 'react-hook-form';
 
 interface Props {
   control: Control<Product, any>;
@@ -22,8 +22,9 @@ interface OptionsVariable {
   orderBy: OrderBy;
 }
 
-const ProductTagInput = ({ control }: Props) => {
+const ProductTag = () => {
   const { t } = useTranslation();
+  const { control } = useFormContext();
 
   const { data, loading, error } = useQuery<TagSelect, OptionsVariable>(
     TAGS_FOR_SELECT,
@@ -58,4 +59,4 @@ const ProductTagInput = ({ control }: Props) => {
   );
 };
 
-export default memo(ProductTagInput);
+export default memo(ProductTag);

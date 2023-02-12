@@ -19,14 +19,14 @@ interface TStaff {
 }
 
 interface OptionsVariable {
-  id: number;
+  id: string;
 }
 
 export default function EditStaffPage({ client }: SSRProps) {
   const { t } = useTranslation();
   const { query } = useRouter();
 
-  const staffId = parseInt(query.staffId as string, 10);
+  const staffId = query.staffId as string;
 
   const { data, loading, error } = useQuery<TStaff, OptionsVariable>(STAFF, {
     variables: { id: staffId },

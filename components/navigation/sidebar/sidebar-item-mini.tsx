@@ -63,11 +63,11 @@ const SidebarItem = ({
       {hadSubLinks ? (
         <div
           className={cn(
-            'overflow-hidden flex flex-col relative justify-center w-full py-4 pb-5 hover:!bg-sidenav-active-hover-color p-2 items-center text-base text-start text-sidenav-color-secondary focus:text-accent hover:border-green-300 border-l-2 border-transparent border-solid cursor-pointer',
+            'overflow-hidden flex flex-col relative justify-center w-full py-4 pb-5 hover:!bg-sidenav-active-hover-color p-2 items-center text-base text-start text-sidenav-color-secondary focus:text-accent hover:border-blue-300 border-l-2 border-transparent border-solid cursor-pointer',
             {
               'mb-12': margin,
-              'border-green-300 !text-white': currentLink[1] === inLink[1],
-              'border-green-300 !text-white !bg-sidenav-active-color hover:!bg-sidenav-active-hover-color':
+              'border-blue-300 !text-white': currentLink[1] === inLink[1],
+              'border-blue-300 !text-white !bg-sidenav-active-color hover:!bg-sidenav-active-hover-color':
                 sublevelOpen || linkHighlight
             }
           )}

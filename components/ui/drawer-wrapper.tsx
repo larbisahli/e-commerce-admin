@@ -18,7 +18,12 @@ const DrawerWrapper: React.FunctionComponent<DrawerWrapperProps> = ({
   className
 }) => {
   return (
-    <div className={cn('flex flex-col h-full relative bg-sidenav', className)}>
+    <div
+      className={cn(
+        'flex flex-col h-full relative bg-sidenav-secondary',
+        className
+      )}
+    >
       <div
         style={{ width: '280px' }}
         className="flex items-center border-sidenav-divider justify-between px-5 md:py-5 border-b border-opacity-75 w-full h-16"
