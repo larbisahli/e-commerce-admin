@@ -7,8 +7,8 @@ import { CROSS_SELL_PRODUCTS, PRODUCT_MODAL } from '@ts-types/constants';
 import { Product } from '@ts-types/generated';
 import isEmpty from 'lodash/isEmpty';
 import { useTranslation } from 'next-i18next';
-import { useEffect } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { memo, useEffect } from 'react';
+import { useFormContext, useWatch } from 'react-hook-form';
 
 import ProductList from '../../product-list';
 
@@ -19,13 +19,13 @@ interface Props {
 const CrossSellProducts = ({ initialValues }: Props) => {
   const { t } = useTranslation();
 
-  const { setValue, getValues, watch } = useFormContext();
+  const { setValue, getValues, control } = useFormContext();
 
   const { openModal } = useModalAction();
   const { id, meta } = useModalState();
 
   const selectedProducts =
-    watch('crossSellProducts') ?? !isEmpty(initialValues)
+    useWatch({ control, name: 'crossSellProducts' }) ?? !isEmpty(initialValues)
       ? getValues('crossSellProducts')
       : [];
 
@@ -36,10 +36,10 @@ const CrossSellProducts = ({ initialValues }: Props) => {
 
   useEffect(() => {
     const { selectedProducts = [] } = meta ?? {};
-    if (id === CROSS_SELL_PRODUCTS && !isEmpty(selectedProducts)) {
+    if (id === CROSS_SELL_PRODUCTS) {
       setValue('crossSellProducts', selectedProducts);
     }
-  }, [id, meta]);
+  }, [id, meta, setValue]);
 
   return (
     <>
@@ -78,4 +78,4 @@ const CrossSellProducts = ({ initialValues }: Props) => {
   );
 };
 
-export default CrossSellProducts;
+export default memo(CrossSellProducts);

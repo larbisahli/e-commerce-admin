@@ -7,30 +7,22 @@ import ValidationError from '@components/ui/form-validation-error';
 import Input from '@components/ui/input';
 import Label from '@components/ui/label';
 import SelectInput from '@components/ui/select-input';
-import { Product } from '@ts-types/generated';
-import { isEmpty } from 'lodash';
+import { Nullable } from '@ts-types/custom.types';
+import { Product, ProductShippingInfo } from '@ts-types/generated';
+import isEqual from 'lodash/isEqual';
 import { useTranslation } from 'next-i18next';
-import React, { memo } from 'react';
-import { useFormContext } from 'react-hook-form';
+import React, { memo, useMemo } from 'react';
+import { useFormContext, useWatch } from 'react-hook-form';
 
 type Props = {
-  initialValues: any;
+  initialValues: Nullable<Product>;
 };
 
-const weightUnits = [
-  { unit: 'kg', label: 'kg' },
-  { unit: 'g', label: 'g' }
-];
+const weightUnits = [{ unit: 'kg' }, { unit: 'g' }];
 
-const volumeUnits = [
-  { unit: 'l', label: 'L' },
-  { unit: 'ml', label: 'ml' }
-];
+const volumeUnits = [{ unit: 'l' }, { unit: 'ml' }];
 
-const dimensionUnits = [
-  { unit: 'l', label: 'L' },
-  { unit: 'ml', label: 'ml' }
-];
+const dimensionUnits = [{ unit: 'l' }, { unit: 'ml' }];
 
 function ProductShippingInfoForm({ initialValues }: Props) {
   const { t } = useTranslation();
@@ -38,11 +30,108 @@ function ProductShippingInfoForm({ initialValues }: Props) {
   const {
     control,
     register,
+    watch,
     formState: { errors }
   } = useFormContext();
 
+  const productShippingInfo = useWatch({
+    control,
+    name: 'productShippingInfo'
+  }) as ProductShippingInfo;
+
+  const {
+    id,
+    weight,
+    weightUnit,
+    volume,
+    volumeUnit,
+    dimensionWidth,
+    dimensionHeight,
+    dimensionDepth,
+    dimensionUnit
+  } = productShippingInfo;
+
+  const currentProductShippingInfo = useMemo(
+    () => ({
+      id,
+      weight: Number(weight),
+      weightUnit: {
+        unit: weightUnit?.unit
+      },
+      volume: Number(volume),
+      volumeUnit: {
+        unit: volumeUnit?.unit
+      },
+      dimensionWidth: Number(dimensionWidth),
+      dimensionHeight: Number(dimensionHeight),
+      dimensionDepth: Number(dimensionDepth),
+      dimensionUnit: {
+        unit: dimensionUnit?.unit
+      }
+    }),
+    [
+      dimensionDepth,
+      dimensionHeight,
+      dimensionUnit?.unit,
+      dimensionWidth,
+      id,
+      volume,
+      volumeUnit?.unit,
+      weight,
+      weightUnit?.unit
+    ]
+  );
+
+  const initialProductShippingInfo = useMemo(
+    () => ({
+      id: initialValues?.productShippingInfo?.id,
+      weight: initialValues?.productShippingInfo?.weight,
+      weightUnit: {
+        unit: initialValues?.productShippingInfo?.weightUnit?.unit
+      },
+      volume: initialValues?.productShippingInfo?.volume,
+      volumeUnit: {
+        unit: initialValues?.productShippingInfo?.volumeUnit?.unit
+      },
+      dimensionWidth: initialValues?.productShippingInfo?.dimensionWidth,
+      dimensionHeight: initialValues?.productShippingInfo?.dimensionHeight,
+      dimensionDepth: initialValues?.productShippingInfo?.dimensionDepth,
+      dimensionUnit: {
+        unit: initialValues?.productShippingInfo?.dimensionUnit?.unit
+      }
+    }),
+    [initialValues?.productShippingInfo]
+  );
+
+  const isUpdated = useMemo(
+    () => !isEqual(initialProductShippingInfo, currentProductShippingInfo),
+    [initialProductShippingInfo, currentProductShippingInfo]
+  );
+
+  const renderSaveButton = () => {
+    if (isUpdated) {
+      return (
+        <div className="mt-12 flex justify-end border-t pt-4">
+          <Button
+          // loading={updating || creating}
+          // disabled={updating || creating}
+          >
+            <div className="mr-1">
+              <SaveIcon width="1.3rem" height="1.3rem" />
+            </div>
+            <div>{t('form:button-label-save')}</div>
+          </Button>
+        </div>
+      );
+    }
+    return null;
+  };
+
   return (
-    <Accordion Title={() => t('form:form-title-product-shipping-info')}>
+    <Accordion
+      isUpdated={isUpdated}
+      Title={() => t('form:form-title-product-shipping-info')}
+    >
       <div className="flex flex-wrap my-5 sm:my-8">
         <Description
           details={`${
@@ -68,7 +157,7 @@ function ProductShippingInfoForm({ initialValues }: Props) {
               <SelectInput
                 name="productShippingInfo.weightUnit"
                 control={control}
-                getOptionLabel={(option: any) => option.label}
+                getOptionLabel={(option: any) => option.unit}
                 getOptionValue={(option: any) => option.unit}
                 options={weightUnits}
                 className="w-full"
@@ -92,7 +181,7 @@ function ProductShippingInfoForm({ initialValues }: Props) {
                 name={'productShippingInfo.volumeUnit'}
                 control={control}
                 className="w-full"
-                getOptionLabel={(option: any) => option.label}
+                getOptionLabel={(option: any) => option.unit}
                 getOptionValue={(option: any) => option.unit}
                 options={volumeUnits}
               />
@@ -169,7 +258,7 @@ function ProductShippingInfoForm({ initialValues }: Props) {
                 name="productShippingInfo.dimensionUnit"
                 control={control}
                 className="w-full"
-                getOptionLabel={(option: any) => option.label}
+                getOptionLabel={(option: any) => option.unit}
                 getOptionValue={(option: any) => option.unit}
                 options={dimensionUnits}
               />
@@ -182,19 +271,7 @@ function ProductShippingInfoForm({ initialValues }: Props) {
               }
             />
           </div>
-          {!isEmpty(initialValues) && (
-            <div className="mt-12 flex justify-end border-t pt-4">
-              <Button
-              // loading={updating || creating}
-              // disabled={updating || creating}
-              >
-                <div className="mr-1">
-                  <SaveIcon width="1.3rem" height="1.3rem" />
-                </div>
-                <div>{t('form:button-label-save')}</div>
-              </Button>
-            </div>
-          )}
+          {renderSaveButton()}
         </Card>
       </div>
     </Accordion>

@@ -69,65 +69,65 @@ const creationVariable = (values: Product): Product => {
 };
 
 const updateVariable = (values: Product, initialValues: Product) => {
-  // 1) gallery block
-  const galleryAdditions = differenceWith(
-    values?.gallery,
-    initialValues?.gallery,
-    isEqual
-  );
-  const galleryDeletions = differenceWith(
-    initialValues?.gallery,
-    values?.gallery,
-    isEqual
-  );
+  // // 1) gallery block
+  // const galleryAdditions = differenceWith(
+  //   values?.gallery,
+  //   initialValues?.gallery,
+  //   isEqual
+  // );
+  // const galleryDeletions = differenceWith(
+  //   initialValues?.gallery,
+  //   values?.gallery,
+  //   isEqual
+  // );
 
-  // 2) thumbnail block
-  const thumbnailAddition = differenceWith(
-    [values?.thumbnail],
-    [initialValues?.thumbnail],
-    isEqual
-  );
-  const thumbnailDeletion = differenceWith(
-    [initialValues?.thumbnail],
-    [values?.thumbnail],
-    isEqual
-  );
+  // // 2) thumbnail block
+  // const thumbnailAddition = differenceWith(
+  //   [values?.thumbnail],
+  //   [initialValues?.thumbnail],
+  //   isEqual
+  // );
+  // const thumbnailDeletion = differenceWith(
+  //   [initialValues?.thumbnail],
+  //   [values?.thumbnail],
+  //   isEqual
+  // );
 
-  // 3) categories block
-  const categoriesAdditions = differenceWith(
-    values?.categories,
-    initialValues?.categories,
-    isEqual
-  );
-  const categoriesDeletions = differenceWith(
-    initialValues?.categories,
-    values?.categories,
-    isEqual
-  );
+  // // 3) categories block
+  // const categoriesAdditions = differenceWith(
+  //   values?.categories,
+  //   initialValues?.categories,
+  //   isEqual
+  // );
+  // const categoriesDeletions = differenceWith(
+  //   initialValues?.categories,
+  //   values?.categories,
+  //   isEqual
+  // );
 
-  // 4) tags block
-  const tagsAdditions = differenceWith(
-    values?.tags,
-    initialValues?.tags,
-    isEqual
-  );
-  const tagsDeletions = differenceWith(
-    initialValues?.tags,
-    values?.tags,
-    isEqual
-  );
+  // // 4) tags block
+  // const tagsAdditions = differenceWith(
+  //   values?.tags,
+  //   initialValues?.tags,
+  //   isEqual
+  // );
+  // const tagsDeletions = differenceWith(
+  //   initialValues?.tags,
+  //   values?.tags,
+  //   isEqual
+  // );
 
-  // 5) suppliers block
-  const suppliersAdditions = differenceWith(
-    values?.suppliers,
-    initialValues?.suppliers,
-    isEqual
-  );
-  const suppliersDeletions = differenceWith(
-    initialValues?.suppliers,
-    values?.suppliers,
-    isEqual
-  );
+  // // 5) suppliers block
+  // const suppliersAdditions = differenceWith(
+  //   values?.suppliers,
+  //   initialValues?.suppliers,
+  //   isEqual
+  // );
+  // const suppliersDeletions = differenceWith(
+  //   initialValues?.suppliers,
+  //   values?.suppliers,
+  //   isEqual
+  // );
 
   // 6) product main info block
   const isVariable = values.type.id === ProductType.Variable;

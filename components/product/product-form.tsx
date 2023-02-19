@@ -253,7 +253,7 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
               className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
             />
             <Card className="w-full sm:w-8/12 md:w-2/3">
-              <Label>{t('form:input-label-attribute-name')}</Label>
+              <Label>{t('form:form-title-product-type')}</Label>
               <SelectInput
                 name={`type`}
                 control={control}

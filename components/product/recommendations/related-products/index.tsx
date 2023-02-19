@@ -7,8 +7,8 @@ import { PRODUCT_MODAL, RELATED_PRODUCTS } from '@ts-types/constants';
 import { Product } from '@ts-types/generated';
 import isEmpty from 'lodash/isEmpty';
 import { useTranslation } from 'next-i18next';
-import { useEffect } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { memo, useEffect } from 'react';
+import { useFormContext, useWatch } from 'react-hook-form';
 
 import ProductList from '../../product-list';
 
@@ -19,13 +19,13 @@ interface Props {
 const RelatedProducts = ({ initialValues }: Props) => {
   const { t } = useTranslation();
 
-  const { setValue, getValues, watch } = useFormContext();
+  const { setValue, getValues, control } = useFormContext();
 
   const { openModal } = useModalAction();
   const { id, meta } = useModalState();
 
   const selectedProducts =
-    watch('relatedProducts') ?? !isEmpty(initialValues)
+    useWatch({ control, name: 'relatedProducts' }) ?? !isEmpty(initialValues)
       ? getValues('relatedProducts')
       : [];
 
@@ -36,10 +36,10 @@ const RelatedProducts = ({ initialValues }: Props) => {
 
   useEffect(() => {
     const { selectedProducts = [] } = meta ?? {};
-    if (id === RELATED_PRODUCTS && !isEmpty(selectedProducts)) {
+    if (id === RELATED_PRODUCTS) {
       setValue('relatedProducts', selectedProducts);
     }
-  }, [id, meta]);
+  }, [id, meta, setValue]);
 
   return (
     <>
@@ -81,4 +81,4 @@ const RelatedProducts = ({ initialValues }: Props) => {
   );
 };
 
-export default RelatedProducts;
+export default memo(RelatedProducts);

@@ -45,7 +45,8 @@ const Recommendations = ({ initialValues }: Props) => {
     RECOMMENDATIONS,
     {
       variables: { id: productId },
-      fetchPolicy: 'cache-and-network'
+      fetchPolicy: 'cache-and-network',
+      skip: isEmpty(initialValues)
     }
   );
 
@@ -60,7 +61,7 @@ const Recommendations = ({ initialValues }: Props) => {
     setValue('relatedProducts', relatedProducts);
     setValue('crossSellProducts', crossSellProducts);
     setValue('upsellProducts', upsellProducts);
-  }, [data]);
+  }, [data, setValue]);
 
   return (
     <Accordion

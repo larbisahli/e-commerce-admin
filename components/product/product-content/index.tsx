@@ -10,28 +10,108 @@ import Label from '@components/ui/label';
 import Loader from '@components/ui/loader/loader';
 import Radio from '@components/ui/radio';
 import TextArea from '@components/ui/text-area';
-import { ProductStatus } from '@ts-types/generated';
-import isEmpty from 'lodash/isEmpty';
+import { Nullable } from '@ts-types/custom.types';
+import { Product, ProductStatus } from '@ts-types/generated';
+import isEqual from 'lodash/isEqual';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
-import { useFormContext } from 'react-hook-form';
+import { memo, useMemo } from 'react';
+import { useFormContext, useWatch } from 'react-hook-form';
+
+interface Props {
+  initialValues: Nullable<Product>;
+}
 
 const Editor = dynamic(() => import('@components/ui/editor'), {
   loading: () => <Loader height="150px" text="Editor..." />,
   ssr: false
 });
 
-const ProductContent = ({ initialValues }) => {
+const ProductContent = ({ initialValues }: Props) => {
   const { t } = useTranslation();
 
   const {
     register,
     formState: { errors },
+    getValues,
     control
   } = useFormContext();
 
+  const name = useWatch({ control, name: 'name', exact: true });
+  const description =
+    useWatch({ control, name: 'description', exact: true }) ??
+    getValues('description');
+  const status = useWatch({ control, name: 'status', exact: true });
+  const note = useWatch({ control, name: 'note', exact: true });
+  const disableOutOfStock = useWatch({
+    control,
+    name: 'disableOutOfStock',
+    exact: true
+  });
+
+  const {
+    name: initName,
+    description: initDescription,
+    published: initPublished,
+    note: initNote,
+    disableOutOfStock: initDisableOutOfStock
+  } = initialValues;
+
+  const isUpdated = useMemo(() => {
+    const initialProductContent = {
+      name: initName,
+      description: initDescription,
+      published: initPublished,
+      note: initNote,
+      disableOutOfStock: initDisableOutOfStock
+    };
+    const currentProductContent = {
+      name,
+      description,
+      published: status === 'publish',
+      note,
+      disableOutOfStock
+    };
+    return !isEqual(initialProductContent, currentProductContent);
+  }, [
+    initName,
+    initDescription,
+    initPublished,
+    initNote,
+    initDisableOutOfStock,
+    name,
+    description,
+    status,
+    note,
+    disableOutOfStock
+  ]);
+
+  console.log({ isUpdated });
+
+  const renderSaveButton = () => {
+    if (isUpdated) {
+      return (
+        <div className="mt-8 flex justify-end border-t pt-4">
+          <Button
+          // loading={updating || creating}
+          // disabled={updating || creating}
+          >
+            <div className="mr-1">
+              <SaveIcon width="1.3rem" height="1.3rem" />
+            </div>
+            <div>{t('form:button-label-save')}</div>
+          </Button>
+        </div>
+      );
+    }
+    return null;
+  };
+
   return (
-    <Accordion isUpdated Title={() => <>{t('form:item-label-content')}</>}>
+    <Accordion
+      isUpdated={isUpdated}
+      Title={() => <>{t('form:item-label-content')}</>}
+    >
       <div className="flex flex-wrap my-5 sm:my-8">
         <Description
           details={`${
@@ -90,23 +170,11 @@ const ProductContent = ({ initialValues }) => {
               label={t('form:input-label-disable-out-of-stock')}
             />
           </div>
-          {!isEmpty(initialValues) && (
-            <div className="mt-8 flex justify-end border-t pt-4">
-              <Button
-              // loading={updating || creating}
-              // disabled={updating || creating}
-              >
-                <div className="mr-1">
-                  <SaveIcon width="1.3rem" height="1.3rem" />
-                </div>
-                <div>{t('form:button-label-save')}</div>
-              </Button>
-            </div>
-          )}
+          {renderSaveButton()}
         </Card>
       </div>
     </Accordion>
   );
 };
 
-export default ProductContent;
+export default memo(ProductContent);

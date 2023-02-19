@@ -10,7 +10,7 @@ import { Product } from '@ts-types/generated';
 import isEmpty from 'lodash/isEmpty';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 import slugify from 'slugify';
 
 type Props = {
@@ -25,21 +25,23 @@ const ProductSeo = ({ initialValues }: Props) => {
   const {
     getValues,
     setValue,
-    watch,
+    control,
     register,
     formState: { errors }
   } = useFormContext();
 
   const thumbnail =
-    watch('thumbnail') ?? !isEmpty(initialValues)
+    useWatch({ control, name: 'thumbnail' }) ?? !isEmpty(initialValues)
       ? getValues('thumbnail')
       : null;
   const metaImage =
-    watch('productSeo.metaImage') ?? !isEmpty(initialValues)
+    useWatch({ control, name: 'productSeo.metaImage' }) ??
+    !isEmpty(initialValues)
       ? getValues('productSeo.metaImage')
       : null;
   const slug =
-    watch('productSeo.slug') ?? !isEmpty(initialValues)
+    useWatch({ control, name: 'productSeo.slug', exact: true }) ??
+    !isEmpty(initialValues)
       ? getValues('productSeo.slug')
       : null;
 

@@ -8,7 +8,6 @@ const EditInfoIcon = ({ ...props }) => {
       height="1.3em"
       viewBox="0 0 24 24"
       {...props}
-      className="text-gray-600"
     >
       <path
         fill="currentColor"

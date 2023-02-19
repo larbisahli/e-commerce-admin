@@ -1,19 +1,22 @@
 import { SaveIcon } from '@components/icons/save-icon';
 import ImageModal from '@components/image-modal';
 import Button from '@components/ui/button';
+import { useDifferenceWith } from '@hooks/useDifferenceWith';
 import isEmpty from 'lodash/isEmpty';
 import { useTranslation } from 'next-i18next';
-import { useEffect, useState } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { memo, useEffect, useState } from 'react';
+import { useFormContext, useWatch } from 'react-hook-form';
 
 const ProductGallery = ({ initialValues }) => {
   const { t } = useTranslation();
 
-  const { getValues, setValue, watch } = useFormContext();
+  const { getValues, setValue, control } = useFormContext();
   const [gallery, setGallery] = useState([]);
-  const watchGallery = watch('gallery');
+  const watchGallery = useWatch({ control, name: 'gallery', exact: true });
 
   useEffect(() => {
+    // When the initialValues is not empty the watchThumbnail
+    // doesn't initially update itself
     if (!isEmpty(initialValues) && isEmpty(watchGallery)) {
       setGallery(getValues('gallery'));
     } else {
@@ -21,15 +24,14 @@ const ProductGallery = ({ initialValues }) => {
     }
   }, [getValues, initialValues, watchGallery]);
 
-  return (
-    <div>
-      <ImageModal
-        onSelect={(photo) => setValue('gallery', photo)}
-        selected={gallery}
-        modalId="gallery"
-        label="form:label-add-product-images"
-      />
-      {!isEmpty(initialValues) && (
+  const { additions, deletions } = useDifferenceWith(
+    gallery,
+    initialValues?.gallery
+  );
+
+  const renderSaveButton = () => {
+    if (!isEmpty(additions) || !isEmpty(deletions)) {
+      return (
         <div className="mt-3 flex justify-end border-t pt-4">
           <Button
           // loading={updating || creating}
@@ -41,9 +43,22 @@ const ProductGallery = ({ initialValues }) => {
             <div>{t('form:button-label-save')}</div>
           </Button>
         </div>
-      )}
+      );
+    }
+    return null;
+  };
+
+  return (
+    <div>
+      <ImageModal
+        onSelect={(photo) => setValue('gallery', photo)}
+        selected={gallery}
+        modalId="gallery"
+        label="form:label-add-product-images"
+      />
+      {renderSaveButton()}
     </div>
   );
 };
 
-export default ProductGallery;
+export default memo(ProductGallery);

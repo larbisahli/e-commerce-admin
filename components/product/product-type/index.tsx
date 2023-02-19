@@ -2,7 +2,7 @@ import Accordion from '@components/ui/accordion';
 import { Product, ProductType } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
 import React from 'react';
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 
 import ProductSimpleForm from '../product-simple-form';
 import ProductVariableForm from '../product-variable-form';
@@ -21,32 +21,41 @@ const ProductTypeComponent = ({
 }: Props) => {
   const { t } = useTranslation();
 
-  const { getValues, watch } = useFormContext();
+  const { getValues, control } = useFormContext();
 
-  const currentProductType = watch('type');
+  const type = useWatch({ control, name: 'type' }) ?? getValues('type');
 
-  const type = currentProductType?.id ?? getValues('type');
+  const renderSimpleForm = () => {
+    if (type?.id === ProductType.Simple) {
+      return <ProductSimpleForm initialValues={initialValues} />;
+    }
+    return null;
+  };
+
+  const renderVariationForm = () => {
+    if (type?.id === ProductType.Variable) {
+      return (
+        <ProductVariableForm
+          initialValues={initialValues}
+          variationState={variationState}
+          dispatchVariationState={dispatchVariationState}
+        />
+      );
+    }
+    return null;
+  };
+
+  const renderTitle = () => {
+    if (type?.id === ProductType.Variable) {
+      return <>{t('form:form-title-variation-product-info')}</>;
+    }
+    return <>{t('form:form-title-simple-product-info')}</>;
+  };
 
   return (
-    <Accordion
-      Title={() => (
-        <>
-          {type === ProductType.Simple
-            ? t('form:form-title-simple-product-info')
-            : t('form:form-title-variation-product-info')}
-        </>
-      )}
-    >
-      {!!type &&
-        (type === ProductType.Simple ? (
-          <ProductSimpleForm initialValues={initialValues} />
-        ) : (
-          <ProductVariableForm
-            initialValues={initialValues}
-            variationState={variationState}
-            dispatchVariationState={dispatchVariationState}
-          />
-        ))}
+    <Accordion Title={() => renderTitle()}>
+      {renderSimpleForm()}
+      {renderVariationForm()}
     </Accordion>
   );
 };

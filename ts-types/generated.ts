@@ -117,8 +117,8 @@ export interface StaffType extends CreatedUpdatedByAt {
 }
 
 export interface Category extends CreatedUpdatedByAt {
-  id?: Scalars['ID'];
-  parentId?: Nullable<Scalars['ID']>;
+  id?: Scalars['Int'];
+  parentId?: Nullable<Scalars['Int']>;
   name?: Scalars['String'];
   description?: Nullable<Scalars['String']>;
   children?: Nullable<Array<CategoryRef>>;
@@ -130,8 +130,8 @@ export interface Category extends CreatedUpdatedByAt {
 }
 
 export interface CategoryRef extends CreatedUpdatedByAt {
-  id?: Scalars['ID'];
-  parentId?: Nullable<Scalars['ID']>;
+  id?: Scalars['Int'];
+  parentId?: Nullable<Scalars['Int']>;
   name?: Scalars['String'];
   description?: Nullable<Scalars['String']>;
   active?: Scalars['Boolean'];
@@ -141,8 +141,8 @@ export interface CategoryRef extends CreatedUpdatedByAt {
 }
 
 export interface ProductShippingInfo {
-  id?: Scalars['ID'];
-  productId?: Scalars['ID'];
+  id?: Scalars['Int'];
+  productId?: Scalars['Int'];
   weight?: Scalars['Int'];
   weightUnit?: { unit: Scalars['String'] };
   volume?: Scalars['Int'];
@@ -154,26 +154,26 @@ export interface ProductShippingInfo {
 }
 
 export interface AttributeValue {
-  id?: Scalars['ID'];
-  attributeId?: Scalars['ID'];
+  id?: Scalars['Int'];
+  attributeId?: Scalars['Int'];
   value?: Scalars['String'];
   color?: Nullable<Scalars['String']>;
 }
 
 export interface Attribute extends CreatedUpdatedByAt {
-  id?: Scalars['ID'];
+  id?: Scalars['Int'];
   name?: Scalars['String'];
   values?: AttributeValue[] | [];
 }
 
 export interface Tag extends CreatedUpdatedByAt {
-  id?: Nullable<Scalars['ID']>;
+  id?: Nullable<Scalars['Int']>;
   name?: Nullable<Scalars['String']>;
   icon?: Nullable<Scalars['String']>;
 }
 
 export interface OrderStatus extends CreatedUpdatedByAt {
-  id?: Nullable<Scalars['ID']>;
+  id?: Nullable<Scalars['Int']>;
   name?: Nullable<Scalars['String']>;
   color?: Nullable<Scalars['String']>;
   privacy?: PrivacyType;
@@ -181,7 +181,7 @@ export interface OrderStatus extends CreatedUpdatedByAt {
 }
 
 export interface Coupon extends CreatedUpdatedByAt {
-  id?: Nullable<Scalars['ID']>;
+  id?: Nullable<Scalars['Int']>;
   code?: Nullable<Scalars['String']>;
   // description: Scalars['String'];
   // image: Scalars['String'];
@@ -200,7 +200,7 @@ export interface Coupon extends CreatedUpdatedByAt {
 
 export interface ShippingZoneType extends CreatedUpdatedByAt {
   shippingZone: {
-    id?: Scalars['ID'];
+    id?: Scalars['Int'];
     name?: Scalars['String'];
     displayName?: Scalars['String'];
     active?: Scalars['Boolean'];
@@ -212,7 +212,7 @@ export interface ShippingZoneType extends CreatedUpdatedByAt {
 }
 
 export interface ShippingRateType {
-  id?: Scalars['ID'];
+  id?: Scalars['Int'];
   weightUnit?: { unit: Scalars['String'] };
   minValue?: Scalars['Int'];
   maxValue?: Nullable<Scalars['Int']>;
@@ -222,8 +222,8 @@ export interface ShippingRateType {
 }
 
 export interface CountryType {
-  id?: Scalars['ID'];
-  zoneId?: Scalars['ID'];
+  id?: Scalars['Int'];
+  zoneId?: Scalars['Int'];
   currency?: Scalars['String'];
   name?: Scalars['String'];
   phone_code?: Scalars['String'];
@@ -257,7 +257,7 @@ export declare type LocationInput = {
 };
 
 export interface Product extends CreatedUpdatedByAt {
-  id?: Scalars['ID'];
+  id?: Scalars['Int'];
   slug?: Scalars['String'];
   name?: Scalars['String'];
   sku?: Nullable<Scalars['String']>;
@@ -291,7 +291,7 @@ export interface Product extends CreatedUpdatedByAt {
 }
 
 interface ProductRef {
-  id?: Scalars['ID'];
+  id?: Scalars['Int'];
   slug?: Scalars['String'];
   name?: Scalars['String'];
   sku?: Nullable<Scalars['String']>;
@@ -333,7 +333,7 @@ export interface VariationOptionsType {
 
 // Attachment
 export interface ImageType {
-  id?: Scalars['ID'];
+  id?: Scalars['Int'];
   image?: Scalars['String'];
   placeholder?: Scalars['String'];
   isThumbnail?: boolean;
@@ -341,7 +341,7 @@ export interface ImageType {
   size?: Scalars['Int'];
 }
 export interface Suppliers extends CreatedUpdatedByAt {
-  id?: Scalars['ID'];
+  id?: Scalars['Int'];
   name?: Scalars['String'];
   company?: Nullable<Scalars['String']>;
   phoneNumber?: Nullable<Scalars['String']>;
@@ -353,7 +353,7 @@ export interface Suppliers extends CreatedUpdatedByAt {
 }
 
 export interface HeroCarouselType extends CreatedUpdatedByAt {
-  id?: Scalars['ID'];
+  id?: Scalars['Int'];
   destinationUrl?: Nullable<Scalars['String']>;
   thumbnail?: ImageType[];
   title?: Scalars['String'];
