@@ -1,36 +1,28 @@
 import { SaveIcon } from '@components/icons/save-icon';
 import ImageModal from '@components/image-modal';
 import Button from '@components/ui/button';
-import { useDifferenceWith } from '@hooks/useDifferenceWith';
-import isEmpty from 'lodash/isEmpty';
+import { ImageType } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
-import { memo, useEffect, useState } from 'react';
-import { useFormContext, useWatch } from 'react-hook-form';
+import { memo } from 'react';
 
-const ProductThumbnail = ({ initialValues }) => {
+import { Actions, useForm } from '../context/form.context';
+
+const ProductThumbnail = () => {
   const { t } = useTranslation();
 
-  const { control, getValues, setValue } = useFormContext();
-  const [thumbnail, setThumbnail] = useState([]);
-  const watchThumbnail = useWatch({ control, name: 'thumbnail', exact: true });
+  const {
+    state: { thumbnail },
+    dispatch
+  } = useForm();
 
-  useEffect(() => {
-    // When the initialValues is not empty the watchThumbnail
-    // doesn't initially update itself
-    if (!isEmpty(initialValues) && isEmpty(watchThumbnail)) {
-      setThumbnail(getValues('thumbnail'));
-    } else {
-      setThumbnail(watchThumbnail);
-    }
-  }, [getValues, initialValues, watchThumbnail]);
-
-  const { additions, deletions } = useDifferenceWith(
-    thumbnail,
-    initialValues?.thumbnail
-  );
+  // const { additions, deletions } = useDifferenceWith(
+  //   thumbnail,
+  //   initialValues?.thumbnail
+  // );
 
   const renderSaveButton = () => {
-    if (!isEmpty(additions) || !isEmpty(deletions)) {
+    // eslint-disable-next-line no-constant-condition
+    if (false) {
       return (
         <div className="mt-3 flex justify-end border-t pt-4">
           <Button
@@ -48,13 +40,20 @@ const ProductThumbnail = ({ initialValues }) => {
     return null;
   };
 
+  const onSelect = (image: ImageType[]) => {
+    dispatch({
+      type: Actions.THUMBNAIL,
+      payload: {
+        field: 'thumbnail',
+        values: image
+      }
+    });
+  };
+
   return (
     <div>
       <ImageModal
-        onSelect={(photo) => {
-          console.log('thumbnail', photo);
-          setValue('thumbnail', photo);
-        }}
+        onSelect={onSelect}
         selected={thumbnail}
         isThumbnail
         modalId="thumbnail"

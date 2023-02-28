@@ -16,118 +16,56 @@ import {
 import { useFormError } from '@hooks/useFormError';
 import { notify } from '@lib/index';
 import type { Product } from '@ts-types/generated';
-import { ProductStatus, ProductType } from '@ts-types/generated';
+import { ProductType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
-import cloneDeep from 'lodash/cloneDeep';
 import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
-import { memo, useReducer, useState } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
+import { memo, useState } from 'react';
 
+import { FormProvider } from './context/form.context';
 import ProductContent from './product-content';
 import ProductGallery from './product-gallery';
 import ProductSelectGroup from './product-select-group';
 import ProductShippingInfoForm from './product-shipping-info';
 import ProductThumbnail from './product-thumbnail';
 import ProductTypeComponent from './product-type';
+import ProductTypeFormComponent from './product-type/product-type-form';
 import { productValidationSchema } from './product-validation-schema';
 import ProductSeo from './products-seo';
 import Recommendations from './recommendations';
 import { creationVariable, updateVariable } from './variablesSubmission';
-import { variationsReducer } from './variations-reducer';
 
 type FormValues = Product;
-
-const defaultValues = {
-  name: '',
-  sku: '',
-  salePrice: 0,
-  comparePrice: 0,
-  buyingPrice: 0,
-  quantity: 0,
-  description: '',
-  type: { id: ProductType.Simple, name: 'Simple' },
-  status: ProductStatus.Draft,
-  disableOutOfStock: true,
-  note: '',
-  thumbnail: [],
-  gallery: [],
-  categories: [],
-  suppliers: [],
-  tags: [],
-  productShippingInfo: {
-    weight: 0,
-    weightUnit: { unit: 'kg', label: 'kg' },
-    volume: 0,
-    volumeUnit: { unit: 'l', label: 'L' },
-    dimensionWidth: 0,
-    dimensionHeight: 0,
-    dimensionDepth: 0,
-    dimensionUnit: { unit: 'l', label: 'L' }
-  },
-  productSeo: {
-    slug: '',
-    metaTitle: '',
-    metaKeywords: '',
-    metaDescription: '',
-    metaImage: []
-  },
-  relatedProducts: [],
-  upsellProducts: [],
-  crossSellProducts: []
-};
 
 type IProps = {
   initialValues?: Product | any;
 };
 
-const productTypes = [
-  { name: 'Simple Product', id: ProductType.Simple },
-  { name: 'Variable Product', id: ProductType.Variable }
-];
-
-function CreateOrUpdateProductForm({ initialValues }: IProps) {
+function CreateOrUpdateProductForm({ initialValues = {} }: IProps) {
   const { t } = useTranslation();
 
   const router = useRouter();
 
-  const [variationState, dispatchVariationState] = useReducer(
-    variationsReducer,
-    {
-      variations: [],
-      variationOptions: []
-    }
-  );
   const [error, setError] = useState(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [unsavedChanges, setUnsavedChanges] = useState(true);
   const [lockedSubmission, setLockedSubmission] = useState(false);
 
-  const methods = useForm<FormValues>({
-    resolver: yupResolver(productValidationSchema),
-    shouldUnregister: true,
-    //@ts-ignore
-    defaultValues: !isEmpty(initialValues)
-      ? cloneDeep({
-          ...initialValues,
-          status: initialValues?.published
-            ? ProductStatus.Publish
-            : ProductStatus.Draft,
-          type:
-            initialValues.type.id === ProductType.Simple
-              ? productTypes[0]
-              : productTypes[1]
-        })
-      : defaultValues
-  });
+  console.log('YUP', yupResolver(productValidationSchema));
 
-  const {
-    handleSubmit,
-    control,
-    reset,
-    formState: { errors }
-  } = methods;
+  // useEffect(()=>{
+  //   !isEmpty(initialValues) ? cloneDeep({
+  //     ...initialValues,
+  //     status: initialValues?.published
+  //       ? ProductStatus.Publish
+  //       : ProductStatus.Draft,
+  //     type:
+  //       initialValues?.type.id === ProductType.Simple
+  //         ? productTypes[0]
+  //         : productTypes[1]
+  //   }): defaultValues
+  // }, [initialValues])
 
   const { staffInfo } = useGetStaff();
   const csrfToken = staffInfo?.csrfToken;
@@ -141,7 +79,6 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
     onCompleted: (data: { createAttribute: Product }) => {
       if (!isEmpty(data)) {
         notify(t('common:successfully-created'), 'success');
-        reset();
         router.push(ROUTES.PRODUCTS);
       }
     }
@@ -162,9 +99,9 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
   });
 
   useErrorLogger(error);
-  useFormError(errors);
 
-  const onSubmit = async (_values: FormValues) => {
+  const onSubmit = async () => {
+    const _values = {};
     const isVariable = _values.type.id === ProductType.Variable;
     const values = {
       ..._values,
@@ -215,8 +152,8 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
           onClose={() => setErrorMessage(null)}
         />
       ) : null}
-      <FormProvider {...methods}>
-        <form onSubmit={handleSubmit(onSubmit)} noValidate>
+      <FormProvider>
+        <form onSubmit={onSubmit} noValidate>
           {/* Thumbnail */}
           <div className="flex flex-wrap pb-8 border-b border-dashed border-border-base my-5 sm:my-8">
             <Description
@@ -225,7 +162,7 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
               className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
             />
             <Card className="w-full sm:w-8/12 md:w-2/3">
-              <ProductThumbnail initialValues={initialValues} />
+              <ProductThumbnail />
             </Card>
           </div>
           {/* Gallery */}
@@ -236,44 +173,18 @@ function CreateOrUpdateProductForm({ initialValues }: IProps) {
               className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
             />
             <Card className="w-full sm:w-8/12 md:w-2/3">
-              <ProductGallery initialValues={initialValues} />
+              <ProductGallery />
             </Card>
           </div>
 
           {/* Product Type */}
-
-          <div className="flex flex-wrap pb-8 border-b border-dashed border-border-base my-5 sm:my-8">
-            <Description
-              title={t('form:form-title-product-type')}
-              details={`${
-                initialValues
-                  ? t('form:item-description-edit')
-                  : t('form:item-description-add')
-              } ${t('form:product-type-help-text')}`}
-              className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
-            />
-            <Card className="w-full sm:w-8/12 md:w-2/3">
-              <Label>{t('form:form-title-product-type')}</Label>
-              <SelectInput
-                name={`type`}
-                control={control}
-                hideSelectedOptions={false}
-                getOptionLabel={(option: any) => option.name}
-                getOptionValue={(option: any) => option.id}
-                options={productTypes}
-              />
-            </Card>
-          </div>
+          <ProductTypeComponent initialValues={initialValues} />
           {/* Content */}
           <ProductContent initialValues={initialValues} />
-          {/* Variation Type & Simple Type */}
-          <ProductTypeComponent
-            initialValues={initialValues}
-            variationState={variationState}
-            dispatchVariationState={dispatchVariationState}
-          />
+          {/* Variation Type & Simple Type product form */}
+          <ProductTypeFormComponent initialValues={initialValues} />
           {/* Tags, Category and Suppliers*/}
-          <ProductSelectGroup initialValues={initialValues} />
+          <ProductSelectGroup />
           {/* SEO */}
           <ProductSeo initialValues={initialValues} />
           {/* Related Products, Up-Sells, and Cross-Sells  */}

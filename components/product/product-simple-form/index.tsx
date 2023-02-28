@@ -6,21 +6,38 @@ import Input from '@components/ui/input';
 import { useSettings } from '@hooks/useSettings';
 import isEmpty from 'lodash/isEmpty';
 import { useTranslation } from 'next-i18next';
-import { memo } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { ChangeEvent, memo } from 'react';
+
+import { Actions, useForm } from '../context/form.context';
 
 type IProps = {
   initialValues: any;
 };
 
 function ProductSimpleForm({ initialValues }: IProps) {
-  const {
-    register,
-    formState: { errors }
-  } = useFormContext();
   const { t } = useTranslation();
 
+  const {
+    state: { salePrice, comparePrice, buyingPrice, quantity, sku },
+    dispatch
+  } = useForm();
+
   const { currency } = useSettings();
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type } = e.target;
+
+    const inputValue =
+      type === 'number' ? (Number(value) < 0 ? 0 : Number(value)) : value;
+
+    dispatch({
+      type: Actions.CONTENT,
+      payload: {
+        field: name,
+        value: inputValue
+      }
+    });
+  };
 
   return (
     <div className="flex flex-wrap pb-8 my-5 sm:my-8">
@@ -36,46 +53,52 @@ function ProductSimpleForm({ initialValues }: IProps) {
       <Card className="w-full sm:w-8/12 md:w-2/3">
         <Input
           label={`${t('form:input-label-sale-price')} (${currency.symbol})`}
-          {...register('salePrice')}
+          name="salePrice"
+          value={salePrice}
+          onChange={handleChange}
           type="number"
-          min={0}
-          error={t(errors.salePrice?.message!)}
+          // error={t(errors.salePrice?.message!)}
           variant="outline"
           className="mb-5"
         />
         <Input
           label={`${t('form:input-label-compare-price')} (${currency.symbol})`}
-          {...register('comparePrice')}
+          name="comparePrice"
+          value={comparePrice}
+          onChange={handleChange}
           type="number"
-          min={0}
-          error={t(errors.comparePrice?.message!)}
+          // error={t(errors.comparePrice?.message!)}
           variant="outline"
           className="mb-5"
         />
         <Input
           label={`${t('form:input-label-buying-price')} (${currency.symbol})`}
-          {...register('buyingPrice')}
+          name="buyingPrice"
+          value={buyingPrice}
+          onChange={handleChange}
           type="number"
-          min={0}
-          error={t(errors.buyingPrice?.message!)}
+          // error={t(errors.buyingPrice?.message!)}
           variant="outline"
           className="mb-5"
         />
         <Input
           label={`${t('form:input-label-total-quantity')}*`}
+          name="quantity"
+          value={quantity}
+          onChange={handleChange}
           type="number"
-          min={0}
-          {...register('quantity')}
-          error={t(errors.quantity?.message!)}
+          // error={t(errors.quantity?.message!)}
           variant="outline"
           className="mb-5"
         />
 
         <Input
           label={t('form:input-label-sku')}
-          {...register('sku')}
+          name="sku"
+          value={sku}
+          onChange={handleChange}
           placeholder="LEV-JN-BL-WM"
-          error={t(errors.sku?.message!)}
+          // error={t(errors.sku?.message!)}
           variant="outline"
           className="mb-5"
         />

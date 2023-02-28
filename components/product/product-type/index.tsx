@@ -1,62 +1,64 @@
-import Accordion from '@components/ui/accordion';
+import Card from '@components/common/card';
+import Description from '@components/ui/description';
+import Label from '@components/ui/label';
+import Select from '@components/ui/select/select';
 import { Product, ProductType } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
 import React from 'react';
-import { useFormContext, useWatch } from 'react-hook-form';
 
-import ProductSimpleForm from '../product-simple-form';
-import ProductVariableForm from '../product-variable-form';
-import { VariationAction, VariationReducerType } from '../variations-reducer';
+import { Actions, useForm } from '../context/form.context';
 
 type Props = {
   initialValues: Product | any;
-  variationState?: VariationReducerType;
-  dispatchVariationState?: React.Dispatch<VariationAction>;
 };
 
-const ProductTypeComponent = ({
-  initialValues,
-  variationState,
-  dispatchVariationState
-}: Props) => {
+const productTypes = [
+  { name: 'Simple Product', id: ProductType.Simple },
+  { name: 'Variable Product', id: ProductType.Variable }
+];
+
+const ProductTypeComponent = ({ initialValues }: Props) => {
   const { t } = useTranslation();
 
-  const { getValues, control } = useFormContext();
+  const {
+    state: { type },
+    dispatch
+  } = useForm();
 
-  const type = useWatch({ control, name: 'type' }) ?? getValues('type');
-
-  const renderSimpleForm = () => {
-    if (type?.id === ProductType.Simple) {
-      return <ProductSimpleForm initialValues={initialValues} />;
-    }
-    return null;
-  };
-
-  const renderVariationForm = () => {
-    if (type?.id === ProductType.Variable) {
-      return (
-        <ProductVariableForm
-          initialValues={initialValues}
-          variationState={variationState}
-          dispatchVariationState={dispatchVariationState}
-        />
-      );
-    }
-    return null;
-  };
-
-  const renderTitle = () => {
-    if (type?.id === ProductType.Variable) {
-      return <>{t('form:form-title-variation-product-info')}</>;
-    }
-    return <>{t('form:form-title-simple-product-info')}</>;
+  const onChange = (value: Product['type']) => {
+    dispatch({
+      type: Actions.CONTENT,
+      payload: {
+        field: 'type',
+        value
+      }
+    });
   };
 
   return (
-    <Accordion Title={() => renderTitle()}>
-      {renderSimpleForm()}
-      {renderVariationForm()}
-    </Accordion>
+    <div className="flex flex-wrap pb-8 border-b border-dashed border-border-base my-5 sm:my-8">
+      <Description
+        title={t('form:form-title-product-type')}
+        details={`${
+          initialValues
+            ? t('form:item-description-edit')
+            : t('form:item-description-add')
+        } ${t('form:product-type-help-text')}`}
+        className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
+      />
+      <Card className="w-full sm:w-8/12 md:w-2/3">
+        <Label>{t('form:form-title-product-type')}</Label>
+        <Select
+          value={type}
+          name="type"
+          hideSelectedOptions={false}
+          getOptionLabel={(option: any) => option.name}
+          getOptionValue={(option: any) => option.id}
+          onChange={onChange}
+          options={productTypes}
+        />
+      </Card>
+    </div>
   );
 };
 

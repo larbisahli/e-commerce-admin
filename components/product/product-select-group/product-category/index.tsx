@@ -1,13 +1,13 @@
 import { useQuery } from '@apollo/client';
-import ValidationError from '@components/ui/form-validation-error';
+import { Actions, useForm } from '@components/product/context/form.context';
+// import ValidationError from '@components/ui/form-validation-error';
 import Label from '@components/ui/label';
-import SelectInput from '@components/ui/select-input';
+import Select from '@components/ui/select/select';
 import { CATEGORIES_FOR_SELECT_ALL } from '@graphql/category';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { Category, OrderBy } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
 import { memo } from 'react';
-import { useFormContext } from 'react-hook-form';
 
 interface TCategorySelect {
   categorySelectAll: Category[];
@@ -23,9 +23,9 @@ const ProductCategory = () => {
   const { t } = useTranslation('common');
 
   const {
-    formState: { errors },
-    control
-  } = useFormContext();
+    state: { categories },
+    dispatch
+  } = useForm();
 
   const { data, loading, error } = useQuery<TCategorySelect, OptionsVariable>(
     CATEGORIES_FOR_SELECT_ALL,
@@ -39,24 +39,33 @@ const ProductCategory = () => {
     }
   );
 
-  const { categorySelectAll: categories = [] } = data ?? {};
+  const { categorySelectAll: options = [] } = data ?? {};
 
   useErrorLogger(error);
+
+  const onChange = (values: Category[]) => {
+    dispatch({
+      type: Actions.CATEGORIES,
+      payload: {
+        values
+      }
+    });
+  };
 
   return (
     <div className="mb-5">
       <Label>{t('form:input-label-categories')}*</Label>
-      <SelectInput
+      <Select
+        options={options}
+        value={categories}
         name="categories"
         isMulti
-        control={control}
-        getOptionLabel={(option: Category) => option.name}
-        getOptionValue={(option: Category) => option.id}
-        options={categories}
+        getOptionLabel={(option: any) => option.name}
+        getOptionValue={(option: any) => option.id}
+        onChange={onChange}
         isLoading={loading}
       />
-      {/* @ts-ignore */}
-      <ValidationError message={t(errors.categories?.message)} />
+      {/* <ValidationError message={t(errors.categories?.message)} /> */}
     </div>
   );
 };

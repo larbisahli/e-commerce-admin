@@ -41,19 +41,22 @@ const ProductList = ({ products, selectedColumns }: IProps) => {
         key: 'thumbnail',
         align: alignLeft,
         width: 85,
-        render: (thumbnail: ImageType) => (
-          <div className="shadow min-w-0 overflow-hidden">
-            <ImageComponent
-              src={thumbnail?.image ?? siteSettings.product.image}
-              customPlaceholder={
-                thumbnail?.placeholder ?? siteSettings.product.placeholder
-              }
-              layout="fill"
-              objectFit="contain"
-              className="overflow-hidden"
-            />
-          </div>
-        )
+        render: (thumbnail: ImageType) => {
+          const { image, placeholder } = thumbnail[0] ?? {};
+          return (
+            <div className="shadow min-w-0 overflow-hidden rounded-sm w-[65px] h-[65px] border">
+              <ImageComponent
+                src={image ?? siteSettings.product.image}
+                customPlaceholder={
+                  placeholder ?? siteSettings.product.placeholder
+                }
+                width={100}
+                height={100}
+                objectFit="cover"
+              />
+            </div>
+          );
+        }
       },
       {
         title: t('table:table-item-title'),

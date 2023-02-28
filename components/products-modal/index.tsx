@@ -20,7 +20,7 @@ import {
   UPSELL_PRODUCTS
 } from '@ts-types/constants';
 import { OrderBy, SortOrder } from '@ts-types/enums';
-import { ImageType, Product } from '@ts-types/generated';
+import { Product } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
 
@@ -48,8 +48,6 @@ const ProductModal = () => {
   );
   const [limit, setLimit] = useState({ id: 1, value: 10, label: 10 });
   const [orderBy, setOrder] = useState(OrderBy.CREATED_AT);
-
-  //  openModal(IMAGE_MODAL, modalId);
 
   const { data, loading, error, fetchMore } = useQuery<
     TProduct,

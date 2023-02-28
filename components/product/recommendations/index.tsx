@@ -12,8 +12,8 @@ import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { memo, useEffect } from 'react';
-import { useFormContext } from 'react-hook-form';
 
+import { Actions, useForm } from '../context/form.context';
 import CrossSellProducts from './cross-sell-products';
 import RelatedProducts from './related-products';
 import UpSellProducts from './up-sell-products';
@@ -35,7 +35,7 @@ interface productVariable {
 const Recommendations = ({ initialValues }: Props) => {
   const { t } = useTranslation('common');
 
-  const { setValue } = useFormContext();
+  const { dispatch } = useForm();
 
   const { query } = useRouter();
 
@@ -58,10 +58,32 @@ const Recommendations = ({ initialValues }: Props) => {
       crossSellProducts = [],
       upsellProducts = []
     } = data ?? {};
-    setValue('relatedProducts', relatedProducts);
-    setValue('crossSellProducts', crossSellProducts);
-    setValue('upsellProducts', upsellProducts);
-  }, [data, setValue]);
+
+    // relatedProducts
+    dispatch({
+      type: Actions.INSERT_PRODUCT_LIST,
+      payload: {
+        field: 'relatedProducts',
+        values: relatedProducts
+      }
+    });
+    // crossSellProducts
+    dispatch({
+      type: Actions.INSERT_PRODUCT_LIST,
+      payload: {
+        field: 'crossSellProducts',
+        values: crossSellProducts
+      }
+    });
+    // upsellProducts
+    dispatch({
+      type: Actions.INSERT_PRODUCT_LIST,
+      payload: {
+        field: 'upsellProducts',
+        values: upsellProducts
+      }
+    });
+  }, [data, dispatch]);
 
   return (
     <Accordion
@@ -76,13 +98,13 @@ const Recommendations = ({ initialValues }: Props) => {
         />
         <Card className="w-full sm:w-8/12 md:w-2/3">
           <div className="m-4">
-            <RelatedProducts initialValues={initialValues} />
+            <RelatedProducts />
           </div>
           <div className="m-4">
-            <UpSellProducts initialValues={initialValues} />
+            <UpSellProducts />
           </div>
           <div className="m-4">
-            <CrossSellProducts initialValues={initialValues} />
+            <CrossSellProducts />
           </div>
           <ProductModal />
           {!isEmpty(initialValues) && (

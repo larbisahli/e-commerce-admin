@@ -9,14 +9,8 @@ import Title from '@components/ui/title';
 import { ATTRIBUTES_FOR_SELECT } from '@graphql/attribute';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import type { Product, VariationType } from '@ts-types/generated';
-import {
-  Attribute,
-  OrderBy,
-  SortOrder,
-  VariationActions
-} from '@ts-types/generated';
+import { Attribute, OrderBy, SortOrder } from '@ts-types/generated';
 import { cartesian } from '@utils/cartesian';
-import cloneDeep from 'lodash/cloneDeep';
 import differenceWith from 'lodash/differenceWith';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
@@ -25,23 +19,14 @@ import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
 import React, { memo, useEffect, useMemo, useState } from 'react';
 
-import {
-  VariationAction,
-  VariationReducerType,
-  VariationTypeExtra
-} from '../variations-reducer';
+import { useForm } from '../context/form.context';
+import { Actions } from '../context/form.types';
 import CartesianProductComponent from './cartesian-product-component';
 
 const Select = dynamic(() => import('@components/ui/select/select'), {
   loading: () => <Loader height="100px" showText={false} />,
   ssr: false
 });
-
-type IProps = {
-  initialValues?: Product | null;
-  variationState?: VariationReducerType;
-  dispatchVariationState?: React.Dispatch<VariationAction>;
-};
 
 interface TAttributeSelect {
   attributes: Attribute[];
@@ -76,12 +61,17 @@ function getCartesianProduct(values: VariationType[]) {
   return cartesian<CartesianType[][]>(...formattedValues) as CartesianType[][];
 }
 
-function ProductVariableForm({
-  initialValues,
-  variationState,
-  dispatchVariationState
-}: IProps) {
+type IProps = {
+  initialValues?: Product | null;
+};
+
+function ProductVariableForm({ initialValues }: IProps) {
   const { t } = useTranslation();
+
+  const {
+    state: { variationOptions, variations },
+    dispatch
+  } = useForm();
 
   const { data, loading, error } = useQuery<TAttributeSelect, OptionsVariable>(
     ATTRIBUTES_FOR_SELECT,
@@ -102,9 +92,6 @@ function ProductVariableForm({
     useState([]);
   const [cartesianProduct, setCartesianProduct] = useState([]);
   const [init, setInit] = useState(false);
-
-  const variations = variationState.variations;
-  const variationOptions = variationState.variationOptions;
 
   const { attributes = [] } = data ?? {};
 
@@ -133,36 +120,36 @@ function ProductVariableForm({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [attributeValuesChanges, attributeValuesChangesState]);
 
-  useEffect(() => {
-    if (
-      isEmpty(variationOptions) &&
-      !isEmpty(initialValues?.variationOptions)
-    ) {
-      const variationOptions = cloneDeep(initialValues?.variationOptions ?? []);
-      const variations = cloneDeep(initialValues?.variations ?? []);
-      dispatchVariationState({
-        type: VariationActions.INIT,
-        payload: {
-          value: {
-            variations: variations?.map((variation) => {
-              return {
-                id: nanoid(),
-                ...variation
-              };
-            }),
-            variationOptions
-          }
-        }
-      });
-    } else if (isEmpty(initialValues?.variationOptions)) {
-      setInit(true);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (
+  //     isEmpty(variationOptions) &&
+  //     !isEmpty(initialValues?.variationOptions)
+  //   ) {
+  //     const variationOptions = cloneDeep(initialValues?.variationOptions ?? []);
+  //     const variations = cloneDeep(initialValues?.variations ?? []);
+  //     dispatchVariationState({
+  //       type: VariationActions.INIT,
+  //       payload: {
+  //         value: {
+  //           variations: variations?.map((variation) => {
+  //             return {
+  //               id: nanoid(),
+  //               ...variation
+  //             };
+  //           }),
+  //           variationOptions
+  //         }
+  //       }
+  //     });
+  //   } else if (isEmpty(initialValues?.variationOptions)) {
+  //     setInit(true);
+  //   }
+  // }, []);
 
   useEffect(() => {
     if (init) {
-      dispatchVariationState({
-        type: VariationActions.CARTESIAN,
+      dispatch({
+        type: Actions.VARIATION_CARTESIAN,
         payload: {
           values: cartesianProduct
         }
@@ -173,8 +160,8 @@ function ProductVariableForm({
 
   const appendVariant = (e: any) => {
     e.preventDefault();
-    dispatchVariationState({
-      type: VariationActions.APPEND_VARIATION,
+    dispatch({
+      type: Actions.APPEND_VARIATION,
       payload: {
         value: { id: nanoid(), attribute: attributes[0], selectedValues: [] }
       }
@@ -205,8 +192,7 @@ function ProductVariableForm({
                     variant,
                     attributes,
                     loading,
-                    index,
-                    dispatchVariationState
+                    index
                   }}
                 />
               );
@@ -238,7 +224,6 @@ function ProductVariableForm({
                   <CartesianProductComponent
                     key={index}
                     variationOption={variationOption}
-                    dispatchVariationState={dispatchVariationState}
                     index={index}
                   />
                 );
@@ -265,25 +250,25 @@ function ProductVariableForm({
 }
 
 interface VCProps {
-  variant: VariationTypeExtra;
+  variant: VariationType;
   attributes: Attribute[];
   index: number;
   loading: boolean;
-  dispatchVariationState: React.Dispatch<VariationAction>;
 }
 
 const VariationComponent = ({
   variant,
   index,
   attributes,
-  loading,
-  dispatchVariationState
+  loading
 }: VCProps) => {
   const { t } = useTranslation();
 
+  const { dispatch } = useForm();
+
   const remove = () => {
-    dispatchVariationState({
-      type: VariationActions.REMOVE_VARIATION,
+    dispatch({
+      type: Actions.REMOVE_VARIATION,
       payload: {
         id: variant.id
       }
@@ -291,8 +276,8 @@ const VariationComponent = ({
   };
 
   const changeAttribute = (attribute) => {
-    dispatchVariationState({
-      type: VariationActions.CHANGE_VARIATION,
+    dispatch({
+      type: Actions.CHANGE_VARIATION,
       payload: {
         value: attribute,
         id: variant.id
@@ -301,8 +286,8 @@ const VariationComponent = ({
   };
 
   const changeValues = (values) => {
-    dispatchVariationState({
-      type: VariationActions.CHANGE_VARIATION_VALUES,
+    dispatch({
+      type: Actions.CHANGE_VARIATION_VALUES,
       payload: {
         values,
         id: variant.id
@@ -326,7 +311,7 @@ const VariationComponent = ({
         <button
           onClick={remove}
           type="button"
-          className="text-sm text-red-500 hover:text-red-700 
+          className="text-sm text-red-500 hover:text-red-700
           transition-colors duration-200 focus:outline-none"
         >
           {t('form:button-label-remove')}

@@ -1,36 +1,23 @@
 import { SaveIcon } from '@components/icons/save-icon';
 import ImageModal from '@components/image-modal';
 import Button from '@components/ui/button';
-import { useDifferenceWith } from '@hooks/useDifferenceWith';
-import isEmpty from 'lodash/isEmpty';
+import { ImageType } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
-import { memo, useEffect, useState } from 'react';
-import { useFormContext, useWatch } from 'react-hook-form';
+import { memo } from 'react';
 
-const ProductGallery = ({ initialValues }) => {
+import { Actions, useForm } from '../context/form.context';
+
+const ProductGallery = () => {
   const { t } = useTranslation();
 
-  const { getValues, setValue, control } = useFormContext();
-  const [gallery, setGallery] = useState([]);
-  const watchGallery = useWatch({ control, name: 'gallery', exact: true });
-
-  useEffect(() => {
-    // When the initialValues is not empty the watchThumbnail
-    // doesn't initially update itself
-    if (!isEmpty(initialValues) && isEmpty(watchGallery)) {
-      setGallery(getValues('gallery'));
-    } else {
-      setGallery(watchGallery);
-    }
-  }, [getValues, initialValues, watchGallery]);
-
-  const { additions, deletions } = useDifferenceWith(
-    gallery,
-    initialValues?.gallery
-  );
+  const {
+    state: { gallery },
+    dispatch
+  } = useForm();
 
   const renderSaveButton = () => {
-    if (!isEmpty(additions) || !isEmpty(deletions)) {
+    // eslint-disable-next-line no-constant-condition
+    if (false) {
       return (
         <div className="mt-3 flex justify-end border-t pt-4">
           <Button
@@ -48,10 +35,20 @@ const ProductGallery = ({ initialValues }) => {
     return null;
   };
 
+  const onSelect = (images: ImageType[]) => {
+    dispatch({
+      type: Actions.GALLERY,
+      payload: {
+        field: 'gallery',
+        values: images
+      }
+    });
+  };
+
   return (
     <div>
       <ImageModal
-        onSelect={(photo) => setValue('gallery', photo)}
+        onSelect={onSelect}
         selected={gallery}
         modalId="gallery"
         label="form:label-add-product-images"

@@ -35,13 +35,10 @@ const HeroCarouselList = ({ heroCarouselList, selectedColumns }: IProps) => {
         title: t('table:table-item-thumbnail'),
         dataIndex: 'thumbnail',
         key: 'thumbnail',
-        align: alignLeft,
-        width: 150,
+        align: 'center',
+        width: 130,
         render: (thumbnail: { image: string; placeholder: string }) => (
-          <div
-            style={{ maxWidth: '100px' }}
-            className="rounded shadow min-w-0 overflow-hidden"
-          >
+          <div className="shadow min-w-0 overflow-hidden rounded-sm w-[120px] h-[65px] border">
             <ImageComponent
               src={
                 !isEmpty(thumbnail)
@@ -53,9 +50,9 @@ const HeroCarouselList = ({ heroCarouselList, selectedColumns }: IProps) => {
                   ? thumbnail[0]?.placeholder
                   : siteSettings.product.placeholder
               }
-              layout="fill"
-              objectFit="contain"
-              className="rounded"
+              width={120}
+              height={65}
+              objectFit="cover"
             />
           </div>
         )

@@ -1,45 +1,46 @@
+import { Actions, useForm } from '@components/product/context/form.context';
 import Button from '@components/ui/button';
 import {
   useModalAction,
   useModalState
 } from '@components/ui/modal/modal.context';
 import { PRODUCT_MODAL, UPSELL_PRODUCTS } from '@ts-types/constants';
-import { Product } from '@ts-types/generated';
 import isEmpty from 'lodash/isEmpty';
 import { useTranslation } from 'next-i18next';
 import { memo, useEffect } from 'react';
-import { useFormContext, useWatch } from 'react-hook-form';
 
 import ProductList from '../../product-list';
 
-interface Props {
-  initialValues: Product | any;
-}
-
-const UpSellProducts = ({ initialValues }: Props) => {
+const UpSellProducts = () => {
   const { t } = useTranslation();
 
-  const { setValue, getValues, control } = useFormContext();
+  const {
+    state: { upsellProducts },
+    dispatch
+  } = useForm();
 
   const { openModal } = useModalAction();
   const { id, meta } = useModalState();
 
-  const selectedProducts =
-    useWatch({ control, name: 'upsellProducts' }) ?? !isEmpty(initialValues)
-      ? getValues('upsellProducts')
-      : [];
-
   const handleClick = (e) => {
     e.preventDefault();
-    openModal(PRODUCT_MODAL, UPSELL_PRODUCTS, { selectedProducts });
+    openModal(PRODUCT_MODAL, UPSELL_PRODUCTS, {
+      selectedProducts: upsellProducts
+    });
   };
 
   useEffect(() => {
     const { selectedProducts = [] } = meta ?? {};
     if (id === UPSELL_PRODUCTS) {
-      setValue('upsellProducts', selectedProducts);
+      dispatch({
+        type: Actions.INSERT_PRODUCT_LIST,
+        payload: {
+          field: 'upsellProducts',
+          values: selectedProducts
+        }
+      });
     }
-  }, [id, meta, setValue]);
+  }, [dispatch, id, meta]);
 
   return (
     <>
@@ -64,10 +65,10 @@ const UpSellProducts = ({ initialValues }: Props) => {
           </Button>
         </div>
       </div>
-      {!isEmpty(selectedProducts) && (
+      {!isEmpty(upsellProducts) && (
         <div className="mt-5">
           <ProductList
-            products={selectedProducts}
+            products={upsellProducts}
             selectedColumns={[
               'thumbnail',
               'name',

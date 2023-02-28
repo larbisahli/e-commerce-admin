@@ -12,11 +12,11 @@ import Radio from '@components/ui/radio';
 import TextArea from '@components/ui/text-area';
 import { Nullable } from '@ts-types/custom.types';
 import { Product, ProductStatus } from '@ts-types/generated';
-import isEqual from 'lodash/isEqual';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
-import { memo, useMemo } from 'react';
-import { useFormContext, useWatch } from 'react-hook-form';
+import { ChangeEvent, memo } from 'react';
+
+import { Actions, useForm } from '../context/form.context';
 
 interface Props {
   initialValues: Nullable<Product>;
@@ -29,62 +29,12 @@ const Editor = dynamic(() => import('@components/ui/editor'), {
 
 const ProductContent = ({ initialValues }: Props) => {
   const { t } = useTranslation();
-
   const {
-    register,
-    formState: { errors },
-    getValues,
-    control
-  } = useFormContext();
+    state: { name, note, description, status, disableOutOfStock },
+    dispatch
+  } = useForm();
 
-  const name = useWatch({ control, name: 'name', exact: true });
-  const description =
-    useWatch({ control, name: 'description', exact: true }) ??
-    getValues('description');
-  const status = useWatch({ control, name: 'status', exact: true });
-  const note = useWatch({ control, name: 'note', exact: true });
-  const disableOutOfStock = useWatch({
-    control,
-    name: 'disableOutOfStock',
-    exact: true
-  });
-
-  const {
-    name: initName,
-    description: initDescription,
-    published: initPublished,
-    note: initNote,
-    disableOutOfStock: initDisableOutOfStock
-  } = initialValues;
-
-  const isUpdated = useMemo(() => {
-    const initialProductContent = {
-      name: initName,
-      description: initDescription,
-      published: initPublished,
-      note: initNote,
-      disableOutOfStock: initDisableOutOfStock
-    };
-    const currentProductContent = {
-      name,
-      description,
-      published: status === 'publish',
-      note,
-      disableOutOfStock
-    };
-    return !isEqual(initialProductContent, currentProductContent);
-  }, [
-    initName,
-    initDescription,
-    initPublished,
-    initNote,
-    initDisableOutOfStock,
-    name,
-    description,
-    status,
-    note,
-    disableOutOfStock
-  ]);
+  const isUpdated = false;
 
   console.log({ isUpdated });
 
@@ -107,6 +57,33 @@ const ProductContent = ({ initialValues }: Props) => {
     return null;
   };
 
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value, type } = e.target;
+
+    const inputValue =
+      type === 'checkbox' ? (e.target as HTMLInputElement)?.checked : value;
+
+    dispatch({
+      type: Actions.CONTENT,
+      payload: {
+        field: name,
+        value: inputValue
+      }
+    });
+  };
+
+  const handleEditorChange = (value) => {
+    dispatch({
+      type: Actions.CONTENT,
+      payload: {
+        field: 'description',
+        value
+      }
+    });
+  };
+
   return (
     <Accordion
       isUpdated={isUpdated}
@@ -125,8 +102,10 @@ const ProductContent = ({ initialValues }: Props) => {
         <Card className="w-full sm:w-8/12 md:w-2/3">
           <Input
             label={`${t('form:input-label-name')}*`}
-            {...register('name')}
-            error={t(errors.name?.message!)}
+            name="name"
+            value={name}
+            onChange={handleChange}
+            // error={t(errors.name?.message!)}
             placeholder="Title..."
             variant="outline"
             className="mb-5"
@@ -134,39 +113,48 @@ const ProductContent = ({ initialValues }: Props) => {
 
           <Label>{t('form:input-label-product-details')}*</Label>
           <Editor
-            control={control}
             name="description"
+            value={description}
+            onChange={handleEditorChange}
             className="mb-5"
             defaultValue=""
           />
-          <ValidationError message={t(errors.description?.message)} />
+          {/* <ValidationError message={t(errors.description?.message)} /> */}
           <TextArea
             label={t('form:item-hidden-note')}
-            {...register('note')}
+            name="note"
+            value={note}
+            onChange={handleChange}
             placeholder="Hidden note"
-            error={t(errors.note?.message!)}
+            // error={t(errors.note?.message!)}
             variant="outline"
             className="mb-5"
           />
           <div>
             <Label>{t('form:input-label-status')}</Label>
             <Radio
-              {...register('status')}
+              name="status"
+              onChange={handleChange}
               label={t('form:input-label-publish')}
               id={ProductStatus.Publish}
+              checked={ProductStatus.Publish === status}
               value={ProductStatus.Publish}
               className="mb-2"
             />
             <Radio
-              {...register('status')}
+              name="status"
+              onChange={handleChange}
               id={ProductStatus.Draft}
+              checked={ProductStatus.Draft === status}
               label={t('form:input-label-draft')}
               value={ProductStatus.Draft}
             />
           </div>
           <div className="my-5">
             <Checkbox
-              {...register('disableOutOfStock')}
+              name="disableOutOfStock"
+              onChange={handleChange}
+              checked={disableOutOfStock}
               label={t('form:input-label-disable-out-of-stock')}
             />
           </div>

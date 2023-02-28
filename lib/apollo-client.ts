@@ -32,7 +32,7 @@ const retryLink = new RetryLink({
 const apolloClient = new ApolloClient({
   link: from([retryLink, persistedQueriesLink.concat(httpLink)]),
   cache: new InMemoryCache({
-    addTypename: true
+    addTypename: false
   })
 });
 

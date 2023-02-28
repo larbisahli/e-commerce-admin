@@ -1,16 +1,12 @@
 import { useQuery } from '@apollo/client';
+import { Actions, useForm } from '@components/product/context/form.context';
 import Label from '@components/ui/label';
-import SelectInput from '@components/ui/select-input';
+import Select from '@components/ui/select/select';
 import { TAGS_FOR_SELECT } from '@graphql/tag';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { OrderBy, Product, Tag } from '@ts-types/generated';
+import { OrderBy, Tag } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
 import { memo } from 'react';
-import { Control, useFormContext } from 'react-hook-form';
-
-interface Props {
-  control: Control<Product, any>;
-}
 
 interface TagSelect {
   tagSelect: Tag[];
@@ -24,7 +20,11 @@ interface OptionsVariable {
 
 const ProductTag = () => {
   const { t } = useTranslation();
-  const { control } = useFormContext();
+
+  const {
+    state: { tags },
+    dispatch
+  } = useForm();
 
   const { data, loading, error } = useQuery<TagSelect, OptionsVariable>(
     TAGS_FOR_SELECT,
@@ -38,21 +38,30 @@ const ProductTag = () => {
     }
   );
 
-  const { tagSelect: tags = [] } = data ?? {};
+  const { tagSelect: options = [] } = data ?? {};
 
   useErrorLogger(error);
+
+  const onChange = (values: Tag[]) => {
+    dispatch({
+      type: Actions.TAGS,
+      payload: {
+        values
+      }
+    });
+  };
 
   return (
     <div>
       <Label>{t('sidebar-nav-item-tags')}</Label>
-      <SelectInput
+      <Select
+        options={options}
+        value={tags}
         name="tags"
         isMulti
-        control={control}
         getOptionLabel={(option: any) => option.name}
         getOptionValue={(option: any) => option.id}
-        // @ts-ignore
-        options={tags}
+        onChange={onChange}
         isLoading={loading}
       />
     </div>

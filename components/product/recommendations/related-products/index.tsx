@@ -1,45 +1,46 @@
+import { Actions, useForm } from '@components/product/context/form.context';
 import Button from '@components/ui/button';
 import {
   useModalAction,
   useModalState
 } from '@components/ui/modal/modal.context';
 import { PRODUCT_MODAL, RELATED_PRODUCTS } from '@ts-types/constants';
-import { Product } from '@ts-types/generated';
 import isEmpty from 'lodash/isEmpty';
 import { useTranslation } from 'next-i18next';
 import { memo, useEffect } from 'react';
-import { useFormContext, useWatch } from 'react-hook-form';
 
 import ProductList from '../../product-list';
 
-interface Props {
-  initialValues: Product | any;
-}
-
-const RelatedProducts = ({ initialValues }: Props) => {
+const RelatedProducts = () => {
   const { t } = useTranslation();
 
-  const { setValue, getValues, control } = useFormContext();
+  const {
+    state: { relatedProducts },
+    dispatch
+  } = useForm();
 
   const { openModal } = useModalAction();
   const { id, meta } = useModalState();
 
-  const selectedProducts =
-    useWatch({ control, name: 'relatedProducts' }) ?? !isEmpty(initialValues)
-      ? getValues('relatedProducts')
-      : [];
-
   const handleClick = (e) => {
     e.preventDefault();
-    openModal(PRODUCT_MODAL, RELATED_PRODUCTS, { selectedProducts });
+    openModal(PRODUCT_MODAL, RELATED_PRODUCTS, {
+      selectedProducts: relatedProducts
+    });
   };
 
   useEffect(() => {
     const { selectedProducts = [] } = meta ?? {};
     if (id === RELATED_PRODUCTS) {
-      setValue('relatedProducts', selectedProducts);
+      dispatch({
+        type: Actions.INSERT_PRODUCT_LIST,
+        payload: {
+          field: 'relatedProducts',
+          values: selectedProducts
+        }
+      });
     }
-  }, [id, meta, setValue]);
+  }, [dispatch, id, meta]);
 
   return (
     <>
@@ -63,10 +64,10 @@ const RelatedProducts = ({ initialValues }: Props) => {
           </Button>
         </div>
       </div>
-      {!isEmpty(selectedProducts) && (
+      {!isEmpty(relatedProducts) && (
         <div className="mt-5">
           <ProductList
-            products={selectedProducts}
+            products={relatedProducts}
             selectedColumns={[
               'thumbnail',
               'name',

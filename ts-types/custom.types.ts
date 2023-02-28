@@ -84,21 +84,21 @@ export type ModalView =
   | PRODUCT_MODAL_TYPE;
 
 export type CategoryQueryOptionsType = {
-  id?: Scalars['ID'];
+  id?: Scalars['Int'];
   limit?: number;
   orderBy?: string;
   sortedBy?: SortOrder;
 };
 
 export declare type AttributeQueryOptionsType = {
-  id?: Scalars['ID'];
+  id?: Scalars['Int'];
   limit?: number;
   orderBy?: string;
   sortedBy?: SortOrder;
 };
 
 export declare type AttributeValueQueryOptionsType = {
-  id?: Scalars['ID'];
+  id?: Scalars['Int'];
   attribute_id?: Scalars['String'];
   attribute_value?: Scalars['String'];
   color?: Nullable<Scalars['String']>;

@@ -9,9 +9,10 @@ import TextArea from '@components/ui/text-area';
 import { Product } from '@ts-types/generated';
 import isEmpty from 'lodash/isEmpty';
 import { useTranslation } from 'next-i18next';
-import { useEffect, useState } from 'react';
-import { useFormContext, useWatch } from 'react-hook-form';
+import { ChangeEvent, useEffect } from 'react';
 import slugify from 'slugify';
+
+import { Actions, useForm } from '../context/form.context';
 
 type Props = {
   initialValues: Product | any;
@@ -20,36 +21,27 @@ type Props = {
 const ProductSeo = ({ initialValues }: Props) => {
   const { t } = useTranslation();
 
-  const [metaDescriptionLength, setMetaDescriptionLength] = useState(0);
-
   const {
-    getValues,
-    setValue,
-    control,
-    register,
-    formState: { errors }
-  } = useFormContext();
-
-  const thumbnail =
-    useWatch({ control, name: 'thumbnail' }) ?? !isEmpty(initialValues)
-      ? getValues('thumbnail')
-      : null;
-  const metaImage =
-    useWatch({ control, name: 'productSeo.metaImage' }) ??
-    !isEmpty(initialValues)
-      ? getValues('productSeo.metaImage')
-      : null;
-  const slug =
-    useWatch({ control, name: 'productSeo.slug', exact: true }) ??
-    !isEmpty(initialValues)
-      ? getValues('productSeo.slug')
-      : null;
+    state: {
+      name: productName,
+      thumbnail,
+      productSeo: { slug, metaImage, metaTitle, metaKeywords, metaDescription },
+      productSeo
+    },
+    dispatch
+  } = useForm();
 
   useEffect(() => {
     if (isEmpty(metaImage)) {
-      setValue('productSeo.metaImage', thumbnail);
+      dispatch({
+        type: Actions.PRODUCT_SEO,
+        payload: {
+          field: 'metaImage',
+          value: thumbnail
+        }
+      });
     }
-  }, [metaImage, setValue, thumbnail]);
+  }, [dispatch, metaImage, thumbnail]);
 
   const generateSlug = (slug = '') => {
     return slugify(slug?.replace(/[^A-Za-z0-9\s!?]/g, '-') ?? '', {
@@ -61,9 +53,50 @@ const ProductSeo = ({ initialValues }: Props) => {
 
   useEffect(() => {
     const value = generateSlug(slug);
-    setValue('productSeo.slug', value);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [slug]);
+    dispatch({
+      type: Actions.PRODUCT_SEO,
+      payload: {
+        field: 'slug',
+        value
+      }
+    });
+  }, [dispatch, slug]);
+
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+
+    dispatch({
+      type: Actions.PRODUCT_SEO,
+      payload: {
+        field: name,
+        value
+      }
+    });
+  };
+
+  const handleImageChange = (photo) => {
+    dispatch({
+      type: Actions.PRODUCT_SEO,
+      payload: {
+        field: 'metaImage',
+        value: photo
+      }
+    });
+  };
+
+  const updateWhenEmpty = (field: string) => {
+    if (isEmpty(productSeo[field])) {
+      dispatch({
+        type: Actions.PRODUCT_SEO,
+        payload: {
+          field,
+          value: generateSlug(productName)
+        }
+      });
+    }
+  };
 
   return (
     <Accordion Title={() => t('form:form-title-seo')}>
@@ -75,50 +108,39 @@ const ProductSeo = ({ initialValues }: Props) => {
         <Card className="w-full sm:w-8/12 md:w-2/3">
           <Input
             label={`${t('form:input-label-meta-slug')}*`}
-            {...register('productSeo.slug')}
+            name="slug"
+            value={slug}
+            onChange={handleChange}
             placeholder="Slug..."
             variant="outline"
             className="mb-5"
-            onFocus={() => {
-              const productName = getValues('name');
-              const metaTitle = getValues('productSeo.slug');
-              if (isEmpty(metaTitle)) {
-                setValue('productSeo.slug', generateSlug(productName));
-              }
-            }}
+            onFocus={() => updateWhenEmpty('slug')}
           />
           <Input
             label={`${t('form:input-label-meta-title')}*`}
-            {...register('productSeo.metaTitle')}
+            name="metaTitle"
+            value={metaTitle}
+            onChange={handleChange}
             placeholder="Title..."
             variant="outline"
             className="mb-5"
-            onFocus={() => {
-              const productName = getValues('name');
-              const metaTitle = getValues('productSeo.metaTitle');
-              if (isEmpty(metaTitle)) {
-                setValue('productSeo.metaTitle', productName);
-              }
-            }}
+            onFocus={() => updateWhenEmpty('metaTitle')}
           />
           <TextArea
             label={`${t('form:input-label-meta-keywords')}*`}
-            // @ts-ignore
-            {...register('productSeo.metaKeywords')}
+            name="metaKeywords"
+            value={metaKeywords}
+            onChange={handleChange}
             variant="outline"
             className="mb-5"
             placeholder="Products, keywords, ..."
           />
           <TextArea
             label={`${t('form:item-meta-description')}*`}
-            // @ts-ignore
-            {...register('productSeo.metaDescription')}
-            onBlur={() =>
-              setMetaDescriptionLength(
-                getValues('productSeo.metaDescription')?.length
-              )
-            }
-            error={t(errors.productSeo?.metaDescription?.message!)}
+            name="metaDescription"
+            value={metaDescription}
+            onChange={handleChange}
+            // error={t(errors.productSeo?.metaDescription?.message!)}
             variant="outline"
           />
           <div
@@ -128,17 +150,19 @@ const ProductSeo = ({ initialValues }: Props) => {
             <p className="text-body mr-2">
               Meta Description should optimally be between 150-160 characters
             </p>
-            {metaDescriptionLength <= 160 ? (
-              <span className="text-green-600">{`(${metaDescriptionLength}/160 characters max)`}</span>
+            {metaDescription?.length < 160 ? (
+              <span className="text-green-600">{`(${
+                metaDescription?.length ?? 0
+              }/160 characters max)`}</span>
             ) : (
               <span className="text-red-600">
-                {`(${metaDescriptionLength}/160 characters max)`}
+                {`(${metaDescription?.length ?? 0}/160 characters max)`}
               </span>
             )}
           </div>
           <div className="my-5">
             <ImageModal
-              onSelect={(photo) => setValue('productSeo.metaImage', photo)}
+              onSelect={handleImageChange}
               isThumbnail
               selected={metaImage}
               modalId="metaImage"

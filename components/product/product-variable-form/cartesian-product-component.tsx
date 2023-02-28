@@ -5,26 +5,26 @@ import Input from '@components/ui/input';
 import Title from '@components/ui/title';
 import { useSettings } from '@hooks/useSettings';
 import type { ImageType, VariationOptionsType } from '@ts-types/generated';
-import { VariationActions } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
 import React, { memo, useMemo } from 'react';
 
-import { VariationAction } from '../variations-reducer';
+import { Actions, useForm } from '../context/form.context';
+import { ActionType } from '../context/form.types';
 
 interface CartesianProductProps {
   variationOption: VariationOptionsType;
-  dispatchVariationState?: React.Dispatch<VariationAction>;
   index: number;
 }
 
 const CartesianProductComponent = ({
   variationOption,
-  dispatchVariationState,
   index
 }: CartesianProductProps) => {
   const { t } = useTranslation();
 
   const { currency } = useSettings();
+
+  const { dispatch } = useForm();
 
   const options = useMemo(
     () => variationOption?.options,
@@ -40,8 +40,8 @@ const CartesianProductComponent = ({
     const value = target.type === 'checkbox' ? target['checked'] : target.value;
     const name = target.name;
 
-    dispatchVariationState({
-      type: VariationActions.CHANGE_VARIATION_OPTION,
+    dispatch({
+      type: Actions.CHANGE_VARIATION_OPTION,
       payload: {
         value: target.type === 'number' ? Number(value) : value,
         field: name,
@@ -51,8 +51,8 @@ const CartesianProductComponent = ({
   };
 
   const handleSelectedImage = (photo: ImageType[]) => {
-    dispatchVariationState({
-      type: VariationActions.CHANGE_VARIATION_OPTION,
+    dispatch({
+      type: Actions.CHANGE_VARIATION_OPTION,
       payload: {
         value: photo,
         field: 'thumbnail',

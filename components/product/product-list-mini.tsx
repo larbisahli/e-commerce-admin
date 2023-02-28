@@ -29,7 +29,7 @@ const ProductListMini = ({
         dataIndex: 'id',
         key: 'id',
         align: alignLeft,
-        width: 30,
+        width: 50,
         ellipsis: true,
         render: (id: string, record: Product) => (
           <Checkbox
@@ -50,24 +50,27 @@ const ProductListMini = ({
         )
       },
       {
-        title: t('table:table-item-image'),
+        title: t('table:table-item-thumbnail'),
         dataIndex: 'thumbnail',
         key: 'thumbnail',
-        align: 'center',
-        width: 50,
-        render: (thumbnail: ImageType) => (
-          <div className="shadow min-w-0 overflow-hidden">
-            <ImageComponent
-              src={thumbnail?.image ?? siteSettings.product.image}
-              customPlaceholder={
-                thumbnail?.placeholder ?? siteSettings.product.placeholder
-              }
-              layout="fill"
-              objectFit="contain"
-              className="overflow-hidden"
-            />
-          </div>
-        )
+        align: 'left',
+        width: 45,
+        render: (thumbnail: ImageType) => {
+          const { image, placeholder } = thumbnail[0] ?? {};
+          return (
+            <div className="shadow min-w-0 overflow-hidden rounded-sm w-[45px] h-[45px] border">
+              <ImageComponent
+                src={image ?? siteSettings.product.image}
+                customPlaceholder={
+                  placeholder ?? siteSettings.product.placeholder
+                }
+                width={100}
+                height={100}
+                objectFit="cover"
+              />
+            </div>
+          );
+        }
       },
       {
         title: t('table:table-item-title'),

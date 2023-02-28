@@ -1,45 +1,46 @@
+import { Actions, useForm } from '@components/product/context/form.context';
 import Button from '@components/ui/button';
 import {
   useModalAction,
   useModalState
 } from '@components/ui/modal/modal.context';
 import { CROSS_SELL_PRODUCTS, PRODUCT_MODAL } from '@ts-types/constants';
-import { Product } from '@ts-types/generated';
 import isEmpty from 'lodash/isEmpty';
 import { useTranslation } from 'next-i18next';
 import { memo, useEffect } from 'react';
-import { useFormContext, useWatch } from 'react-hook-form';
 
 import ProductList from '../../product-list';
 
-interface Props {
-  initialValues: Product | any;
-}
-
-const CrossSellProducts = ({ initialValues }: Props) => {
+const CrossSellProducts = () => {
   const { t } = useTranslation();
 
-  const { setValue, getValues, control } = useFormContext();
+  const {
+    state: { crossSellProducts },
+    dispatch
+  } = useForm();
 
   const { openModal } = useModalAction();
   const { id, meta } = useModalState();
 
-  const selectedProducts =
-    useWatch({ control, name: 'crossSellProducts' }) ?? !isEmpty(initialValues)
-      ? getValues('crossSellProducts')
-      : [];
-
   const handleClick = (e) => {
     e.preventDefault();
-    openModal(PRODUCT_MODAL, CROSS_SELL_PRODUCTS, { selectedProducts });
+    openModal(PRODUCT_MODAL, CROSS_SELL_PRODUCTS, {
+      selectedProducts: crossSellProducts
+    });
   };
 
   useEffect(() => {
     const { selectedProducts = [] } = meta ?? {};
     if (id === CROSS_SELL_PRODUCTS) {
-      setValue('crossSellProducts', selectedProducts);
+      dispatch({
+        type: Actions.INSERT_PRODUCT_LIST,
+        payload: {
+          field: 'crossSellProducts',
+          values: selectedProducts
+        }
+      });
     }
-  }, [id, meta, setValue]);
+  }, [dispatch, id, meta]);
 
   return (
     <>
@@ -60,10 +61,10 @@ const CrossSellProducts = ({ initialValues }: Props) => {
           </Button>
         </div>
       </div>
-      {!isEmpty(selectedProducts) && (
+      {!isEmpty(crossSellProducts) && (
         <div className="mt-5">
           <ProductList
-            products={selectedProducts}
+            products={crossSellProducts}
             selectedColumns={[
               'thumbnail',
               'name',

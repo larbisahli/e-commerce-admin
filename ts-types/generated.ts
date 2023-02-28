@@ -47,16 +47,6 @@ export declare enum WithdrawStatus {
   Processing = 'PROCESSING'
 }
 
-export enum VariationActions {
-  APPEND_VARIATION = 'APPEND_VARIATION',
-  CHANGE_VARIATION = 'CHANGE_VARIATION',
-  REMOVE_VARIATION = 'REMOVE_VARIATION',
-  CHANGE_VARIATION_VALUES = 'CHANGE_VARIATION_VALUES',
-  CHANGE_VARIATION_OPTION = 'CHANGE_VARIATION_OPTION',
-  INIT = 'INIT',
-  CARTESIAN = 'CARTESIAN'
-}
-
 export enum ShippingsActions {
   INSERT = 'INSERT',
   INIT = 'INIT',
@@ -312,18 +302,19 @@ export interface ProductSeo {
 }
 
 export interface VariationType {
+  id?: Scalars['Int'];
   attribute: Attribute;
   selectedValues: Array<Nullable<AttributeValue>>;
 }
 
 export interface VariationOptionsType {
-  id?: string;
+  id?: Scalars['Int'];
   title: string;
   key?: string;
   isDisable?: boolean;
   active?: boolean;
   thumbnail: ImageType[];
-  options: string[];
+  options: Scalars['Int'][];
   salePrice: Scalars['Float'];
   comparePrice: Scalars['Float'];
   buyingPrice: Scalars['Float'];

@@ -1,16 +1,12 @@
 import { useQuery } from '@apollo/client';
+import { Actions, useForm } from '@components/product/context/form.context';
 import Label from '@components/ui/label';
-import SelectInput from '@components/ui/select-input';
+import Select from '@components/ui/select/select';
 import { SUPPLIERS_FOR_SELECT } from '@graphql/supplier';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { OrderBy, Product, Suppliers } from '@ts-types/generated';
+import { OrderBy, Suppliers } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
 import { memo } from 'react';
-import { Control, useFormContext } from 'react-hook-form';
-
-interface Props {
-  control: Control<Product, any>;
-}
 
 interface TSupplierSelect {
   suppliersForSelect: Suppliers[];
@@ -24,7 +20,11 @@ interface OptionsVariable {
 
 const ProductSupplier = () => {
   const { t } = useTranslation();
-  const { control } = useFormContext();
+
+  const {
+    state: { suppliers },
+    dispatch
+  } = useForm();
 
   const { data, loading, error } = useQuery<TSupplierSelect, OptionsVariable>(
     SUPPLIERS_FOR_SELECT,
@@ -38,18 +38,30 @@ const ProductSupplier = () => {
     }
   );
 
+  const { suppliersForSelect: options = [] } = data ?? {};
+
   useErrorLogger(error);
+
+  const onChange = (values: Suppliers[]) => {
+    dispatch({
+      type: Actions.SUPPLIERS,
+      payload: {
+        values
+      }
+    });
+  };
 
   return (
     <div className="mb-5">
       <Label>{t('form:input-label-suppliers')}</Label>
-      <SelectInput
+      <Select
+        options={options}
+        value={suppliers}
         name="suppliers"
         isMulti
-        control={control}
         getOptionLabel={(option: any) => option.name}
         getOptionValue={(option: any) => option.id}
-        options={data?.suppliersForSelect ?? []}
+        onChange={onChange}
         isLoading={loading}
       />
     </div>
