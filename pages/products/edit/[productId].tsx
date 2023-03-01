@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client';
 import AppLayout from '@components/layouts/app';
-import CreateOrUpdateProductForm from '@components/product/product-form';
+import CreateOrUpdateProductForm from '@components/product';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { PRODUCT } from '@graphql/product';

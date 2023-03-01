@@ -8,8 +8,7 @@ import type { ImageType, VariationOptionsType } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
 import React, { memo, useMemo } from 'react';
 
-import { Actions, useForm } from '../context/form.context';
-import { ActionType } from '../context/form.types';
+import { Actions, useFormReducer } from '../context/form.context';
 
 interface CartesianProductProps {
   variationOption: VariationOptionsType;
@@ -24,7 +23,7 @@ const CartesianProductComponent = ({
 
   const { currency } = useSettings();
 
-  const { dispatch } = useForm();
+  const dispatch = useFormReducer();
 
   const options = useMemo(
     () => variationOption?.options,
@@ -84,6 +83,7 @@ const CartesianProductComponent = ({
             id={`salePrice-${index}`}
             name="salePrice"
             onChange={HandleInputChange}
+            min={0}
             value={variationOption.salePrice}
             // error={t(errors.variation_options?.[index]?.sale_price?.message)}
             variant="outline"
@@ -94,6 +94,7 @@ const CartesianProductComponent = ({
               currency.symbol
             })`}
             name="comparePrice"
+            min={0}
             onChange={HandleInputChange}
             value={variationOption.comparePrice}
             type="number"
@@ -105,6 +106,7 @@ const CartesianProductComponent = ({
             label={`${t('form:input-label-buying-price')} (${currency.symbol})`}
             type="number"
             name="buyingPrice"
+            min={0}
             onChange={HandleInputChange}
             value={variationOption.buyingPrice}
             // error={t(errors.variation_options?.[index]?.buying_price?.message)}
@@ -115,6 +117,7 @@ const CartesianProductComponent = ({
             label={`${t('form:input-label-quantity')}*`}
             type="number"
             name="quantity"
+            min={0}
             onChange={HandleInputChange}
             value={variationOption.quantity}
             // error={t(errors.variation_options?.[index]?.quantity?.message)}

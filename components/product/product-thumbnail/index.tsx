@@ -1,24 +1,24 @@
 import { SaveIcon } from '@components/icons/save-icon';
 import ImageModal from '@components/image-modal';
 import Button from '@components/ui/button';
-import { ImageType } from '@ts-types/generated';
+import { ImageType, Product } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
 import { memo } from 'react';
 
-import { Actions, useForm } from '../context/form.context';
+import { Actions, useFormReducer } from '../context/form.context';
 
-const ProductThumbnail = () => {
+interface Props {
+  state: {
+    thumbnail: Product['thumbnail'];
+  };
+}
+
+const ProductThumbnail = ({ state }: Props) => {
   const { t } = useTranslation();
 
-  const {
-    state: { thumbnail },
-    dispatch
-  } = useForm();
+  const dispatch = useFormReducer();
 
-  // const { additions, deletions } = useDifferenceWith(
-  //   thumbnail,
-  //   initialValues?.thumbnail
-  // );
+  const { thumbnail } = state;
 
   const renderSaveButton = () => {
     // eslint-disable-next-line no-constant-condition

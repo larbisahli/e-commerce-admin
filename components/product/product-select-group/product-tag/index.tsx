@@ -1,10 +1,13 @@
 import { useQuery } from '@apollo/client';
-import { Actions, useForm } from '@components/product/context/form.context';
+import {
+  Actions,
+  useFormReducer
+} from '@components/product/context/form.context';
 import Label from '@components/ui/label';
 import Select from '@components/ui/select/select';
 import { TAGS_FOR_SELECT } from '@graphql/tag';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { OrderBy, Tag } from '@ts-types/generated';
+import { OrderBy, Product, Tag } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
 import { memo } from 'react';
 
@@ -18,13 +21,10 @@ interface OptionsVariable {
   orderBy: OrderBy;
 }
 
-const ProductTag = () => {
+const ProductTag = ({ tags }: { tags: Product['tags'] }) => {
   const { t } = useTranslation();
 
-  const {
-    state: { tags },
-    dispatch
-  } = useForm();
+  const dispatch = useFormReducer();
 
   const { data, loading, error } = useQuery<TagSelect, OptionsVariable>(
     TAGS_FOR_SELECT,

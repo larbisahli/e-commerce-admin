@@ -1,35 +1,59 @@
 import Accordion from '@components/ui/accordion';
 import { Product, ProductType } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
-import React from 'react';
+import React, { memo } from 'react';
 
-import { useForm } from '../context/form.context';
 import ProductSimpleForm from '../product-simple-form';
 import ProductVariableForm from '../product-variable-form';
 
 type Props = {
   initialValues: Product | any;
+  state: {
+    type: Product['type'];
+    variationOptions: Product['variationOptions'];
+    variations: Product['variations'];
+    salePrice: Product['salePrice'];
+    comparePrice: Product['comparePrice'];
+    buyingPrice: Product['buyingPrice'];
+    quantity: Product['quantity'];
+    sku: Product['sku'];
+  };
 };
 
-const ProductTypeFormComponent = ({ initialValues }: Props) => {
+const ProductTypeFormComponent = ({ state, initialValues }: Props) => {
   const { t } = useTranslation();
 
   const {
-    state: {
-      type: { id: productType }
-    }
-  } = useForm();
+    type: { id: productType },
+    variationOptions,
+    variations,
+    salePrice,
+    comparePrice,
+    buyingPrice,
+    quantity,
+    sku
+  } = state;
 
   const renderSimpleForm = () => {
     if (productType === ProductType.Simple) {
-      return <ProductSimpleForm initialValues={initialValues} />;
+      return (
+        <ProductSimpleForm
+          state={{ salePrice, comparePrice, buyingPrice, quantity, sku }}
+          initialValues={initialValues}
+        />
+      );
     }
     return null;
   };
 
   const renderVariationForm = () => {
     if (productType === ProductType.Variable) {
-      return <ProductVariableForm initialValues={initialValues} />;
+      return (
+        <ProductVariableForm
+          state={{ variationOptions, variations }}
+          initialValues={initialValues}
+        />
+      );
     }
     return null;
   };
@@ -49,4 +73,4 @@ const ProductTypeFormComponent = ({ initialValues }: Props) => {
   );
 };
 
-export default ProductTypeFormComponent;
+export default memo(ProductTypeFormComponent);

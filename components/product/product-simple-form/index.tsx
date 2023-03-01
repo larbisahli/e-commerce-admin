@@ -4,25 +4,31 @@ import Button from '@components/ui/button';
 import Description from '@components/ui/description';
 import Input from '@components/ui/input';
 import { useSettings } from '@hooks/useSettings';
+import { Product } from '@ts-types/generated';
 import isEmpty from 'lodash/isEmpty';
 import { useTranslation } from 'next-i18next';
 import { ChangeEvent, memo } from 'react';
 
-import { Actions, useForm } from '../context/form.context';
+import { Actions, useFormReducer } from '../context/form.context';
 
 type IProps = {
   initialValues: any;
+  state: {
+    salePrice: Product['salePrice'];
+    comparePrice: Product['comparePrice'];
+    buyingPrice: Product['buyingPrice'];
+    quantity: Product['quantity'];
+    sku: Product['sku'];
+  };
 };
 
-function ProductSimpleForm({ initialValues }: IProps) {
+function ProductSimpleForm({ state, initialValues }: IProps) {
   const { t } = useTranslation();
 
-  const {
-    state: { salePrice, comparePrice, buyingPrice, quantity, sku },
-    dispatch
-  } = useForm();
-
   const { currency } = useSettings();
+  const dispatch = useFormReducer();
+
+  const { salePrice, comparePrice, buyingPrice, quantity, sku } = state;
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value, type } = e.target;

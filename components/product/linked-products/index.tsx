@@ -13,29 +13,32 @@ import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { memo, useEffect } from 'react';
 
-import { Actions, useForm } from '../context/form.context';
+import { Actions, useFormReducer } from '../context/form.context';
 import CrossSellProducts from './cross-sell-products';
 import RelatedProducts from './related-products';
 import UpSellProducts from './up-sell-products';
 
 interface Props {
   initialValues: Product | any;
+  state: TProduct;
 }
 
 interface TProduct {
-  relatedProducts: Product[];
-  upsellProducts: Product[];
-  crossSellProducts: Product[];
+  relatedProducts: Product['relatedProducts'];
+  upsellProducts: Product['upsellProducts'];
+  crossSellProducts: Product['crossSellProducts'];
 }
 
 interface productVariable {
   id: number;
 }
 
-const Recommendations = ({ initialValues }: Props) => {
+const LinkedProducts = ({ state, initialValues }: Props) => {
   const { t } = useTranslation('common');
 
-  const { dispatch } = useForm();
+  const dispatch = useFormReducer();
+
+  const { upsellProducts, relatedProducts, crossSellProducts } = state;
 
   const { query } = useRouter();
 
@@ -98,13 +101,13 @@ const Recommendations = ({ initialValues }: Props) => {
         />
         <Card className="w-full sm:w-8/12 md:w-2/3">
           <div className="m-4">
-            <RelatedProducts />
+            <RelatedProducts relatedProducts={relatedProducts} />
           </div>
           <div className="m-4">
-            <UpSellProducts />
+            <UpSellProducts upsellProducts={upsellProducts} />
           </div>
           <div className="m-4">
-            <CrossSellProducts />
+            <CrossSellProducts crossSellProducts={crossSellProducts} />
           </div>
           <ProductModal />
           {!isEmpty(initialValues) && (
@@ -126,4 +129,4 @@ const Recommendations = ({ initialValues }: Props) => {
   );
 };
 
-export default memo(Recommendations);
+export default memo(LinkedProducts);

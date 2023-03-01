@@ -3,6 +3,7 @@ import { SaveIcon } from '@components/icons/save-icon';
 import Accordion from '@components/ui/accordion';
 import Button from '@components/ui/button';
 import Description from '@components/ui/description';
+import { Product } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
 import { memo } from 'react';
 
@@ -10,8 +11,18 @@ import ProductCategory from './product-category';
 import ProductSupplier from './product-supplier';
 import ProductTag from './product-tag';
 
-const ProductSelectGroup = () => {
+interface Props {
+  state: {
+    categories: Product['categories'];
+    tags: Product['tags'];
+    suppliers: Product['suppliers'];
+  };
+}
+
+const ProductSelectGroup = ({ state }: Props) => {
   const { t } = useTranslation('common');
+
+  const { categories, suppliers, tags } = state;
 
   const isUpdated = false;
 
@@ -42,9 +53,9 @@ const ProductSelectGroup = () => {
           className="w-full px-0 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
         />
         <Card className="w-full sm:w-8/12 md:w-2/3">
-          <ProductCategory />
-          <ProductSupplier />
-          <ProductTag />
+          <ProductCategory categories={categories} />
+          <ProductSupplier suppliers={suppliers} />
+          <ProductTag tags={tags} />
           {renderSaveButton()}
         </Card>
       </div>

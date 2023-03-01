@@ -4,12 +4,13 @@ import Label from '@components/ui/label';
 import Select from '@components/ui/select/select';
 import { Product, ProductType } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
-import React from 'react';
+import React, { memo } from 'react';
 
-import { Actions, useForm } from '../context/form.context';
+import { Actions, useFormReducer } from '../context/form.context';
 
 type Props = {
   initialValues: Product | any;
+  state: { type: Product['type'] };
 };
 
 const productTypes = [
@@ -17,13 +18,12 @@ const productTypes = [
   { name: 'Variable Product', id: ProductType.Variable }
 ];
 
-const ProductTypeComponent = ({ initialValues }: Props) => {
+const ProductTypeComponent = ({ state, initialValues }: Props) => {
   const { t } = useTranslation();
 
-  const {
-    state: { type },
-    dispatch
-  } = useForm();
+  const dispatch = useFormReducer();
+
+  const { type } = state;
 
   const onChange = (value: Product['type']) => {
     dispatch({
@@ -62,4 +62,4 @@ const ProductTypeComponent = ({ initialValues }: Props) => {
   );
 };
 
-export default ProductTypeComponent;
+export default memo(ProductTypeComponent);

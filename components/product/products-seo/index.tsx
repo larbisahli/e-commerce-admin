@@ -9,27 +9,31 @@ import TextArea from '@components/ui/text-area';
 import { Product } from '@ts-types/generated';
 import isEmpty from 'lodash/isEmpty';
 import { useTranslation } from 'next-i18next';
-import { ChangeEvent, useEffect } from 'react';
+import { ChangeEvent, memo, useEffect } from 'react';
 import slugify from 'slugify';
 
-import { Actions, useForm } from '../context/form.context';
+import { Actions, useFormReducer } from '../context/form.context';
 
 type Props = {
   initialValues: Product | any;
+  state: {
+    name: string;
+    thumbnail: Product['thumbnail'];
+    productSeo: Product['productSeo'];
+  };
 };
 
-const ProductSeo = ({ initialValues }: Props) => {
+const ProductSeo = ({ state, initialValues }: Props) => {
   const { t } = useTranslation();
 
   const {
-    state: {
-      name: productName,
-      thumbnail,
-      productSeo: { slug, metaImage, metaTitle, metaKeywords, metaDescription },
-      productSeo
-    },
-    dispatch
-  } = useForm();
+    name: productName,
+    thumbnail,
+    productSeo: { slug, metaImage, metaTitle, metaKeywords, metaDescription },
+    productSeo
+  } = state;
+
+  const dispatch = useFormReducer();
 
   useEffect(() => {
     if (isEmpty(metaImage)) {
@@ -145,7 +149,7 @@ const ProductSeo = ({ initialValues }: Props) => {
           />
           <div
             style={{ fontSize: '.75rem' }}
-            className="mb-5 flex items-center"
+            className="mb-5 flex items-center flex-wrap"
           >
             <p className="text-body mr-2">
               Meta Description should optimally be between 150-160 characters
@@ -188,4 +192,4 @@ const ProductSeo = ({ initialValues }: Props) => {
   );
 };
 
-export default ProductSeo;
+export default memo(ProductSeo);

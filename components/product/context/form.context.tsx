@@ -5,6 +5,7 @@ import {
   FC,
   ReactNode,
   useContext,
+  useMemo,
   useReducer
 } from 'react';
 
@@ -75,9 +76,10 @@ export const FormProvider: FC<Props> = ({ children }) => {
   );
 };
 
-export function useForm() {
-  const state = useContext(FormContext);
-  console.log({ state });
-  const dispatch = useContext(ActionContext);
-  return { state, dispatch };
+export function useFormState() {
+  return useContext(FormContext);
+}
+
+export function useFormReducer() {
+  return useContext(ActionContext);
 }

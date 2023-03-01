@@ -1,10 +1,13 @@
 import { useQuery } from '@apollo/client';
-import { Actions, useForm } from '@components/product/context/form.context';
+import {
+  Actions,
+  useFormReducer
+} from '@components/product/context/form.context';
 import Label from '@components/ui/label';
 import Select from '@components/ui/select/select';
 import { SUPPLIERS_FOR_SELECT } from '@graphql/supplier';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { OrderBy, Suppliers } from '@ts-types/generated';
+import { OrderBy, Product, Suppliers } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
 import { memo } from 'react';
 
@@ -18,13 +21,14 @@ interface OptionsVariable {
   orderBy: OrderBy;
 }
 
-const ProductSupplier = () => {
+const ProductSupplier = ({
+  suppliers
+}: {
+  suppliers: Product['suppliers'];
+}) => {
   const { t } = useTranslation();
 
-  const {
-    state: { suppliers },
-    dispatch
-  } = useForm();
+  const dispatch = useFormReducer();
 
   const { data, loading, error } = useQuery<TSupplierSelect, OptionsVariable>(
     SUPPLIERS_FOR_SELECT,

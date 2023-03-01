@@ -4,7 +4,7 @@ import Accordion from '@components/ui/accordion';
 import Button from '@components/ui/button';
 import Checkbox from '@components/ui/checkbox';
 import Description from '@components/ui/description';
-import ValidationError from '@components/ui/form-validation-error';
+// import ValidationError from '@components/ui/form-validation-error';
 import Input from '@components/ui/input';
 import Label from '@components/ui/label';
 import Loader from '@components/ui/loader/loader';
@@ -16,10 +16,17 @@ import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
 import { ChangeEvent, memo } from 'react';
 
-import { Actions, useForm } from '../context/form.context';
+import { Actions, useFormReducer } from '../context/form.context';
 
 interface Props {
   initialValues: Nullable<Product>;
+  state: {
+    name: Product['name'];
+    note: Product['note'];
+    description: Product['description'];
+    status: Product['status'];
+    disableOutOfStock: Product['disableOutOfStock'];
+  };
 }
 
 const Editor = dynamic(() => import('@components/ui/editor'), {
@@ -27,12 +34,12 @@ const Editor = dynamic(() => import('@components/ui/editor'), {
   ssr: false
 });
 
-const ProductContent = ({ initialValues }: Props) => {
+const ProductContent = ({ state, initialValues }: Props) => {
   const { t } = useTranslation();
-  const {
-    state: { name, note, description, status, disableOutOfStock },
-    dispatch
-  } = useForm();
+
+  const { name, note, description, status, disableOutOfStock } = state;
+
+  const dispatch = useFormReducer();
 
   const isUpdated = false;
 

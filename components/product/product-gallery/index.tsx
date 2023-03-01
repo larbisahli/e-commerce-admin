@@ -1,19 +1,24 @@
 import { SaveIcon } from '@components/icons/save-icon';
 import ImageModal from '@components/image-modal';
 import Button from '@components/ui/button';
-import { ImageType } from '@ts-types/generated';
+import { ImageType, Product } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
 import { memo } from 'react';
 
-import { Actions, useForm } from '../context/form.context';
+import { Actions, useFormReducer } from '../context/form.context';
 
-const ProductGallery = () => {
+interface Props {
+  state: {
+    gallery: Product['gallery'];
+  };
+}
+
+const ProductGallery = ({ state }: Props) => {
   const { t } = useTranslation();
 
-  const {
-    state: { gallery },
-    dispatch
-  } = useForm();
+  const dispatch = useFormReducer();
+
+  const { gallery } = state;
 
   const renderSaveButton = () => {
     // eslint-disable-next-line no-constant-condition

@@ -1,11 +1,14 @@
 import { useQuery } from '@apollo/client';
-import { Actions, useForm } from '@components/product/context/form.context';
+import {
+  Actions,
+  useFormReducer
+} from '@components/product/context/form.context';
 // import ValidationError from '@components/ui/form-validation-error';
 import Label from '@components/ui/label';
 import Select from '@components/ui/select/select';
 import { CATEGORIES_FOR_SELECT_ALL } from '@graphql/category';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { Category, OrderBy } from '@ts-types/generated';
+import { Category, OrderBy, Product } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
 import { memo } from 'react';
 
@@ -19,13 +22,14 @@ interface OptionsVariable {
   orderBy: OrderBy;
 }
 
-const ProductCategory = () => {
+const ProductCategory = ({
+  categories
+}: {
+  categories: Product['categories'];
+}) => {
   const { t } = useTranslation('common');
 
-  const {
-    state: { categories },
-    dispatch
-  } = useForm();
+  const dispatch = useFormReducer();
 
   const { data, loading, error } = useQuery<TCategorySelect, OptionsVariable>(
     CATEGORIES_FOR_SELECT_ALL,

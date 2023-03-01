@@ -9,12 +9,15 @@ import Select from '@components/ui/select/select';
 import { Nullable } from '@ts-types/custom.types';
 import { Product } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, memo } from 'react';
 
-import { Actions, useForm } from '../context/form.context';
+import { Actions, useFormReducer } from '../context/form.context';
 
 type Props = {
   initialValues: Nullable<Product>;
+  state: {
+    productShippingInfo: Product['productShippingInfo'];
+  };
 };
 
 const weightUnits = [{ unit: 'kg' }, { unit: 'g' }];
@@ -23,24 +26,23 @@ const volumeUnits = [{ unit: 'l' }, { unit: 'ml' }];
 
 const dimensionUnits = [{ unit: 'l' }, { unit: 'ml' }];
 
-function ProductShippingInfoForm({ initialValues }: Props) {
+function ProductShippingInfoForm({ state, initialValues }: Props) {
   const { t } = useTranslation();
 
   const {
-    state: {
-      productShippingInfo: {
-        weight,
-        weightUnit,
-        volume,
-        volumeUnit,
-        dimensionWidth,
-        dimensionHeight,
-        dimensionDepth,
-        dimensionUnit
-      }
-    },
-    dispatch
-  } = useForm();
+    productShippingInfo: {
+      weight,
+      weightUnit,
+      volume,
+      volumeUnit,
+      dimensionWidth,
+      dimensionHeight,
+      dimensionDepth,
+      dimensionUnit
+    }
+  } = state;
+
+  const dispatch = useFormReducer();
 
   const isUpdated = false;
 
@@ -256,4 +258,4 @@ function ProductShippingInfoForm({ initialValues }: Props) {
   );
 }
 
-export default ProductShippingInfoForm;
+export default memo(ProductShippingInfoForm);
