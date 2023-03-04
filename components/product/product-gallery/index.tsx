@@ -1,28 +1,37 @@
 import { SaveIcon } from '@components/icons/save-icon';
 import ImageModal from '@components/image-modal';
 import Button from '@components/ui/button';
+import { useDifferenceWith } from '@hooks/useDifferenceWith';
 import { ImageType, Product } from '@ts-types/generated';
+import isEmpty from 'lodash/isEmpty';
 import { useTranslation } from 'next-i18next';
 import { memo } from 'react';
 
 import { Actions, useFormReducer } from '../context/form.context';
 
 interface Props {
+  initialValues: Product;
   state: {
     gallery: Product['gallery'];
+    isUpdateMode: boolean;
   };
 }
 
-const ProductGallery = ({ state }: Props) => {
+const ProductGallery = ({ state, initialValues }: Props) => {
   const { t } = useTranslation();
 
   const dispatch = useFormReducer();
 
-  const { gallery } = state;
+  const { gallery, isUpdateMode } = state;
+
+  const { additions, deletions } = useDifferenceWith(
+    gallery,
+    initialValues?.gallery,
+    isUpdateMode
+  );
 
   const renderSaveButton = () => {
-    // eslint-disable-next-line no-constant-condition
-    if (false) {
+    if (!isEmpty(additions) || !isEmpty(deletions)) {
       return (
         <div className="mt-3 flex justify-end border-t pt-4">
           <Button

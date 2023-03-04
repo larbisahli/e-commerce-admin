@@ -1,11 +1,10 @@
-import { Product, ProductStatus, ProductType } from '@ts-types/generated';
+import { ProductStatus, ProductType } from '@ts-types/generated';
 import {
   createContext,
   Dispatch,
   FC,
   ReactNode,
   useContext,
-  useMemo,
   useReducer
 } from 'react';
 
@@ -54,10 +53,10 @@ export const initialState: ProductFormType = {
   upsellProducts: [],
   crossSellProducts: [],
   // extend for update
-  updatedFields: []
+  isUpdateMode: false
 };
 
-const FormContext = createContext<Product>(initialState);
+const FormContext = createContext<ProductFormType>(initialState);
 
 const ActionContext = createContext<Dispatch<ActionType>>(undefined);
 

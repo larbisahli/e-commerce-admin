@@ -5,7 +5,6 @@ import Description from '@components/ui/description';
 import Input from '@components/ui/input';
 import { useSettings } from '@hooks/useSettings';
 import { Product } from '@ts-types/generated';
-import isEmpty from 'lodash/isEmpty';
 import { useTranslation } from 'next-i18next';
 import { ChangeEvent, memo } from 'react';
 
@@ -13,6 +12,8 @@ import { Actions, useFormReducer } from '../context/form.context';
 
 type IProps = {
   initialValues: any;
+  checkForUpdateHandler: () => void;
+  isUpdated: boolean;
   state: {
     salePrice: Product['salePrice'];
     comparePrice: Product['comparePrice'];
@@ -22,7 +23,12 @@ type IProps = {
   };
 };
 
-function ProductSimpleForm({ state, initialValues }: IProps) {
+function ProductSimpleForm({
+  state,
+  initialValues,
+  isUpdated,
+  checkForUpdateHandler
+}: IProps) {
   const { t } = useTranslation();
 
   const { currency } = useSettings();
@@ -45,6 +51,25 @@ function ProductSimpleForm({ state, initialValues }: IProps) {
     });
   };
 
+  const renderSaveButton = () => {
+    if (isUpdated) {
+      return (
+        <div className="mt-8 flex justify-end border-t pt-4">
+          <Button
+          // loading={updating || creating}
+          // disabled={updating || creating}
+          >
+            <div className="mr-1">
+              <SaveIcon width="1.3rem" height="1.3rem" />
+            </div>
+            <div>{t('form:button-label-save')}</div>
+          </Button>
+        </div>
+      );
+    }
+    return null;
+  };
+
   return (
     <div className="flex flex-wrap pb-8 my-5 sm:my-8">
       <Description
@@ -62,6 +87,7 @@ function ProductSimpleForm({ state, initialValues }: IProps) {
           name="salePrice"
           value={salePrice}
           onChange={handleChange}
+          onBlur={checkForUpdateHandler}
           type="number"
           // error={t(errors.salePrice?.message!)}
           variant="outline"
@@ -72,6 +98,7 @@ function ProductSimpleForm({ state, initialValues }: IProps) {
           name="comparePrice"
           value={comparePrice}
           onChange={handleChange}
+          onBlur={checkForUpdateHandler}
           type="number"
           // error={t(errors.comparePrice?.message!)}
           variant="outline"
@@ -82,6 +109,7 @@ function ProductSimpleForm({ state, initialValues }: IProps) {
           name="buyingPrice"
           value={buyingPrice}
           onChange={handleChange}
+          onBlur={checkForUpdateHandler}
           type="number"
           // error={t(errors.buyingPrice?.message!)}
           variant="outline"
@@ -92,6 +120,7 @@ function ProductSimpleForm({ state, initialValues }: IProps) {
           name="quantity"
           value={quantity}
           onChange={handleChange}
+          onBlur={checkForUpdateHandler}
           type="number"
           // error={t(errors.quantity?.message!)}
           variant="outline"
@@ -103,24 +132,13 @@ function ProductSimpleForm({ state, initialValues }: IProps) {
           name="sku"
           value={sku}
           onChange={handleChange}
+          onBlur={checkForUpdateHandler}
           placeholder="LEV-JN-BL-WM"
           // error={t(errors.sku?.message!)}
           variant="outline"
           className="mb-5"
         />
-        {!isEmpty(initialValues) && (
-          <div className="mt-11 flex justify-end border-t pt-4">
-            <Button
-            // loading={updating || creating}
-            // disabled={updating || creating}
-            >
-              <div className="mr-1">
-                <SaveIcon width="1.3rem" height="1.3rem" />
-              </div>
-              <div>{t('form:button-label-save')}</div>
-            </Button>
-          </div>
-        )}
+        {renderSaveButton()}
       </Card>
     </div>
   );

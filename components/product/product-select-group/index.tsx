@@ -3,28 +3,60 @@ import { SaveIcon } from '@components/icons/save-icon';
 import Accordion from '@components/ui/accordion';
 import Button from '@components/ui/button';
 import Description from '@components/ui/description';
+import { useDifferenceWith } from '@hooks/useDifferenceWith';
 import { Product } from '@ts-types/generated';
+import isEmpty from 'lodash/isEmpty';
 import { useTranslation } from 'next-i18next';
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 
 import ProductCategory from './product-category';
 import ProductSupplier from './product-supplier';
 import ProductTag from './product-tag';
 
 interface Props {
+  initialValues: Product;
   state: {
     categories: Product['categories'];
     tags: Product['tags'];
     suppliers: Product['suppliers'];
+    isUpdateMode: boolean;
   };
 }
 
-const ProductSelectGroup = ({ state }: Props) => {
+const ProductSelectGroup = ({ state, initialValues }: Props) => {
   const { t } = useTranslation('common');
 
-  const { categories, suppliers, tags } = state;
+  const { categories, suppliers, tags, isUpdateMode } = state;
 
-  const isUpdated = false;
+  // __ CATEGORIES __
+  const { additions: additionalCategories, deletions: deletedCategories } =
+    useDifferenceWith(categories, initialValues?.categories, isUpdateMode);
+
+  // __ SUPPLIERS __
+  const { additions: additionalSuppliers, deletions: deletedSuppliers } =
+    useDifferenceWith(suppliers, initialValues?.suppliers, isUpdateMode);
+
+  // __ TAGS __
+  const { additions: additionalTags, deletions: deletedTags } =
+    useDifferenceWith(tags, initialValues?.tags, isUpdateMode);
+
+  const isUpdated = useMemo(() => {
+    return (
+      !isEmpty(additionalCategories) ||
+      !isEmpty(deletedCategories) ||
+      !isEmpty(additionalSuppliers) ||
+      !isEmpty(deletedSuppliers) ||
+      !isEmpty(additionalTags) ||
+      !isEmpty(deletedTags)
+    );
+  }, [
+    additionalCategories,
+    deletedCategories,
+    additionalSuppliers,
+    deletedSuppliers,
+    additionalTags,
+    deletedTags
+  ]);
 
   const renderSaveButton = () => {
     if (isUpdated) {

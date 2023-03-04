@@ -1,28 +1,37 @@
 import { SaveIcon } from '@components/icons/save-icon';
 import ImageModal from '@components/image-modal';
 import Button from '@components/ui/button';
+import { useDifferenceWith } from '@hooks/useDifferenceWith';
 import { ImageType, Product } from '@ts-types/generated';
+import isEmpty from 'lodash/isEmpty';
 import { useTranslation } from 'next-i18next';
 import { memo } from 'react';
 
 import { Actions, useFormReducer } from '../context/form.context';
 
 interface Props {
+  initialValues: Product;
   state: {
     thumbnail: Product['thumbnail'];
+    isUpdateMode: boolean;
   };
 }
 
-const ProductThumbnail = ({ state }: Props) => {
+const ProductThumbnail = ({ state, initialValues }: Props) => {
   const { t } = useTranslation();
 
   const dispatch = useFormReducer();
 
-  const { thumbnail } = state;
+  const { thumbnail, isUpdateMode } = state;
+
+  const { additions, deletions } = useDifferenceWith(
+    thumbnail,
+    initialValues?.thumbnail,
+    isUpdateMode
+  );
 
   const renderSaveButton = () => {
-    // eslint-disable-next-line no-constant-condition
-    if (false) {
+    if (!isEmpty(additions) || !isEmpty(deletions)) {
       return (
         <div className="mt-3 flex justify-end border-t pt-4">
           <Button

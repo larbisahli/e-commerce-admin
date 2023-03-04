@@ -8,12 +8,20 @@ export interface Props extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
   id: string;
   error?: string;
+  onMouseLeaveTopLevel?: () => void;
 }
 
 const Radio = React.forwardRef<HTMLInputElement, Props>(
-  ({ style, className, label, name, id, error, ...rest }, ref) => {
+  (
+    { style, className, label, name, id, error, onMouseLeaveTopLevel, ...rest },
+    ref
+  ) => {
     return (
-      <div style={style} className={className}>
+      <div
+        onMouseLeave={onMouseLeaveTopLevel}
+        style={style}
+        className={className}
+      >
         <div className="flex items-center">
           <input
             id={id}

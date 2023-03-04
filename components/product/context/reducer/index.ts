@@ -1,6 +1,13 @@
-import type { Category, Product, Suppliers, Tag } from '@ts-types/generated';
+import {
+  Category,
+  ProductStatus,
+  ProductType,
+  Suppliers,
+  Tag
+} from '@ts-types/generated';
+import { isEmpty } from 'lodash';
 
-import { Actions, ActionType } from '../form.types';
+import { Actions, ActionType, ProductFormType } from '../form.types';
 import { VariationReducer } from './variation.reducer';
 
 const {
@@ -19,10 +26,14 @@ const {
   CATEGORIES,
   PRODUCT_SHIPPING_INFO,
   PRODUCT_SEO,
-  INSERT_PRODUCT_LIST
+  INSERT_PRODUCT_LIST,
+  INITIAL_VALUES
 } = Actions;
 
-export function formReducer(state: Product, action: ActionType): Product {
+export function formReducer(
+  state: ProductFormType,
+  action: ActionType
+): ProductFormType {
   const { type, payload } = action;
 
   switch (type) {
@@ -40,11 +51,6 @@ export function formReducer(state: Product, action: ActionType): Product {
       return {
         ...state,
         [payload?.field]: payload?.values
-      };
-    case APPEND_VARIATION:
-      return {
-        ...state,
-        ...VariationReducer[APPEND_VARIATION](state, action)
       };
     case CATEGORIES:
       return {
@@ -82,6 +88,11 @@ export function formReducer(state: Product, action: ActionType): Product {
           [payload.field]: payload.value
         }
       };
+    case APPEND_VARIATION:
+      return {
+        ...state,
+        ...VariationReducer[APPEND_VARIATION](state, action)
+      };
     case REMOVE_VARIATION:
       return {
         ...state,
@@ -112,6 +123,22 @@ export function formReducer(state: Product, action: ActionType): Product {
         ...state,
         ...VariationReducer[VARIATION_INIT](state, action)
       };
+    case INITIAL_VALUES: {
+      const { init } = payload;
+      if (isEmpty(init)) {
+        return state;
+      }
+      return {
+        ...state,
+        ...init,
+        status: init?.published ? ProductStatus.Publish : ProductStatus.Draft,
+        type:
+          init?.type.id === ProductType.Simple
+            ? { name: 'Simple Product', id: ProductType.Simple }
+            : { name: 'Variable Product', id: ProductType.Variable },
+        isUpdateMode: true
+      };
+    }
     default:
       return state;
   }

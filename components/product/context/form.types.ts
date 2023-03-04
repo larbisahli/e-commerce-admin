@@ -28,11 +28,12 @@ export enum Actions {
   CATEGORIES = 'CATEGORIES',
   PRODUCT_SHIPPING_INFO = 'PRODUCT_SHIPPING_INFO',
   PRODUCT_SEO = 'PRODUCT_SEO',
-  INSERT_PRODUCT_LIST = 'INSERT_PRODUCT_LIST'
+  INSERT_PRODUCT_LIST = 'INSERT_PRODUCT_LIST',
+  INITIAL_VALUES = 'INITIAL_VALUES'
 }
 
 export interface ProductFormType extends Product {
-  updatedFields: string[];
+  isUpdateMode: boolean;
 }
 
 export interface ActionType {
@@ -54,6 +55,7 @@ interface VariationPayload {
   )[];
   field?: string;
   options?: number[];
+  init?: Product;
 }
 
 export interface VariationReducerType {

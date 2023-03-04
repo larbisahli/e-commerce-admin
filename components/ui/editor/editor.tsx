@@ -25,6 +25,9 @@ const EditorComponent = (props) => {
 
   useEffect(() => {
     const productDescription = props.value;
+    const block = props.block;
+
+    if (block) return;
 
     if (productDescription && stateIsEmpty) {
       const blocksFromHTML = convertFromHTML(productDescription);
@@ -36,11 +39,12 @@ const EditorComponent = (props) => {
     } else if (stateIsEmpty) {
       setEditorState(EditorState.createEmpty());
     }
-  }, [props.value, stateIsEmpty]);
+  }, [props.block, props.value, stateIsEmpty]);
 
   return (
     <div className={props.className}>
       <Editor
+        onBlur={props?.onBlur}
         editorState={editorState}
         onEditorStateChange={onEditorStateChange}
         wrapperClassName="editor-wrapper-class"
@@ -49,20 +53,20 @@ const EditorComponent = (props) => {
           options: [
             'inline',
             'blockType',
-            // 'fontSize',
-            // 'fontFamily',
+            'fontSize',
+            'fontFamily',
             'list',
-            // 'textAlign',
-            // 'colorPicker',
-            // 'emoji',
-            // 'link',
+            'textAlign',
+            'colorPicker',
+            'emoji',
+            'link',
             'history'
-          ]
-          // inline: { inDropdown: true },
-          // list: { inDropdown: true },
-          // textAlign: { inDropdown: true },
-          // link: { inDropdown: true },
-          // history: { inDropdown: false }
+          ],
+          inline: { inDropdown: true },
+          list: { inDropdown: true },
+          textAlign: { inDropdown: true },
+          link: { inDropdown: true },
+          history: { inDropdown: false }
         }}
       />
     </div>

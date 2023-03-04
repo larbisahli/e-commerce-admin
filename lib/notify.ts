@@ -15,7 +15,7 @@ type Type = 'success' | 'error' | 'info' | 'warning';
 /** types: success | error | info | warning */
 export function notify(Message: string, type: Type): void {
   const Options: OptionsType = {
-    position: 'bottom-right',
+    position: 'top-right',
     autoClose: 5000,
     hideProgressBar: true,
     closeOnClick: true,

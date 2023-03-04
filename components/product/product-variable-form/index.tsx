@@ -56,6 +56,8 @@ function getCartesianProduct(values: VariationType[]) {
 
 type IProps = {
   initialValues?: Product | null;
+  checkForUpdateHandler: () => void;
+  isUpdated: boolean;
   state: {
     variationOptions: Product['variationOptions'];
     variations: Product['variations'];

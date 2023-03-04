@@ -8,8 +8,9 @@ import Input from '@components/ui/input';
 import TextArea from '@components/ui/text-area';
 import { Product } from '@ts-types/generated';
 import isEmpty from 'lodash/isEmpty';
+import isEqual from 'lodash/isEqual';
 import { useTranslation } from 'next-i18next';
-import { ChangeEvent, memo, useEffect } from 'react';
+import { ChangeEvent, memo, useCallback, useEffect, useState } from 'react';
 import slugify from 'slugify';
 
 import { Actions, useFormReducer } from '../context/form.context';
@@ -20,20 +21,54 @@ type Props = {
     name: string;
     thumbnail: Product['thumbnail'];
     productSeo: Product['productSeo'];
+    isUpdateMode: boolean;
   };
 };
 
 const ProductSeo = ({ state, initialValues }: Props) => {
   const { t } = useTranslation();
 
+  const [isUpdated, setIsUpdated] = useState(false);
+
   const {
     name: productName,
     thumbnail,
     productSeo: { slug, metaImage, metaTitle, metaKeywords, metaDescription },
-    productSeo
+    productSeo,
+    isUpdateMode
   } = state;
 
   const dispatch = useFormReducer();
+
+  const checkForUpdateHandler = useCallback(() => {
+    if (!isUpdateMode) return;
+
+    const seo = initialValues.productSeo ?? {};
+    const initialProductContent = {
+      slug: seo.slug,
+      metaImage: [{ id: seo.metaImage[0]?.id }],
+      metaTitle: seo.metaTitle,
+      metaKeywords: seo.metaKeywords,
+      metaDescription: seo.metaDescription
+    };
+    const currentProductContent = {
+      slug,
+      metaImage: [{ id: metaImage[0]?.id }],
+      metaTitle,
+      metaKeywords,
+      metaDescription
+    };
+
+    setIsUpdated(!isEqual(initialProductContent, currentProductContent));
+  }, [
+    initialValues.productSeo,
+    isUpdateMode,
+    metaDescription,
+    metaImage,
+    metaKeywords,
+    metaTitle,
+    slug
+  ]);
 
   useEffect(() => {
     if (isEmpty(metaImage)) {
@@ -45,7 +80,8 @@ const ProductSeo = ({ state, initialValues }: Props) => {
         }
       });
     }
-  }, [dispatch, metaImage, thumbnail]);
+    checkForUpdateHandler();
+  }, [checkForUpdateHandler, dispatch, metaImage, thumbnail]);
 
   const generateSlug = (slug = '') => {
     return slugify(slug?.replace(/[^A-Za-z0-9\s!?]/g, '-') ?? '', {
@@ -90,20 +126,39 @@ const ProductSeo = ({ state, initialValues }: Props) => {
     });
   };
 
-  const updateWhenEmpty = (field: string) => {
+  const updateWhenEmpty = (field: string, isSlug = true) => {
     if (isEmpty(productSeo[field])) {
       dispatch({
         type: Actions.PRODUCT_SEO,
         payload: {
           field,
-          value: generateSlug(productName)
+          value: isSlug ? generateSlug(productName) : productName
         }
       });
     }
   };
 
+  const renderSaveButton = () => {
+    if (isUpdated) {
+      return (
+        <div className="mt-8 flex justify-end border-t pt-4">
+          <Button
+          // loading={updating || creating}
+          // disabled={updating || creating}
+          >
+            <div className="mr-1">
+              <SaveIcon width="1.3rem" height="1.3rem" />
+            </div>
+            <div>{t('form:button-label-save')}</div>
+          </Button>
+        </div>
+      );
+    }
+    return null;
+  };
+
   return (
-    <Accordion Title={() => t('form:form-title-seo')}>
+    <Accordion isUpdated={isUpdated} Title={() => t('form:form-title-seo')}>
       <div className="flex flex-wrap my-5 sm:my-8">
         <Description
           details={t('form:type-and-category-help-text')}
@@ -119,6 +174,7 @@ const ProductSeo = ({ state, initialValues }: Props) => {
             variant="outline"
             className="mb-5"
             onFocus={() => updateWhenEmpty('slug')}
+            onBlur={checkForUpdateHandler}
           />
           <Input
             label={`${t('form:input-label-meta-title')}*`}
@@ -128,7 +184,8 @@ const ProductSeo = ({ state, initialValues }: Props) => {
             placeholder="Title..."
             variant="outline"
             className="mb-5"
-            onFocus={() => updateWhenEmpty('metaTitle')}
+            onFocus={() => updateWhenEmpty('metaTitle', false)}
+            onBlur={checkForUpdateHandler}
           />
           <TextArea
             label={`${t('form:input-label-meta-keywords')}*`}
@@ -138,6 +195,7 @@ const ProductSeo = ({ state, initialValues }: Props) => {
             variant="outline"
             className="mb-5"
             placeholder="Products, keywords, ..."
+            onBlur={checkForUpdateHandler}
           />
           <TextArea
             label={`${t('form:item-meta-description')}*`}
@@ -146,6 +204,7 @@ const ProductSeo = ({ state, initialValues }: Props) => {
             onChange={handleChange}
             // error={t(errors.productSeo?.metaDescription?.message!)}
             variant="outline"
+            onBlur={checkForUpdateHandler}
           />
           <div
             style={{ fontSize: '.75rem' }}
@@ -173,19 +232,7 @@ const ProductSeo = ({ state, initialValues }: Props) => {
               label="form:label-add-meta-images"
             />
           </div>
-          {!isEmpty(initialValues) && (
-            <div className="mt-12 flex justify-end border-t pt-4">
-              <Button
-              // loading={updating || creating}
-              // disabled={updating || creating}
-              >
-                <div className="mr-1">
-                  <SaveIcon width="1.3rem" height="1.3rem" />
-                </div>
-                <div>{t('form:button-label-save')}</div>
-              </Button>
-            </div>
-          )}
+          {renderSaveButton()}
         </Card>
       </div>
     </Accordion>

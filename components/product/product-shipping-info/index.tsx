@@ -8,8 +8,9 @@ import Label from '@components/ui/label';
 import Select from '@components/ui/select/select';
 import { Nullable } from '@ts-types/custom.types';
 import { Product } from '@ts-types/generated';
+import isEqual from 'lodash/isEqual';
 import { useTranslation } from 'next-i18next';
-import React, { ChangeEvent, memo } from 'react';
+import React, { ChangeEvent, memo, useState } from 'react';
 
 import { Actions, useFormReducer } from '../context/form.context';
 
@@ -17,6 +18,7 @@ type Props = {
   initialValues: Nullable<Product>;
   state: {
     productShippingInfo: Product['productShippingInfo'];
+    isUpdateMode: boolean;
   };
 };
 
@@ -39,12 +41,41 @@ function ProductShippingInfoForm({ state, initialValues }: Props) {
       dimensionHeight,
       dimensionDepth,
       dimensionUnit
-    }
+    },
+    isUpdateMode
   } = state;
 
   const dispatch = useFormReducer();
 
-  const isUpdated = false;
+  const [isUpdated, setIsUpdated] = useState(false);
+
+  const checkForUpdateHandler = () => {
+    if (!isUpdateMode) return;
+
+    const productShippingInfo = initialValues.productShippingInfo ?? {};
+    const initialProductContent = {
+      weight: productShippingInfo.weight,
+      weightUnit: productShippingInfo.weightUnit,
+      volume: productShippingInfo.volume,
+      volumeUnit: productShippingInfo.volumeUnit,
+      dimensionWidth: productShippingInfo.dimensionWidth,
+      dimensionHeight: productShippingInfo.dimensionHeight,
+      dimensionDepth: productShippingInfo.dimensionDepth,
+      dimensionUnit: productShippingInfo.dimensionUnit
+    };
+    const currentProductContent = {
+      weight,
+      weightUnit,
+      volume,
+      volumeUnit,
+      dimensionWidth,
+      dimensionHeight,
+      dimensionDepth,
+      dimensionUnit
+    };
+
+    setIsUpdated(!isEqual(initialProductContent, currentProductContent));
+  };
 
   const renderSaveButton = () => {
     if (isUpdated) {
@@ -112,6 +143,7 @@ function ProductShippingInfoForm({ state, initialValues }: Props) {
               name="weight"
               value={weight}
               onChange={handleChange}
+              onBlur={checkForUpdateHandler}
               type="number"
               variant="outline"
               className="mr-2"
@@ -125,6 +157,7 @@ function ProductShippingInfoForm({ state, initialValues }: Props) {
                 getOptionValue={(option: any) =>
                   option.unit?.charAt(0)?.toUpperCase() + option.unit?.slice(1)
                 }
+                onBlur={checkForUpdateHandler}
                 onChange={(value) => onSelectChange(value, 'weightUnit')}
                 className="w-full"
               />
@@ -140,6 +173,7 @@ function ProductShippingInfoForm({ state, initialValues }: Props) {
               name="volume"
               value={volume}
               onChange={handleChange}
+              onBlur={checkForUpdateHandler}
               type="number"
               variant="outline"
               className="mr-2"
@@ -153,6 +187,7 @@ function ProductShippingInfoForm({ state, initialValues }: Props) {
                 getOptionValue={(option: any) =>
                   option.unit?.charAt(0)?.toUpperCase() + option.unit?.slice(1)
                 }
+                onBlur={checkForUpdateHandler}
                 onChange={(value) => onSelectChange(value, 'volumeUnit')}
                 className="w-full"
               />
@@ -178,6 +213,7 @@ function ProductShippingInfoForm({ state, initialValues }: Props) {
                 name="dimensionWidth"
                 value={dimensionWidth}
                 onChange={handleChange}
+                onBlur={checkForUpdateHandler}
                 type="number"
                 variant="outline"
                 className="w-24 mr-2"
@@ -197,6 +233,7 @@ function ProductShippingInfoForm({ state, initialValues }: Props) {
                 name="dimensionHeight"
                 value={dimensionHeight}
                 onChange={handleChange}
+                onBlur={checkForUpdateHandler}
                 type="number"
                 variant="outline"
                 className="w-24 mr-2"
@@ -216,6 +253,7 @@ function ProductShippingInfoForm({ state, initialValues }: Props) {
                 name="dimensionDepth"
                 value={dimensionDepth}
                 onChange={handleChange}
+                onBlur={checkForUpdateHandler}
                 type="number"
                 variant="outline"
                 className="w-24 mr-2"
@@ -239,6 +277,7 @@ function ProductShippingInfoForm({ state, initialValues }: Props) {
                 getOptionValue={(option: any) =>
                   option.unit?.charAt(0)?.toUpperCase() + option.unit?.slice(1)
                 }
+                onBlur={checkForUpdateHandler}
                 onChange={(value) => onSelectChange(value, 'dimensionUnit')}
                 className="w-full"
               />

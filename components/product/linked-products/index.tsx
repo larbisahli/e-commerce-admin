@@ -6,12 +6,13 @@ import Accordion from '@components/ui/accordion';
 import Button from '@components/ui/button';
 import Description from '@components/ui/description';
 import { RECOMMENDATIONS } from '@graphql/product';
+import { useDifferenceWith } from '@hooks/useDifferenceWith';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import type { Product } from '@ts-types/generated';
 import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
-import { memo, useEffect } from 'react';
+import { memo, useEffect, useMemo } from 'react';
 
 import { Actions, useFormReducer } from '../context/form.context';
 import CrossSellProducts from './cross-sell-products';
@@ -27,6 +28,7 @@ interface TProduct {
   relatedProducts: Product['relatedProducts'];
   upsellProducts: Product['upsellProducts'];
   crossSellProducts: Product['crossSellProducts'];
+  isUpdateMode: boolean;
 }
 
 interface productVariable {
@@ -38,7 +40,8 @@ const LinkedProducts = ({ state, initialValues }: Props) => {
 
   const dispatch = useFormReducer();
 
-  const { upsellProducts, relatedProducts, crossSellProducts } = state;
+  const { upsellProducts, relatedProducts, crossSellProducts, isUpdateMode } =
+    state;
 
   const { query } = useRouter();
 
@@ -88,10 +91,54 @@ const LinkedProducts = ({ state, initialValues }: Props) => {
     });
   }, [data, dispatch]);
 
+  // __ upsellProducts __
+  const {
+    additions: additionalUpsellProducts,
+    deletions: deletedUpsellProducts
+  } = useDifferenceWith(
+    upsellProducts,
+    initialValues?.upsellProducts,
+    isUpdateMode
+  );
+
+  // __ relatedProducts __
+  const {
+    additions: additionalRelatedProducts,
+    deletions: deletedRelatedProducts
+  } = useDifferenceWith(
+    relatedProducts,
+    initialValues?.relatedProducts,
+    isUpdateMode
+  );
+
+  // __ TAGS __
+  const {
+    additions: additionalCrossSellProducts,
+    deletions: deletedCrossSellProducts
+  } = useDifferenceWith(crossSellProducts, initialValues?.tags, isUpdateMode);
+
+  const isUpdated = useMemo(() => {
+    return (
+      !isEmpty(additionalUpsellProducts) ||
+      !isEmpty(deletedUpsellProducts) ||
+      !isEmpty(additionalRelatedProducts) ||
+      !isEmpty(deletedRelatedProducts) ||
+      !isEmpty(additionalCrossSellProducts) ||
+      !isEmpty(deletedCrossSellProducts)
+    );
+  }, [
+    additionalUpsellProducts,
+    deletedUpsellProducts,
+    additionalRelatedProducts,
+    deletedRelatedProducts,
+    additionalCrossSellProducts,
+    deletedCrossSellProducts
+  ]);
+
   return (
     <Accordion
       loading={loading}
-      isUpdated={false}
+      isUpdated={isUpdated}
       Title={() => t('form:related-up-sells-cross-sells-product')}
     >
       <div className="flex flex-wrap my-5 sm:my-8">

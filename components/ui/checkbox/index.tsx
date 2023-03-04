@@ -9,6 +9,7 @@ export interface Props extends InputHTMLAttributes<HTMLInputElement> {
   error?: string;
   inputClassName?: string;
   labelClassName?: string;
+  onMouseLeaveTopLevel?: () => void;
 }
 
 const Checkbox = React.forwardRef<HTMLInputElement, Props>(
@@ -22,12 +23,17 @@ const Checkbox = React.forwardRef<HTMLInputElement, Props>(
       name,
       error,
       labelClassName,
+      onMouseLeaveTopLevel,
       ...rest
     },
     ref
   ) => {
     return (
-      <div style={style} className={className}>
+      <div
+        style={style}
+        onMouseLeave={onMouseLeaveTopLevel}
+        className={className}
+      >
         <div className="flex items-center">
           <input
             id={id ?? name}

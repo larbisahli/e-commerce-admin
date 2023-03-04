@@ -12,20 +12,23 @@ import Radio from '@components/ui/radio';
 import TextArea from '@components/ui/text-area';
 import { Nullable } from '@ts-types/custom.types';
 import { Product, ProductStatus } from '@ts-types/generated';
+import { isEmpty, isEqual } from 'lodash';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
-import { ChangeEvent, memo } from 'react';
+import { ChangeEvent, memo, useState } from 'react';
 
 import { Actions, useFormReducer } from '../context/form.context';
 
 interface Props {
   initialValues: Nullable<Product>;
   state: {
+    id: number;
     name: Product['name'];
     note: Product['note'];
     description: Product['description'];
     status: Product['status'];
     disableOutOfStock: Product['disableOutOfStock'];
+    isUpdateMode: boolean;
   };
 }
 
@@ -37,31 +40,38 @@ const Editor = dynamic(() => import('@components/ui/editor'), {
 const ProductContent = ({ state, initialValues }: Props) => {
   const { t } = useTranslation();
 
-  const { name, note, description, status, disableOutOfStock } = state;
+  const [isUpdated, setIsUpdated] = useState(false);
+
+  const {
+    id,
+    name,
+    note,
+    description,
+    status,
+    disableOutOfStock,
+    isUpdateMode
+  } = state;
 
   const dispatch = useFormReducer();
 
-  const isUpdated = false;
+  const checkForUpdateHandler = () => {
+    if (!isUpdateMode) return;
 
-  console.log({ isUpdated });
-
-  const renderSaveButton = () => {
-    if (isUpdated) {
-      return (
-        <div className="mt-8 flex justify-end border-t pt-4">
-          <Button
-          // loading={updating || creating}
-          // disabled={updating || creating}
-          >
-            <div className="mr-1">
-              <SaveIcon width="1.3rem" height="1.3rem" />
-            </div>
-            <div>{t('form:button-label-save')}</div>
-          </Button>
-        </div>
-      );
-    }
-    return null;
+    const initialProductContent = {
+      name: initialValues.name,
+      description: initialValues.description,
+      published: initialValues.published,
+      note: initialValues.note,
+      disableOutOfStock: initialValues.disableOutOfStock
+    };
+    const currentProductContent = {
+      name,
+      description,
+      published: status === 'publish',
+      note,
+      disableOutOfStock
+    };
+    setIsUpdated(!isEqual(initialProductContent, currentProductContent));
   };
 
   const handleChange = (
@@ -91,6 +101,25 @@ const ProductContent = ({ state, initialValues }: Props) => {
     });
   };
 
+  const renderSaveButton = () => {
+    if (isUpdated) {
+      return (
+        <div className="mt-8 flex justify-end border-t pt-4">
+          <Button
+          // loading={updating || creating}
+          // disabled={updating || creating}
+          >
+            <div className="mr-1">
+              <SaveIcon width="1.3rem" height="1.3rem" />
+            </div>
+            <div>{t('form:button-label-save')}</div>
+          </Button>
+        </div>
+      );
+    }
+    return null;
+  };
+
   return (
     <Accordion
       isUpdated={isUpdated}
@@ -112,6 +141,7 @@ const ProductContent = ({ state, initialValues }: Props) => {
             name="name"
             value={name}
             onChange={handleChange}
+            onBlur={checkForUpdateHandler}
             // error={t(errors.name?.message!)}
             placeholder="Title..."
             variant="outline"
@@ -123,7 +153,9 @@ const ProductContent = ({ state, initialValues }: Props) => {
             name="description"
             value={description}
             onChange={handleEditorChange}
+            onBlur={checkForUpdateHandler}
             className="mb-5"
+            block={!isEmpty(initialValues.description) && !id}
             defaultValue=""
           />
           {/* <ValidationError message={t(errors.description?.message)} /> */}
@@ -132,6 +164,7 @@ const ProductContent = ({ state, initialValues }: Props) => {
             name="note"
             value={note}
             onChange={handleChange}
+            onBlur={checkForUpdateHandler}
             placeholder="Hidden note"
             // error={t(errors.note?.message!)}
             variant="outline"
@@ -142,6 +175,7 @@ const ProductContent = ({ state, initialValues }: Props) => {
             <Radio
               name="status"
               onChange={handleChange}
+              onMouseLeaveTopLevel={checkForUpdateHandler}
               label={t('form:input-label-publish')}
               id={ProductStatus.Publish}
               checked={ProductStatus.Publish === status}
@@ -151,6 +185,7 @@ const ProductContent = ({ state, initialValues }: Props) => {
             <Radio
               name="status"
               onChange={handleChange}
+              onMouseLeaveTopLevel={checkForUpdateHandler}
               id={ProductStatus.Draft}
               checked={ProductStatus.Draft === status}
               label={t('form:input-label-draft')}
@@ -161,6 +196,7 @@ const ProductContent = ({ state, initialValues }: Props) => {
             <Checkbox
               name="disableOutOfStock"
               onChange={handleChange}
+              onMouseLeaveTopLevel={checkForUpdateHandler}
               checked={disableOutOfStock}
               label={t('form:input-label-disable-out-of-stock')}
             />

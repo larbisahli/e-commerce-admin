@@ -4,15 +4,22 @@ import { useMemo } from 'react';
 
 export function useDifferenceWith(
   currentValue: any[] = [],
-  initialValue: any[] = []
+  initialValue: any[] = [],
+  isUpdateMode: boolean
 ) {
   const mapCurrentValue = useMemo(
-    () => currentValue?.map(({ id }) => ({ id }))?.sort((a, b) => a.id - b.id),
-    [currentValue]
+    () =>
+      isUpdateMode
+        ? currentValue?.map(({ id }) => ({ id }))?.sort((a, b) => a.id - b.id)
+        : [],
+    [currentValue, isUpdateMode]
   );
   const mapInitialValue = useMemo(
-    () => initialValue?.map(({ id }) => ({ id }))?.sort((a, b) => a.id - b.id),
-    [initialValue]
+    () =>
+      isUpdateMode
+        ? initialValue?.map(({ id }) => ({ id }))?.sort((a, b) => a.id - b.id)
+        : [],
+    [initialValue, isUpdateMode]
   );
   const { additions = [], deletions = [] } = useMemo(() => {
     const additions = differenceWith(mapCurrentValue, mapInitialValue, isEqual);
