@@ -302,7 +302,7 @@ export interface ProductSeo {
 }
 
 export interface VariationType {
-  id?: Scalars['Int'];
+  id?: Scalars['ID'];
   attribute: Attribute;
   selectedValues: Array<Nullable<AttributeValue>>;
 }

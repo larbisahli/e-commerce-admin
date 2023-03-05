@@ -231,6 +231,7 @@ function ProductForm({ setUnsavedChanges, initialValues = {} }: IProps) {
         />
         <Card className="w-full sm:w-8/12 md:w-2/3">
           <ProductThumbnail
+            setError={setError}
             state={productThumbnailState}
             initialValues={initialValues}
           />
@@ -245,6 +246,7 @@ function ProductForm({ setUnsavedChanges, initialValues = {} }: IProps) {
         />
         <Card className="w-full sm:w-8/12 md:w-2/3">
           <ProductGallery
+            setError={setError}
             state={productGalleryState}
             initialValues={initialValues}
           />

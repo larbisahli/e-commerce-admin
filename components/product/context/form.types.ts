@@ -43,7 +43,7 @@ export interface ActionType {
 
 interface VariationPayload {
   value?: any;
-  id?: Scalars['Int'];
+  id?: Scalars['ID'];
   values?: (
     | Category
     | Tag

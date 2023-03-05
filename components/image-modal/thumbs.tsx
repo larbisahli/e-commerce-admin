@@ -22,20 +22,25 @@ const ImageThumbs = ({
     e: React.ChangeEvent<HTMLInputElement>,
     photo: ImageType
   ) => {
+    const { id, image, placeholder } = photo;
     const target = e.target;
     const checked = target['checked'];
+
     if (isThumbnail) {
       if (checked) {
-        setSelectedImages([photo]);
+        setSelectedImages([{ id, image, placeholder }]);
       } else {
         setSelectedImages([]);
       }
     } else {
       if (checked) {
-        setSelectedImages((prev) => [...(prev ?? []), photo]);
+        setSelectedImages((prev) => [
+          ...(prev ?? []),
+          { id, image, placeholder }
+        ]);
       } else {
         setSelectedImages((prev) => [
-          ...((prev ?? [])?.filter((img) => img.id !== photo?.id) ?? [])
+          ...((prev ?? [])?.filter((img) => img.id !== id) ?? [])
         ]);
       }
     }

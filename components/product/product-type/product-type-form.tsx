@@ -1,8 +1,9 @@
 import Accordion from '@components/ui/accordion';
 import { Product, ProductType } from '@ts-types/generated';
+import { differenceWith, isEmpty } from 'lodash';
 import isEqual from 'lodash/isEqual';
 import { useTranslation } from 'next-i18next';
-import React, { memo, useState } from 'react';
+import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
 
 import ProductSimpleForm from '../product-simple-form';
 import ProductVariableForm from '../product-variable-form';
@@ -39,26 +40,67 @@ const ProductTypeFormComponent = ({ state, initialValues }: Props) => {
     isUpdateMode
   } = state;
 
-  const checkForUpdateHandler = () => {
-    if (!isUpdateMode) return;
+  const checkForUpdateHandler = useCallback(
+    (values?: any) => {
+      if (!isUpdateMode) return;
 
-    const initialProductContent = {
-      salePrice: initialValues.salePrice ?? 0,
-      comparePrice: initialValues.comparePrice ?? 0,
-      buyingPrice: initialValues.buyingPrice ?? 0,
-      quantity: initialValues.quantity ?? 0,
-      sku: initialValues.sku ?? 0
-    };
-    const currentProductContent = {
-      salePrice,
-      comparePrice,
+      if (productType === ProductType.Variable) {
+        const { additions, deletions } = values;
+        setIsUpdated(!isEmpty(additions) || !isEmpty(deletions));
+        return;
+      }
+
+      const {
+        salePrice: initSalePrice,
+        comparePrice: initComparePrice,
+        buyingPrice: initBuyingPrice,
+        quantity: initQuantity,
+        initSku
+      } = initialValues;
+
+      const initialProductContent = {
+        salePrice: initSalePrice ?? 0,
+        comparePrice: initComparePrice ?? 0,
+        buyingPrice: initBuyingPrice ?? 0,
+        quantity: initQuantity ?? 0,
+        sku: initSku ?? 0
+      };
+      const currentProductContent = {
+        salePrice,
+        comparePrice,
+        buyingPrice,
+        quantity,
+        sku
+      };
+
+      setIsUpdated(!isEqual(initialProductContent, currentProductContent));
+    },
+    [
       buyingPrice,
+      comparePrice,
+      initialValues,
+      isUpdateMode,
+      productType,
       quantity,
+      salePrice,
       sku
-    };
+    ]
+  );
 
-    setIsUpdated(!isEqual(initialProductContent, currentProductContent));
-  };
+  const getUpdatedVariationOptions = useCallback(() => {
+    if (!isUpdateMode) return { additions: [], deletions: [] };
+
+    return {
+      additions: differenceWith(
+        variationOptions,
+        initialValues?.variationOptions,
+        isEqual
+      ),
+      deletions: initialValues?.variationOptions?.filter((vo) => {
+        return isEmpty(variationOptions?.find((v) => v?.id === vo?.id));
+      })
+    };
+  }, [initialValues?.variationOptions, isUpdateMode, variationOptions]);
 
   const renderSimpleForm = () => {
     if (productType === ProductType.Simple) {
@@ -80,7 +122,8 @@ const ProductTypeFormComponent = ({ state, initialValues }: Props) => {
         <ProductVariableForm
           isUpdated={isUpdated}
           checkForUpdateHandler={checkForUpdateHandler}
-          state={{ variationOptions, variations }}
+          getUpdatedVariationOptions={getUpdatedVariationOptions}
+          state={{ variationOptions, variations, isUpdateMode }}
           initialValues={initialValues}
         />
       );

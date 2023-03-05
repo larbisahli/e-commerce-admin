@@ -14,7 +14,7 @@ import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
 import { nanoid } from 'nanoid';
 import { useTranslation } from 'next-i18next';
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { useFormReducer } from '../context/form.context';
 import { Actions } from '../context/form.types';
@@ -56,18 +56,32 @@ function getCartesianProduct(values: VariationType[]) {
 
 type IProps = {
   initialValues?: Product | null;
-  checkForUpdateHandler: () => void;
+  getUpdatedVariationOptions: () => {
+    additions: Product['variationOptions'];
+    deletions: Product['variationOptions'];
+  };
+  // eslint-disable-next-line no-unused-vars
+  checkForUpdateHandler: (values: any) => void;
   isUpdated: boolean;
   state: {
     variationOptions: Product['variationOptions'];
     variations: Product['variations'];
+    isUpdateMode: boolean;
   };
 };
 
-function ProductVariableForm({ state, initialValues }: IProps) {
+function ProductVariableForm({
+  state,
+  initialValues,
+  checkForUpdateHandler,
+  getUpdatedVariationOptions,
+  isUpdated
+}: IProps) {
   const { t } = useTranslation();
 
   const dispatch = useFormReducer();
+
+  const [updatedVariationOptions, setUpdatedVariationOptions] = useState([]);
 
   const { variationOptions, variations } = state;
 
@@ -93,8 +107,9 @@ function ProductVariableForm({ state, initialValues }: IProps) {
 
   const { attributes = [] } = data ?? {};
 
-  const attributeValuesChanges = [].concat(
-    ...(variations?.map((v) => v?.selectedValues) ?? [])
+  const attributeValuesChanges = useMemo(
+    () => [].concat(...(variations?.map((v) => v?.selectedValues) ?? [])),
+    [variations]
   );
 
   useEffect(() => {
@@ -118,41 +133,18 @@ function ProductVariableForm({ state, initialValues }: IProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [attributeValuesChanges, attributeValuesChangesState]);
 
-  // useEffect(() => {
-  //   if (
-  //     isEmpty(variationOptions) &&
-  //     !isEmpty(initialValues?.variationOptions)
-  //   ) {
-  //     const variationOptions = cloneDeep(initialValues?.variationOptions ?? []);
-  //     const variations = cloneDeep(initialValues?.variations ?? []);
-  //     dispatchVariationState({
-  //       type: VariationActions.INIT,
-  //       payload: {
-  //         value: {
-  //           variations: variations?.map((variation) => {
-  //             return {
-  //               id: nanoid(),
-  //               ...variation
-  //             };
-  //           }),
-  //           variationOptions
-  //         }
-  //       }
-  //     });
-  //   } else if (isEmpty(initialValues?.variationOptions)) {
-  //     setInit(true);
-  //   }
-  // }, []);
-
   useEffect(() => {
-    dispatch({
-      type: Actions.VARIATION_CARTESIAN,
-      payload: {
-        values: cartesianProduct
-      }
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cartesianProduct]);
+    if (init) {
+      dispatch({
+        type: Actions.VARIATION_CARTESIAN,
+        payload: {
+          values: cartesianProduct
+        }
+      });
+    } else {
+      setInit(true);
+    }
+  }, [cartesianProduct, dispatch, init]);
 
   const appendVariant = (e: any) => {
     e.preventDefault();
@@ -162,6 +154,31 @@ function ProductVariableForm({ state, initialValues }: IProps) {
         value: { id: nanoid(), attribute: attributes[0], selectedValues: [] }
       }
     });
+  };
+
+  const updateHandler = useCallback(() => {
+    const { additions, deletions } = getUpdatedVariationOptions();
+    checkForUpdateHandler({ additions, deletions });
+    setUpdatedVariationOptions(additions);
+  }, [checkForUpdateHandler, getUpdatedVariationOptions]);
+
+  const renderSaveButton = () => {
+    if (isUpdated) {
+      return (
+        <div className="mt-8 flex justify-end border-t pt-4 m-5">
+          <Button
+          // loading={updating || creating}
+          // disabled={updating || creating}
+          >
+            <div className="mr-1">
+              <SaveIcon width="1.3rem" height="1.3rem" />
+            </div>
+            <div>{t('form:button-label-save')}</div>
+          </Button>
+        </div>
+      );
+    }
+    return null;
   };
 
   return (
@@ -185,6 +202,7 @@ function ProductVariableForm({ state, initialValues }: IProps) {
                 <VariationComponent
                   key={variant.id}
                   {...{
+                    updateHandler,
                     variant,
                     attributes,
                     loading,
@@ -212,34 +230,26 @@ function ProductVariableForm({ state, initialValues }: IProps) {
               <Title className="text-lg uppercase text-center px-5 md:px-8 mb-0">
                 {variationOptions?.length}{' '}
                 {variationOptions?.length > 1
-                  ? t('form:total-variations-added')
-                  : t('form:total-variation-added')}
+                  ? t('form:variations')
+                  : t('form:variation')}
               </Title>
               {variationOptions?.map((variationOption, index: number) => {
                 return (
                   <CartesianProductComponent
                     key={index}
-                    variationOption={variationOption}
-                    index={index}
+                    {...{
+                      index,
+                      updateHandler,
+                      updatedVariationOptions,
+                      variationOption
+                    }}
                   />
                 );
               })}
             </div>
           )}
         </div>
-        {!isEmpty(initialValues) && (
-          <div className="mt-12 flex justify-end p-5">
-            <Button
-            // loading={updating || creating}
-            // disabled={updating || creating}
-            >
-              <div className="mr-1">
-                <SaveIcon width="1.3rem" height="1.3rem" />
-              </div>
-              <div>{t('form:button-label-save')}</div>
-            </Button>
-          </div>
-        )}
+        {renderSaveButton()}
       </Card>
     </div>
   );

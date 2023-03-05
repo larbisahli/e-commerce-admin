@@ -8,12 +8,11 @@ import { useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 
 interface ImageType {
-  bucket: string;
+  id: string;
   image: string;
-  mimeType: string;
-  originalname: string;
   placeholder: string;
   success: boolean;
+  size: number;
   error?: any;
 }
 

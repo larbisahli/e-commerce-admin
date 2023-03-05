@@ -1,43 +1,85 @@
+import { useMutation } from '@apollo/client';
 import { SaveIcon } from '@components/icons/save-icon';
 import ImageModal from '@components/image-modal';
 import Button from '@components/ui/button';
+import { UPDATE_PRODUCT_THUMBNAIL } from '@graphql/product';
 import { useDifferenceWith } from '@hooks/useDifferenceWith';
+import { useGetStaff } from '@hooks/useGetStaff';
+import { notify } from '@lib/notify';
 import { ImageType, Product } from '@ts-types/generated';
 import isEmpty from 'lodash/isEmpty';
 import { useTranslation } from 'next-i18next';
-import { memo } from 'react';
+import { Dispatch, memo, useState } from 'react';
 
 import { Actions, useFormReducer } from '../context/form.context';
 
 interface Props {
   initialValues: Product;
+  setError: Dispatch<any>;
   state: {
     thumbnail: Product['thumbnail'];
     isUpdateMode: boolean;
   };
 }
 
-const ProductThumbnail = ({ state, initialValues }: Props) => {
+const ProductThumbnail = ({ state, initialValues, setError }: Props) => {
   const { t } = useTranslation();
 
   const dispatch = useFormReducer();
+
+  const [initThumbnail, setInitThumbnail] = useState(
+    () => initialValues?.thumbnail
+  );
+
+  const { id: productId } = initialValues;
 
   const { thumbnail, isUpdateMode } = state;
 
   const { additions, deletions } = useDifferenceWith(
     thumbnail,
-    initialValues?.thumbnail,
+    initThumbnail,
     isUpdateMode
   );
+
+  const { staffInfo } = useGetStaff();
+  const csrfToken = staffInfo?.csrfToken;
+
+  const [updateProduct, { loading }] = useMutation(UPDATE_PRODUCT_THUMBNAIL, {
+    context: {
+      headers: {
+        'x-csrf-token': csrfToken
+      }
+    },
+    onCompleted: (data: { updateProductThumbnail: { id: number } }) => {
+      if (!isEmpty(data?.updateProductThumbnail)) {
+        setInitThumbnail(thumbnail);
+        notify(t('common:successfully-updated'), 'success');
+      }
+    }
+  });
+
+  const onUpdate = (e) => {
+    e.preventDefault();
+    // Check if the image exits
+    if (isEmpty(additions) || isEmpty(deletions)) {
+      notify(t('Please add an image'), 'warning');
+    }
+    updateProduct({
+      variables: {
+        id: productId,
+        additions: { thumbnail: additions },
+        deletions: { thumbnail: deletions }
+      }
+    }).catch((err) => {
+      setError(err);
+    });
+  };
 
   const renderSaveButton = () => {
     if (!isEmpty(additions) || !isEmpty(deletions)) {
       return (
         <div className="mt-3 flex justify-end border-t pt-4">
-          <Button
-          // loading={updating || creating}
-          // disabled={updating || creating}
-          >
+          <Button onClick={onUpdate} loading={loading} disabled={loading}>
             <div className="mr-1">
               <SaveIcon width="1.3rem" height="1.3rem" />
             </div>

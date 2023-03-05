@@ -5,18 +5,23 @@ import Input from '@components/ui/input';
 import Title from '@components/ui/title';
 import { useSettings } from '@hooks/useSettings';
 import type { ImageType, VariationOptionsType } from '@ts-types/generated';
+import isEmpty from 'lodash/isEmpty';
 import { useTranslation } from 'next-i18next';
-import React, { memo, useMemo } from 'react';
+import React, { memo, useEffect, useMemo } from 'react';
 
 import { Actions, useFormReducer } from '../context/form.context';
 
 interface CartesianProductProps {
+  updateHandler: () => void;
   variationOption: VariationOptionsType;
+  updatedVariationOptions: VariationOptionsType[];
   index: number;
 }
 
 const CartesianProductComponent = ({
+  updateHandler,
   variationOption,
+  updatedVariationOptions,
   index
 }: CartesianProductProps) => {
   const { t } = useTranslation();
@@ -60,15 +65,33 @@ const CartesianProductComponent = ({
     });
   };
 
+  const {
+    id,
+    title,
+    salePrice,
+    comparePrice,
+    buyingPrice,
+    quantity,
+    sku,
+    thumbnail
+  } = variationOption;
+
+  const isUpdated = useMemo(() => {
+    return !isEmpty(updatedVariationOptions?.find((v) => v.id === id));
+  }, [id, updatedVariationOptions]);
+
+  useEffect(() => {
+    updateHandler();
+  }, [thumbnail]);
+
   return (
     <Accordion
-      btnClassName="mt-1"
+      isUpdated={isUpdated}
+      btnClassName="mt-1 bg-gray-100"
       Title={() => (
         <Title className="!text-lg">
           {t('form:form-title-variant')}:{' '}
-          <span className="text-blue-600 font-semibold">
-            {variationOption.title}
-          </span>
+          <span className="text-blue-600 font-semibold">{title}</span>
         </Title>
       )}
     >
@@ -83,8 +106,9 @@ const CartesianProductComponent = ({
             id={`salePrice-${index}`}
             name="salePrice"
             onChange={HandleInputChange}
+            onBlur={updateHandler}
             min={0}
-            value={variationOption.salePrice}
+            value={salePrice}
             // error={t(errors.variation_options?.[index]?.sale_price?.message)}
             variant="outline"
             className="mb-2 ml-1"
@@ -96,7 +120,8 @@ const CartesianProductComponent = ({
             name="comparePrice"
             min={0}
             onChange={HandleInputChange}
-            value={variationOption.comparePrice}
+            onBlur={updateHandler}
+            value={comparePrice}
             type="number"
             // error={t(errors.variation_options?.[index]?.compare_price?.message)}
             variant="outline"
@@ -108,7 +133,8 @@ const CartesianProductComponent = ({
             name="buyingPrice"
             min={0}
             onChange={HandleInputChange}
-            value={variationOption.buyingPrice}
+            onBlur={updateHandler}
+            value={buyingPrice}
             // error={t(errors.variation_options?.[index]?.buying_price?.message)}
             variant="outline"
             className="mb-2 ml-1"
@@ -119,7 +145,8 @@ const CartesianProductComponent = ({
             name="quantity"
             min={0}
             onChange={HandleInputChange}
-            value={variationOption.quantity}
+            onBlur={updateHandler}
+            value={quantity}
             // error={t(errors.variation_options?.[index]?.quantity?.message)}
             variant="outline"
             className="mb-2 ml-1"
@@ -129,7 +156,8 @@ const CartesianProductComponent = ({
             label={`${t('form:input-label-sku')}`}
             name="sku"
             onChange={HandleInputChange}
-            value={variationOption.sku}
+            onBlur={updateHandler}
+            value={sku}
             // error={t(errors.variation_options?.[index]?.sku?.message)}
             variant="outline"
             className="mb-2 ml-1"
@@ -139,7 +167,7 @@ const CartesianProductComponent = ({
         <ImageModal
           isThumbnail
           onSelect={handleSelectedImage}
-          selected={variationOption.thumbnail ?? []}
+          selected={thumbnail ?? []}
           modalId={`fieldAttributeValues-modal-${index}`}
           label="form:label-add-variant-thumbnail"
         />

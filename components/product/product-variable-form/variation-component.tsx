@@ -3,9 +3,10 @@ import Loader from '@components/ui/loader/loader';
 import Title from '@components/ui/title';
 import type { VariationType } from '@ts-types/generated';
 import { Attribute } from '@ts-types/generated';
+import isEmpty from 'lodash/isEmpty';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
-import React, { memo, useMemo } from 'react';
+import React, { useMemo } from 'react';
 
 import { useFormReducer } from '../context/form.context';
 import { Actions } from '../context/form.types';
@@ -16,6 +17,7 @@ const Select = dynamic(() => import('@components/ui/select/select'), {
 });
 
 interface VCProps {
+  updateHandler: () => void;
   variant: VariationType;
   attributes: Attribute[];
   index: number;
@@ -23,6 +25,7 @@ interface VCProps {
 }
 
 const VariationComponent = ({
+  updateHandler,
   variant,
   index,
   attributes,
@@ -36,7 +39,7 @@ const VariationComponent = ({
     dispatch({
       type: Actions.REMOVE_VARIATION,
       payload: {
-        id: variant.id
+        id: variant?.id
       }
     });
   };
@@ -46,7 +49,7 @@ const VariationComponent = ({
       type: Actions.CHANGE_VARIATION,
       payload: {
         value: attribute,
-        id: variant.id
+        id: variant?.id
       }
     });
   };
@@ -56,17 +59,19 @@ const VariationComponent = ({
       type: Actions.CHANGE_VARIATION_VALUES,
       payload: {
         values,
-        id: variant.id
+        id: variant?.id
       }
     });
   };
 
-  const values = useMemo(
-    () =>
-      attributes?.find((attribute) => attribute.id === variant.attribute.id)
-        ?.values,
-    [variant.attribute, attributes]
-  );
+  const values = useMemo(() => {
+    if (loading && !isEmpty(variant)) {
+      return [];
+    }
+    return attributes?.find(
+      (attribute) => attribute.id === variant?.attribute.id
+    )?.values;
+  }, [loading, variant, attributes]);
 
   return (
     <div className="border-b border-dashed border-border-200 last:border-0 p-5 md:p-8">
@@ -88,7 +93,7 @@ const VariationComponent = ({
         <div className="mt-5">
           <Label>{t('form:input-label-attribute-name')}*</Label>
           <Select
-            value={variant.attribute}
+            value={variant?.attribute}
             getOptionLabel={(option: any) => option.name}
             getOptionValue={(option: any) => option.id}
             isLoading={loading}
@@ -96,13 +101,14 @@ const VariationComponent = ({
             hideSelectedOptions
             options={attributes}
             onChange={changeAttribute}
+            onBlur={updateHandler}
           />
         </div>
 
         <div className="mt-5 col-span-2">
           <Label>{t('form:input-label-attribute-value')}*</Label>
           <Select
-            value={variant.selectedValues}
+            value={variant?.selectedValues}
             getOptionLabel={(option: any) => option.value}
             getOptionValue={(option: any) => option.id}
             isMulti
@@ -111,6 +117,7 @@ const VariationComponent = ({
             hideSelectedOptions
             options={values}
             onChange={changeValues}
+            onBlur={updateHandler}
           />
         </div>
       </div>

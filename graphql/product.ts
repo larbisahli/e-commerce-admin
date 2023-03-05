@@ -150,7 +150,7 @@ export const PRODUCT = gql`
   }
 `;
 
-export const RECOMMENDATIONS = gql`
+export const LINKED_PRODUCTS = gql`
   query Product($id: Int!) {
     relatedProducts(id: $id) {
       id
@@ -264,6 +264,38 @@ export const UPDATE_PRODUCT = gql`
     $deletions: UpdateProductInput!
   ) {
     updateProduct(id: $id, additions: $additions, deletions: $deletions) {
+      id
+    }
+  }
+`;
+
+export const UPDATE_PRODUCT_THUMBNAIL = gql`
+  mutation UpdateProductThumbnail(
+    $id: Int!
+    $additions: UpdateProductInput!
+    $deletions: UpdateProductInput!
+  ) {
+    updateProductThumbnail(
+      id: $id
+      additions: $additions
+      deletions: $deletions
+    ) {
+      id
+    }
+  }
+`;
+
+export const UPDATE_PRODUCT_GALLERY = gql`
+  mutation UpdateProductGallery(
+    $id: Int!
+    $additions: UpdateProductInput!
+    $deletions: UpdateProductInput!
+  ) {
+    updateProductGallery(
+      id: $id
+      additions: $additions
+      deletions: $deletions
+    ) {
       id
     }
   }

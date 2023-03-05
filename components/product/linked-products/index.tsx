@@ -5,7 +5,7 @@ import ProductModal from '@components/products-modal';
 import Accordion from '@components/ui/accordion';
 import Button from '@components/ui/button';
 import Description from '@components/ui/description';
-import { RECOMMENDATIONS } from '@graphql/product';
+import { LINKED_PRODUCTS } from '@graphql/product';
 import { useDifferenceWith } from '@hooks/useDifferenceWith';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import type { Product } from '@ts-types/generated';
@@ -48,7 +48,7 @@ const LinkedProducts = ({ state, initialValues }: Props) => {
   const productId = parseInt(query.productId as string, 10);
 
   const { data, loading, error } = useQuery<TProduct, productVariable>(
-    RECOMMENDATIONS,
+    LINKED_PRODUCTS,
     {
       variables: { id: productId },
       fetchPolicy: 'cache-and-network',
@@ -95,27 +95,23 @@ const LinkedProducts = ({ state, initialValues }: Props) => {
   const {
     additions: additionalUpsellProducts,
     deletions: deletedUpsellProducts
-  } = useDifferenceWith(
-    upsellProducts,
-    initialValues?.upsellProducts,
-    isUpdateMode
-  );
+  } = useDifferenceWith(upsellProducts, data?.upsellProducts, isUpdateMode);
 
   // __ relatedProducts __
   const {
     additions: additionalRelatedProducts,
     deletions: deletedRelatedProducts
-  } = useDifferenceWith(
-    relatedProducts,
-    initialValues?.relatedProducts,
-    isUpdateMode
-  );
+  } = useDifferenceWith(relatedProducts, data?.relatedProducts, isUpdateMode);
 
   // __ TAGS __
   const {
     additions: additionalCrossSellProducts,
     deletions: deletedCrossSellProducts
-  } = useDifferenceWith(crossSellProducts, initialValues?.tags, isUpdateMode);
+  } = useDifferenceWith(
+    crossSellProducts,
+    data?.crossSellProducts,
+    isUpdateMode
+  );
 
   const isUpdated = useMemo(() => {
     return (
@@ -134,6 +130,25 @@ const LinkedProducts = ({ state, initialValues }: Props) => {
     additionalCrossSellProducts,
     deletedCrossSellProducts
   ]);
+
+  const renderSaveButton = () => {
+    if (isUpdated) {
+      return (
+        <div className="mt-8 flex justify-end border-t pt-4">
+          <Button
+          // loading={updating || creating}
+          // disabled={updating || creating}
+          >
+            <div className="mr-1">
+              <SaveIcon width="1.3rem" height="1.3rem" />
+            </div>
+            <div>{t('form:button-label-save')}</div>
+          </Button>
+        </div>
+      );
+    }
+    return null;
+  };
 
   return (
     <Accordion
@@ -157,19 +172,7 @@ const LinkedProducts = ({ state, initialValues }: Props) => {
             <CrossSellProducts crossSellProducts={crossSellProducts} />
           </div>
           <ProductModal />
-          {!isEmpty(initialValues) && (
-            <div className="mt-12 flex justify-end border-t pt-4">
-              <Button
-              // loading={updating || creating}
-              // disabled={updating || creating}
-              >
-                <div className="mr-1">
-                  <SaveIcon width="1.3rem" height="1.3rem" />
-                </div>
-                <div>{t('form:button-label-save')}</div>
-              </Button>
-            </div>
-          )}
+          {renderSaveButton()}
         </Card>
       </div>
     </Accordion>
