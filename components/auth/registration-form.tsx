@@ -288,11 +288,11 @@ const AliasViewer = ({ aliasName, executeCheckQuery }) => {
         aliasCheck({ variables: { name: aliasName } });
         clearTimeout(timeout.current);
         timeout.current = null;
-      }, 600);
+      }, 900);
     } else {
       clearTimeout(timeout.current);
       timeout.current = null;
-    }
+    } 
   }, [executeCheckQuery, aliasName]);
 
   return aliasName ? (
