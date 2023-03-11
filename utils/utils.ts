@@ -59,11 +59,11 @@ export const replace = (array, index: number, replacerIndex: number) => {
   }
 };
 
-export const mediaURL = !PRODUCTION_ENV
+export const mediaURL = PRODUCTION_ENV
   ? process.env.MEDIA_URL
   : 'http://127.0.0.1:5000/media';
 
-export const apiURL = !PRODUCTION_ENV
+export const apiURL = PRODUCTION_ENV
   ? process.env.API_URL
   : 'http://127.0.0.1:5000';
 
