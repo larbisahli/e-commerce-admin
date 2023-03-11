@@ -292,7 +292,7 @@ const AliasViewer = ({ aliasName, executeCheckQuery }) => {
     } else {
       clearTimeout(timeout.current);
       timeout.current = null;
-    } 
+    }
   }, [executeCheckQuery, aliasName]);
 
   return aliasName ? (

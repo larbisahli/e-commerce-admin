@@ -42,14 +42,16 @@ const moduleExports = {
     loader: 'default'
   },
   env: {
-    API_URL: 'https://api.dropgala.com/',
+    API_URL: 'https://api.dropgala.com',
     MEDIA_URL: 'https://api.dropgala.com/media',
     NEXT_PUBLIC_GTAG_MEASUREMENT_ID: 'G-TQMWTHM2FF',
     TOKEN_ISSUER: 'dropgala.com',
     // NEXT_PUBLIC_GOOGLE_MAP_API_KEY: 'AIzaSyDB2j-G5LJM0yPNG0AqziJjgh1UOW10W7I',
     FB_APPID: '',
-    SENTRY_DSN: 'https://bb6c9168b250492493d8695e9851c780@o1189599.ingest.sentry.io/6310398',
-    NEXT_PUBLIC_SENTRY_DSN: 'https://bb6c9168b250492493d8695e9851c780@o1189599.ingest.sentry.io/6310398',
+    SENTRY_DSN:
+      'https://bb6c9168b250492493d8695e9851c780@o1189599.ingest.sentry.io/6310398',
+    NEXT_PUBLIC_SENTRY_DSN:
+      'https://bb6c9168b250492493d8695e9851c780@o1189599.ingest.sentry.io/6310398',
     SENTRY_AUTH_TOKEN: '896bfeeab4b511ec839996dc720e1b31'
   },
   typescript: {
@@ -61,8 +63,8 @@ const moduleExports = {
   sentry: {
     disableServerWebpackPlugin: true,
     disableClientWebpackPlugin: true,
-    hideSourceMaps: true,
-  },
+    hideSourceMaps: true
+  }
 };
 
 // const SentryWebpackPluginOptions = { silent: true };

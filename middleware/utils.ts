@@ -95,7 +95,9 @@ export async function verifyAuth(context: GetServerSidePropsContext) {
       httpOnly: true,
       maxAge: 0,
       sameSite: 'strict',
-      secure: PRODUCTION_ENV
+      secure: PRODUCTION_ENV,
+      domain: PRODUCTION_ENV ? '.dropgala.com' : '127.0.0.1',
+      overwrite: true
     });
     return { error: { message: error?.message, jwtToken } };
   }
@@ -155,7 +157,9 @@ export async function XSRFHandler(context: GetServerSidePropsContext) {
         httpOnly: true,
         maxAge: 5 * 60 * 60 * 1000, // 5 hours
         sameSite: 'strict',
-        secure: PRODUCTION_ENV
+        secure: PRODUCTION_ENV,
+        domain: PRODUCTION_ENV ? '.dropgala.com' : '127.0.0.1',
+        overwrite: true
       });
     }
   } catch (err) {
