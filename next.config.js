@@ -35,14 +35,15 @@ const moduleExports = {
     domains: [
       '127.0.0.1',
       'media.dropgala.com',
+      'api.dropgala.com',
       'dropgala.s3.eu-west-3.amazonaws.com'
     ],
     path: '/_next/image',
     loader: 'default'
   },
   env: {
-    API_URL: 'http://13.39.86.65:5000',
-    MEDIA_URL: 'http://13.39.86.65:5000/media',
+    API_URL: 'https://api.dropgala.com/',
+    MEDIA_URL: 'https://api.dropgala.com/media',
     NEXT_PUBLIC_GTAG_MEASUREMENT_ID: 'G-TQMWTHM2FF',
     TOKEN_ISSUER: 'dropgala.com',
     // NEXT_PUBLIC_GOOGLE_MAP_API_KEY: 'AIzaSyDB2j-G5LJM0yPNG0AqziJjgh1UOW10W7I',
