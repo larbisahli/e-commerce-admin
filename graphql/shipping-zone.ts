@@ -93,7 +93,7 @@ export const CREATE_SHIPPING = gql`
 export const UPDATE_SHIPPING = gql`
   mutation UpdateShippingZone(
     $id: Int!
-    $shippingZone: UpdateShippingZoneInput
+    $shippingZone: ShippingZoneInput
     $additions: UpdateRateAndZoneInput
     $deletions: UpdateRateAndZoneInput
   ) {

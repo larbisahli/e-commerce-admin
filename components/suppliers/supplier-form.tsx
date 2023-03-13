@@ -16,7 +16,6 @@ import { CREATE_SUPPLIER, UPDATE_SUPPLIER } from '@graphql/supplier';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetStaff } from '@hooks/useGetStaff';
 import { notify } from '@lib/index';
-import type { Nullable } from '@ts-types/custom.types';
 import type { Suppliers } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import { isValidPhoneNumber } from 'libphonenumber-js';
@@ -69,13 +68,16 @@ export default function CreateOrUpdateSupplierForm({ initialValues }: IProps) {
 
   // Get Countries
   useEffect(() => {
+    console.log({ initialValues });
     async function getCountries() {
       const { Countries } = await import('@utils/countries');
       setCountries(Countries);
-      setValue(
-        'country',
-        Countries?.find(({ iso2 }) => iso2 == 'US')
-      );
+      if (isEmpty(initialValues?.country)) {
+        setValue(
+          'country',
+          Countries?.find(({ iso2 }) => iso2 == 'US')
+        );
+      }
     }
     getCountries();
   }, []);

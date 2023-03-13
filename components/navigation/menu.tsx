@@ -16,7 +16,7 @@ export default function NavMenu() {
   const { t } = useTranslation('common');
 
   const {
-    staffInfo: { profile = [], firstName, lastName }
+    staffInfo: { profile = [], firstName = '', lastName = '' }
   } = useGetStaff();
   console.log({ profile });
   const { image = null, placeholder = null } = profile[0] ?? {};
@@ -34,7 +34,9 @@ export default function NavMenu() {
           src={image ?? siteSettings.avatar.image}
           customPlaceholder={placeholder ?? siteSettings.avatar.placeholder}
         />
-        <div className="pl-1 pr-2 text-gray-500 font-medium">{`${firstName} ${lastName}`}</div>
+        {firstName && (
+          <div className="pl-1 pr-2 text-gray-500 font-medium">{`${firstName} ${lastName}`}</div>
+        )}
       </Menu.Button>
 
       <Transition

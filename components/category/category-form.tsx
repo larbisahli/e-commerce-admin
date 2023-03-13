@@ -18,7 +18,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useErrorLogger, useWarnIfUnsavedChanges } from '@hooks/index';
 import { useGetStaff } from '@hooks/index';
 import { notify } from '@lib/index';
-import { Nullable } from '@ts-types/custom.types';
 import { Category, OrderBy } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import isEmpty from 'lodash/isEmpty';
@@ -31,11 +30,11 @@ import { categoryIcons } from './category-icons';
 import { categoryValidationSchema } from './category-validation-schema';
 
 interface TCategorySelect {
-  getCategoriesSelect: Category[];
+  categorySelect: Category[];
 }
 
 interface OptionsVariable {
-  id: string | string[];
+  id: number;
   page: number;
   limit: number;
   orderBy: OrderBy;
@@ -50,7 +49,7 @@ function SelectCategories({ control }: { control: Control<FormValues> }) {
     CATEGORIES_FOR_SELECT,
     {
       variables: {
-        id: categoryId,
+        id: Number(categoryId),
         page: 1,
         limit: 999,
         orderBy: OrderBy.CREATED_AT
@@ -59,7 +58,7 @@ function SelectCategories({ control }: { control: Control<FormValues> }) {
     }
   );
 
-  const categories = data?.getCategoriesSelect;
+  const categories = data?.categorySelect;
 
   useErrorLogger(error);
 

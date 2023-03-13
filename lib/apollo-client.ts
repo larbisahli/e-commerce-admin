@@ -3,6 +3,7 @@ import { createPersistedQueryLink } from '@apollo/client/link/persisted-queries'
 import { RetryLink } from '@apollo/client/link/retry';
 import { apiURL } from '@utils/utils';
 import { sha256 } from 'crypto-hash';
+import isEmpty from 'lodash/isEmpty';
 
 const persistedQueriesLink = createPersistedQueryLink({
   sha256,
@@ -21,10 +22,10 @@ const retryLink = new RetryLink({
     jitter: true
   },
   attempts: {
-    max: 5,
+    max: 2,
     retryIf: (error, _operation) => {
       console.log(`retryIf`, { error, _operation });
-      return !!error;
+      return !isEmpty(error);
     }
   }
 });
