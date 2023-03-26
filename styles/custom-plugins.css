@@ -527,6 +527,11 @@
   @apply !bg-accent;
 }
 
+.Toastify__toast--success {
+  background-color: rgb(12, 156, 12);
+  @apply text-white font-semibold;
+}
+
 .Toastify__toast-theme--colored.Toastify__toast--error {
   @apply !bg-red-500;
 }

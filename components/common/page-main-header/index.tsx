@@ -35,6 +35,7 @@ interface Props {
   perPage: Nullable<number>;
   onLimitChange?: Function;
   limit?: { id: number; value: number; label: number };
+  showOnlyPagination?: boolean;
 }
 
 const PageMainHeader = ({
@@ -46,7 +47,8 @@ const PageMainHeader = ({
   onPagination,
   total,
   currentPage,
-  perPage
+  perPage,
+  showOnlyPagination = false
 }: Props) => {
   const { t } = useTranslation();
 
@@ -60,9 +62,11 @@ const PageMainHeader = ({
     });
   };
 
-  return (
-    <div className="p-3 mb-8">
-      {/* ----- */}
+  const renderControllers = () => {
+    if (showOnlyPagination) {
+      return null;
+    }
+    return (
       <div className="py-2 flex items-center justify-end">
         <button
           onClick={() => handleOpenDrop('filter')}
@@ -124,14 +128,28 @@ const PageMainHeader = ({
           <RefreshIcon width="25px" height="25px" />
         </Button>
       </div>
-      {/* --- Applied Filters --- */}
+    );
+  };
+
+  const renderAppliedFilter = () => {
+    if (showOnlyPagination) {
+      return null;
+    }
+    return (
       <div className="border-y border-gray-300 py-3 my-5 flex items-center justify-between">
         <div>
           <div className="text-base text-sub-heading">Active filters:</div>
         </div>
         <button className="text-blue-500 font-medium">Clear All</button>
       </div>
-      {/* --- Dropdown --- */}
+    );
+  };
+
+  const renderColumnsDropdown = () => {
+    if (showOnlyPagination) {
+      return null;
+    }
+    return (
       <div className="mb-5">
         {openDrop === 'columns' && (
           <ColumnsComponent
@@ -141,6 +159,17 @@ const PageMainHeader = ({
           />
         )}
       </div>
+    );
+  };
+
+  return (
+    <div className="p-3 mb-8">
+      {/* ----- */}
+      {renderControllers()}
+      {/* --- Applied Filters --- */}
+      {renderAppliedFilter()}
+      {/* --- Dropdown --- */}
+      {renderColumnsDropdown()}
       {/* ----- */}
       <div className="flex items-center justify-end">
         {onLimitChange instanceof Function && (

@@ -11,8 +11,8 @@ export const SUPER_ADMIN_PRIVILEGE = 'super_admin_privilege';
 export type ADMIN_TYPE = typeof SUPER_ADMIN_PRIVILEGE;
 
 // Cookies Name
-export const STAFF_TOKEN_NAME = '_suid';
-export type STAFF_TOKEN_TYPE = typeof STAFF_TOKEN_NAME;
+export const USER_TOKEN_NAME = '_uuid';
+export type STAFF_TOKEN_TYPE = typeof USER_TOKEN_NAME;
 
 // Modal Views
 export const DELETE_PRODUCT = 'DELETE_PRODUCT';

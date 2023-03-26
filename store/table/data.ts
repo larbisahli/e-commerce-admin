@@ -105,5 +105,8 @@ export const initialState = {
   },
   attribute: {
     columns: ['name', 'value', 'createdAt', 'createdBy', 'updatedBy', 'actions']
+  },
+  role: {
+    columns: ['role']
   }
 };

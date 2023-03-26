@@ -59,14 +59,6 @@ export type SSRProps = {
   client?: StaffType | null;
 };
 
-export type PrivilegesType = (
-  | READ_TYPE
-  | CREATE_TYPE
-  | UPDATE_TYPE
-  | DELETE_TYPE
-  | ADMIN_TYPE
-)[];
-
 export type ModalView =
   | DELETE_PRODUCT_TYPE
   | DELETE_ATTRIBUTE_TYPE

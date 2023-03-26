@@ -68,7 +68,7 @@ function SelectRoles({ control }: { control: Control<FormValues> }) {
       <SelectInput
         name="role"
         control={control}
-        getOptionLabel={(option: RoleType) => option.roleName}
+        getOptionLabel={(option: RoleType) => option.role}
         getOptionValue={(option: RoleType) => option.id}
         options={roles}
         isClearable={true}

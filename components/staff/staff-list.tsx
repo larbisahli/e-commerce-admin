@@ -125,7 +125,7 @@ const StaffList = ({ staffs, selectedColumns }: IProps) => {
                 style={{ width: 'fit-content' }}
                 className="font-medium text-13px md:text-sm rounded block border border-sink-base px-2 py-1 bg-gray-100"
               >
-                {'+' + phoneNumber}
+                {phoneNumber ? '+' + phoneNumber : 'NA'}
               </span>
             </div>
           );

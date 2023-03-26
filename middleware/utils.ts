@@ -1,4 +1,4 @@
-import { STAFF } from '@graphql/staff';
+import { USER_AUTH } from '@graphql/staff';
 import apolloClient from '@lib/apollo-client';
 import { JwtPayload } from '@ts-types/custom.types';
 import { CookieNames } from '@ts-types/enums';
@@ -20,7 +20,7 @@ const PublicKEY = Buffer.from(process.env.JWTRS256_KEY_PUB, 'base64').toString(
 );
 
 interface TStaff {
-  staff: StaffType;
+  userAuth: StaffType;
   error: Error;
 }
 
@@ -32,7 +32,7 @@ export async function verifyAuth(context: GetServerSidePropsContext) {
   const { req, res } = context;
 
   const cookies = new Cookies(req, res);
-  const jwtToken = cookies.get(CookieNames.STAFF_TOKEN_NAME);
+  const jwtToken = cookies.get(CookieNames.USER_TOKEN_NAME);
 
   try {
     if (!jwtToken) {
@@ -55,12 +55,10 @@ export async function verifyAuth(context: GetServerSidePropsContext) {
       return { error: 'Invalid Access Token' };
     }
 
-    const staffId = payload?.uid;
-
     // fetch for client info
     const { data } = await apolloClient.query<TStaff>({
-      query: STAFF,
-      variables: { id: staffId },
+      query: USER_AUTH,
+      variables: {},
       context: {
         headers: {
           authorization: jwtToken ? `Bearer ${jwtToken}` : ''
@@ -68,30 +66,30 @@ export async function verifyAuth(context: GetServerSidePropsContext) {
       }
     });
 
-    const { staff, error } = data ?? {};
+    const { userAuth, error } = data ?? {};
 
-    console.log({ data, staffId });
+    console.log({ userAuth, error });
 
-    if (!isEmpty(error) || isEmpty(staff)) {
+    if (!isEmpty(error) || isEmpty(userAuth)) {
       console.log('Auth Error:>>', { error });
       return {
-        error: { message: error.message }
+        error: { message: error?.message ?? 'Something happened' }
       };
     }
 
-    if (!staff?.active) {
+    if (!userAuth?.active) {
       return {
         error: { message: 'User not active!' }
       };
     }
 
     return {
-      client: { ...staff, ...payload }
+      client: { ...userAuth, ...payload }
     };
   } catch (error) {
     console.log('verifyAuth Error:>>', { error });
     const cookies = new Cookies(req, res);
-    cookies.set(CookieNames.STAFF_TOKEN_NAME, '', {
+    cookies.set(CookieNames.USER_TOKEN_NAME, '', {
       httpOnly: true,
       maxAge: 0,
       sameSite: 'strict',
@@ -106,7 +104,7 @@ export function verifyJWT(context: GetServerSidePropsContext) {
   const { req, res } = context;
 
   const cookies = new Cookies(req, res);
-  const jwtToken = cookies.get(CookieNames.STAFF_TOKEN_NAME);
+  const jwtToken = cookies.get(CookieNames.USER_TOKEN_NAME);
 
   try {
     if (!jwtToken) {
@@ -154,7 +152,7 @@ export async function XSRFHandler(context: GetServerSidePropsContext) {
     if (csrfSecret) {
       cookies.set(CookieNames.XSRF_TOKEN, csrfSecret, {
         httpOnly: true,
-        maxAge: 5 * 60 * 60 * 1000, // 5 hours
+        maxAge: 5 * 60 * 60 * 1000, // token valid for 5 hours
         sameSite: 'strict',
         domain: PRODUCTION_ENV ? '.dropgala.com' : '127.0.0.1',
         overwrite: true

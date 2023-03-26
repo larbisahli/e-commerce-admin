@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server';
 
 export async function middleware(req: NextRequest) {
   // const url = req.nextUrl;
-  // const staff_token = req.cookies[CookieNames.STAFF_TOKEN_NAME];
+  // const staff_token = req.cookies[CookieNames.USER_TOKEN_NAME];
 
   // if (
   //   !staff_token &&

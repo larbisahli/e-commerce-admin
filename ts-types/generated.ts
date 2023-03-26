@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import type { Nullable, PrivilegesType, Scalars } from './custom.types';
+import type { Nullable, Scalars } from './custom.types';
 import { RateType } from './enums';
 
 export enum SortOrder {
@@ -78,10 +78,9 @@ export interface CreatedUpdatedByAt {
   }>;
 }
 
-export interface RoleType extends CreatedUpdatedByAt {
+export interface RoleType {
   id?: string;
   roleName?: string;
-  privileges?: PrivilegesType[];
 }
 
 export interface StaffType extends CreatedUpdatedByAt {

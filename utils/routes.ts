@@ -17,7 +17,10 @@ export const ROUTES = {
   SUPPLIERS: '/suppliers',
   PROFILE_UPDATE: '/profile-update',
   LOGOUT: '/logout',
-  STAFFS: '/staffs',
+  STAFFS: '/user',
+  STAFF_ROLE: '/user/user_role',
+  USERS: '/user',
+  USER_ROLE: '/user/user_role',
   APPS: '/apps',
   STORE_SETTINGS: '/store/store-settings',
   WHATSAPP: '/whatsapp',
@@ -38,5 +41,6 @@ export const ROUTES = {
   EMAIL_TEMPLATES: '/store/email-templates',
   HERO_CAROUSEL: '/hero-carousel',
   INVITE: '/hero-carousel',
-  FILES: '/file'
+  FILES: '/file',
+  COMING_SOON: '/coming-soon'
 };

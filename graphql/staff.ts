@@ -16,15 +16,14 @@ export const STAFF_INFO = gql`
       role {
         id
         roleName
-        privileges
       }
     }
   }
 `;
 
 export const STAFF = gql`
-  query Staff($id: ID!) {
-    staff(id: $id) {
+  query User($id: ID!) {
+    user(id: $id) {
       id
       firstName
       lastName
@@ -40,23 +39,45 @@ export const STAFF = gql`
       role {
         id
         roleName
-        privileges
       }
     }
   }
 `;
 
-export const STAFFS = gql`
-  query Staffs(
+export const USER_AUTH = gql`
+  query UserAuth {
+    userAuth {
+      id
+      firstName
+      lastName
+      phoneNumber
+      email
+      isTenant
+      active
+      profile {
+        id
+        image
+        placeholder
+      }
+      role {
+        id
+        roleName
+      }
+    }
+  }
+`;
+
+export const USERS = gql`
+  query Users(
     $page: Int!
     $limit: Int!
     $orderBy: String!
     $sortedBy: String!
   ) {
-    staffCount {
+    userCount {
       count
     }
-    staffs(page: $page, limit: $limit, orderBy: $orderBy, sortedBy: $sortedBy) {
+    users(page: $page, limit: $limit, orderBy: $orderBy, sortedBy: $sortedBy) {
       id
       firstName
       lastName
@@ -83,15 +104,6 @@ export const STAFFS = gql`
         firstName
         lastName
       }
-    }
-  }
-`;
-
-export const ROLES_FOR_SELECT = gql`
-  query Roles {
-    roles {
-      id
-      roleName
     }
   }
 `;
@@ -166,6 +178,32 @@ export const BAN_STAFF = gql`
       id
       firstName
       lastName
+    }
+  }
+`;
+
+export const ROLES = gql`
+  query Staffs(
+    $page: Int!
+    $limit: Int!
+    $orderBy: String!
+    $sortedBy: String!
+  ) {
+    roleCount {
+      count
+    }
+    roles(page: $page, limit: $limit, orderBy: $orderBy, sortedBy: $sortedBy) {
+      id
+      roleName
+    }
+  }
+`;
+
+export const ROLES_FOR_SELECT = gql`
+  query Roles {
+    roles {
+      id
+      roleName
     }
   }
 `;

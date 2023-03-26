@@ -1,5 +1,3 @@
-import 'react-phone-input-2/lib/style.css';
-
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { ArrowSync } from '@components/icons/arrow-sync';
 import EditSvg from '@components/icons/pen';
@@ -15,13 +13,11 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetStaff } from '@hooks/useGetStaff';
 import { ROUTES } from '@utils/routes';
-import { isValidPhoneNumber } from 'libphonenumber-js';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import PhoneInput from 'react-phone-input-2';
 import * as yup from 'yup';
 
 import FormFooter from './form-footer';
@@ -29,8 +25,8 @@ import FormFooter from './form-footer';
 type FormValues = {
   firstName: string;
   lastName: string;
-  aliasName: string;
-  phoneNumber: string;
+  alias: string;
+  email: string;
   storeName: string;
 };
 
@@ -38,7 +34,7 @@ const registrationFormSchema = yup.object().shape({
   firstName: yup.string().required('form:error-first-name-required'),
   lastName: yup.string().required('form:error-last-name-required'),
   storeName: yup.string().required('form:error-store-name-required'),
-  aliasName: yup
+  alias: yup
     .string()
     .test(
       'len',
@@ -46,10 +42,11 @@ const registrationFormSchema = yup.object().shape({
       (val) => val.length <= 63 && val.length >= 2
     )
     .required('form:error-store-name-required'),
-  phoneNumber: yup
+  email: yup
     .string()
-    .typeError('form:error-phone-number-required')
-    .required('form:error-phone-number-required')
+    .email()
+    .typeError('form:error-email-required')
+    .required('form:error-email-required')
 });
 
 const RegistrationForm = () => {
@@ -57,7 +54,7 @@ const RegistrationForm = () => {
   const { t } = useTranslation();
 
   const [executeCheckQuery, setExecuteCheckQuery] = useState(false);
-  const [iso2, setIso2] = useState('ma');
+  const [iso2, setIso2] = useState('us');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
@@ -65,7 +62,6 @@ const RegistrationForm = () => {
     register,
     handleSubmit,
     watch,
-    setValue,
     formState: { errors },
     resetField
   } = useForm<FormValues>({
@@ -87,7 +83,7 @@ const RegistrationForm = () => {
         resetField('firstName');
         resetField('lastName');
         resetField('storeName');
-        resetField('aliasName');
+        resetField('alias');
         setSuccessMessage('form:success-register');
         router.push(ROUTES.LOGIN);
       }
@@ -99,15 +95,15 @@ const RegistrationForm = () => {
   async function onSubmit({
     firstName,
     lastName,
-    aliasName,
+    alias,
     storeName,
-    phoneNumber
+    email
   }: FormValues) {
     const variables = {
       firstName,
       lastName,
-      phoneNumber,
-      aliasName: aliasName
+      email,
+      alias: alias
         ?.toString()
         ?.toLowerCase()
         ?.replace(/[^a-zA-Z0-9]/g, ''),
@@ -117,25 +113,21 @@ const RegistrationForm = () => {
 
     setErrorMessage(null);
 
-    if (isValidPhoneNumber(`+${phoneNumber}`)) {
-      createStore({ variables }).catch((error) => {
-        const err = error?.graphQLErrors[0];
-        setErrorMessage(`error:${err?.t ?? 'SOMETHING_HAPPENED'}`);
-      });
-    } else {
-      setErrorMessage('error:INVALID_PHONE_NUMBER');
-    }
+    createStore({ variables }).catch((error) => {
+      const err = error?.graphQLErrors[0];
+      setErrorMessage(`error:${err?.t ?? 'SOMETHING_HAPPENED'}`);
+    });
   }
 
-  const aliasName = watch('aliasName');
+  const alias = watch('alias');
 
-  const alias = useMemo(
+  const aliasValidation = useMemo(
     () =>
-      aliasName
+      alias
         ?.toString()
         ?.toLowerCase()
         .replace(/[^a-zA-Z0-9]/g, ''),
-    [aliasName]
+    [alias]
   );
 
   useEffect(() => {
@@ -147,39 +139,19 @@ const RegistrationForm = () => {
       .then((data) => setIso2(data?.iso2 ?? 'ma'));
   }, []);
 
-  const phoneNumber = watch('phoneNumber');
-
   return (
     <div className="h-full">
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <div className="mb-5 phone-number-class">
-          <Label>{t('form:input-label-whatsapp-number')}</Label>
-          <PhoneInput
-            country={iso2?.toLowerCase()}
-            inputProps={{
-              name: 'phone',
-              required: true,
-              autoFocus: true
-            }}
-            disableSearchIcon
-            enableSearch
-            inputClass="phone-number-class py-5"
-            value={`+${phoneNumber}`}
-            isValid={(value, country: { dialCode: string }) => {
-              if (country?.dialCode != value) {
-                return isValidPhoneNumber(`+${value}`);
-              }
-              return true;
-            }}
-            onChange={(phone) => {
-              setValue('phoneNumber', phone);
-            }}
+          <Label>{t('form:input-label-email')}</Label>
+          <Input
+            {...register('email')}
+            type="email"
+            placeholder={t('form:input-label-email')}
+            variant="outline"
+            className="mb-4 w-full"
+            error={t(errors?.email?.message!)}
           />
-          <p className="pt-1 text-gray-400 text-sm">
-            {t('form:input-info-whatsapp-number')}
-          </p>
-          {/* @ts-ignore */}
-          <ValidationError message={t(errors.phoneNumber?.message)} />
         </div>
         <Label>{t('form:input-label-store-info')}</Label>
         <div className="flex items-center justify-between">
@@ -208,18 +180,21 @@ const RegistrationForm = () => {
           />
         </div>
         <Input
-          {...register('aliasName')}
+          {...register('alias')}
           type="text"
           variant="outline"
           placeholder="Store link"
-          error={t(errors?.aliasName?.message!)}
+          error={t(errors?.alias?.message!)}
           onKeyDown={() => setExecuteCheckQuery(false)}
           onKeyUp={() => setExecuteCheckQuery(true)}
         />
         <p className="pt-1 mb-4 text-gray-400 text-sm">
           {t('form:input-info-store-link')}
         </p>
-        <AliasViewer aliasName={alias} executeCheckQuery={executeCheckQuery} />
+        <AliasViewer
+          alias={aliasValidation}
+          executeCheckQuery={executeCheckQuery}
+        />
         <Button className="w-full" loading={loading} disabled={loading}>
           {t('common:sign-up')}
         </Button>
@@ -255,7 +230,7 @@ const RegistrationForm = () => {
   );
 };
 
-const AliasViewer = ({ aliasName, executeCheckQuery }) => {
+const AliasViewer = ({ alias, executeCheckQuery }) => {
   const timeout = useRef(null);
 
   const { staffInfo } = useGetStaff();
@@ -283,9 +258,9 @@ const AliasViewer = ({ aliasName, executeCheckQuery }) => {
   useErrorLogger(error);
 
   useEffect(() => {
-    if (executeCheckQuery && timeout.current === null && aliasName) {
+    if (executeCheckQuery && timeout.current === null && alias) {
       timeout.current = setTimeout(() => {
-        aliasCheck({ variables: { name: aliasName } });
+        aliasCheck({ variables: { name: alias } });
         clearTimeout(timeout.current);
         timeout.current = null;
       }, 900);
@@ -293,9 +268,9 @@ const AliasViewer = ({ aliasName, executeCheckQuery }) => {
       clearTimeout(timeout.current);
       timeout.current = null;
     }
-  }, [executeCheckQuery, aliasName]);
+  }, [executeCheckQuery, alias, aliasCheck]);
 
-  return aliasName ? (
+  return alias ? (
     <div
       style={{
         background: '#f7f7f7',
@@ -327,7 +302,7 @@ const AliasViewer = ({ aliasName, executeCheckQuery }) => {
           style={{ color: exists ? '#e43a1c' : '#006ce7' }}
           className="break-all"
         >
-          {aliasName}
+          {alias}
         </span>
         <span>.dropgala.com</span>
       </div>

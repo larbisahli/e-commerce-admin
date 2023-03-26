@@ -1,5 +1,4 @@
 import RegistrationForm from '@components/auth/registration-form';
-import LogoSvg from '@components/icons/logo';
 import { useGetStaff } from '@hooks/useGetStaff';
 import { XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
@@ -13,9 +12,7 @@ export default function SignUp({ client }: SSRProps) {
   return (
     <div className="flex items-center justify-center bg-gray-100 min-h-screen h-fit">
       <div className="border border-gray-100 mx-auto max-w-xl bg-white p-5 sm:p-8 min-h-screen h-fit w-full">
-        <div className="flex justify-center mb-2">
-          <LogoSvg width="5rem" height="5rem" />
-        </div>
+        <div className="flex justify-center mb-2">Dropgala</div>
         <h3 className="text-center font-medium text-lg mt-4 mb-9">
           {t('sign-up-create-store')}
         </h3>

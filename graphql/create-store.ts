@@ -4,17 +4,17 @@ export const CREATE_STORE = gql`
   mutation CreateStore(
     $firstName: String!
     $lastName: String!
-    $phoneNumber: String!
+    $email: String!
     $storeName: String!
-    $aliasName: String!
+    $alias: String!
     $country: CountryInput!
   ) {
     createStore(
       firstName: $firstName
       lastName: $lastName
-      phoneNumber: $phoneNumber
+      email: $email
       storeName: $storeName
-      aliasName: $aliasName
+      alias: $alias
       country: $country
     ) {
       storeName

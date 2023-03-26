@@ -1,36 +1,32 @@
-import 'react-phone-input-2/lib/style.css';
-
 import { useMutation } from '@apollo/client';
 import Alert from '@components/ui/alert';
 import Button from '@components/ui/button';
-import ValidationError from '@components/ui/form-validation-error';
+import Input from '@components/ui/input';
 import InputSlug from '@components/ui/input-slug';
 import PasswordInput from '@components/ui/password-input';
-import { STAFF_LOGIN } from '@graphql/login';
+import { USER_LOGIN } from '@graphql/login';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetStaff } from '@hooks/useGetStaff';
 import { ROUTES } from '@utils/routes';
-import { isValidPhoneNumber } from 'libphonenumber-js';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import PhoneInput from 'react-phone-input-2';
 import * as yup from 'yup';
 
 import FormFooter from './form-footer';
 
 type FormValues = {
-  aliasName: string;
-  phoneNumber: string;
+  alias: string;
+  email: string;
   password: string;
   success: boolean;
 };
 
 const loginFormSchema = yup.object().shape({
-  aliasName: yup
+  alias: yup
     .string()
     .test(
       'len',
@@ -38,12 +34,12 @@ const loginFormSchema = yup.object().shape({
       (val) => val.length <= 63 && val.length >= 2
     )
     .required('form:error-store-name-required'),
-  phoneNumber: yup.string().required('form:error-email-required'),
+  email: yup.string().email().required('form:error-email-required'),
   password: yup.string().required('form:error-password-required')
 });
 
 const defaultValues = {
-  phoneNumber: '',
+  email: '',
   password: ''
 };
 
@@ -53,13 +49,10 @@ const LoginForm = () => {
 
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [country, setCountry] = useState('ma');
 
   const {
     register,
     handleSubmit,
-    watch,
-    setValue,
     formState: { errors }
   } = useForm<FormValues>({
     defaultValues,
@@ -70,7 +63,7 @@ const LoginForm = () => {
 
   const csrfToken = staffInfo?.csrfToken;
 
-  const [staffLogin] = useMutation(STAFF_LOGIN, {
+  const [staffLogin] = useMutation(USER_LOGIN, {
     context: {
       headers: {
         'x-csrf-token': csrfToken
@@ -86,17 +79,12 @@ const LoginForm = () => {
 
   useErrorLogger(error);
 
-  async function onSubmit({ aliasName, phoneNumber, password }: FormValues) {
+  async function onSubmit({ alias, email, password }: FormValues) {
     const variables = {
-      aliasName,
-      phoneNumber,
+      alias,
+      email,
       password
     };
-
-    if (!isValidPhoneNumber(`+${phoneNumber}`)) {
-      setError('error:INVALID_PHONE_NUMBER');
-      return;
-    }
 
     setLoading(true);
     staffLogin({ variables }).catch((error) => {
@@ -106,53 +94,27 @@ const LoginForm = () => {
     });
   }
 
-  useEffect(() => {
-    // Prefetch dashboard bundle
-    router.prefetch(ROUTES.DASHBOARD);
-    // Get current country code
-    fetch('api/hi')
-      .then((response) => response.json())
-      .then((data) => setCountry(data?.country ?? 'ma'));
-  }, []);
-
-  const phoneNumber = watch('phoneNumber');
-
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <div className="mb-5">
           <InputSlug
-            {...register('aliasName')}
+            {...register('alias')}
             placeholder={t('form:input-slug')}
             variant="outline"
             className="mb-4 mr-2 w-full"
-            error={t(errors?.aliasName?.message!)}
+            error={t(errors?.alias?.message!)}
           />
         </div>
         <div className="mb-5 phone-number-class">
-          <PhoneInput
-            country={country?.toLowerCase()}
-            inputProps={{
-              name: 'phone',
-              required: true,
-              autoFocus: true
-            }}
-            disableSearchIcon
-            enableSearch
-            inputClass="phone-number-class py-5"
-            value={`+${phoneNumber}`}
-            isValid={(value, country: { dialCode: string }) => {
-              if (country?.dialCode != value) {
-                return isValidPhoneNumber(`+${value}`);
-              }
-              return true;
-            }}
-            onChange={(phone) => {
-              setValue('phoneNumber', phone);
-            }}
+          <Input
+            {...register('email')}
+            type="email"
+            placeholder={t('form:input-label-email')}
+            variant="outline"
+            className="mb-4 w-full"
+            error={t(errors?.email?.message!)}
           />
-          {/* @ts-ignore */}
-          <ValidationError message={t(errors.phoneNumber?.message)} />
         </div>
         <PasswordInput
           placeholder={t('form:input-label-password')}

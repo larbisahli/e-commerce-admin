@@ -1,30 +1,5 @@
 /* eslint-disable no-unused-vars */
 
-// CUSTOMER PRIVILEGES
-export enum INTERNAL_PRIVILEGES {
-  READ = 'read_privilege',
-  CREATE = 'create_privilege',
-  UPDATE = 'update_privilege',
-  DELETE = 'delete_privilege'
-}
-
-// STAFF PRIVILEGES
-export enum STAFF_PRIVILEGES {
-  READ = 'staff_read_privilege',
-  CREATE = 'staff_create_privilege',
-  UPDATE = 'staff_update_privilege',
-  DELETE = 'staff_delete_privilege'
-}
-
-// ADMIN PRIVILEGES
-export enum ADMIN_PRIVILEGES {
-  READ = 'admin_read_privilege',
-  CREATE = 'admin_create_privilege',
-  UPDATE = 'admin_update_privilege',
-  DELETE = 'admin_delete_privilege',
-  SUPER = 'super_admin_privilege'
-}
-
 export enum SortOrder {
   Asc = 'ASC',
   Desc = 'DESC'
@@ -51,7 +26,7 @@ export enum ErrorNames {
 }
 
 export enum CookieNames {
-  STAFF_TOKEN_NAME = '_suid',
+  USER_TOKEN_NAME = '_uuid',
   CUSTOMER_SESSION_NAME = '_cuid',
   XSRF_TOKEN = 'xsrf-token'
 }
