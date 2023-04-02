@@ -108,5 +108,8 @@ export const initialState = {
   },
   role: {
     columns: ['role']
+  },
+  file: {
+    columns: ['id', 'image', 'size', 'createdAt', 'actions']
   }
 };

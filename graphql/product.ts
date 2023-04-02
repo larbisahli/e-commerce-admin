@@ -357,8 +357,8 @@ export const UPDATE_SIMPLE_PRODUCT_INFORMATION = gql`
 export const UPDATE_PRODUCT_SELECT_GROUP = gql`
   mutation UpdateProductSelectGroup(
     $id: Int!
-    $additions: UpdateProductInput!
-    $deletions: UpdateProductInput!
+    $additions: UpdateProductInput
+    $deletions: UpdateProductInput
   ) {
     updateProductSelectGroup(
       id: $id

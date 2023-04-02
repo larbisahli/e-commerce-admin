@@ -430,5 +430,7 @@
   "related-up-sells-cross-sells-product": "Related Products, Up-Sells, and Cross-Sells",
   "label-add-meta-images": "Add Meta Image",
   "input-label-meta-slug": "Slug",
-  "label-add-category-image": "Add Category Image"
+  "label-add-category-image": "Add Category Image",
+  "button-label-upload-image": "Upload Image",
+  "button-label-images": "Images"
 }

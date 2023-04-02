@@ -20,9 +20,9 @@ export const PHOTOS = gql`
   }
 `;
 
-export const DELETE_IMAGE_OBJECT = gql`
-  mutation DeleteImageObject($image: String!, $placeholder: String!) {
-    deleteImageObject(image: $image, placeholder: $placeholder) {
+export const DELETE_IMAGE = gql`
+  mutation DeleteImage($id: Int!) {
+    deleteImage(id: $id) {
       image
     }
   }

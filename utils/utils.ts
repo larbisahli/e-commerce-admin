@@ -1,5 +1,4 @@
 // import { Category } from '@ts-types/generated';
-import cloneDeepWith from 'lodash/cloneDeepWith';
 import React from 'react';
 
 export const PRODUCTION_ENV = process.env.NODE_ENV === 'production';

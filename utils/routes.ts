@@ -39,6 +39,6 @@ export const ROUTES = {
   EMAIL_TEMPLATES: '/store/email-templates',
   HERO_CAROUSEL: '/hero-carousel',
   INVITE: '/hero-carousel',
-  FILES: '/file',
+  FILE: '/file',
   COMING_SOON: '/coming-soon'
 };

@@ -4,12 +4,13 @@ import { SaveIcon } from '@components/icons/save-icon';
 import Accordion from '@components/ui/accordion';
 import Button from '@components/ui/button';
 import Description from '@components/ui/description';
-import { UPDATE_SIMPLE_PRODUCT_INFORMATION } from '@graphql/product';
+import { UPDATE_PRODUCT_SELECT_GROUP } from '@graphql/product';
 import { useDifferenceWith } from '@hooks/useDifferenceWith';
 import { useGetUser } from '@hooks/useGetUser';
 import { notify } from '@lib/notify';
 import { Category, Product, Suppliers, Tag } from '@ts-types/generated';
 import isEmpty from 'lodash/isEmpty';
+import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { memo, useMemo, useState } from 'react';
 
@@ -29,6 +30,9 @@ interface Props {
 
 const ProductSelectGroup = ({ state, initialValues }: Props) => {
   const { t } = useTranslation('common');
+  const { query } = useRouter();
+
+  const productId = parseInt(query.productId as string, 10);
 
   const { categories, suppliers, tags, isUpdateMode } = state;
 
@@ -76,27 +80,28 @@ const ProductSelectGroup = ({ state, initialValues }: Props) => {
   const csrfToken = userInfo?.csrfToken;
 
   const [updateProductSelectGroup, { loading }] = useMutation(
-    UPDATE_SIMPLE_PRODUCT_INFORMATION,
+    UPDATE_PRODUCT_SELECT_GROUP,
     {
       context: {
         headers: {
           'x-csrf-token': csrfToken
         }
       },
-      onCompleted: (data: Product) => {
-        if (
-          !isEmpty(data?.categories) ||
-          !isEmpty(data?.tags) ||
-          !isEmpty(data?.suppliers)
-        ) {
-          if (!isEmpty(data?.categories)) {
-            setInitProductCategories(data?.categories);
+      onCompleted: (data: { updateProductSelectGroup: Product }) => {
+        const {
+          categories = [],
+          tags = [],
+          suppliers = []
+        } = data?.updateProductSelectGroup;
+        if (!isEmpty(categories) || !isEmpty(tags) || !isEmpty(suppliers)) {
+          if (!isEmpty(categories)) {
+            setInitProductCategories(categories);
           }
-          if (!isEmpty(data?.tags)) {
-            setInitProductTags(data?.tags);
+          if (!isEmpty(tags)) {
+            setInitProductTags(tags);
           }
-          if (!isEmpty(data?.suppliers)) {
-            setInitProductSuppliers(data?.suppliers);
+          if (!isEmpty(suppliers)) {
+            setInitProductSuppliers(suppliers);
           }
           notify(t('common:successfully-updated'), 'success');
         }
@@ -106,12 +111,28 @@ const ProductSelectGroup = ({ state, initialValues }: Props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // if (name.length === 0) {
-    //   return notify('Product name should not be empty', 'error');
-    // }
-    updateProductInformation({
-      variables: {}
+
+    // In case removed all the categories
+    if (isEmpty(additionalCategories) && !isEmpty(deletedCategories)) {
+      return notify('Product category should not be empty', 'error');
+    }
+
+    updateProductSelectGroup({
+      variables: {
+        id: productId,
+        additions: {
+          categories: additionalCategories,
+          tags: additionalTags,
+          suppliers: additionalSuppliers
+        },
+        deletions: {
+          categories: deletedCategories,
+          tags: deletedTags,
+          suppliers: deletedSuppliers
+        }
+      }
     }).catch((err) => {
+      console.log({ err });
       // TODO: Error product context
       // setError(err);
     });
