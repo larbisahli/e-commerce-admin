@@ -12,15 +12,16 @@ import Input from '@components/ui/input';
 import Label from '@components/ui/label';
 import PasswordInput from '@components/ui/password-input';
 import SelectInput from '@components/ui/select-input';
-import { CREATE_STAFF, ROLES_FOR_SELECT, UPDATE_STAFF } from '@graphql/staff';
+import { CREATE_USER, UPDATE_USER } from '@graphql/user';
+import { ROLES } from '@graphql/user-role';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   useErrorLogger,
-  useGetStaff,
+  useGetUser,
   useWarnIfUnsavedChanges
 } from '@hooks/index';
 import { notify } from '@lib/index';
-import { RoleType, StaffType } from '@ts-types/generated';
+import { RoleType, UserType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import { isValidPhoneNumber } from 'libphonenumber-js';
 import isEmpty from 'lodash/isEmpty';
@@ -30,35 +31,31 @@ import { useState } from 'react';
 import { Control, useForm } from 'react-hook-form';
 import PhoneInput from 'react-phone-input-2';
 
-import { staffValidationSchema } from './staff-validation-schema';
+import { userValidationSchema } from './user-validation-schema';
 
-interface FormValues extends StaffType {
+interface FormValues extends UserType {
   notify: boolean;
 }
 
 const defaultValues = {};
 
 type IProps = {
-  initialValues?: StaffType | any;
+  initialValues?: UserType | any;
 };
 
 interface TRolesSelect {
   roles: RoleType[];
 }
 
-interface OptionsVariable {}
-
 function SelectRoles({ control }: { control: Control<FormValues> }) {
   const { t } = useTranslation();
 
-  const { data, loading, error } = useQuery<TRolesSelect, OptionsVariable>(
-    ROLES_FOR_SELECT,
-    {
-      variables: {}
-    }
-  );
+  const { data, loading, error } = useQuery<TRolesSelect>(ROLES, {
+    variables: {},
+    fetchPolicy: 'cache-and-network'
+  });
 
-  const roles = data?.roles;
+  const { roles = [] } = data ?? {};
 
   useErrorLogger(error);
 
@@ -68,7 +65,7 @@ function SelectRoles({ control }: { control: Control<FormValues> }) {
       <SelectInput
         name="role"
         control={control}
-        getOptionLabel={(option: RoleType) => option.role}
+        getOptionLabel={(option: RoleType) => option.roleName}
         getOptionValue={(option: RoleType) => option.id}
         options={roles}
         isClearable={true}
@@ -78,7 +75,7 @@ function SelectRoles({ control }: { control: Control<FormValues> }) {
   );
 }
 
-const StaffCreateUpdateForm = ({ initialValues }: IProps) => {
+const UserCreateUpdateForm = ({ initialValues }: IProps) => {
   const { t } = useTranslation();
   const router = useRouter();
 
@@ -103,36 +100,36 @@ const StaffCreateUpdateForm = ({ initialValues }: IProps) => {
           notify: false
         }
       : defaultValues,
-    resolver: yupResolver(staffValidationSchema)
+    resolver: yupResolver(userValidationSchema)
   });
 
-  const { staffInfo } = useGetStaff();
-  const csrfToken = staffInfo?.csrfToken;
+  const { userInfo } = useGetUser();
+  const csrfToken = userInfo?.csrfToken;
 
-  const [createStaff, { loading: creating }] = useMutation(CREATE_STAFF, {
+  const [createUser, { loading: creating }] = useMutation(CREATE_USER, {
     context: {
       headers: {
         'x-csrf-token': csrfToken
       }
     },
-    onCompleted: (data: { createStaff: StaffType }) => {
+    onCompleted: (data: { createUser: UserType }) => {
       if (!isEmpty(data)) {
         reset();
         notify(t('common:successfully-created'), 'success');
-        router.push(ROUTES.STAFFS);
+        router.push(ROUTES.USER);
       }
     }
   });
-  const [updateStaff, { loading: updating }] = useMutation(UPDATE_STAFF, {
+  const [updateUser, { loading: updating }] = useMutation(UPDATE_USER, {
     context: {
       headers: {
         'x-csrf-token': csrfToken
       }
     },
-    onCompleted: (data: { updateStaff: StaffType }) => {
+    onCompleted: (data: { updateUser: UserType }) => {
       if (!isEmpty(data)) {
         notify(t('common:successfully-updated'), 'success');
-        router.push(ROUTES.STAFFS);
+        router.push(ROUTES.USER);
       }
     }
   });
@@ -159,11 +156,11 @@ const StaffCreateUpdateForm = ({ initialValues }: IProps) => {
 
     setUnsavedChanges(false);
     if (isEmpty(initialValues)) {
-      createStaff({ variables }).catch((err) => {
+      createUser({ variables }).catch((err) => {
         setError(err);
       });
     } else {
-      updateStaff({ variables: { id: initialValues?.id, ...variables } }).catch(
+      updateUser({ variables: { id: initialValues?.id, ...variables } }).catch(
         (err) => {
           setError(err);
           setUnsavedChanges(true);
@@ -305,4 +302,4 @@ const StaffCreateUpdateForm = ({ initialValues }: IProps) => {
   );
 };
 
-export default StaffCreateUpdateForm;
+export default UserCreateUpdateForm;

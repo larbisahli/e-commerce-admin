@@ -180,9 +180,7 @@ const CouponList = ({ coupons, selectedColumns }: IProps) => {
           createdBy: CreatedUpdatedByAt['createdBy'],
           record: Coupon
         ) => {
-          return (
-            <ProfileCart staff={createdBy} createdAt={record?.createdAt} />
-          );
+          return <ProfileCart user={createdBy} createdAt={record?.createdAt} />;
         }
       },
       {
@@ -196,9 +194,7 @@ const CouponList = ({ coupons, selectedColumns }: IProps) => {
           updatedBy: CreatedUpdatedByAt['updatedBy'],
           record: Coupon
         ) => {
-          return (
-            <ProfileCart staff={updatedBy} updatedAt={record?.updatedAt} />
-          );
+          return <ProfileCart user={updatedBy} updatedAt={record?.updatedAt} />;
         }
       },
       {

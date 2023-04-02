@@ -1,18 +1,6 @@
-// Permissions
-export const READ_PRIVILEGE = 'read_privilege';
-export type READ_TYPE = typeof READ_PRIVILEGE;
-export const CREATE_PRIVILEGE = 'create_privilege';
-export type CREATE_TYPE = typeof CREATE_PRIVILEGE;
-export const UPDATE_PRIVILEGE = 'update_privilege';
-export type UPDATE_TYPE = typeof UPDATE_PRIVILEGE;
-export const DELETE_PRIVILEGE = 'delete_privilege';
-export type DELETE_TYPE = typeof DELETE_PRIVILEGE;
-export const SUPER_ADMIN_PRIVILEGE = 'super_admin_privilege';
-export type ADMIN_TYPE = typeof SUPER_ADMIN_PRIVILEGE;
-
 // Cookies Name
 export const USER_TOKEN_NAME = '_uuid';
-export type STAFF_TOKEN_TYPE = typeof USER_TOKEN_NAME;
+export type USER_TOKEN_TYPE = typeof USER_TOKEN_NAME;
 
 // Modal Views
 export const DELETE_PRODUCT = 'DELETE_PRODUCT';
@@ -33,10 +21,10 @@ export const DELETE_TAG = 'DELETE_TAG';
 export type DELETE_TAG_TYPE = typeof DELETE_TAG;
 export const BAN_CUSTOMER = 'BAN_CUSTOMER';
 export type BAN_CUSTOMER_TYPE = typeof BAN_CUSTOMER;
-export const BAN_STAFF = 'BAN_STAFF';
-export type BAN_STAFF_TYPE = typeof BAN_STAFF;
-export const DELETE_STAFF = 'DELETE_STAFF';
-export type DELETE_STAFF_TYPE = typeof DELETE_STAFF;
+export const BAN_USER = 'BAN_USER';
+export type BAN_USER_TYPE = typeof BAN_USER;
+export const DELETE_USER = 'DELETE_USER';
+export type DELETE_USER_TYPE = typeof DELETE_USER;
 export const DELETE_SLIDER = 'DELETE_SLIDER';
 export type DELETE_SLIDER_TYPE = typeof DELETE_SLIDER;
 export const IMAGE_MODAL = 'IMAGE_MODAL';

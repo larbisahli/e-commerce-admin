@@ -13,7 +13,7 @@ export const initialState = {
       'actions'
     ]
   },
-  staff: {
+  user: {
     columns: [
       'profile',
       'name',

@@ -8,12 +8,17 @@ import Label from '@components/ui/label';
 import Select from '@components/ui/select/select';
 import { CATEGORIES_FOR_SELECT_ALL } from '@graphql/category';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { Category, OrderBy, Product } from '@ts-types/generated';
+import { Category, OrderBy } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
-import { memo } from 'react';
+import React, { memo } from 'react';
 
 interface TCategorySelect {
   categorySelectAll: Category[];
+}
+
+interface Props {
+  categories: Category[];
+  setInitProductCategories: React.Dispatch<React.SetStateAction<Category[]>>;
 }
 
 interface OptionsVariable {
@@ -22,11 +27,7 @@ interface OptionsVariable {
   orderBy: OrderBy;
 }
 
-const ProductCategory = ({
-  categories
-}: {
-  categories: Product['categories'];
-}) => {
+const ProductCategory = ({ categories, setInitProductCategories }: Props) => {
   const { t } = useTranslation('common');
 
   const dispatch = useFormReducer();

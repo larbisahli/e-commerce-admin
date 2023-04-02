@@ -11,7 +11,7 @@ import SelectInput from '@components/ui/select-input';
 import { CREATE_COUPON, UPDATE_COUPON } from '@graphql/coupons';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetStaff } from '@hooks/useGetStaff';
+import { useGetUser } from '@hooks/useGetUser';
 import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/notify';
 import { Nullable, Scalars } from '@ts-types/custom.types';
@@ -110,8 +110,8 @@ export default function CreateOrUpdateCouponForm({ initialValues }: IProps) {
     resolver: yupResolver(couponValidationSchema)
   });
 
-  const { staffInfo } = useGetStaff();
-  const csrfToken = staffInfo?.csrfToken;
+  const { userInfo } = useGetUser();
+  const csrfToken = userInfo?.csrfToken;
 
   const { currency } = useSettings();
 

@@ -7,9 +7,14 @@ import Label from '@components/ui/label';
 import Select from '@components/ui/select/select';
 import { TAGS_FOR_SELECT } from '@graphql/tag';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { OrderBy, Product, Tag } from '@ts-types/generated';
+import { OrderBy, Tag } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
-import { memo } from 'react';
+import React, { memo } from 'react';
+
+interface Props {
+  tags: Tag[];
+  setInitProductTags: React.Dispatch<React.SetStateAction<Tag[]>>;
+}
 
 interface TagSelect {
   tagSelect: Tag[];
@@ -21,7 +26,7 @@ interface OptionsVariable {
   orderBy: OrderBy;
 }
 
-const ProductTag = ({ tags }: { tags: Product['tags'] }) => {
+const ProductTag = ({ tags, setInitProductTags }: Props) => {
   const { t } = useTranslation();
 
   const dispatch = useFormReducer();

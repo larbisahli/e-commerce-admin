@@ -1,5 +1,5 @@
 import AppLayout from '@components/layouts/app';
-import { useGetStaff } from '@hooks/index';
+import { useGetUser } from '@hooks/index';
 import { verifyAuth } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { ROUTES } from '@utils/routes';
@@ -11,7 +11,7 @@ const AdminDashboard = dynamic(() => import('@components/dashboard/admin'));
 // const OwnerDashboard = dynamic(() => import("@components/dashboard/owner"));
 
 export default function Dashboard({ client }: SSRProps) {
-  useGetStaff(client);
+  useGetUser(client);
   return <AdminDashboard />;
 }
 

@@ -4,7 +4,7 @@ import { SaveIcon } from '@components/icons/save-icon';
 import Button from '@components/ui/button';
 import Description from '@components/ui/description';
 import { CREATE_PRODUCT, UPDATE_PRODUCT } from '@graphql/product';
-import { useErrorLogger, useGetStaff } from '@hooks/index';
+import { useErrorLogger, useGetUser } from '@hooks/index';
 import { notify } from '@lib/index';
 import { Product, ProductStatus } from '@ts-types/generated';
 import { ProductType } from '@ts-types/generated';
@@ -149,10 +149,11 @@ function ProductForm({ setUnsavedChanges, initialValues = {} }: IProps) {
   );
 
   const [lockedSubmission, setLockedSubmission] = useState(false);
+  // TODO: Create an error context
   const [error, setError] = useState(null);
 
-  const { staffInfo } = useGetStaff();
-  const csrfToken = staffInfo?.csrfToken;
+  const { userInfo } = useGetUser();
+  const csrfToken = userInfo?.csrfToken;
 
   const [createProduct, { loading: creating }] = useMutation(CREATE_PRODUCT, {
     context: {
@@ -221,7 +222,7 @@ function ProductForm({ setUnsavedChanges, initialValues = {} }: IProps) {
   };
 
   return (
-    <form onSubmit={onSubmit} noValidate>
+    <form noValidate>
       {/* Thumbnail */}
       <div className="flex flex-wrap pb-8 border-b border-dashed border-border-base my-5 sm:my-8">
         <Description
@@ -262,6 +263,7 @@ function ProductForm({ setUnsavedChanges, initialValues = {} }: IProps) {
       <ProductContent
         state={productContentState}
         initialValues={initialValues}
+        setError={setError}
       />
       {/* Variation Type & Simple Type product form */}
       <ProductTypeFormComponent
@@ -303,6 +305,7 @@ function ProductForm({ setUnsavedChanges, initialValues = {} }: IProps) {
           <Button
             loading={updating || creating}
             disabled={updating || creating}
+            onClick={onSubmit}
           >
             <div className="mr-1">
               <SaveIcon width="1.3rem" height="1.3rem" />

@@ -14,7 +14,7 @@ import TextArea from '@components/ui/text-area';
 import { CREATE_HERO_SLIDE, UPDATE_HERO_SLIDE } from '@graphql/hero-carousel';
 import {
   useErrorLogger,
-  useGetStaff,
+  useGetUser,
   useWarnIfUnsavedChanges
 } from '@hooks/index';
 import { notify } from '@lib/index';
@@ -76,8 +76,8 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
       : (defaultValues as HeroCarouselType)
   });
 
-  const { staffInfo } = useGetStaff();
-  const csrfToken = staffInfo?.csrfToken;
+  const { userInfo } = useGetUser();
+  const csrfToken = userInfo?.csrfToken;
 
   const styles = watch('styles');
   const thumbnail = watch('thumbnail') as ImageType[];

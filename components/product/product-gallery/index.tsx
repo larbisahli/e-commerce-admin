@@ -3,8 +3,8 @@ import { SaveIcon } from '@components/icons/save-icon';
 import ImageModal from '@components/image-modal';
 import Button from '@components/ui/button';
 import { UPDATE_PRODUCT_GALLERY } from '@graphql/product';
+import { useGetUser } from '@hooks/index';
 import { useDifferenceWith } from '@hooks/useDifferenceWith';
-import { useGetStaff } from '@hooks/useGetStaff';
 import { notify } from '@lib/notify';
 import { ImageType, Product } from '@ts-types/generated';
 import isEmpty from 'lodash/isEmpty';
@@ -39,8 +39,8 @@ const ProductGallery = ({ state, initialValues, setError }: Props) => {
     isUpdateMode
   );
 
-  const { staffInfo } = useGetStaff();
-  const csrfToken = staffInfo?.csrfToken;
+  const { userInfo } = useGetUser();
+  const csrfToken = userInfo?.csrfToken;
 
   const [updateProduct, { loading }] = useMutation(UPDATE_PRODUCT_GALLERY, {
     context: {

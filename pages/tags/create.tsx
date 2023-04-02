@@ -1,6 +1,6 @@
 import AppLayout from '@components/layouts/app';
 import CreateOrUpdateTagForm from '@components/tag/tag-form';
-import { useGetStaff } from '@hooks/index';
+import { useGetUser } from '@hooks/index';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { ROUTES } from '@utils/routes';
@@ -10,7 +10,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 export default function CreateCategoriesPage({ client }: SSRProps) {
   const { t } = useTranslation();
-  useGetStaff(client);
+  useGetUser(client);
 
   return (
     <>

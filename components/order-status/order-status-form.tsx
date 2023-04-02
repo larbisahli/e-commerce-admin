@@ -13,8 +13,8 @@ import {
   UPDATE_ORDER_STATUS
 } from '@graphql/order-status';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useGetUser } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetStaff } from '@hooks/useGetStaff';
 import { notify } from '@lib/notify';
 import { OrderStatus, PrivacyType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
@@ -57,8 +57,8 @@ export default function CreateOrUpdateOrderStatusForm({
     defaultValues: initialValues ?? defaultValues
   });
 
-  const { staffInfo } = useGetStaff();
-  const csrfToken = staffInfo?.csrfToken;
+  const { userInfo } = useGetUser();
+  const csrfToken = userInfo?.csrfToken;
 
   const [createOrderStatus, { loading: creating }] = useMutation(
     CREATE_ORDER_STATUS,

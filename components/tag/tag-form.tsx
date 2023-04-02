@@ -9,10 +9,9 @@ import Label from '@components/ui/label';
 import SelectInput from '@components/ui/select-input';
 import { CREATE_TAG, UPDATE_TAG } from '@graphql/tag';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useGetUser } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetStaff } from '@hooks/useGetStaff';
 import { notify } from '@lib/notify';
-import { Nullable } from '@ts-types/custom.types';
 import { Tag } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import isEmpty from 'lodash/isEmpty';
@@ -79,8 +78,8 @@ export default function CreateOrUpdateTagForm({ initialValues }: IProps) {
     resolver: yupResolver(tagValidationSchema)
   });
 
-  const { staffInfo } = useGetStaff();
-  const csrfToken = staffInfo?.csrfToken;
+  const { userInfo } = useGetUser();
+  const csrfToken = userInfo?.csrfToken;
 
   const [createTag, { loading: creating }] = useMutation(CREATE_TAG, {
     context: {

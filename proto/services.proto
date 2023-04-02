@@ -1,8 +1,0 @@
-syntax = "proto3";
-
-import "./staffService.proto";
-
-// Define the services containing methods here
-service StaffServiceRoutes {
-  rpc StaffInfo(StaffRequest) returns (Staff);
-}

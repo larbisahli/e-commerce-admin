@@ -13,8 +13,8 @@ import Label from '@components/ui/label';
 import SelectInput from '@components/ui/select-input';
 import TextArea from '@components/ui/text-area';
 import { CREATE_SUPPLIER, UPDATE_SUPPLIER } from '@graphql/supplier';
+import { useGetUser } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetStaff } from '@hooks/useGetStaff';
 import { notify } from '@lib/index';
 import type { Suppliers } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
@@ -82,8 +82,8 @@ export default function CreateOrUpdateSupplierForm({ initialValues }: IProps) {
     getCountries();
   }, []);
 
-  const { staffInfo } = useGetStaff();
-  const csrfToken = staffInfo?.csrfToken;
+  const { userInfo } = useGetUser();
+  const csrfToken = userInfo?.csrfToken;
 
   const [createSupplier, { loading: creating }] = useMutation(CREATE_SUPPLIER, {
     context: {

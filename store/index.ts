@@ -1,16 +1,16 @@
 import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit';
 import FilesReducer from '@store/files';
 import SettingsReducer from '@store/settings';
-import StaffReducer from '@store/staff';
 import TableReducer from '@store/table';
 import UIReducer from '@store/ui';
+import UserReducer from '@store/user';
 import { PRODUCTION_ENV } from '@utils/utils';
 
 export function makeStore() {
   return configureStore({
     reducer: {
       settings: SettingsReducer,
-      staffInfo: StaffReducer,
+      userInfo: UserReducer,
       files: FilesReducer,
       tables: TableReducer,
       ui: UIReducer

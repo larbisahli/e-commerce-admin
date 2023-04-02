@@ -11,7 +11,7 @@ import { CREATE_SHIPPING, UPDATE_SHIPPING } from '@graphql/shipping-zone';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   useErrorLogger,
-  useGetStaff,
+  useGetUser,
   useWarnIfUnsavedChanges
 } from '@hooks/index';
 import { notify } from '@lib/notify';
@@ -102,8 +102,8 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
         }
   });
 
-  const { staffInfo } = useGetStaff();
-  const csrfToken = staffInfo?.csrfToken;
+  const { userInfo } = useGetUser();
+  const csrfToken = userInfo?.csrfToken;
 
   const [
     createShippingZone,

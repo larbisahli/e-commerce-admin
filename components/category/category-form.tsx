@@ -16,7 +16,7 @@ import {
 } from '@graphql/category';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useErrorLogger, useWarnIfUnsavedChanges } from '@hooks/index';
-import { useGetStaff } from '@hooks/index';
+import { useGetUser } from '@hooks/useGetUser';
 import { notify } from '@lib/index';
 import { Category, OrderBy } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
@@ -101,9 +101,9 @@ export default function CreateOrUpdateCategoriesForm({
   const [error, setError] = useState(null);
   const [unsavedChanges, setUnsavedChanges] = useState(true);
 
-  const { staffInfo } = useGetStaff();
+  const { userInfo } = useGetUser();
 
-  const csrfToken = staffInfo?.csrfToken;
+  const csrfToken = userInfo?.csrfToken;
 
   const {
     register,

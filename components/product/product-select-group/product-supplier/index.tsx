@@ -9,10 +9,15 @@ import { SUPPLIERS_FOR_SELECT } from '@graphql/supplier';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { OrderBy, Product, Suppliers } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
-import { memo } from 'react';
+import React, { memo } from 'react';
 
 interface TSupplierSelect {
   suppliersForSelect: Suppliers[];
+}
+
+interface Props {
+  suppliers: Suppliers[];
+  setInitProductSuppliers: React.Dispatch<React.SetStateAction<Suppliers[]>>;
 }
 
 interface OptionsVariable {
@@ -21,11 +26,7 @@ interface OptionsVariable {
   orderBy: OrderBy;
 }
 
-const ProductSupplier = ({
-  suppliers
-}: {
-  suppliers: Product['suppliers'];
-}) => {
+const ProductSupplier = ({ suppliers, setInitProductSuppliers }: Props) => {
   const { t } = useTranslation();
 
   const dispatch = useFormReducer();

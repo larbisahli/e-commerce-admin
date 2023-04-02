@@ -83,7 +83,7 @@ export interface RoleType {
   roleName?: string;
 }
 
-export interface StaffType extends CreatedUpdatedByAt {
+export interface UserType extends CreatedUpdatedByAt {
   id: string;
   email: string;
   password: string;

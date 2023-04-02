@@ -6,8 +6,8 @@ import ShippingList from '@components/shipping-zone/shipping-list';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { SHIPPING_ZONES } from '@graphql/shipping-zone';
+import { useGetUser } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetStaff } from '@hooks/useGetStaff';
 import { useTableColumn } from '@hooks/useTableColumn';
 import { verifyAuth } from '@middleware/utils';
 import type { SSRProps } from '@ts-types/custom.types';
@@ -59,7 +59,7 @@ export default function ShippingZonesPage({ client }: SSRProps) {
   const { shippingZones = [], shippingZoneCount: { count } = { count: 0 } } =
     data ?? {};
 
-  useGetStaff(client);
+  useGetUser(client);
   useErrorLogger(error);
 
   const handlePagination = (current: number) => {

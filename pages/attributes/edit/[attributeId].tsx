@@ -4,8 +4,8 @@ import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { ATTRIBUTE } from '@graphql/attribute';
+import { useGetUser } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetStaff } from '@hooks/useGetStaff';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import type { SSRProps } from '@ts-types/custom.types';
 import type { Attribute } from '@ts-types/generated';
@@ -36,7 +36,7 @@ export default function UpdateAttributePage({ client }: SSRProps) {
     }
   );
 
-  useGetStaff(client);
+  useGetUser(client);
   useErrorLogger(error);
 
   const { attribute = [] } = data ?? {};

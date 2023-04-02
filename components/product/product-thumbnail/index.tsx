@@ -4,7 +4,7 @@ import ImageModal from '@components/image-modal';
 import Button from '@components/ui/button';
 import { UPDATE_PRODUCT_THUMBNAIL } from '@graphql/product';
 import { useDifferenceWith } from '@hooks/useDifferenceWith';
-import { useGetStaff } from '@hooks/useGetStaff';
+import { useGetUser } from '@hooks/useGetUser';
 import { notify } from '@lib/notify';
 import { ImageType, Product } from '@ts-types/generated';
 import isEmpty from 'lodash/isEmpty';
@@ -41,8 +41,8 @@ const ProductThumbnail = ({ state, initialValues, setError }: Props) => {
     isUpdateMode
   );
 
-  const { staffInfo } = useGetStaff();
-  const csrfToken = staffInfo?.csrfToken;
+  const { userInfo } = useGetUser();
+  const csrfToken = userInfo?.csrfToken;
 
   const [updateProduct, { loading }] = useMutation(UPDATE_PRODUCT_THUMBNAIL, {
     context: {

@@ -17,7 +17,7 @@ export enum ErrorNames {
   PERMISSION_DENIED = 'PERMISSION_DENIED',
   SOMETHING_HAPPENED = 'SOMETHING_HAPPENED',
   TRANSACTION_ERROR = 'TRANSACTION_ERROR',
-  STAFF_DOES_NOT_EXIST = 'STAFF_DOES_NOT_EXIST',
+  USER_DOES_NOT_EXIST = 'USER_DOES_NOT_EXIST',
   BAD_REQUEST = 'BAD_REQUEST',
   FORBIDDEN = 'FORBIDDEN',
   INCORRECT_PASSWORD = 'INCORRECT_PASSWORD',
@@ -34,4 +34,28 @@ export enum CookieNames {
 export enum RateType {
   WEIGHT = 'weight',
   PRICE = 'price'
+}
+
+export enum ACTION_PRIVILEGES {
+  READ = 'read',
+  WRITE = 'write',
+  UPDATE = 'update',
+  DELETE = 'delete'
+}
+
+export enum RESOURCES {
+  PHOTOS = 'photos',
+  USER = 'user',
+  CATEGORY = 'category',
+  PRODUCT = 'product',
+  TAG = 'tag',
+  SUPPLIER = 'supplier',
+  ATTRIBUTE = 'attribute',
+  CUSTOMER = 'customer',
+  COUPON = 'coupon',
+  SHIPPING_ZONE = 'shippingZone',
+  ORDER_STATUS = 'orderStatus',
+  ORDER = 'order',
+  ROLE = 'role',
+  SLIDESHOW = 'slideshow'
 }

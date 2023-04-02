@@ -6,7 +6,7 @@ import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { COUPONS } from '@graphql/coupons';
-import { useErrorLogger, useGetStaff } from '@hooks/index';
+import { useErrorLogger, useGetUser } from '@hooks/index';
 import { useTableColumn } from '@hooks/useTableColumn';
 import { verifyAuth } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
@@ -55,7 +55,7 @@ export default function Coupons({ client }: SSRProps) {
 
   const { coupons = [], couponCount: { count } = { count: 0 } } = data ?? {};
 
-  useGetStaff(client);
+  useGetUser(client);
   useErrorLogger(error);
 
   function handlePagination(current: any) {

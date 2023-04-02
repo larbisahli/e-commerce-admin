@@ -102,9 +102,7 @@ const SuppliersList = ({ suppliers, selectedColumns }: IProps) => {
           createdBy: CreatedUpdatedByAt['createdBy'],
           record: Suppliers
         ) => {
-          return (
-            <ProfileCart staff={createdBy} createdAt={record?.createdAt} />
-          );
+          return <ProfileCart user={createdBy} createdAt={record?.createdAt} />;
         }
       },
       {
@@ -118,9 +116,7 @@ const SuppliersList = ({ suppliers, selectedColumns }: IProps) => {
           updatedBy: CreatedUpdatedByAt['updatedBy'],
           record: Suppliers
         ) => {
-          return (
-            <ProfileCart staff={updatedBy} updatedAt={record?.updatedAt} />
-          );
+          return <ProfileCart user={updatedBy} updatedAt={record?.updatedAt} />;
         }
       },
       {

@@ -4,7 +4,7 @@ import CreateOrUpdateTagForm from '@components/tag/tag-form';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { TAG } from '@graphql/tag';
-import { useErrorLogger, useGetStaff } from '@hooks/index';
+import { useErrorLogger, useGetUser } from '@hooks/index';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { Tag } from '@ts-types/generated';
@@ -34,7 +34,7 @@ export default function UpdateTagPage({ client }: SSRProps) {
 
   const { tag = [] } = data ?? {};
 
-  useGetStaff(client);
+  useGetUser(client);
   useErrorLogger(error);
 
   if (loading) {

@@ -4,8 +4,8 @@ import CreateOrUpdateSupplierForm from '@components/suppliers/supplier-form';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { SUPPLIER } from '@graphql/supplier';
+import { useGetUser } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetStaff } from '@hooks/useGetStaff';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import type { SSRProps } from '@ts-types/custom.types';
 import type { Suppliers } from '@ts-types/generated';
@@ -38,7 +38,7 @@ export default function UpdateSupplierPage({ client }: SSRProps) {
 
   const { supplier = [] } = data ?? {};
 
-  useGetStaff(client);
+  useGetUser(client);
   useErrorLogger(error);
 
   if (loading) {

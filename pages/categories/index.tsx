@@ -6,7 +6,7 @@ import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { CATEGORIES } from '@graphql/category';
-import { useErrorLogger, useGetStaff } from '@hooks/index';
+import { useErrorLogger, useGetUser } from '@hooks/index';
 import { useTableColumn } from '@hooks/useTableColumn';
 import { verifyAuth } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
@@ -58,7 +58,7 @@ export default function Categories({ client }: SSRProps) {
   const { categories = [], categoryCount: { count } = { count: 0 } } =
     data ?? {};
 
-  useGetStaff(client);
+  useGetUser(client);
   useErrorLogger(error);
 
   const handlePagination = (current: number) => {

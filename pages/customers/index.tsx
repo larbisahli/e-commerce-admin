@@ -44,14 +44,14 @@ export default function Customers() {
       <Card className="flex flex-col md:flex-row items-center mb-8">
         <div className="md:w-1/4 mb-4 md:mb-0">
           <h1 className="text-lg font-semibold text-heading">
-            {t('form:input-label-staffs')}
+            {t('form:input-label-users')}
           </h1>
         </div>
 
         <div className="w-full md:w-3/4 flex items-center ms-auto">
           <Search onSearch={handleSearch} />
           <LinkButton
-            href={`${ROUTES.STAFFS}/create`}
+            href={`${ROUTES.USER}/create`}
             className="h-12 ms-4 md:ms-6"
           >
             <span className="hidden md:block">

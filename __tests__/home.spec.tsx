@@ -21,7 +21,7 @@ describe('Home', () => {
     jest.resetAllMocks();
   });
   it('renders a heading', () => {
-    render(<Login client={{ staff_id: '' }} />, {});
+    render(<Login client={{ user_id: '' }} />, {});
 
     screen.debug();
 

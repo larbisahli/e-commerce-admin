@@ -60,14 +60,24 @@ export const FilesSlice = createSlice({
       action: PayloadAction<{ image: ImageType }>
     ) => {
       const image = action.payload.image;
-      state.fileStore?.map((storePhoto) => {
-        if (storePhoto.page === state.currentPage) {
-          const clonedItems = cloneDeep(storePhoto.items);
-          storePhoto.items = [image, ...clonedItems];
+      if (isEmpty(state.fileStore)) {
+        state.fileStore = [
+          {
+            page: 1,
+            total: 1,
+            items: [image]
+          }
+        ];
+      } else {
+        state.fileStore?.map((storePhoto) => {
+          if (storePhoto.page === state.currentPage) {
+            const clonedItems = cloneDeep(storePhoto.items);
+            storePhoto.items = [image, ...clonedItems];
+            return storePhoto;
+          }
           return storePhoto;
-        }
-        return storePhoto;
-      });
+        });
+      }
     },
     setCurrentPage: (
       state: FilesState,

@@ -120,9 +120,7 @@ const ShippingList = ({ shippingZones, selectedColumns }: IProps) => {
           createdBy: CreatedUpdatedByAt['createdBy'],
           record: ShippingZoneType
         ) => {
-          return (
-            <ProfileCart staff={createdBy} createdAt={record?.createdAt} />
-          );
+          return <ProfileCart user={createdBy} createdAt={record?.createdAt} />;
         }
       },
       {
@@ -136,9 +134,7 @@ const ShippingList = ({ shippingZones, selectedColumns }: IProps) => {
           updatedBy: CreatedUpdatedByAt['updatedBy'],
           record: ShippingZoneType
         ) => {
-          return (
-            <ProfileCart staff={updatedBy} updatedAt={record?.updatedAt} />
-          );
+          return <ProfileCart user={updatedBy} updatedAt={record?.updatedAt} />;
         }
       },
       {

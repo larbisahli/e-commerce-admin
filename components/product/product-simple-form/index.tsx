@@ -1,17 +1,24 @@
+import { useMutation } from '@apollo/client';
 import Card from '@components/common/card';
 import { SaveIcon } from '@components/icons/save-icon';
 import Button from '@components/ui/button';
 import Description from '@components/ui/description';
 import Input from '@components/ui/input';
+import { UPDATE_SIMPLE_PRODUCT_INFORMATION } from '@graphql/product';
+import { useGetUser } from '@hooks/useGetUser';
 import { useSettings } from '@hooks/useSettings';
+import { notify } from '@lib/notify';
 import { Product } from '@ts-types/generated';
+import isEmpty from 'lodash/isEmpty';
+import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
-import { ChangeEvent, memo } from 'react';
+import React, { ChangeEvent, memo } from 'react';
 
 import { Actions, useFormReducer } from '../context/form.context';
 
 type IProps = {
-  initialValues: any;
+  initProductInformation: Product;
+  setInitProductInformation: React.Dispatch<React.SetStateAction<Product>>;
   checkForUpdateHandler: () => void;
   isUpdated: boolean;
   state: {
@@ -25,14 +32,38 @@ type IProps = {
 
 function ProductSimpleForm({
   state,
-  initialValues,
+  initProductInformation,
+  setInitProductInformation,
   isUpdated,
   checkForUpdateHandler
 }: IProps) {
   const { t } = useTranslation();
+  const { query } = useRouter();
+
+  const productId = parseInt(query.productId as string, 10);
 
   const { currency } = useSettings();
   const dispatch = useFormReducer();
+
+  const { userInfo } = useGetUser();
+  const csrfToken = userInfo?.csrfToken;
+
+  const [updateProductInformation, { loading }] = useMutation(
+    UPDATE_SIMPLE_PRODUCT_INFORMATION,
+    {
+      context: {
+        headers: {
+          'x-csrf-token': csrfToken
+        }
+      },
+      onCompleted: (data: { updateSimpleProductInformation: Product }) => {
+        if (!isEmpty(data?.updateSimpleProductInformation)) {
+          setInitProductInformation(data?.updateSimpleProductInformation);
+          notify(t('common:successfully-updated'), 'success');
+        }
+      }
+    }
+  );
 
   const { salePrice, comparePrice, buyingPrice, quantity, sku } = state;
 
@@ -51,14 +82,31 @@ function ProductSimpleForm({
     });
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // if (name.length === 0) {
+    //   return notify('Product name should not be empty', 'error');
+    // }
+    updateProductInformation({
+      variables: {
+        id: productId,
+        salePrice,
+        comparePrice,
+        buyingPrice,
+        quantity,
+        sku
+      }
+    }).catch((err) => {
+      // TODO: Error product context
+      // setError(err);
+    });
+  };
+
   const renderSaveButton = () => {
     if (isUpdated) {
       return (
         <div className="mt-8 flex justify-end border-t pt-4">
-          <Button
-          // loading={updating || creating}
-          // disabled={updating || creating}
-          >
+          <Button loading={loading} disabled={loading} onClick={handleSubmit}>
             <div className="mr-1">
               <SaveIcon width="1.3rem" height="1.3rem" />
             </div>
@@ -74,7 +122,7 @@ function ProductSimpleForm({
     <div className="flex flex-wrap pb-8 my-5 sm:my-8">
       <Description
         details={`${
-          initialValues
+          initProductInformation
             ? t('form:item-description-edit')
             : t('form:item-description-add')
         } ${t('form:form-description-simple-product-info')}`}

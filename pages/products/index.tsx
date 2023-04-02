@@ -6,8 +6,8 @@ import ProductList from '@components/product/product-list';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { PRODUCTS } from '@graphql/product';
+import { useGetUser } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetStaff } from '@hooks/useGetStaff';
 import { useTableColumn } from '@hooks/useTableColumn';
 import { verifyAuth } from '@middleware/utils';
 import type { SSRProps } from '@ts-types/custom.types';
@@ -58,7 +58,7 @@ export default function ProductsPage({ client }: SSRProps) {
 
   const { products = [], productCount: { count } = { count: 0 } } = data ?? {};
 
-  useGetStaff(client);
+  useGetUser(client);
   useErrorLogger(error);
 
   const handlePagination = (current: number) => {

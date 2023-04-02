@@ -7,7 +7,7 @@ import PasswordInput from '@components/ui/password-input';
 import { USER_LOGIN } from '@graphql/login';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetStaff } from '@hooks/useGetStaff';
+import { useGetUser } from '@hooks/useGetUser';
 import { ROUTES } from '@utils/routes';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -59,11 +59,11 @@ const LoginForm = () => {
     resolver: yupResolver(loginFormSchema)
   });
 
-  const { staffInfo } = useGetStaff();
+  const { userInfo } = useGetUser();
 
-  const csrfToken = staffInfo?.csrfToken;
+  const csrfToken = userInfo?.csrfToken;
 
-  const [staffLogin] = useMutation(USER_LOGIN, {
+  const [userLogin] = useMutation(USER_LOGIN, {
     context: {
       headers: {
         'x-csrf-token': csrfToken
@@ -87,7 +87,7 @@ const LoginForm = () => {
     };
 
     setLoading(true);
-    staffLogin({ variables }).catch((error) => {
+    userLogin({ variables }).catch((error) => {
       const err = error?.graphQLErrors[0];
       setLoading(false);
       setError(`error:${err?.t ?? 'SOMETHING_HAPPENED'}`);

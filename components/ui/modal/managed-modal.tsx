@@ -7,9 +7,9 @@ import {
   DELETE_PRODUCT,
   DELETE_SHIPPING,
   DELETE_SLIDER,
-  DELETE_STAFF,
   DELETE_SUPPLIER,
-  DELETE_TAG
+  DELETE_TAG,
+  DELETE_USER
 } from '@ts-types/constants';
 import dynamic from 'next/dynamic';
 
@@ -17,9 +17,7 @@ import { useModalAction, useModalState } from './modal.context';
 
 const TagDeleteView = dynamic(() => import('@components/tag/tag-delete-view'));
 
-const BanCustomerView = dynamic(
-  () => import('@components/staff/staff-ban-view')
-);
+const BanCustomerView = dynamic(() => import('@components/user/user-ban-view'));
 
 const ShippingDeleteView = dynamic(
   () => import('@components/shipping-zone/shipping-delete-view')
@@ -41,8 +39,8 @@ const OrderStatusDeleteView = dynamic(
   () => import('@components/order-status/order-status-delete-view')
 );
 
-const StaffDeleteView = dynamic(
-  () => import('@components/staff/staff-delete-view')
+const UserDeleteView = dynamic(
+  () => import('@components/user/user-delete-view')
 );
 
 const SupplierDeleteView = dynamic(
@@ -70,7 +68,7 @@ const ManagedModal = () => {
       {view === DELETE_TAG && <TagDeleteView />}
       {view === BAN_CUSTOMER && <BanCustomerView />}
       {view === DELETE_ORDER_STATUS && <OrderStatusDeleteView />}
-      {view === DELETE_STAFF && <StaffDeleteView />}
+      {view === DELETE_USER && <UserDeleteView />}
       {view === DELETE_SUPPLIER && <SupplierDeleteView />}
       {view === DELETE_SLIDER && <SliderDeleteView />}
     </Modal>

@@ -4,7 +4,7 @@ import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { HERO_SLIDE } from '@graphql/hero-carousel';
-import { useErrorLogger, useGetStaff } from '@hooks/index';
+import { useErrorLogger, useGetUser } from '@hooks/index';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { HeroCarouselType } from '@ts-types/generated';
@@ -37,8 +37,7 @@ export default function UpdateHeroSliderPage({ client }: SSRProps) {
 
   const { heroSlide = [] } = data ?? {};
 
-  useGetStaff(client);
-
+  useGetUser(client);
   useErrorLogger(error);
 
   if (loading) {

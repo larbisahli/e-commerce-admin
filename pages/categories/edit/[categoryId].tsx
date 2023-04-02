@@ -4,7 +4,7 @@ import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { CATEGORY } from '@graphql/category';
-import { useErrorLogger, useGetStaff } from '@hooks/index';
+import { useErrorLogger, useGetUser } from '@hooks/index';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { Category } from '@ts-types/generated';
@@ -37,7 +37,7 @@ export default function UpdateCategoriesPage({ client }: SSRProps) {
 
   const { category = [] } = data ?? {};
 
-  useGetStaff(client);
+  useGetUser(client);
   useErrorLogger(error);
 
   if (loading) {

@@ -1,3 +1,5 @@
+import { ACTION_PRIVILEGES, RESOURCES } from './enums';
+
 /* eslint-disable no-unused-vars */
 export enum PATH {
   PRODUCTS = 'products',
@@ -59,4 +61,12 @@ export enum SEARCH_JOIN {
 export enum OrderField {
   CreatedAt = 'created_at',
   UpdatedAt = 'updated_at'
+}
+
+export interface ResourcePermissionType {
+  resource: RESOURCES;
+  [ACTION_PRIVILEGES.READ]: boolean;
+  [ACTION_PRIVILEGES.WRITE]: boolean;
+  [ACTION_PRIVILEGES.UPDATE]: boolean;
+  [ACTION_PRIVILEGES.DELETE]: boolean;
 }

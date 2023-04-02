@@ -2,11 +2,11 @@ import { CreatedUpdatedByAt } from '@ts-types/generated';
 import dayjs from 'dayjs';
 
 const ProfileCart = ({
-  staff,
+  user,
   updatedAt,
   createdAt
 }: {
-  staff: CreatedUpdatedByAt['updatedBy'];
+  user: CreatedUpdatedByAt['updatedBy'];
   updatedAt?: CreatedUpdatedByAt['updatedAt'];
   createdAt?: CreatedUpdatedByAt['createdAt'];
 }) => {
@@ -22,7 +22,7 @@ const ProfileCart = ({
       className="flex items-center min-w-max"
     >
       <div className="px-1 font-medium">
-        {`${staff?.firstName ?? ''} ${staff?.lastName ?? ''}`}
+        {`${user?.firstName ?? ''} ${user?.lastName ?? ''}`}
       </div>
     </div>
   );

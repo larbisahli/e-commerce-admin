@@ -4,16 +4,16 @@ import {
   useModalAction,
   useModalState
 } from '@components/ui/modal/modal.context';
-import { BAN_STAFF, STAFFS } from '@graphql/staff';
+import { BAN_USER, USERS } from '@graphql/user';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useState } from 'react';
 
-const StaffBanView = () => {
+const UserBanView = () => {
   const [error, setError] = useState(null);
-  const [BanStaff, { loading }] = useMutation(BAN_STAFF, {
+  const [BanUser, { loading }] = useMutation(BAN_USER, {
     refetchQueries: [
-      STAFFS,
-      'Staffs' // Query name
+      USERS,
+      'Users' // Query name
     ]
   });
 
@@ -24,8 +24,8 @@ const StaffBanView = () => {
 
   async function handleDelete() {
     if (meta === 'ban') {
-      // Block staff
-      BanStaff({
+      // Block user
+      BanUser({
         variables: {
           id,
           active: false
@@ -34,8 +34,8 @@ const StaffBanView = () => {
         setError(err);
       });
     } else {
-      // Unblock staff
-      BanStaff({
+      // Unblock user
+      BanUser({
         variables: {
           id,
           active: true
@@ -51,15 +51,15 @@ const StaffBanView = () => {
       onCancel={closeModal}
       onDelete={handleDelete}
       deleteBtnText={meta === 'ban' ? 'Block' : 'Unblock'}
-      title={meta === 'ban' ? 'Block Staff' : 'Unblock Staff'}
+      title={meta === 'ban' ? 'Block User' : 'Unblock User'}
       description={
         meta === 'ban'
-          ? 'Are you sure you want to block this Staff?'
-          : 'Are you sure you want to unblock this Staff?'
+          ? 'Are you sure you want to block this User?'
+          : 'Are you sure you want to unblock this User?'
       }
       deleteBtnLoading={loading}
     />
   );
 };
 
-export default StaffBanView;
+export default UserBanView;

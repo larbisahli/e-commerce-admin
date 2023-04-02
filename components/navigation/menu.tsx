@@ -1,7 +1,7 @@
 import Avatar from '@components/common/avatar';
 import Link from '@components/ui/link';
 import { Menu, Transition } from '@headlessui/react';
-import { useGetStaff } from '@hooks/index';
+import { useGetUser } from '@hooks/index';
 import { siteSettings } from '@settings/site.settings';
 import cn from 'classnames';
 import classNames from 'classnames/bind';
@@ -16,8 +16,8 @@ export default function NavMenu() {
   const { t } = useTranslation('common');
 
   const {
-    staffInfo: { profile = [], firstName = '', lastName = '' }
-  } = useGetStaff();
+    userInfo: { profile = [], firstName = '', lastName = '' }
+  } = useGetUser();
   console.log({ profile });
   const { image = null, placeholder = null } = profile[0] ?? {};
 

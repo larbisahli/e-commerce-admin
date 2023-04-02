@@ -1,3 +1,4 @@
+import { useMutation } from '@apollo/client';
 import Card from '@components/common/card';
 import { SaveIcon } from '@components/icons/save-icon';
 import Accordion from '@components/ui/accordion';
@@ -10,17 +11,21 @@ import Label from '@components/ui/label';
 import Loader from '@components/ui/loader/loader';
 import Radio from '@components/ui/radio';
 import TextArea from '@components/ui/text-area';
+import { UPDATE_PRODUCT_CONTENT } from '@graphql/product';
+import { useGetUser } from '@hooks/index';
+import { notify } from '@lib/notify';
 import { Nullable } from '@ts-types/custom.types';
 import { Product, ProductStatus } from '@ts-types/generated';
 import { isEmpty, isEqual } from 'lodash';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
-import { ChangeEvent, memo, useState } from 'react';
+import { ChangeEvent, Dispatch, memo, useState } from 'react';
 
 import { Actions, useFormReducer } from '../context/form.context';
 
 interface Props {
   initialValues: Nullable<Product>;
+  setError: Dispatch<any>;
   state: {
     id: number;
     name: Product['name'];
@@ -37,10 +42,38 @@ const Editor = dynamic(() => import('@components/ui/editor'), {
   ssr: false
 });
 
-const ProductContent = ({ state, initialValues }: Props) => {
+const ProductContent = ({ state, initialValues, setError }: Props) => {
   const { t } = useTranslation();
 
   const [isUpdated, setIsUpdated] = useState(false);
+
+  const [initProductContent, setInitProductContent] = useState<Product>(() => ({
+    name: initialValues.name,
+    description: initialValues.description,
+    published: initialValues.published,
+    note: initialValues.note,
+    disableOutOfStock: initialValues.disableOutOfStock
+  }));
+
+  const { userInfo } = useGetUser();
+  const csrfToken = userInfo?.csrfToken;
+
+  const [updateProductContent, { loading }] = useMutation(
+    UPDATE_PRODUCT_CONTENT,
+    {
+      context: {
+        headers: {
+          'x-csrf-token': csrfToken
+        }
+      },
+      onCompleted: (data: { updateProductContent: Product }) => {
+        if (!isEmpty(data?.updateProductContent)) {
+          setInitProductContent(data?.updateProductContent);
+          notify(t('common:successfully-updated'), 'success');
+        }
+      }
+    }
+  );
 
   const {
     id,
@@ -58,11 +91,11 @@ const ProductContent = ({ state, initialValues }: Props) => {
     if (!isUpdateMode) return;
 
     const initialProductContent = {
-      name: initialValues.name,
-      description: initialValues.description,
-      published: initialValues.published,
-      note: initialValues.note,
-      disableOutOfStock: initialValues.disableOutOfStock
+      name: initProductContent.name,
+      description: initProductContent.description,
+      published: initProductContent.published,
+      note: initProductContent.note,
+      disableOutOfStock: initProductContent.disableOutOfStock
     };
     const currentProductContent = {
       name,
@@ -101,14 +134,30 @@ const ProductContent = ({ state, initialValues }: Props) => {
     });
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (name.length === 0) {
+      return notify('Product name should not be empty', 'error');
+    }
+    updateProductContent({
+      variables: {
+        id,
+        name,
+        description,
+        published: status === 'publish',
+        note,
+        disableOutOfStock
+      }
+    }).catch((err) => {
+      setError(err);
+    });
+  };
+
   const renderSaveButton = () => {
     if (isUpdated) {
       return (
         <div className="mt-8 flex justify-end border-t pt-4">
-          <Button
-          // loading={updating || creating}
-          // disabled={updating || creating}
-          >
+          <Button loading={loading} disabled={loading} onClick={handleSubmit}>
             <div className="mr-1">
               <SaveIcon width="1.3rem" height="1.3rem" />
             </div>

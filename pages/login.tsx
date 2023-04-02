@@ -1,6 +1,6 @@
 import LoginForm from '@components/auth/login-form';
 import LogoSvg from '@components/icons/logo';
-import { useGetStaff } from '@hooks/useGetStaff';
+import { useGetUser } from '@hooks/index';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { ROUTES } from '@utils/routes';
@@ -16,7 +16,7 @@ import shop from '../public/shop.jpg';
 const LoginPage = ({ client }: SSRProps) => {
   const router = useRouter();
   const { t } = useTranslation('common');
-  useGetStaff(client);
+  useGetUser(client);
 
   useEffect(() => {
     router.prefetch('/dashboard');

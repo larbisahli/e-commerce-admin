@@ -4,21 +4,21 @@ import {
   useModalAction,
   useModalState
 } from '@components/ui/modal/modal.context';
-import { DELETE_STAFF, STAFFS } from '@graphql/staff';
+import { DELETE_USER, USERS } from '@graphql/user';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { notify } from '@lib/index';
-import { StaffType } from '@ts-types/generated';
+import { UserType } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
 
-const StaffDeleteView = () => {
+const UserDeleteView = () => {
   const { t } = useTranslation();
 
   const [error, setError] = useState(null);
-  const [deleteAttributeValue, { loading }] = useMutation(DELETE_STAFF, {
+  const [deleteAttributeValue, { loading }] = useMutation(DELETE_USER, {
     refetchQueries: [
-      STAFFS,
-      'Staffs' // Query name
+      USERS,
+      'Users' // Query name
     ]
   });
 
@@ -30,10 +30,10 @@ const StaffDeleteView = () => {
   async function handleDelete() {
     deleteAttributeValue({
       variables: { id },
-      onCompleted: ({ deleteStaff }: { deleteStaff: StaffType }) => {
-        const { firstName, lastName } = deleteStaff;
+      onCompleted: ({ deleteUser }: { deleteUser: UserType }) => {
+        const { firstName, lastName } = deleteUser;
         notify(
-          `${t('common:sidebar-nav-item-staff')} '${firstName} ${lastName}' ${t(
+          `${t('common:sidebar-nav-item-user')} '${firstName} ${lastName}' ${t(
             'common:successfully-deleted'
           )}`,
           'success'
@@ -54,4 +54,4 @@ const StaffDeleteView = () => {
   );
 };
 
-export default StaffDeleteView;
+export default UserDeleteView;

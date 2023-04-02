@@ -1,8 +1,6 @@
 import type {
-  ADMIN_TYPE,
   BAN_CUSTOMER_TYPE,
-  BAN_STAFF_TYPE,
-  CREATE_TYPE,
+  BAN_USER_TYPE,
   DELETE_ATTRIBUTE_TYPE,
   DELETE_COUPON_TYPE,
   DELETE_ORDER_STATUS_TYPE,
@@ -10,16 +8,13 @@ import type {
   DELETE_PRODUCT_TYPE,
   DELETE_SHIPPING_TYPE,
   DELETE_SLIDER_TYPE,
-  DELETE_STAFF_TYPE,
   DELETE_SUPPLIER_TYPE,
   DELETE_TAG_TYPE,
-  DELETE_TYPE,
+  DELETE_USER_TYPE,
   IMAGE_MODAL_TYPE,
-  PRODUCT_MODAL_TYPE,
-  READ_TYPE,
-  UPDATE_TYPE
+  PRODUCT_MODAL_TYPE
 } from './constants';
-import { SortOrder, StaffType } from './generated';
+import { SortOrder, UserType } from './generated';
 
 // Nullable can be assigned to a value or can be assigned to null.
 export declare type Nullable<T> = T | null;
@@ -56,7 +51,7 @@ export interface JwtPayload {
 
 export type SSRProps = {
   token?: string | null;
-  client?: StaffType | null;
+  client?: UserType | null;
 };
 
 export type ModalView =
@@ -68,8 +63,8 @@ export type ModalView =
   | DELETE_ORDER_STATUS_TYPE
   | DELETE_TAG_TYPE
   | BAN_CUSTOMER_TYPE
-  | BAN_STAFF_TYPE
-  | DELETE_STAFF_TYPE
+  | BAN_USER_TYPE
+  | DELETE_USER_TYPE
   | DELETE_SUPPLIER_TYPE
   | DELETE_SLIDER_TYPE
   | IMAGE_MODAL_TYPE
@@ -132,7 +127,7 @@ export type CurrencyType = {
 //   sortedBy?: SortOrder;
 // };
 
-// export type StaffsQueryOptionsType = {
+// export type UserQueryOptionsType = {
 //   page?: number;
 //   shop_id?: number;
 //   limit?: number;

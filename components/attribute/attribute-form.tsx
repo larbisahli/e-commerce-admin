@@ -13,7 +13,7 @@ import {
   UPDATE_ATTRIBUTE
 } from '@graphql/attribute';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetStaff } from '@hooks/useGetStaff';
+import { useGetUser } from '@hooks/useGetUser';
 import { notify } from '@lib/index';
 import { Nullable } from '@ts-types/custom.types';
 import { Attribute, AttributeValue } from '@ts-types/generated';
@@ -55,8 +55,8 @@ export default function CreateOrUpdateAttributeForm({ initialValues }: IProps) {
     defaultValues: initialValues ? initialValues : { name: null, values: [] }
   });
 
-  const { staffInfo } = useGetStaff();
-  const csrfToken = staffInfo?.csrfToken;
+  const { userInfo } = useGetUser();
+  const csrfToken = userInfo?.csrfToken;
 
   const { fields, append, remove } = useFieldArray({
     control,

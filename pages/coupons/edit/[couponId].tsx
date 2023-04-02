@@ -4,7 +4,7 @@ import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { COUPON } from '@graphql/coupons';
-import { useErrorLogger, useGetStaff } from '@hooks/index';
+import { useErrorLogger, useGetUser } from '@hooks/index';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { Coupon } from '@ts-types/generated';
@@ -35,7 +35,7 @@ export default function UpdateCouponPage({ client }: SSRProps) {
 
   const { coupon = [] } = data ?? {};
 
-  useGetStaff(client);
+  useGetUser(client);
   useErrorLogger(error);
 
   if (loading) {

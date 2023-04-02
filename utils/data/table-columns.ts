@@ -24,7 +24,7 @@ export const COLUMNS = {
     { label: 'Updated By', key: 'updatedBy' },
     { label: 'Actions', key: 'actions' }
   ],
-  staff: [
+  user: [
     { label: 'Profile', key: 'profile' },
     { label: 'Name', key: 'firstName' },
     { label: 'Role', key: 'role' },

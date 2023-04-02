@@ -1,6 +1,6 @@
 import * as yup from 'yup';
 
-export const staffValidationSchema = yup.object().shape({
+export const userValidationSchema = yup.object().shape({
   firstName: yup.string().required('form:error-last-name-required'),
   lastName: yup.string().required('form:error-first-name-required'),
   email: yup

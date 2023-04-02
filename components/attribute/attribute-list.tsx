@@ -91,9 +91,7 @@ const AttributeList = ({ attributes, selectedColumns }: IProps) => {
           createdBy: CreatedUpdatedByAt['createdBy'],
           record: Attribute
         ) => {
-          return (
-            <ProfileCart staff={createdBy} createdAt={record?.updatedAt} />
-          );
+          return <ProfileCart user={createdBy} createdAt={record?.updatedAt} />;
         }
       },
       {
@@ -107,9 +105,7 @@ const AttributeList = ({ attributes, selectedColumns }: IProps) => {
           updatedBy: CreatedUpdatedByAt['updatedBy'],
           record: Attribute
         ) => {
-          return (
-            <ProfileCart staff={updatedBy} updatedAt={record?.updatedAt} />
-          );
+          return <ProfileCart user={updatedBy} updatedAt={record?.updatedAt} />;
         }
       },
       {

@@ -11,7 +11,7 @@ import {
   toggleSidebar
 } from '@store/ui';
 
-import { useAppDispatch, useAppSelector } from './useGetStaff';
+import { useAppDispatch, useAppSelector } from './useGetUser';
 
 export const useUI = () => {
   const ui = useAppSelector((state) => state.ui);

@@ -1,0 +1,102 @@
+import { ACTION_PRIVILEGES, RESOURCES } from '@ts-types/enums';
+
+export const resourceDefaultData = [
+  {
+    resource: RESOURCES.PHOTOS,
+    [ACTION_PRIVILEGES.WRITE]: false,
+    [ACTION_PRIVILEGES.READ]: false,
+    [ACTION_PRIVILEGES.UPDATE]: false,
+    [ACTION_PRIVILEGES.DELETE]: false
+  },
+  {
+    resource: RESOURCES.USER,
+    [ACTION_PRIVILEGES.WRITE]: false,
+    [ACTION_PRIVILEGES.READ]: false,
+    [ACTION_PRIVILEGES.UPDATE]: false,
+    [ACTION_PRIVILEGES.DELETE]: false
+  },
+  {
+    resource: RESOURCES.CATEGORY,
+    [ACTION_PRIVILEGES.WRITE]: false,
+    [ACTION_PRIVILEGES.READ]: false,
+    [ACTION_PRIVILEGES.UPDATE]: false,
+    [ACTION_PRIVILEGES.DELETE]: false
+  },
+  {
+    resource: RESOURCES.PRODUCT,
+    [ACTION_PRIVILEGES.WRITE]: false,
+    [ACTION_PRIVILEGES.READ]: false,
+    [ACTION_PRIVILEGES.UPDATE]: false,
+    [ACTION_PRIVILEGES.DELETE]: false
+  },
+  {
+    resource: RESOURCES.TAG,
+    [ACTION_PRIVILEGES.WRITE]: false,
+    [ACTION_PRIVILEGES.READ]: false,
+    [ACTION_PRIVILEGES.UPDATE]: false,
+    [ACTION_PRIVILEGES.DELETE]: false
+  },
+  {
+    resource: RESOURCES.SUPPLIER,
+    [ACTION_PRIVILEGES.WRITE]: false,
+    [ACTION_PRIVILEGES.READ]: false,
+    [ACTION_PRIVILEGES.UPDATE]: false,
+    [ACTION_PRIVILEGES.DELETE]: false
+  },
+  {
+    resource: RESOURCES.ATTRIBUTE,
+    [ACTION_PRIVILEGES.WRITE]: false,
+    [ACTION_PRIVILEGES.READ]: false,
+    [ACTION_PRIVILEGES.UPDATE]: false,
+    [ACTION_PRIVILEGES.DELETE]: false
+  },
+  {
+    resource: RESOURCES.CUSTOMER,
+    [ACTION_PRIVILEGES.WRITE]: false,
+    [ACTION_PRIVILEGES.READ]: false,
+    [ACTION_PRIVILEGES.UPDATE]: false,
+    [ACTION_PRIVILEGES.DELETE]: false
+  },
+  {
+    resource: RESOURCES.COUPON,
+    [ACTION_PRIVILEGES.WRITE]: false,
+    [ACTION_PRIVILEGES.READ]: false,
+    [ACTION_PRIVILEGES.UPDATE]: false,
+    [ACTION_PRIVILEGES.DELETE]: false
+  },
+  {
+    resource: RESOURCES.SHIPPING_ZONE,
+    [ACTION_PRIVILEGES.WRITE]: false,
+    [ACTION_PRIVILEGES.READ]: false,
+    [ACTION_PRIVILEGES.UPDATE]: false,
+    [ACTION_PRIVILEGES.DELETE]: false
+  },
+  {
+    resource: RESOURCES.ORDER_STATUS,
+    [ACTION_PRIVILEGES.WRITE]: false,
+    [ACTION_PRIVILEGES.READ]: false,
+    [ACTION_PRIVILEGES.UPDATE]: false,
+    [ACTION_PRIVILEGES.DELETE]: false
+  },
+  {
+    resource: RESOURCES.ORDER,
+    [ACTION_PRIVILEGES.WRITE]: false,
+    [ACTION_PRIVILEGES.READ]: false,
+    [ACTION_PRIVILEGES.UPDATE]: false,
+    [ACTION_PRIVILEGES.DELETE]: false
+  },
+  {
+    resource: RESOURCES.ROLE,
+    [ACTION_PRIVILEGES.WRITE]: false,
+    [ACTION_PRIVILEGES.READ]: false,
+    [ACTION_PRIVILEGES.UPDATE]: false,
+    [ACTION_PRIVILEGES.DELETE]: false
+  },
+  {
+    resource: RESOURCES.SLIDESHOW,
+    [ACTION_PRIVILEGES.WRITE]: false,
+    [ACTION_PRIVILEGES.READ]: false,
+    [ACTION_PRIVILEGES.UPDATE]: false,
+    [ACTION_PRIVILEGES.DELETE]: false
+  }
+];

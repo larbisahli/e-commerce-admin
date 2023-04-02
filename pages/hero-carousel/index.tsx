@@ -6,7 +6,7 @@ import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { HERO_CAROUSEL_LIST } from '@graphql/hero-carousel';
-import { useErrorLogger, useGetStaff } from '@hooks/index';
+import { useErrorLogger, useGetUser } from '@hooks/index';
 import { useTableColumn } from '@hooks/useTableColumn';
 import { verifyAuth } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
@@ -52,7 +52,7 @@ export default function HeroCarousel({ client }: SSRProps) {
   const { heroSlideList = [], heroSlideListCount: { count } = { count: 0 } } =
     data ?? {};
 
-  useGetStaff(client);
+  useGetUser(client);
   useErrorLogger(error);
 
   const handlePagination = (current: number) => {

@@ -88,9 +88,7 @@ const OrderStatusList = ({ orderStatuses, selectedColumns }: IProps) => {
           createdBy: CreatedUpdatedByAt['createdBy'],
           record: OrderStatus
         ) => {
-          return (
-            <ProfileCart staff={createdBy} createdAt={record?.createdAt} />
-          );
+          return <ProfileCart user={createdBy} createdAt={record?.createdAt} />;
         }
       },
       {
@@ -104,9 +102,7 @@ const OrderStatusList = ({ orderStatuses, selectedColumns }: IProps) => {
           updatedBy: CreatedUpdatedByAt['updatedBy'],
           record: OrderStatus
         ) => {
-          return (
-            <ProfileCart staff={updatedBy} updatedAt={record?.updatedAt} />
-          );
+          return <ProfileCart user={updatedBy} updatedAt={record?.updatedAt} />;
         }
       },
       {

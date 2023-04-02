@@ -189,35 +189,6 @@ export const siteSettings = {
         ]
       },
       {
-        id: '9YcWhG',
-        href: ROUTES.COMING_SOON,
-        label: 'sidebar-nav-item-whatsapp',
-        icon: 'WhatsAppIcon',
-        subLinks: [
-          {
-            id: '9YcIhG',
-            href: ROUTES.COMING_SOON,
-            label: 'sidebar-nav-item-whatsapp-newsletter',
-            padding: '35px',
-            isSubLink: true
-          },
-          {
-            id: '9YcXWhG',
-            href: ROUTES.COMING_SOON,
-            label: 'sidebar-nav-item-whatsapp-templates',
-            padding: '35px',
-            isSubLink: true
-          },
-          {
-            id: 'RVRgg5S',
-            href: ROUTES.COMING_SOON,
-            label: 'sidebar-nav-item-newsletter-subscribers',
-            padding: '35px',
-            isSubLink: true
-          }
-        ]
-      },
-      {
         id: 'j6OQzo',
         href: ROUTES.COMING_SOON,
         label: 'sidebar-nav-item-email',
@@ -329,11 +300,11 @@ export const siteSettings = {
         id: 'JU99uXy',
         href: '#',
         label: 'sidebar-nav-item-users',
-        icon: 'StaffsIcon',
+        icon: 'UsersIcon',
         subLinks: [
           {
             id: '00WaIACaCI',
-            href: ROUTES.USERS,
+            href: ROUTES.USER,
             label: 'sidebar-nav-item-all-users',
             padding: '35px',
             isSubLink: true
@@ -356,22 +327,8 @@ export const siteSettings = {
         subLinks: [
           {
             id: '9YcWhG',
-            href: ROUTES.ACCOUNT_INFORMATION,
-            label: 'sidebar-nav-item-account-information',
-            padding: '35px',
-            isSubLink: true
-          },
-          {
-            id: 'j6OQzo',
             href: ROUTES.COMING_SOON,
-            label: 'sidebar-nav-item-recent-login-history',
-            padding: '35px',
-            isSubLink: true
-          },
-          {
-            id: 'RVRg5SS',
-            href: ROUTES.COMING_SOON,
-            label: 'sidebar-nav-item-notifications',
+            label: 'sidebar-nav-item-themes',
             padding: '35px',
             isSubLink: true
           }

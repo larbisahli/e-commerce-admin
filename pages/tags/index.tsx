@@ -6,7 +6,7 @@ import TagList from '@components/tag/tag-list';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { TAGS } from '@graphql/tag';
-import { useErrorLogger, useGetStaff } from '@hooks/index';
+import { useErrorLogger, useGetUser } from '@hooks/index';
 import { useTableColumn } from '@hooks/useTableColumn';
 import { verifyAuth } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
@@ -55,7 +55,7 @@ export default function Tags({ client }: SSRProps) {
 
   const { tags = [], tagCount: { count } = { count: 0 } } = data ?? {};
 
-  useGetStaff(client);
+  useGetUser(client);
   useErrorLogger(error);
 
   function handlePagination(current: any) {

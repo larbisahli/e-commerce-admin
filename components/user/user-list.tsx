@@ -3,13 +3,13 @@ import Avatar from '@components/common/avatar';
 import Badge from '@components/ui/badge/badge';
 import ProfileCart from '@components/ui/profile-card';
 import { Table } from '@components/ui/table';
-import { useGetStaff } from '@hooks/useGetStaff';
+import { useGetUser } from '@hooks/index';
 import { siteSettings } from '@settings/site.settings';
 import {
   CreatedUpdatedByAt,
   ImageType,
   RoleType,
-  StaffType
+  UserType
 } from '@ts-types/generated';
 import { useIsRTL } from '@utils/locals';
 import { ROUTES } from '@utils/routes';
@@ -18,14 +18,14 @@ import { useTranslation } from 'next-i18next';
 import { useMemo } from 'react';
 
 type IProps = {
-  staffs: StaffType[] | null | undefined;
+  users: UserType[] | null | undefined;
   selectedColumns: string[];
 };
-const StaffList = ({ staffs, selectedColumns }: IProps) => {
+const UserList = ({ users, selectedColumns }: IProps) => {
   const { t } = useTranslation();
   const { alignLeft } = useIsRTL();
 
-  const { staffInfo } = useGetStaff();
+  const { userInfo } = useGetUser();
 
   const columns = useMemo(() => {
     return [
@@ -43,7 +43,7 @@ const StaffList = ({ staffs, selectedColumns }: IProps) => {
         key: 'profile',
         align: 'center',
         width: 74,
-        render: (profile: ImageType, record: StaffType) => {
+        render: (profile: ImageType, record: UserType) => {
           const { image, placeholder } = profile[0] ?? {};
           return (
             <Avatar
@@ -61,7 +61,7 @@ const StaffList = ({ staffs, selectedColumns }: IProps) => {
         align: alignLeft,
         width: 120,
         ellipsis: true,
-        render: (firstName: string, record: StaffType) => (
+        render: (firstName: string, record: UserType) => (
           <span className="font-semibold text-gray-800 capitalize">
             {`${firstName} ${record?.lastName}`}
           </span>
@@ -152,11 +152,9 @@ const StaffList = ({ staffs, selectedColumns }: IProps) => {
         ellipsis: true,
         render: (
           createdBy: CreatedUpdatedByAt['createdBy'],
-          record: StaffType
+          record: UserType
         ) => {
-          return (
-            <ProfileCart staff={createdBy} createdAt={record?.createdAt} />
-          );
+          return <ProfileCart user={createdBy} createdAt={record?.createdAt} />;
         }
       },
       {
@@ -168,11 +166,9 @@ const StaffList = ({ staffs, selectedColumns }: IProps) => {
         ellipsis: true,
         render: (
           updatedBy: CreatedUpdatedByAt['updatedBy'],
-          record: StaffType
+          record: UserType
         ) => {
-          return (
-            <ProfileCart staff={updatedBy} updatedAt={record?.updatedAt} />
-          );
+          return <ProfileCart user={updatedBy} updatedAt={record?.updatedAt} />;
         }
       },
       {
@@ -181,14 +177,14 @@ const StaffList = ({ staffs, selectedColumns }: IProps) => {
         key: 'actions',
         align: 'center',
         width: 150,
-        render: (id: string, { active }: StaffType) => {
+        render: (id: string, { active }: UserType) => {
           return (
             <>
               <ActionButtons
                 id={id}
-                editUrl={`${ROUTES.STAFFS}/edit/${id}`}
-                deleteModalView={staffInfo?.id != id ? 'DELETE_STAFF' : null}
-                userStatus={staffInfo?.id != id}
+                editUrl={`${ROUTES.USER}/edit/${id}`}
+                deleteModalView={userInfo?.id != id ? 'DELETE_USER' : null}
+                userStatus={userInfo?.id != id}
                 isUserActive={active}
               />
             </>
@@ -196,7 +192,7 @@ const StaffList = ({ staffs, selectedColumns }: IProps) => {
         }
       }
     ];
-  }, [alignLeft, staffInfo?.id, t]);
+  }, [alignLeft, userInfo?.id, t]);
 
   const tableColumns = useMemo(() => {
     return columns?.filter(({ key }) => {
@@ -213,7 +209,7 @@ const StaffList = ({ staffs, selectedColumns }: IProps) => {
           // @ts-ignore
           columns={tableColumns}
           emptyText={t('table:empty-table-data')}
-          data={staffs}
+          data={users}
           rowKey="id"
           scroll={{ x: 800 }}
         />
@@ -222,4 +218,4 @@ const StaffList = ({ staffs, selectedColumns }: IProps) => {
   );
 };
 
-export default StaffList;
+export default UserList;

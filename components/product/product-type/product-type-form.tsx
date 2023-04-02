@@ -3,7 +3,7 @@ import { Product, ProductType } from '@ts-types/generated';
 import { differenceWith, isEmpty } from 'lodash';
 import isEqual from 'lodash/isEqual';
 import { useTranslation } from 'next-i18next';
-import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { memo, useCallback, useState } from 'react';
 
 import ProductSimpleForm from '../product-simple-form';
 import ProductVariableForm from '../product-variable-form';
@@ -28,6 +28,16 @@ const ProductTypeFormComponent = ({ state, initialValues }: Props) => {
 
   const [isUpdated, setIsUpdated] = useState(false);
 
+  const [initProductInformation, setInitProductInformation] = useState<Product>(
+    () => ({
+      salePrice: initialValues.salePrice,
+      comparePrice: initialValues.comparePrice,
+      buyingPrice: initialValues.buyingPrice,
+      quantity: initialValues.quantity,
+      sku: initialValues.sku
+    })
+  );
+
   const {
     type: { id: productType },
     variationOptions,
@@ -50,22 +60,7 @@ const ProductTypeFormComponent = ({ state, initialValues }: Props) => {
         return;
       }
 
-      const {
-        salePrice: initSalePrice,
-        comparePrice: initComparePrice,
-        buyingPrice: initBuyingPrice,
-        quantity: initQuantity,
-        initSku
-      } = initialValues;
-
-      const initialProductContent = {
-        salePrice: initSalePrice ?? 0,
-        comparePrice: initComparePrice ?? 0,
-        buyingPrice: initBuyingPrice ?? 0,
-        quantity: initQuantity ?? 0,
-        sku: initSku ?? 0
-      };
-      const currentProductContent = {
+      const currentSimpleProductInformation = {
         salePrice,
         comparePrice,
         buyingPrice,
@@ -73,12 +68,14 @@ const ProductTypeFormComponent = ({ state, initialValues }: Props) => {
         sku
       };
 
-      setIsUpdated(!isEqual(initialProductContent, currentProductContent));
+      setIsUpdated(
+        !isEqual(initProductInformation, currentSimpleProductInformation)
+      );
     },
     [
       buyingPrice,
       comparePrice,
-      initialValues,
+      initProductInformation,
       isUpdateMode,
       productType,
       quantity,
@@ -109,7 +106,8 @@ const ProductTypeFormComponent = ({ state, initialValues }: Props) => {
           isUpdated={isUpdated}
           checkForUpdateHandler={checkForUpdateHandler}
           state={{ salePrice, comparePrice, buyingPrice, quantity, sku }}
-          initialValues={initialValues}
+          setInitProductInformation={setInitProductInformation}
+          initProductInformation={initProductInformation}
         />
       );
     }

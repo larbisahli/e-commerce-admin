@@ -5,13 +5,12 @@ import SecureX from '@components/icons/secure-x';
 import ShieldCheck from '@components/icons/shield-check';
 import Alert from '@components/ui/alert';
 import Button from '@components/ui/button';
-import ValidationError from '@components/ui/form-validation-error';
 import Input from '@components/ui/input';
 import Label from '@components/ui/label';
 import { ALIAS_NAME_CHECK, CREATE_STORE } from '@graphql/create-store';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetStaff } from '@hooks/useGetStaff';
+import { useGetUser } from '@hooks/useGetUser';
 import { ROUTES } from '@utils/routes';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -68,9 +67,9 @@ const RegistrationForm = () => {
     resolver: yupResolver(registrationFormSchema)
   });
 
-  const { staffInfo } = useGetStaff();
+  const { userInfo } = useGetUser();
 
-  const csrfToken = staffInfo?.csrfToken;
+  const csrfToken = userInfo?.csrfToken;
 
   const [createStore, { loading, error }] = useMutation(CREATE_STORE, {
     context: {
@@ -233,9 +232,9 @@ const RegistrationForm = () => {
 const AliasViewer = ({ alias, executeCheckQuery }) => {
   const timeout = useRef(null);
 
-  const { staffInfo } = useGetStaff();
+  const { userInfo } = useGetUser();
 
-  const csrfToken = staffInfo?.csrfToken;
+  const csrfToken = userInfo?.csrfToken;
 
   const [aliasCheck, { data, loading, error }] = useLazyQuery(
     ALIAS_NAME_CHECK,

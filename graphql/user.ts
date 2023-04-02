@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
-export const STAFF_INFO = gql`
-  query StaffInfo($id: ID!, $payload: ID!) {
-    staffInfo(id: $id, payload: $payload) {
+export const USER_INFO = gql`
+  query UserInfo($id: ID!, $payload: ID!) {
+    userInfo(id: $id, payload: $payload) {
       id
       firstName
       lastName
@@ -21,7 +21,7 @@ export const STAFF_INFO = gql`
   }
 `;
 
-export const STAFF = gql`
+export const USER = gql`
   query User($id: ID!) {
     user(id: $id) {
       id
@@ -108,18 +108,18 @@ export const USERS = gql`
   }
 `;
 
-export const CREATE_STAFF = gql`
-  mutation CreateStaff(
+export const CREATE_USER = gql`
+  mutation CreateUser(
     $firstName: String!
     $lastName: String!
-    $phoneNumber: String!
-    $email: String
+    $phoneNumber: String
+    $email: String!
     $profile: [ImageInput]
     $password: String!
     $roleId: Int!
     $notify: Boolean
   ) {
-    createStaff(
+    createUser(
       firstName: $firstName
       lastName: $lastName
       phoneNumber: $phoneNumber
@@ -136,17 +136,17 @@ export const CREATE_STAFF = gql`
   }
 `;
 
-export const UPDATE_STAFF = gql`
-  mutation UpdateStaff(
+export const UPDATE_USER = gql`
+  mutation UpdateUser(
     $id: ID!
     $firstName: String!
     $lastName: String!
-    $phoneNumber: String!
-    $email: String
+    $phoneNumber: String
+    $email: String!
     $profile: [ImageInput]
     $roleId: Int!
   ) {
-    updateStaff(
+    updateUser(
       id: $id
       firstName: $firstName
       lastName: $lastName
@@ -162,9 +162,9 @@ export const UPDATE_STAFF = gql`
   }
 `;
 
-export const DELETE_STAFF = gql`
-  mutation DeleteStaff($id: ID!) {
-    deleteStaff(id: $id) {
+export const DELETE_USER = gql`
+  mutation DeleteUser($id: ID!) {
+    deleteUser(id: $id) {
       id
       firstName
       lastName
@@ -172,38 +172,12 @@ export const DELETE_STAFF = gql`
   }
 `;
 
-export const BAN_STAFF = gql`
-  mutation BanStaff($id: ID!, $active: Boolean!) {
-    banStaff(id: $id, active: $active) {
+export const BAN_USER = gql`
+  mutation BanUser($id: ID!, $active: Boolean!) {
+    banUser(id: $id, active: $active) {
       id
       firstName
       lastName
-    }
-  }
-`;
-
-export const ROLES = gql`
-  query Staffs(
-    $page: Int!
-    $limit: Int!
-    $orderBy: String!
-    $sortedBy: String!
-  ) {
-    roleCount {
-      count
-    }
-    roles(page: $page, limit: $limit, orderBy: $orderBy, sortedBy: $sortedBy) {
-      id
-      roleName
-    }
-  }
-`;
-
-export const ROLES_FOR_SELECT = gql`
-  query Roles {
-    roles {
-      id
-      roleName
     }
   }
 `;

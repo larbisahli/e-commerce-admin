@@ -6,7 +6,7 @@ import OrderStatusList from '@components/order-status/order-status-list';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { ORDER_STATUSES } from '@graphql/order-status';
-import { useErrorLogger, useGetStaff } from '@hooks/index';
+import { useErrorLogger, useGetUser } from '@hooks/index';
 import { useTableColumn } from '@hooks/useTableColumn';
 import { verifyAuth } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
@@ -57,7 +57,7 @@ export default function OrderStatusPage({ client }: SSRProps) {
   const { orderStatuses = [], orderStatusCount: { count = 0 } = { count: 0 } } =
     data ?? {};
 
-  useGetStaff(client);
+  useGetUser(client);
   useErrorLogger(error);
 
   function handlePagination(current: any) {

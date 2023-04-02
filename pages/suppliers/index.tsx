@@ -6,7 +6,7 @@ import SuppliersList from '@components/suppliers/supplier-list';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { SUPPLIERS } from '@graphql/supplier';
-import { useErrorLogger, useGetStaff } from '@hooks/index';
+import { useErrorLogger, useGetUser } from '@hooks/index';
 import { useTableColumn } from '@hooks/useTableColumn';
 import { verifyAuth } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
@@ -57,7 +57,7 @@ export default function SuppliersPage({ client }: SSRProps) {
   const { suppliers = [], supplierCount: { count } = { count: 0 } } =
     data ?? {};
 
-  useGetStaff(client);
+  useGetUser(client);
   useErrorLogger(error);
 
   const handlePagination = (current: number) => {

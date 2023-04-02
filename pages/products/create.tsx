@@ -1,6 +1,6 @@
 import AppLayout from '@components/layouts/app';
 import CreateOrUpdateProductForm from '@components/product';
-import { useGetStaff } from '@hooks/index';
+import { useGetUser } from '@hooks/index';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import type { SSRProps } from '@ts-types/custom.types';
 import { ROUTES } from '@utils/routes';
@@ -11,7 +11,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 export default function CreateProductPage({ client }: SSRProps) {
   const { t } = useTranslation();
 
-  useGetStaff(client);
+  useGetUser(client);
 
   return (
     <>

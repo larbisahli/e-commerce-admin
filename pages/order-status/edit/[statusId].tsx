@@ -4,8 +4,8 @@ import CreateOrUpdateOrderStatusForm from '@components/order-status/order-status
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { ORDER_STATUS } from '@graphql/order-status';
+import { useGetUser } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetStaff } from '@hooks/useGetStaff';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { OrderStatus } from '@ts-types/generated';
@@ -38,7 +38,7 @@ export default function UpdateOrderStatusPage({ client }: SSRProps) {
 
   const { orderStatus = [] } = data ?? {};
 
-  useGetStaff(client);
+  useGetUser(client);
   useErrorLogger(error);
 
   if (loading) {

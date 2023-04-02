@@ -301,6 +301,86 @@ export const UPDATE_PRODUCT_GALLERY = gql`
   }
 `;
 
+export const UPDATE_PRODUCT_CONTENT = gql`
+  mutation UpdateProductContent(
+    $id: Int!
+    $name: String!
+    $description: String!
+    $note: String
+    $published: Boolean!
+    $disableOutOfStock: Boolean!
+  ) {
+    updateProductContent(
+      id: $id
+      name: $name
+      note: $note
+      description: $description
+      published: $published
+      disableOutOfStock: $disableOutOfStock
+    ) {
+      id
+      name
+      note
+      description
+      published
+      disableOutOfStock
+    }
+  }
+`;
+
+export const UPDATE_SIMPLE_PRODUCT_INFORMATION = gql`
+  mutation UpdateSimpleProductInformation(
+    $id: Int!
+    $salePrice: Float!
+    $comparePrice: Float!
+    $buyingPrice: Float
+    $quantity: Int!
+    $sku: String
+  ) {
+    updateSimpleProductInformation(
+      id: $id
+      salePrice: $salePrice
+      comparePrice: $comparePrice
+      buyingPrice: $buyingPrice
+      quantity: $quantity
+      sku: $sku
+    ) {
+      salePrice
+      comparePrice
+      buyingPrice
+      quantity
+      sku
+    }
+  }
+`;
+
+export const UPDATE_PRODUCT_SELECT_GROUP = gql`
+  mutation UpdateProductSelectGroup(
+    $id: Int!
+    $additions: UpdateProductInput!
+    $deletions: UpdateProductInput!
+  ) {
+    updateProductSelectGroup(
+      id: $id
+      additions: $additions
+      deletions: $deletions
+    ) {
+      categories {
+        id
+        name
+      }
+      suppliers {
+        id
+        name
+      }
+      tags {
+        id
+        name
+      }
+    }
+  }
+`;
+
 export const DELETE_ATTRIBUTE = gql`
   mutation DeleteProduct($id: Int!) {
     deleteProduct(id: $id) {

@@ -4,8 +4,8 @@ import CreateOrUpdateProductForm from '@components/product';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { PRODUCT } from '@graphql/product';
+import { useGetUser } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetStaff } from '@hooks/useGetStaff';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import type { SSRProps } from '@ts-types/custom.types';
 import type { Product } from '@ts-types/generated';
@@ -36,7 +36,7 @@ export default function UpdateProductPage({ client }: SSRProps) {
     }
   );
 
-  useGetStaff(client);
+  useGetUser(client);
   useErrorLogger(error);
 
   const { product = {} } = data ?? {};

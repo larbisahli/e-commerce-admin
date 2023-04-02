@@ -1,8 +1,8 @@
-import { USER_AUTH } from '@graphql/staff';
+import { USER_AUTH } from '@graphql/user';
 import apolloClient from '@lib/apollo-client';
 import { JwtPayload } from '@ts-types/custom.types';
 import { CookieNames } from '@ts-types/enums';
-import { StaffType } from '@ts-types/generated';
+import { UserType } from '@ts-types/generated';
 import Cookies from 'cookies';
 import Tokens from 'csrf';
 import jwt, { Algorithm } from 'jsonwebtoken';
@@ -19,8 +19,8 @@ const PublicKEY = Buffer.from(process.env.JWTRS256_KEY_PUB, 'base64').toString(
   'ascii'
 );
 
-interface TStaff {
-  userAuth: StaffType;
+interface TUser {
+  userAuth: UserType;
   error: Error;
 }
 
@@ -56,7 +56,7 @@ export async function verifyAuth(context: GetServerSidePropsContext) {
     }
 
     // fetch for client info
-    const { data } = await apolloClient.query<TStaff>({
+    const { data } = await apolloClient.query<TUser>({
       query: USER_AUTH,
       variables: {},
       context: {
