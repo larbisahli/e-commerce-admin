@@ -47,7 +47,6 @@ export const selectStyles = {
     color: state.isFocused ? '#9CA3AF' : '#e03d3d',
     padding: 0,
     cursor: 'pointer',
-
     '&:hover': {
       color: '#b92f2f'
     }

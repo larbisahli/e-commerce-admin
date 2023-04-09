@@ -1,5 +1,4 @@
 import ActionButtons from '@components/common/action-buttons';
-import * as categoriesIcon from '@components/icons/category';
 import ProfileCart from '@components/ui/profile-card';
 import { Table } from '@components/ui/table';
 import { Category, CreatedUpdatedByAt } from '@ts-types/generated';
@@ -35,33 +34,18 @@ const CategoryList = ({ categories, selectedColumns }: IProps) => {
         dataIndex: 'name',
         key: 'name',
         align: alignLeft,
-        width: 150,
+        width: 200,
         ellipsis: true,
         render: (name: string, record: Category) => {
           return (
             <span
               className={cn('font-semibold text-gray-800 capitalize', {
-                'pl-3': !!record?.parentId,
-                'text-gray-600': !!record?.parentId
+                'pl-3': record?.level === 2,
+                'pl-6': record?.level === 3,
+                'text-gray-600 font-medium': record?.level !== 1
               })}
             >
               {name}
-            </span>
-          );
-        }
-      },
-      {
-        title: t('table:table-item-icon'),
-        dataIndex: 'icon',
-        key: 'icon',
-        align: 'center',
-        width: 50,
-        render: (icon: string) => {
-          const TagName = categoriesIcon[icon];
-          if (!icon) return null;
-          return (
-            <span className="flex items-center justify-center">
-              {TagName && <TagName className="w-5 h-5 max-h-full max-w-full" />}
             </span>
           );
         }
@@ -73,6 +57,17 @@ const CategoryList = ({ categories, selectedColumns }: IProps) => {
         align: alignLeft,
         width: 150,
         ellipsis: true
+      },
+      {
+        title: t('table:table-item-include-in-menu'),
+        dataIndex: 'includeInMenu',
+        key: 'includeInMenu',
+        align: alignLeft,
+        width: 150,
+        ellipsis: true,
+        render: (includeInMenu: boolean) => {
+          return <span>{includeInMenu ? 'Yes' : 'No'}</span>;
+        }
       },
       {
         title: t('table:table-item-created-at'),
@@ -143,12 +138,11 @@ const CategoryList = ({ categories, selectedColumns }: IProps) => {
           columns={tableColumns}
           emptyText={t('table:empty-table-data')}
           data={categories}
-          rowKey="id"
+          rowKey={(record) => record.id}
+          key="id"
           scroll={{ x: 800 }}
-          indentSize={10}
           expandable={{
-            indentSize: 10,
-            expandedRowRender: () => '',
+            expandedRowRender: () => <></>,
             rowExpandable: (record: Category) => !isEmpty(record?.children)
           }}
         />

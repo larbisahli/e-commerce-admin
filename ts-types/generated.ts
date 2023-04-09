@@ -110,15 +110,17 @@ export interface Category extends CreatedUpdatedByAt {
   parentId?: Nullable<Scalars['Int']>;
   name?: Scalars['String'];
   description?: Nullable<Scalars['String']>;
-  children?: Nullable<Array<CategoryRef>>;
+  children?: Nullable<Array<CategoryRefLevel2>>;
   active?: Scalars['Boolean'];
   thumbnail?: ImageType[];
-  icon?: Nullable<Scalars['String']>;
+  level?: Scalars['Int'];
   hasChildren?: Scalars['Boolean'];
-  parent?: Nullable<CategoryRef>;
+  includeInMenu?: Scalars['Boolean'];
+  parent?: Nullable<CategoryRefLevel2>;
 }
 
-export interface CategoryRef extends CreatedUpdatedByAt {
+// To prevent circular references
+export interface CategoryRefLevel2 extends CreatedUpdatedByAt {
   id?: Scalars['Int'];
   parentId?: Nullable<Scalars['Int']>;
   name?: Scalars['String'];
@@ -126,6 +128,22 @@ export interface CategoryRef extends CreatedUpdatedByAt {
   active?: Scalars['Boolean'];
   thumbnail?: ImageType[];
   icon?: Nullable<Scalars['String']>;
+  includeInMenu?: Scalars['Boolean'];
+  level?: Scalars['Int'];
+  children?: Nullable<Array<CategoryRefLevel3>>;
+  parent?: Nullable<CategoryRefLevel3>;
+}
+
+// To prevent circular references
+export interface CategoryRefLevel3 extends CreatedUpdatedByAt {
+  id?: Scalars['Int'];
+  parentId?: Nullable<Scalars['Int']>;
+  name?: Scalars['String'];
+  description?: Nullable<Scalars['String']>;
+  active?: Scalars['Boolean'];
+  thumbnail?: ImageType[];
+  level?: Scalars['Int'];
+  includeInMenu?: Scalars['Boolean'];
   // parent?: Nullable<Category>;
 }
 
@@ -158,7 +176,6 @@ export interface Attribute extends CreatedUpdatedByAt {
 export interface Tag extends CreatedUpdatedByAt {
   id?: Nullable<Scalars['Int']>;
   name?: Nullable<Scalars['String']>;
-  icon?: Nullable<Scalars['String']>;
 }
 
 export interface OrderStatus extends CreatedUpdatedByAt {

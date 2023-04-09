@@ -1,11 +1,12 @@
-import { Control, Controller, FieldErrors } from 'react-hook-form';
 import { Switch } from '@headlessui/react';
-import ValidationError from './form-validation-error';
 import { useTranslation } from 'next-i18next';
+import { Controller } from 'react-hook-form';
+
+import ValidationError from './form-validation-error';
 
 interface Props {
-  control: Control<any>;
-  errors: FieldErrors;
+  control: any;
+  errors?: any;
   label: string;
   name: string;
 }
@@ -13,8 +14,10 @@ interface Props {
 const SwitchInput = ({ control, label, name, errors }: Props) => {
   const { t } = useTranslation();
   return (
-    <div>
-      <div>{label}</div>
+    <div className="flex items-center">
+      <div className="block text-body-dark font-semibold text-sm leading-none mr-2">
+        {label}
+      </div>
       <Controller
         name={name}
         control={control}
@@ -23,7 +26,7 @@ const SwitchInput = ({ control, label, name, errors }: Props) => {
             checked={value}
             onChange={onChange}
             className={`${
-              value ? 'bg-blue-600' : 'bg-gray-200'
+              value ? 'bg-green-600' : 'bg-gray-200'
             } relative inline-flex items-center h-6 rounded-full w-11`}
           >
             <span className="sr-only">Enable {label}</span>

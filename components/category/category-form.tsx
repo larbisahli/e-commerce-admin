@@ -1,6 +1,5 @@
 import { useMutation, useQuery } from '@apollo/client';
 import Card from '@components/common/card';
-import * as categoriesIcon from '@components/icons/category';
 import { SaveIcon } from '@components/icons/save-icon';
 import ImageModal from '@components/image-modal';
 import Button from '@components/ui/button';
@@ -8,6 +7,7 @@ import Description from '@components/ui/description';
 import Input from '@components/ui/input';
 import Label from '@components/ui/label';
 import SelectInput from '@components/ui/select-input';
+import SwitchInput from '@components/ui/switch-input';
 import TextArea from '@components/ui/text-area';
 import {
   CATEGORIES_FOR_SELECT,
@@ -23,10 +23,9 @@ import { ROUTES } from '@utils/routes';
 import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { Control, useForm } from 'react-hook-form';
 
-import { categoryIcons } from './category-icons';
 import { categoryValidationSchema } from './category-validation-schema';
 
 interface TCategorySelect {
@@ -81,9 +80,10 @@ function SelectCategories({ control }: { control: Control<FormValues> }) {
 type FormValues = Category;
 
 const defaultValues = {
-  category_name: '',
-  category_description: null,
+  name: '',
+  description: null,
   parent: null,
+  includeInMenu: true,
   thumbnail: [],
   icon: null
 };
@@ -114,16 +114,7 @@ export default function CreateOrUpdateCategoriesForm({
     formState: { errors },
     reset
   } = useForm<FormValues>({
-    defaultValues: initialValues
-      ? {
-          ...initialValues,
-          icon: initialValues?.icon
-            ? categoryIcons.find(
-                (singleIcon) => singleIcon.value === initialValues?.icon!
-              )
-            : null
-        }
-      : (defaultValues as unknown),
+    defaultValues: initialValues ? initialValues : defaultValues,
     resolver: yupResolver(categoryValidationSchema)
   });
 
@@ -168,13 +159,13 @@ export default function CreateOrUpdateCategoriesForm({
     const variables = {
       name: values.name,
       description: values.description,
+      includeInMenu: values.includeInMenu,
       thumbnail: [
         {
           id: values.thumbnail[0]?.id
         }
       ],
-      parentId: isEmpty(values?.parent) ? null : values?.parent?.id,
-      icon: (values.icon as unknown as { value: string })?.value ?? null
+      parentId: isEmpty(values?.parent) ? null : values?.parent?.id
     };
 
     setUnsavedChanges(false);
@@ -199,21 +190,6 @@ export default function CreateOrUpdateCategoriesForm({
 
   const thumbnail = watch('thumbnail');
 
-  const Icons = useMemo(() => {
-    return categoryIcons.map((item: any) => {
-      const TagName = categoriesIcon[item.value];
-      item.element = (
-        <div className="flex space-s-5 items-center">
-          <span className="flex w-5 h-5 items-center justify-center">
-            {TagName && <TagName className="max-h-full max-w-full" />}
-          </span>
-          <span>{item.label}</span>
-        </div>
-      );
-      return item;
-    });
-  }, []);
-
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-wrap pb-8 border-b border-dashed border-border-base my-5 sm:my-8">
@@ -229,9 +205,11 @@ export default function CreateOrUpdateCategoriesForm({
             selected={thumbnail}
             isThumbnail
           />
+          <div className="my-5">
+            <SelectCategories control={control} />
+          </div>
         </Card>
       </div>
-
       <div className="flex flex-wrap my-5 sm:my-8">
         <Description
           title={t('form:input-label-description')}
@@ -242,7 +220,6 @@ export default function CreateOrUpdateCategoriesForm({
           } ${t('form:category-description-helper-text')}`}
           className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
         />
-
         <Card className="w-full sm:w-8/12 md:w-2/3">
           <Input
             label={t('form:input-label-name')}
@@ -252,32 +229,20 @@ export default function CreateOrUpdateCategoriesForm({
             variant="outline"
             className="mb-5"
           />
-
           <TextArea
             label={t('form:input-label-details')}
             {...register('description')}
             variant="outline"
             className="mb-5"
           />
-
-          <div className="mb-5">
-            <Label>{t('form:input-label-select-icon')}</Label>
-            <SelectInput
-              name="icon"
+          <div className="mb-4">
+            <SwitchInput
+              name="includeInMenu"
+              label="Include in menu"
               control={control}
-              getOptionLabel={(option: any) => option.element}
-              options={Icons}
-              isClearable={true}
+              errors={errors}
             />
-            {t(errors.icon?.message!) && (
-              <p className="my-2 text-xs text-start text-red-500">
-                {t(errors.icon?.message!)}
-              </p>
-            )}
           </div>
-          {!initialValues?.hasChildren && (
-            <SelectCategories control={control} />
-          )}
         </Card>
       </div>
       <div className="mb-4 flex justify-end">
@@ -291,7 +256,6 @@ export default function CreateOrUpdateCategoriesForm({
             {t('form:button-label-back')}
           </Button>
         )}
-
         <Button loading={creating || updating} disabled={creating || updating}>
           <div className="mr-1">
             <SaveIcon width="1.3rem" height="1.3rem" />

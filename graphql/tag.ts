@@ -8,7 +8,6 @@ export const TAGS = gql`
     tags(page: $page, limit: $limit, orderBy: $orderBy, sortedBy: $sortedBy) {
       id
       name
-      icon
       createdAt
       updatedAt
       createdBy {
@@ -45,8 +44,8 @@ export const TAGS_FOR_SELECT = gql`
 `;
 
 export const CREATE_TAG = gql`
-  mutation CreateTag($name: String!, $icon: String) {
-    createTag(name: $name, icon: $icon) {
+  mutation CreateTag($name: String!) {
+    createTag(name: $name) {
       id
       name
     }
@@ -54,8 +53,8 @@ export const CREATE_TAG = gql`
 `;
 
 export const UPDATE_TAG = gql`
-  mutation UpdateTag($id: Int!, $name: String!, $icon: String) {
-    updateTag(id: $id, name: $name, icon: $icon) {
+  mutation UpdateTag($id: Int!, $name: String!) {
+    updateTag(id: $id, name: $name) {
       id
       name
     }

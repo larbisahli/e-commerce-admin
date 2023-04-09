@@ -1,5 +1,4 @@
 import ActionButtons from '@components/common/action-buttons';
-import * as categoriesIcon from '@components/icons/category';
 import ProfileCart from '@components/ui/profile-card';
 import { Table } from '@components/ui/table';
 import { CreatedUpdatedByAt, Tag } from '@ts-types/generated';
@@ -28,22 +27,6 @@ const TagList = ({ tags, selectedColumns }: IProps) => {
         align: alignLeft,
         width: 50,
         ellipsis: true
-      },
-      {
-        title: t('table:table-item-icon'),
-        dataIndex: 'icon',
-        key: 'icon',
-        align: 'center',
-        width: 70,
-        render: (icon: string) => {
-          const TagName = categoriesIcon[icon];
-          if (!icon) return null;
-          return (
-            <span className="flex items-center justify-center">
-              {TagName && <TagName className="w-5 h-5 max-h-full max-w-full" />}
-            </span>
-          );
-        }
       },
       {
         title: t('table:table-item-title'),

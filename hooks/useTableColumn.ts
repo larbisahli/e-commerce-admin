@@ -45,7 +45,7 @@ export function useTableColumn(tableName: string) {
   );
 
   useEffect(() => {
-    const tables = window?.localStorage.getItem('@echo-tables');
+    const tables = window?.localStorage.getItem('@dropgala-tables');
     const restoredValue = _rehydrate_(tables, {});
     dispatch(rehydrate(restoredValue));
   }, []);

@@ -14,7 +14,7 @@ const AppLayout: React.FC = ({ children }: Props) => {
     <div className="min-h-screen bg-gray-100 h-fit flex flex-col transition-colors duration-150">
       <MobileNavigation />
       <SublevelNavigation />
-      <div className="flex flex-1 pt-5">
+      <div className="flex flex-1 pt-5 pb-16">
         <SidebarMini />
         <Sidebar />
         <main className="w-full h-full md:ps-20 nlg:ps-20 nxl:ps-20 lg:ps-72 xl:ps-76">

@@ -95,8 +95,8 @@ export const initialState = {
   category: {
     columns: [
       'name',
-      'icon',
       'description',
+      'includeInMenu',
       'createdAt',
       'createdBy',
       'updatedBy',

@@ -35,7 +35,7 @@ export const TableSlice = createSlice({
         ...(state[tableName]?.columns ?? []),
         column?.key
       ];
-      window?.localStorage.setItem('@echo-tables', hydrate(state));
+      window?.localStorage.setItem('@dropgala-tables', hydrate(state));
     },
     removeColumn: (
       state: TableColumns,
@@ -46,7 +46,7 @@ export const TableSlice = createSlice({
       state[tableName].columns =
         state[tableName]?.columns?.filter((columnKey) => columnKey !== id) ??
         [];
-      window?.localStorage.setItem('@echo-tables', hydrate(state));
+      window?.localStorage.setItem('@dropgala-tables', hydrate(state));
     },
     resetColumn: (
       state: TableColumns,
@@ -55,7 +55,7 @@ export const TableSlice = createSlice({
       const tableName = action.payload.tableName;
       const { columns } = initialState[tableName];
       state[tableName].columns = columns;
-      window?.localStorage.setItem('@echo-tables', hydrate(state));
+      window?.localStorage.setItem('@dropgala-tables', hydrate(state));
     },
     rehydrate: (state: TableColumns, action: PayloadAction<TableColumns>) => {
       console.log({ state });

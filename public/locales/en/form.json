@@ -432,5 +432,6 @@
   "input-label-meta-slug": "Slug",
   "label-add-category-image": "Add Category Image",
   "button-label-upload-image": "Upload Image",
-  "button-label-images": "Images"
+  "button-label-images": "Images",
+  "input-label-images": "Images"
 }
