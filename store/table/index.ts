@@ -1,8 +1,20 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AppState } from '@store/index';
+import { COLUMNS } from '@utils/data/table-columns';
 import isEmpty from 'lodash/isEmpty';
+import merge from 'lodash/merge';
 
-import { initialState } from './data';
+var merged = (arr: any[]) => merge.apply(null, [{}].concat(arr));
+
+const initialState = ():TableColumns=>{
+  return merged(Object.keys(COLUMNS)?.map((tableName)=>{
+    return {
+      [tableName]: {
+        columns: COLUMNS[tableName]?.map((({key}) => key))
+      }
+    }
+  }))
+}
 
 interface TableColumns {
   [key: string]: { columns: string[] | [] };
@@ -19,8 +31,8 @@ const hydrate = (value) => {
 };
 
 export const TableSlice = createSlice({
-  name: 'files',
-  initialState: initialState as TableColumns,
+  name: 'tables',
+  initialState: initialState(),
   reducers: {
     appendColumn: (
       state: TableColumns,

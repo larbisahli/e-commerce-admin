@@ -3,7 +3,7 @@ import PageMainHeader from '@components/common/page-main-header';
 import PageMainAction from '@components/common/PageMainAction';
 import AppLayout from '@components/layouts/app';
 import TagList from '@components/tag/tag-list';
-import ErrorMessage from '@components/ui/error-message';
+import ErrorMessage, {Error} from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { TAGS } from '@graphql/tag';
 import { useErrorLogger, useGetUser } from '@hooks/index';
@@ -74,7 +74,7 @@ export default function Tags({ client }: SSRProps) {
     return <Loader text={t('common:text-loading')} />;
   }
   if (!isEmpty(error)) {
-    return <ErrorMessage message={t('common:MESSAGE_SOMETHING_WENT_WRONG')} />;
+    return <Error message={t('common:MESSAGE_SOMETHING_WENT_WRONG')} />;
   }
 
   return (

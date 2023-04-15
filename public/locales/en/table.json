@@ -20,6 +20,8 @@
   "table-item-slug": "Slug",
   "table-item-details": "Details",
   "table-item-include-in-menu": "Include in menu",
+  "table-item-position": "Position",
+  "table-item-level": "Level",
   "table-item-delivery-fee": "Delivery Fee",
   "table-item-shipping-address": "Shipping Address",
   "table-item-serial": "Serial",

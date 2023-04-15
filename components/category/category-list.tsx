@@ -70,6 +70,20 @@ const CategoryList = ({ categories, selectedColumns }: IProps) => {
         }
       },
       {
+        title: t('table:table-item-level'),
+        dataIndex: 'level',
+        key: 'level',
+        align: 'center',
+        width: 80,
+      },
+      {
+        title: t('table:table-item-position'),
+        dataIndex: 'position',
+        key: 'position',
+        align: 'center',
+        width: 80,
+      },
+      {
         title: t('table:table-item-created-at'),
         dataIndex: 'createdAt',
         key: 'createdAt',

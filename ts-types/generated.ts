@@ -116,6 +116,7 @@ export interface Category extends CreatedUpdatedByAt {
   level?: Scalars['Int'];
   hasChildren?: Scalars['Boolean'];
   includeInMenu?: Scalars['Boolean'];
+  position?: Scalars['Int'];
   parent?: Nullable<CategoryRefLevel2>;
 }
 
@@ -367,11 +368,12 @@ export interface HeroCarouselType extends CreatedUpdatedByAt {
   description?: Nullable<Scalars['String']>;
   btnLabel?: Scalars['String'];
   styles?: {
+    align?: 'left'|'center'|'right'
     textColor?: string;
     btnBgc?: string;
     btnTextColor?: string;
   };
-  displayOrder?: Scalars['Int'];
+  position?: Scalars['Int'];
   published?: Scalars['Boolean'];
   status?: 'draft' | 'publish';
   clicks?: Scalars['Int'];

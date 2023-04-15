@@ -8,7 +8,7 @@ export const CREATE_HERO_SLIDE = gql`
     $description: String
     $btnLabel: String
     $styles: HeroBannerStyleInput!
-    $displayOrder: Int!
+    $position: Int!
     $published: Boolean!
   ) {
     createHeroSlide(
@@ -18,7 +18,7 @@ export const CREATE_HERO_SLIDE = gql`
       description: $description
       btnLabel: $btnLabel
       styles: $styles
-      displayOrder: $displayOrder
+      position: $position
       published: $published
     ) {
       id
@@ -35,7 +35,7 @@ export const UPDATE_HERO_SLIDE = gql`
     $description: String
     $btnLabel: String
     $styles: HeroBannerStyleInput!
-    $displayOrder: Int!
+    $position: Int!
     $published: Boolean!
   ) {
     updateHeroSlide(
@@ -46,7 +46,7 @@ export const UPDATE_HERO_SLIDE = gql`
       description: $description
       btnLabel: $btnLabel
       styles: $styles
-      displayOrder: $displayOrder
+      position: $position
       published: $published
     ) {
       id
@@ -74,7 +74,7 @@ export const HERO_CAROUSEL_LIST = gql`
         placeholder
       }
       title
-      displayOrder
+      position
       published
       clicks
       createdAt
@@ -107,11 +107,12 @@ export const HERO_SLIDE = gql`
       description
       btnLabel
       styles {
+        align
         textColor
         btnBgc
         btnTextColor
       }
-      displayOrder
+      position
       published
     }
   }

@@ -23,7 +23,7 @@ import { ROUTES } from '@utils/routes';
 import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Control, useForm } from 'react-hook-form';
 
 import { categoryValidationSchema } from './category-validation-schema';
@@ -84,6 +84,7 @@ const defaultValues = {
   description: null,
   parent: null,
   includeInMenu: true,
+  position: 0,
   thumbnail: [],
   icon: null
 };
@@ -160,6 +161,7 @@ export default function CreateOrUpdateCategoriesForm({
       name: values.name,
       description: values.description,
       includeInMenu: values.includeInMenu,
+      position: Number(values.position),
       thumbnail: [
         {
           id: values.thumbnail[0]?.id
@@ -189,6 +191,13 @@ export default function CreateOrUpdateCategoriesForm({
   });
 
   const thumbnail = watch('thumbnail');
+  const includeInMenu = watch('includeInMenu');
+
+  useEffect(()=>{
+    if(!includeInMenu){
+      setValue('position', 0)
+    }
+  }, [includeInMenu])
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -232,6 +241,16 @@ export default function CreateOrUpdateCategoriesForm({
           <TextArea
             label={t('form:input-label-details')}
             {...register('description')}
+            variant="outline"
+            className="mb-5"
+          />
+          <Input
+            label={`${t('form:input-label-menu-position')}`}
+            type="number"
+            min={0}
+            {...register('position')}
+            disabled={!includeInMenu}
+            error={t(errors.position?.message!)}
             variant="outline"
             className="mb-5"
           />

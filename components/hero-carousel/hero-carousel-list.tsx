@@ -82,8 +82,8 @@ const HeroCarouselList = ({ heroCarouselList, selectedColumns }: IProps) => {
       },
       {
         title: t('table:table-item-display-order'),
-        dataIndex: 'displayOrder',
-        key: 'displayOrder',
+        dataIndex: 'position',
+        key: 'position',
         align: 'center',
         width: 120,
         ellipsis: true

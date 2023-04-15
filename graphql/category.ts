@@ -6,6 +6,7 @@ export const CREATE_CATEGORY = gql`
     $name: String!
     $description: String!
     $includeInMenu: Boolean!
+    $position: Int!
     $thumbnail: [ImageInput]
   ) {
     createCategory(
@@ -13,6 +14,7 @@ export const CREATE_CATEGORY = gql`
       name: $name
       description: $description
       includeInMenu: $includeInMenu
+      position: $position
       thumbnail: $thumbnail
     ) {
       id
@@ -28,6 +30,7 @@ export const UPDATE_CATEGORY = gql`
     $name: String!
     $description: String
     $includeInMenu: Boolean!
+    $position: Int!
     $thumbnail: [ImageInput]
   ) {
     updateCategory(
@@ -36,6 +39,7 @@ export const UPDATE_CATEGORY = gql`
       name: $name
       description: $description
       includeInMenu: $includeInMenu
+      position: $position
       thumbnail: $thumbnail
     ) {
       id
@@ -66,6 +70,7 @@ export const CATEGORIES = gql`
       description
       includeInMenu
       level
+      position
       children {
         id
         parentId
@@ -73,6 +78,7 @@ export const CATEGORIES = gql`
         description
         includeInMenu
         level
+        position
         children {
           id
           parentId
@@ -80,6 +86,7 @@ export const CATEGORIES = gql`
           description
           includeInMenu
           level
+          position
           createdAt
           updatedAt
           createdBy {
@@ -134,6 +141,7 @@ export const CATEGORY = gql`
       name
       description
       includeInMenu
+      position
       thumbnail {
         id
         image

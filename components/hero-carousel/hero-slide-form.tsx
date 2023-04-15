@@ -18,7 +18,7 @@ import {
   useWarnIfUnsavedChanges
 } from '@hooks/index';
 import { notify } from '@lib/index';
-import { HeroCarouselType, ImageType } from '@ts-types/generated';
+import type { HeroCarouselType, ImageType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import cloneDeep from 'lodash/cloneDeep';
 import isEmpty from 'lodash/isEmpty';
@@ -38,9 +38,10 @@ const defaultValues = {
   thumbnail: [],
   description: null,
   btnLabel: null,
-  displayOrder: 0,
+  position: 0,
   status: 'draft',
   styles: {
+    align: 'left',
     textColor: '#ffffff',
     btnBgc: '#dcdbdb',
     btnTextColor: '#222121'
@@ -133,9 +134,10 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
       ],
       description: values.description,
       btnLabel: values.btnLabel,
-      displayOrder: Number(values.displayOrder),
+      position: Number(values.position),
       published: values.status === 'publish',
       styles: {
+        align: values.styles.align,
         textColor: values.styles.textColor,
         btnBgc: values.styles.btnBgc,
         btnTextColor: values.styles.btnTextColor
@@ -235,11 +237,35 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
             label={`${t('form:input-label-display-order')}`}
             type="number"
             min={0}
-            {...register('displayOrder')}
-            error={t(errors.displayOrder?.message!)}
+            {...register('position')}
+            error={t(errors.position?.message!)}
             variant="outline"
             className="mb-5"
           />
+          <div className='flex items-center my-5'>
+            <Label className='mb-0'>{t('form:input-label-alignment')}:</Label>
+            <Radio
+              {...register('styles.align')}
+              label={t('form:input-label-left')}
+              id="left"
+              value="left"
+              className="mx-2"
+            />
+            <Radio
+              {...register('styles.align')}
+              id="center"
+              value="center"
+              label={t('form:input-label-center')}
+              className="mx-2"
+            />
+            <Radio
+              {...register('styles.align')}
+              id="right"
+              value="right"
+              label={t('form:input-label-right')}
+              className="mx-2"
+            />
+          </div>
           <div>
             <Label>{t('form:input-label-status')}</Label>
             <Radio

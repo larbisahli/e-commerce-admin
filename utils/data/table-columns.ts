@@ -1,3 +1,4 @@
+// TODO: Add translation
 export const COLUMNS = {
   'order-status': [
     { label: 'Name', key: 'name' },
@@ -64,7 +65,7 @@ export const COLUMNS = {
     { label: 'Thumbnail', key: 'thumbnail' },
     { label: 'Title', key: 'title' },
     { label: 'Clicks', key: 'clicks' },
-    { label: 'Display Order', key: 'displayOrder' },
+    { label: 'Position', key: 'position' },
     { label: 'Status', key: 'published' },
     { label: 'Creation Date', key: 'createdAt' },
     { label: 'Placed By', key: 'createdBy' },
@@ -88,6 +89,8 @@ export const COLUMNS = {
     { label: 'Name', key: 'name' },
     { label: 'Details', key: 'description' },
     { label: 'Include in menu', key: 'includeInMenu' },
+    { label: 'Level', key: 'level' },
+    { label: 'Position', key: 'position' },
     { label: 'Creation Date', key: 'createdAt' },
     { label: 'Placed By', key: 'createdBy' },
     { label: 'Last Updated By', key: 'updatedBy' },
