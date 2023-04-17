@@ -103,5 +103,13 @@ export const COLUMNS = {
     { label: 'Placed By', key: 'createdBy' },
     { label: 'Last Updated By', key: 'updatedBy' },
     { label: 'Actions', key: 'actions' }
+  ],
+  file: [
+    { label: 'Image', key: 'image' },
+    { label: 'Size', key: 'size' },
+    { label: 'Creation Date', key: 'createdAt' },
+    { label: 'Placed By', key: 'createdBy' },
+    { label: 'Last Updated By', key: 'updatedBy' },
+    { label: 'Actions', key: 'actions' }
   ]
 };

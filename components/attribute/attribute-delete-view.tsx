@@ -6,11 +6,27 @@ import {
 } from '@components/ui/modal/modal.context';
 import { ATTRIBUTES, DELETE_ATTRIBUTE } from '@graphql/attribute';
 import { useErrorLogger } from '@hooks/useErrorLogger';
+import { useGetUser } from '@hooks/useGetUser';
+import { notify } from '@lib/notify';
+import { useTranslation } from 'next-i18next';
+import { useState } from 'react';
 
 const AttributeDeleteView = () => {
-  const [deleteAttributeValue, { loading, error }] = useMutation(
+  const { t } = useTranslation();
+
+  const [error, setError] = useState(null);
+
+  const { userInfo } = useGetUser();
+  const csrfToken = userInfo?.csrfToken;
+
+  const [deleteAttributeValue, { loading }] = useMutation(
     DELETE_ATTRIBUTE,
     {
+      context: {
+        headers: {
+          'x-csrf-token': csrfToken
+        }
+      },
       refetchQueries: [
         ATTRIBUTES,
         'Attributes' // Query name
@@ -24,8 +40,15 @@ const AttributeDeleteView = () => {
   useErrorLogger(error);
 
   async function handleDelete() {
-    deleteAttributeValue({ variables: { id } });
-    closeModal();
+    deleteAttributeValue({ variables: { id } }).then(({data})=>{
+      const {deleteAttribute: {name}} = data
+      if(name){
+        notify(t('common:successfully-deleted'), 'success');
+      }
+      closeModal();
+    }).catch((err) => {
+      setError(err);
+    })
   }
 
   return (

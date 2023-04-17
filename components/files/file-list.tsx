@@ -1,22 +1,14 @@
 /* eslint-disable jsx-a11y/interactive-supports-focus */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import ActionButtons from '@components/common/action-buttons';
-import { CopyIcon } from '@components/icons/copy';
 import ImageComponent from '@components/ImageComponent';
-import Badge from '@components/ui/badge/badge';
-import ProfileCart from '@components/ui/profile-card';
 import { Table } from '@components/ui/table';
-import { notify } from '@lib/index';
 import { siteSettings } from '@settings/site.settings';
 import {
-  Coupon,
-  CouponType,
   CreatedUpdatedByAt,
   ImageType
 } from '@ts-types/generated';
 import { useIsRTL } from '@utils/locals';
-import { ROUTES } from '@utils/routes';
-import { CopyToClipboard } from '@utils/utils';
 import dayjs from 'dayjs';
 import { useTranslation } from 'next-i18next';
 import { useMemo } from 'react';

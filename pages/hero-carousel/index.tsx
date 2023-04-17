@@ -8,7 +8,7 @@ import Loader from '@components/ui/loader/loader';
 import { HERO_CAROUSEL_LIST } from '@graphql/hero-carousel';
 import { useErrorLogger, useGetUser } from '@hooks/index';
 import { useTableColumn } from '@hooks/useTableColumn';
-import { verifyAuth } from '@middleware/utils';
+import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { HeroCarouselType } from '@ts-types/generated';
 import { COLUMNS } from '@utils/data/table-columns';
@@ -60,7 +60,7 @@ export default function HeroCarousel({ client }: SSRProps) {
     fetchMore({
       variables: {
         page: current,
-        limit
+        limit: limit.value
       }
     });
   };
@@ -115,6 +115,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
+  const { csrfToken, csrfError } = await XSRFHandler(context);
+
   return {
     props: {
       ...(await serverSideTranslations(locale!, [
@@ -123,7 +125,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         'table',
         'error'
       ])),
-      client
+      client: { ...(client ?? {}), csrfToken, csrfError }
     }
   };
 };

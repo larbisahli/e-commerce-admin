@@ -8,7 +8,7 @@ import Loader from '@components/ui/loader/loader';
 import { COUPONS } from '@graphql/coupons';
 import { useErrorLogger, useGetUser } from '@hooks/index';
 import { useTableColumn } from '@hooks/useTableColumn';
-import { verifyAuth } from '@middleware/utils';
+import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { Coupon, OrderBy, SortOrder } from '@ts-types/generated';
 import { COLUMNS } from '@utils/data/table-columns';
@@ -63,7 +63,7 @@ export default function Coupons({ client }: SSRProps) {
     fetchMore({
       variables: {
         page: current,
-        limit,
+        limit: limit.value,
         orderBy,
         sortedBy: SortOrder.Desc
       }
@@ -117,6 +117,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
+  const { csrfToken, csrfError } = await XSRFHandler(context);
+
   return {
     props: {
       ...(await serverSideTranslations(locale, [
@@ -125,7 +127,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         'table',
         'error'
       ])),
-      client
+      client: { ...(client ?? {}), csrfToken, csrfError }
     }
   };
 };

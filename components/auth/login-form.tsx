@@ -79,6 +79,8 @@ const LoginForm = () => {
 
   useErrorLogger(error);
 
+  console.log({errors})
+
   async function onSubmit({ alias, email, password }: FormValues) {
     const variables = {
       alias,
@@ -90,7 +92,7 @@ const LoginForm = () => {
     userLogin({ variables }).catch((error) => {
       const err = error?.graphQLErrors[0];
       setLoading(false);
-      setError(`error:${err?.t ?? 'SOMETHING_HAPPENED'}`);
+      setError(err.message);
     });
   }
 

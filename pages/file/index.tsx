@@ -63,7 +63,7 @@ export default function Coupons({ client }: SSRProps) {
     fetchMore({
       variables: {
         page: current,
-        limit,
+        limit: limit.value,
         orderBy,
         sortedBy: SortOrder.Desc
       }

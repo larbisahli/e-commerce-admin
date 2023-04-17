@@ -8,7 +8,7 @@ import Loader from '@components/ui/loader/loader';
 import { ORDER_STATUSES } from '@graphql/order-status';
 import { useErrorLogger, useGetUser } from '@hooks/index';
 import { useTableColumn } from '@hooks/useTableColumn';
-import { verifyAuth } from '@middleware/utils';
+import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { OrderBy, OrderStatus, SortOrder } from '@ts-types/generated';
 import { COLUMNS } from '@utils/data/table-columns';
@@ -65,7 +65,7 @@ export default function OrderStatusPage({ client }: SSRProps) {
     fetchMore({
       variables: {
         page: current,
-        limit,
+        limit: limit.value,
         orderBy,
         sortedBy: SortOrder.Desc
       }
@@ -122,6 +122,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
+  const { csrfToken, csrfError } = await XSRFHandler(context);
+
   return {
     props: {
       ...(await serverSideTranslations(locale, [
@@ -130,25 +132,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         'form',
         'error'
       ])),
-      client
+      client: { ...(client ?? {}), csrfToken, csrfError }
     }
   };
 };
-
-{
-  /* <SortForm
-            className="md:ms-5"
-            showLabel={false}
-            onLimitChange={(value) => {
-              setLimit(value);
-            }}
-            limit={limit}
-            onOrderChange={({ value }: { value: OrderBy }) => {
-              setOrder(value);
-            }}
-            options={[
-              { id: 1, value: 'created_at', label: 'Created At' },
-              { id: 2, value: 'updated_at', label: 'Updated At' }
-            ]}
-          /> */
-}

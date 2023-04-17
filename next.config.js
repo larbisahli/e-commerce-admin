@@ -34,16 +34,16 @@ const moduleExports = {
     // iconSizes: [],
     domains: [
       '127.0.0.1',
-      'media.dropgala.com',
-      'api.dropgala.com',
+      'media.dropgala.shop',
+      'api.dropgala.shop',
       'dropgala.s3.eu-west-3.amazonaws.com'
     ],
     path: '/_next/image',
     loader: 'default'
   },
   env: {
-    API_URL: 'https://api.dropgala.com',
-    MEDIA_URL: 'https://api.dropgala.com/media',
+    API_URL: 'https://api.dropgala.shop',
+    MEDIA_URL: 'https://api.dropgala.shop/media',
     NEXT_PUBLIC_GTAG_MEASUREMENT_ID: 'G-TQMWTHM2FF',
     TOKEN_ISSUER: 'dropgala.com',
     // NEXT_PUBLIC_GOOGLE_MAP_API_KEY: 'AIzaSyDB2j-G5LJM0yPNG0AqziJjgh1UOW10W7I',

@@ -67,7 +67,7 @@ export default function ShippingZonesPage({ client }: SSRProps) {
     fetchMore({
       variables: {
         page: current,
-        limit,
+        limit: limit.value,
         orderBy,
         sortedBy: SortOrder.Desc
       }

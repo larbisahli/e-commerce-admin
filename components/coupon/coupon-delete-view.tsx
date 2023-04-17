@@ -6,11 +6,25 @@ import {
 } from '@components/ui/modal/modal.context';
 import { COUPONS, DELETE_COUPON } from '@graphql/coupons';
 import { useErrorLogger } from '@hooks/useErrorLogger';
+import { useGetUser } from '@hooks/useGetUser';
+import { notify } from '@lib/notify';
+import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
 
 const CouponDeleteView = () => {
+  const { t } = useTranslation();
+
   const [error, setError] = useState(null);
+
+  const { userInfo } = useGetUser();
+  const csrfToken = userInfo?.csrfToken;
+
   const [deleteCoupon, { loading }] = useMutation(DELETE_COUPON, {
+    context: {
+      headers: {
+        'x-csrf-token': csrfToken
+      }
+    },
     refetchQueries: [
       COUPONS,
       'CouponsForAdmin' // Query name
@@ -23,10 +37,17 @@ const CouponDeleteView = () => {
   useErrorLogger(error);
 
   async function handleDelete() {
-    deleteCoupon({ variables: { id } }).catch((err) => {
+    deleteCoupon({ variables: { id } })
+    .then(({data})=>{
+      const {deleteCoupon: {id}} = data
+      if(id){
+        notify(t('common:successfully-deleted'), 'success');
+      }
+      closeModal();
+    })
+    .catch((err) => {
       setError(err);
-    });
-    closeModal();
+    })
   }
 
   return (

@@ -83,7 +83,7 @@ const CouponList = ({ coupons, selectedColumns }: IProps) => {
         width: 135,
         render: (discountValue: number, record: Coupon) => {
           const className =
-            'font-medium bg-gray-100 w-fit text-13px md:text-sm rounded block border border-sink-base px-2 py-1';
+            'font-medium bg-gray-100 w-full text-13px md:text-sm rounded block border border-sink-base px-2 py-1';
 
           if (record.discountType === CouponType.Percentage) {
             return <span className={className}>{`- ${discountValue} %`}</span>;
