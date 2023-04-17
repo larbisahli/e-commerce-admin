@@ -38,16 +38,18 @@ const SliderDeleteView = () => {
 
   async function handleDelete() {
     deleteSlide({ variables: { id } })
-    .then(({data})=>{
-      const {deleteHeroSlide: {id}} = data
-      if(id){
-        notify(t('common:successfully-deleted'), 'success');
-      }
-      closeModal();
-    })
-    .catch((err) => {
-      setError(err);
-    });
+      .then(({ data }) => {
+        const {
+          deleteHeroSlide: { id }
+        } = data;
+        if (id) {
+          notify(t('common:successfully-deleted'), 'success');
+        }
+        closeModal();
+      })
+      .catch((err) => {
+        setError(err);
+      });
   }
 
   return (

@@ -25,7 +25,7 @@ const HeroBannerCard = ({
         {
           'justify-start': styles.align === 'left',
           'justify-center': styles.align === 'center',
-          'justify-end': styles.align === 'right',
+          'justify-end': styles.align === 'right'
         }
       )}
       style={{ zIndex: 0 }}
@@ -46,39 +46,42 @@ const HeroBannerCard = ({
           ' mx-12 h-fit flex-col flex 2xl:max-w-[600px] max-w-[480px] md:max-w-[550px]',
           {
             'items-center': styles.align === 'center',
-            'items-end': styles.align === 'right',
+            'items-end': styles.align === 'right'
           }
         )}
       >
-          <h2
-            className={cn(
-              'text-3xl 2xl:text-4xl font-manrope font-extrabold leading-snug md:leading-tight xl:leading-[1.3em] mb-3 md:mb-4 xl:mb-3 -mt-2 xl:-mt-3 2xl:-mt-4'
-            )}
-            style={{ color: styles?.textColor }}
-          >
-            {title}
-          </h2>
-          <p
-            className={cn(
-              'md:text-[17px] leading-7 md:leading-8 xl:leading-[1.92em] text-sm 2xl:text-base',
-              {'text-center': styles.align === 'center', 'text-end': styles.align === 'right'}
-            )}
-            style={{ color: styles?.textColor }}
-          >
-            {description}
-          </p>
-          {btnLabel && (
-            <a
-              href={'#'}
-              className="h-[45px] w-fit uppercase mt-2 text-sm inline-flex items-center justify-center transition duration-300 rounded-sm px-6 py-2 font-semibold"
-              style={{
-                background: styles?.btnBgc,
-                color: styles?.btnTextColor
-              }}
-            >
-              {btnLabel}
-            </a>
+        <h2
+          className={cn(
+            'text-3xl 2xl:text-4xl font-manrope font-extrabold leading-snug md:leading-tight xl:leading-[1.3em] mb-3 md:mb-4 xl:mb-3 -mt-2 xl:-mt-3 2xl:-mt-4'
           )}
+          style={{ color: styles?.textColor }}
+        >
+          {title}
+        </h2>
+        <p
+          className={cn(
+            'md:text-[17px] leading-7 md:leading-8 xl:leading-[1.92em] text-sm 2xl:text-base',
+            {
+              'text-center': styles.align === 'center',
+              'text-end': styles.align === 'right'
+            }
+          )}
+          style={{ color: styles?.textColor }}
+        >
+          {description}
+        </p>
+        {btnLabel && (
+          <a
+            href={'#'}
+            className="h-[45px] w-fit uppercase mt-2 text-sm inline-flex items-center justify-center transition duration-300 rounded-sm px-6 py-2 font-semibold"
+            style={{
+              background: styles?.btnBgc,
+              color: styles?.btnTextColor
+            }}
+          >
+            {btnLabel}
+          </a>
+        )}
       </div>
     </div>
   );

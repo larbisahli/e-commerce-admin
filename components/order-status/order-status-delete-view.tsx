@@ -40,16 +40,19 @@ const OrderStatusDeleteView = () => {
   useErrorLogger(error);
 
   async function handleDelete() {
-    deleteOrderStatusValue({ variables: { id } }).then(({data})=>{
-      const {deleteOrderStatus: {id}} = data
-      if(id){
-        notify(t('common:successfully-deleted'), 'success');
-      }
-      closeModal();
-    })
-    .catch((err) => {
-      setError(err);
-    });
+    deleteOrderStatusValue({ variables: { id } })
+      .then(({ data }) => {
+        const {
+          deleteOrderStatus: { id }
+        } = data;
+        if (id) {
+          notify(t('common:successfully-deleted'), 'success');
+        }
+        closeModal();
+      })
+      .catch((err) => {
+        setError(err);
+      });
   }
 
   return (

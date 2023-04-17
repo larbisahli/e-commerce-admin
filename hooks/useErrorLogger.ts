@@ -9,7 +9,7 @@ export function useErrorLogger(error?: any, isVisible: boolean = true) {
 
   useEffect(() => {
     if (!isEmpty(error)) {
-      console.log({error})
+      console.log({ error });
       // Sentry Logs
       sentry(error);
       // Error Notification

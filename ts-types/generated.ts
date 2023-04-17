@@ -368,7 +368,7 @@ export interface HeroCarouselType extends CreatedUpdatedByAt {
   description?: Nullable<Scalars['String']>;
   btnLabel?: Scalars['String'];
   styles?: {
-    align?: 'left'|'center'|'right'
+    align?: 'left' | 'center' | 'right';
     textColor?: string;
     btnBgc?: string;
     btnTextColor?: string;

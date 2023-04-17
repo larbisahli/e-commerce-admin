@@ -3,7 +3,7 @@ import PageMainHeader from '@components/common/page-main-header';
 import PageMainAction from '@components/common/PageMainAction';
 import AppLayout from '@components/layouts/app';
 import TagList from '@components/tag/tag-list';
-import ErrorMessage, {Error} from '@components/ui/error-message';
+import ErrorMessage, { Error } from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { TAGS } from '@graphql/tag';
 import { useErrorLogger, useGetUser } from '@hooks/index';

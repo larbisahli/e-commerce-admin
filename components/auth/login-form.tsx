@@ -79,7 +79,7 @@ const LoginForm = () => {
 
   useErrorLogger(error);
 
-  console.log({errors})
+  console.log({ errors });
 
   async function onSubmit({ alias, email, password }: FormValues) {
     const variables = {

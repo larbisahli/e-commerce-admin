@@ -6,15 +6,17 @@ import merge from 'lodash/merge';
 
 var merged = (arr: any[]) => merge.apply(null, [{}].concat(arr));
 
-const initialState = ():TableColumns=>{
-  return merged(Object.keys(COLUMNS)?.map((tableName)=>{
-    return {
-      [tableName]: {
-        columns: COLUMNS[tableName]?.map((({key}) => key))
-      }
-    }
-  }))
-}
+const initialState = (): TableColumns => {
+  return merged(
+    Object.keys(COLUMNS)?.map((tableName) => {
+      return {
+        [tableName]: {
+          columns: COLUMNS[tableName]?.map(({ key }) => key)
+        }
+      };
+    })
+  );
+};
 
 interface TableColumns {
   [key: string]: { columns: string[] | [] };

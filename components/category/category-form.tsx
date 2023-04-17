@@ -193,11 +193,11 @@ export default function CreateOrUpdateCategoriesForm({
   const thumbnail = watch('thumbnail');
   const includeInMenu = watch('includeInMenu');
 
-  useEffect(()=>{
-    if(!includeInMenu){
-      setValue('position', 0)
+  useEffect(() => {
+    if (!includeInMenu) {
+      setValue('position', 0);
     }
-  }, [includeInMenu])
+  }, [includeInMenu]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

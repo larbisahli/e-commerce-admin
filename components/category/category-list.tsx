@@ -74,14 +74,14 @@ const CategoryList = ({ categories, selectedColumns }: IProps) => {
         dataIndex: 'level',
         key: 'level',
         align: 'center',
-        width: 80,
+        width: 80
       },
       {
         title: t('table:table-item-position'),
         dataIndex: 'position',
         key: 'position',
         align: 'center',
-        width: 80,
+        width: 80
       },
       {
         title: t('table:table-item-created-at'),

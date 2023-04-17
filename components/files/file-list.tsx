@@ -4,10 +4,7 @@ import ActionButtons from '@components/common/action-buttons';
 import ImageComponent from '@components/ImageComponent';
 import { Table } from '@components/ui/table';
 import { siteSettings } from '@settings/site.settings';
-import {
-  CreatedUpdatedByAt,
-  ImageType
-} from '@ts-types/generated';
+import { CreatedUpdatedByAt, ImageType } from '@ts-types/generated';
 import { useIsRTL } from '@utils/locals';
 import dayjs from 'dayjs';
 import { useTranslation } from 'next-i18next';

@@ -242,8 +242,8 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
             variant="outline"
             className="mb-5"
           />
-          <div className='flex items-center my-5'>
-            <Label className='mb-0'>{t('form:input-label-alignment')}:</Label>
+          <div className="flex items-center my-5">
+            <Label className="mb-0">{t('form:input-label-alignment')}:</Label>
             <Radio
               {...register('styles.align')}
               label={t('form:input-label-left')}

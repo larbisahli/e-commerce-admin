@@ -38,16 +38,18 @@ const CouponDeleteView = () => {
 
   async function handleDelete() {
     deleteCoupon({ variables: { id } })
-    .then(({data})=>{
-      const {deleteCoupon: {id}} = data
-      if(id){
-        notify(t('common:successfully-deleted'), 'success');
-      }
-      closeModal();
-    })
-    .catch((err) => {
-      setError(err);
-    })
+      .then(({ data }) => {
+        const {
+          deleteCoupon: { id }
+        } = data;
+        if (id) {
+          notify(t('common:successfully-deleted'), 'success');
+        }
+        closeModal();
+      })
+      .catch((err) => {
+        setError(err);
+      });
   }
 
   return (

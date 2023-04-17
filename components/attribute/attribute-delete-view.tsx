@@ -19,20 +19,17 @@ const AttributeDeleteView = () => {
   const { userInfo } = useGetUser();
   const csrfToken = userInfo?.csrfToken;
 
-  const [deleteAttributeValue, { loading }] = useMutation(
-    DELETE_ATTRIBUTE,
-    {
-      context: {
-        headers: {
-          'x-csrf-token': csrfToken
-        }
-      },
-      refetchQueries: [
-        ATTRIBUTES,
-        'Attributes' // Query name
-      ]
-    }
-  );
+  const [deleteAttributeValue, { loading }] = useMutation(DELETE_ATTRIBUTE, {
+    context: {
+      headers: {
+        'x-csrf-token': csrfToken
+      }
+    },
+    refetchQueries: [
+      ATTRIBUTES,
+      'Attributes' // Query name
+    ]
+  });
 
   const { id } = useModalState();
   const { closeModal } = useModalAction();
@@ -40,15 +37,19 @@ const AttributeDeleteView = () => {
   useErrorLogger(error);
 
   async function handleDelete() {
-    deleteAttributeValue({ variables: { id } }).then(({data})=>{
-      const {deleteAttribute: {name}} = data
-      if(name){
-        notify(t('common:successfully-deleted'), 'success');
-      }
-      closeModal();
-    }).catch((err) => {
-      setError(err);
-    })
+    deleteAttributeValue({ variables: { id } })
+      .then(({ data }) => {
+        const {
+          deleteAttribute: { name }
+        } = data;
+        if (name) {
+          notify(t('common:successfully-deleted'), 'success');
+        }
+        closeModal();
+      })
+      .catch((err) => {
+        setError(err);
+      });
   }
 
   return (
