@@ -134,25 +134,33 @@ export function verifyJWT(context: GetServerSidePropsContext) {
   }
 }
 
+// TODO: Show the client a popup where it says "Your session has expired please refresh the page" when the XSRF_TOKEN expired
 export async function XSRFHandler(context: GetServerSidePropsContext) {
   const { req, res } = context;
 
   const cookies = new Cookies(req, res);
+  const storedCsrfSecret = cookies.get(CookieNames.XSRF_TOKEN);
 
   let csrfToken: string | null = null;
   let csrfSecret: string | null = null;
   let csrfError: string | null = null;
 
   try {
-    // generate & set new secret
-    csrfSecret = tokens.secretSync();
+
+    if(storedCsrfSecret){
+      csrfSecret = storedCsrfSecret
+    }else {
+      // generate & set new secret
+      csrfSecret = tokens.secretSync();
+    }
+
     // create new token
     csrfToken = tokens.create(csrfSecret);
 
-    if (csrfSecret) {
+    if (!storedCsrfSecret && csrfSecret) {
       cookies.set(CookieNames.XSRF_TOKEN, csrfSecret, {
         httpOnly: true,
-        maxAge: 5 * 60 * 60 * 1000, // token valid for 5 hours
+        maxAge: 5 * 60 * 60 * 1000, // Token is valid for 5 hours
         sameSite: 'strict',
         domain: PRODUCTION_ENV ? '.dropgala.com' : '127.0.0.1',
         overwrite: true
@@ -163,5 +171,5 @@ export async function XSRFHandler(context: GetServerSidePropsContext) {
     csrfError = err.message;
   }
 
-  return { csrfToken, csrfError };
+  return { csrfSecret, csrfToken, csrfError };
 }
