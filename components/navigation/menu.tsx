@@ -1,8 +1,10 @@
 import Avatar from '@components/common/avatar';
+import { SettingsIcon, ShopIcon } from '@components/icons/sidebar';
 import Link from '@components/ui/link';
 import { Menu, Transition } from '@headlessui/react';
 import { useGetUser } from '@hooks/index';
 import { siteSettings } from '@settings/site.settings';
+import { ROUTES } from '@utils/routes';
 import cn from 'classnames';
 import classNames from 'classnames/bind';
 import { useTranslation } from 'next-i18next';
@@ -12,11 +14,26 @@ import styles from './scss/index.module.scss';
 
 let cx = classNames.bind(styles);
 
+const authorizedLinks = [
+  {
+    href: ROUTES.COMING_SOON,
+    labelTransKey: 'authorized-nav-item-account-settings'
+  },
+  {
+    href: (alias:string)=> `https://${alias}.dropgala.com`,
+    labelTransKey: 'authorized-nav-item-store'
+  },
+  {
+    href: ROUTES.COMING_SOON,
+    labelTransKey: 'authorized-nav-item-logout'
+  }
+]
+
 export default function NavMenu() {
   const { t } = useTranslation('common');
 
   const {
-    userInfo: { profile = [], firstName = '', lastName = '' }
+    userInfo: { profile = [], firstName = '', lastName = '', ali }
   } = useGetUser();
   console.log({ profile });
   const { image = null, placeholder = null } = profile[0] ?? {};
@@ -52,12 +69,13 @@ export default function NavMenu() {
           as="ul"
           className="absolute shadow right-0 w-48 py-4 mt-1 origin-top-right bg-white rounded shadow-700 focus:outline-none"
         >
-          {siteSettings.authorizedLinks.map(({ href, labelTransKey }) => (
-            <Menu.Item key={`${href}${labelTransKey}`}>
+          {authorizedLinks.map(({ href, labelTransKey }, idx) => (
+            <Menu.Item key={idx}>
               {({ active }) => (
-                <li className="border-b border-gray-100 cursor-pointer last:border-0">
+                <li className="border-b border-gray-100 cursor-pointer last:border-0 flex">
                   <Link
-                    href={href}
+                    target='_blank'
+                    href={href instanceof Function ? href(ali) : href}
                     className={cn(
                       'block px-4 py-3 text-sm capitalize font-semibold transition duration-200 hover:text-accent',
                       active ? 'text-accent' : 'text-heading'

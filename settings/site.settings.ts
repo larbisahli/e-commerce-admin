@@ -17,20 +17,6 @@ export const siteSettings = {
     address: ''
   },
   headerLinks: [],
-  authorizedLinks: [
-    {
-      href: ROUTES.COMING_SOON,
-      labelTransKey: 'authorized-nav-item-account-settings'
-    },
-    {
-      href: ROUTES.COMING_SOON,
-      labelTransKey: 'authorized-nav-item-store'
-    },
-    {
-      href: ROUTES.COMING_SOON,
-      labelTransKey: 'authorized-nav-item-logout'
-    }
-  ],
   sidebarLinks: {
     admin: [
       {

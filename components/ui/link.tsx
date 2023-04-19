@@ -5,12 +5,13 @@ const Link: React.FC<
   NextLinkProps & {
     className?: string;
     title?: string;
+    target?: string
     children: React.ReactNode;
   }
-> = ({ href, children, ...props }) => {
+> = ({ href, target = '_self',children, ...props }) => {
   return (
     <NextLink href={href}>
-      <a {...props}>{children}</a>
+      <a target={target} {...props}>{children}</a>
     </NextLink>
   );
 };
