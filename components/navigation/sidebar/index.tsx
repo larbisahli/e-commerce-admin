@@ -33,7 +33,7 @@ const Sidebar: React.FC<Props> = ({ absolute = false }) => {
           <div className="h-[1px] w-[90%] bg-sidenav-divider"></div>
         </div>
         {siteSettings.sidebarLinks.admin.map(
-          ({ id, href, label, icon, line, subLinks }) => (
+          ({ id, href, label, icon, line, subLinks, disabled }) => (
             <SidebarItem
               key={id}
               id={id}
@@ -45,6 +45,7 @@ const Sidebar: React.FC<Props> = ({ absolute = false }) => {
               subLinks={subLinks}
               showLinkId={showLinkIdLevel1}
               setShowLinkId={setShowLinkIdLevel1}
+              disabled={disabled}
               showTriangle
             />
           )

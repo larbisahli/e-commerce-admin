@@ -78,7 +78,7 @@ const FileList = ({ files, selectedColumns }: IProps) => {
         align: 'center',
         width: 'auto',
         render: (id: string) => (
-          <ActionButtons id={id} deleteModalView="DELETE_COUPON" />
+          <ActionButtons id={id} deleteModalView="DELETE_PHOTO" />
         )
       }
     ];

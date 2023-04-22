@@ -42,7 +42,7 @@ const OrderStatusList = ({ orderStatuses, selectedColumns }: IProps) => {
         render: (name: string, record: OrderStatus) => (
           <span
             className="font-semibold capitalize border border-solid
-                       rounded-full bg-white py-[4px] px-[8px] shadow-md"
+                       rounded-md bg-white py-[5px] px-[10px] shadow-md"
             style={{ color: record?.color }}
           >
             {name}

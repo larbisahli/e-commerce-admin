@@ -40,5 +40,6 @@ export const ROUTES = {
   HERO_CAROUSEL: '/hero-carousel',
   INVITE: '/hero-carousel',
   FILE: '/file',
+  THEMES: '/themes',
   COMING_SOON: '/coming-soon'
 };

@@ -22,12 +22,14 @@ interface Props {
   line?: boolean;
   margin?: boolean;
   showTriangle?: boolean;
+  disabled?: boolean;
   subLinks?: {
     id: string;
     href: string;
     icon?: string;
     label: string;
     padding: string;
+    disabled?: boolean;
   }[];
 }
 
@@ -38,6 +40,7 @@ const SidebarItem = ({
   label,
   includes,
   line,
+  disabled,
   margin = false,
   subLinks
 }: Props) => {
@@ -69,6 +72,9 @@ const SidebarItem = ({
               'border-blue-300 !text-white': currentLink[1] === inLink[1],
               'border-blue-300 !text-white !bg-sidenav-active-color hover:!bg-sidenav-active-hover-color':
                 sublevelOpen || linkHighlight
+            },
+            {
+              'pointer-events-none opacity-70': disabled
             }
           )}
           onClick={() => openSublevelSidebar({ id })}
@@ -87,7 +93,10 @@ const SidebarItem = ({
           )}
           className={cn(
             'overflow-hidden flex flex-col relative justify-center w-full pb-5 hover:bg-sidenav-active-hover-color p-2 items-center text-base text-start text-sidenav-color-secondary focus:text-white hover:border-green-300 border-l-2 border-transparent border-solid',
-            { 'mb-12': margin }
+            { 'mb-12': margin },
+            {
+              'pointer-events-none opacity-70': disabled
+            }
           )}
           includes={includes}
         >

@@ -92,7 +92,7 @@ const LoginForm = () => {
     userLogin({ variables }).catch((error) => {
       const err = error?.graphQLErrors[0];
       setLoading(false);
-      setError(err.message);
+      setError(err?.message);
     });
   }
 

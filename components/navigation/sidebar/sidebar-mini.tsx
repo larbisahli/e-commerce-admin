@@ -20,7 +20,7 @@ const SidebarMini: React.FC = () => {
           <div className="h-[2px] w-[76%] bg-sidenav-divider"></div>
         </div>
         {siteSettings.sidebarLinks?.admin?.map(
-          ({ id, href, label, icon, line, subLinks }) => (
+          ({ id, href, label, icon, line, subLinks, disabled }) => (
             <SidebarItem
               key={id}
               id={id}
@@ -30,6 +30,7 @@ const SidebarMini: React.FC = () => {
               includes={href}
               line={line}
               subLinks={subLinks}
+              disabled={disabled}
               showTriangle
             />
           )

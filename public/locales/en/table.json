@@ -62,6 +62,8 @@
   "table-item-order-amount-limit": "Order Amount Limit",
   "table-item-company": "Company",
   "table-item-name": "Name",
+  "table-item-theme-title": "Theme title",
+  "table-item-theme-path": "Theme path",
   "table-item-resource": "Resource",
   "table-item-write": "Write",
   "table-item-read": "Read",

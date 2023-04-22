@@ -118,10 +118,10 @@ const RoleCreateUpdateForm = ({ initialValues }: IProps) => {
         <Description
           title={t('form:input-label-image')}
           details={t('form:category-image-helper-text')}
-          className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
+          className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-[25%] md:w-[25%] sm:py-8"
         />
 
-        <Card className="w-full sm:w-8/12 md:w-2/3">
+        <Card className="w-full sm:w-[75%] md:w-[75%]">
           <div>
             <Input
               name="roleName"

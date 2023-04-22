@@ -39,32 +39,28 @@ export const siteSettings = {
             isSubLink: true
           },
           {
-            id: '1tWw2Tg',
-            href: ROUTES.ORDER_STATUS,
-            label: 'sidebar-nav-item-order-status',
-            padding: '35px',
-            isSubLink: true
-          },
-          {
             id: '2tWw2Tg',
             href: ROUTES.COMING_SOON,
             label: 'sidebar-nav-item-invoices',
             padding: '35px',
-            isSubLink: true
+            isSubLink: true,
+            disabled: true
           },
           {
             id: '3tWw2Tg',
             href: ROUTES.COMING_SOON,
             label: 'sidebar-nav-item-shipments',
             padding: '35px',
-            isSubLink: true
+            isSubLink: true,
+            disabled: true
           },
           {
             id: '4tWw2Tg',
             href: ROUTES.COMING_SOON,
             label: 'sidebar-nav-item-transactions',
             padding: '35px',
-            isSubLink: true
+            isSubLink: true,
+            disabled: true
           }
         ]
       },
@@ -86,7 +82,8 @@ export const siteSettings = {
             href: ROUTES.COMING_SOON,
             label: 'sidebar-nav-item-customer-groups',
             padding: '35px',
-            isSubLink: true
+            isSubLink: true,
+            disabled: true
           }
         ],
         line: true
@@ -105,41 +102,38 @@ export const siteSettings = {
             isSubLink: true
           },
           {
-            id: '4859yLk',
-            href: ROUTES.CATEGORIES,
-            label: 'sidebar-nav-item-categories',
-            padding: '35px',
-            isSubLink: true
-          },
-          {
-            id: 'vGN65vK',
-            href: ROUTES.ATTRIBUTES,
-            label: 'sidebar-nav-item-attributes',
-            padding: '35px',
-            isSubLink: true
-          },
-          {
-            id: 'yNqHtb',
-            href: ROUTES.TAGS,
-            label: 'sidebar-nav-item-tags',
-            padding: '35px',
-            isSubLink: true
-          },
-          {
-            id: 'D2IcKt',
-            href: ROUTES.SUPPLIERS,
-            label: 'sidebar-nav-item-suppliers',
-            padding: '35px',
-            isSubLink: true
-          },
-          {
             id: 'D2IXKt',
             href: ROUTES.COMING_SOON,
             label: 'sidebar-nav-item-reviews',
             padding: '35px',
-            isSubLink: true
+            isSubLink: true,
+            disabled: true
           }
         ]
+      },
+      {
+        id: '4859yLk',
+        href: ROUTES.CATEGORIES,
+        label: 'sidebar-nav-item-categories',
+        icon: 'CategoriesIcon'
+      },
+      {
+        id: 'vGN65vK',
+        href: ROUTES.ATTRIBUTES,
+        label: 'sidebar-nav-item-attributes',
+        icon: 'AttributeIcon'
+      },
+      {
+        id: 'yNqHtb',
+        href: ROUTES.TAGS,
+        label: 'sidebar-nav-item-tags',
+        icon: 'TagIcon'
+      },
+      {
+        id: 'D2IcKt',
+        href: ROUTES.SUPPLIERS,
+        label: 'sidebar-nav-item-suppliers',
+        icon: 'SuppliersIcon'
       },
       {
         id: 'Qk3MiG',
@@ -152,6 +146,12 @@ export const siteSettings = {
         href: ROUTES.SHIPPING_ZONES,
         label: 'sidebar-nav-item-shipping-zones',
         icon: 'ShippingsIcon'
+      },
+      {
+        id: '1tWw2Tg',
+        href: ROUTES.ORDER_STATUS,
+        label: 'sidebar-nav-item-order-status',
+        icon: 'OrdersStatusIcon'
       },
       {
         id: 'Wa09XCI',
@@ -174,114 +174,124 @@ export const siteSettings = {
           }
         ]
       },
-      // {
-      //   id: 'j6OQzo',
-      //   href: ROUTES.COMING_SOON,
-      //   label: 'sidebar-nav-item-email',
-      //   icon: 'EmailIcon',
-      //   subLinks: [
-      //     {
-      //       id: 'RVRg5VS',
-      //       href: ROUTES.COMING_SOON,
-      //       label: 'sidebar-nav-item-email-newsletters',
-      //       padding: '35px',
-      //       isSubLink: true
-      //     },
-      //     {
-      //       id: 'j6OQXzo',
-      //       href: ROUTES.COMING_SOON,
-      //       label: 'sidebar-nav-item-email-templates',
-      //       padding: '35px',
-      //       isSubLink: true
-      //     },
-      //     {
-      //       id: 'RSVRg5S',
-      //       href: ROUTES.COMING_SOON,
-      //       label: 'sidebar-nav-item-newsletter-subscribers',
-      //       padding: '35px',
-      //       isSubLink: true
-      //     }
-      //   ]
-      // },
-      // {
-      //   id: 'W109XCO',
-      //   href: ROUTES.COMING_SOON,
-      //   label: 'sidebar-nav-item-rma',
-      //   icon: 'PackageReturn',
-      //   subLinks: [
-      //     {
-      //       id: 'WaIACaCI',
-      //       href: ROUTES.COMING_SOON,
-      //       label: 'sidebar-nav-item-manage-requests',
-      //       padding: '35px',
-      //       isSubLink: true
-      //     },
-      //     {
-      //       id: 'WaIRCAaCI',
-      //       href: ROUTES.COMING_SOON,
-      //       label: 'sidebar-nav-item-customer-pending-requests',
-      //       padding: '35px',
-      //       isSubLink: true
-      //     },
-      //     {
-      //       id: 'WaIECaCI',
-      //       href: ROUTES.COMING_SOON,
-      //       label: 'sidebar-nav-item-item-conditions',
-      //       padding: '35px',
-      //       isSubLink: true
-      //     },
-      //     {
-      //       id: 'WaIOCaCI',
-      //       href: ROUTES.COMING_SOON,
-      //       label: 'sidebar-nav-item-return-reasons',
-      //       padding: '35px',
-      //       isSubLink: true
-      //     },
-      //     {
-      //       id: 'WaIPCaCI',
-      //       href: ROUTES.COMING_SOON,
-      //       label: 'sidebar-nav-item-rma-statuses',
-      //       padding: '35px',
-      //       isSubLink: true
-      //     }
-      //   ]
-      // },
-      // {
-      //   id: '1239XCO',
-      //   href: ROUTES.COMING_SOON,
-      //   label: 'sidebar-nav-item-blogs',
-      //   icon: 'BlogIcon',
-      //   subLinks: [
-      //     {
-      //       id: '12WaIACaCI',
-      //       href: ROUTES.COMING_SOON,
-      //       label: 'sidebar-nav-item-posts',
-      //       padding: '35px',
-      //       isSubLink: true
-      //     },
-      //     {
-      //       id: 'WaIRCaXCI',
-      //       href: ROUTES.COMING_SOON,
-      //       label: 'sidebar-nav-item-categories',
-      //       padding: '35px',
-      //       isSubLink: true
-      //     },
-      //     {
-      //       id: 'WaIRCaCI',
-      //       href: ROUTES.COMING_SOON,
-      //       label: 'sidebar-nav-item-tags',
-      //       padding: '35px',
-      //       isSubLink: true
-      //     },
-      //     {
-      //       id: 'WaIECaCI',
-      //       href: ROUTES.COMING_SOON,
-      //       label: 'sidebar-nav-item-comments',
-      //       padding: '35px',
-      //       isSubLink: true
-      //     }
-      //   ]
-      // },
+      {
+        id: 'j6OQzo',
+        href: ROUTES.COMING_SOON,
+        label: 'sidebar-nav-item-email',
+        icon: 'EmailIcon',
+        disabled: true,
+        subLinks: [
+          {
+            id: 'RVRg5VS',
+            href: ROUTES.COMING_SOON,
+            label: 'sidebar-nav-item-email-newsletters',
+            padding: '35px',
+            isSubLink: true,
+            disabled: true
+          },
+          {
+            id: 'j6OQXzo',
+            href: ROUTES.COMING_SOON,
+            label: 'sidebar-nav-item-email-templates',
+            padding: '35px',
+            isSubLink: true,
+            disabled: true
+          },
+          {
+            id: 'RSVRg5S',
+            href: ROUTES.COMING_SOON,
+            label: 'sidebar-nav-item-newsletter-subscribers',
+            padding: '35px',
+            isSubLink: true,
+            disabled: true
+          }
+        ]
+      },
+      {
+        id: 'W109XCO',
+        href: ROUTES.COMING_SOON,
+        label: 'sidebar-nav-item-rma',
+        icon: 'PackageReturn',
+        disabled: true,
+        subLinks: [
+          {
+            id: 'WaIACaCI',
+            href: ROUTES.COMING_SOON,
+            label: 'sidebar-nav-item-manage-requests',
+            padding: '35px',
+            isSubLink: true
+          },
+          {
+            id: 'WaIRCAaCI',
+            href: ROUTES.COMING_SOON,
+            label: 'sidebar-nav-item-customer-pending-requests',
+            padding: '35px',
+            isSubLink: true
+          },
+          {
+            id: 'WaIECaCI',
+            href: ROUTES.COMING_SOON,
+            label: 'sidebar-nav-item-item-conditions',
+            padding: '35px',
+            isSubLink: true
+          },
+          {
+            id: 'WaIOCaCI',
+            href: ROUTES.COMING_SOON,
+            label: 'sidebar-nav-item-return-reasons',
+            padding: '35px',
+            isSubLink: true
+          },
+          {
+            id: 'WaIPCaCI',
+            href: ROUTES.COMING_SOON,
+            label: 'sidebar-nav-item-rma-statuses',
+            padding: '35px',
+            isSubLink: true
+          }
+        ]
+      },
+      {
+        id: '1239XCO',
+        href: ROUTES.COMING_SOON,
+        label: 'sidebar-nav-item-blogs',
+        icon: 'BlogIcon',
+        disabled: true,
+        subLinks: [
+          {
+            id: '12WaIACaCI',
+            href: ROUTES.COMING_SOON,
+            label: 'sidebar-nav-item-posts',
+            padding: '35px',
+            isSubLink: true,
+            disabled: true
+          },
+          {
+            id: 'WaIRCaXCI',
+            href: ROUTES.COMING_SOON,
+            label: 'sidebar-nav-item-categories',
+            padding: '35px',
+            isSubLink: true,
+            disabled: true
+          },
+          {
+            id: 'WaIRCaCI',
+            href: ROUTES.COMING_SOON,
+            label: 'sidebar-nav-item-tags',
+            padding: '35px',
+            isSubLink: true,
+            disabled: true
+          },
+          {
+            id: 'WaIECaCI',
+            href: ROUTES.COMING_SOON,
+            label: 'sidebar-nav-item-comments',
+            padding: '35px',
+            isSubLink: true,
+            disabled: true
+          }
+        ]
+      },
       {
         id: 'JU99uXy',
         href: '#',
@@ -313,7 +323,7 @@ export const siteSettings = {
         subLinks: [
           {
             id: '9YcWhG',
-            href: ROUTES.COMING_SOON,
+            href: ROUTES.THEMES,
             label: 'sidebar-nav-item-themes',
             padding: '35px',
             isSubLink: true
@@ -338,22 +348,32 @@ export const siteSettings = {
             href: ROUTES.COMING_SOON,
             label: 'sidebar-nav-item-recent-login-history',
             padding: '35px',
-            isSubLink: true
+            isSubLink: true,
+            disabled: true
           },
           {
             id: 'ERVRg5S',
             href: ROUTES.COMING_SOON,
             label: 'sidebar-nav-item-notifications',
             padding: '35px',
-            isSubLink: true
+            isSubLink: true,
+            disabled: true
           }
         ]
       },
       {
         id: 'WDIqEI',
         href: ROUTES.COMING_SOON,
+        label: 'sidebar-nav-item-marketplace',
+        icon: 'MarketPlaceSvg',
+        disabled: true
+      },
+      {
+        id: 'WDIqEI',
+        href: ROUTES.COMING_SOON,
         label: 'sidebar-nav-item-invite-earn',
-        icon: 'AffiliateIcon'
+        icon: 'AffiliateIcon',
+        disabled: true
       }
     ]
   },

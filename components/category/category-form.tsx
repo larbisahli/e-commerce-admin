@@ -84,7 +84,7 @@ const defaultValues = {
   description: null,
   parent: null,
   includeInMenu: true,
-  position: 0,
+  position: 1,
   thumbnail: [],
   icon: null
 };

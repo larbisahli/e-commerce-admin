@@ -1,5 +1,4 @@
 import Avatar from '@components/common/avatar';
-import { SettingsIcon, ShopIcon } from '@components/icons/sidebar';
 import Link from '@components/ui/link';
 import { Menu, Transition } from '@headlessui/react';
 import { useGetUser } from '@hooks/index';
@@ -20,14 +19,14 @@ const authorizedLinks = [
     labelTransKey: 'authorized-nav-item-account-settings'
   },
   {
-    href: (alias:string)=> `https://${alias}.dropgala.com`,
+    href: (alias: string) => `https://${alias}.dropgala.com`,
     labelTransKey: 'authorized-nav-item-store'
   },
   {
     href: ROUTES.COMING_SOON,
     labelTransKey: 'authorized-nav-item-logout'
   }
-]
+];
 
 export default function NavMenu() {
   const { t } = useTranslation('common');
@@ -74,7 +73,7 @@ export default function NavMenu() {
               {({ active }) => (
                 <li className="border-b border-gray-100 cursor-pointer last:border-0 flex">
                   <Link
-                    target='_blank'
+                    target="_blank"
                     href={href instanceof Function ? href(ali) : href}
                     className={cn(
                       'block px-4 py-3 text-sm capitalize font-semibold transition duration-200 hover:text-accent',

@@ -10,7 +10,7 @@ export default function SignUp({ client }: SSRProps) {
   const { t } = useTranslation('common');
   useGetUser(client);
 
-  console.log({client})
+  console.log({ client });
 
   return (
     <div className="flex items-center justify-center bg-gray-100 min-h-screen h-fit">

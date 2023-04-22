@@ -62,8 +62,8 @@ const CategoryList = ({ categories, selectedColumns }: IProps) => {
         title: t('table:table-item-include-in-menu'),
         dataIndex: 'includeInMenu',
         key: 'includeInMenu',
-        align: alignLeft,
-        width: 150,
+        align: 'center',
+        width: 120,
         ellipsis: true,
         render: (includeInMenu: boolean) => {
           return <span>{includeInMenu ? 'Yes' : 'No'}</span>;

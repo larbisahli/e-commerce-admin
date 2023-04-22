@@ -23,7 +23,7 @@ export const PHOTOS = gql`
 export const DELETE_IMAGE = gql`
   mutation DeleteImage($id: Int!) {
     deleteImage(id: $id) {
-      image
+      id
     }
   }
 `;

@@ -38,7 +38,7 @@ const defaultValues = {
   thumbnail: [],
   description: null,
   btnLabel: null,
-  position: 0,
+  position: 1,
   status: 'draft',
   styles: {
     align: 'left',

@@ -4,6 +4,7 @@ import {
   DELETE_ATTRIBUTE,
   DELETE_COUPON,
   DELETE_ORDER_STATUS,
+  DELETE_PHOTO,
   DELETE_PRODUCT,
   DELETE_SHIPPING,
   DELETE_SLIDER,
@@ -51,6 +52,10 @@ const SliderDeleteView = dynamic(
   () => import('@components/hero-carousel/slider-delete-view')
 );
 
+const PhotoDeleteView = dynamic(
+  () => import('@components/files/file-delete-view')
+);
+
 // const AttributeExportImport = dynamic(
 //   () => import('@components/attribute/attribute-import-export')
 // );
@@ -71,6 +76,7 @@ const ManagedModal = () => {
       {view === DELETE_USER && <UserDeleteView />}
       {view === DELETE_SUPPLIER && <SupplierDeleteView />}
       {view === DELETE_SLIDER && <SliderDeleteView />}
+      {view === DELETE_PHOTO && <PhotoDeleteView />}
     </Modal>
   );
 };

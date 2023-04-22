@@ -1,4 +1,7 @@
+import { ShopIcon } from '@components/icons/sidebar';
+import Link from '@components/ui/link';
 import LinkButton from '@components/ui/link-button';
+import { useGetUser } from '@hooks/useGetUser';
 import { useMediaQuery } from '@hooks/useMediaQuery';
 import { useUI } from '@hooks/useUI';
 import { ROUTES } from '@utils/routes';
@@ -36,6 +39,10 @@ const Navbar = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [closeSideBar]);
 
+  const {
+    userInfo: { ali: alias }
+  } = useGetUser();
+
   return (
     <header className="w-full mt-5 mb-12">
       <nav className="px-5 md:px-8 py-2 flex items-center justify-between lg:justify-end md:justify-end">
@@ -51,20 +58,17 @@ const Navbar = () => {
           </div>
         </motion.button>
         <div className="flex items-center space-s-8">
-          <LinkButton
-            href={`${ROUTES.PRODUCTS}/create`}
-            className="ms-4 md:ms-6"
-            size="small"
+          <Link
+            target="_blank"
+            className="hover:text-accent text-gray-700  shadow hover:border-green-300 border rounded-full w-10 h-10 flex items-center justify-center"
+            href={`https://${alias}.dropgala.com`}
           >
-            {t('common:text-create-product')}
-          </LinkButton>
+            <ShopIcon />
+          </Link>
           <div className="text-body-black font-medium flex items-center shadow justify-center border rounded-full py-1 px-3">
             <div className="font-medium text-gray-600 mr-1">Balance:</div>
             <div className="text-green-600 font-medium">$100</div>
           </div>
-          {/* <div className="text-body-black font-medium flex items-center  bg-orange-400 shadow justify-center border rounded-full py-1 px-3">
-            <div className="font-bold text-orange-900 mr-1">Pro</div>
-          </div> */}
           <NavNotification />
           <NavMenu />
         </div>

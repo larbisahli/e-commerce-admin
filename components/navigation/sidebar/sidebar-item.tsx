@@ -21,6 +21,7 @@ interface Props {
   showTriangle?: boolean;
   isSublevel?: boolean;
   isSubLink?: boolean;
+  disabled?: boolean;
   subLinks?: {
     id: string;
     href: string;
@@ -29,6 +30,7 @@ interface Props {
     line?: boolean;
     padding: string;
     isSubLink?: boolean;
+    disabled?: boolean;
     subLinks?: {
       id: string;
       href: string;
@@ -37,6 +39,7 @@ interface Props {
       line?: boolean;
       padding: string;
       isSubLink?: boolean;
+      disabled?: boolean;
     }[];
   }[];
   padding?: string;
@@ -67,6 +70,7 @@ const SidebarItem = ({
   isSublevel,
   showLinkId,
   setShowLinkId,
+  disabled,
   isSubLink
 }: Props) => {
   const { t } = useTranslation();
@@ -95,6 +99,9 @@ const SidebarItem = ({
               'nav-sub-links-bg': !!padding,
               '!text-white !bg-sidenav-active-hover-color border-green-300 border-solid':
                 sublevelOpen
+            },
+            {
+              'pointer-events-none opacity-70': disabled
             }
           )}
           onClick={handleShowLinkId}
@@ -121,7 +128,10 @@ const SidebarItem = ({
           }
           className={cn(
             'overflow-hidden flex w-full pl-6 hover:bg-sidenav-active-hover-color p-2 items-center text-base text-sidenav-color hover:text-white text-start focus:text-white hover:border-solid hover:border-green-300 hover:border-l-2 border-l-2 border-transparent border-solid',
-            { 'nav-sub-links-bg': !!padding && !isSublevel }
+            { 'nav-sub-links-bg': !!padding && !isSublevel },
+            {
+              'pointer-events-none opacity-70': disabled
+            }
           )}
           includes={includes}
           isSubLink={isSubLink}
@@ -144,7 +154,16 @@ const SidebarItem = ({
           })}
         >
           {subLinks?.map(
-            ({ id, href, label, icon, padding, subLinks, isSubLink }) => (
+            ({
+              id,
+              href,
+              label,
+              icon,
+              padding,
+              subLinks,
+              isSubLink,
+              disabled
+            }) => (
               <SidebarItem
                 key={id}
                 id={id}
@@ -157,6 +176,7 @@ const SidebarItem = ({
                 showLinkId={showLinksLevel2}
                 setShowLinkId={setShowLinksLevel2}
                 isSublevel={isSublevel}
+                disabled={disabled}
                 isSubLink={isSubLink}
               />
             )

@@ -8,7 +8,7 @@ import Loader from '@components/ui/loader/loader';
 import { PHOTOS } from '@graphql/photo';
 import { useErrorLogger, useGetUser } from '@hooks/index';
 import { useTableColumn } from '@hooks/useTableColumn';
-import { verifyAuth } from '@middleware/utils';
+import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { ImageType, OrderBy, SortOrder } from '@ts-types/generated';
 import { COLUMNS } from '@utils/data/table-columns';
@@ -31,7 +31,7 @@ interface OptionsVariable {
   sortedBy: SortOrder;
 }
 
-export default function Coupons({ client }: SSRProps) {
+export default function Files({ client }: SSRProps) {
   const { t } = useTranslation();
 
   const [page, setPage] = useState(1);
@@ -103,7 +103,7 @@ export default function Coupons({ client }: SSRProps) {
   );
 }
 
-Coupons.Layout = AppLayout;
+Files.Layout = AppLayout;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { locale } = context;
@@ -118,6 +118,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
+  const { csrfToken, csrfError } = await XSRFHandler(context);
+
   return {
     props: {
       ...(await serverSideTranslations(locale, [
@@ -126,7 +128,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         'table',
         'error'
       ])),
-      client
+      client: { ...(client ?? {}), csrfToken, csrfError }
     }
   };
 };

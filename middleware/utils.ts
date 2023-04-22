@@ -146,10 +146,9 @@ export async function XSRFHandler(context: GetServerSidePropsContext) {
   let csrfError: string | null = null;
 
   try {
-
-    if(storedCsrfSecret){
-      csrfSecret = storedCsrfSecret
-    }else {
+    if (storedCsrfSecret) {
+      csrfSecret = storedCsrfSecret;
+    } else {
       // generate & set new secret
       csrfSecret = tokens.secretSync();
     }

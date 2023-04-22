@@ -83,6 +83,11 @@ export interface RoleType {
   roleName?: string;
 }
 
+export interface ThemeType {
+  id?: string;
+  name?: string;
+}
+
 export interface UserType extends CreatedUpdatedByAt {
   id: string;
   email: string;
