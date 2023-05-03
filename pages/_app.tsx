@@ -47,7 +47,7 @@ function App({ Component, pageProps }: AppProps) {
           href="/favicons/favicon-16x16.png"
         />
         <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#ffffff" />
+        <meta name="theme-color" content="#020024" />
       </Head>
       <ToastContainer
         position="top-right"

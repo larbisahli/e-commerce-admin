@@ -3,10 +3,10 @@ import Card from '@components/common/card';
 import { SaveIcon } from '@components/icons/save-icon';
 import Button from '@components/ui/button';
 import Description from '@components/ui/description';
-import { CREATE_PRODUCT, UPDATE_PRODUCT } from '@graphql/product';
+import { CREATE_PRODUCT } from '@graphql/product';
 import { useErrorLogger, useGetUser } from '@hooks/index';
 import { notify } from '@lib/index';
-import { Product, ProductStatus } from '@ts-types/generated';
+import { Product } from '@ts-types/generated';
 import { ProductType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import isEmpty from 'lodash/isEmpty';
@@ -104,11 +104,12 @@ function ProductForm({ setUnsavedChanges, initialValues = {} }: IProps) {
   const ProductSeoState = useMemo(
     () => ({
       isUpdateMode,
+      id,
       name,
       thumbnail,
       productSeo
     }),
-    [name, thumbnail, productSeo, isUpdateMode]
+    [id, name, thumbnail, productSeo, isUpdateMode]
   );
   const productThumbnailState = useMemo(
     () => ({ thumbnail, isUpdateMode }),
@@ -144,8 +145,8 @@ function ProductForm({ setUnsavedChanges, initialValues = {} }: IProps) {
     [upsellProducts, relatedProducts, crossSellProducts, isUpdateMode]
   );
   const productShippingInfoState = useMemo(
-    () => ({ isUpdateMode, productShippingInfo }),
-    [productShippingInfo, isUpdateMode]
+    () => ({ id, isUpdateMode, productShippingInfo }),
+    [id, productShippingInfo, isUpdateMode]
   );
 
   const [lockedSubmission, setLockedSubmission] = useState(false);
@@ -164,20 +165,6 @@ function ProductForm({ setUnsavedChanges, initialValues = {} }: IProps) {
     onCompleted: (data: { createAttribute: Product }) => {
       if (!isEmpty(data)) {
         notify(t('common:successfully-created'), 'success');
-        router.push(ROUTES.PRODUCTS);
-      }
-    }
-  });
-
-  const [updateProduct, { loading: updating }] = useMutation(UPDATE_PRODUCT, {
-    context: {
-      headers: {
-        'x-csrf-token': csrfToken
-      }
-    },
-    onCompleted: (data: { updateAttribute: Product }) => {
-      if (!isEmpty(data)) {
-        notify(t('common:successfully-updated'), 'success');
         router.push(ROUTES.PRODUCTS);
       }
     }
@@ -276,17 +263,23 @@ function ProductForm({ setUnsavedChanges, initialValues = {} }: IProps) {
         initialValues={initialValues}
       />
       {/* SEO */}
-      <ProductSeo state={ProductSeoState} initialValues={initialValues} />
+      <ProductSeo
+        state={ProductSeoState}
+        initialValues={initialValues}
+        setError={setError}
+      />
       {/* Related Products, Up-Sells, and Cross-Sells  */}
       <LinkedProducts
         state={linkedProductsState}
         initialValues={initialValues}
+        setError={setError}
       />
       {/* Shipping Info */}
       <div className="mb-12">
         <ProductShippingInfoForm
           state={productShippingInfoState}
           initialValues={initialValues}
+          setError={setError}
         />
       </div>
 
@@ -302,11 +295,7 @@ function ProductForm({ setUnsavedChanges, initialValues = {} }: IProps) {
           </Button>
         )}
         {isEmpty(initialValues) && (
-          <Button
-            loading={updating || creating}
-            disabled={updating || creating}
-            onClick={onSubmit}
-          >
+          <Button loading={creating} disabled={creating} onClick={onSubmit}>
             <div className="mr-1">
               <SaveIcon width="1.3rem" height="1.3rem" />
             </div>

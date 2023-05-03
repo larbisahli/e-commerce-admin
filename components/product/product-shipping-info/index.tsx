@@ -1,3 +1,4 @@
+import { useMutation } from '@apollo/client';
 import Card from '@components/common/card';
 import { SaveIcon } from '@components/icons/save-icon';
 import Accordion from '@components/ui/accordion';
@@ -6,17 +7,30 @@ import Description from '@components/ui/description';
 import Input from '@components/ui/input';
 import Label from '@components/ui/label';
 import Select from '@components/ui/select/select';
+import { UPDATE_PRODUCT_SHIPPING_INFO } from '@graphql/product';
+import { useGetUser } from '@hooks/useGetUser';
+import { notify } from '@lib/notify';
 import { Nullable } from '@ts-types/custom.types';
 import { Product } from '@ts-types/generated';
+import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
 import { useTranslation } from 'next-i18next';
-import React, { ChangeEvent, memo, useState } from 'react';
+import React, {
+  ChangeEvent,
+  Dispatch,
+  memo,
+  useCallback,
+  useEffect,
+  useState
+} from 'react';
 
 import { Actions, useFormReducer } from '../context/form.context';
 
 type Props = {
   initialValues: Nullable<Product>;
+  setError: Dispatch<any>;
   state: {
+    id: number;
     productShippingInfo: Product['productShippingInfo'];
     isUpdateMode: boolean;
   };
@@ -28,10 +42,37 @@ const volumeUnits = [{ unit: 'l' }, { unit: 'ml' }];
 
 const dimensionUnits = [{ unit: 'l' }, { unit: 'ml' }];
 
-function ProductShippingInfoForm({ state, initialValues }: Props) {
+function ProductShippingInfoForm({ state, initialValues, setError }: Props) {
   const { t } = useTranslation();
 
+  const [initProductShippingInfo, setInitProductShippingInfo] = useState<
+    Product['productShippingInfo']
+  >(() => initialValues?.productShippingInfo);
+
+  const { userInfo } = useGetUser();
+  const csrfToken = userInfo?.csrfToken;
+
+  const [updateProductShippingInfo, { loading }] = useMutation(
+    UPDATE_PRODUCT_SHIPPING_INFO,
+    {
+      context: {
+        headers: {
+          'x-csrf-token': csrfToken
+        }
+      },
+      onCompleted: (data: { updateProductShippingInfo: Product }) => {
+        if (!isEmpty(data?.updateProductShippingInfo)) {
+          setInitProductShippingInfo(
+            data?.updateProductShippingInfo?.productShippingInfo
+          );
+          notify(t('common:successfully-updated'), 'success');
+        }
+      }
+    }
+  );
+
   const {
+    id,
     productShippingInfo: {
       weight,
       weightUnit,
@@ -49,11 +90,11 @@ function ProductShippingInfoForm({ state, initialValues }: Props) {
 
   const [isUpdated, setIsUpdated] = useState(false);
 
-  const checkForUpdateHandler = () => {
+  const checkForUpdateHandler = useCallback(() => {
     if (!isUpdateMode) return;
 
-    const productShippingInfo = initialValues.productShippingInfo ?? {};
-    const initialProductContent = {
+    const productShippingInfo = initProductShippingInfo;
+    const initialProductShippingInfo = {
       weight: productShippingInfo.weight,
       weightUnit: productShippingInfo.weightUnit,
       volume: productShippingInfo.volume,
@@ -63,7 +104,7 @@ function ProductShippingInfoForm({ state, initialValues }: Props) {
       dimensionDepth: productShippingInfo.dimensionDepth,
       dimensionUnit: productShippingInfo.dimensionUnit
     };
-    const currentProductContent = {
+    const currentProductShippingInfo = {
       weight,
       weightUnit,
       volume,
@@ -74,17 +115,52 @@ function ProductShippingInfoForm({ state, initialValues }: Props) {
       dimensionUnit
     };
 
-    setIsUpdated(!isEqual(initialProductContent, currentProductContent));
+    setIsUpdated(
+      !isEqual(initialProductShippingInfo, currentProductShippingInfo)
+    );
+  }, [
+    dimensionDepth,
+    dimensionHeight,
+    dimensionUnit,
+    dimensionWidth,
+    initProductShippingInfo,
+    isUpdateMode,
+    volume,
+    volumeUnit,
+    weight,
+    weightUnit
+  ]);
+
+  useEffect(() => {
+    checkForUpdateHandler();
+  }, [checkForUpdateHandler, initProductShippingInfo]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    updateProductShippingInfo({
+      variables: {
+        id,
+        productShippingInfo: {
+          weight,
+          weightUnit,
+          volume,
+          volumeUnit,
+          dimensionWidth,
+          dimensionHeight,
+          dimensionDepth,
+          dimensionUnit
+        }
+      }
+    }).catch((err) => {
+      setError(err);
+    });
   };
 
   const renderSaveButton = () => {
     if (isUpdated) {
       return (
         <div className="mt-12 flex justify-end border-t pt-4">
-          <Button
-          // loading={updating || creating}
-          // disabled={updating || creating}
-          >
+          <Button loading={loading} disabled={loading} onClick={handleSubmit}>
             <div className="mr-1">
               <SaveIcon width="1.3rem" height="1.3rem" />
             </div>

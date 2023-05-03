@@ -2,13 +2,14 @@
   "name": "DropGala",
   "short_name": "DropGala",
   "lang": "en-US",
-  "description": "Great place to buy items with a fair price.",
+  "description": "Great place to start selling",
   "start_url": "/",
   "scope": "https://business.dropgala.com/",
   "display": "standalone",
-  "theme_color": "#ffffff",
-  "background_color": "#ffffff",
-  "categories": ["shopping"],
+  "orientation": "portrait",
+  "theme_color": "#020024",
+  "background_color": "#020024",
+  "categories": ["admin"],
   "icons": [
     {
       "src": "/favicons//android-chrome-192x192.png",

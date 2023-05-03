@@ -88,21 +88,15 @@ const ProductSelectGroup = ({ state, initialValues }: Props) => {
         }
       },
       onCompleted: (data: { updateProductSelectGroup: Product }) => {
-        const {
-          categories = [],
-          tags = [],
-          suppliers = []
-        } = data?.updateProductSelectGroup;
-        if (!isEmpty(categories) || !isEmpty(tags) || !isEmpty(suppliers)) {
-          if (!isEmpty(categories)) {
-            setInitProductCategories(categories);
-          }
-          if (!isEmpty(tags)) {
-            setInitProductTags(tags);
-          }
-          if (!isEmpty(suppliers)) {
-            setInitProductSuppliers(suppliers);
-          }
+        if (!isEmpty(data.updateProductSelectGroup)) {
+          const {
+            categories = [],
+            tags = [],
+            suppliers = []
+          } = data.updateProductSelectGroup;
+          setInitProductCategories(categories);
+          setInitProductTags(tags);
+          setInitProductSuppliers(suppliers);
           notify(t('common:successfully-updated'), 'success');
         }
       }
@@ -113,7 +107,7 @@ const ProductSelectGroup = ({ state, initialValues }: Props) => {
     e.preventDefault();
 
     // In case removed all the categories
-    if (isEmpty(additionalCategories) && !isEmpty(deletedCategories)) {
+    if (isEmpty(categories)) {
       return notify('Product category should not be empty', 'error');
     }
 

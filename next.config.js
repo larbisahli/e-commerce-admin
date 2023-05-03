@@ -2,17 +2,16 @@
  * @type {import('next').NextConfig}
  */
 
-// const withPWA = require('next-pwa');
-// const runtimeCaching = require('next-pwa/cache');
+const runtimeCaching = require('next-pwa/cache');
+const withPWA = require('next-pwa')({
+  dest: 'public',
+  disable: process.env.NODE_ENV === 'development',
+  runtimeCaching
+});
 const { i18n } = require('./next-i18next.config');
 const { withSentryConfig } = require('@sentry/nextjs');
 
 const moduleExports = {
-  // compiler: {
-  //   removeConsole: {
-  //     exclude: ['error', 'warn']
-  //   }
-  // },
   async redirects() {
     return [
       {
@@ -23,11 +22,12 @@ const moduleExports = {
     ];
   },
   i18n,
-  // pwa: {
-  //   disable: process.env.NODE_ENV === 'development',
-  //   dest: 'public',
-  //   runtimeCaching
+  // compiler: {
+  //   removeConsole: {
+  //     exclude: ['error', 'warn', 'log']
+  //   }
   // },
+  // pwa: {},
   reactStrictMode: true,
   images: {
     deviceSizes: [320, 420, 768, 1024, 1200],
@@ -68,11 +68,11 @@ const moduleExports = {
   }
 };
 
-// const SentryWebpackPluginOptions = { silent: true };
+const SentryWebpackPluginOptions = { silent: true };
 
-module.exports = withSentryConfig(moduleExports);
+// module.exports = withSentryConfig(moduleExports);
 
-// module.exports = withSentryConfig(
-//   withPWA(moduleExports),
-//   SentryWebpackPluginOptions
-// );
+module.exports = withSentryConfig(
+  withPWA(moduleExports),
+  SentryWebpackPluginOptions
+);

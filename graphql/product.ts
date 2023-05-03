@@ -183,7 +183,6 @@ export const LINKED_PRODUCTS = gql`
       }
     }
     crossSellProducts(id: $id) {
-      id
       sku
       name
       type {
@@ -381,7 +380,118 @@ export const UPDATE_PRODUCT_SELECT_GROUP = gql`
   }
 `;
 
-export const DELETE_ATTRIBUTE = gql`
+export const UPDATE_PRODUCT_SEO = gql`
+  mutation UpdateProductSeo($id: Int!, $productSeo: ProductSeoInput!) {
+    updateProductSeo(id: $id, productSeo: $productSeo) {
+      id
+      productSeo {
+        id
+        slug
+        metaTitle
+        metaKeywords
+        metaDescription
+        metaImage {
+          id
+          image
+          placeholder
+        }
+      }
+    }
+  }
+`;
+
+export const UPDATE_PRODUCT_SHIPPING_INFO = gql`
+  mutation UpdateProductShippingInfo(
+    $id: Int!
+    $productShippingInfo: ProductShippingInfoInput!
+  ) {
+    updateProductShippingInfo(
+      id: $id
+      productShippingInfo: $productShippingInfo
+    ) {
+      id
+      productShippingInfo {
+        id
+        weight
+        weightUnit {
+          unit
+        }
+        volume
+        volumeUnit {
+          unit
+        }
+        dimensionWidth
+        dimensionHeight
+        dimensionDepth
+        dimensionUnit {
+          unit
+        }
+      }
+    }
+  }
+`;
+
+export const UPDATE_LINKED_PRODUCTS = gql`
+  mutation UpdateLinkedProducts(
+    $id: Int!
+    $additions: UpdateProductInput!
+    $deletions: UpdateProductInput!
+  ) {
+    updateLinkedProducts(
+      id: $id
+      additions: $additions
+      deletions: $deletions
+    ) {
+      id
+      relatedProducts {
+        id
+        sku
+        name
+        type {
+          id
+        }
+        quantity
+        published
+        thumbnail {
+          id
+          image
+          placeholder
+        }
+      }
+      upsellProducts {
+        id
+        sku
+        name
+        type {
+          id
+        }
+        quantity
+        published
+        thumbnail {
+          id
+          image
+          placeholder
+        }
+      }
+      crossSellProducts {
+        sku
+        name
+        type {
+          id
+        }
+        quantity
+        published
+        thumbnail {
+          id
+          image
+          placeholder
+        }
+      }
+    }
+  }
+`;
+
+export const DELETE_PRODUCT = gql`
   mutation DeleteProduct($id: Int!) {
     deleteProduct(id: $id) {
       name

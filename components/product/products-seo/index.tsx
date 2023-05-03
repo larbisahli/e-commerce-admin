@@ -1,3 +1,4 @@
+import { useMutation } from '@apollo/client';
 import Card from '@components/common/card';
 import { SaveIcon } from '@components/icons/save-icon';
 import ImageModal from '@components/image-modal';
@@ -6,18 +7,30 @@ import Button from '@components/ui/button';
 import Description from '@components/ui/description';
 import Input from '@components/ui/input';
 import TextArea from '@components/ui/text-area';
+import { UPDATE_PRODUCT_SEO } from '@graphql/product';
+import { useGetUser } from '@hooks/useGetUser';
+import { notify } from '@lib/notify';
 import { Product } from '@ts-types/generated';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
 import { useTranslation } from 'next-i18next';
-import { ChangeEvent, memo, useCallback, useEffect, useState } from 'react';
+import {
+  ChangeEvent,
+  Dispatch,
+  memo,
+  useCallback,
+  useEffect,
+  useState
+} from 'react';
 import slugify from 'slugify';
 
 import { Actions, useFormReducer } from '../context/form.context';
 
 type Props = {
-  initialValues: Product | any;
+  initialValues: Product;
+  setError: Dispatch<any>;
   state: {
+    id: number;
     name: string;
     thumbnail: Product['thumbnail'];
     productSeo: Product['productSeo'];
@@ -25,25 +38,54 @@ type Props = {
   };
 };
 
-const ProductSeo = ({ state, initialValues }: Props) => {
+const ProductSeo = ({ state, initialValues, setError }: Props) => {
   const { t } = useTranslation();
+
+  const [initProductSeo, setInitProductSeo] = useState<Product['productSeo']>(
+    () => initialValues?.productSeo
+  );
 
   const [isUpdated, setIsUpdated] = useState(false);
 
   const {
+    id: productId,
     name: productName,
     thumbnail,
-    productSeo: { slug, metaImage, metaTitle, metaKeywords, metaDescription },
+    productSeo: {
+      id,
+      slug,
+      metaImage,
+      metaTitle,
+      metaKeywords,
+      metaDescription
+    },
     productSeo,
     isUpdateMode
   } = state;
 
   const dispatch = useFormReducer();
 
+  const { userInfo } = useGetUser();
+  const csrfToken = userInfo?.csrfToken;
+
+  const [updateProductSeo, { loading }] = useMutation(UPDATE_PRODUCT_SEO, {
+    context: {
+      headers: {
+        'x-csrf-token': csrfToken
+      }
+    },
+    onCompleted: (data: { updateProductSeo: Product }) => {
+      if (!isEmpty(data?.updateProductSeo)) {
+        setInitProductSeo(data?.updateProductSeo?.productSeo);
+        notify(t('common:successfully-updated'), 'success');
+      }
+    }
+  });
+
   const checkForUpdateHandler = useCallback(() => {
     if (!isUpdateMode) return;
 
-    const seo = initialValues.productSeo ?? {};
+    const seo = initProductSeo;
     const initialProductContent = {
       slug: seo.slug,
       metaImage: [{ id: seo.metaImage[0]?.id }],
@@ -61,7 +103,7 @@ const ProductSeo = ({ state, initialValues }: Props) => {
 
     setIsUpdated(!isEqual(initialProductContent, currentProductContent));
   }, [
-    initialValues.productSeo,
+    initProductSeo,
     isUpdateMode,
     metaDescription,
     metaImage,
@@ -138,14 +180,34 @@ const ProductSeo = ({ state, initialValues }: Props) => {
     }
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!slug) {
+      return notify('slug should not be empty', 'error');
+    }
+
+    updateProductSeo({
+      variables: {
+        id: productId,
+        productSeo: {
+          id,
+          slug,
+          metaImage: [{ id: metaImage[0]?.id }],
+          metaTitle,
+          metaKeywords,
+          metaDescription
+        }
+      }
+    }).catch((err) => {
+      setError(err);
+    });
+  };
+
   const renderSaveButton = () => {
     if (isUpdated) {
       return (
         <div className="mt-8 flex justify-end border-t pt-4">
-          <Button
-          // loading={updating || creating}
-          // disabled={updating || creating}
-          >
+          <Button loading={loading} disabled={loading} onClick={handleSubmit}>
             <div className="mr-1">
               <SaveIcon width="1.3rem" height="1.3rem" />
             </div>

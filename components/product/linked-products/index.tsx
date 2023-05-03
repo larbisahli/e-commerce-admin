@@ -1,18 +1,20 @@
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import Card from '@components/common/card';
 import { SaveIcon } from '@components/icons/save-icon';
 import ProductModal from '@components/products-modal';
 import Accordion from '@components/ui/accordion';
 import Button from '@components/ui/button';
 import Description from '@components/ui/description';
-import { LINKED_PRODUCTS } from '@graphql/product';
+import { LINKED_PRODUCTS, UPDATE_LINKED_PRODUCTS } from '@graphql/product';
 import { useDifferenceWith } from '@hooks/useDifferenceWith';
 import { useErrorLogger } from '@hooks/useErrorLogger';
+import { useGetUser } from '@hooks/useGetUser';
+import { notify } from '@lib/notify';
 import type { Product } from '@ts-types/generated';
 import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
-import { memo, useEffect, useMemo } from 'react';
+import { Dispatch, memo, useEffect, useMemo } from 'react';
 
 import { Actions, useFormReducer } from '../context/form.context';
 import CrossSellProducts from './cross-sell-products';
@@ -20,6 +22,7 @@ import RelatedProducts from './related-products';
 import UpSellProducts from './up-sell-products';
 
 interface Props {
+  setError: Dispatch<any>;
   initialValues: Product | any;
   state: TProduct;
 }
@@ -35,7 +38,7 @@ interface productVariable {
   id: number;
 }
 
-const LinkedProducts = ({ state, initialValues }: Props) => {
+const LinkedProducts = ({ state, initialValues, setError }: Props) => {
   const { t } = useTranslation('common');
 
   const dispatch = useFormReducer();
@@ -53,6 +56,26 @@ const LinkedProducts = ({ state, initialValues }: Props) => {
       variables: { id: productId },
       fetchPolicy: 'cache-and-network',
       skip: isEmpty(initialValues)
+    }
+  );
+
+  const { userInfo } = useGetUser();
+  const csrfToken = userInfo?.csrfToken;
+
+  const [updateLinkedProducts, { loading: updateLoading }] = useMutation(
+    UPDATE_LINKED_PRODUCTS,
+    {
+      context: {
+        headers: {
+          'x-csrf-token': csrfToken
+        }
+      },
+      onCompleted: (data: { updateLinkedProducts: Product }) => {
+        if (!isEmpty(data?.updateLinkedProducts)) {
+          // setInitProductShippingInfo(data?.updateProductShippingInfo?.productShippingInfo);
+          notify(t('common:successfully-updated'), 'success');
+        }
+      }
     }
   );
 
@@ -131,13 +154,35 @@ const LinkedProducts = ({ state, initialValues }: Props) => {
     deletedCrossSellProducts
   ]);
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    updateLinkedProducts({
+      variables: {
+        id: productId,
+        additions: {
+          relatedProducts: additionalRelatedProducts,
+          upsellProducts: additionalUpsellProducts,
+          crossSellProducts: additionalCrossSellProducts
+        },
+        deletions: {
+          relatedProducts: deletedRelatedProducts,
+          upsellProducts: deletedUpsellProducts,
+          crossSellProducts: deletedCrossSellProducts
+        }
+      }
+    }).catch((err) => {
+      setError(err);
+    });
+  };
+
   const renderSaveButton = () => {
     if (isUpdated) {
       return (
         <div className="mt-8 flex justify-end border-t pt-4">
           <Button
-          // loading={updating || creating}
-          // disabled={updating || creating}
+            loading={updateLoading}
+            disabled={updateLoading}
+            onClick={handleSubmit}
           >
             <div className="mr-1">
               <SaveIcon width="1.3rem" height="1.3rem" />

@@ -3,7 +3,7 @@ import { Product, ProductType } from '@ts-types/generated';
 import { differenceWith, isEmpty } from 'lodash';
 import isEqual from 'lodash/isEqual';
 import { useTranslation } from 'next-i18next';
-import React, { memo, useCallback, useState } from 'react';
+import React, { memo, useCallback, useEffect, useState } from 'react';
 
 import ProductSimpleForm from '../product-simple-form';
 import ProductVariableForm from '../product-variable-form';
@@ -83,6 +83,10 @@ const ProductTypeFormComponent = ({ state, initialValues }: Props) => {
       sku
     ]
   );
+
+  useEffect(() => {
+    checkForUpdateHandler();
+  }, [initProductInformation, checkForUpdateHandler]);
 
   const getUpdatedVariationOptions = useCallback(() => {
     if (!isUpdateMode) return { additions: [], deletions: [] };
