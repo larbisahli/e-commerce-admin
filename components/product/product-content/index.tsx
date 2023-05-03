@@ -19,7 +19,14 @@ import { Product, ProductStatus } from '@ts-types/generated';
 import { isEmpty, isEqual } from 'lodash';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
-import { ChangeEvent, Dispatch, memo, useState } from 'react';
+import {
+  ChangeEvent,
+  Dispatch,
+  memo,
+  useCallback,
+  useEffect,
+  useState
+} from 'react';
 
 import { Actions, useFormReducer } from '../context/form.context';
 
@@ -87,7 +94,7 @@ const ProductContent = ({ state, initialValues, setError }: Props) => {
 
   const dispatch = useFormReducer();
 
-  const checkForUpdateHandler = () => {
+  const checkForUpdateHandler = useCallback(() => {
     if (!isUpdateMode) return;
 
     const initialProductContent = {
@@ -105,7 +112,23 @@ const ProductContent = ({ state, initialValues, setError }: Props) => {
       disableOutOfStock
     };
     setIsUpdated(!isEqual(initialProductContent, currentProductContent));
-  };
+  }, [
+    description,
+    disableOutOfStock,
+    initProductContent.description,
+    initProductContent.disableOutOfStock,
+    initProductContent.name,
+    initProductContent.note,
+    initProductContent.published,
+    isUpdateMode,
+    name,
+    note,
+    status
+  ]);
+
+  useEffect(() => {
+    checkForUpdateHandler();
+  }, [checkForUpdateHandler, initProductContent]);
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>

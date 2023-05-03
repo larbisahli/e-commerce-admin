@@ -2,6 +2,7 @@ import { gql } from '@apollo/client';
 
 export const PRODUCTS = gql`
   query Products(
+    $id: Int
     $page: Int!
     $limit: Int!
     $orderBy: String!
@@ -11,6 +12,7 @@ export const PRODUCTS = gql`
       count
     }
     products(
+      id: $id
       page: $page
       limit: $limit
       orderBy: $orderBy
@@ -183,6 +185,7 @@ export const LINKED_PRODUCTS = gql`
       }
     }
     crossSellProducts(id: $id) {
+      id
       sku
       name
       type {
@@ -259,8 +262,8 @@ export const CREATE_PRODUCT = gql`
 export const UPDATE_PRODUCT = gql`
   mutation UpdateProduct(
     $id: Int!
-    $additions: UpdateProductInput!
-    $deletions: UpdateProductInput!
+    $additions: ProductInput!
+    $deletions: ProductInput!
   ) {
     updateProduct(id: $id, additions: $additions, deletions: $deletions) {
       id
@@ -271,8 +274,8 @@ export const UPDATE_PRODUCT = gql`
 export const UPDATE_PRODUCT_THUMBNAIL = gql`
   mutation UpdateProductThumbnail(
     $id: Int!
-    $additions: UpdateProductInput!
-    $deletions: UpdateProductInput!
+    $additions: ProductInput!
+    $deletions: ProductInput!
   ) {
     updateProductThumbnail(
       id: $id
@@ -287,8 +290,8 @@ export const UPDATE_PRODUCT_THUMBNAIL = gql`
 export const UPDATE_PRODUCT_GALLERY = gql`
   mutation UpdateProductGallery(
     $id: Int!
-    $additions: UpdateProductInput!
-    $deletions: UpdateProductInput!
+    $additions: ProductInput!
+    $deletions: ProductInput!
   ) {
     updateProductGallery(
       id: $id
@@ -356,8 +359,8 @@ export const UPDATE_SIMPLE_PRODUCT_INFORMATION = gql`
 export const UPDATE_PRODUCT_SELECT_GROUP = gql`
   mutation UpdateProductSelectGroup(
     $id: Int!
-    $additions: UpdateProductInput
-    $deletions: UpdateProductInput
+    $additions: ProductInput
+    $deletions: ProductInput
   ) {
     updateProductSelectGroup(
       id: $id
@@ -434,8 +437,8 @@ export const UPDATE_PRODUCT_SHIPPING_INFO = gql`
 export const UPDATE_LINKED_PRODUCTS = gql`
   mutation UpdateLinkedProducts(
     $id: Int!
-    $additions: UpdateProductInput!
-    $deletions: UpdateProductInput!
+    $additions: ProductInput!
+    $deletions: ProductInput!
   ) {
     updateLinkedProducts(
       id: $id
@@ -474,6 +477,7 @@ export const UPDATE_LINKED_PRODUCTS = gql`
         }
       }
       crossSellProducts {
+        id
         sku
         name
         type {

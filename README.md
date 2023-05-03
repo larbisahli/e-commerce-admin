@@ -1,7 +1,7 @@
 ## How do I get into a Docker container's shell?
 
 IMPORTANT -> USE DYNAMIC IMPORT
-******\*\*******\*\*******\*\*******\*\*******\*\*******\*\*******\*\*******
+**\*\***\*\***\*\***\*\***\*\***\*\***\*\***\*\***\*\***\*\***\*\***\*\***\*\***\*\***\*\***
 
 ```bash
 $  sudo docker exec -it admin-website sh

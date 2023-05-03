@@ -21,6 +21,7 @@ import {
 } from '@ts-types/constants';
 import { OrderBy, SortOrder } from '@ts-types/enums';
 import { Product } from '@ts-types/generated';
+import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
 
@@ -30,6 +31,7 @@ interface TProduct {
 }
 
 interface ProductVariable {
+  id: number;
   page: number;
   limit: number;
   orderBy: OrderBy;
@@ -39,7 +41,7 @@ interface ProductVariable {
 const ProductModal = () => {
   const { t } = useTranslation();
 
-  const { closeModal, openModal } = useModalAction();
+  const { closeModal } = useModalAction();
   const { isOpen, id, meta } = useModalState();
 
   const [page, setPage] = useState(1);
@@ -49,11 +51,16 @@ const ProductModal = () => {
   const [limit, setLimit] = useState({ id: 1, value: 10, label: 10 });
   const [orderBy, setOrder] = useState(OrderBy.CREATED_AT);
 
+  const { query } = useRouter();
+
+  const productId = parseInt(query.productId as string, 10);
+
   const { data, loading, error, fetchMore } = useQuery<
     TProduct,
     ProductVariable
   >(PRODUCTS, {
     variables: {
+      id: productId,
       page,
       limit: limit.value,
       orderBy,

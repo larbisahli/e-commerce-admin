@@ -50,7 +50,7 @@ const LinkedProducts = ({ state, initialValues, setError }: Props) => {
 
   const productId = parseInt(query.productId as string, 10);
 
-  const { data, loading, error } = useQuery<TProduct, productVariable>(
+  const { data, loading, error, refetch } = useQuery<TProduct, productVariable>(
     LINKED_PRODUCTS,
     {
       variables: { id: productId },
@@ -74,6 +74,7 @@ const LinkedProducts = ({ state, initialValues, setError }: Props) => {
         if (!isEmpty(data?.updateLinkedProducts)) {
           // setInitProductShippingInfo(data?.updateProductShippingInfo?.productShippingInfo);
           notify(t('common:successfully-updated'), 'success');
+          refetch();
         }
       }
     }

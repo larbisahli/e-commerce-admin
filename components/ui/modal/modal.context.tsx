@@ -23,7 +23,7 @@ function modalReducer(state: State, action: Action): State {
     view: action.view,
     id: action.id,
     isOpen: action.type === 'open',
-    meta: action.meta
+    ...(action.meta ? { meta: action.meta } : {})
   };
 }
 
