@@ -495,6 +495,48 @@ export const UPDATE_LINKED_PRODUCTS = gql`
   }
 `;
 
+export const UPDATE_VARIABLE_PRODUCT_INFORMATION = gql`
+  mutation UpdateVariableProductInformation(
+    $id: Int!
+    $additions: ProductInput!
+    $deletions: ProductInput!
+  ) {
+    updateVariableProductInformation(
+      id: $id
+      additions: $additions
+      deletions: $deletions
+    ) {
+      id
+      variationOptions {
+        id
+        title
+        isDisable
+        thumbnail {
+          id
+          image
+          placeholder
+        }
+        options
+        salePrice
+        comparePrice
+        buyingPrice
+        quantity
+        sku
+      }
+      variations {
+        attribute {
+          id
+          name
+        }
+        selectedValues {
+          id
+          value
+        }
+      }
+    }
+  }
+`;
+
 export const DELETE_PRODUCT = gql`
   mutation DeleteProduct($id: Int!) {
     deleteProduct(id: $id) {

@@ -12,27 +12,20 @@ import Loader from '@components/ui/loader/loader';
 import Radio from '@components/ui/radio';
 import TextArea from '@components/ui/text-area';
 import { UPDATE_PRODUCT_CONTENT } from '@graphql/product';
-import { useGetUser } from '@hooks/index';
+import { useErrorLogger, useGetUser } from '@hooks/index';
 import { notify } from '@lib/notify';
 import { Nullable } from '@ts-types/custom.types';
 import { Product, ProductStatus } from '@ts-types/generated';
-import { isEmpty, isEqual } from 'lodash';
+import isEmpty from 'lodash/isEmpty';
+import isEqual from 'lodash/isEqual';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
-import {
-  ChangeEvent,
-  Dispatch,
-  memo,
-  useCallback,
-  useEffect,
-  useState
-} from 'react';
+import { ChangeEvent, memo, useCallback, useEffect, useState } from 'react';
 
 import { Actions, useFormReducer } from '../context/form.context';
 
 interface Props {
   initialValues: Nullable<Product>;
-  setError: Dispatch<any>;
   state: {
     id: number;
     name: Product['name'];
@@ -49,18 +42,17 @@ const Editor = dynamic(() => import('@components/ui/editor'), {
   ssr: false
 });
 
-const ProductContent = ({ state, initialValues, setError }: Props) => {
+const ProductContent = ({ state, initialValues }: Props) => {
   const { t } = useTranslation();
 
   const [isUpdated, setIsUpdated] = useState(false);
 
-  const [initProductContent, setInitProductContent] = useState<Product>(() => ({
-    name: initialValues.name,
-    description: initialValues.description,
-    published: initialValues.published,
-    note: initialValues.note,
-    disableOutOfStock: initialValues.disableOutOfStock
-  }));
+  const [initProductContent, setInitProductContent] = useState<Product>(
+    () => initialValues
+  );
+
+  const [error, setError] = useState(null);
+  useErrorLogger(error);
 
   const { userInfo } = useGetUser();
   const csrfToken = userInfo?.csrfToken;
@@ -127,7 +119,9 @@ const ProductContent = ({ state, initialValues, setError }: Props) => {
   ]);
 
   useEffect(() => {
-    checkForUpdateHandler();
+    if (!isEmpty(initProductContent)) {
+      checkForUpdateHandler();
+    }
   }, [checkForUpdateHandler, initProductContent]);
 
   const handleChange = (

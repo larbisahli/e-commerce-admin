@@ -28,6 +28,7 @@ import { creationVariable } from './variablesSubmission';
 
 type IProps = {
   initialValues: Product | any;
+  setUnsavedChanges: any;
 };
 
 function ProductForm({ setUnsavedChanges, initialValues = {} }: IProps) {
@@ -66,8 +67,6 @@ function ProductForm({ setUnsavedChanges, initialValues = {} }: IProps) {
     crossSellProducts,
     isUpdateMode
   } = state;
-
-  console.log('>>>', { initialValues, state });
 
   useEffect(() => {
     dispatch({
@@ -150,8 +149,9 @@ function ProductForm({ setUnsavedChanges, initialValues = {} }: IProps) {
   );
 
   const [lockedSubmission, setLockedSubmission] = useState(false);
-  // TODO: Create an error context
+
   const [error, setError] = useState(null);
+  useErrorLogger(error);
 
   const { userInfo } = useGetUser();
   const csrfToken = userInfo?.csrfToken;
@@ -170,9 +170,9 @@ function ProductForm({ setUnsavedChanges, initialValues = {} }: IProps) {
     }
   });
 
-  useErrorLogger(error);
+  const onSubmit = async (e) => {
+    e.preventDefault();
 
-  const onSubmit = async () => {
     const isVariable = state.type.id === ProductType.Variable;
     const values = {
       ...state,
@@ -180,7 +180,6 @@ function ProductForm({ setUnsavedChanges, initialValues = {} }: IProps) {
       variationOptions: isVariable ? state.variationOptions : []
     };
 
-    console.log({ values });
     if (lockedSubmission) return;
 
     setLockedSubmission(true);
@@ -188,22 +187,63 @@ function ProductForm({ setUnsavedChanges, initialValues = {} }: IProps) {
 
     if (isEmpty(initialValues)) {
       const variables = creationVariable(values);
-      console.log({ state, variables });
+      console.log({ variables });
+
+      // Validations
+      const name = variables.name;
+      const thumbnail = variables.thumbnail;
+      const slug = variables.productSeo.slug;
+      const productType = variables.type.id;
+      const salePrice = variables.salePrice;
+      const comparePrice = variables.comparePrice;
+      const variationOptions = variables.variationOptions;
+      if (productType === ProductType.Simple && salePrice >= comparePrice) {
+        notify('Compare price must be larger than Sale price', 'error');
+        setLockedSubmission(false);
+        return;
+      } else if (isEmpty(name)) {
+        notify('Product name should not be empty', 'error');
+        setLockedSubmission(false);
+        return;
+      } else if (isEmpty(slug)) {
+        notify('Product slug should not be empty', 'error');
+        setLockedSubmission(false);
+        return;
+      } else if (isEmpty(thumbnail)) {
+        notify('Product thumbnail must not be empty', 'error');
+        setLockedSubmission(false);
+        return;
+      } else if (
+        productType === ProductType.Variable &&
+        !isEmpty(variationOptions)
+      ) {
+        const values = variationOptions
+          ?.map((option) => {
+            const comparePrice = option.comparePrice;
+            const salePrice = option.salePrice;
+            if (salePrice >= comparePrice) {
+              return option.title;
+            }
+            return undefined;
+          })
+          ?.filter((e) => e !== undefined);
+
+        console.log({ values });
+
+        if (!isEmpty(values[0])) {
+          notify(
+            `Compare price in option ${values[0]} must be larger than Sale price`,
+            'error'
+          );
+          setLockedSubmission(false);
+          return;
+        }
+      }
+
       createProduct({ variables }).catch((err) => {
         setError(err);
         setUnsavedChanges(true);
       });
-    } else {
-      const variables = values;
-      console.log({ variables, state });
-      // updateProduct({
-      //   variables: {
-      //     ...variables
-      //   }
-      // }).catch((err) => {
-      //   setError(err);
-      //   setUnsavedChanges(true);
-      // });
     }
     setLockedSubmission(false);
   };
@@ -219,7 +259,6 @@ function ProductForm({ setUnsavedChanges, initialValues = {} }: IProps) {
         />
         <Card className="w-full sm:w-8/12 md:w-2/3">
           <ProductThumbnail
-            setError={setError}
             state={productThumbnailState}
             initialValues={initialValues}
           />
@@ -234,7 +273,6 @@ function ProductForm({ setUnsavedChanges, initialValues = {} }: IProps) {
         />
         <Card className="w-full sm:w-8/12 md:w-2/3">
           <ProductGallery
-            setError={setError}
             state={productGalleryState}
             initialValues={initialValues}
           />
@@ -250,7 +288,6 @@ function ProductForm({ setUnsavedChanges, initialValues = {} }: IProps) {
       <ProductContent
         state={productContentState}
         initialValues={initialValues}
-        setError={setError}
       />
       {/* Variation Type & Simple Type product form */}
       <ProductTypeFormComponent
@@ -263,23 +300,17 @@ function ProductForm({ setUnsavedChanges, initialValues = {} }: IProps) {
         initialValues={initialValues}
       />
       {/* SEO */}
-      <ProductSeo
-        state={ProductSeoState}
-        initialValues={initialValues}
-        setError={setError}
-      />
+      <ProductSeo state={ProductSeoState} initialValues={initialValues} />
       {/* Related Products, Up-Sells, and Cross-Sells  */}
       <LinkedProducts
         state={linkedProductsState}
         initialValues={initialValues}
-        setError={setError}
       />
       {/* Shipping Info */}
       <div className="mb-12">
         <ProductShippingInfoForm
           state={productShippingInfoState}
           initialValues={initialValues}
-          setError={setError}
         />
       </div>
 

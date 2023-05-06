@@ -4,25 +4,25 @@ import ImageModal from '@components/image-modal';
 import Button from '@components/ui/button';
 import { UPDATE_PRODUCT_THUMBNAIL } from '@graphql/product';
 import { useDifferenceWith } from '@hooks/useDifferenceWith';
+import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetUser } from '@hooks/useGetUser';
 import { notify } from '@lib/notify';
 import { ImageType, Product } from '@ts-types/generated';
 import isEmpty from 'lodash/isEmpty';
 import { useTranslation } from 'next-i18next';
-import { Dispatch, memo, useState } from 'react';
+import { memo, useState } from 'react';
 
 import { Actions, useFormReducer } from '../context/form.context';
 
 interface Props {
   initialValues: Product;
-  setError: Dispatch<any>;
   state: {
     thumbnail: Product['thumbnail'];
     isUpdateMode: boolean;
   };
 }
 
-const ProductThumbnail = ({ state, initialValues, setError }: Props) => {
+const ProductThumbnail = ({ state, initialValues }: Props) => {
   const { t } = useTranslation();
 
   const dispatch = useFormReducer();
@@ -34,6 +34,9 @@ const ProductThumbnail = ({ state, initialValues, setError }: Props) => {
   const { id: productId } = initialValues;
 
   const { thumbnail, isUpdateMode } = state;
+
+  const [error, setError] = useState(null);
+  useErrorLogger(error);
 
   const { additions, deletions } = useDifferenceWith(
     thumbnail,

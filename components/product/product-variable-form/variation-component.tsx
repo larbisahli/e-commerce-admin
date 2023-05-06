@@ -3,7 +3,6 @@ import Loader from '@components/ui/loader/loader';
 import Title from '@components/ui/title';
 import type { VariationType } from '@ts-types/generated';
 import { Attribute } from '@ts-types/generated';
-import isEmpty from 'lodash/isEmpty';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
 import React, { useMemo } from 'react';
@@ -64,14 +63,15 @@ const VariationComponent = ({
     });
   };
 
+  const AttributeId = variant?.attribute.id;
+
   const values = useMemo(() => {
-    if (loading && !isEmpty(variant)) {
+    if (loading && !AttributeId) {
       return [];
     }
-    return attributes?.find(
-      (attribute) => attribute.id === variant?.attribute.id
-    )?.values;
-  }, [loading, variant, attributes]);
+    return attributes?.find((attribute) => attribute.id === AttributeId)
+      ?.values;
+  }, [loading, AttributeId, attributes]);
 
   return (
     <div className="border-b border-dashed border-border-200 last:border-0 p-5 md:p-8">

@@ -1,18 +1,26 @@
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import Card from '@components/common/card';
 import { SaveIcon } from '@components/icons/save-icon';
 import Button from '@components/ui/button';
 import Description from '@components/ui/description';
 import Title from '@components/ui/title';
 import { ATTRIBUTES_FOR_SELECT } from '@graphql/attribute';
+import { UPDATE_VARIABLE_PRODUCT_INFORMATION } from '@graphql/product';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import type { Product, VariationType } from '@ts-types/generated';
+import { useGetUser } from '@hooks/useGetUser';
+import { notify } from '@lib/notify';
+import type {
+  Product,
+  VariationOptionsType,
+  VariationType
+} from '@ts-types/generated';
 import { Attribute, OrderBy, SortOrder } from '@ts-types/generated';
 import { cartesian } from '@utils/cartesian';
 import differenceWith from 'lodash/differenceWith';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
 import { nanoid } from 'nanoid';
+import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
 
@@ -56,7 +64,8 @@ function getCartesianProduct(values: VariationType[]) {
 
 type IProps = {
   initialValues?: Product | null;
-  getUpdatedVariationOptions: () => {
+  // eslint-disable-next-line no-empty-pattern
+  getUpdatedVariationOptions: ({}: any) => {
     additions: Product['variationOptions'];
     deletions: Product['variationOptions'];
   };
@@ -81,24 +90,57 @@ function ProductVariableForm({
 
   const dispatch = useFormReducer();
 
+  const { query } = useRouter();
+
+  const productId = parseInt(query.productId as string, 10);
+
+  const [error, setError] = useState(null);
+
   const [updatedVariationOptions, setUpdatedVariationOptions] = useState([]);
+  const [initVariableProductInformation, setInitVariableProductInformation] =
+    useState(() => initialValues);
 
-  const { variationOptions, variations } = state;
+  const { variationOptions: initVariationOptions } =
+    initVariableProductInformation;
 
-  const { data, loading, error } = useQuery<TAttributeSelect, OptionsVariable>(
-    ATTRIBUTES_FOR_SELECT,
-    {
-      variables: {
-        page: 1,
-        limit: 999,
-        orderBy: OrderBy.CREATED_AT,
-        sortedBy: SortOrder.Desc
+  const { variationOptions, variations, isUpdateMode } = state;
+
+  const {
+    data,
+    loading,
+    error: queryError
+  } = useQuery<TAttributeSelect, OptionsVariable>(ATTRIBUTES_FOR_SELECT, {
+    variables: {
+      page: 1,
+      limit: 999,
+      orderBy: OrderBy.CREATED_AT,
+      sortedBy: SortOrder.Desc
+    },
+    fetchPolicy: 'cache-and-network'
+  });
+
+  const { userInfo } = useGetUser();
+  const csrfToken = userInfo?.csrfToken;
+
+  const [updateVariableProductInformation, { loading: updateLoading }] =
+    useMutation(UPDATE_VARIABLE_PRODUCT_INFORMATION, {
+      context: {
+        headers: {
+          'x-csrf-token': csrfToken
+        }
       },
-      fetchPolicy: 'cache-and-network'
-    }
-  );
+      onCompleted: (data: { updateVariableProductInformation: Product }) => {
+        if (!isEmpty(data?.updateVariableProductInformation)) {
+          setInitVariableProductInformation(
+            data?.updateVariableProductInformation
+          );
+          notify(t('common:successfully-updated'), 'success');
+        }
+      }
+    });
 
   useErrorLogger(error);
+  useErrorLogger(queryError);
 
   const [attributeValuesChangesState, setAttributeValuesChangesState] =
     useState([]);
@@ -157,18 +199,156 @@ function ProductVariableForm({
   };
 
   const updateHandler = useCallback(() => {
-    const { additions, deletions } = getUpdatedVariationOptions();
+    const { additions, deletions } = getUpdatedVariationOptions({
+      variationOptions,
+      initVariationOptions
+    });
+    console.log({ additions, deletions });
     checkForUpdateHandler({ additions, deletions });
     setUpdatedVariationOptions(additions);
-  }, [checkForUpdateHandler, getUpdatedVariationOptions]);
+  }, [
+    checkForUpdateHandler,
+    getUpdatedVariationOptions,
+    initVariationOptions,
+    variationOptions
+  ]);
+
+  useEffect(() => {
+    if (!isEmpty(initVariableProductInformation)) {
+      updateHandler();
+    }
+  }, [initVariableProductInformation, updateHandler]);
+
+  const getUpdatedVariationAttributes = useCallback(() => {
+    if (!isUpdateMode) return { additions: [], deletions: [] };
+
+    const variationAdditions = variations
+      ?.map((v) => {
+        const initVariation = initVariableProductInformation?.variations?.find(
+          (vv) => vv?.attribute?.id === v?.attribute?.id
+        );
+        if (!isEmpty(initVariation)) {
+          const addedSelectedValues = differenceWith(
+            v?.selectedValues,
+            initVariation?.selectedValues,
+            isEqual
+          );
+          return isEmpty(addedSelectedValues)
+            ? undefined
+            : {
+                attribute: { id: v.attribute.id },
+                selectedValues: addedSelectedValues?.map((av) => {
+                  return { id: av.id };
+                })
+              };
+        } else {
+          return {
+            attribute: { id: v.attribute.id },
+            selectedValues: v.selectedValues?.map((av) => {
+              return { id: av.id };
+            })
+          };
+        }
+      })
+      ?.filter((e) => e !== undefined);
+
+    const variationDeletions = initVariableProductInformation?.variations
+      ?.map((v) => {
+        const valueVariation = variations?.find(
+          (vv) => vv?.attribute?.id === v?.attribute?.id
+        );
+        if (!isEmpty(valueVariation)) {
+          const deletedSelectedValues = differenceWith(
+            v?.selectedValues,
+            valueVariation?.selectedValues,
+            isEqual
+          );
+          return isEmpty(deletedSelectedValues)
+            ? undefined
+            : {
+                attribute: { id: v.attribute.id },
+                selectedValues: deletedSelectedValues?.map((av) => {
+                  return { id: av.id };
+                })
+              };
+        } else {
+          return {
+            attribute: { id: v.attribute.id }
+          };
+        }
+      })
+      ?.filter((e) => e !== undefined);
+
+    return {
+      additions: variationAdditions,
+      deletions: variationDeletions
+    };
+  }, [initVariableProductInformation?.variations, isUpdateMode, variations]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const { additions, deletions } = getUpdatedVariationOptions({
+      variationOptions,
+      initVariationOptions
+    });
+    const { additions: variationAdditions, deletions: variationDeletion } =
+      getUpdatedVariationAttributes();
+
+    console.log({
+      additions: {
+        variationOptions: additions?.map((value) => {
+          return {
+            ...value,
+            thumbnail: value.thumbnail?.map(({ id }) => ({ id }))
+          };
+        }),
+        variations: variationAdditions
+      },
+      deletions: {
+        variationOptions: deletions?.map((value) => {
+          return {
+            ...value,
+            thumbnail: value.thumbnail?.map(({ id }) => ({ id }))
+          };
+        }),
+        variations: variationDeletion
+      }
+    });
+
+    updateVariableProductInformation({
+      variables: {
+        id: productId,
+        additions: {
+          variationOptions: additions?.map((value) => {
+            return {
+              ...value,
+              thumbnail: value.thumbnail?.map(({ id }) => ({ id })),
+              active: !value.isDisable
+            };
+          }),
+          variations: variationAdditions
+        },
+        deletions: {
+          variationOptions: deletions?.map(({ id }) => {
+            id;
+          }),
+          variations: variationDeletion
+        }
+      }
+    }).catch((err) => {
+      setError(err);
+    });
+  };
 
   const renderSaveButton = () => {
     if (isUpdated) {
       return (
         <div className="mt-8 flex justify-end border-t pt-4 m-5">
           <Button
-          // loading={updating || creating}
-          // disabled={updating || creating}
+            loading={updateLoading}
+            disabled={updateLoading}
+            onClick={handleSubmit}
           >
             <div className="mr-1">
               <SaveIcon width="1.3rem" height="1.3rem" />
@@ -185,7 +365,7 @@ function ProductVariableForm({
     <div className="flex flex-wrap pb-8 my-5 sm:my-8">
       <Description
         details={`${
-          initialValues
+          initVariableProductInformation
             ? t('form:item-description-update')
             : t('form:item-description-choose')
         } ${t('form:form-description-variation-product-info')}`}

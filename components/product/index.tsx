@@ -1,5 +1,4 @@
 import Alert from '@components/ui/alert';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { useWarnIfUnsavedChanges } from '@hooks/index';
 import type { Product } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
@@ -7,7 +6,6 @@ import { memo, useState } from 'react';
 
 import { FormProvider } from './context/form.context';
 import ProductForm from './product-form';
-import { productValidationSchema } from './product-validation-schema';
 
 type IProps = {
   initialValues?: Product | any;
@@ -18,8 +16,6 @@ function CreateOrUpdateProductForm({ initialValues = {} }: IProps) {
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [unsavedChanges, setUnsavedChanges] = useState(true);
-
-  console.log('YUP', yupResolver(productValidationSchema));
 
   useWarnIfUnsavedChanges(unsavedChanges, () => {
     return confirm(t('common:UNSAVED_CHANGES'));

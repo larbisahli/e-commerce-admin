@@ -316,7 +316,7 @@ interface ProductRef {
 }
 
 export interface ProductSeo {
-  id: number;
+  id?: number;
   slug: string;
   metaTitle: string;
   metaKeywords: string;

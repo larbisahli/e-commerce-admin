@@ -27,6 +27,7 @@ export const VariationReducer = {
       variations: state.variations?.map((variation) => {
         if (variation.id === payload.id) {
           variation.attribute = payload.value;
+          variation.selectedValues = [];
         }
         return variation;
       })
@@ -53,7 +54,13 @@ export const VariationReducer = {
     return {
       ...state,
       variationOptions: state.variationOptions?.map((option) => {
-        if (isEqual(payload?.options?.sort(), option?.options?.sort())) {
+        if (
+          isEqual(
+            payload?.options?.sort((a, b) => a - b),
+            option?.options?.sort((a, b) => a - b)
+          )
+        ) {
+          // ASC
           return {
             ...option,
             [payload.field]: payload.value
@@ -80,7 +87,10 @@ export const VariationReducer = {
               const options = Array.isArray(cart)
                 ? cart?.map((av) => av.id)
                 : [cart.id];
-              return isEqual(options?.sort(), v.options?.sort());
+              return isEqual(
+                options?.sort((a, b) => a - b),
+                v.options?.sort((a, b) => a - b)
+              ); // ASC
             });
 
             if (isEmpty(combination)) {
@@ -104,8 +114,12 @@ export const VariationReducer = {
                 ? v?.map((av) => av.id)
                 : [(v as CartesianType).id];
 
-              const combination = state.variationOptions?.find((s) =>
-                isEqual(s.options?.sort(), options?.sort())
+              const combination = state.variationOptions?.find(
+                (s) =>
+                  isEqual(
+                    s.options?.sort((a, b) => a - b),
+                    options?.sort((a, b) => a - b)
+                  ) // ASC
               );
 
               if (isEmpty(combination)) {

@@ -8,27 +8,20 @@ import Description from '@components/ui/description';
 import Input from '@components/ui/input';
 import TextArea from '@components/ui/text-area';
 import { UPDATE_PRODUCT_SEO } from '@graphql/product';
+import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetUser } from '@hooks/useGetUser';
 import { notify } from '@lib/notify';
 import { Product } from '@ts-types/generated';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
 import { useTranslation } from 'next-i18next';
-import {
-  ChangeEvent,
-  Dispatch,
-  memo,
-  useCallback,
-  useEffect,
-  useState
-} from 'react';
+import { ChangeEvent, memo, useCallback, useEffect, useState } from 'react';
 import slugify from 'slugify';
 
 import { Actions, useFormReducer } from '../context/form.context';
 
 type Props = {
   initialValues: Product;
-  setError: Dispatch<any>;
   state: {
     id: number;
     name: string;
@@ -38,7 +31,7 @@ type Props = {
   };
 };
 
-const ProductSeo = ({ state, initialValues, setError }: Props) => {
+const ProductSeo = ({ state, initialValues }: Props) => {
   const { t } = useTranslation();
 
   const [initProductSeo, setInitProductSeo] = useState<Product['productSeo']>(
@@ -46,6 +39,9 @@ const ProductSeo = ({ state, initialValues, setError }: Props) => {
   );
 
   const [isUpdated, setIsUpdated] = useState(false);
+
+  const [error, setError] = useState(null);
+  useErrorLogger(error);
 
   const {
     id: productId,

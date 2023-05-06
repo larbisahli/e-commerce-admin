@@ -1,5 +1,9 @@
 import Accordion from '@components/ui/accordion';
-import { Product, ProductType } from '@ts-types/generated';
+import {
+  Product,
+  ProductType,
+  VariationOptionsType
+} from '@ts-types/generated';
 import { differenceWith, isEmpty } from 'lodash';
 import isEqual from 'lodash/isEqual';
 import { useTranslation } from 'next-i18next';
@@ -55,7 +59,7 @@ const ProductTypeFormComponent = ({ state, initialValues }: Props) => {
       if (!isUpdateMode) return;
 
       if (productType === ProductType.Variable) {
-        const { additions, deletions } = values;
+        const { additions = [], deletions = [] } = values ?? {};
         setIsUpdated(!isEmpty(additions) || !isEmpty(deletions));
         return;
       }
@@ -88,20 +92,29 @@ const ProductTypeFormComponent = ({ state, initialValues }: Props) => {
     checkForUpdateHandler();
   }, [initProductInformation, checkForUpdateHandler]);
 
-  const getUpdatedVariationOptions = useCallback(() => {
-    if (!isUpdateMode) return { additions: [], deletions: [] };
+  const getUpdatedVariationOptions = useCallback(
+    ({
+      variationOptions,
+      initVariationOptions
+    }: {
+      variationOptions: VariationOptionsType[];
+      initVariationOptions: VariationOptionsType[];
+    }) => {
+      if (!isUpdateMode) return { additions: [], deletions: [] };
 
-    return {
-      additions: differenceWith(
-        variationOptions,
-        initialValues?.variationOptions,
-        isEqual
-      ),
-      deletions: initialValues?.variationOptions?.filter((vo) => {
-        return isEmpty(variationOptions?.find((v) => v?.id === vo?.id));
-      })
-    };
-  }, [initialValues?.variationOptions, isUpdateMode, variationOptions]);
+      return {
+        additions: differenceWith(
+          variationOptions,
+          initVariationOptions,
+          isEqual
+        ),
+        deletions: initVariationOptions?.filter((vo) => {
+          return isEmpty(variationOptions?.find((v) => v?.id === vo?.id));
+        })
+      };
+    },
+    [isUpdateMode]
+  );
 
   const renderSimpleForm = () => {
     if (productType === ProductType.Simple) {

@@ -14,7 +14,7 @@ import type { Product } from '@ts-types/generated';
 import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
-import { Dispatch, memo, useEffect, useMemo } from 'react';
+import { memo, useEffect, useMemo, useState } from 'react';
 
 import { Actions, useFormReducer } from '../context/form.context';
 import CrossSellProducts from './cross-sell-products';
@@ -22,7 +22,6 @@ import RelatedProducts from './related-products';
 import UpSellProducts from './up-sell-products';
 
 interface Props {
-  setError: Dispatch<any>;
   initialValues: Product | any;
   state: TProduct;
 }
@@ -38,7 +37,7 @@ interface productVariable {
   id: number;
 }
 
-const LinkedProducts = ({ state, initialValues, setError }: Props) => {
+const LinkedProducts = ({ state, initialValues }: Props) => {
   const { t } = useTranslation('common');
 
   const dispatch = useFormReducer();
@@ -50,14 +49,18 @@ const LinkedProducts = ({ state, initialValues, setError }: Props) => {
 
   const productId = parseInt(query.productId as string, 10);
 
-  const { data, loading, error, refetch } = useQuery<TProduct, productVariable>(
-    LINKED_PRODUCTS,
-    {
-      variables: { id: productId },
-      fetchPolicy: 'cache-and-network',
-      skip: isEmpty(initialValues)
-    }
-  );
+  const [error, setError] = useState(null);
+
+  const {
+    data,
+    loading,
+    error: queryError,
+    refetch
+  } = useQuery<TProduct, productVariable>(LINKED_PRODUCTS, {
+    variables: { id: productId },
+    fetchPolicy: 'cache-and-network',
+    skip: isEmpty(initialValues)
+  });
 
   const { userInfo } = useGetUser();
   const csrfToken = userInfo?.csrfToken;
@@ -81,6 +84,7 @@ const LinkedProducts = ({ state, initialValues, setError }: Props) => {
   );
 
   useErrorLogger(error);
+  useErrorLogger(queryError);
 
   useEffect(() => {
     const {

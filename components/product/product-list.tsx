@@ -4,15 +4,17 @@ import Badge from '@components/ui/badge/badge';
 import { Table } from '@components/ui/table';
 import { siteSettings } from '@settings/site.settings';
 import type { Nullable } from '@ts-types/custom.types';
-import type {
+import {
   Category,
   CreatedUpdatedByAt,
   ImageType,
-  Product
+  Product,
+  ProductType
 } from '@ts-types/generated';
 import { useIsRTL } from '@utils/locals';
 import { ROUTES } from '@utils/routes';
 import dayjs from 'dayjs';
+import isEmpty from 'lodash/isEmpty';
 import { useTranslation } from 'next-i18next';
 import { useMemo } from 'react';
 
@@ -72,7 +74,10 @@ const ProductList = ({ products, selectedColumns }: IProps) => {
         key: 'sku',
         align: alignLeft,
         width: 80,
-        ellipsis: true
+        ellipsis: true,
+        render: (sku: string) => {
+          return !isEmpty(sku) ? sku : 'N/A';
+        }
       },
       {
         title: t('table:table-item-categories'),
@@ -92,7 +97,7 @@ const ProductList = ({ products, selectedColumns }: IProps) => {
               title={categories_values}
               className="whitespace-nowrap truncate"
             >
-              {categories_values}
+              {!isEmpty(categories) ? categories_values : 'N/A'}
             </span>
           );
         }
@@ -104,7 +109,7 @@ const ProductList = ({ products, selectedColumns }: IProps) => {
         align: alignRight,
         width: 100,
         render: (salePrice: number, record: Product) => {
-          if (record?.maxPrice > 0 && record?.minPrice > 0) {
+          if (record.type.id === ProductType.Variable) {
             return (
               <span
                 className="whitespace-nowrap"

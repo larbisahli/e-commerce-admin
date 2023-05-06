@@ -8,6 +8,7 @@ import Input from '@components/ui/input';
 import Label from '@components/ui/label';
 import Select from '@components/ui/select/select';
 import { UPDATE_PRODUCT_SHIPPING_INFO } from '@graphql/product';
+import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetUser } from '@hooks/useGetUser';
 import { notify } from '@lib/notify';
 import { Nullable } from '@ts-types/custom.types';
@@ -17,7 +18,6 @@ import isEqual from 'lodash/isEqual';
 import { useTranslation } from 'next-i18next';
 import React, {
   ChangeEvent,
-  Dispatch,
   memo,
   useCallback,
   useEffect,
@@ -28,7 +28,6 @@ import { Actions, useFormReducer } from '../context/form.context';
 
 type Props = {
   initialValues: Nullable<Product>;
-  setError: Dispatch<any>;
   state: {
     id: number;
     productShippingInfo: Product['productShippingInfo'];
@@ -42,12 +41,15 @@ const volumeUnits = [{ unit: 'l' }, { unit: 'ml' }];
 
 const dimensionUnits = [{ unit: 'l' }, { unit: 'ml' }];
 
-function ProductShippingInfoForm({ state, initialValues, setError }: Props) {
+function ProductShippingInfoForm({ state, initialValues }: Props) {
   const { t } = useTranslation();
 
   const [initProductShippingInfo, setInitProductShippingInfo] = useState<
     Product['productShippingInfo']
   >(() => initialValues?.productShippingInfo);
+
+  const [error, setError] = useState(null);
+  useErrorLogger(error);
 
   const { userInfo } = useGetUser();
   const csrfToken = userInfo?.csrfToken;
@@ -132,7 +134,9 @@ function ProductShippingInfoForm({ state, initialValues, setError }: Props) {
   ]);
 
   useEffect(() => {
-    checkForUpdateHandler();
+    if (!isEmpty(initProductShippingInfo)) {
+      checkForUpdateHandler();
+    }
   }, [checkForUpdateHandler, initProductShippingInfo]);
 
   const handleSubmit = (e) => {

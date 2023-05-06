@@ -5,6 +5,7 @@ import Button from '@components/ui/button';
 import Description from '@components/ui/description';
 import Input from '@components/ui/input';
 import { UPDATE_SIMPLE_PRODUCT_INFORMATION } from '@graphql/product';
+import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetUser } from '@hooks/useGetUser';
 import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/notify';
@@ -12,7 +13,7 @@ import { Product } from '@ts-types/generated';
 import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
-import React, { ChangeEvent, memo } from 'react';
+import React, { ChangeEvent, memo, useState } from 'react';
 
 import { Actions, useFormReducer } from '../context/form.context';
 
@@ -41,6 +42,9 @@ function ProductSimpleForm({
   const { query } = useRouter();
 
   const productId = parseInt(query.productId as string, 10);
+
+  const [error, setError] = useState(null);
+  useErrorLogger(error);
 
   const { currency } = useSettings();
   const dispatch = useFormReducer();
@@ -97,8 +101,7 @@ function ProductSimpleForm({
         sku
       }
     }).catch((err) => {
-      // TODO: Error product context
-      // setError(err);
+      setError(err);
     });
   };
 
