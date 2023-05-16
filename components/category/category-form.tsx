@@ -134,6 +134,7 @@ export default function CreateOrUpdateCategoriesForm({
         }
       }
     });
+
   const [updateCategory, { loading: updating, reset: resetUpdateMutation }] =
     useMutation(UPDATE_CATEGORY, {
       context: {

@@ -386,20 +386,48 @@ export interface HeroCarouselType extends CreatedUpdatedByAt {
 }
 
 export interface SettingsType {
-  siteTitle: Scalars['String'];
-  siteSubtitle: Scalars['String'];
-  currency: {
-    symbol: Scalars['String'];
-    name: Scalars['String'];
-    symbol_native: Scalars['String'];
-    decimal_digits: Scalars['Int'];
-    rounding: Scalars['Int'];
-    code: Scalars['String'];
-    name_plural: Scalars['String'];
+  logo?: ImageType[];
+  favicon?: ImageType[];
+  storeName?: string;
+  storeEmail?: string;
+  storeNumber?: string;
+  currency?: {
+    symbol: string;
+    name: string;
+    symbol_native: string;
+    decimal_digits: number;
+    rounding: number;
+    code: string;
+    name_plural: string;
   };
-  logo: {
-    thumbnail: Scalars['String'];
-    original: Scalars['String'];
+  canonicalUrl?: string;
+  socials?: {
+    url: string;
+    icon: {
+      value: string;
+      label?: string;
+    };
+  }[];
+  maxCheckoutQuantity?: number;
+  seo?: {
+    metaTitle: string;
+    metaDescription: string;
+    ogTitle: string;
+    ogDescription: string;
+    ogImage: ImageType[];
+    twitterHandle: string;
+    twitterCardType: string;
+    metaTags: string;
+    canonicalUrl: string;
+  };
+  google?: {
+    isEnable: boolean;
+    tagManagerId: string;
+  };
+  facebook?: {
+    isEnable: boolean;
+    appId: string;
+    pageId: string;
   };
 }
 

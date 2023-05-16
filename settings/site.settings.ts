@@ -338,7 +338,7 @@ export const siteSettings = {
         subLinks: [
           {
             id: '9YcWhG',
-            href: ROUTES.ACCOUNT_INFORMATION,
+            href: ROUTES.ACCOUNT_SETTINGS,
             label: 'sidebar-nav-item-account-settings',
             padding: '35px',
             isSubLink: true

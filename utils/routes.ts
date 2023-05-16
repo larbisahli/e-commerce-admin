@@ -31,7 +31,7 @@ export const ROUTES = {
   CUSTOMERS_REVIEW: '/store/product-settings/customers-review',
   CONTACT_PAGE: '/store/contact-page/contact-page',
   ABOUT_PAGE: '/store/contact-page/about-page',
-  ACCOUNT_INFORMATION: '/settings/account-information',
+  ACCOUNT_SETTINGS: '/settings/account-settings',
   RECENT_LOGIN_HISTORY: '/settings/recent-login-history',
   NOTIFICATIONS: '/settings/notifications',
   INTEGRATIONS: '/store/integrations',

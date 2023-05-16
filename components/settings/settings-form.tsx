@@ -1,60 +1,30 @@
+import { useMutation } from '@apollo/client';
 import Card from '@components/common/card';
 import * as socialIcons from '@components/icons/social';
-// import Alert from '@components/ui/alert';
+import ImageModal from '@components/image-modal';
 import Button from '@components/ui/button';
 import Description from '@components/ui/description';
-import FileInput from '@components/ui/file-input';
 import ValidationError from '@components/ui/form-validation-error';
 import Input from '@components/ui/input';
 import Label from '@components/ui/label';
 import SelectInput from '@components/ui/select-input';
 import TextArea from '@components/ui/text-area';
+import { UPDATE_SETTINGS } from '@graphql/settings';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useErrorLogger } from '@hooks/useErrorLogger';
+import { useGetUser } from '@hooks/useGetUser';
+import { notify } from '@lib/notify';
 import { siteSettings } from '@settings/site.settings';
+import { SettingsType } from '@ts-types/generated';
 import { CURRENCY } from '@utils/currency';
-// import { getFormattedImage } from '@utils/get-formatted-image';
-// import omit from 'lodash/omit';
+import { isEmpty } from 'lodash';
 import { useTranslation } from 'next-i18next';
-import {
-  //  useFieldArray,
-  useForm
-} from 'react-hook-form';
+import { useEffect, useState } from 'react';
+import { useFieldArray, useForm } from 'react-hook-form';
 
 import { settingsValidationSchema } from './settings-validation-schema';
 
-type FormValues = {
-  siteTitle: string;
-  siteSubtitle: string;
-  currency: any;
-  minimumOrderAmount: number;
-  logo: any;
-  // taxClass: Tax;
-  // contactDetails: ContactDetailsInput;
-  deliveryTime: {
-    title: string;
-    description: string;
-  };
-  seo: {
-    metaTitle: string;
-    metaDescription: string;
-    ogTitle: string;
-    ogDescription: string;
-    ogImage: any;
-    twitterHandle: string;
-    twitterCardType: string;
-    metaTags: string;
-    canonicalUrl: string;
-  };
-  google: {
-    isEnable: boolean;
-    tagManagerId: string;
-  };
-  facebook: {
-    isEnable: boolean;
-    appId: string;
-    pageId: string;
-  };
-};
+type FormValues = SettingsType;
 
 const socialIcon = [
   {
@@ -89,99 +59,117 @@ export const updatedIcons = socialIcon.map((item: any) => {
 });
 
 type IProps = {
-  // SettingsOptions
-  settings?: {} | undefined | null;
+  settings?: SettingsType;
 };
 
 export default function SettingsForm({ settings }: IProps) {
   const { t } = useTranslation();
-  // const { mutate: updateSettingsMutation, isLoading: loading } =
-  //   useUpdateSettingsMutation();
+
+  const [error, setError] = useState(null);
+
   const {
     register,
     handleSubmit,
     control,
+    setValue,
+    getValues,
+    watch,
     formState: { errors }
   } = useForm<FormValues>({
     shouldUnregister: true,
     resolver: yupResolver(settingsValidationSchema),
     defaultValues: {
       ...settings,
-      contactDetails: {
-        // ...settings?.contactDetails,
-        // socials: settings?.contactDetails?.socials
-        //   ? settings?.contactDetails?.socials.map((social: any) => ({
-        //       icon: updatedIcons?.find((icon) => icon?.value === social?.icon),
-        //       url: social?.url
-        //     }))
-        //   : []
-      },
-      // deliveryTime: settings?.deliveryTime ? settings?.deliveryTime : [],
-      // logo: settings?.logo ?? '',
-      // currency: settings?.currency
-      //   ? CURRENCY.find((item) => item.code == settings?.currency)
-      //   : '',
-      // @ts-ignore
-      // taxClass: !!taxClasses?.length
-      //   ? taxClasses?.find((tax: Tax) => tax.id == settings?.taxClass)
-      //   : '',
-      taxClass: '',
-      // @ts-ignore
-      shippingClass: ''
-      // !!shippingClasses?.length
-      //   ? shippingClasses?.find(
-      //       (shipping: Shipping) => shipping.id == settings?.shippingClass
-      //     )
-      //   : ''
+      logo: settings?.logo,
+      favicon: settings?.favicon,
+      socials: !isEmpty(settings?.socials)
+        ? settings?.socials.map((social: any) => ({
+            icon: updatedIcons?.find(
+              (icon) => icon?.value === social?.icon?.value
+            ),
+            url: social?.url
+          }))
+        : []
     }
   });
 
-  // const { fields, append, remove } = useFieldArray({
-  //   control,
-  //   name: 'deliveryTime'
-  // });
+  const {
+    fields: socialFields,
+    append: socialAppend,
+    remove: socialRemove
+  } = useFieldArray({
+    control,
+    name: 'socials'
+  });
 
-  // const {
-  //   // fields: socialFields,
-  //   append: socialAppend,
-  //   // remove: socialRemove
-  // } = useFieldArray({
-  //   control,
-  //   name: 'contactDetails.socials'
-  // });
+  const { userInfo } = useGetUser();
+
+  const csrfToken = userInfo?.csrfToken;
+
+  const [updateSettings, { loading }] = useMutation(UPDATE_SETTINGS, {
+    context: {
+      headers: {
+        'x-csrf-token': csrfToken
+      }
+    },
+    onCompleted: (data: { updateSettings: SettingsType }) => {
+      if (!isEmpty(data)) {
+        notify(t('common:successfully-updated'), 'success');
+      }
+    }
+  });
+
+  useErrorLogger(error);
+
+  const [logo, setLogo] = useState([]);
+  const [favicon, setFavicon] = useState([]);
+  const [ogImage, setOgImage] = useState([]);
 
   async function onSubmit(values: FormValues) {
-    // const contactDetails = {
-    //   ...values?.contactDetails,
-    //   location: { ...omit(values?.contactDetails?.location, '__typename') },
-    //   socials: values?.contactDetails?.socials
-    //     ? values?.contactDetails?.socials?.map((social: any) => ({
-    //         icon: social?.icon?.value,
-    //         url: social?.url
-    //       }))
-    //     : []
-    // };
-    console.log('values', values);
-    // updateSettingsMutation({
-    //   variables: {
-    //     input: {
-    //       options: {
-    //         ...values,
-    //         minimumOrderAmount: Number(values.minimumOrderAmount),
-    //         currency: values.currency?.code,
-    //         taxClass: values?.taxClass?.id,
-    //         shippingClass: values?.shippingClass?.id,
-    //         logo: values?.logo,
-    //         contactDetails,
-    //         //@ts-ignore
-    //         seo: {
-    //           ...values?.seo,
-    //           ogImage: getFormattedImage(values?.seo?.ogImage)
-    //         }
-    //       }
-    //     }
-    //   }
-    // });
+    console.log({
+      settings,
+      values,
+      var: {
+        ...values,
+        logo: values.logo?.map(({ id }) => ({ id })),
+        favicon: values.logo?.map(({ id }) => ({ id })),
+        maxCheckoutQuantity: Number(values.maxCheckoutQuantity),
+        socials: values?.socials
+          ? values?.socials?.map((social: any) => ({
+              icon: {
+                value: social?.icon?.value
+              },
+              url: social?.url
+            }))
+          : [],
+        seo: {
+          ...values.seo,
+          ogImage: values?.seo?.ogImage?.map(({ id }) => ({ id }))
+        }
+      }
+    });
+    updateSettings({
+      variables: {
+        ...values,
+        logo: logo?.map(({ id }) => ({ id })),
+        favicon: favicon?.map(({ id }) => ({ id })),
+        maxCheckoutQuantity: Number(values.maxCheckoutQuantity),
+        socials: values?.socials
+          ? values?.socials?.map((social: any) => ({
+              icon: {
+                value: social?.icon?.value
+              },
+              url: social?.url
+            }))
+          : [],
+        seo: {
+          ...values.seo,
+          ogImage: ogImage?.map(({ id }) => ({ id }))
+        }
+      }
+    }).catch((err) => {
+      setError(err);
+    });
   }
 
   const logoInformation = (
@@ -194,6 +182,12 @@ export default function SettingsForm({ settings }: IProps) {
     </span>
   );
 
+  useEffect(() => {
+    setLogo(settings.logo);
+    setFavicon(settings.favicon);
+    setOgImage(settings.seo.ogImage);
+  }, []);
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-wrap pb-8 border-b border-dashed border-border-base my-5 sm:my-8">
@@ -204,7 +198,13 @@ export default function SettingsForm({ settings }: IProps) {
         />
 
         <Card className="w-full sm:w-8/12 md:w-2/3">
-          <FileInput name="logo" control={control} multiple={false} />
+          <ImageModal
+            onSelect={(photo) => setLogo(photo)}
+            selected={logo}
+            isThumbnail
+            modalId="logo"
+            label="form:label-add-store-logo"
+          />
         </Card>
       </div>
       <div className="flex flex-wrap pb-8 border-b border-dashed border-border-base my-5 sm:my-8">
@@ -215,7 +215,13 @@ export default function SettingsForm({ settings }: IProps) {
         />
 
         <Card className="w-full sm:w-8/12 md:w-2/3">
-          <FileInput name="favicon" control={control} multiple={false} />
+          <ImageModal
+            onSelect={(photo) => setFavicon(photo)}
+            selected={favicon}
+            isThumbnail
+            modalId="favicon"
+            label="form:label-add-store-favicon"
+          />
         </Card>
       </div>
 
@@ -227,56 +233,47 @@ export default function SettingsForm({ settings }: IProps) {
         />
 
         <Card className="w-full sm:w-8/12 md:w-2/3">
-          {/* <Input
+          <Input
             label={t('form:input-label-store-name')}
-            {...register('store_name')}
-            error={t(errors.store_name?.message!)}
+            {...register('storeName')}
+            error={t(errors.storeName?.message!)}
             variant="outline"
             className="mb-5"
-          /> */}
-          {/* <Input
+          />
+          <Input
             label={t('form:input-label-store-contact-email')}
-            {...register('store_email')}
-            error={t(errors.store_email?.message!)}
+            {...register('storeEmail')}
+            error={t(errors.storeEmail?.message!)}
             variant="outline"
             className="mb-5"
-          /> */}
-          {/* <Input
+          />
+          <Input
             label={t('form:input-label-store-contact-number')}
-            {...register('store_number')}
+            {...register('storeNumber')}
             variant="outline"
             className="mb-5"
-            error={t(errors.store_number?.message!)}
-          /> */}
+            error={t(errors.storeNumber?.message!)}
+          />
           <div className="mb-5">
             <Label>{t('form:input-label-currency')}</Label>
             <SelectInput
               name="currency"
               control={control}
-              getOptionLabel={(option: any) => option.name}
-              getOptionValue={(option: any) => option.code}
+              getOptionLabel={(option: any) => option?.name}
+              getOptionValue={(option: any) => option?.code}
               options={CURRENCY}
             />
             <ValidationError message={t(errors.currency?.message)} />
           </div>
 
-          {/* <Input
-            label={`${t('form:input-label-max-order-amount')}`}
-            {...register('max_order_acount')}
-            type="number"
-            error={t(errors.max_order_acount?.message!)}
-            variant="outline"
-            className="mb-5"
-          /> */}
-
-          {/* <Input
+          <Input
             label={`${t('form:input-label-max-checkout-quantity')}`}
-            {...register('max_checkout_quantity')}
+            {...register('maxCheckoutQuantity')}
             type="number"
-            error={t(errors.max_checkout_quantity?.message!)}
+            error={t(errors.maxCheckoutQuantity?.message!)}
             variant="outline"
             className="mb-5"
-          /> */}
+          />
         </Card>
       </div>
       <div className="flex flex-wrap pb-8 border-b border-dashed border-border-base my-5 sm:my-8">
@@ -319,7 +316,13 @@ export default function SettingsForm({ settings }: IProps) {
           />
           <div className="mb-5">
             <Label>{t('form:input-label-og-image')}</Label>
-            <FileInput name="seo.ogImage" control={control} multiple={false} />
+            <ImageModal
+              onSelect={(photo) => setOgImage(photo)}
+              selected={ogImage}
+              isThumbnail
+              modalId="seo.ogImage"
+              label="form:label-add-store-og-image"
+            />
           </div>
           <Input
             label={t('form:input-label-twitter-handle')}
@@ -340,53 +343,51 @@ export default function SettingsForm({ settings }: IProps) {
 
         <Card className="w-full sm:w-8/12 md:w-2/3">
           {/* Social and Icon picker */}
-          {/* <div>
-            {socialFields.map(
-              (item: ShopSocialInput & { id: string }, index: number) => (
-                <div
-                  className="border-b border-dashed border-border-200 first:border-t last:border-b-0 first:mt-5 md:first:mt-10 py-5 md:py-8"
-                  key={item.id}
-                >
-                  <div className="grid grid-cols-1 sm:grid-cols-5 gap-5">
-                    <div className="sm:col-span-2">
-                      <Label className="whitespace-nowrap">
-                        {t('form:input-label-select-platform')}
-                      </Label>
-                      <SelectInput
-                        name={`contactDetails.socials.${index}.icon` as const}
-                        control={control}
-                        options={updatedIcons}
-                        isClearable={true}
-                        defaultValue={item?.icon!}
-                      />
-                    </div>
-                    <Input
-                      className="sm:col-span-2"
-                      label={t('form:input-label-social-url')}
-                      variant="outline"
-                      {...register(
-                        `contactDetails.socials.${index}.url` as const
-                      )}
-                      defaultValue={item.url!} // make sure to set up defaultValue
+          <div>
+            {socialFields.map((item, index: number) => (
+              <div
+                className="border-b border-dashed border-border-200 first:border-t last:border-b-0 first:mt-5 md:first:mt-10 py-5 md:py-8"
+                key={index}
+              >
+                <div className="grid grid-cols-1 sm:grid-cols-5 gap-5">
+                  <div className="sm:col-span-2">
+                    <Label className="whitespace-nowrap">
+                      {t('form:input-label-select-platform')}
+                    </Label>
+                    <SelectInput
+                      name={`socials.${index}.icon` as const}
+                      control={control}
+                      options={updatedIcons}
+                      isClearable={true}
+                      defaultValue={item?.icon!}
                     />
-                    <button
-                      onClick={() => {
-                        socialRemove(index);
-                      }}
-                      type="button"
-                      className="text-sm text-red-500 hover:text-red-700 transition-colors duration-200 focus:outline-none sm:mt-4 sm:col-span-1"
-                    >
-                      {t('form:button-label-remove')}
-                    </button>
                   </div>
+                  <Input
+                    className="sm:col-span-2"
+                    label={t('form:input-label-social-url')}
+                    variant="outline"
+                    {...register(`socials.${index}.url` as const)}
+                    defaultValue={item.url!} // make sure to set up defaultValue
+                  />
+                  <button
+                    onClick={() => {
+                      socialRemove(index);
+                    }}
+                    type="button"
+                    className="text-sm text-red-500 hover:text-red-700 transition-colors duration-200 focus:outline-none sm:mt-4 sm:col-span-1"
+                  >
+                    {t('form:button-label-remove')}
+                  </button>
                 </div>
-              )
-            )}
-          </div> */}
+              </div>
+            ))}
+          </div>
 
           <Button
             type="button"
-            // onClick={() => socialAppend({ icon: '', url: '' })}
+            onClick={() =>
+              socialAppend({ icon: { value: 'FacebookIcon' }, url: '' })
+            }
             className="w-full sm:w-auto"
           >
             {t('form:button-label-add-social')}
@@ -395,9 +396,7 @@ export default function SettingsForm({ settings }: IProps) {
       </div>
 
       <div className="mb-4 text-end">
-        <Button
-        // loading={loading} disabled={loading}
-        >
+        <Button loading={loading} disabled={loading}>
           {t('form:button-label-save-settings')}
         </Button>
       </div>
