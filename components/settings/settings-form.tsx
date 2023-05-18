@@ -71,9 +71,6 @@ export default function SettingsForm({ settings }: IProps) {
     register,
     handleSubmit,
     control,
-    setValue,
-    getValues,
-    watch,
     formState: { errors }
   } = useForm<FormValues>({
     shouldUnregister: true,
@@ -126,28 +123,6 @@ export default function SettingsForm({ settings }: IProps) {
   const [ogImage, setOgImage] = useState([]);
 
   async function onSubmit(values: FormValues) {
-    console.log({
-      settings,
-      values,
-      var: {
-        ...values,
-        logo: values.logo?.map(({ id }) => ({ id })),
-        favicon: values.logo?.map(({ id }) => ({ id })),
-        maxCheckoutQuantity: Number(values.maxCheckoutQuantity),
-        socials: values?.socials
-          ? values?.socials?.map((social: any) => ({
-              icon: {
-                value: social?.icon?.value
-              },
-              url: social?.url
-            }))
-          : [],
-        seo: {
-          ...values.seo,
-          ogImage: values?.seo?.ogImage?.map(({ id }) => ({ id }))
-        }
-      }
-    });
     updateSettings({
       variables: {
         ...values,
