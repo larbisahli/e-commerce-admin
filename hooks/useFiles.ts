@@ -58,7 +58,8 @@ export function useFiles({ limit }: { limit: number }) {
       limit,
       orderBy,
       sortedBy: SortOrder.Desc
-    }
+    },
+    fetchPolicy: 'cache-and-network'
   });
 
   useErrorLogger(error);

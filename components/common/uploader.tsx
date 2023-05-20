@@ -8,7 +8,7 @@ import { useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 
 interface ImageType {
-  id: string;
+  id: number;
   image: string;
   placeholder: string;
   success: boolean;

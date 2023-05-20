@@ -54,7 +54,7 @@ const ProductSeo = ({ state, initialValues }: Props) => {
       metaTitle,
       metaKeywords,
       metaDescription
-    },
+    } = {},
     productSeo,
     isUpdateMode
   } = state;
@@ -84,14 +84,14 @@ const ProductSeo = ({ state, initialValues }: Props) => {
     const seo = initProductSeo;
     const initialProductContent = {
       slug: seo.slug,
-      metaImage: [{ id: seo.metaImage[0]?.id }],
+      metaImage: seo.metaImage?.map(({ id }) => ({ id })),
       metaTitle: seo.metaTitle,
       metaKeywords: seo.metaKeywords,
       metaDescription: seo.metaDescription
     };
     const currentProductContent = {
       slug,
-      metaImage: [{ id: metaImage[0]?.id }],
+      metaImage: metaImage?.map(({ id }) => ({ id })),
       metaTitle,
       metaKeywords,
       metaDescription
@@ -188,7 +188,7 @@ const ProductSeo = ({ state, initialValues }: Props) => {
         productSeo: {
           id,
           slug,
-          metaImage: [{ id: metaImage[0]?.id }],
+          metaImage: metaImage?.map(({ id }) => ({ id })),
           metaTitle,
           metaKeywords,
           metaDescription

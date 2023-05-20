@@ -28,8 +28,6 @@ export default function AccountInformation({ client }: SSRProps) {
 
   const { getSettings: settings } = data ?? {};
 
-  console.log({ settings, client });
-
   useGetUser(client);
   useErrorLogger(error);
 
