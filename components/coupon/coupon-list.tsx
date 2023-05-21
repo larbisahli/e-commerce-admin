@@ -37,14 +37,14 @@ const CouponList = ({ coupons, selectedColumns }: IProps) => {
         title: t('table:table-item-code'),
         dataIndex: 'code',
         key: 'code',
-        align: 'center',
+        align: alignLeft,
         width: 120,
         ellipsis: true,
         render: (code: string) => (
           <>
             <div
               role="button"
-              className="flex items-center justify-center text-accent"
+              className="flex items-center text-accent"
               onClick={(event) =>
                 CopyToClipboard(event, (value) => {
                   notify(`Coupon (${value}) successfully copied`, 'success');
@@ -174,7 +174,7 @@ const CouponList = ({ coupons, selectedColumns }: IProps) => {
         dataIndex: 'createdBy',
         key: 'createdBy',
         align: alignLeft,
-        width: 140,
+        width: 150,
         ellipsis: true,
         render: (
           createdBy: CreatedUpdatedByAt['createdBy'],
@@ -188,7 +188,7 @@ const CouponList = ({ coupons, selectedColumns }: IProps) => {
         dataIndex: 'updatedBy',
         key: 'updatedBy',
         align: alignLeft,
-        width: 140,
+        width: 150,
         ellipsis: true,
         render: (
           updatedBy: CreatedUpdatedByAt['updatedBy'],

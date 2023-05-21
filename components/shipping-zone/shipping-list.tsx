@@ -114,7 +114,7 @@ const ShippingList = ({ shippingZones, selectedColumns }: IProps) => {
         dataIndex: 'createdBy',
         key: 'createdBy',
         align: alignLeft,
-        width: 100,
+        width: 150,
         ellipsis: true,
         render: (
           createdBy: CreatedUpdatedByAt['createdBy'],
@@ -128,7 +128,7 @@ const ShippingList = ({ shippingZones, selectedColumns }: IProps) => {
         dataIndex: 'updatedBy',
         key: 'updatedBy',
         align: alignLeft,
-        width: 140,
+        width: 150,
         ellipsis: true,
         render: (
           updatedBy: CreatedUpdatedByAt['updatedBy'],

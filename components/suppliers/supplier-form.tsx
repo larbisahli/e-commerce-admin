@@ -120,7 +120,15 @@ export default function CreateOrUpdateSupplierForm({ initialValues }: IProps) {
 
   const onSubmit = (values: FormValues) => {
     const variables = {
-      ...values
+      ...values,
+      country: {
+        name: values?.country?.name,
+        currency: values?.country?.currency,
+        iso2: values?.country?.iso2,
+        subregion: values?.country?.subregion,
+        region: values?.country?.region,
+        phoneCode: values?.country?.phone_code,
+      }
     };
 
     if (isEmpty(initialValues)) {

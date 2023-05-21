@@ -63,7 +63,7 @@ const TagList = ({ tags, selectedColumns }: IProps) => {
         dataIndex: 'createdBy',
         key: 'createdBy',
         align: alignLeft,
-        width: 140,
+        width: 150,
         ellipsis: true,
         render: (createdBy: CreatedUpdatedByAt['createdBy'], record: Tag) => {
           console.log({ createdBy });
@@ -75,7 +75,7 @@ const TagList = ({ tags, selectedColumns }: IProps) => {
         dataIndex: 'updatedBy',
         key: 'updatedBy',
         align: alignLeft,
-        width: 140,
+        width: 150,
         ellipsis: true,
         render: (updatedBy: CreatedUpdatedByAt['updatedBy'], record: Tag) => {
           return <ProfileCart user={updatedBy} updatedAt={record?.updatedAt} />;

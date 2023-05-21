@@ -29,7 +29,6 @@ export const TAG = gql`
     tag(id: $id) {
       id
       name
-      icon
     }
   }
 `;

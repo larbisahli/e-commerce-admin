@@ -96,7 +96,7 @@ const SuppliersList = ({ suppliers, selectedColumns }: IProps) => {
         dataIndex: 'createdBy',
         key: 'createdBy',
         align: alignLeft,
-        width: 140,
+        width: 150,
         ellipsis: true,
         render: (
           createdBy: CreatedUpdatedByAt['createdBy'],
@@ -110,7 +110,7 @@ const SuppliersList = ({ suppliers, selectedColumns }: IProps) => {
         dataIndex: 'updatedBy',
         key: 'updatedBy',
         align: alignLeft,
-        width: 140,
+        width: 150,
         ellipsis: true,
         render: (
           updatedBy: CreatedUpdatedByAt['updatedBy'],
