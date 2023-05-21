@@ -63,7 +63,8 @@ export async function verifyAuth(context: GetServerSidePropsContext) {
         headers: {
           authorization: jwtToken ? `Bearer ${jwtToken}` : ''
         }
-      }
+      },
+      fetchPolicy: 'no-cache'
     });
 
     const { userAuth, error } = data ?? {};
