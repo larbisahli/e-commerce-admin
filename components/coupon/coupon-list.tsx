@@ -38,7 +38,7 @@ const CouponList = ({ coupons, selectedColumns }: IProps) => {
         dataIndex: 'code',
         key: 'code',
         align: alignLeft,
-        width: 120,
+        width: 150,
         ellipsis: true,
         render: (code: string) => (
           <>
