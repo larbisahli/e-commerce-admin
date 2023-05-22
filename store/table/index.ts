@@ -72,7 +72,6 @@ export const TableSlice = createSlice({
       window?.localStorage.setItem('@dropgala-tables', hydrate(state));
     },
     rehydrate: (state: TableColumns, action: PayloadAction<TableColumns>) => {
-      console.log({ state });
       if (!isEmpty(action.payload)) {
         return action.payload;
       }

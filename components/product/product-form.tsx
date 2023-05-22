@@ -38,8 +38,6 @@ function ProductForm({ setUnsavedChanges, initialValues = {} }: IProps) {
   const state = useFormState();
   const dispatch = useFormReducer();
 
-  console.log({ state });
-
   const {
     id,
     name,
@@ -187,7 +185,6 @@ function ProductForm({ setUnsavedChanges, initialValues = {} }: IProps) {
 
     if (isEmpty(initialValues)) {
       const variables = creationVariable(values);
-      console.log({ variables });
 
       // Validations
       const name = variables.name;
@@ -197,7 +194,11 @@ function ProductForm({ setUnsavedChanges, initialValues = {} }: IProps) {
       const salePrice = variables.salePrice;
       const comparePrice = variables.comparePrice;
       const variationOptions = variables.variationOptions;
-      if (productType === ProductType.Simple && salePrice >= comparePrice) {
+      if (
+        productType === ProductType.Simple &&
+        salePrice >= comparePrice &&
+        comparePrice !== 0
+      ) {
         notify('Compare price must be larger than Sale price', 'error');
         setLockedSubmission(false);
         return;
@@ -221,14 +222,12 @@ function ProductForm({ setUnsavedChanges, initialValues = {} }: IProps) {
           ?.map((option) => {
             const comparePrice = option.comparePrice;
             const salePrice = option.salePrice;
-            if (salePrice >= comparePrice) {
+            if (salePrice >= comparePrice && comparePrice !== 0) {
               return option.title;
             }
             return undefined;
           })
           ?.filter((e) => e !== undefined);
-
-        console.log({ values });
 
         if (!isEmpty(values[0])) {
           notify(

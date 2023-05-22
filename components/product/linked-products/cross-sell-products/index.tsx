@@ -34,8 +34,6 @@ const CrossSellProducts = ({
     });
   };
 
-  console.log('crossSellProducts');
-
   useEffect(() => {
     const { selectedProducts = [] } = meta ?? {};
     if (id === CROSS_SELL_PRODUCTS) {

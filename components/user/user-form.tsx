@@ -152,8 +152,6 @@ const UserCreateUpdateForm = ({ initialValues }: IProps) => {
       notify: values.notify
     };
 
-    console.log({ variables, initialValues });
-
     setUnsavedChanges(false);
     if (isEmpty(initialValues)) {
       createUser({ variables }).catch((err) => {

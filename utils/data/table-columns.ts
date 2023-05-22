@@ -88,7 +88,7 @@ export const COLUMNS = {
   category: [
     { label: 'Name', key: 'name' },
     { label: 'Details', key: 'description' },
-    { label: 'Include in menu', key: 'includeInMenu' },
+    { label: 'Menu', key: 'includeInMenu' },
     { label: 'Level', key: 'level' },
     { label: 'Position', key: 'position' },
     { label: 'Creation Date', key: 'createdAt' },

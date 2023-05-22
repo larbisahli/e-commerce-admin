@@ -81,7 +81,7 @@ export default function Files({ client }: SSRProps) {
     <>
       <PageMainAction
         href="#"
-        onClick={() => console.log('LOL')}
+        // onClick={() => console.log('LOL')}
         title={t('form:input-label-images')}
         label={t('form:button-label-upload-image')}
       />

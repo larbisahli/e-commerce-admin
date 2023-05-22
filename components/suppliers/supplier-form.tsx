@@ -68,7 +68,6 @@ export default function CreateOrUpdateSupplierForm({ initialValues }: IProps) {
 
   // Get Countries
   useEffect(() => {
-    console.log({ initialValues });
     async function getCountries() {
       const { Countries } = await import('@utils/countries');
       setCountries(Countries);
@@ -127,7 +126,7 @@ export default function CreateOrUpdateSupplierForm({ initialValues }: IProps) {
         iso2: values?.country?.iso2,
         subregion: values?.country?.subregion,
         region: values?.country?.region,
-        phoneCode: values?.country?.phone_code,
+        phoneCode: values?.country?.phone_code
       }
     };
 

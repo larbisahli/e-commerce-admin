@@ -19,8 +19,6 @@ const SuppliersList = ({ suppliers, selectedColumns }: IProps) => {
 
   const { alignLeft, alignRight } = useIsRTL();
 
-  console.log({ suppliers });
-
   const columns = useMemo(() => {
     return [
       {

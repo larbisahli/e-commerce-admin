@@ -59,7 +59,7 @@ const UserList = ({ users, selectedColumns }: IProps) => {
         dataIndex: 'firstName',
         key: 'firstName',
         align: alignLeft,
-        width: 120,
+        width: 180,
         ellipsis: true,
         render: (firstName: string, record: UserType) => (
           <span className="font-semibold text-gray-800 capitalize">

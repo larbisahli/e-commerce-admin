@@ -69,8 +69,6 @@ export async function verifyAuth(context: GetServerSidePropsContext) {
 
     const { userAuth, error } = data ?? {};
 
-    console.log({ userAuth, error });
-
     if (!isEmpty(error) || isEmpty(userAuth)) {
       console.log('Auth Error:>>', { error });
       return {

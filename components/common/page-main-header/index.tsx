@@ -54,8 +54,6 @@ const PageMainHeader = ({
 
   const [openDrop, setOpenDrop] = useState('');
 
-  console.log({ openDrop });
-
   const handleOpenDrop = (column) => {
     setOpenDrop((prev) => {
       return prev === column ? '' : column;

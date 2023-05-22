@@ -34,7 +34,6 @@ export default function NavMenu() {
   const {
     userInfo: { profile = [], firstName = '', lastName = '', ali }
   } = useGetUser();
-  console.log({ profile });
   const { image = null, placeholder = null } = profile[0] ?? {};
 
   return (

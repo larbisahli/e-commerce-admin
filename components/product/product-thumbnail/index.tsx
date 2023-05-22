@@ -64,7 +64,6 @@ const ProductThumbnail = ({ state, initialValues }: Props) => {
   const onUpdate = (e) => {
     e.preventDefault();
     // Check if the image exits
-    console.log({ additions, deletions });
     if (isEmpty(additions)) {
       notify(t('Please add an image'), 'warning');
     }

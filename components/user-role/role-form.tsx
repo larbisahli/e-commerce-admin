@@ -91,8 +91,6 @@ const RoleCreateUpdateForm = ({ initialValues }: IProps) => {
       }
     };
 
-    console.log({ variables });
-
     setUnsavedChanges(false);
     if (isEmpty(initialValues)) {
       createRole({ variables }).catch((err) => {

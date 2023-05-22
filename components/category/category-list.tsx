@@ -59,7 +59,7 @@ const CategoryList = ({ categories, selectedColumns }: IProps) => {
         ellipsis: true
       },
       {
-        title: t('table:table-item-include-in-menu'),
+        title: t('table:table-item-menu'),
         dataIndex: 'includeInMenu',
         key: 'includeInMenu',
         align: 'center',

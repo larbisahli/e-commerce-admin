@@ -66,7 +66,6 @@ const TagList = ({ tags, selectedColumns }: IProps) => {
         width: 150,
         ellipsis: true,
         render: (createdBy: CreatedUpdatedByAt['createdBy'], record: Tag) => {
-          console.log({ createdBy });
           return <ProfileCart user={createdBy} createdAt={record?.updatedAt} />;
         }
       },

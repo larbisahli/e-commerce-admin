@@ -184,7 +184,6 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
       });
     } else {
       const variablesUpdate = updateVariable(values, initialValues);
-      console.log('=====>', { variablesUpdate, values, initialValues });
       updateShippingZone({
         variables: { id: initialValues?.shippingZone?.id, ...variablesUpdate }
       }).catch((err) => {
@@ -207,8 +206,6 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
   const shippingRates = watch('shippingRates');
   const zones = watch('zones');
   const freeShipping = watch('shippingZone.freeShipping');
-
-  console.log({ zones, initialValues });
 
   useEffect(() => {
     const exist = zones?.find((c) => c.iso2 === 'XX');

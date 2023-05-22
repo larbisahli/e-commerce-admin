@@ -9,11 +9,7 @@ import { UPDATE_VARIABLE_PRODUCT_INFORMATION } from '@graphql/product';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetUser } from '@hooks/useGetUser';
 import { notify } from '@lib/notify';
-import type {
-  Product,
-  VariationOptionsType,
-  VariationType
-} from '@ts-types/generated';
+import type { Product, VariationType } from '@ts-types/generated';
 import { Attribute, OrderBy, SortOrder } from '@ts-types/generated';
 import { cartesian } from '@utils/cartesian';
 import differenceWith from 'lodash/differenceWith';
@@ -130,10 +126,27 @@ function ProductVariableForm({
         }
       },
       onCompleted: (data: { updateVariableProductInformation: Product }) => {
-        if (!isEmpty(data?.updateVariableProductInformation)) {
-          setInitVariableProductInformation(
-            data?.updateVariableProductInformation
-          );
+        const { updateVariableProductInformation } = data ?? {};
+        if (!isEmpty(updateVariableProductInformation)) {
+          const { variations, variationOptions } =
+            updateVariableProductInformation;
+          // Update initial state
+          setInitVariableProductInformation(updateVariableProductInformation);
+          // Update current state
+          dispatch({
+            type: Actions.VARIATION_INIT,
+            payload: {
+              value: {
+                variations: variations?.map((variation) => {
+                  return {
+                    id: nanoid(),
+                    ...variation
+                  };
+                }),
+                variationOptions
+              }
+            }
+          });
           notify(t('common:successfully-updated'), 'success');
         }
       }
@@ -203,7 +216,6 @@ function ProductVariableForm({
       variationOptions,
       initVariationOptions
     });
-    console.log({ additions, deletions });
     checkForUpdateHandler({ additions, deletions });
     setUpdatedVariationOptions(additions);
   }, [
@@ -295,27 +307,6 @@ function ProductVariableForm({
     const { additions: variationAdditions, deletions: variationDeletion } =
       getUpdatedVariationAttributes();
 
-    console.log({
-      additions: {
-        variationOptions: additions?.map((value) => {
-          return {
-            ...value,
-            thumbnail: value.thumbnail?.map(({ id }) => ({ id }))
-          };
-        }),
-        variations: variationAdditions
-      },
-      deletions: {
-        variationOptions: deletions?.map((value) => {
-          return {
-            ...value,
-            thumbnail: value.thumbnail?.map(({ id }) => ({ id }))
-          };
-        }),
-        variations: variationDeletion
-      }
-    });
-
     updateVariableProductInformation({
       variables: {
         id: productId,
@@ -330,9 +321,9 @@ function ProductVariableForm({
           variations: variationAdditions
         },
         deletions: {
-          variationOptions: deletions?.map(({ id }) => {
-            id;
-          }),
+          variationOptions: deletions?.map(({ id }) => ({
+            id
+          })),
           variations: variationDeletion
         }
       }

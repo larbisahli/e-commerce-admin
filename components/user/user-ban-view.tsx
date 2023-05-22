@@ -6,11 +6,25 @@ import {
 } from '@components/ui/modal/modal.context';
 import { BAN_USER, USERS } from '@graphql/user';
 import { useErrorLogger } from '@hooks/useErrorLogger';
+import { useGetUser } from '@hooks/useGetUser';
+import { notify } from '@lib/notify';
+import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
 
 const UserBanView = () => {
+  const { t } = useTranslation();
+
   const [error, setError] = useState(null);
+
+  const { userInfo } = useGetUser();
+  const csrfToken = userInfo?.csrfToken;
+
   const [BanUser, { loading }] = useMutation(BAN_USER, {
+    context: {
+      headers: {
+        'x-csrf-token': csrfToken
+      }
+    },
     refetchQueries: [
       USERS,
       'Users' // Query name
@@ -22,6 +36,8 @@ const UserBanView = () => {
 
   useErrorLogger(error);
 
+  console.log({ error });
+
   async function handleDelete() {
     if (meta === 'ban') {
       // Block user
@@ -30,9 +46,19 @@ const UserBanView = () => {
           id,
           active: false
         }
-      }).catch((err) => {
-        setError(err);
-      });
+      })
+        .then(({ data }) => {
+          const {
+            banUser: { id }
+          } = data;
+          if (id) {
+            notify(t('common:successfully-blocked'), 'success');
+          }
+          closeModal();
+        })
+        .catch((err) => {
+          setError(err);
+        });
     } else {
       // Unblock user
       BanUser({
@@ -40,11 +66,20 @@ const UserBanView = () => {
           id,
           active: true
         }
-      }).catch((err) => {
-        setError(err);
-      });
+      })
+        .then(({ data }) => {
+          const {
+            banUser: { id }
+          } = data;
+          if (id) {
+            notify(t('common:successfully-unblocked'), 'success');
+          }
+          closeModal();
+        })
+        .catch((err) => {
+          setError(err);
+        });
     }
-    closeModal();
   }
   return (
     <ConfirmationCard
