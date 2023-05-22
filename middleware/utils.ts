@@ -133,7 +133,7 @@ export function verifyJWT(context: GetServerSidePropsContext) {
   }
 }
 
-// TODO: Show the client a popup where it says "Your session has expired please refresh the page" when the XSRF_TOKEN expired
+// TODO: Extend the token when the XSRF_TOKEN is 5 hours before expiring
 export async function XSRFHandler(context: GetServerSidePropsContext) {
   const { req, res } = context;
 
