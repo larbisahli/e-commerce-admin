@@ -55,7 +55,7 @@ export const Accordion: React.FC<CollapseProps> = ({
               {isUpdated && (
                 <Tooltip
                   placement="top"
-                  trigger={['hover']}
+                  trigger={['hover', 'click']}
                   overlay={
                     <span>
                       Changes have been made to this section that have not been

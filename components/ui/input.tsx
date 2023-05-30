@@ -8,6 +8,8 @@ export interface Props extends InputHTMLAttributes<HTMLInputElement> {
   note?: string;
   name: string;
   error?: string;
+  isRequiredLabel?: boolean;
+  disabled?: boolean;
   type?: string;
   shadow?: boolean;
   variant?: 'normal' | 'solid' | 'outline';
@@ -30,8 +32,10 @@ const Input = React.forwardRef<HTMLInputElement, Props>(
       name,
       error,
       children,
+      isRequiredLabel = false,
       variant = 'normal',
       shadow = false,
+      disabled = false,
       type = 'text',
       inputClassName,
       id,
@@ -57,9 +61,17 @@ const Input = React.forwardRef<HTMLInputElement, Props>(
         {label && (
           <label
             htmlFor={name}
-            className="block text-body-dark font-semibold text-sm leading-none mb-2"
+            className={cn(
+              'block text-body-dark font-semibold text-sm leading-none mb-2',
+              { 'text-gray-300': disabled }
+            )}
           >
             {label}
+            {isRequiredLabel && (
+              <span title="Required filed" className="text-red-500 m-[1px]">
+                *
+              </span>
+            )}
           </label>
         )}
         <input
@@ -67,12 +79,13 @@ const Input = React.forwardRef<HTMLInputElement, Props>(
           name={name}
           type={type}
           ref={ref}
-          className={rootClassName}
+          className={cn(rootClassName, { 'text-gray-300': disabled })}
           autoComplete="off"
           autoCorrect="off"
           autoCapitalize="off"
           spellCheck="false"
           aria-invalid={error ? 'true' : 'false'}
+          disabled={disabled}
           {...rest}
         />
         {note && <p className="mt-2 text-xs text-body">{note}</p>}

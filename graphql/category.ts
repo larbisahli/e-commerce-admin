@@ -8,6 +8,7 @@ export const CREATE_CATEGORY = gql`
     $includeInMenu: Boolean!
     $position: Int!
     $thumbnail: [ImageInput]
+    $categorySeo: CategorySeoInput!
   ) {
     createCategory(
       parentId: $parentId
@@ -16,6 +17,7 @@ export const CREATE_CATEGORY = gql`
       includeInMenu: $includeInMenu
       position: $position
       thumbnail: $thumbnail
+      categorySeo: $categorySeo
     ) {
       id
       name
@@ -32,6 +34,7 @@ export const UPDATE_CATEGORY = gql`
     $includeInMenu: Boolean!
     $position: Int!
     $thumbnail: [ImageInput]
+    $categorySeo: CategorySeoInput!
   ) {
     updateCategory(
       id: $id
@@ -41,6 +44,7 @@ export const UPDATE_CATEGORY = gql`
       includeInMenu: $includeInMenu
       position: $position
       thumbnail: $thumbnail
+      categorySeo: $categorySeo
     ) {
       id
       name
@@ -148,6 +152,19 @@ export const CATEGORY = gql`
         placeholder
       }
       hasChildren
+      categorySeo {
+        urlKey
+        metaTitle
+        metaKeywords
+        metaDescription
+        metaRobots
+        breadcrumbsPriority
+        metaImage {
+          id
+          image
+          placeholder
+        }
+      }
     }
   }
 `;

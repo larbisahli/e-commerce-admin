@@ -123,6 +123,15 @@ export interface Category extends CreatedUpdatedByAt {
   includeInMenu?: Scalars['Boolean'];
   position?: Scalars['Int'];
   parent?: Nullable<CategoryRefLevel2>;
+  categorySeo?: {
+    metaTitle: Scalars['String'];
+    urlKey: Scalars['String'];
+    metaKeywords: Scalars['String'];
+    metaDescription: Scalars['String'];
+    metaRobots: { value: Scalars['String'] };
+    breadcrumbsPriority: number;
+    metaImage: ImageType[];
+  };
 }
 
 // To prevent circular references

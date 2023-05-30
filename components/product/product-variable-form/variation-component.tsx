@@ -91,7 +91,7 @@ const VariationComponent = ({
 
       <div className="grid grid-cols-fit gap-5">
         <div className="mt-5">
-          <Label>{t('form:input-label-attribute-name')}*</Label>
+          <Label isRequiredLabel>{t('form:input-label-attribute-name')}</Label>
           <Select
             value={variant?.attribute}
             getOptionLabel={(option: any) => option.name}
@@ -106,7 +106,7 @@ const VariationComponent = ({
         </div>
 
         <div className="mt-5 col-span-2">
-          <Label>{t('form:input-label-attribute-value')}*</Label>
+          <Label isRequiredLabel>{t('form:input-label-attribute-value')}</Label>
           <Select
             value={variant?.selectedValues}
             getOptionLabel={(option: any) => option.value}

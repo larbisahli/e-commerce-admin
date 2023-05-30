@@ -224,7 +224,8 @@ const ProductSeo = ({ state, initialValues }: Props) => {
         />
         <Card className="w-full sm:w-8/12 md:w-2/3">
           <Input
-            label={`${t('form:input-label-meta-slug')}*`}
+            label={t('form:input-label-meta-slug')}
+            isRequiredLabel
             name="slug"
             value={slug}
             onChange={handleChange}
@@ -235,7 +236,8 @@ const ProductSeo = ({ state, initialValues }: Props) => {
             onBlur={checkForUpdateHandler}
           />
           <Input
-            label={`${t('form:input-label-meta-title')}*`}
+            label={t('form:input-label-meta-title')}
+            isRequiredLabel
             name="metaTitle"
             value={metaTitle}
             onChange={handleChange}
@@ -246,7 +248,8 @@ const ProductSeo = ({ state, initialValues }: Props) => {
             onBlur={checkForUpdateHandler}
           />
           <TextArea
-            label={`${t('form:input-label-meta-keywords')}*`}
+            label={t('form:input-label-meta-keywords')}
+            isRequiredLabel
             name="metaKeywords"
             value={metaKeywords}
             onChange={handleChange}
@@ -256,7 +259,8 @@ const ProductSeo = ({ state, initialValues }: Props) => {
             onBlur={checkForUpdateHandler}
           />
           <TextArea
-            label={`${t('form:item-meta-description')}*`}
+            label={t('form:item-meta-description')}
+            isRequiredLabel
             name="metaDescription"
             value={metaDescription}
             onChange={handleChange}

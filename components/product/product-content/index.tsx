@@ -203,8 +203,9 @@ const ProductContent = ({ state, initialValues }: Props) => {
 
         <Card className="w-full sm:w-8/12 md:w-2/3">
           <Input
-            label={`${t('form:input-label-name')}*`}
+            label={t('form:input-label-name')}
             name="name"
+            isRequiredLabel
             value={name}
             onChange={handleChange}
             onBlur={checkForUpdateHandler}
@@ -214,7 +215,7 @@ const ProductContent = ({ state, initialValues }: Props) => {
             className="mb-5"
           />
 
-          <Label>{t('form:input-label-product-details')}*</Label>
+          <Label isRequiredLabel>{t('form:input-label-product-details')}</Label>
           <Editor
             name="description"
             value={description}

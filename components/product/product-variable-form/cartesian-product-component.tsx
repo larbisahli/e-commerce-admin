@@ -104,7 +104,8 @@ const CartesianProductComponent = ({
       >
         <div className="grid grid-cols-3 gap-3">
           <Input
-            label={`${t('form:input-label-sale-price')} (${currency.symbol})*`}
+            label={`${t('form:input-label-sale-price')} (${currency.symbol})`}
+            isRequiredLabel
             type="number"
             id={`salePrice-${index}`}
             name="salePrice"
@@ -143,7 +144,8 @@ const CartesianProductComponent = ({
             className="mb-2 ml-1"
           />
           <Input
-            label={`${t('form:input-label-quantity')}*`}
+            label={t('form:input-label-quantity')}
+            isRequiredLabel
             type="number"
             name="quantity"
             min={0}

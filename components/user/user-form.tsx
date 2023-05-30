@@ -61,7 +61,7 @@ function SelectRoles({ control }: { control: Control<FormValues> }) {
 
   return (
     <div>
-      <Label>{t('form:input-label-roles')}</Label>
+      <Label isRequiredLabel>{t('form:input-label-roles')}</Label>
       <SelectInput
         name="role"
         control={control}
@@ -202,6 +202,7 @@ const UserCreateUpdateForm = ({ initialValues }: IProps) => {
         <Card className="w-full sm:w-8/12 md:w-2/3">
           <Input
             label={t('form:input-label-first-name')}
+            isRequiredLabel
             {...register('firstName')}
             type="text"
             variant="outline"
@@ -210,6 +211,7 @@ const UserCreateUpdateForm = ({ initialValues }: IProps) => {
           />
           <Input
             label={t('form:input-label-last-name')}
+            isRequiredLabel
             {...register('lastName')}
             type="text"
             variant="outline"
@@ -244,6 +246,7 @@ const UserCreateUpdateForm = ({ initialValues }: IProps) => {
           </div>
           <Input
             label={t('form:input-label-email')}
+            isRequiredLabel
             {...register('email')}
             type="email"
             variant="outline"
@@ -254,6 +257,7 @@ const UserCreateUpdateForm = ({ initialValues }: IProps) => {
             <div>
               <PasswordInput
                 label={t('form:input-label-password')}
+                isRequiredLabel
                 {...register('password')}
                 error={t(errors?.password?.message!)}
                 variant="outline"
@@ -261,6 +265,7 @@ const UserCreateUpdateForm = ({ initialValues }: IProps) => {
               />
               <PasswordInput
                 label={t('form:input-label-confirm-password')}
+                isRequiredLabel
                 {...register('confirmPassword')}
                 error={t(errors?.confirmPassword?.message!)}
                 variant="outline"

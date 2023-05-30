@@ -222,6 +222,7 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
     }
   }, [zones]);
 
+  // TODO: Fix when MaxValue is null and MinValue is 0
   const handleRateAppend = () => {
     const hasFields = !isEmpty(shippingRates);
 
@@ -275,7 +276,8 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
         <Card className="w-full sm:w-8/12 md:w-2/3">
           <div className="mb-5">
             <Input
-              label={`${t('form:input-label-name')}*`}
+              label={t('form:input-label-name')}
+              isRequiredLabel
               {...register('shippingZone.name')}
               error={t(errors.shippingZone?.name?.message!)}
               placeholder="Name ( The name you'll remember )"
@@ -283,7 +285,8 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
               className="w-full mb-5"
             />
             <Input
-              label={`${t('form:input-label-display-name')}*`}
+              label={t('form:input-label-display-name')}
+              isRequiredLabel
               {...register('shippingZone.displayName')}
               error={t(errors.shippingZone?.displayName?.message!)}
               placeholder="Name ( Name to be displayed to customers )"

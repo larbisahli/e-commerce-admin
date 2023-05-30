@@ -5,6 +5,7 @@ import Uploader from '@components/common/uploader';
 import { ImagesSvg } from '@components/icons/images';
 import { UploadIcon } from '@components/icons/upload-icon';
 import Button from '@components/ui/button';
+import Label from '@components/ui/label';
 import Loader from '@components/ui/loader/loader';
 import Modal from '@components/ui/modal/modal';
 import {
@@ -30,12 +31,14 @@ interface Props {
   isThumbnail?: boolean;
   modalId?: string;
   label?: string;
+  isRequiredLabel?: boolean;
 }
 
 const ImageModal = ({
   onSelect,
   selected,
   isThumbnail,
+  isRequiredLabel = false,
   modalId = 'image_modal',
   label = 'Add product images'
 }: Props) => {
@@ -76,7 +79,7 @@ const ImageModal = ({
     <div className="w-full">
       {/* BUTTON */}
       <div className="flex items-center justify-between border-b pb-5">
-        <div className="font-medium">{t(label)}</div>
+        <Label isRequiredLabel={isRequiredLabel}>{t(label)}</Label>
         <Button
           onClick={(e) => {
             e.preventDefault();

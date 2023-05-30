@@ -202,6 +202,7 @@ export default function CreateOrUpdateAttributeForm({ initialValues }: IProps) {
           <Card className="w-full sm:w-8/12 md:w-2/3">
             <Input
               label={t('form:input-label-name')}
+              isRequiredLabel
               {...register('name', { required: 'Name is required' })}
               error={t(errors.name?.message!)}
               variant="outline"
@@ -231,6 +232,7 @@ export default function CreateOrUpdateAttributeForm({ initialValues }: IProps) {
                   <div className="flex justify-between">
                     <Input
                       className="sm:col-span-2"
+                      isRequiredLabel
                       label={t('form:input-label-value')}
                       variant="outline"
                       {...register(`values.${index}.value` as const)}

@@ -25,6 +25,7 @@ import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
 import { Control, useForm } from 'react-hook-form';
+import slugify from 'slugify';
 
 import { categoryValidationSchema } from './category-validation-schema';
 
@@ -86,12 +87,31 @@ const defaultValues = {
   includeInMenu: true,
   position: 1,
   thumbnail: [],
-  icon: null
+  icon: null,
+  categorySeo: {
+    urlKey: '',
+    metaTitle: '',
+    metaKeywords: '',
+    metaDescription: '',
+    metaRobots: { value: 'INDEX, FOLLOW' },
+    breadcrumbsPriority: 0,
+    metaImage: []
+  }
 };
 
 type IProps = {
   initialValues?: Category | any;
 };
+
+const metaRobotOptions = [
+  { value: 'INDEX, FOLLOW' },
+  { value: 'INDEX, NOFOLLOW' },
+  { value: 'NOINDEX, FOLLOW' },
+  { value: 'NOINDEX, NOFOLLOW' },
+  { value: 'INDEX, FOLLOW, NOARCHIVE' },
+  { value: 'INDEX, NOFOLLOW, NOARCHIVE' },
+  { value: 'NOINDEX, NOFOLLOW, NOARCHIVE' }
+];
 
 export default function CreateOrUpdateCategoriesForm({
   initialValues
@@ -111,11 +131,22 @@ export default function CreateOrUpdateCategoriesForm({
     handleSubmit,
     control,
     setValue,
+    getValues,
     watch,
     formState: { errors },
     reset
   } = useForm<FormValues>({
-    defaultValues: initialValues ? initialValues : defaultValues,
+    defaultValues: isEmpty(initialValues)
+      ? defaultValues
+      : {
+          ...initialValues,
+          categorySeo: isEmpty(initialValues?.categorySeo)
+            ? {}
+            : {
+                ...initialValues?.categorySeo,
+                metaRobots: { value: initialValues?.categorySeo?.metaRobots }
+              }
+        },
     resolver: yupResolver(categoryValidationSchema)
   });
 
@@ -154,7 +185,7 @@ export default function CreateOrUpdateCategoriesForm({
 
   const onSubmit = async (values: FormValues) => {
     if (isEmpty(values.thumbnail)) {
-      notify('form:category-image-required', 'warning');
+      notify(t('form:category-image-required'), 'warning');
       return;
     }
 
@@ -163,12 +194,14 @@ export default function CreateOrUpdateCategoriesForm({
       description: values.description,
       includeInMenu: values.includeInMenu,
       position: Number(values.position),
-      thumbnail: [
-        {
-          id: values.thumbnail[0]?.id
-        }
-      ],
-      parentId: isEmpty(values?.parent) ? null : values?.parent?.id
+      thumbnail: values.thumbnail?.map(({ id }) => ({ id })),
+      parentId: isEmpty(values?.parent) ? null : values?.parent?.id,
+      categorySeo: {
+        ...values.categorySeo,
+        breadcrumbsPriority: Number(values.categorySeo.breadcrumbsPriority),
+        metaImage: values.categorySeo.metaImage?.map(({ id }) => ({ id })),
+        metaRobots: values.categorySeo.metaRobots.value
+      }
     };
 
     setUnsavedChanges(false);
@@ -191,14 +224,45 @@ export default function CreateOrUpdateCategoriesForm({
     return confirm(t('common:UNSAVED_CHANGES'));
   });
 
+  const generateSlug = (slug = '') => {
+    return slugify(slug?.replace(/[^A-Za-z0-9\s!?]/g, '-') ?? '', {
+      trim: false,
+      replacement: '-',
+      lower: true
+    });
+  };
+
   const thumbnail = watch('thumbnail');
   const includeInMenu = watch('includeInMenu');
+  const name = watch('name');
+  const metaDescription = watch('categorySeo.metaDescription');
+  const metaImage = watch('categorySeo.metaImage');
+  const urlKey = watch('categorySeo.urlKey');
 
   useEffect(() => {
     if (!includeInMenu) {
       setValue('position', 0);
     }
   }, [includeInMenu]);
+
+  useEffect(() => {
+    if (!isEmpty(thumbnail) && isEmpty(metaImage)) {
+      setValue('categorySeo.metaImage', thumbnail);
+    }
+  }, [thumbnail, metaImage]);
+
+  useEffect(() => {
+    const value = generateSlug(urlKey);
+    setValue('categorySeo.urlKey', value);
+  }, [urlKey]);
+
+  const updateWhenEmpty = (field: string, isSlug = true) => {
+    // @ts-ignore
+    if (isEmpty(getValues(field))) {
+      // @ts-ignore
+      setValue(field, isSlug ? generateSlug(name) : name);
+    }
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -211,18 +275,16 @@ export default function CreateOrUpdateCategoriesForm({
         <Card className="w-full sm:w-8/12 md:w-2/3">
           <ImageModal
             label="form:label-add-category-image"
+            isRequiredLabel
             onSelect={(photo) => setValue('thumbnail', photo)}
             selected={thumbnail}
             isThumbnail
           />
-          <div className="my-5">
-            <SelectCategories control={control} />
-          </div>
         </Card>
       </div>
       <div className="flex flex-wrap my-5 sm:my-8">
         <Description
-          title={t('form:input-label-description')}
+          title={t('form:input-label-content')}
           details={`${
             initialValues
               ? t('form:item-description-edit')
@@ -233,6 +295,7 @@ export default function CreateOrUpdateCategoriesForm({
         <Card className="w-full sm:w-8/12 md:w-2/3">
           <Input
             label={t('form:input-label-name')}
+            isRequiredLabel
             // @ts-ignore
             {...register('name')}
             error={t(errors.name?.message!)}
@@ -240,11 +303,16 @@ export default function CreateOrUpdateCategoriesForm({
             className="mb-5"
           />
           <TextArea
-            label={t('form:input-label-details')}
+            label={t('form:input-label-description')}
+            isRequiredLabel
             {...register('description')}
+            error={t(errors.description?.message!)}
             variant="outline"
             className="mb-5"
           />
+          <div className="my-5">
+            <SelectCategories control={control} />
+          </div>
           <Input
             label={`${t('form:input-label-menu-position')}`}
             type="number"
@@ -261,6 +329,101 @@ export default function CreateOrUpdateCategoriesForm({
               label="Include in menu"
               control={control}
               errors={errors}
+            />
+          </div>
+        </Card>
+      </div>
+      <div className="flex flex-wrap my-5 sm:my-8">
+        <Description
+          title={t('form:input-label-search-engine-optimization')}
+          details={`${
+            initialValues
+              ? t('form:item-description-edit')
+              : t('form:item-description-add')
+          } ${t('form:category-description-helper-text')}`}
+          className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
+        />
+        <Card className="w-full sm:w-8/12 md:w-2/3">
+          <Input
+            label={t('form:input-label-meta-title')}
+            isRequiredLabel
+            onFocus={() => updateWhenEmpty('categorySeo.metaTitle', false)}
+            // @ts-ignore
+            {...register('categorySeo.metaTitle')}
+            error={t(errors.categorySeo?.metaTitle?.message!)}
+            variant="outline"
+            className="mb-5"
+          />
+          <Input
+            label={t('form:input-label-url-key')}
+            isRequiredLabel
+            onFocus={() => updateWhenEmpty('categorySeo.urlKey')}
+            // @ts-ignore
+            {...register('categorySeo.urlKey')}
+            error={t(errors.categorySeo?.urlKey?.message!)}
+            variant="outline"
+            className="mb-5"
+          />
+          <div className="mb-5">
+            <Label isRequiredLabel>{t('form:input-label-meta-robots')}</Label>
+            <SelectInput
+              name="categorySeo.metaRobots"
+              control={control}
+              getOptionLabel={(option: { value: string }) => option.value}
+              getOptionValue={(option: { value: string }) => option.value}
+              options={metaRobotOptions}
+            />
+          </div>
+          <TextArea
+            label={t('form:input-label-meta-keywords')}
+            // @ts-ignore
+            {...register('categorySeo.metaKeywords')}
+            rows={2}
+            variant="outline"
+            className="mb-5"
+          />
+          <TextArea
+            label={t('form:input-label-meta-description')}
+            // @ts-ignore
+            {...register('categorySeo.metaDescription')}
+            variant="outline"
+          />
+          <div style={{ fontSize: '.75rem' }} className="mb-5">
+            <div className="flex items-center flex-wrap">
+              <p className="text-body mr-2">
+                Meta Description should optimally be between 150-160 characters
+              </p>
+              {metaDescription?.length < 160 ? (
+                <span className="text-green-600">{`(${
+                  metaDescription?.length ?? 0
+                }/160 characters max)`}</span>
+              ) : (
+                <span className="text-red-600">
+                  {`(${metaDescription?.length ?? 0}/160 characters max)`}
+                </span>
+              )}
+            </div>
+            <p className="my-2 text-xs text-red-500">
+              {t(errors.categorySeo?.metaDescription?.message!)}
+            </p>
+          </div>
+          <Input
+            label={`${t('form:input-label-breadcrumbs-priority')}`}
+            type="number"
+            min={0}
+            max={100}
+            {...register('categorySeo.breadcrumbsPriority')}
+            variant="outline"
+            className="mb-12"
+            note="100 is the highest priority. This setting defines the priority of each category to be selected for the product breadcrumbs."
+          />
+          <div className="my-5">
+            <ImageModal
+              onSelect={(image) => setValue('categorySeo.metaImage', image)}
+              isThumbnail
+              selected={metaImage}
+              modalId="metaImage"
+              label="form:label-add-meta-images"
             />
           </div>
         </Card>

@@ -171,7 +171,8 @@ export default function CreateOrUpdateSupplierForm({ initialValues }: IProps) {
           <Card className="w-full sm:w-8/12 md:w-2/3">
             <div className="grid grid-cols-2 gap-5">
               <Input
-                label={`${t('form:input-label-supplier-name')}*`}
+                label={t('form:input-label-supplier-name')}
+                isRequiredLabel
                 {...register('name', { required: 'Name is required' })}
                 error={t(errors.name?.message!)}
                 variant="outline"
@@ -185,7 +186,8 @@ export default function CreateOrUpdateSupplierForm({ initialValues }: IProps) {
                 className="mb-5"
               />
               <Input
-                label={`${t('form:input-label-address-1')}*`}
+                label={t('form:input-label-address-1')}
+                isRequiredLabel
                 {...register('addressLine1', {
                   required: 'address 1 is required'
                 })}

@@ -135,6 +135,7 @@ function ProductSimpleForm({
       <Card className="w-full sm:w-8/12 md:w-2/3">
         <Input
           label={`${t('form:input-label-sale-price')} (${currency.symbol})`}
+          isRequiredLabel
           name="salePrice"
           value={salePrice}
           onChange={handleChange}
@@ -167,7 +168,8 @@ function ProductSimpleForm({
           className="mb-5"
         />
         <Input
-          label={`${t('form:input-label-total-quantity')}*`}
+          label={t('form:input-label-total-quantity')}
+          isRequiredLabel
           name="quantity"
           value={quantity}
           onChange={handleChange}

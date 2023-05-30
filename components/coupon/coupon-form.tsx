@@ -69,7 +69,7 @@ function SelectTypes({
 
   return (
     <div className="mb-5">
-      <Label>{t('form:input-label-discount-type')}</Label>
+      <Label isRequiredLabel>{t('form:input-label-discount-type')}</Label>
       <SelectInput
         name="discountType"
         control={control}
@@ -197,6 +197,7 @@ export default function CreateOrUpdateCouponForm({ initialValues }: IProps) {
         <Card className="w-full sm:w-8/12 md:w-2/3">
           <Input
             label={t('form:input-label-code')}
+            isRequiredLabel
             {...register('code')}
             error={t(errors.code?.message!)}
             variant="outline"

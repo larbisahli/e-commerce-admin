@@ -6,6 +6,7 @@ export interface Props extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   inputClassName?: string;
   label?: string;
   name: string;
+  isRequiredLabel?: boolean;
   error?: string;
   shadow?: boolean;
   variant?: 'normal' | 'solid' | 'outline';
@@ -28,6 +29,7 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, Props>((props, ref) => {
     name,
     error,
     variant = 'normal',
+    isRequiredLabel = false,
     shadow = false,
     inputClassName,
     ...rest
@@ -51,6 +53,11 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, Props>((props, ref) => {
       {label && (
         <label className="block text-body-dark font-semibold text-sm leading-none mb-3">
           {label}
+          {isRequiredLabel && (
+            <span title="Requited filed" className="text-red-500 m-[1px]">
+              *
+            </span>
+          )}
         </label>
       )}
       <textarea
@@ -65,7 +72,7 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, Props>((props, ref) => {
         ref={ref}
         {...rest}
       />
-      {error && <p className="my-2 text-xs text-end text-red-500">{error}</p>}
+      {error && <p className="my-2 text-xs text-red-500">{error}</p>}
     </div>
   );
 });

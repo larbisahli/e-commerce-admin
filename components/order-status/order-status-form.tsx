@@ -138,6 +138,7 @@ export default function CreateOrUpdateOrderStatusForm({
         <Card className="w-full sm:w-8/12 md:w-2/3">
           <Input
             label={t('form:input-label-name')}
+            isRequiredLabel
             {...register('name')}
             error={t(errors.name?.message!)}
             variant="outline"
