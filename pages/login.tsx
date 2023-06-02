@@ -40,8 +40,10 @@ const LoginPage = ({ client }: SSRProps) => {
       <div className="flex flex-col items-center justify-center min-h-screen h-fit">
         <div className="border border-gray-100 mx-auto max-w-xl bg-white p-5 sm:p-8 min-h-screen h-fit w-full">
           <div className="flex flex-col items-center justify-center">
-            <div className="flex justify-center mb-2 font-semibold">Dropgala</div>
-             <h3 className="text-center text-xl font-medium mt-4 mb-10">
+            <div className="flex justify-center mb-2 font-semibold">
+              Dropgala
+            </div>
+            <h3 className="text-center text-xl font-medium mt-4 mb-10">
               {t('admin-login-manage-store')}
             </h3>
           </div>

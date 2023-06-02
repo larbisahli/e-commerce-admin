@@ -70,7 +70,7 @@ const FormFooter = ({ isSignUp = false }) => {
           </Link>
         </div>
         <p className="italic m-3 text-gray-700 text-center">
-        Create Your Dream Online Store Effortlessly with Dropgala!
+          Create Your Dream Online Store Effortlessly with Dropgala!
         </p>
         <p>© dropgala 2022 All rights reserved</p>
       </div>

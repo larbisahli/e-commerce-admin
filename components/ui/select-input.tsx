@@ -29,7 +29,7 @@ const SelectInput = ({
   closeMenuOnSelect = true,
   hideSelectedOptions = false,
   // isSearchable=true,
-  // isDisabled=false,
+  isDisabled = false,
   // isOptionDisabled=false,
   ...rest
 }: SelectInputProps) => {
@@ -43,7 +43,7 @@ const SelectInput = ({
         <Select
           {...field}
           // isOptionDisabled={isOptionDisabled}
-          // isDisabled={isDisabled}
+          isDisabled={isDisabled}
           // isSearchable={isSearchable}
           getOptionLabel={getOptionLabel}
           getOptionValue={getOptionValue}

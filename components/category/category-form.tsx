@@ -311,7 +311,7 @@ export default function CreateOrUpdateCategoriesForm({
             className="mb-5"
           />
           <div className="my-5">
-            <SelectCategories control={control} />
+            {isEmpty(initialValues) && <SelectCategories control={control} />}
           </div>
           <Input
             label={`${t('form:input-label-menu-position')}`}
