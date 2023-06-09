@@ -1,6 +1,14 @@
 import Image from 'next/image';
+import { useEffect } from 'react';
+import MailchimpSubscribe from "react-mailchimp-subscribe"
 
 const HomePage = () => {
+
+  useEffect(()=>{
+    const btn = document.getElementById('mailchimp');
+    btn.childNodes[0].lastChild.textContent = 'Subscribe'
+  },[])
+
   return (
     <div
       className="h-screen pb-14 bg-right bg-cover"
@@ -19,12 +27,12 @@ const HomePage = () => {
               >
                 Login
               </a>
-              <a
+              {/* <a
                 className="inline-block text-white bg-green-600 no-underline rounded hover:text-underline text-center py-3 px-8"
                 href="https://dropgala.com/signup"
               >
                 Sign up
-              </a>
+              </a> */}
             </div>
           </div>
         </div>
@@ -37,16 +45,21 @@ const HomePage = () => {
           <h1 className="my-4 text-3xl md:text-5xl text-green-600 font-bold leading-tight text-center md:text-left slide-in-bottom-h1">
             Coming soon
           </h1>
-          <p className="leading-normal text-gray-800 pb-8 md:text-2xl text-center md:text-left slide-in-bottom-subtitle">
-            The Fastest, Easiest Way to Launch Your Online Store.
+          <p className="leading-normal text-gray-800 pb-8 md:text-xl text-center md:text-left slide-in-bottom-subtitle">
+          Be the first to know when our revolutionary new site goes live!
           </p>
-          <div className="flex items-center w-full">
-            <div className="text-blue-400 font-bold whitespace-nowrap pr-1">
-              More info:
-            </div>
-            <div className="flex w-full justify-center md:justify-start pb-24 lg:pb-0 fade-in px-2">
-              larbisahli1905@gmail.com
-            </div>
+          <div className="w-full">
+          <MailchimpSubscribe
+              url={process.env.NEXT_PUBLIC_MAILCHIMP_URL}
+              render={({ subscribe, status, message }) => (
+                <div className='mailchimp' id='mailchimp'>
+                  <MailchimpSubscribe url={process.env.NEXT_PUBLIC_MAILCHIMP_URL} onSubmitted={formData => subscribe(formData)}/>
+                  {status === "sending" && <div style={{ color: "blue" }}>sending...</div>}
+                  {status === "error" && <div style={{ color: "red" }} dangerouslySetInnerHTML={{__html: message}}/>}
+                  {status === "success" && <div style={{ color: "green" }}>Subscribed !</div>}
+                </div>
+              )}
+            />
           </div>
         </div>
 
@@ -61,12 +74,21 @@ const HomePage = () => {
             height={500}
           />
         </div>
-
+        <div className='flex flex-col items-center justify-center w-full'>
+          <div className="leading-normal text-gray-800 text-center mt-6 slide-in-bottom-subtitle max-w-5xl">
+          A game-changing SaaS platform for creating stunning online stores.
+          Our mission is to empower entrepreneurs, like you, with the tools and features needed to build remarkable e-commerce experiences that captivate and convert. With Dropgala, you can easily customize your store, effortlessly drag and drop components, and unleash your creativity without any coding knowledge required.
+          </div>
+          <p className="leading-normal text-gray-800 my-2 text-center slide-in-bottom-subtitle max-w-5xl">Join us on this exciting journey and unlock the potential of your online business. Together, let's revolutionize the way we build and scale e-commerce stores!</p>
+        </div>
         {/* <!--Footer--> */}
-        <div className="w-full pt-16 pb-6 text-sm text-center md:text-left fade-in">
-          <a className="text-gray-500 no-underline hover:no-underline" href="#">
-            &copy; Dropgala 2023
-          </a>
+        <div className="w-full mt-16 pt-8 pb-6 text-sm text-center md:text-left fade-in border-t border-dotted border-gray-300">
+          <p className="italic m-3 text-gray-700 text-center">
+          Create Your Dream Online Store Effortlessly with Dropgala!
+        </p>
+        <p className="text-gray-500 no-underline hover:no-underline">
+            &copy; Dropgala 2023 All rights reserved.
+          </p>
         </div>
       </div>
     </div>

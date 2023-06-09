@@ -154,3 +154,42 @@
   width: 100%;
   max-height: 28.25em;
 }
+
+.mailchimp > div {
+  display: flex;
+  align-items: center;
+  position: relative;
+  height: 110px;
+}
+
+.mailchimp > div > input{
+  padding: 10px;
+  outline: none;
+  flex: 1;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.mailchimp > div > div{
+  position: absolute;
+  bottom: 0;
+}
+
+.mailchimp > div > button{
+  padding: 10px 20px;
+  outline: none;
+  border: 1px solid #ccc;
+  background-color: rgb(22, 163, 74);
+  color: white;
+  font-weight: bold;
+  border-left: 0;
+  border-radius: 3px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.mailchimp > div > button:hover{
+  background-color: rgb(5, 119, 47);
+}
