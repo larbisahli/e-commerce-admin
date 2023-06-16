@@ -1,13 +1,12 @@
 import Image from 'next/image';
 import { useEffect } from 'react';
-import MailchimpSubscribe from "react-mailchimp-subscribe"
+import MailchimpSubscribe from 'react-mailchimp-subscribe';
 
 const HomePage = () => {
-
-  useEffect(()=>{
+  useEffect(() => {
     const btn = document.getElementById('mailchimp');
-    btn.childNodes[0].lastChild.textContent = 'Subscribe'
-  },[])
+    btn.childNodes[0].lastChild.textContent = 'Subscribe';
+  }, []);
 
   return (
     <div
@@ -46,17 +45,29 @@ const HomePage = () => {
             Coming soon
           </h1>
           <p className="leading-normal text-gray-800 pb-8 md:text-xl text-center md:text-left slide-in-bottom-subtitle">
-          Be the first to know when our revolutionary new site goes live!
+            Be the first to know when our revolutionary new site goes live!
           </p>
           <div className="w-full">
-          <MailchimpSubscribe
+            <MailchimpSubscribe
               url={process.env.NEXT_PUBLIC_MAILCHIMP_URL}
               render={({ subscribe, status, message }) => (
-                <div className='mailchimp' id='mailchimp'>
-                  <MailchimpSubscribe url={process.env.NEXT_PUBLIC_MAILCHIMP_URL} onSubmitted={formData => subscribe(formData)}/>
-                  {status === "sending" && <div style={{ color: "blue" }}>sending...</div>}
-                  {status === "error" && <div style={{ color: "red" }} dangerouslySetInnerHTML={{__html: message}}/>}
-                  {status === "success" && <div style={{ color: "green" }}>Subscribed !</div>}
+                <div className="mailchimp" id="mailchimp">
+                  <MailchimpSubscribe
+                    url={process.env.NEXT_PUBLIC_MAILCHIMP_URL}
+                    onSubmitted={(formData) => subscribe(formData)}
+                  />
+                  {status === 'sending' && (
+                    <div style={{ color: 'blue' }}>sending...</div>
+                  )}
+                  {status === 'error' && (
+                    <div
+                      style={{ color: 'red' }}
+                      dangerouslySetInnerHTML={{ __html: message }}
+                    />
+                  )}
+                  {status === 'success' && (
+                    <div style={{ color: 'green' }}>Subscribed !</div>
+                  )}
                 </div>
               )}
             />
@@ -74,19 +85,27 @@ const HomePage = () => {
             height={500}
           />
         </div>
-        <div className='flex flex-col items-center justify-center w-full'>
+        <div className="flex flex-col items-center justify-center w-full">
           <div className="leading-normal text-gray-800 text-center mt-6 slide-in-bottom-subtitle max-w-5xl">
-          A game-changing SaaS platform for creating stunning online stores.
-          Our mission is to empower entrepreneurs, like you, with the tools and features needed to build remarkable e-commerce experiences that captivate and convert. With Dropgala, you can easily customize your store, effortlessly drag and drop components, and unleash your creativity without any coding knowledge required.
+            A game-changing SaaS platform for creating stunning online stores.
+            Our mission is to empower entrepreneurs, like you, with the tools
+            and features needed to build remarkable e-commerce experiences that
+            captivate and convert. With Dropgala, you can easily customize your
+            store, effortlessly drag and drop components, and unleash your
+            creativity without any coding knowledge required.
           </div>
-          <p className="leading-normal text-gray-800 my-2 text-center slide-in-bottom-subtitle max-w-5xl">Join us on this exciting journey and unlock the potential of your online business. Together, let's revolutionize the way we build and scale e-commerce stores!</p>
+          <p className="leading-normal text-gray-800 my-2 text-center slide-in-bottom-subtitle max-w-5xl">
+            Join us on this exciting journey and unlock the potential of your
+            online business. Together, let's revolutionize the way we build and
+            scale e-commerce stores!
+          </p>
         </div>
         {/* <!--Footer--> */}
         <div className="w-full mt-16 pt-8 pb-6 text-sm text-center md:text-left fade-in border-t border-dotted border-gray-300">
           <p className="italic m-3 text-gray-700 text-center">
-          Create Your Dream Online Store Effortlessly with Dropgala!
-        </p>
-        <p className="text-gray-500 no-underline hover:no-underline">
+            Create Your Dream Online Store Effortlessly with Dropgala!
+          </p>
+          <p className="text-gray-500 no-underline hover:no-underline">
             &copy; Dropgala 2023 All rights reserved.
           </p>
         </div>

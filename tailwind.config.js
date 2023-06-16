@@ -98,6 +98,25 @@ module.exports = {
 
       gridTemplateColumns: {
         fit: 'repeat(auto-fit, minmax(0, 1fr))'
+      },
+      animation: {
+        'marquee-infinite': 'marquee 1s linear infinite',
+        'marquee2-infinite': 'marquee2 1s linear infinite'
+      },
+      keyframes: {
+        shake: {
+          '0%, 100%': { transform: 'translate3d(0,0,0)' },
+          '10%, 30%, 50%, 70%, 90%': { transform: 'translate3d(-6px,0,0)' },
+          '20%, 40%, 60%, 80%': { transform: 'translate3d(6px,0,0)' }
+        },
+        marquee: {
+          '0%': { transform: 'translateX(0%)' },
+          '100%': { transform: 'translateX(-100%)' }
+        },
+        marquee2: {
+          '0%': { transform: 'translateX(-100%)' },
+          '100%': { transform: 'translateX(0%)' }
+        }
       }
     }
   },

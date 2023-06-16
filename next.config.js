@@ -46,7 +46,8 @@ const moduleExports = {
     API_URL: 'https://api.dropgala.com',
     MEDIA_URL: 'https://api.dropgala.com/media',
     NEXT_PUBLIC_GTAG_MEASUREMENT_ID: 'G-SL6J94NXZP',
-    NEXT_PUBLIC_MAILCHIMP_URL: 'https://devrev.us7.list-manage.com/subscribe/post?u=85b3c3a2231cd7d42156c2b25&amp;id=f17d885310&amp;f_id=00d7cfe4f0',
+    NEXT_PUBLIC_MAILCHIMP_URL:
+      'https://devrev.us7.list-manage.com/subscribe/post?u=85b3c3a2231cd7d42156c2b25&amp;id=f17d885310&amp;f_id=00d7cfe4f0',
     TOKEN_ISSUER: 'dropgala.com',
     // NEXT_PUBLIC_GOOGLE_MAP_API_KEY: 'AIzaSyDB2j-G5LJM0yPNG0AqziJjgh1UOW10W7I',
     FB_APPID: '',

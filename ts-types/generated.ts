@@ -394,6 +394,20 @@ export interface HeroCarouselType extends CreatedUpdatedByAt {
   clicks?: Scalars['Int'];
 }
 
+export interface PromoCarouselType extends CreatedUpdatedByAt {
+  id?: Scalars['Int'];
+  animationSpeed: string | { value: string };
+  backgroundColor: string;
+  direction: 'RLT' | 'LTR';
+  published?: Scalars['Boolean'];
+  status?: 'draft' | 'publish';
+  sliders?: {
+    text: string;
+    textColor: string;
+    position?: Scalars['Int'];
+  }[];
+}
+
 export interface SettingsType {
   logo?: ImageType[];
   favicon?: ImageType[];

@@ -162,7 +162,7 @@
   height: 110px;
 }
 
-.mailchimp > div > input{
+.mailchimp > div > input {
   padding: 10px;
   outline: none;
   flex: 1;
@@ -172,12 +172,12 @@
   border-bottom-right-radius: 0;
 }
 
-.mailchimp > div > div{
+.mailchimp > div > div {
   position: absolute;
   bottom: 0;
 }
 
-.mailchimp > div > button{
+.mailchimp > div > button {
   padding: 10px 20px;
   outline: none;
   border: 1px solid #ccc;
@@ -190,6 +190,6 @@
   border-bottom-left-radius: 0;
 }
 
-.mailchimp > div > button:hover{
+.mailchimp > div > button:hover {
   background-color: rgb(5, 119, 47);
 }

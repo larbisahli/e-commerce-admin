@@ -67,7 +67,7 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
     formState: { errors },
     reset
   } = useForm<FormValues>({
-    defaultValues: initialValues
+    defaultValues: !isEmpty(initialValues)
       ? cloneDeep({
           ...initialValues,
           status: (initialValues as HeroCarouselType)?.published

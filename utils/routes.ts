@@ -38,6 +38,7 @@ export const ROUTES = {
   PAYMENTS: '/store/payments',
   EMAIL_TEMPLATES: '/store/email-templates',
   HERO_CAROUSEL: '/hero-carousel',
+  PROMO_SLIDERS: '/promo-sliders',
   INVITE: '/hero-carousel',
   FILE: '/file',
   THEMES: '/themes',

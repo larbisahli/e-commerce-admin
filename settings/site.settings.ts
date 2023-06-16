@@ -163,12 +163,19 @@ export const siteSettings = {
         id: 'WaIqCI',
         href: '#',
         label: 'sidebar-nav-item-sliders',
-        icon: 'ImageMultipleIcon',
+        icon: 'SliderIcon',
         subLinks: [
           {
-            id: 'WaIECI',
+            id: 'WaIE1CI',
             href: ROUTES.HERO_CAROUSEL,
             label: 'sidebar-nav-item-hero-carousel',
+            padding: '35px',
+            isSubLink: true
+          },
+          {
+            id: 'WaIE3WCI',
+            href: ROUTES.PROMO_SLIDERS,
+            label: 'sidebar-nav-item-promo-sliders',
             padding: '35px',
             isSubLink: true
           }
