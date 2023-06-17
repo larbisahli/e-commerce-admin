@@ -2,12 +2,12 @@ import { gql } from '@apollo/client';
 
 export const UPDATE_PROMO_SLIDE = gql`
   mutation UpdatePromoSlide(
-    $id: Int!
+    $id: Int
     $animationSpeed: String
     $backgroundColor: String
     $direction: String
     $published: Boolean!
-    $styles: PromoSliderInput
+    $sliders: [PromoSliderInput]
   ) {
     updatePromoSlide(
       id: $id
@@ -15,7 +15,7 @@ export const UPDATE_PROMO_SLIDE = gql`
       backgroundColor: $backgroundColor
       direction: $direction
       published: $published
-      styles: $styles
+      sliders: $sliders
     ) {
       id
     }
@@ -30,10 +30,11 @@ export const PROMO_SLIDER = gql`
       backgroundColor
       direction
       published
-      styles {
+      sliders {
         text
         textColor
         position
+        destinationUrl
       }
       updatedAt
       updatedBy {

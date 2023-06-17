@@ -396,7 +396,7 @@ export interface HeroCarouselType extends CreatedUpdatedByAt {
 
 export interface PromoCarouselType extends CreatedUpdatedByAt {
   id?: Scalars['Int'];
-  animationSpeed: string | { value: string };
+  animationSpeed: { value: string; name: string };
   backgroundColor: string;
   direction: 'RLT' | 'LTR';
   published?: Scalars['Boolean'];
@@ -405,6 +405,7 @@ export interface PromoCarouselType extends CreatedUpdatedByAt {
     text: string;
     textColor: string;
     position?: Scalars['Int'];
+    destinationUrl: string;
   }[];
 }
 

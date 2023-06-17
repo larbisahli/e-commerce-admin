@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/interactive-supports-focus */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 import { useMutation } from '@apollo/client';
 import Card from '@components/common/card';
 import { SaveIcon } from '@components/icons/save-icon';
@@ -18,7 +16,6 @@ import {
 } from '@hooks/index';
 import { notify } from '@lib/index';
 import type { PromoCarouselType } from '@ts-types/generated';
-import { ROUTES } from '@utils/routes';
 import cn from 'classnames';
 import cloneDeep from 'lodash/cloneDeep';
 import isEmpty from 'lodash/isEmpty';
@@ -64,17 +61,13 @@ export default function CreateOrUpdatePromoSlideForm({
   const [error, setError] = useState(null);
   const [unsavedChanges, setUnsavedChanges] = useState(true);
 
-  const {
-    watch,
-    register,
-    handleSubmit,
-    formState: { errors },
-    control,
-    reset
-  } = useForm<FormValues>({
+  const { watch, register, handleSubmit, control } = useForm<FormValues>({
     defaultValues: !isEmpty(initialValues)
       ? cloneDeep({
           ...initialValues,
+          animationSpeed: animationSpeedOptions?.find(
+            (e) => e.value === initialValues.animationSpeed
+          ),
           status: (initialValues as PromoCarouselType)?.published
             ? 'publish'
             : 'draft'
@@ -102,8 +95,6 @@ export default function CreateOrUpdatePromoSlideForm({
       onCompleted: (data: { updatePromoSlide: PromoCarouselType }) => {
         if (!isEmpty(data)) {
           notify(t('common:successfully-created'), 'success');
-          reset();
-          router.push(ROUTES.HERO_CAROUSEL);
         }
       }
     }
@@ -112,23 +103,25 @@ export default function CreateOrUpdatePromoSlideForm({
   useErrorLogger(error);
 
   const onSubmit = async (values: FormValues) => {
-    console.log({ values });
+    const variables = {
+      direction: values.direction,
+      backgroundColor: values.backgroundColor,
+      animationSpeed: values?.animationSpeed?.value,
+      published: values.status === 'publish',
+      sliders: values?.sliders?.map((slider, idx) => ({
+        ...slider,
+        position: idx
+      }))
+    };
+    console.log({ values, variables });
+
+    updatePromoSlider({
+      variables: { id: initialValues.id, ...variables }
+    }).catch((err) => {
+      setError(err);
+    });
 
     setUnsavedChanges(false);
-    // if (isEmpty(initialValues)) {
-    //   createHeroSlider({ variables }).catch((err) => {
-    //     setError(err);
-    //     resetCreateMutation();
-    //   });
-    // } else {
-    //   const { id = null } = initialValues as HeroCarouselType;
-    //   updateHeroSlider({
-    //     variables: { id, ...variables }
-    //   }).catch((err) => {
-    //     setError(err);
-    //     resetUpdateMutation();
-    //   });
-    // }
   };
 
   useWarnIfUnsavedChanges(unsavedChanges, () => {
@@ -146,7 +139,7 @@ export default function CreateOrUpdatePromoSlideForm({
         <Label>{t('form:input-label-demo')}</Label>
         <PromoSlider
           {...{
-            animationSpeed: animationSpeed.value,
+            animationSpeed: animationSpeed?.value,
             direction,
             sliders,
             backgroundColor
@@ -229,30 +222,42 @@ export default function CreateOrUpdatePromoSlideForm({
           <div>
             {fields.map((slide, index) => (
               <div
-                className="border-b border-dashed border-border-200 last:border-0 py-5 md:py-8"
+                className="border-b border-dashed border-border-500 mb-5 last:border-0 md:py-8"
                 key={index}
               >
-                <div className="flex justify-between">
+                <div className="flex justify-between flex-col">
                   <Input
-                    className="sm:col-span-2"
+                    className="sm:col-span-2  mb-5"
                     isRequiredLabel
                     label={t('form:input-label-title')}
                     variant="outline"
                     {...register(`sliders.${index}.text` as const)}
                     defaultValue={slide.text}
                   />
-                  <ColorPicker
-                    control={control}
-                    color={slide.textColor}
-                    {...register(`sliders.${index}.textColor` as const)}
-                  ></ColorPicker>
-                  <button
-                    onClick={() => remove(index)}
-                    type="button"
-                    className="text-sm text-red-500 hover:text-red-700 transition-colors duration-200 focus:outline-none sm:mt-4 sm:col-span-1"
-                  >
-                    {t('form:button-label-remove')}
-                  </button>
+                  <div>
+                    <Input
+                      className="sm:col-span-2"
+                      label={t('form:input-label-destination-url')}
+                      variant="outline"
+                      {...register(`sliders.${index}.destinationUrl` as const)}
+                      defaultValue={slide.destinationUrl}
+                    />
+                    <div className="mt-5">
+                      <Label>{t('form:input-text-color')}</Label>
+                      <ColorPicker
+                        control={control}
+                        color={slide.textColor}
+                        {...register(`sliders.${index}.textColor` as const)}
+                      ></ColorPicker>
+                    </div>
+                    <button
+                      onClick={() => remove(index)}
+                      type="button"
+                      className="text-sm text-red-500 hover:text-red-700 transition-colors duration-200 focus:outline-none sm:mt-4 sm:col-span-1"
+                    >
+                      {t('form:button-label-remove')}
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}
@@ -260,7 +265,14 @@ export default function CreateOrUpdatePromoSlideForm({
 
           <Button
             type="button"
-            onClick={() => append({ text: '', textColor: '#000', position: 0 })}
+            onClick={() =>
+              append({
+                text: '',
+                textColor: '#000',
+                position: 0,
+                destinationUrl: null
+              })
+            }
             className="w-full sm:w-auto"
           >
             {t('form:button-label-add-value')}
@@ -308,11 +320,7 @@ const PromoSlider = ({
   sliders,
   backgroundColor
 }) => {
-  console.log({ animationSpeed, direction, sliders, backgroundColor });
-
   const [width, setWidth] = useState(null);
-
-  console.log({ width });
 
   useEffect(() => {
     var slideWidth = document.getElementById('promoSlide');
@@ -332,11 +340,13 @@ const PromoSlider = ({
     };
   }, []);
 
+  console.log({ sliders });
+
   return (
     <div
       style={{ backgroundColor: backgroundColor }}
       id="promoSlide"
-      className="h-[40px] overflow-hidden w-full relative text-white text-center font-medium"
+      className="h-[40px] overflow-hidden w-full relative text-white text-center"
     >
       <div
         style={{ animationDuration: animationSpeed }}
@@ -352,13 +362,19 @@ const PromoSlider = ({
           }
         )}
       >
-        {sliders?.map(({ text, textColor }, idx) => (
+        {sliders?.map(({ text, textColor, destinationUrl }, idx) => (
           <div
             key={idx}
             style={{ color: textColor, width: `${width}px` }}
             className="flex justify-center items-center h-[40px]"
           >
-            <span className="h-fit text-xl">{text}</span>
+            {!isEmpty(destinationUrl) ? (
+              <span className="h-fit text-xl hover:underline cursor-pointer">
+                {text}
+              </span>
+            ) : (
+              <span className="h-fit text-xl">{text}</span>
+            )}
           </div>
         ))}
       </div>

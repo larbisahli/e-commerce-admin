@@ -16,7 +16,7 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 interface THeroCarousel {
-  promoSlide: PromoCarouselType[];
+  promoSlide: PromoCarouselType;
 }
 
 export default function PromoSliders({ client }: SSRProps) {
@@ -27,7 +27,7 @@ export default function PromoSliders({ client }: SSRProps) {
     fetchPolicy: 'cache-and-network'
   });
 
-  const { promoSlider = [] } = data ?? {};
+  const { promoSlide = {} } = data ?? {};
 
   useGetUser(client);
   useErrorLogger(error);
@@ -42,7 +42,7 @@ export default function PromoSliders({ client }: SSRProps) {
   return (
     <>
       <PageMainAction title={t('form:input-label-promo-carousel')} label="" />
-      <CreateOrUpdatePromoSlideForm initialValues={promoSlider} />
+      <CreateOrUpdatePromoSlideForm initialValues={promoSlide} />
     </>
   );
 }
