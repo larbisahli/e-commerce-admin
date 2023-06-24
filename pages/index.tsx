@@ -87,12 +87,14 @@ const HomePage = () => {
         </div>
         <div className="flex flex-col items-center justify-center w-full">
           <div className="leading-normal text-gray-800 text-center mt-6 slide-in-bottom-subtitle max-w-5xl">
-            A game-changing SaaS platform for creating stunning online stores.
-            Our mission is to empower entrepreneurs, like you, with the tools
-            and features needed to build remarkable e-commerce experiences that
-            captivate and convert. With Dropgala, you can easily customize your
-            store, effortlessly drag and drop components, and unleash your
-            creativity without any coding knowledge required.
+            Dropgala is an online platform that provides accessible and
+            user-friendly services for creating and managing online stores. With
+            a strong focus on merchant and entrepreneur needs, Dropgala offers a
+            comprehensive range of services, including the creation of
+            professional online stores, extensive support, and valuable business
+            development resources. Their all-in-one solution empowers
+            individuals of all backgrounds to effortlessly establish their
+            online presence and succeed in the digital marketplace.
           </div>
           <p className="leading-normal text-gray-800 my-2 text-center slide-in-bottom-subtitle max-w-5xl">
             Join us on this exciting journey and unlock the potential of your

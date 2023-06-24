@@ -113,7 +113,6 @@ export default function CreateOrUpdatePromoSlideForm({
         position: idx
       }))
     };
-    console.log({ values, variables });
 
     updatePromoSlider({
       variables: { id: initialValues.id, ...variables }
@@ -306,7 +305,10 @@ const DisplayColorCode = ({ color }: { color: string }) => {
   return (
     <>
       {color !== null && (
-        <span className="ms-3 px-2 py-1 text-sm text-heading bg-gray-100 border border-border-200 rounded">
+        <span
+          className="ms-3 px-2 py-1 text-sm text-heading bg-gray-100
+                         border border-border-200 rounded"
+        >
           {color}
         </span>
       )}
@@ -339,8 +341,6 @@ const PromoSlider = ({
       });
     };
   }, []);
-
-  console.log({ sliders });
 
   return (
     <div

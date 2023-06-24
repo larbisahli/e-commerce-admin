@@ -80,6 +80,12 @@ export default function Dashboard() {
   // }
   return (
     <>
+      <div className="mb-8">
+        <div className="text-xl font-medium">Welcome back!</div>
+        <span className="text-sm text-gray-500">
+          {`You can impact someone's life today.`}
+        </span>
+      </div>
       <div className="w-full grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-6">
         <div className="w-full ">
           <StickerCard
