@@ -455,6 +455,19 @@ export interface SettingsType {
   };
 }
 
+export interface PageType {
+  id: string;
+  slug: string;
+  name: string;
+  content: string;
+  published: boolean;
+  ogImageId: ImageType[];
+  seo: {
+    metaTitle: string;
+    metaDescription: string;
+  };
+}
+
 // export declare type Address = {
 //   id: Scalars['ID'];
 //   title?: Nullable<Scalars['String']>;

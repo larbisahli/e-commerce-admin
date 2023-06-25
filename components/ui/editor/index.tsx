@@ -10,6 +10,9 @@ interface EditorInputProps {
   [key: string]: unknown;
 }
 
+// https://lexical.dev/
+// https://blog.logrocket.com/best-text-editors-react/
+
 const Editor = ({ className, ...rest }: EditorInputProps) => {
   return <EditorComponent {...rest} className={className} />;
   // return (

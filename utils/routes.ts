@@ -42,5 +42,11 @@ export const ROUTES = {
   INVITE: '/hero-carousel',
   FILE: '/file',
   THEMES: '/store/themes',
-  COMING_SOON: '/coming-soon'
+  COMING_SOON: '/coming-soon',
+  STORE_ABOUT_US: '/store/pages/about-us',
+  STORE_CONTACT_US: '/store/pages/contact-us',
+  STORE_FAQ: '/store/pages/faq',
+  STORE_TERMS: '/store/pages/terms-and-conditions',
+  STORE_POLICY: '/store/pages/confidentiality',
+  STORE_RETURN_POLICY: '/store/pages/return-policy'
 };

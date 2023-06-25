@@ -182,6 +182,71 @@ export const siteSettings = {
         ]
       },
       {
+        id: 'JU3uxd',
+        href: 'store',
+        label: 'sidebar-nav-item-store',
+        icon: 'ShopIcon',
+        subLinks: [
+          {
+            id: '9YcWhG',
+            href: ROUTES.THEMES,
+            label: 'sidebar-nav-item-themes',
+            padding: '35px',
+            isSubLink: true
+          },
+          {
+            id: 'XU3uxdPo',
+            label: 'sidebar-nav-item-pages',
+            padding: '35px',
+            isSubLink: true,
+            subLinks: [
+              {
+                id: '9Yc234G',
+                href: ROUTES.STORE_ABOUT_US,
+                label: 'sidebar-nav-item-about-us',
+                padding: '45px',
+                isSubLink: true
+              },
+              {
+                id: '9342HWhG',
+                href: ROUTES.STORE_CONTACT_US,
+                label: 'sidebar-nav-item-contact-us',
+                padding: '45px',
+                isSubLink: true
+              },
+              {
+                id: '923442HWhG',
+                href: ROUTES.STORE_FAQ,
+                label: 'sidebar-nav-item-faq',
+                padding: '45px',
+                isSubLink: true
+              },
+              {
+                id: '9349832HWhG',
+                href: ROUTES.STORE_TERMS,
+                label: 'sidebar-nav-item-terms',
+                padding: '45px',
+                isSubLink: true
+              },
+              {
+                id: '9349RTHWhG',
+                href: ROUTES.STORE_POLICY,
+                label: 'sidebar-nav-item-privacy-policy',
+                padding: '45px',
+                isSubLink: true
+              },
+              {
+                id: '9349RTHWhG',
+                href: ROUTES.STORE_RETURN_POLICY,
+                label: 'sidebar-nav-item-return-policy',
+                padding: '45px',
+                isSubLink: true
+              }
+            ]
+          }
+        ]
+      },
+      {
         id: 'j6OQzo',
         href: ROUTES.COMING_SOON,
         label: 'sidebar-nav-item-email',
@@ -321,21 +386,6 @@ export const siteSettings = {
           }
         ],
         line: true
-      },
-      {
-        id: 'JU3uxd',
-        href: 'store',
-        label: 'sidebar-nav-item-store',
-        icon: 'ShopIcon',
-        subLinks: [
-          {
-            id: '9YcWhG',
-            href: ROUTES.THEMES,
-            label: 'sidebar-nav-item-themes',
-            padding: '35px',
-            isSubLink: true
-          }
-        ]
       },
       {
         id: 'nMtvIg',
