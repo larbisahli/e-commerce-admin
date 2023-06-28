@@ -155,8 +155,8 @@ export const siteSettings = {
       },
       {
         id: 'Wa09XCI',
-        href: ROUTES.FILE,
-        label: 'sidebar-nav-item-files',
+        href: ROUTES.MEDIA,
+        label: 'sidebar-nav-item-media',
         icon: 'ImageFolder'
       },
       {

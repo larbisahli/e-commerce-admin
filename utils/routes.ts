@@ -40,7 +40,7 @@ export const ROUTES = {
   HERO_CAROUSEL: '/sliders/hero-carousel',
   PROMO_SLIDERS: '/sliders/promo-sliders',
   INVITE: '/hero-carousel',
-  FILE: '/file',
+  MEDIA: '/media',
   THEMES: '/store/themes',
   COMING_SOON: '/coming-soon',
   STORE_ABOUT_US: '/store/pages/about-us',

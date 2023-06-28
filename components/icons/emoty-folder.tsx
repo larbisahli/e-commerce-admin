@@ -1,0 +1,20 @@
+import React from 'react';
+
+function EmptyFolderSvg() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="45"
+      height="45"
+      viewBox="0 0 15 15"
+    >
+      <path
+        fill="none"
+        stroke="currentColor"
+        d="M5.5 6.5l4 4m-4 0l4-4m-9-4v10a1 1 0 001 1h12a1 1 0 001-1v-8a1 1 0 00-1-1h-6l-2-2h-4a1 1 0 00-1 1z"
+      ></path>
+    </svg>
+  );
+}
+
+export default EmptyFolderSvg;

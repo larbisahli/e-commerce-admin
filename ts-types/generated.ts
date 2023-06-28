@@ -363,6 +363,16 @@ export interface ImageType {
   createdAt?: Scalars['DateTime'];
   size?: Scalars['Int'];
 }
+
+export interface MediaType extends CreatedUpdatedByAt {
+  id?: Scalars['ID'];
+  parent?: MediaType;
+  children?: MediaType[];
+  name?: Scalars['String'];
+  image?: ImageType[];
+  itemsCount?: number;
+}
+
 export interface Suppliers extends CreatedUpdatedByAt {
   id?: Scalars['Int'];
   name?: Scalars['String'];

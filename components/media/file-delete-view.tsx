@@ -4,7 +4,7 @@ import {
   useModalAction,
   useModalState
 } from '@components/ui/modal/modal.context';
-import { DELETE_IMAGE, PHOTOS } from '@graphql/photo';
+import { DELETE_IMAGE, PHOTOS } from '@graphql/media';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetUser } from '@hooks/useGetUser';
 import { notify } from '@lib/notify';

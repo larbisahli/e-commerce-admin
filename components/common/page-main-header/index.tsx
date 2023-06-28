@@ -24,10 +24,10 @@ interface Parameter {
 }
 
 interface Props {
-  columns: { label: string; key: string }[];
-  selectedColumns: string[];
+  columns?: { label: string; key: string }[];
+  selectedColumns?: string[];
   // eslint-disable-next-line no-unused-vars
-  handleColumnChange: (a: Parameter) => void;
+  handleColumnChange?: (a: Parameter) => void;
   // eslint-disable-next-line no-unused-vars
   onPagination: (key: number) => void;
   total: Nullable<number>;

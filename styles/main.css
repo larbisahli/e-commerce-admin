@@ -193,6 +193,11 @@
   a {
     @apply no-underline;
   }
+
+  body {
+    @apply font-body;
+    /* font-family: 'Mulish' */
+  }
 }
 
 @import './custom-plugins.css';

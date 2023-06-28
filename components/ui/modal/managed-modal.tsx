@@ -53,7 +53,7 @@ const SliderDeleteView = dynamic(
 );
 
 const PhotoDeleteView = dynamic(
-  () => import('@components/files/file-delete-view')
+  () => import('@components/media/file-delete-view')
 );
 
 // const AttributeExportImport = dynamic(

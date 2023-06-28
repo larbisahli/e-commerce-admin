@@ -153,6 +153,7 @@
   "button-label-remove": "Remove",
   "button-label-add-option": "Add an option",
   "button-label-add": "Add",
+  "button-label-add-folder": "Add new folder",
   "button-label-update": "Update",
   "button-label-order-status": "Order Status",
   "button-label-add-type": "Add Type",
@@ -458,5 +459,5 @@
   "label-add-category-image": "Add Category Image",
   "button-label-upload-image": "Upload Image",
   "button-label-images": "Images",
-  "input-label-images": "Images"
+  "input-label-media": "Media"
 }
