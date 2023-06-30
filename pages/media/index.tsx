@@ -1,6 +1,7 @@
 import { useQuery } from '@apollo/client';
 import PageMainHeader from '@components/common/page-main-header';
 import PageMainAction from '@components/common/PageMainAction';
+import { UploadIcon } from '@components/icons/upload-icon';
 import AppLayout from '@components/layouts/app';
 import MediaList from '@components/media';
 import ErrorMessage from '@components/ui/error-message';
@@ -57,16 +58,9 @@ export default function Files({ client }: SSRProps) {
     return <ErrorMessage message={t('common:MESSAGE_SOMETHING_WENT_WRONG')} />;
   }
 
-  const onImageUpload = (e) => {
-    e.preventDefault();
-    console.log('LOL');
-  };
-
   return (
     <>
       <PageMainAction
-        href="#"
-        onClick={onImageUpload}
         title={t('form:input-label-media')}
         label={t('form:button-label-upload-image')}
       />

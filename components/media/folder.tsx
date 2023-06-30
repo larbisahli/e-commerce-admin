@@ -1,10 +1,13 @@
 import { ApolloQueryResult, useMutation } from '@apollo/client';
+import DotsIcon from '@components/icons/dots';
 import FolderSvg from '@components/icons/folder';
-import Loader from '@components/ui/loader/loader';
-import { CREATE_FOLDER, MEDIA, UPDATE_FOLDER } from '@graphql/media';
+import ImageComponent from '@components/ImageComponent';
+import { useModalAction } from '@components/ui/modal/modal.context';
+import { CREATE_FOLDER, UPDATE_FOLDER } from '@graphql/media';
 import { useGetUser } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { notify } from '@lib/notify';
+import { MEDIA_ITEM_MODAL } from '@ts-types/constants';
 import { MediaType, Tag } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import isEmpty from 'lodash/isEmpty';
@@ -28,6 +31,8 @@ export default function Folder({
 }: IProps) {
   const router = useRouter();
   const { t } = useTranslation();
+
+  const { openModal } = useModalAction();
 
   const id = router.query.id as string;
 
@@ -110,12 +115,12 @@ export default function Folder({
           contentEditable={isCreateMode}
           id="editable_input"
           className="text-gray-500 mt-4 break-all outline-none capitalize
-      focus:border px-2 py-1 rounded-sm focus:border-green-500 w-44 text-center"
+       px-2 rounded-sm focus:outline-blue-300 w-44 text-center"
         ></span>
       );
     }
     return (
-      <span className="text-gray-500 mt-4 break-all capitalize">
+      <span className="text-gray-500 text-center cut-line-2 mt-4 break-all capitalize">
         {folder?.name}
       </span>
     );
@@ -130,17 +135,75 @@ export default function Folder({
     return null;
   };
 
-  return (
-    <Link href={`${ROUTES.MEDIA}/${folder?.id}`}>
-      <a className="relative flex flex-col items-center w-fit h-fit p-5 hover:bg-blue-100 cursor-pointer">
-        {renderSpinner()}
-        <div className="border border-gray-300 flex justify-center bg-gray-100 items-center h-40 w-40 rounded">
-          <div className="m-2">
-            <FolderSvg width={55} height={55} />
+  const { image = [] } = folder;
+  const photo = image[0] ?? {};
+
+  const handleModalClick = (e) => {
+    e.preventDefault();
+    openModal(MEDIA_ITEM_MODAL, id, folder);
+  };
+
+  const renderFolder = () => {
+    return (
+      <Link href={`${ROUTES.MEDIA}/${folder?.id}`}>
+        <a
+          title={folder?.name}
+          className=" relative flex flex-col items-center w-48 h-fit p-5 hover:bg-blue-100 cursor-pointer"
+        >
+          {renderSpinner()}
+          <div className="border relative group border-gray-300 flex justify-center bg-gray-100 items-center h-40 w-40 rounded">
+            <button
+              onClick={handleModalClick}
+              className="group-hover:block px-1 cursor-pointer hidden bg-white text-black top-0 absolute right-0 z-50"
+            >
+              <div className="rotate-90">
+                <DotsIcon />
+              </div>
+            </button>
+            <div className="m-2">
+              <FolderSvg width={55} height={55} />
+            </div>
           </div>
+          {renderTitle()}
+        </a>
+      </Link>
+    );
+  };
+
+  const renderImage = () => {
+    return (
+      <div
+        title={folder?.name}
+        className="flex flex-col items-center w-48 h-fit p-5 hover:bg-blue-100 group"
+      >
+        <div className="relative border border-gray-300 flex justify-center bg-gray-100 items-center h-40 w-40 rounded">
+          <button
+            onClick={handleModalClick}
+            className="group-hover:block px-1 cursor-pointer hidden bg-white text-black top-0 absolute right-0 z-50"
+          >
+            <div className="rotate-90">
+              <DotsIcon />
+            </div>
+          </button>
+          <div className="bg-black p-[2px] text-white text-xs top-0 rounded-sm absolute left-0 z-50">
+            {photo?.size?.formatBytes()}
+          </div>
+          <ImageComponent
+            src={photo?.image}
+            customPlaceholder={photo?.placeholder}
+            width={160}
+            height={160}
+            objectFit="cover"
+          />
         </div>
         {renderTitle()}
-      </a>
-    </Link>
-  );
+      </div>
+    );
+  };
+
+  if (isEmpty(image)) {
+    return renderFolder();
+  }
+
+  return renderImage();
 }

@@ -7,9 +7,10 @@ interface Props {
   title: string;
   label: string;
   onClick?: (e: any) => void;
+  RenderIcon?: () => any;
 }
 
-const PageMainAction = ({ href, title, label, onClick }: Props) => {
+const PageMainAction = ({ href, title, label, onClick, RenderIcon }: Props) => {
   const { t } = useTranslation();
 
   return (
@@ -19,11 +20,11 @@ const PageMainAction = ({ href, title, label, onClick }: Props) => {
         <LinkButton href={href} onClick={onClick} className="h-12 ms-4 md:ms-6">
           <div className="w-full flex items-center justify-center">
             <div className="hidden md:flex items-center justify-center">
-              <Add width="1rem" height="1rem" />
+              {RenderIcon ? <RenderIcon /> : <Add width="1rem" height="1rem" />}
               <span className="m-1">{label}</span>
             </div>
             <div className="md:hidden flex items-center justify-center">
-              <Add width="1rem" height="1rem" />
+              {RenderIcon ? <RenderIcon /> : <Add width="1rem" height="1rem" />}
               <span className="m-1">{t('form:button-label-add')}</span>
             </div>
           </div>

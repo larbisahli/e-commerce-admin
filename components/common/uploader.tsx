@@ -1,6 +1,6 @@
 import { UploadIcon } from '@components/icons/upload-icon';
 import { useErrorLogger } from '@hooks/index';
-import { appendFile, useAppDispatch } from '@hooks/useFiles';
+import { useAppDispatch } from '@hooks/useFiles';
 import { notify } from '@lib/notify';
 import { apiURL } from '@utils/utils';
 import { useTranslation } from 'next-i18next';
@@ -16,10 +16,8 @@ interface ImageType {
   error?: any;
 }
 
-export default function Uploader({ setLoading }: any) {
+export default function Uploader({ setLoading, mediaId = null, refetch }: any) {
   const { t } = useTranslation();
-
-  const dispatch = useAppDispatch();
 
   const [error, setError] = useState(null);
 
@@ -28,9 +26,22 @@ export default function Uploader({ setLoading }: any) {
   const { getRootProps, getInputProps } = useDropzone({
     multiple: true,
     maxSize: 5 * (1024 * 1024),
-    onDrop: async (acceptedFiles) => {
+    onDrop: async (acceptedFiles, fileRejections) => {
+      setLoading(true);
+
       try {
-        setLoading(true);
+        fileRejections.forEach((file) => {
+          file.errors.forEach((err) => {
+            if (err.code === 'file-too-large') {
+              notify(`Error: Image is larger than 5MB`, 'error');
+            }
+
+            if (err.code === 'file-invalid-type') {
+              notify(`Error: ${err.message}`, 'error');
+            }
+          });
+          setLoading(false);
+        });
 
         for await (const file of acceptedFiles) {
           if (
@@ -40,6 +51,7 @@ export default function Uploader({ setLoading }: any) {
           ) {
             var formData = new FormData();
             formData.append('image', file);
+            formData.append('mediaId', mediaId ?? '');
             fetch(`${apiURL}/upload`, {
               credentials: 'include',
               method: 'POST',
@@ -49,7 +61,7 @@ export default function Uploader({ setLoading }: any) {
 
               if (image.success) {
                 setLoading(false);
-                dispatch(appendFile({ image }));
+                refetch();
               }
 
               // @ts-ignore
@@ -61,7 +73,8 @@ export default function Uploader({ setLoading }: any) {
               console.log(`<:FINISHED UPLOAD:>`, image);
             });
           } else {
-            notify('Image type not supported!', 'error');
+            notify('Image type is not supported!', 'error');
+            setLoading(false);
           }
         }
       } catch (error) {

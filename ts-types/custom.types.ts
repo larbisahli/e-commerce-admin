@@ -12,6 +12,7 @@ import type {
   DELETE_TAG_TYPE,
   DELETE_USER_TYPE,
   IMAGE_MODAL_TYPE,
+  MEDIA_ITEM_MODAL_TYPE,
   PRODUCT_MODAL_TYPE
 } from './constants';
 import { SortOrder, UserType } from './generated';
@@ -68,7 +69,8 @@ export type ModalView =
   | DELETE_SUPPLIER_TYPE
   | DELETE_SLIDER_TYPE
   | IMAGE_MODAL_TYPE
-  | PRODUCT_MODAL_TYPE;
+  | PRODUCT_MODAL_TYPE
+  | MEDIA_ITEM_MODAL_TYPE;
 
 export type CategoryQueryOptionsType = {
   id?: Scalars['Int'];

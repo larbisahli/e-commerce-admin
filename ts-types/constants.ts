@@ -31,6 +31,8 @@ export const DELETE_SLIDER = 'DELETE_SLIDER';
 export type DELETE_SLIDER_TYPE = typeof DELETE_SLIDER;
 export const IMAGE_MODAL = 'IMAGE_MODAL';
 export type IMAGE_MODAL_TYPE = typeof IMAGE_MODAL;
+export const MEDIA_ITEM_MODAL = 'MEDIA_ITEM_MODAL';
+export type MEDIA_ITEM_MODAL_TYPE = typeof MEDIA_ITEM_MODAL;
 export const PRODUCT_MODAL = 'PRODUCT_MODAL';
 export type PRODUCT_MODAL_TYPE = typeof PRODUCT_MODAL;
 

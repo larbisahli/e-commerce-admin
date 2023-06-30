@@ -1,10 +1,12 @@
 /* eslint-disable jsx-a11y/interactive-supports-focus */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import { ApolloQueryResult } from '@apollo/client';
+import Uploader from '@components/common/uploader';
 import { ArrowPrev } from '@components/icons/arrow-prev';
 import EmptyFolderSvg from '@components/icons/emoty-folder';
 import ImageComponent from '@components/ImageComponent';
 import Button from '@components/ui/button';
+import Loader from '@components/ui/loader/loader';
 import Modal from '@components/ui/modal/modal';
 import { MediaType } from '@ts-types/generated';
 import cn from 'classnames';
@@ -15,6 +17,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import Folder from './folder';
+import ImageViewModal from './Image-view-modal';
 
 type IProps = {
   media: {
@@ -49,6 +52,7 @@ const MediaList = ({ media, refetch }: IProps) => {
   });
 
   const [newFolderClicked, setNewFolderClicked] = useState(false);
+  const [loadingImage, setLoading] = useState<boolean>(false);
 
   const handleNewFolderButton = () => {
     setNewFolderClicked((prev) => !prev);
@@ -75,6 +79,10 @@ const MediaList = ({ media, refetch }: IProps) => {
 
   return (
     <>
+      <ImageViewModal />
+      <div className="relative py-4 m-2">
+        <Uploader setLoading={setLoading} mediaId={id} refetch={refetch} />
+      </div>
       <div className="mb-6">
         <div
           className={cn('flex justify-end items-center', {
@@ -89,7 +97,7 @@ const MediaList = ({ media, refetch }: IProps) => {
               type="button"
             >
               <ArrowPrev width={18} height={18} />
-              <span className="pl-2">{t('form:button-label-back')}</span>
+              <span className="pl-2">{media.parent.name}</span>
             </Button>
           )}
           <Button
@@ -102,6 +110,9 @@ const MediaList = ({ media, refetch }: IProps) => {
           </Button>
         </div>
         <div className="mt-14 flex flex-wrap">
+          {loadingImage && (
+            <Loader height="10vh" text={t('common:text-loading')} />
+          )}
           {newFolderClicked && (
             <Folder
               folder={{}}

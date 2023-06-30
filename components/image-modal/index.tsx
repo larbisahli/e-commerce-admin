@@ -2,6 +2,7 @@
 import 'rc-pagination/assets/index.css';
 
 import Uploader from '@components/common/uploader';
+import { ArrowPrev } from '@components/icons/arrow-prev';
 import { ImagesSvg } from '@components/icons/images';
 import { UploadIcon } from '@components/icons/upload-icon';
 import Button from '@components/ui/button';
@@ -12,17 +13,17 @@ import {
   useModalAction,
   useModalState
 } from '@components/ui/modal/modal.context';
-import Pagination2 from '@components/ui/pagination2';
 import Thumbs from '@components/ui/thumbs';
 import { useFiles } from '@hooks/useFiles';
 import { IMAGE_MODAL } from '@ts-types/constants';
 import { ImageType } from '@ts-types/generated';
+import cn from 'classnames';
+import { isEmpty } from 'lodash';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
 
-import ImageThumbs from './thumbs';
-
-const limit = 40;
+import Folder from './folder';
+import ImageThumb from './thumb';
 
 interface Props {
   // eslint-disable-next-line no-unused-vars
@@ -47,19 +48,18 @@ const ImageModal = ({
   const { closeModal, openModal } = useModalAction();
   const { isOpen, view, id } = useModalState();
 
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loadingImage, setLoading] = useState<boolean>(false);
   const [uploadVisible, setUploadVisible] = useState<boolean>(false);
+  const [selectedFolderId, setSelectedFolderId] = useState(null);
   const [selectedImages, setSelectedImages] = useState<ImageType[]>(
     () => selected
   );
 
   const {
-    photos: { items },
-    currentPage,
-    photosCount,
-    loadingPhotos,
-    handlePagination
-  } = useFiles({ limit });
+    fileStore: { parent, children },
+    loading,
+    refetch
+  } = useFiles({ id: selectedFolderId });
 
   useEffect(() => {
     if (!isOpen) {
@@ -72,8 +72,19 @@ const ImageModal = ({
   useEffect(() => {
     if (!isOpen) {
       setUploadVisible(false);
+    } else {
+      setSelectedFolderId(null);
     }
   }, [isOpen]);
+
+  const handleClick = (id) => {
+    setSelectedFolderId(id);
+  };
+
+  const handleImageRemoval = (e, id) => {
+    e.preventDefault();
+    onSelect(selected?.filter((img) => img.id !== id) ?? []);
+  };
 
   return (
     <div className="w-full">
@@ -96,18 +107,18 @@ const ImageModal = ({
         </Button>
       </div>
       {/* SELECTED IMAGES */}
-      <Thumbs photos={selected} modalId={modalId} />
+      <Thumbs photos={selected} handleImageRemoval={handleImageRemoval} />
       {/* MODEL */}
       <Modal open={isOpen && isCurrentModal} onClose={closeModal}>
         {view === IMAGE_MODAL && (
           <div className="flex overflow-y-auto flex-col bg-white md:h-fit h-[100vh] w-[100vw] md:w-[70vw] 2xl:w-[60vw]">
-            <div className="p-4 font-semibold text-lg bg-green-600 text-white uppercase">
-              Images
+            <div className="p-4 font-semibold text-lg bg-green-600 text-white capitalize">
+              Choose media
             </div>
             <div className="p-4 h-fit min-h-[400px] w-full">
               <div className="w-fit text-gray-500 text-sm">
-                Your files are encrypted for security reasons and only accessed
-                by you.
+                Your media files are encrypted for security reasons and only
+                accessed by you.
               </div>
               <div className="flex justify-end pt-5 pb-2">
                 <Button
@@ -122,45 +133,78 @@ const ImageModal = ({
               </div>
               {uploadVisible && (
                 <div className="py-4 m-2">
-                  <Uploader setLoading={setLoading} />
+                  <Uploader
+                    setLoading={setLoading}
+                    mediaId={parent?.id}
+                    refetch={refetch}
+                  />
                 </div>
               )}
-              <div className="flex flex-col justify-between relative my-5 flex-1">
+              <div className="flex item-center">
+                {!!parent?.name && (
+                  <button
+                    className={cn(
+                      'flex hover:text-black text-lg p-2 items-center justify-center text-gray-500 underline'
+                    )}
+                    onClick={() => handleClick(parent?.parentId)}
+                  >
+                    <div className="mx-2">
+                      <ArrowPrev width="16px" height="16px" />
+                    </div>
+                    <div>{parent?.name}</div>
+                  </button>
+                )}
+              </div>
+              <div className="flex border-t flex-col justify-between relative my-5 flex-1">
                 <div className="absolute z-10 top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                  {loadingPhotos && (
+                  {loading && (
                     <Loader height="20vh" text={t('common:text-loading')} />
                   )}
                 </div>
-                <div className="h-full w-full min-h-[400px]">
-                  <ul className="my-4 image-grid-col-auto grid grid-flow-row gap-4 w-full">
-                    {loading && (
-                      <li className="rounded-sm mt-2 me-2 relative">
-                        <div className="relative min-w-0 w-24 h-24 overflow-hidden rounded-sm">
-                          <div className="h-16 flex items-center justify-center mt-2 ms-2">
+                <div className="h-full w-full">
+                  <ul className="my-4 flex flex-wrap w-full overflow-y-auto min-h-[400px] md:max-h-[600px]">
+                    {loadingImage && (
+                      <li className="bg-blue-100 rounded-sm w-36 h-40 mt-2 me-2 relative">
+                        <div className="relative min-w-0 w-36 h-40 overflow-hidden rounded-sm">
+                          <div className="h-full flex items-center justify-center">
                             <Loader simple={true} className="w-6 h-6" />
                           </div>
                         </div>
                       </li>
                     )}
-                    <ImageThumbs
-                      photos={items}
-                      {...{
-                        setSelectedImages,
-                        selectedImages,
-                        isThumbnail
-                      }}
-                    />
+                    {children?.map((child) => {
+                      if (isEmpty(child.image)) {
+                        return (
+                          <Folder
+                            key={child.id}
+                            folder={child}
+                            onClick={handleClick}
+                          />
+                        );
+                      }
+                      return (
+                        <ImageThumb
+                          key={child.id}
+                          name={child.name}
+                          photo={child?.image[0]}
+                          {...{
+                            setSelectedImages,
+                            selectedImages,
+                            isThumbnail
+                          }}
+                        />
+                      );
+                    })}
                   </ul>
                 </div>
-                <div className="flex items-center mt-3 md:mb-0 justify-between mb-16">
-                  <div className="flex-1">
-                    <Pagination2
-                      total={photosCount}
-                      current={currentPage}
-                      pageSize={limit}
-                      onChange={handlePagination}
-                    />
-                  </div>
+                <div className="flex items-center mt-3 md:mb-0 justify-end mb-16">
+                  <Button
+                    variant="outline"
+                    className="mr-4"
+                    onClick={() => closeModal()}
+                  >
+                    Cancel
+                  </Button>
                   <Button
                     onClick={() => {
                       onSelect(selectedImages);
@@ -168,7 +212,7 @@ const ImageModal = ({
                       closeModal();
                     }}
                   >
-                    Select
+                    Add media
                   </Button>
                 </div>
               </div>

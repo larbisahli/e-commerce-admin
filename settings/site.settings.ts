@@ -222,14 +222,14 @@ export const siteSettings = {
                 isSubLink: true
               },
               {
-                id: '9349832HWhG',
+                id: '93149832HWhG',
                 href: ROUTES.STORE_TERMS,
                 label: 'sidebar-nav-item-terms',
                 padding: '45px',
                 isSubLink: true
               },
               {
-                id: '9349RTHWhG',
+                id: '90049RTHWhG',
                 href: ROUTES.STORE_POLICY,
                 label: 'sidebar-nav-item-privacy-policy',
                 padding: '45px',
@@ -426,7 +426,7 @@ export const siteSettings = {
         disabled: true
       },
       {
-        id: 'WDIqEI',
+        id: 'WDIqE0I',
         href: ROUTES.COMING_SOON,
         label: 'sidebar-nav-item-invite-earn',
         icon: 'AffiliateIcon',

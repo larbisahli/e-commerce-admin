@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 
-export const MEDIA = gql`
+export const PHOTOS = gql`
   query Media($id: ID, $page: Int!, $limit: Int!) {
     media(id: $id, page: $page, limit: $limit) {
       parent {
@@ -19,6 +19,40 @@ export const MEDIA = gql`
       children {
         id
         name
+        itemsCount
+      }
+    }
+  }
+`;
+
+export const MEDIA = gql`
+  query Media($id: ID, $page: Int!, $limit: Int!) {
+    media(id: $id, page: $page, limit: $limit) {
+      parent {
+        id
+        name
+        parentId
+        image {
+          id
+          image
+          placeholder
+          size
+          createdAt
+        }
+        createdAt
+        itemsCount
+      }
+      children {
+        id
+        name
+        parentId
+        image {
+          id
+          image
+          placeholder
+          size
+          createdAt
+        }
         itemsCount
       }
     }
