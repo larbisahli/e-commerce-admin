@@ -1,5 +1,5 @@
 import cn from 'classnames';
-import { LabelHTMLAttributes } from 'react';
+import React, { LabelHTMLAttributes } from 'react';
 
 export interface Props extends LabelHTMLAttributes<HTMLLabelElement> {
   className?: string;

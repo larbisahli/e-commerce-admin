@@ -143,9 +143,25 @@ export const siteSettings = {
       },
       {
         id: 'JiCQsO',
-        href: ROUTES.SHIPPING_ZONES,
-        label: 'sidebar-nav-item-shipping-zones',
-        icon: 'ShippingsIcon'
+        href: '#',
+        label: 'sidebar-nav-item-shipping-and-delivery',
+        icon: 'ShippingsIcon',
+        subLinks: [
+          {
+            id: 'WaXZ1CI',
+            href: ROUTES.SHIPPING_ZONES,
+            label: 'sidebar-nav-item-shipping-zones',
+            padding: '35px',
+            isSubLink: true
+          },
+          {
+            id: 'W0P93WCI',
+            href: ROUTES.DELIVERY_TIMES,
+            label: 'sidebar-nav-item-delivery-times',
+            padding: '35px',
+            isSubLink: true
+          }
+        ]
       },
       {
         id: '1tWw2Tg',
@@ -247,6 +263,29 @@ export const siteSettings = {
         ]
       },
       {
+        id: 'WD0IqEI',
+        href: '#',
+        label: 'sidebar-nav-item-marketplace',
+        icon: 'MarketPlaceSvg',
+        subLinks: [
+          {
+            id: 'RVS2Rg5VS',
+            href: ROUTES.MARKETPLACE_THEMES,
+            label: 'sidebar-nav-item-themes',
+            padding: '35px',
+            isSubLink: true
+          },
+          {
+            id: 'j6OZZXzo',
+            href: ROUTES.MARKETPLACE_APPS,
+            label: 'sidebar-nav-item-apps',
+            padding: '35px',
+            isSubLink: true,
+            disabled: true
+          }
+        ]
+      },
+      {
         id: 'j6OQzo',
         href: ROUTES.COMING_SOON,
         label: 'sidebar-nav-item-email',
@@ -279,50 +318,50 @@ export const siteSettings = {
           }
         ]
       },
-      {
-        id: 'W109XCO',
-        href: ROUTES.COMING_SOON,
-        label: 'sidebar-nav-item-rma',
-        icon: 'PackageReturn',
-        disabled: true,
-        subLinks: [
-          {
-            id: 'WaIACaCI',
-            href: ROUTES.COMING_SOON,
-            label: 'sidebar-nav-item-manage-requests',
-            padding: '35px',
-            isSubLink: true
-          },
-          {
-            id: 'WaIRCAaCI',
-            href: ROUTES.COMING_SOON,
-            label: 'sidebar-nav-item-customer-pending-requests',
-            padding: '35px',
-            isSubLink: true
-          },
-          {
-            id: 'WaIECaCI',
-            href: ROUTES.COMING_SOON,
-            label: 'sidebar-nav-item-item-conditions',
-            padding: '35px',
-            isSubLink: true
-          },
-          {
-            id: 'WaIOCaCI',
-            href: ROUTES.COMING_SOON,
-            label: 'sidebar-nav-item-return-reasons',
-            padding: '35px',
-            isSubLink: true
-          },
-          {
-            id: 'WaIPCaCI',
-            href: ROUTES.COMING_SOON,
-            label: 'sidebar-nav-item-rma-statuses',
-            padding: '35px',
-            isSubLink: true
-          }
-        ]
-      },
+      // {
+      //   id: 'W109XCO',
+      //   href: ROUTES.COMING_SOON,
+      //   label: 'sidebar-nav-item-rma',
+      //   icon: 'PackageReturn',
+      //   disabled: true,
+      //   subLinks: [
+      //     {
+      //       id: 'WaIACaCI',
+      //       href: ROUTES.COMING_SOON,
+      //       label: 'sidebar-nav-item-manage-requests',
+      //       padding: '35px',
+      //       isSubLink: true
+      //     },
+      //     {
+      //       id: 'WaIRCAaCI',
+      //       href: ROUTES.COMING_SOON,
+      //       label: 'sidebar-nav-item-customer-pending-requests',
+      //       padding: '35px',
+      //       isSubLink: true
+      //     },
+      //     {
+      //       id: 'WaIECaCI',
+      //       href: ROUTES.COMING_SOON,
+      //       label: 'sidebar-nav-item-item-conditions',
+      //       padding: '35px',
+      //       isSubLink: true
+      //     },
+      //     {
+      //       id: 'WaIOCaCI',
+      //       href: ROUTES.COMING_SOON,
+      //       label: 'sidebar-nav-item-return-reasons',
+      //       padding: '35px',
+      //       isSubLink: true
+      //     },
+      //     {
+      //       id: 'WaIPCaCI',
+      //       href: ROUTES.COMING_SOON,
+      //       label: 'sidebar-nav-item-rma-statuses',
+      //       padding: '35px',
+      //       isSubLink: true
+      //     }
+      //   ]
+      // },
       {
         id: '1239XCO',
         href: ROUTES.COMING_SOON,
@@ -417,13 +456,6 @@ export const siteSettings = {
             disabled: true
           }
         ]
-      },
-      {
-        id: 'WDIqEI',
-        href: ROUTES.COMING_SOON,
-        label: 'sidebar-nav-item-marketplace',
-        icon: 'MarketPlaceSvg',
-        disabled: true
       },
       {
         id: 'WDIqE0I',

@@ -8,7 +8,8 @@ export const ROUTES = {
   COUPONS: '/coupons',
   CUSTOMERS: '/customers',
   TAXES: '/taxes',
-  SHIPPING_ZONES: '/shipping-zones',
+  SHIPPING_ZONES: '/shipping-delivery/shipping-zones',
+  DELIVERY_TIMES: '/shipping-delivery/delivery-times',
   SETTINGS: '/settings',
   CATEGORIES: '/categories',
   ATTRIBUTES: '/attributes',
@@ -48,5 +49,7 @@ export const ROUTES = {
   STORE_FAQ: '/store/pages/faq',
   STORE_TERMS: '/store/pages/terms-and-conditions',
   STORE_POLICY: '/store/pages/confidentiality',
-  STORE_RETURN_POLICY: '/store/pages/return-policy'
+  STORE_RETURN_POLICY: '/store/pages/return-policy',
+  MARKETPLACE_THEMES: '/marketplace/themes/listing',
+  MARKETPLACE_APPS: '/marketplace/apps/listing'
 };

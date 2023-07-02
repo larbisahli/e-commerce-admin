@@ -40,7 +40,7 @@ export default function NavMenu() {
     <Menu as="div" className="relative inline-block text-left">
       <Menu.Button
         className={cx(
-          'flex items-center text-gray-700 shadow-lg border rounded-full focus:outline-none p-1',
+          'flex items-center bg-white text-gray-700 shadow-lg border rounded-full focus:outline-none p-1',
           'border-hover'
         )}
       >

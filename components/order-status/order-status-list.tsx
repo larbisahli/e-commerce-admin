@@ -60,7 +60,7 @@ const OrderStatusList = ({ orderStatuses, selectedColumns }: IProps) => {
           <Badge
             text={privacy}
             color={
-              privacy === PrivacyType.Private ? 'bg-blue-500' : 'bg-accent'
+              privacy === PrivacyType.Private ? 'bg-blue-500' : 'bg-green-600'
             }
           />
         )

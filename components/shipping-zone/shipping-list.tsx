@@ -76,7 +76,7 @@ const ShippingList = ({ shippingZones, selectedColumns }: IProps) => {
             <Badge
               className="!text-sm"
               text={active ? 'Visible' : 'Hidden'}
-              color={active ? 'bg-green-400' : 'bg-red-400'}
+              color={active ? 'bg-green-600' : 'bg-red-400'}
             />
           );
         }
@@ -92,7 +92,7 @@ const ShippingList = ({ shippingZones, selectedColumns }: IProps) => {
             <Badge
               className="!text-sm"
               text={freeShipping ? 'Yes' : 'No'}
-              color={freeShipping ? 'bg-green-400' : 'bg-red-400'}
+              color={freeShipping ? 'bg-green-600' : 'bg-red-400'}
             />
           );
         }
@@ -145,7 +145,7 @@ const ShippingList = ({ shippingZones, selectedColumns }: IProps) => {
         render: (id: string) => (
           <ActionButtons
             id={id}
-            editUrl={`${ROUTES.SHIPPING_ZONES}/edit/${id}`}
+            editUrl={`${ROUTES.SHIPPING_DELIVERY}/edit/${id}`}
             deleteModalView="DELETE_SHIPPING"
           />
         ),

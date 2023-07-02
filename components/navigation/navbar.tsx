@@ -60,15 +60,11 @@ const Navbar = () => {
         <div className="flex items-center space-s-8">
           <Link
             target="_blank"
-            className="hover:text-accent text-gray-700  shadow hover:border-green-300 border rounded-full w-10 h-10 flex items-center justify-center"
+            className="bg-white hover:text-accent text-gray-700  shadow hover:border-blue-300 border rounded-full w-10 h-10 flex items-center justify-center"
             href={`https://${alias}.dropgala.com`}
           >
             <ShopIcon />
           </Link>
-          <div className="text-body-black font-medium flex items-center shadow justify-center border rounded-full py-1 px-3">
-            <div className="font-medium text-gray-600 mr-1">Balance:</div>
-            <div className="text-green-600 font-medium">$100</div>
-          </div>
           <NavNotification />
           <NavMenu />
         </div>

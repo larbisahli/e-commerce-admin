@@ -97,7 +97,7 @@ const HeroCarouselList = ({ heroCarouselList, selectedColumns }: IProps) => {
         render: (published: boolean) => (
           <Badge
             text={published ? 'Publish' : 'Draft'}
-            color={published ? 'bg-accent' : 'bg-yellow-400'}
+            color={published ? 'bg-green-600' : 'bg-yellow-500'}
           />
         )
       },

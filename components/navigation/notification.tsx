@@ -31,7 +31,7 @@ export default function NavNotification() {
       >
         <div
           className={cn(
-            'flex items-center text-gray-500 justify-center cursor-pointer w-10 h-10 overflow-hidden rounded-full'
+            'flex items-center bg-white text-gray-500 justify-center cursor-pointer w-10 h-10 overflow-hidden rounded-full'
           )}
         >
           <Bell width={25} height={25} />

@@ -121,10 +121,11 @@
 }
 
 .border-hover{
-  border: 2px solid #d7d7d7;
+  border: 1px solid #d7d7d7;
   box-shadow: 0 0 10px 2px #18181818;
 
   &:hover{
-    border: 2px solid #a7e641;
+    border: 1px solid;
+    @apply border-blue-400;
   }
 }

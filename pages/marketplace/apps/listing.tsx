@@ -1,8 +1,7 @@
 import { useQuery } from '@apollo/client';
 import PageMainAction from '@components/common/PageMainAction';
 import AppLayout from '@components/layouts/app';
-import PageTabs from '@components/pageTabs';
-import MyThemeList from '@components/theme/my-theme-list';
+import ThemeList from '@components/theme/theme-list';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { THEMES } from '@graphql/theme';
@@ -44,10 +43,10 @@ export default function Themes({ client }: SSRProps) {
   return (
     <>
       <PageMainAction
-        title={t('form:button-label-your-themes')}
-        label={t('form:button-label-your-themes')}
+        title={t('form:button-label-themes')}
+        label={t('form:button-label-themes')}
       />
-      <MyThemeList themes={themes} />
+      <ThemeList themes={themes} />
     </>
   );
 }

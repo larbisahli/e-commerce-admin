@@ -114,7 +114,7 @@ const CouponList = ({ coupons, selectedColumns }: IProps) => {
             <Badge
               className="!text-sm"
               text={expired || limited ? 'Expired' : 'Active'}
-              color={expired || limited ? 'bg-red-500' : 'bg-green-500'}
+              color={expired || limited ? 'bg-red-500' : 'bg-green-600'}
             />
           );
         }

@@ -98,7 +98,7 @@ const UserList = ({ users, selectedColumns }: IProps) => {
             <Badge
               className="!text-sm"
               text={active ? 'Active' : 'Inactive'}
-              color={active ? 'bg-green-500' : 'bg-red-500'}
+              color={active ? 'bg-green-600' : 'bg-red-500'}
             />
           );
         }

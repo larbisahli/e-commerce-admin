@@ -94,10 +94,10 @@ const SidebarItem = ({
       {hadSubLinks ? (
         <div
           className={cn(
-            'overflow-hidden cursor-pointer justify-between flex w-full pl-6 hover:!bg-sidenav-active-hover-color p-2 items-center text-base text-sidenav-color text-start focus:text-accent hover:border-solid hover:border-green-300 hover:text-white border-l-2 border-transparent border-solid',
+            'overflow-hidden cursor-pointer justify-between flex w-full pl-6 hover:!bg-sidenav-active-hover-color p-2 items-center text-base text-sidenav-color text-start focus:text-accent hover:border-solid hover:border-white hover:text-white border-l-2 border-transparent border-solid',
             {
               'nav-sub-links-bg': !!padding,
-              '!text-white !bg-sidenav-active-hover-color border-green-300 border-solid':
+              '!text-white !bg-sidenav-active-hover-color border-blue-300 border-solid':
                 sublevelOpen
             },
             {
@@ -122,12 +122,12 @@ const SidebarItem = ({
           activeClassName={
             hadSubLinks
               ? ''
-              : cn('relative !bg-green-600 hover:!bg-green-500 !text-white', {
+              : cn('relative !bg-blue-600 hover:!bg-blue-500 !text-white', {
                   'sidebar-triangle': showTriangle
                 })
           }
           className={cn(
-            'overflow-hidden flex w-full pl-6 hover:bg-sidenav-active-hover-color p-2 items-center text-base text-sidenav-color hover:text-white text-start focus:text-white hover:border-solid hover:border-green-300 hover:border-l-2 border-l-2 border-transparent border-solid',
+            'overflow-hidden flex w-full pl-6 hover:bg-sidenav-active-hover-color p-2 items-center text-base text-sidenav-color hover:text-white text-start focus:text-white hover:border-solid hover:border-white hover:border-l-2 border-l-2 border-transparent border-solid',
             { 'nav-sub-links-bg': !!padding && !isSublevel },
             {
               'pointer-events-none opacity-70': disabled
