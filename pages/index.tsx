@@ -9,6 +9,7 @@ import ShipIcon from '@components/icons/ship';
 import ThumbUpIcon from '@components/icons/thumb-up';
 import UpSellIcon from '@components/icons/upsell';
 import cn from 'classnames';
+import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -57,6 +58,13 @@ const HomePage = () => {
       className="h-screen pb-14 bg-right bg-cover"
       // style={{ backgroundImage: "url('/bg.svg')" }}
     >
+      <Head>
+        <title>Dropgala</title>
+        <meta
+          name="description"
+          content="Dropgala is an online platform that provides accessible and user-friendly services for creating and managing online stores."
+        />
+      </Head>
       {/* NAVIGATION */}
       <nav
         className={cn('w-full px-6 py-3 fixed z-50 transition-all', {
@@ -77,7 +85,7 @@ const HomePage = () => {
               </Link>
             </div>
             <div className="flex font-medium justify-center items-center">
-              <Link href="https://dropgala.com/login">
+              {/* <Link href="https://dropgala.com/login">
                 <a className="inline-block border text-gray-800 border-gray-300 mx-3 no-underline rounded-sm hover:text-underline text-center py-3 px-8">
                   Login
                 </a>
@@ -85,6 +93,11 @@ const HomePage = () => {
               <Link href="https://dropgala.com/signup">
                 <a className="inline-block text-white bg-blue-600 no-underline rounded-sm hover:text-underline text-center py-3 px-8">
                   Sign up
+                </a>
+              </Link> */}
+              <Link href="#subscription">
+                <a className="inline-block text-white bg-blue-600 no-underline rounded-full border-blue-300 font-medium hover:text-underline text-center py-2 px-5">
+                  Join Our Waitlist!
                 </a>
               </Link>
             </div>
@@ -99,14 +112,14 @@ const HomePage = () => {
           <div className="container pt-12 md:pt-12 px-6 mx-auto flex flex-wrap flex-col md:flex-row items-center justify-between">
             {/* <!--Left Col--> */}
             <div className="flex flex-col w-full xl:w-2/5 justify-center lg:items-start overflow-y-hidden">
-              <h1 className="my-4 text-2xl md:text-4xl text-blue-500 font-bold leading-tight text-center md:text-left slide-in-bottom-h1">
+              <h1 className="my-4 text-center text-2xl md:text-4xl text-blue-500 font-bold leading-tight xl:text-left slide-in-bottom-h1">
                 Start your online store and kickstart your e-commerce business
                 today
               </h1>
-              <p className="leading-normal text-gray-700 pb-8 text-base text-center md:text-left slide-in-bottom-subtitle">
+              <p className="leading-normal text-gray-700 pb-8 text-base w-full text-center xl:text-left slide-in-bottom-subtitle">
                 Be the first to know when our revolutionary new site goes live!
               </p>
-              <div className="w-full">
+              <div className="w-full flex justify-center">
                 <MailchimpSubscribe
                   url={process.env.NEXT_PUBLIC_MAILCHIMP_URL}
                   render={({ subscribe, status, message }) => (
@@ -223,7 +236,7 @@ const HomePage = () => {
           </div>
           <div className="mt-8 grid grid-cols-1 gap-5 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
             {/*  */}
-            <div className="shadow h-[250px] border bg-white rounded-lg">
+            <div className="shadow h-[280px] border bg-white rounded-lg">
               <div className=" flex justify-center items-center flex-col p-4">
                 <div className="py-3 text-gray-700">
                   <ShipIcon />
@@ -238,7 +251,7 @@ const HomePage = () => {
               </div>
             </div>
             {/*  */}
-            <div className="shadow h-[250px] border bg-white rounded-lg">
+            <div className="shadow h-[280px] border bg-white rounded-lg">
               <div className=" flex justify-center items-center flex-col p-4">
                 <div className="py-3 text-gray-800">
                   <SheetsIcon />
@@ -246,14 +259,15 @@ const HomePage = () => {
                 <div className="font-medium pt-1">Google Sheet Integration</div>
                 <div className="pt-5 text-center text-gray-700">
                   <p>
-                    Scale and speed up your business operations by leveraging
-                    the power of our seamless Google Sheet integration
+                    Supercharge your business operations with our seamless
+                    Google Sheet integration for enhanced scalability and
+                    accelerated processes.
                   </p>
                 </div>
               </div>
             </div>
             {/*  */}
-            <div className="shadow h-[250px] border bg-white rounded-lg">
+            <div className="shadow h-[280px] border bg-white rounded-lg">
               <div className=" flex justify-center items-center flex-col p-4">
                 <div className="py-3 text-gray-500">
                   <CurrencyConvertIcon />
@@ -261,15 +275,15 @@ const HomePage = () => {
                 <div className="font-medium pt-1">Multi Currency Converter</div>
                 <div className="pt-5 text-center text-gray-700">
                   <p>
-                    Offer a customized experience to your customers. Your store
-                    currency will be automatically converted based on your
-                    customers location.
+                    Offer seamless customer experiences with automatic currency
+                    conversion based on their location. Customize your store's
+                    currency to cater to each customer effortlessly.
                   </p>
                 </div>
               </div>
             </div>
             {/*  */}
-            <div className="shadow h-[250px] border bg-white rounded-lg">
+            <div className="shadow h-[280px] border bg-white rounded-lg">
               <div className=" flex justify-center items-center flex-col p-4">
                 <div className="py-3 text-gray-800">
                   <ExpressCheckoutIcon />
@@ -277,14 +291,15 @@ const HomePage = () => {
                 <div className="font-medium pt-1">Express checkout form</div>
                 <div className="pt-5 text-center text-gray-700">
                   <p>
-                    Allow your visitor to order the product on the same page.
-                    Less steps, more conversion!
+                    Boost conversions with a streamlined shopping experience—let
+                    visitors order products directly on the same page,
+                    eliminating extra steps.
                   </p>
                 </div>
               </div>
             </div>
             {/*  */}
-            <div className="shadow h-[250px] border bg-white rounded-lg">
+            <div className="shadow h-[280px] border bg-white rounded-lg">
               <div className=" flex justify-center items-center flex-col p-4">
                 <div className="py-3 text-gray-700">
                   <UpSellIcon />
@@ -292,15 +307,16 @@ const HomePage = () => {
                 <div className="font-medium pt-1">One Click UpSell</div>
                 <div className="pt-5 text-center text-gray-700">
                   <p>
-                    Increase your sales effortlessly with our upsell, cross-sell
-                    and related products feature that shows your customers
-                    attractive offers right after they purchase.
+                    Effortlessly increase sales with post-purchase upsell,
+                    cross-sell, and related products. Delight customers with
+                    attractive offers, driving additional revenue and enhancing
+                    their shopping experience.
                   </p>
                 </div>
               </div>
             </div>
             {/*  */}
-            <div className="shadow h-[250px] border bg-white rounded-lg">
+            <div className="shadow h-[280px] border bg-white rounded-lg">
               <div className=" flex justify-center items-center flex-col p-4">
                 <div className="py-3 text-gray-700">
                   <AnalyticsIcon />
@@ -308,15 +324,15 @@ const HomePage = () => {
                 <div className="font-medium pt-1">SEO Support</div>
                 <div className="pt-5 text-center text-gray-700">
                   <p>
-                    Rank your product pages higher in search results. Get free
-                    access to the tools you need to increase organic traffic to
-                    your store.
+                    Boost your product page rankings in search results. Unlock
+                    free access to powerful tools that drive organic traffic and
+                    elevate your store's visibility.
                   </p>
                 </div>
               </div>
             </div>
             {/*  */}
-            <div className="shadow h-[250px] border bg-white rounded-lg">
+            <div className="shadow h-[270px] border bg-white rounded-lg">
               <div className=" flex justify-center items-center flex-col p-4">
                 <div className="py-3 text-gray-700">
                   <PluginIcon />
@@ -324,15 +340,15 @@ const HomePage = () => {
                 <div className="font-medium pt-1">Pixels Integration</div>
                 <div className="pt-5 text-center text-gray-700">
                   <p>
-                    Drive quality leads to your store thanks to our
-                    easy-to-setup pixel integration of most advertising
+                    Attract high-quality leads to your store effortlessly with
+                    our seamless pixel integration across popular advertising
                     platforms.
                   </p>
                 </div>
               </div>
             </div>
             {/*  */}
-            <div className="shadow h-[250px] border bg-white rounded-lg">
+            <div className="shadow h-[270px] border bg-white rounded-lg">
               <div className=" flex justify-center items-center flex-col p-4">
                 <div className="py-3 text-gray-700">
                   <ThumbUpIcon />
@@ -340,8 +356,8 @@ const HomePage = () => {
                 <div className="font-medium pt-1">Products Reviews</div>
                 <div className="pt-5 text-center text-gray-700">
                   <p>
-                    Increase your store's conversion by up to 50% by adding real
-                    reviews from your happy past customers.
+                    {`Increase your store's conversion by up to 50% by adding real
+                    reviews from your happy past customers.`}
                   </p>
                 </div>
               </div>
@@ -352,7 +368,7 @@ const HomePage = () => {
         {/* ----------------- Pricing ------------------- */}
         <section
           id="pricing"
-          className="p-5 px-11 mt-32 container mx-auto rounded w-full"
+          className="p-5 sm:px-11 mt-32 container mx-auto rounded w-full"
         >
           <div className="flex flex-col items-center">
             <h2 className="my-5 text-3xl text-gray-800 font-bold leading-tight text-center md:text-left slide-in-bottom-h1">
@@ -361,9 +377,9 @@ const HomePage = () => {
             <p>Offering the most competitive rates to entrepreneurs:</p>
           </div>
           <div className="w-full pt-8">
-            <div className="mt-8 mx-auto grid grid-cols-1 gap-8 lg:grid-cols-2 xl:grid-cols-3 w-fit">
+            <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-2 xl:grid-cols-3 mx-auto w-fit">
               {/* STARTUP */}
-              <div className="shadow h-[800px] mt-11 border-2 bg-white rounded-xl w-[400px]">
+              <div className="shadow h-[800px] mt-11 border-2 bg-white rounded-xl min-w-[300px] sm:w-[400px]">
                 <div className="p-5">
                   <div className="font-semibold text-2xl pt-1">Startup</div>
                   <div className="pt-5">
@@ -371,7 +387,7 @@ const HomePage = () => {
                     <span className="text-gray-500 ml-1">/month</span>
                   </div>
                   <div className="pt-5">
-                    <Link href="https://dropgala.com/signup">
+                    <Link href="#subscription">
                       <a className="inline-block text-black hover:text-white hover:bg-gray-900 font-medium rounded-[10px] border-black border no-underline w-full hover:text-underline text-center py-2 px-8">
                         Get Started
                       </a>
@@ -499,7 +515,7 @@ const HomePage = () => {
                 </div>
               </div>
               {/* PRO */}
-              <div className="shadow h-[900px] border-2 bg-white rounded-xl border-gray-600 w-[400px]">
+              <div className="shadow h-[900px] border-2 bg-white rounded-xl border-gray-600 min-w-[300px] sm:w-[400px]">
                 <div className="p-5">
                   <div className="font-semibold text-3xl pt-1">Pro</div>
                   <div className="pt-5">
@@ -507,7 +523,7 @@ const HomePage = () => {
                     <span className="text-gray-500 ml-1">/month</span>
                   </div>
                   <div className="pt-5">
-                    <Link href="https://dropgala.com/signup">
+                    <Link href="#subscription">
                       <a className="inline-block font-medium  text-white rounded-[10px] bg-black hover:bg-gray-900 no-underline w-full hover:text-underline text-center py-2 px-8">
                         Get Started
                       </a>
@@ -572,7 +588,7 @@ const HomePage = () => {
                 </div>
               </div>
               {/* BUSINESS */}
-              <div className="shadow border-2 mt-11 h-[800px] bg-white rounded-xl w-[400px]">
+              <div className="shadow border-2 mt-11 h-[800px] bg-white rounded-xl  min-w-[300px] sm:w-[400px]">
                 <div className="p-5">
                   <div className="font-semibold text-3xl pt-1">Business</div>
                   <div className="pt-5">
@@ -580,7 +596,7 @@ const HomePage = () => {
                     <span className="text-gray-500 ml-1">/month</span>
                   </div>
                   <div className="pt-5">
-                    <Link href="https://dropgala.com/signup">
+                    <Link href="#subscription">
                       <a className="inline-block text-black hover:text-white hover:bg-gray-900 font-medium rounded-[10px] border-black border no-underline w-full hover:text-underline text-center py-2 px-8">
                         Get Started
                       </a>
@@ -658,7 +674,7 @@ const HomePage = () => {
         </section>
 
         {/* ------------- FAQ ----------------- */}
-        <section className="p-5 px-11 mt-32 container mx-auto flex flex-col rounded bg-gray-100 w-full">
+        <section className="p-5 sm:px-11 mt-32 container mx-auto flex flex-col rounded bg-gray-100 w-full">
           <div className="flex items-center justify-center flex-col my-7">
             <h2 className="text-2xl text-gray-800 font-bold leading-tight text-center md:text-left slide-in-bottom-h1">
               Frequently asked questions

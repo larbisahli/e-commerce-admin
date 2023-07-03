@@ -170,6 +170,8 @@
   border-radius: 3px;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
+  min-width: 100px;
+  max-width: 500px;
 }
 
 .mailchimp > div > div {
@@ -178,7 +180,7 @@
 }
 
 .mailchimp > div > button {
-  padding: 10px 20px;
+  padding: 10px 12px;
   outline: none;
   border: 1px solid #ccc;
   background-color: rgb(45, 105, 216);
