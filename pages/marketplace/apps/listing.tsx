@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client';
 import PageMainAction from '@components/common/PageMainAction';
 import AppLayout from '@components/layouts/app';
-import ThemeList from '@components/theme/theme-list';
+import ThemeList from '@components/theme/theme-listing';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { THEMES } from '@graphql/theme';
