@@ -181,7 +181,7 @@
   padding: 10px 20px;
   outline: none;
   border: 1px solid #ccc;
-  background-color: rgb(22, 163, 74);
+  background-color: rgb(45, 105, 216);
   color: white;
   font-weight: bold;
   border-left: 0;
@@ -191,5 +191,5 @@
 }
 
 .mailchimp > div > button:hover {
-  background-color: rgb(5, 119, 47);
+  background-color: rgb(74, 122, 211);
 }
