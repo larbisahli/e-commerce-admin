@@ -131,7 +131,7 @@ export default function CreateOrUpdateCouponForm({ initialValues }: IProps) {
       if (!isEmpty(data)) {
         notify(t('common:successfully-created'), 'success');
         reset();
-        router.push(ROUTES.COUPONS);
+        router.push(ROUTES.COUPON);
       }
     }
   });
@@ -145,7 +145,7 @@ export default function CreateOrUpdateCouponForm({ initialValues }: IProps) {
     onCompleted: (data: { updateCoupon: Coupon }) => {
       if (!isEmpty(data)) {
         notify(t('common:successfully-updated'), 'success');
-        router.push(ROUTES.COUPONS);
+        router.push(ROUTES.COUPON);
       }
     }
   });

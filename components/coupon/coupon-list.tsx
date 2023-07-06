@@ -206,7 +206,7 @@ const CouponList = ({ coupons, selectedColumns }: IProps) => {
         render: (id: string) => (
           <ActionButtons
             id={id}
-            editUrl={`${ROUTES.COUPONS}/edit/${id}`}
+            editUrl={`${ROUTES.COUPON}/edit/${id}`}
             deleteModalView="DELETE_COUPON"
           />
         )

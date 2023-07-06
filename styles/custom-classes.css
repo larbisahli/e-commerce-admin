@@ -155,6 +155,10 @@
   max-height: 28.25em;
 }
 
+.mailchimp {
+  width: 100%;
+}
+
 .mailchimp > div {
   display: flex;
   align-items: center;

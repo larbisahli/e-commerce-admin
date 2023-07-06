@@ -39,6 +39,13 @@ export const siteSettings = {
             isSubLink: true
           },
           {
+            id: '0tSWwS2Tg',
+            href: ROUTES.ORDER_STATUS,
+            label: 'sidebar-nav-item-order-status',
+            padding: '35px',
+            isSubLink: true
+          },
+          {
             id: '2tWw2Tg',
             href: ROUTES.COMING_SOON,
             label: 'sidebar-nav-item-invoices',
@@ -72,7 +79,7 @@ export const siteSettings = {
         subLinks: [
           {
             id: 'W12ECaCI',
-            href: ROUTES.CUSTOMERS,
+            href: ROUTES.CUSTOMER,
             label: 'sidebar-nav-item-all-customers',
             padding: '35px',
             isSubLink: true
@@ -96,7 +103,7 @@ export const siteSettings = {
         subLinks: [
           {
             id: '4855yLk',
-            href: ROUTES.PRODUCTS,
+            href: ROUTES.PRODUCT,
             label: 'sidebar-nav-item-products',
             padding: '35px',
             isSubLink: true
@@ -108,36 +115,44 @@ export const siteSettings = {
             padding: '35px',
             isSubLink: true,
             disabled: true
+          },
+          {
+            id: 'D2IXKt',
+            href: ROUTES.SUPPLIER,
+            label: 'sidebar-nav-item-suppliers',
+            padding: '35px',
+            isSubLink: true
+          },
+          {
+            id: 'D2IXKt',
+            href: ROUTES.MANUFACTURER,
+            label: 'sidebar-nav-item-manufacturers',
+            padding: '35px',
+            isSubLink: true
           }
         ]
       },
       {
         id: '4859yLk',
-        href: ROUTES.CATEGORIES,
+        href: ROUTES.CATEGORY,
         label: 'sidebar-nav-item-categories',
         icon: 'CategoriesIcon'
       },
       {
         id: 'vGN65vK',
-        href: ROUTES.ATTRIBUTES,
+        href: ROUTES.ATTRIBUTE,
         label: 'sidebar-nav-item-attributes',
         icon: 'AttributeIcon'
       },
       {
         id: 'yNqHtb',
-        href: ROUTES.TAGS,
+        href: ROUTES.TAG,
         label: 'sidebar-nav-item-tags',
         icon: 'TagIcon'
       },
       {
-        id: 'D2IcKt',
-        href: ROUTES.SUPPLIERS,
-        label: 'sidebar-nav-item-suppliers',
-        icon: 'SuppliersIcon'
-      },
-      {
         id: 'Qk3MiG',
-        href: ROUTES.COUPONS,
+        href: ROUTES.COUPON,
         label: 'sidebar-nav-item-coupons',
         icon: 'CouponsIcon'
       },
@@ -149,25 +164,19 @@ export const siteSettings = {
         subLinks: [
           {
             id: 'WaXZ1CI',
-            href: ROUTES.SHIPPING_ZONES,
+            href: ROUTES.SHIPPING_ZONE,
             label: 'sidebar-nav-item-shipping-zones',
             padding: '35px',
             isSubLink: true
           },
           {
             id: 'W0P93WCI',
-            href: ROUTES.DELIVERY_TIMES,
+            href: ROUTES.DELIVERY_TIME,
             label: 'sidebar-nav-item-delivery-times',
             padding: '35px',
             isSubLink: true
           }
         ]
-      },
-      {
-        id: '1tWw2Tg',
-        href: ROUTES.ORDER_STATUS,
-        label: 'sidebar-nav-item-order-status',
-        icon: 'OrdersStatusIcon'
       },
       {
         id: 'Wa09XCI',
@@ -190,7 +199,7 @@ export const siteSettings = {
           },
           {
             id: 'WaIE3WCI',
-            href: ROUTES.PROMO_SLIDERS,
+            href: ROUTES.PROMO_SLIDER,
             label: 'sidebar-nav-item-promo-sliders',
             padding: '35px',
             isSubLink: true
@@ -205,7 +214,15 @@ export const siteSettings = {
         subLinks: [
           {
             id: '9YcWhG',
-            href: ROUTES.THEMES,
+            href: ROUTES.SYSTEM_STORES,
+            label: 'sidebar-nav-item-all-stores',
+            padding: '35px',
+            isSubLink: true,
+            disabled: true
+          },
+          {
+            id: '9YcWhG',
+            href: ROUTES.THEME,
             label: 'sidebar-nav-item-themes',
             padding: '35px',
             isSubLink: true
@@ -270,14 +287,14 @@ export const siteSettings = {
         subLinks: [
           {
             id: 'RVS2Rg5VS',
-            href: ROUTES.MARKETPLACE_THEMES,
+            href: ROUTES.MARKETPLACE_THEME,
             label: 'sidebar-nav-item-themes',
             padding: '35px',
             isSubLink: true
           },
           {
             id: 'j6OZZXzo',
-            href: ROUTES.MARKETPLACE_APPS,
+            href: ROUTES.MARKETPLACE_APP,
             label: 'sidebar-nav-item-apps',
             padding: '35px',
             isSubLink: true,
@@ -438,6 +455,22 @@ export const siteSettings = {
             label: 'sidebar-nav-item-account-settings',
             padding: '35px',
             isSubLink: true
+          },
+          {
+            id: '9YcWhG',
+            href: ROUTES.COMING_SOON,
+            label: 'sidebar-nav-item-payment-methods',
+            padding: '35px',
+            isSubLink: true,
+            disabled: true
+          },
+          {
+            id: '9YcWhG',
+            href: ROUTES.COMING_SOON,
+            label: 'sidebar-nav-item-tax',
+            padding: '35px',
+            isSubLink: true,
+            disabled: true
           },
           {
             id: 'j6OQzo',

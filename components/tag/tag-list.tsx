@@ -89,7 +89,7 @@ const TagList = ({ tags, selectedColumns }: IProps) => {
         render: (id: string) => (
           <ActionButtons
             id={id}
-            editUrl={`${ROUTES.TAGS}/edit/${id}`}
+            editUrl={`${ROUTES.TAG}/edit/${id}`}
             deleteModalView="DELETE_TAG"
           />
         )

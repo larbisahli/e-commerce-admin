@@ -118,7 +118,7 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
       if (!isEmpty(data)) {
         reset();
         notify(t('common:successfully-created'), 'success');
-        router.push(ROUTES.SHIPPING_DELIVERY);
+        router.push(ROUTES.SHIPPING_ZONE);
       }
     }
   });
@@ -135,7 +135,7 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
     onCompleted: (data: { updateShippingZone: ShippingZoneType }) => {
       if (!isEmpty(data)) {
         notify(t('common:successfully-updated'), 'success');
-        router.push(ROUTES.SHIPPING_DELIVERY);
+        router.push(ROUTES.SHIPPING_ZONE);
       }
     }
   });

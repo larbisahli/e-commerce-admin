@@ -163,7 +163,7 @@ function ProductForm({ setUnsavedChanges, initialValues = {} }: IProps) {
     onCompleted: (data: { createAttribute: Product }) => {
       if (!isEmpty(data)) {
         notify(t('common:successfully-created'), 'success');
-        router.push(ROUTES.PRODUCTS);
+        router.push(ROUTES.PRODUCT);
       }
     }
   });

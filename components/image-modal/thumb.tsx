@@ -83,7 +83,7 @@ const ImageThumb = ({
           <Checkbox
             name="image"
             id={photo?.id?.toString()}
-            className="transition-all absolute z-50"
+            className="transition-all absolute z-30"
             onChange={(e) => handleSelectImage(e, photo)}
             checked={isCurrentImage}
             style={{

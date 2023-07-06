@@ -1,17 +1,16 @@
 import { useQuery } from '@apollo/client';
-import CategoryList from '@components/category/category-list';
 import PageMainHeader from '@components/common/page-main-header';
 import PageMainAction from '@components/common/PageMainAction';
 import AppLayout from '@components/layouts/app';
+import SuppliersList from '@components/suppliers/supplier-list';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
-import { CATEGORIES } from '@graphql/category';
+import { SUPPLIERS } from '@graphql/supplier';
 import { useErrorLogger, useGetUser } from '@hooks/index';
 import { useTableColumn } from '@hooks/useTableColumn';
 import { verifyAuth } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
-import { OrderBy, SortOrder } from '@ts-types/generated';
-import { Category } from '@ts-types/generated';
+import { OrderBy, SortOrder, Suppliers } from '@ts-types/generated';
 import { COLUMNS } from '@utils/data/table-columns';
 import { ROUTES } from '@utils/routes';
 import isEmpty from 'lodash/isEmpty';
@@ -20,9 +19,9 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useState } from 'react';
 
-interface TCategories {
-  categories: Category[];
-  categoryCount: { count: number };
+interface TSupplier {
+  suppliers: Suppliers[];
+  supplierCount: { count: number };
 }
 
 interface OptionsVariable {
@@ -32,20 +31,20 @@ interface OptionsVariable {
   sortedBy: SortOrder;
 }
 
-export default function Categories({ client }: SSRProps) {
+export default function SuppliersPage({ client }: SSRProps) {
   const { t } = useTranslation();
 
   const [page, setPage] = useState(1);
-  const [orderBy, setOrder] = useState(OrderBy.CREATED_AT);
   const [limit, setLimit] = useState({ id: 1, value: 10, label: 10 });
+  const [orderBy, setOrder] = useState(OrderBy.CREATED_AT);
 
   const { selectedTableColumns, handleColumnChange } =
-    useTableColumn('category');
+    useTableColumn('supplier');
 
   const { data, loading, error, fetchMore } = useQuery<
-    TCategories,
+    TSupplier,
     OptionsVariable
-  >(CATEGORIES, {
+  >(SUPPLIERS, {
     variables: {
       page,
       limit: limit.value,
@@ -55,7 +54,7 @@ export default function Categories({ client }: SSRProps) {
     fetchPolicy: 'cache-and-network'
   });
 
-  const { categories = [], categoryCount: { count } = { count: 0 } } =
+  const { suppliers = [], supplierCount: { count } = { count: 0 } } =
     data ?? {};
 
   useGetUser(client);
@@ -83,12 +82,12 @@ export default function Categories({ client }: SSRProps) {
   return (
     <>
       <PageMainAction
-        href={`${ROUTES.CATEGORIES}/create`}
-        title={t('form:input-label-categories')}
-        label={t('form:button-label-add-categories')}
+        href={`${ROUTES.SUPPLIER}/create`}
+        title={t('form:button-label-add-supplier')}
+        label={t('common:sidebar-nav-item-suppliers')}
       />
       <PageMainHeader
-        columns={COLUMNS['category']}
+        columns={COLUMNS['supplier']}
         selectedColumns={selectedTableColumns}
         handleColumnChange={handleColumnChange}
         onLimitChange={(value) => {
@@ -100,15 +99,15 @@ export default function Categories({ client }: SSRProps) {
         currentPage={page}
         perPage={limit.value}
       />
-      <CategoryList
-        categories={categories}
+      <SuppliersList
         selectedColumns={selectedTableColumns}
+        suppliers={suppliers}
       />
     </>
   );
 }
 
-Categories.Layout = AppLayout;
+SuppliersPage.Layout = AppLayout;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { locale } = context;
@@ -126,9 +125,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       ...(await serverSideTranslations(locale!, [
-        'form',
-        'common',
         'table',
+        'common',
+        'form',
         'error'
       ])),
       client

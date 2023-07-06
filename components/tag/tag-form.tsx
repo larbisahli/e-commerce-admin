@@ -61,7 +61,7 @@ export default function CreateOrUpdateTagForm({ initialValues }: IProps) {
       if (!isEmpty(data)) {
         notify(t('common:successfully-created'), 'success');
         reset();
-        router.push(ROUTES.TAGS);
+        router.push(ROUTES.TAG);
       }
     }
   });
@@ -75,7 +75,7 @@ export default function CreateOrUpdateTagForm({ initialValues }: IProps) {
     onCompleted: (data: { updateTag: Tag }) => {
       if (!isEmpty(data)) {
         notify(t('common:successfully-updated'), 'success');
-        router.push(ROUTES.TAGS);
+        router.push(ROUTES.TAG);
       }
     }
   });

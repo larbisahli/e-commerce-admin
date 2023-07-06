@@ -145,7 +145,7 @@ const ShippingList = ({ shippingZones, selectedColumns }: IProps) => {
         render: (id: string) => (
           <ActionButtons
             id={id}
-            editUrl={`${ROUTES.SHIPPING_DELIVERY}/edit/${id}`}
+            editUrl={`${ROUTES.SHIPPING_ZONE}/edit/${id}`}
             deleteModalView="DELETE_SHIPPING"
           />
         ),

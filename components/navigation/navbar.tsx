@@ -1,14 +1,16 @@
 import { ShopIcon } from '@components/icons/sidebar';
+import SearchBar from '@components/search-bar';
 import Link from '@components/ui/link';
 import LinkButton from '@components/ui/link-button';
 import { useGetUser } from '@hooks/useGetUser';
 import { useMediaQuery } from '@hooks/useMediaQuery';
 import { useUI } from '@hooks/useUI';
 import { ROUTES } from '@utils/routes';
+import cn from 'classnames';
 import classNames from 'classnames/bind';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'next-i18next';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import NavMenu from './menu';
 import NavNotification from './notification';
@@ -29,6 +31,30 @@ const Navbar = () => {
 
   const closeSideBar = useMediaQuery('min-width', 768);
 
+  const [show, setShow] = useState(false);
+
+  const controlNavbar = () => {
+    console.log({ x: window.scrollY });
+    if (typeof window !== 'undefined') {
+      if (window.scrollY > 50) {
+        setShow(true);
+      } else {
+        setShow(false);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      window.addEventListener('scroll', controlNavbar);
+
+      // cleanup function
+      return () => {
+        window.removeEventListener('scroll', controlNavbar);
+      };
+    }
+  }, []);
+
   /**
    * Close sidebar when mini side bar appears
    */
@@ -44,8 +70,18 @@ const Navbar = () => {
   } = useGetUser();
 
   return (
-    <header className="w-full mt-5 mb-12">
-      <nav className="px-5 md:px-8 py-2 flex items-center justify-between lg:justify-end md:justify-end">
+    <header
+      className={cn(
+        'w-full fixed bg-white border border-b-400 top-0 right-0 left-0 z-40',
+        { 'shadow-md': show }
+      )}
+    >
+      <nav
+        className={cn(
+          'md:ps-20 nlg:ps-20 nxl:ps-20 lg:ps-64 xl:ps-64',
+          'px-5 md:px-8 py-2 flex items-center justify-between'
+        )}
+      >
         <motion.button
           whileTap={{ scale: 0.88 }}
           onClick={toggleSidebar}
@@ -57,6 +93,11 @@ const Navbar = () => {
             <span className={menuSpanClass}></span>
           </div>
         </motion.button>
+        <div className="px-8 flex-1 flex justify-center">
+          <div className="max-w-[600px] flex-1">
+            <SearchBar />
+          </div>
+        </div>
         <div className="flex items-center space-s-8">
           <Link
             target="_blank"

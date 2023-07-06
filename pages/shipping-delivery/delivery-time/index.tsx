@@ -2,16 +2,16 @@ import { useQuery } from '@apollo/client';
 import PageMainHeader from '@components/common/page-main-header';
 import PageMainAction from '@components/common/PageMainAction';
 import AppLayout from '@components/layouts/app';
-import ProductList from '@components/product/product-list';
+import ShippingList from '@components/shipping-zone/shipping-list';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
-import { PRODUCTS } from '@graphql/product';
+import { SHIPPING_ZONES } from '@graphql/shipping-zone';
 import { useGetUser } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useTableColumn } from '@hooks/useTableColumn';
 import { verifyAuth } from '@middleware/utils';
 import type { SSRProps } from '@ts-types/custom.types';
-import type { Product } from '@ts-types/generated';
+import type { ShippingZoneType } from '@ts-types/generated';
 import { OrderBy, SortOrder } from '@ts-types/generated';
 import { COLUMNS } from '@utils/data/table-columns';
 import { ROUTES } from '@utils/routes';
@@ -21,19 +21,19 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useState } from 'react';
 
-interface TProduct {
-  products: Product[];
-  productCount: { count: number };
+interface TShipping {
+  shippingZones: ShippingZoneType[];
+  shippingZoneCount: { count: number };
 }
 
-interface ProductVariable {
+interface ShippingVariable {
   page: number;
   limit: number;
   orderBy: OrderBy;
   sortedBy: SortOrder;
 }
 
-export default function ProductsPage({ client }: SSRProps) {
+export default function ShippingZonesPage({ client }: SSRProps) {
   const { t } = useTranslation();
 
   const [page, setPage] = useState(1);
@@ -41,12 +41,12 @@ export default function ProductsPage({ client }: SSRProps) {
   const [orderBy, setOrder] = useState(OrderBy.CREATED_AT);
 
   const { selectedTableColumns, handleColumnChange } =
-    useTableColumn('product');
+    useTableColumn('shipping-zone');
 
   const { data, loading, error, fetchMore } = useQuery<
-    TProduct,
-    ProductVariable
-  >(PRODUCTS, {
+    TShipping,
+    ShippingVariable
+  >(SHIPPING_ZONES, {
     variables: {
       page,
       limit: limit.value,
@@ -56,7 +56,8 @@ export default function ProductsPage({ client }: SSRProps) {
     fetchPolicy: 'cache-and-network'
   });
 
-  const { products = [], productCount: { count } = { count: 0 } } = data ?? {};
+  const { shippingZones = [], shippingZoneCount: { count } = { count: 0 } } =
+    data ?? {};
 
   useGetUser(client);
   useErrorLogger(error);
@@ -83,12 +84,12 @@ export default function ProductsPage({ client }: SSRProps) {
   return (
     <>
       <PageMainAction
-        href={`${ROUTES.PRODUCTS}/create`}
-        title={t('form:input-label-products')}
-        label={t('form:button-label-add-products')}
+        href={`${ROUTES.SHIPPING_ZONE}/create`}
+        title={t('form:button-label-add-shipping-zone')}
+        label={t('form:input-label-shipping-zones')}
       />
       <PageMainHeader
-        columns={COLUMNS['product']}
+        columns={COLUMNS['shipping-zone']}
         selectedColumns={selectedTableColumns}
         handleColumnChange={handleColumnChange}
         onLimitChange={(value) => {
@@ -100,12 +101,14 @@ export default function ProductsPage({ client }: SSRProps) {
         currentPage={page}
         perPage={limit.value}
       />
-      <ProductList products={products} selectedColumns={selectedTableColumns} />
+      <ShippingList
+        shippingZones={shippingZones}
+        selectedColumns={selectedTableColumns}
+      />
     </>
   );
 }
-
-ProductsPage.Layout = AppLayout;
+ShippingZonesPage.Layout = AppLayout;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { locale } = context;
@@ -122,7 +125,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   return {
     props: {
-      ...(await serverSideTranslations(locale, ['table', 'common', 'form'])),
+      ...(await serverSideTranslations(locale!, [
+        'table',
+        'common',
+        'form',
+        'error'
+      ])),
       client
     }
   };

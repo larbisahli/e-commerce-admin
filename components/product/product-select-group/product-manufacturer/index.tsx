@@ -27,7 +27,10 @@ interface OptionsVariable {
   orderBy: OrderBy;
 }
 
-const ProductCategory = ({ categories, setInitProductCategories }: Props) => {
+const ProductManufacturer = ({
+  categories,
+  setInitProductCategories
+}: Props) => {
   const { t } = useTranslation('common');
 
   const dispatch = useFormReducer();
@@ -59,7 +62,7 @@ const ProductCategory = ({ categories, setInitProductCategories }: Props) => {
 
   return (
     <div className="mb-5">
-      <Label isRequiredLabel>{t('form:input-label-categories')}</Label>
+      <Label>{t('form:input-label-manufacturer')}</Label>
       <Select
         options={options}
         value={categories}
@@ -75,4 +78,4 @@ const ProductCategory = ({ categories, setInitProductCategories }: Props) => {
   );
 };
 
-export default memo(ProductCategory);
+export default memo(ProductManufacturer);

@@ -154,7 +154,7 @@ export default function Folder({
           <div className="border relative group border-gray-300 flex justify-center bg-gray-100 items-center h-40 w-40 rounded">
             <button
               onClick={handleModalClick}
-              className="group-hover:block px-1 cursor-pointer hidden bg-white text-black top-0 absolute right-0 z-50"
+              className="group-hover:block px-1 cursor-pointer hidden bg-white text-black top-0 absolute right-0 z-30"
             >
               <div className="rotate-90">
                 <DotsIcon />
@@ -179,13 +179,13 @@ export default function Folder({
         <div className="relative border border-gray-300 flex justify-center bg-gray-100 items-center h-40 w-40 rounded">
           <button
             onClick={handleModalClick}
-            className="group-hover:block px-1 cursor-pointer hidden bg-white text-black top-0 absolute right-0 z-50"
+            className="group-hover:block px-1 cursor-pointer hidden bg-white text-black top-0 absolute right-0 z-30"
           >
             <div className="rotate-90">
               <DotsIcon />
             </div>
           </button>
-          <div className="bg-black p-[2px] text-white text-xs top-0 rounded-sm absolute left-0 z-50">
+          <div className="bg-black p-[2px] text-white text-xs top-0 rounded-sm absolute left-0 z-30">
             {photo?.size?.formatBytes()}
           </div>
           <ImageComponent

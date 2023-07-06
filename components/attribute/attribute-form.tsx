@@ -76,7 +76,7 @@ export default function CreateOrUpdateAttributeForm({ initialValues }: IProps) {
         if (!isEmpty(data)) {
           notify(t('common:successfully-created'), 'success');
           reset();
-          router.push(ROUTES.ATTRIBUTES);
+          router.push(ROUTES.ATTRIBUTE);
         }
       }
     }
@@ -93,7 +93,7 @@ export default function CreateOrUpdateAttributeForm({ initialValues }: IProps) {
       onCompleted: (data: { updateAttribute: Attribute }) => {
         if (!isEmpty(data)) {
           notify(t('common:successfully-updated'), 'success');
-          router.push(ROUTES.ATTRIBUTES);
+          router.push(ROUTES.ATTRIBUTE);
         }
       }
     }

@@ -1,18 +1,16 @@
 import { useQuery } from '@apollo/client';
 import PageMainHeader from '@components/common/page-main-header';
 import PageMainAction from '@components/common/PageMainAction';
+import CouponList from '@components/coupon/coupon-list';
 import AppLayout from '@components/layouts/app';
-import ShippingList from '@components/shipping-zone/shipping-list';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
-import { SHIPPING_ZONES } from '@graphql/shipping-zone';
-import { useGetUser } from '@hooks/index';
-import { useErrorLogger } from '@hooks/useErrorLogger';
+import { COUPONS } from '@graphql/coupons';
+import { useErrorLogger, useGetUser } from '@hooks/index';
 import { useTableColumn } from '@hooks/useTableColumn';
-import { verifyAuth } from '@middleware/utils';
-import type { SSRProps } from '@ts-types/custom.types';
-import type { ShippingZoneType } from '@ts-types/generated';
-import { OrderBy, SortOrder } from '@ts-types/generated';
+import { verifyAuth, XSRFHandler } from '@middleware/utils';
+import { SSRProps } from '@ts-types/custom.types';
+import { Coupon, OrderBy, SortOrder } from '@ts-types/generated';
 import { COLUMNS } from '@utils/data/table-columns';
 import { ROUTES } from '@utils/routes';
 import isEmpty from 'lodash/isEmpty';
@@ -21,32 +19,31 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useState } from 'react';
 
-interface TShipping {
-  shippingZones: ShippingZoneType[];
-  shippingZoneCount: { count: number };
+interface TCoupon {
+  coupons: Coupon[];
+  couponCount: { count: number };
 }
 
-interface ShippingVariable {
+interface OptionsVariable {
   page: number;
   limit: number;
   orderBy: OrderBy;
   sortedBy: SortOrder;
 }
 
-export default function ShippingZonesPage({ client }: SSRProps) {
+export default function Coupons({ client }: SSRProps) {
   const { t } = useTranslation();
 
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState({ id: 1, value: 10, label: 10 });
   const [orderBy, setOrder] = useState(OrderBy.CREATED_AT);
+  const [limit, setLimit] = useState({ id: 1, value: 10, label: 10 });
 
-  const { selectedTableColumns, handleColumnChange } =
-    useTableColumn('shipping-zone');
+  const { selectedTableColumns, handleColumnChange } = useTableColumn('coupon');
 
   const { data, loading, error, fetchMore } = useQuery<
-    TShipping,
-    ShippingVariable
-  >(SHIPPING_ZONES, {
+    TCoupon,
+    OptionsVariable
+  >(COUPONS, {
     variables: {
       page,
       limit: limit.value,
@@ -56,13 +53,12 @@ export default function ShippingZonesPage({ client }: SSRProps) {
     fetchPolicy: 'cache-and-network'
   });
 
-  const { shippingZones = [], shippingZoneCount: { count } = { count: 0 } } =
-    data ?? {};
+  const { coupons = [], couponCount: { count } = { count: 0 } } = data ?? {};
 
   useGetUser(client);
   useErrorLogger(error);
 
-  const handlePagination = (current: number) => {
+  function handlePagination(current: any) {
     setPage(current);
     fetchMore({
       variables: {
@@ -72,7 +68,7 @@ export default function ShippingZonesPage({ client }: SSRProps) {
         sortedBy: SortOrder.Desc
       }
     });
-  };
+  }
 
   if (loading) {
     return <Loader text={t('common:text-loading')} />;
@@ -84,12 +80,12 @@ export default function ShippingZonesPage({ client }: SSRProps) {
   return (
     <>
       <PageMainAction
-        href={`${ROUTES.SHIPPING_DELIVERY}/create`}
-        title={t('form:button-label-add-shipping-zone')}
-        label={t('form:input-label-shipping-zones')}
+        href={`${ROUTES.COUPON}/create`}
+        title={t('form:input-label-coupons')}
+        label={t('form:button-label-add-coupon')}
       />
       <PageMainHeader
-        columns={COLUMNS['shipping-zone']}
+        columns={COLUMNS['coupon']}
         selectedColumns={selectedTableColumns}
         handleColumnChange={handleColumnChange}
         onLimitChange={(value) => {
@@ -101,14 +97,12 @@ export default function ShippingZonesPage({ client }: SSRProps) {
         currentPage={page}
         perPage={limit.value}
       />
-      <ShippingList
-        shippingZones={shippingZones}
-        selectedColumns={selectedTableColumns}
-      />
+      <CouponList coupons={coupons} selectedColumns={selectedTableColumns} />
     </>
   );
 }
-ShippingZonesPage.Layout = AppLayout;
+
+Coupons.Layout = AppLayout;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { locale } = context;
@@ -123,15 +117,17 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
+  const { csrfToken, csrfError } = await XSRFHandler(context);
+
   return {
     props: {
-      ...(await serverSideTranslations(locale!, [
-        'table',
-        'common',
+      ...(await serverSideTranslations(locale, [
         'form',
+        'common',
+        'table',
         'error'
       ])),
-      client
+      client: { ...(client ?? {}), csrfToken, csrfError }
     }
   };
 };

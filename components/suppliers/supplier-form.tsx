@@ -94,7 +94,7 @@ export default function CreateOrUpdateSupplierForm({ initialValues }: IProps) {
       if (!isEmpty(data)) {
         notify(t('common:successfully-created'), 'success');
         reset();
-        router.push(ROUTES.SUPPLIERS);
+        router.push(ROUTES.SUPPLIER);
       }
     }
   });
@@ -108,7 +108,7 @@ export default function CreateOrUpdateSupplierForm({ initialValues }: IProps) {
     onCompleted: (data: { updateSupplier: Suppliers }) => {
       if (!isEmpty(data)) {
         notify(t('common:successfully-updated'), 'success');
-        router.push(ROUTES.SUPPLIERS);
+        router.push(ROUTES.SUPPLIER);
       }
     }
   });

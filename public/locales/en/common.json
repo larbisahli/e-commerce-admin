@@ -114,6 +114,7 @@
   "sidebar-nav-item-about-page": "About Page",
   "sidebar-nav-item-account-information": "Account Information",
   "sidebar-nav-item-themes": "Themes",
+  "sidebar-nav-item-all-stores": "All Stores",
   "sidebar-nav-item-pages": "Pages",
   "sidebar-nav-item-about-us": "About us",
   "sidebar-nav-item-contact-us": "Contact us",
@@ -131,8 +132,10 @@
   "authorized-nav-item-settings": "Settings",
   "authorized-nav-item-profile": "Profile",
   "authorized-nav-item-store": "Store",
-  "sidebar-nav-item-account-settings": "Account Setting",
-  "authorized-nav-item-account-settings": "Account Setting",
+  "sidebar-nav-item-account-settings": "Account Settings",
+  "sidebar-nav-item-payment-methods": "Payment Methods",
+  "sidebar-nav-item-tax": "Tax",
+  "authorized-nav-item-account-settings": "Account Settings",
   "authorized-nav-item-logout": "Logout",
   "navbar-add-products": "Add Products",
   "text-delete": "Delete",
@@ -277,5 +280,6 @@
   "not-yet-registered": "Not yet registered ?",
   "sidebar-nav-item-all-products": "All Products",
   "sidebar-nav-item-new-product": "New Product",
-  "sidebar-nav-item-reviews": "Reviews"
+  "sidebar-nav-item-reviews": "Reviews",
+  "sidebar-nav-item-manufacturers": "Manufacturers"
 }

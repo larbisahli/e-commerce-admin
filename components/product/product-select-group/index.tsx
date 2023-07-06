@@ -15,6 +15,7 @@ import { useTranslation } from 'next-i18next';
 import { memo, useMemo, useState } from 'react';
 
 import ProductCategory from './product-category';
+import ProductManufacturer from './product-manufacturer';
 import ProductSupplier from './product-supplier';
 import ProductTag from './product-tag';
 
@@ -157,6 +158,10 @@ const ProductSelectGroup = ({ state, initialValues }: Props) => {
         />
         <Card className="w-full sm:w-8/12 md:w-2/3">
           <ProductCategory
+            categories={categories}
+            setInitProductCategories={setInitProductCategories}
+          />
+          <ProductManufacturer
             categories={categories}
             setInitProductCategories={setInitProductCategories}
           />

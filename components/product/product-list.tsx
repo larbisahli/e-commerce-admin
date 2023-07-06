@@ -196,7 +196,7 @@ const ProductList = ({ products, selectedColumns }: IProps) => {
         render: (id: string) => (
           <ActionButtons
             id={id}
-            editUrl={`${ROUTES.PRODUCTS}/edit/${id}`}
+            editUrl={`${ROUTES.PRODUCT}/edit/${id}`}
             deleteModalView="DELETE_PRODUCT"
           />
         )

@@ -2,28 +2,26 @@ import { useQuery } from '@apollo/client';
 import PageMainHeader from '@components/common/page-main-header';
 import PageMainAction from '@components/common/PageMainAction';
 import AppLayout from '@components/layouts/app';
-import NoIndex from '@components/seo/no-index';
-import ErrorMessage from '@components/ui/error-message';
+import TagList from '@components/tag/tag-list';
+import ErrorMessage, { Error } from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
-import UserList from '@components/user/user-list';
-import { USERS } from '@graphql/user';
+import { TAGS } from '@graphql/tag';
 import { useErrorLogger, useGetUser } from '@hooks/index';
 import { useTableColumn } from '@hooks/useTableColumn';
-import { verifyAuth, XSRFHandler } from '@middleware/utils';
+import { verifyAuth } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
-import { OrderBy, SortOrder, UserType } from '@ts-types/generated';
+import { OrderBy, SortOrder, Tag } from '@ts-types/generated';
 import { COLUMNS } from '@utils/data/table-columns';
 import { ROUTES } from '@utils/routes';
 import isEmpty from 'lodash/isEmpty';
 import type { GetServerSideProps } from 'next';
-import Head from 'next/head';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useState } from 'react';
 
-interface TUser {
-  users: UserType[];
-  userCount: { count: number };
+interface TTags {
+  tags: Tag[];
+  tagCount: { count: number };
 }
 
 interface OptionsVariable {
@@ -33,17 +31,17 @@ interface OptionsVariable {
   sortedBy: SortOrder;
 }
 
-export default function User({ client }: SSRProps) {
+export default function Tags({ client }: SSRProps) {
   const { t } = useTranslation();
 
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState({ id: 1, value: 10, label: 10 });
   const [orderBy, setOrder] = useState(OrderBy.CREATED_AT);
+  const [limit, setLimit] = useState({ id: 1, value: 10, label: 10 });
 
-  const { selectedTableColumns, handleColumnChange } = useTableColumn('user');
+  const { selectedTableColumns, handleColumnChange } = useTableColumn('tag');
 
-  const { data, loading, error, fetchMore } = useQuery<TUser, OptionsVariable>(
-    USERS,
+  const { data, loading, error, fetchMore } = useQuery<TTags, OptionsVariable>(
+    TAGS,
     {
       variables: {
         page,
@@ -55,7 +53,7 @@ export default function User({ client }: SSRProps) {
     }
   );
 
-  const { users = [], userCount: { count } = { count: 0 } } = data ?? {};
+  const { tags = [], tagCount: { count } = { count: 0 } } = data ?? {};
 
   useGetUser(client);
   useErrorLogger(error);
@@ -76,19 +74,18 @@ export default function User({ client }: SSRProps) {
     return <Loader text={t('common:text-loading')} />;
   }
   if (!isEmpty(error)) {
-    return <ErrorMessage message={t('common:MESSAGE_SOMETHING_WENT_WRONG')} />;
+    return <Error message={t('common:MESSAGE_SOMETHING_WENT_WRONG')} />;
   }
 
   return (
     <>
-      <NoIndex />
       <PageMainAction
-        href={`${ROUTES.USER}/create`}
-        title={t('form:button-label-add-user')}
-        label={t('form:input-label-users')}
+        href={`${ROUTES.TAG}/create`}
+        title={t('common:sidebar-nav-item-tags')}
+        label={t('form:button-label-add-tag')}
       />
       <PageMainHeader
-        columns={COLUMNS['user']}
+        columns={COLUMNS['tag']}
         selectedColumns={selectedTableColumns}
         handleColumnChange={handleColumnChange}
         onLimitChange={(value) => {
@@ -100,11 +97,12 @@ export default function User({ client }: SSRProps) {
         currentPage={page}
         perPage={limit.value}
       />
-      <UserList users={users} selectedColumns={selectedTableColumns} />
+      <TagList tags={tags} selectedColumns={selectedTableColumns} />
     </>
   );
 }
-User.Layout = AppLayout;
+
+Tags.Layout = AppLayout;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { locale } = context;
@@ -119,17 +117,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
-  const { csrfToken, csrfError } = await XSRFHandler(context);
-
   return {
     props: {
       ...(await serverSideTranslations(locale, [
-        'table',
-        'common',
         'form',
+        'common',
+        'table',
         'error'
       ])),
-      client: { ...(client ?? {}), csrfToken, csrfError }
+      client
     }
   };
 };

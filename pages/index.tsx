@@ -21,7 +21,7 @@ const HomePage = () => {
     btn.childNodes[0].lastChild.textContent = 'Subscribe';
   }, []);
 
-  const [show, setShow] = useState(true);
+  const [show, setShow] = useState(false);
   const [openFAQ, setOpenFAQ] = useState(null);
 
   const controlNavbar = () => {
@@ -64,6 +64,7 @@ const HomePage = () => {
           name="description"
           content="Dropgala is an online platform that provides accessible and user-friendly services for creating and managing online stores."
         />
+        <link rel="canonical" href="https://dropgala.com" />
       </Head>
       {/* NAVIGATION */}
       <nav
@@ -374,7 +375,9 @@ const HomePage = () => {
             <h2 className="my-5 text-3xl text-gray-800 font-bold leading-tight text-center md:text-left slide-in-bottom-h1">
               Pricing
             </h2>
-            <p>Offering the most competitive rates to entrepreneurs:</p>
+            <p className="text-center">
+              Offering the most competitive rates to entrepreneurs:
+            </p>
           </div>
           <div className="w-full pt-8">
             <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-2 xl:grid-cols-3 mx-auto w-fit">

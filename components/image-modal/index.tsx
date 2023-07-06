@@ -96,13 +96,13 @@ const ImageModal = ({
             e.preventDefault();
             openModal(IMAGE_MODAL, modalId);
           }}
-          variant="outline"
+          variant="normal"
         >
           <div className="flex items-center">
             <div className="mr-2">
               <ImagesSvg />
             </div>
-            <div className="font-medium">Manage</div>
+            <div className="font-medium capitalize">Open media</div>
           </div>
         </Button>
       </div>

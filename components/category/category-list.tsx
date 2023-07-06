@@ -130,7 +130,7 @@ const CategoryList = ({ categories, selectedColumns }: IProps) => {
         align: 'center',
         width: 80,
         render: (id: string) => (
-          <ActionButtons id={id} editUrl={`${ROUTES.CATEGORIES}/edit/${id}`} />
+          <ActionButtons id={id} editUrl={`${ROUTES.CATEGORY}/edit/${id}`} />
         )
       }
     ];

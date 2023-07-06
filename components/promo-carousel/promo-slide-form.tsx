@@ -274,7 +274,7 @@ export default function CreateOrUpdatePromoSlideForm({
             }
             className="w-full sm:w-auto"
           >
-            {t('form:button-label-add-value')}
+            {t('form:button-label-add-slide')}
           </Button>
         </Card>
       </div>
