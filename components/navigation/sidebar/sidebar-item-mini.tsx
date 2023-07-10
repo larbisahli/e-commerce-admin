@@ -65,8 +65,9 @@ const SidebarItem = ({
     <React.Fragment>
       {hadSubLinks ? (
         <div
+          title={label}
           className={cn(
-            'overflow-hidden flex flex-col relative justify-center w-full py-4 pb-5 hover:!bg-sidenav-active-hover-color p-2 items-center text-base text-start text-sidenav-color-secondary focus:text-accent hover:border-blue-300 border-l-2 border-transparent border-solid cursor-pointer',
+            'overflow-hidden flex flex-col relative justify-center w-full py-4 hover:!bg-sidenav-active-hover-color p-2 items-center text-base text-start text-sidenav-color-secondary focus:text-accent hover:border-blue-300 border-l-2 border-transparent border-solid cursor-pointer',
             {
               'mb-12': margin,
               'border-blue-300 !text-white': currentLink[1] === inLink[1],
@@ -79,20 +80,21 @@ const SidebarItem = ({
           )}
           onClick={() => openSublevelSidebar({ id })}
         >
-          <SidebarLabel icon={icon} label={label} />
+          <SidebarLabel icon={icon} />
         </div>
       ) : (
         <ActiveLink
           href={href}
+          title={label}
           onClick={closeSublevelSidebar}
           activeClassName={cn(
-            'relative !bg-sidenav-active-color hover:!bg-sidenav-active-hover-color !text-white border-green-300',
+            'relative !bg-sidenav-active-color hover:!bg-sidenav-active-hover-color !text-white border-blue-400',
             {
               'sidebar-triangle': !displaySublevelSidebar
             }
           )}
           className={cn(
-            'overflow-hidden flex flex-col relative justify-center w-full pb-5 hover:bg-sidenav-active-hover-color p-2 items-center text-base text-start text-sidenav-color-secondary focus:text-white hover:border-green-300 border-l-2 border-transparent border-solid',
+            'overflow-hidden flex flex-col relative justify-center w-full hover:bg-sidenav-active-hover-color py-3 items-center text-base text-start text-sidenav-color-secondary focus:text-white hover:border-blue-300 border-l-2 border-transparent border-solid',
             { 'mb-12': margin },
             {
               'pointer-events-none opacity-70': disabled
@@ -100,7 +102,7 @@ const SidebarItem = ({
           )}
           includes={includes}
         >
-          <SidebarLabel icon={icon} label={label} />
+          <SidebarLabel icon={icon} />
         </ActiveLink>
       )}
       {line && (
@@ -112,13 +114,12 @@ const SidebarItem = ({
   );
 };
 
-const SidebarLabel = ({ icon, label }: { icon: string; label: string }) => {
+const SidebarLabel = ({ icon }: { icon: string }) => {
   const TagName = sidebarIcons[icon];
 
   return (
     <React.Fragment>
-      {icon && TagName && <TagName className="w-6 h-6" />}
-      <span className={`${cx('mini-slider-container')}`}>{label}</span>
+      {icon && TagName && <TagName className="w-[22px] h-[22px]" />}
     </React.Fragment>
   );
 };

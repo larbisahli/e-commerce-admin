@@ -1,8 +1,8 @@
 .menu-icon-container {
   position: relative;
   display: inline-block;
-  width: 30px;
-  height: 18px;
+  width: 25px;
+  height: 12px;
   cursor: pointer;
   transition: 0.5s ease-in-out;
   border-radius: 50%;
@@ -11,31 +11,32 @@
     display: block;
     position: relative;
     left: 0;
-    height: 3px;
-    width: 30px;
+    height: 2px;
+    width: 25px;
     background: #505050;
     opacity: 1;
     transition: 0.25s all ease-in-out;
 
     &--open {
       &:nth-child(1) {
-        top: 9.5px;
-        width: 30px;
+        top: 4px;
+        width: 25px;
         transform: rotate(135deg);
       }
 
       &:nth-child(2) {
-        left: -30px;
+        left: -25px;
         top: 6px;
         opacity: 0;
       }
 
       &:nth-child(3) {
-        top: 2px;
-        width: 30px;
-        transform: rotate(-135deg);
+        top: 0;
+        width: 25px;
+        transform: rotate(222deg);
       }
     }
+
     &--close {
       &:nth-child(1) {
         top: 0;
@@ -73,8 +74,8 @@
     position: absolute;
     border-radius: 20px;
     line-height: 0px;
-    height: 22px;
-    width: 22px;
+    height: 20px;
+    width: 20px;
     box-sizing: content-box;
     background-color: rgb(207, 19, 29);
     top: 0;
@@ -89,6 +90,9 @@
 
     span{
       color: #fff;
+      font-weight: 600;
+      font-size: 12px;
+      padding-top: 5px;
     }
 
     &::before{

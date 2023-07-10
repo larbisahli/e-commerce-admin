@@ -12,7 +12,8 @@ import { ROUTES } from '@utils/routes';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
+import ReCAPTCHA from 'react-google-recaptcha';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
@@ -44,6 +45,7 @@ const defaultValues = {
 };
 
 const LoginForm = () => {
+  const _reCaptchaRef = useRef<any>();
   const router = useRouter();
   const { t } = useTranslation();
 
@@ -53,7 +55,8 @@ const LoginForm = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
+    getValues
   } = useForm<FormValues>({
     defaultValues,
     resolver: yupResolver(loginFormSchema)
@@ -79,23 +82,35 @@ const LoginForm = () => {
 
   useErrorLogger(error);
 
-  async function onSubmit({ alias, email, password }: FormValues) {
-    const variables = {
-      alias,
-      email,
-      password
-    };
+  function onReCaptchaChange(token) {
+    console.log('Captcha value :>>', token);
+
+    const variables = getValues();
 
     setLoading(true);
-    userLogin({ variables }).catch((error) => {
+    userLogin({ variables: { ...variables, token } }).catch((error) => {
       const err = error?.graphQLErrors[0];
       setLoading(false);
       setError(err?.message);
+      _reCaptchaRef.current.reset();
     });
+  }
+
+  async function onSubmit() {
+    _reCaptchaRef.current.execute();
   }
 
   return (
     <>
+      <div className="absolute z-50">
+        <ReCAPTCHA
+          sitekey={process.env.RECAPTCHA_SITE_KEY}
+          badge="bottomright"
+          onChange={onReCaptchaChange}
+          size="invisible"
+          ref={_reCaptchaRef}
+        />
+      </div>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <div className="mb-5">
           <InputSlug
@@ -126,7 +141,7 @@ const LoginForm = () => {
           forgotPageLink="/forgot-password"
         />
         <Button
-          className="w-full"
+          className="w-full rounded-sm"
           loading={loading && !error}
           disabled={loading}
         >
@@ -142,11 +157,11 @@ const LoginForm = () => {
             onClose={() => setError(null)}
           />
         ) : null}
-        <div className="shadow p-5 text-sm  text-center border rounded-sm mt-12">
-          <span className="mr-1">{t('not-yet-registered')}</span>
+        <div className=" p-5 text-center">
+          <span className="mr-1 text-gray-600">{t('dont-have-account')}</span>
           <Link href={ROUTES.SIGNUP}>
             <a className="text-blue-500 font-normal">
-              {t('create-your-store')}
+              {t('create-an-account')}
             </a>
           </Link>
         </div>

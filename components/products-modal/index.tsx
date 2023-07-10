@@ -105,7 +105,7 @@ const ProductModal = () => {
 
   return (
     <Modal open={open} onClose={onClose}>
-      <div className="flex overflow-y-auto flex-col bg-white md:h-fit h-[100vh] w-[100vw] md:w-[60vw] 2xl:w-[50vw]">
+      <div className="flex max-h-screen overflow-y-auto flex-col bg-white md:h-fit h-[100vh] w-[100vw] md:w-[60vw] 2xl:w-[50vw]">
         <div className="p-4 font-semibold text-lg bg-green-600 text-white uppercase">
           Products
         </div>

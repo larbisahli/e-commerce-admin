@@ -16,6 +16,7 @@ import { COLUMNS } from '@utils/data/table-columns';
 import { ROUTES } from '@utils/routes';
 import isEmpty from 'lodash/isEmpty';
 import type { GetServerSideProps } from 'next';
+import Head from 'next/head';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useState } from 'react';
@@ -82,6 +83,14 @@ export default function Categories({ client }: SSRProps) {
 
   return (
     <>
+      <Head>
+        <link
+          rel="icon"
+          type="image/svg"
+          sizes="32x32"
+          href="/svg/category.svg"
+        />
+      </Head>
       <PageMainAction
         href={`${ROUTES.CATEGORY}/create`}
         title={t('form:input-label-categories')}

@@ -107,11 +107,15 @@ const ImageModal = ({
         </Button>
       </div>
       {/* SELECTED IMAGES */}
-      <Thumbs photos={selected} handleImageRemoval={handleImageRemoval} />
+      <Thumbs
+        isThumbnail={isThumbnail}
+        photos={selected}
+        handleImageRemoval={handleImageRemoval}
+      />
       {/* MODEL */}
       <Modal open={isOpen && isCurrentModal} onClose={closeModal}>
         {view === IMAGE_MODAL && (
-          <div className="flex overflow-y-auto flex-col bg-white md:h-fit h-[100vh] w-[100vw] md:w-[70vw] 2xl:w-[60vw]">
+          <div className="flex overflow-y-auto max-h-screen flex-col bg-white md:h-fit h-[100vh] w-[100vw] md:w-[70vw] 2xl:w-[60vw]">
             <div className="p-4 font-semibold text-lg bg-green-600 text-white capitalize">
               Choose media
             </div>

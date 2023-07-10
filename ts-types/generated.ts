@@ -84,8 +84,19 @@ export interface RoleType {
 }
 
 export interface ThemeType {
-  id?: string;
-  name?: string;
+  id: Scalars['Int'];
+  title: Scalars['String'];
+  description: Scalars['String'];
+  themePath: Scalars['String'];
+  previewImage: Scalars['String'];
+  reviewsCount: Scalars['Int'];
+  ratingStarCount: Scalars['Int'];
+  price: Scalars['Int'];
+  isFree: Scalars['Boolean'];
+  installed: Scalars['Boolean'];
+  isDefault: Scalars['Boolean'];
+  version: Scalars['String'];
+  updatedAt: Scalars['Date'];
 }
 
 export interface UserType extends CreatedUpdatedByAt {
@@ -102,6 +113,7 @@ export interface UserType extends CreatedUpdatedByAt {
   active: boolean;
   csrfToken?: string;
   csrfError?: string;
+  storeName?: string;
   // JWT
   uid?: string;
   iss?: string;
@@ -412,10 +424,8 @@ export interface PromoCarouselType extends CreatedUpdatedByAt {
   published?: Scalars['Boolean'];
   status?: 'draft' | 'publish';
   sliders?: {
-    text: string;
-    textColor: string;
+    content: string;
     position?: Scalars['Int'];
-    destinationUrl: string;
   }[];
 }
 

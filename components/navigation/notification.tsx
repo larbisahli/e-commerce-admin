@@ -20,12 +20,12 @@ export default function NavNotification() {
     <Menu as="div" className="relative inline-block text-left">
       {hasNotification && (
         <div className={cx('notification-bubble')}>
-          <span>4</span>
+          <span className="text-sm">2</span>
         </div>
       )}
       <Menu.Button
         className={cx(
-          'flex items-center border rounded-full focus:outline-none',
+          'flex items-center border rounded-sm focus:outline-none',
           'border-hover'
         )}
       >

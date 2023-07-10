@@ -9,7 +9,7 @@ import SidebarItem from './sidebar/sidebar-item';
 
 const MobileNavigation: React.FC = () => {
   const {
-    ui: { displaySidebar },
+    ui: { displayMobileSidebar },
     handleSidebar
   } = useUI();
   const { t } = useTranslation();
@@ -18,11 +18,17 @@ const MobileNavigation: React.FC = () => {
   return (
     <div>
       <Drawer
-        open={displaySidebar}
-        onClose={() => handleSidebar({ display: false })}
+        open={displayMobileSidebar}
+        onClose={() =>
+          handleSidebar({ field: 'displayMobileSidebar', display: false })
+        }
         variant="left"
       >
-        <DrawerWrapper onClose={() => handleSidebar({ display: false })}>
+        <DrawerWrapper
+          onClose={() =>
+            handleSidebar({ field: 'displayMobileSidebar', display: false })
+          }
+        >
           <div className="flex flex-col py-3">
             {siteSettings?.sidebarLinks?.admin?.map(
               ({ id, href, label, icon, line, subLinks }) => (

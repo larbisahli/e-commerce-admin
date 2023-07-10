@@ -22,14 +22,19 @@ export const useUI = () => {
     closeSublevelSidebar: () => dispatch(closeSublevelSidebar()),
     handleModal: ({ display }: { display: boolean }) =>
       dispatch(handleModal({ display })),
-    handleSidebar: ({ display }: { display: boolean }) =>
-      dispatch(handleSidebar({ display })),
+    handleSidebar: ({
+      field,
+      display
+    }: {
+      field: 'displayMiniSidebar' | 'displayMobileSidebar';
+      display: boolean;
+    }) => dispatch(handleSidebar({ field, display })),
     openSublevelSidebar: ({ id }: { id: string }) =>
       dispatch(openSublevelSidebar({ id })),
     setModalData: ({ data }: { data: MODAL_DATA }) =>
       dispatch(setModalData({ data })),
     setModalView: ({ view }: { view: MODAL_VIEWS }) =>
       dispatch(setModalView({ view })),
-    toggleSidebar: () => dispatch(toggleSidebar())
+    toggleSidebar: ({ field }) => dispatch(toggleSidebar({ field }))
   };
 };

@@ -31,10 +31,8 @@ export const PROMO_SLIDER = gql`
       direction
       published
       sliders {
-        text
-        textColor
+        content
         position
-        destinationUrl
       }
       updatedAt
       updatedBy {

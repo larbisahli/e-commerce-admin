@@ -9,6 +9,7 @@ type Props = {
   includes: string;
   className: string;
   children: React.ReactNode;
+  title?: string;
   isSubLink?: boolean;
 };
 
@@ -19,6 +20,7 @@ const ActiveLink: React.FC<NextLinkProps & Props> = ({
   className,
   includes,
   onClick,
+  title,
   isSubLink = false,
   ...props
 }) => {
@@ -29,6 +31,7 @@ const ActiveLink: React.FC<NextLinkProps & Props> = ({
     () => includes?.split('/')?.filter((item) => item),
     [includes]
   );
+
   const isIncluded = useMemo(
     () =>
       isSubLink
@@ -47,6 +50,7 @@ const ActiveLink: React.FC<NextLinkProps & Props> = ({
   return (
     <NextLink href={href} passHref>
       <a
+        title={title}
         onClick={onClick}
         role={isFunction ? 'button' : null}
         className={class_name}

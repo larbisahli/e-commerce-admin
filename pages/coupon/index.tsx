@@ -15,6 +15,7 @@ import { COLUMNS } from '@utils/data/table-columns';
 import { ROUTES } from '@utils/routes';
 import isEmpty from 'lodash/isEmpty';
 import type { GetServerSideProps } from 'next';
+import Head from 'next/head';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useState } from 'react';
@@ -79,6 +80,14 @@ export default function Coupons({ client }: SSRProps) {
 
   return (
     <>
+      <Head>
+        <link
+          rel="icon"
+          type="image/svg"
+          sizes="32x32"
+          href="/svg/coupon.svg"
+        />
+      </Head>
       <PageMainAction
         href={`${ROUTES.COUPON}/create`}
         title={t('form:input-label-coupons')}

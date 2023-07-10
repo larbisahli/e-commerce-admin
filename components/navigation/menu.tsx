@@ -16,15 +16,13 @@ let cx = classNames.bind(styles);
 const authorizedLinks = [
   {
     href: ROUTES.COMING_SOON,
-    labelTransKey: 'authorized-nav-item-account-settings'
+    labelTransKey: 'authorized-nav-item-account-settings',
+    target: '_self'
   },
   {
-    href: (alias: string) => `https://${alias}.dropgala.com`,
-    labelTransKey: 'authorized-nav-item-store'
-  },
-  {
-    href: ROUTES.COMING_SOON,
-    labelTransKey: 'authorized-nav-item-logout'
+    href: ROUTES.LOGOUT,
+    labelTransKey: 'authorized-nav-item-logout',
+    target: '_self'
   }
 ];
 
@@ -40,18 +38,15 @@ export default function NavMenu() {
     <Menu as="div" className="relative inline-block text-left">
       <Menu.Button
         className={cx(
-          'flex items-center bg-white text-gray-700 shadow-lg border rounded-full focus:outline-none p-1',
+          'flex items-center bg-white text-gray-700 shadow-lg border rounded-sm focus:outline-none',
           'border-hover'
         )}
       >
         <Avatar
-          className="shadow-lg"
+          className="shadow-lg !rounded-sm"
           src={image ?? siteSettings.avatar.image}
           customPlaceholder={placeholder ?? siteSettings.avatar.placeholder}
         />
-        {firstName && (
-          <div className="pl-1 pr-2 text-gray-500 font-medium">{`${firstName} ${lastName}`}</div>
-        )}
       </Menu.Button>
 
       <Transition
@@ -65,17 +60,33 @@ export default function NavMenu() {
       >
         <Menu.Items
           as="ul"
-          className="absolute shadow right-0 w-48 py-4 mt-1 origin-top-right bg-white rounded shadow-700 focus:outline-none"
+          className="absolute shadow right-0 w-48 py-4 mt-1 origin-top-right bg-white rounded-sm border shadow-700 focus:outline-none"
         >
-          {authorizedLinks.map(({ href, labelTransKey }, idx) => (
+          {firstName && (
+            <div className="px-4 text-gray-600 text-sm capitalize">{`${firstName} ${lastName}`}</div>
+          )}
+          <div className="px-4 text-gray-600 text-xs flex items-center">
+            <span>Your store:</span>
+            <Link
+              target="_blank"
+              href={`https://${ali}.dropgala.com`}
+              className={cn(
+                'block px-1 text-accent text-sm capitalize font-semibold transition duration-200 hover:text-accent'
+              )}
+            >
+              {ali}
+            </Link>
+          </div>
+          <div className="bg-gray-300 h-[1px] my-2 w-full"></div>
+          {authorizedLinks.map(({ href, labelTransKey, target }, idx) => (
             <Menu.Item key={idx}>
               {({ active }) => (
-                <li className="border-b border-gray-100 cursor-pointer last:border-0 flex">
+                <li className="cursor-pointer last:border-0 flex">
                   <Link
-                    target="_blank"
-                    href={href instanceof Function ? href(ali) : href}
+                    target={target}
+                    href={href}
                     className={cn(
-                      'block px-4 py-3 text-sm capitalize font-semibold transition duration-200 hover:text-accent',
+                      'block px-4 py-2 text-sm capitalize transition duration-200 hover:text-accent',
                       active ? 'text-accent' : 'text-heading'
                     )}
                   >

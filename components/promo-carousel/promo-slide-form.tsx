@@ -4,8 +4,8 @@ import { SaveIcon } from '@components/icons/save-icon';
 import Button from '@components/ui/button';
 import ColorPicker from '@components/ui/color-picker/color-picker';
 import Description from '@components/ui/description';
-import Input from '@components/ui/input';
 import Label from '@components/ui/label';
+import Loader from '@components/ui/loader/loader';
 import Radio from '@components/ui/radio';
 import SelectInput from '@components/ui/select-input';
 import { UPDATE_PROMO_SLIDE } from '@graphql/promo-slide';
@@ -17,13 +17,20 @@ import {
 import { notify } from '@lib/index';
 import type { PromoCarouselType } from '@ts-types/generated';
 import cn from 'classnames';
+import ReactHtmlParser from 'html-react-parser';
 import cloneDeep from 'lodash/cloneDeep';
 import isEmpty from 'lodash/isEmpty';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
 import React from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
+
+const Editor = dynamic(() => import('@components/ui/editor'), {
+  loading: () => <Loader height="150px" text="Editor..." />,
+  ssr: false
+});
 
 const animationSpeedOptions = [
   { value: '10s', name: '10 seconds' },
@@ -61,19 +68,20 @@ export default function CreateOrUpdatePromoSlideForm({
   const [error, setError] = useState(null);
   const [unsavedChanges, setUnsavedChanges] = useState(true);
 
-  const { watch, register, handleSubmit, control } = useForm<FormValues>({
-    defaultValues: !isEmpty(initialValues)
-      ? cloneDeep({
-          ...initialValues,
-          animationSpeed: animationSpeedOptions?.find(
-            (e) => e.value === initialValues.animationSpeed
-          ),
-          status: (initialValues as PromoCarouselType)?.published
-            ? 'publish'
-            : 'draft'
-        })
-      : (defaultValues as PromoCarouselType)
-  });
+  const { watch, register, handleSubmit, control, setValue } =
+    useForm<FormValues>({
+      defaultValues: !isEmpty(initialValues)
+        ? cloneDeep({
+            ...initialValues,
+            animationSpeed: animationSpeedOptions?.find(
+              (e) => e.value === initialValues.animationSpeed
+            ),
+            status: (initialValues as PromoCarouselType)?.published
+              ? 'publish'
+              : 'draft'
+          })
+        : (defaultValues as PromoCarouselType)
+    });
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -225,30 +233,17 @@ export default function CreateOrUpdatePromoSlideForm({
                 key={index}
               >
                 <div className="flex justify-between flex-col">
-                  <Input
+                  <Label>{t('form:input-label-title')}</Label>
+                  <Editor
+                    name={`sliders.${index}.content`}
+                    value={slide.content}
+                    onChange={(value) =>
+                      setValue(`sliders.${index}.content`, value)
+                    }
                     className="sm:col-span-2  mb-5"
-                    isRequiredLabel
-                    label={t('form:input-label-title')}
-                    variant="outline"
-                    {...register(`sliders.${index}.text` as const)}
-                    defaultValue={slide.text}
+                    defaultValue=""
                   />
                   <div>
-                    <Input
-                      className="sm:col-span-2"
-                      label={t('form:input-label-destination-url')}
-                      variant="outline"
-                      {...register(`sliders.${index}.destinationUrl` as const)}
-                      defaultValue={slide.destinationUrl}
-                    />
-                    <div className="mt-5">
-                      <Label>{t('form:input-text-color')}</Label>
-                      <ColorPicker
-                        control={control}
-                        color={slide.textColor}
-                        {...register(`sliders.${index}.textColor` as const)}
-                      ></ColorPicker>
-                    </div>
                     <button
                       onClick={() => remove(index)}
                       type="button"
@@ -362,19 +357,13 @@ const PromoSlider = ({
           }
         )}
       >
-        {sliders?.map(({ text, textColor, destinationUrl }, idx) => (
+        {sliders?.map(({ content }, idx) => (
           <div
             key={idx}
-            style={{ color: textColor, width: `${width}px` }}
+            style={{ width: `${width}px` }}
             className="flex justify-center items-center h-[40px]"
           >
-            {!isEmpty(destinationUrl) ? (
-              <span className="h-fit text-xl hover:underline cursor-pointer">
-                {text}
-              </span>
-            ) : (
-              <span className="h-fit text-xl">{text}</span>
-            )}
+            <span className="h-fit">{ReactHtmlParser(content ?? '')}</span>
           </div>
         ))}
       </div>

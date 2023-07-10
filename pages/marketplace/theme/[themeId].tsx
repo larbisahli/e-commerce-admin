@@ -1,36 +1,40 @@
 import { useQuery } from '@apollo/client';
-import PageMainAction from '@components/common/PageMainAction';
 import AppLayout from '@components/layouts/app';
-import PageTabs from '@components/pageTabs';
-import MyThemeList from '@components/theme/my-theme-list';
+import ThemePage from '@components/theme/theme-page';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
-import { STORE_THEMES } from '@graphql/theme';
+import { THEME } from '@graphql/theme';
 import { useErrorLogger, useGetUser } from '@hooks/index';
-import { verifyAuth } from '@middleware/utils';
+import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { ThemeType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import isEmpty from 'lodash/isEmpty';
 import type { GetServerSideProps } from 'next';
+import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 interface TTheme {
-  storeThemes: ThemeType[];
+  theme: ThemeType;
+}
+
+interface OptionsVariable {
+  id: string;
 }
 
 export default function Themes({ client }: SSRProps) {
+  const { query } = useRouter();
   const { t } = useTranslation();
 
-  const { data, loading, error } = useQuery<TTheme>(STORE_THEMES, {
-    variables: {},
+  const themeId = query.themeId as string;
+
+  const { data, loading, error } = useQuery<TTheme, OptionsVariable>(THEME, {
+    variables: { id: themeId },
     fetchPolicy: 'cache-and-network'
   });
 
-  const { storeThemes: themes = [] } = data ?? {};
-
-  console.log({ themes });
+  const { theme } = data ?? {};
 
   useGetUser(client);
   useErrorLogger(error);
@@ -42,15 +46,7 @@ export default function Themes({ client }: SSRProps) {
     return <ErrorMessage message={t('common:MESSAGE_SOMETHING_WENT_WRONG')} />;
   }
 
-  return (
-    <>
-      <PageMainAction
-        title={t('form:button-label-your-themes')}
-        label={t('form:button-label-your-themes')}
-      />
-      <MyThemeList themes={themes} />
-    </>
-  );
+  return <ThemePage theme={theme} />;
 }
 
 Themes.Layout = AppLayout;
@@ -68,6 +64,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
+  const { csrfToken, csrfError } = await XSRFHandler(context);
+
   return {
     props: {
       ...(await serverSideTranslations(locale, [
@@ -76,7 +74,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         'form',
         'error'
       ])),
-      client
+      client: { ...(client ?? {}), csrfToken, csrfError }
     }
   };
 };

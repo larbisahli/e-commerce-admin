@@ -25,7 +25,6 @@ const HomePage = () => {
   const [openFAQ, setOpenFAQ] = useState(null);
 
   const controlNavbar = () => {
-    console.log({ x: window.scrollY });
     if (typeof window !== 'undefined') {
       if (window.scrollY > 50) {
         setShow(true);
@@ -48,7 +47,7 @@ const HomePage = () => {
 
   const handleFaq = (num) => {
     setOpenFAQ((prev) => {
-      if (prev) return null;
+      if (prev === num) return null;
       return num;
     });
   };
@@ -75,9 +74,11 @@ const HomePage = () => {
         <div className="w-full mx-auto container flex items-center justify-between">
           <div className="flex justify-between content-end w-full">
             <div className="flex items-center">
-              <div className="leading-normal text-center text-blue-600 text-2xl font-bold">
-                Dropgala
-              </div>
+              <Link href="/">
+                <a className="leading-normal text-center text-blue-600 text-2xl font-bold">
+                  Dropgala
+                </a>
+              </Link>
               <Link href="#features">
                 <a className="px-8 text-gray-800 md:block hidden">Features</a>
               </Link>
@@ -192,29 +193,29 @@ const HomePage = () => {
           </div>
         </section>
 
-        {/* ------------------ Trial section ------------------ */}
-        <section className="container my-22 px-6 mx-auto flex flex-wrap flex-col-reverse md:flex-row items-center justify-between">
+        {/* ------------------ Free section ------------------ */}
+        <section className="container my-24 px-6 mx-auto flex flex-wrap flex-col-reverse md:flex-row items-center justify-between">
           {/* <!--Left Col--> */}
           <div className="w-full flex flex-col justify-center items-center overflow-y-hidden">
             <h2 className="my-4 text-xl md:text-3xl text-gray-800 font-bold leading-tight text-center slide-in-bottom-h1">
-              Get free 7 days trial
+              Create your online store. It’s free.
             </h2>
             <p className="leading-normal max-w-[700px] text-gray-800 pb-8 text-lg text-center slide-in-bottom-subtitle">
-              Get started today with a free 7-day trial! Dropgala provides you
-              with all the services, tools, support, and competitive advantages
-              you need to launch your online business. Take your first steps
-              towards achieving your dream project and start selling online with
-              ease and confidence.
+              Get started today for free! Dropgala provides you with all the
+              services, tools, support, and competitive advantages you need to
+              launch your online business. Take your first steps towards
+              achieving your dream project and start selling online with ease
+              and confidence.
             </p>
             {/* <Link href="https://dropgala.com/signup">
              <a
                 className="inline-block text-white bg-blue-600 no-underline rounded-full border-blue-300 text-lg font-medium hover:text-underline text-center py-3 px-8"
               >
-                Create your store for free!
+                Sign up
               </a>
           </Link> */}
             <Link href="#subscription">
-              <a className="inline-block text-white bg-blue-600 no-underline rounded-full border-blue-300 text-lg font-medium hover:text-underline text-center py-3 px-8">
+              <a className="inline-block text-white bg-blue-600 no-underline rounded-xl border-blue-300 text-lg font-medium hover:text-underline text-center py-3 px-8">
                 Join Our Waitlist!
               </a>
             </Link>
@@ -384,10 +385,9 @@ const HomePage = () => {
               {/* STARTUP */}
               <div className="shadow h-[800px] mt-11 border-2 bg-white rounded-xl min-w-[300px] sm:w-[400px]">
                 <div className="p-5">
-                  <div className="font-semibold text-2xl pt-1">Startup</div>
+                  <div className="font-semibold text-2xl pt-1">Basic</div>
                   <div className="pt-5">
-                    <span className="text-black font-bold text-5xl">$10</span>
-                    <span className="text-gray-500 ml-1">/month</span>
+                    <span className="text-black font-bold text-5xl">FREE</span>
                   </div>
                   <div className="pt-5">
                     <Link href="#subscription">
@@ -403,7 +403,7 @@ const HomePage = () => {
                         <CheckMark width={11} height={11} />
                       </div>
                       <span className="mx-2 text-gray-800 font-medium">
-                        Online store
+                        1 store
                       </span>
                     </div>
                     {/* ------------- */}
@@ -412,7 +412,7 @@ const HomePage = () => {
                         <CheckMark width={11} height={11} />
                       </div>
                       <span className="mx-2 text-gray-800 font-medium">
-                        100 products
+                        1 user
                       </span>
                     </div>
                     {/* ------------- */}
@@ -421,106 +421,16 @@ const HomePage = () => {
                         <CheckMark width={11} height={11} />
                       </div>
                       <span className="mx-2 text-gray-800 font-medium">
-                        Unlimited monthly sales
-                      </span>
-                    </div>
-                    {/* ------------- */}
-                    <div className="flex items-center mt-3">
-                      <div className="rounded-full flex items-center justify-center text-white bg-black w-5 h-5">
-                        <CheckMark width={11} height={11} />
-                      </div>
-                      <span className="mx-2 text-gray-800 font-medium">
-                        1 User
-                      </span>
-                    </div>
-                    {/* ------------- */}
-                    <div className="flex items-center mt-3">
-                      <div className="rounded-full flex items-center justify-center text-white bg-black w-5 h-5">
-                        <CheckMark width={11} height={11} />
-                      </div>
-                      <span className="mx-2 text-gray-800 font-medium">
-                        500 images upload
-                      </span>
-                    </div>
-                    {/* ------------- */}
-                    <div className="flex items-center mt-3">
-                      <div className="rounded-full flex items-center justify-center text-white bg-black w-5 h-5">
-                        <CheckMark width={11} height={11} />
-                      </div>
-                      <span className="mx-2 text-gray-800 font-medium">
-                        Custom domain
-                      </span>
-                    </div>
-                    {/* ------------- */}
-                    <div className="flex items-center mt-3">
-                      <div className="rounded-full flex items-center justify-center text-white bg-black w-5 h-5">
-                        <CheckMark width={11} height={11} />
-                      </div>
-                      <span className="mx-2 text-gray-800 font-medium">
-                        Multiple templates
-                      </span>
-                    </div>
-                    {/* ------------- */}
-                    <div className="flex items-center mt-3">
-                      <div className="rounded-full flex items-center justify-center text-white bg-black w-5 h-5">
-                        <CheckMark width={11} height={11} />
-                      </div>
-                      <span className="mx-2 text-gray-800 font-medium">
-                        Multilanguages store
-                      </span>
-                    </div>
-                    {/* ------------- */}
-                    <div className="flex items-center mt-3">
-                      <div className="rounded-full flex items-center justify-center text-white bg-black w-5 h-5">
-                        <CheckMark width={11} height={11} />
-                      </div>
-                      <span className="mx-2 text-gray-800 font-medium">
-                        Unlimited customer Reviews
-                      </span>
-                    </div>
-                    {/* ------------- */}
-                    <div className="flex items-center mt-3">
-                      <div className="rounded-full flex items-center justify-center text-white bg-black w-5 h-5">
-                        <CheckMark width={11} height={11} />
-                      </div>
-                      <span className="mx-2 text-gray-800 font-medium">
-                        3 Roles and permissions
-                      </span>
-                    </div>
-                    {/* ------------- */}
-                    <div className="flex items-center mt-3">
-                      <div className="rounded-full flex items-center justify-center text-white bg-black w-5 h-5">
-                        <CheckMark width={11} height={11} />
-                      </div>
-                      <span className="mx-2 text-gray-800 font-medium">
-                        Multicurrencies
-                      </span>
-                    </div>
-                    {/* ------------- */}
-                    <div className="flex items-center mt-3">
-                      <div className="rounded-full flex items-center justify-center text-white bg-black w-5 h-5">
-                        <CheckMark width={11} height={11} />
-                      </div>
-                      <span className="mx-2 text-gray-800 font-medium">
-                        Customer support 24/7
-                      </span>
-                    </div>
-                    {/* ------------- */}
-                    <div className="flex items-center mt-3">
-                      <div className="rounded-full flex items-center justify-center text-white bg-black w-5 h-5">
-                        <CheckMark width={11} height={11} />
-                      </div>
-                      <span className="mx-2 text-gray-800 font-medium">
-                        Google Sheets
+                        20 images upload
                       </span>
                     </div>
                   </div>
                 </div>
               </div>
-              {/* PRO */}
+              {/* PREMIUM */}
               <div className="shadow h-[900px] border-2 bg-white rounded-xl border-gray-600 min-w-[300px] sm:w-[400px]">
                 <div className="p-5">
-                  <div className="font-semibold text-3xl pt-1">Pro</div>
+                  <div className="font-semibold text-3xl pt-1">Premium</div>
                   <div className="pt-5">
                     <span className="text-black font-bold text-5xl">$15</span>
                     <span className="text-gray-500 ml-1">/month</span>
@@ -539,7 +449,7 @@ const HomePage = () => {
                         <CheckMark width={11} height={11} />
                       </div>
                       <span className="mx-2 text-black font-semibold">
-                        All Startup Features
+                        All Basic Features
                       </span>
                     </div>
                     {/* ------------- */}
@@ -548,7 +458,7 @@ const HomePage = () => {
                         <CheckMark width={11} height={11} />
                       </div>
                       <span className="mx-2 text-gray-800 font-medium">
-                        1000 products
+                        Unlimited products
                       </span>
                     </div>
                     {/* ------------- */}
@@ -557,7 +467,16 @@ const HomePage = () => {
                         <CheckMark width={11} height={11} />
                       </div>
                       <span className="mx-2 text-gray-800 font-medium">
-                        1000 images upload
+                        Unlimited images upload
+                      </span>
+                    </div>
+                    {/* ------------- */}
+                    <div className="flex items-center mt-3">
+                      <div className="rounded-full flex items-center justify-center text-white bg-black w-5 h-5">
+                        <CheckMark width={11} height={11} />
+                      </div>
+                      <span className="mx-2 text-gray-800 font-medium">
+                        Custom domain
                       </span>
                     </div>
                     {/* ------------- */}
@@ -587,6 +506,78 @@ const HomePage = () => {
                         9 Blog Posts
                       </span>
                     </div>
+                    {/* ------------- */}
+                    <div className="flex items-center mt-3">
+                      <div className="rounded-full flex items-center justify-center text-white bg-black w-5 h-5">
+                        <CheckMark width={11} height={11} />
+                      </div>
+                      <span className="mx-2 text-gray-800 font-medium">
+                        3 Roles and permissions
+                      </span>
+                    </div>
+                    {/* ------------- */}
+                    <div className="flex items-center mt-3">
+                      <div className="rounded-full flex items-center justify-center text-white bg-black w-5 h-5">
+                        <CheckMark width={11} height={11} />
+                      </div>
+                      <span className="mx-2 text-gray-800 font-medium">
+                        Unlimited monthly sales
+                      </span>
+                    </div>
+                    {/* ------------- */}
+                    <div className="flex items-center mt-3">
+                      <div className="rounded-full flex items-center justify-center text-white bg-black w-5 h-5">
+                        <CheckMark width={11} height={11} />
+                      </div>
+                      <span className="mx-2 text-gray-800 font-medium">
+                        Multicurrencies
+                      </span>
+                    </div>
+                    {/* ------------- */}
+                    <div className="flex items-center mt-3">
+                      <div className="rounded-full flex items-center justify-center text-white bg-black w-5 h-5">
+                        <CheckMark width={11} height={11} />
+                      </div>
+                      <span className="mx-2 text-gray-800 font-medium">
+                        Customer support 24/7
+                      </span>
+                    </div>
+                    {/* ------------- */}
+                    <div className="flex items-center mt-3">
+                      <div className="rounded-full flex items-center justify-center text-white bg-black w-5 h-5">
+                        <CheckMark width={11} height={11} />
+                      </div>
+                      <span className="mx-2 text-gray-800 font-medium">
+                        Google Sheets
+                      </span>
+                    </div>
+                    {/* ------------- */}
+                    <div className="flex items-center mt-3">
+                      <div className="rounded-full flex items-center justify-center text-white bg-black w-5 h-5">
+                        <CheckMark width={11} height={11} />
+                      </div>
+                      <span className="mx-2 text-gray-800 font-medium">
+                        Multiple templates
+                      </span>
+                    </div>
+                    {/* ------------- */}
+                    <div className="flex items-center mt-3">
+                      <div className="rounded-full flex items-center justify-center text-white bg-black w-5 h-5">
+                        <CheckMark width={11} height={11} />
+                      </div>
+                      <span className="mx-2 text-gray-800 font-medium">
+                        Multilanguages store
+                      </span>
+                    </div>
+                    {/* ------------- */}
+                    <div className="flex items-center mt-3">
+                      <div className="rounded-full flex items-center justify-center text-white bg-black w-5 h-5">
+                        <CheckMark width={11} height={11} />
+                      </div>
+                      <span className="mx-2 text-gray-800 font-medium">
+                        Unlimited customer reviews
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -595,7 +586,7 @@ const HomePage = () => {
                 <div className="p-5">
                   <div className="font-semibold text-3xl pt-1">Business</div>
                   <div className="pt-5">
-                    <span className="text-black font-bold text-5xl">$25</span>
+                    <span className="text-black font-bold text-5xl">$50</span>
                     <span className="text-gray-500 ml-1">/month</span>
                   </div>
                   <div className="pt-5">
@@ -612,25 +603,7 @@ const HomePage = () => {
                         <CheckMark width={11} height={11} />
                       </div>
                       <span className="mx-2 text-black font-semibold">
-                        All Professional Features
-                      </span>
-                    </div>
-                    {/* ------------- */}
-                    <div className="flex items-center mt-3">
-                      <div className="rounded-full flex items-center justify-center text-white bg-black w-5 h-5">
-                        <CheckMark width={11} height={11} />
-                      </div>
-                      <span className="mx-2 text-gray-800 font-medium">
-                        Unlimited products
-                      </span>
-                    </div>
-                    {/* ------------- */}
-                    <div className="flex items-center mt-3">
-                      <div className="rounded-full flex items-center justify-center text-white bg-black w-5 h-5">
-                        <CheckMark width={11} height={11} />
-                      </div>
-                      <span className="mx-2 text-gray-800 font-medium">
-                        Unlimited images upload
+                        All Premium Features
                       </span>
                     </div>
                     {/* ------------- */}
@@ -851,18 +824,8 @@ const HomePage = () => {
           {/* <!--Left Col--> */}
           <div className="w-full flex flex-col justify-center items-center overflow-y-hidden">
             <h2 className="my-4 text-xl md:text-3xl text-gray-800 font-bold leading-tight text-center slide-in-bottom-h1">
-              About us
+              Join us
             </h2>
-            <p className="leading-normal max-w-[1000px] text-gray-700 pb-8 text-base text-center slide-in-bottom-subtitle">
-              Dropgala is an online platform that provides accessible and
-              user-friendly services for creating and managing online stores.
-              With a strong focus on merchant and entrepreneur needs, Dropgala
-              offers a comprehensive range of services, including the creation
-              of professional online stores, extensive support, and valuable
-              business development resources. Their all-in-one solution empowers
-              individuals of all backgrounds to effortlessly establish their
-              online presence and succeed in the digital marketplace.
-            </p>
             <p className="leading-normal text-gray-800 pb-4 text-center slide-in-bottom-subtitle max-w-5xl">
               {`Join us on this exciting journey and unlock the potential of your
             online business. Together, let's revolutionize the way we build and
@@ -884,9 +847,36 @@ const HomePage = () => {
         </section>
         {/* <!--Footer--> */}
         <div className="container mx-auto w-full mt-16 pt-8 pb-6 text-sm text-center md:text-left fade-in border-t border-dotted border-gray-300">
-          <p className="italic m-3 text-gray-700 text-center">
-            Create Your Dream Online Store Effortlessly with Dropgala!
-          </p>
+          <div className="flex justify-center items-center">
+            <Link href="/about-us">
+              <a className="text-gray-600 text-lg mx-3 hover:text-blue-500">
+                About us
+              </a>
+            </Link>
+            <Link href="/policy">
+              <a className="text-gray-600 text-lg mx-3 hover:text-blue-500">
+                Policy
+              </a>
+            </Link>
+            <Link href="/support">
+              <a className="text-gray-600 text-lg mx-3 hover:text-blue-500">
+                Support
+              </a>
+            </Link>
+            <Link href="/#subscription">
+              <a className="text-gray-600 text-lg mx-3 hover:text-blue-500">
+                Sign up
+              </a>
+            </Link>
+            <Link href="/#subscription">
+              <a className="text-gray-600 text-lg mx-3 hover:text-blue-500">
+                Login
+              </a>
+            </Link>
+          </div>
+          <div className="flex justify-center items-center mb-12 mt-4">
+            <span className="text-xl font-bold text-gray-400">dropgala</span>
+          </div>
           <p className="text-gray-500 no-underline hover:no-underline">
             &copy; Dropgala 2023 All rights reserved.
           </p>

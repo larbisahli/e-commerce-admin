@@ -44,11 +44,7 @@ export default function Uploader({ setLoading, mediaId = null, refetch }: any) {
         });
 
         for await (const file of acceptedFiles) {
-          if (
-            ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'].includes(
-              file.type
-            )
-          ) {
+          if (['image/png', 'image/jpeg', 'image/jpg'].includes(file.type)) {
             var formData = new FormData();
             formData.append('image', file);
             formData.append('mediaId', mediaId ?? '');
@@ -99,8 +95,12 @@ export default function Uploader({ setLoading, mediaId = null, refetch }: any) {
           <span className="text-accent font-semibold">
             {t('text-upload-highlight')}
           </span>{' '}
-          {t('text-upload-message')} <br />
-          <span className="text-xs text-body">{t('text-img-format')}</span>
+          {t('text-upload-message')}
+          <span className="px-1 text-xs text-body">{`(${t(
+            'text-img-format'
+          )})`}</span>
+          <br />
+          <p className="text-xs text-body">{t('text-upload-limit')}</p>
         </p>
       </div>
     </section>

@@ -493,6 +493,13 @@ export const siteSettings = {
       {
         id: 'WDIqE0I',
         href: ROUTES.COMING_SOON,
+        label: 'sidebar-nav-item-support',
+        icon: 'SupportIcon',
+        disabled: true
+      },
+      {
+        id: 'WDIqE0I',
+        href: ROUTES.COMING_SOON,
         label: 'sidebar-nav-item-invite-earn',
         icon: 'AffiliateIcon',
         disabled: true

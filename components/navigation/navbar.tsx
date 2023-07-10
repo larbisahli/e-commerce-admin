@@ -1,12 +1,10 @@
 import { ShopIcon } from '@components/icons/sidebar';
+import styles from '@components/navigation/scss/index.module.scss';
 import SearchBar from '@components/search-bar';
 import Link from '@components/ui/link';
-import LinkButton from '@components/ui/link-button';
 import { useGetUser } from '@hooks/useGetUser';
 import { useMediaQuery } from '@hooks/useMediaQuery';
 import { useUI } from '@hooks/useUI';
-import { ROUTES } from '@utils/routes';
-import cn from 'classnames';
 import classNames from 'classnames/bind';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'next-i18next';
@@ -14,19 +12,20 @@ import { useEffect, useState } from 'react';
 
 import NavMenu from './menu';
 import NavNotification from './notification';
-import styles from './scss/index.module.scss';
 
 let cx = classNames.bind(styles);
 
 const Navbar = () => {
   const { t } = useTranslation();
-  const { toggleSidebar, closeSidebarIfPresent } = useUI();
-
-  const menuIsOpen = false;
+  const {
+    toggleSidebar,
+    ui: { displayMobileSidebar, displayMiniSidebar },
+    closeSidebarIfPresent
+  } = useUI();
 
   const menuSpanClass = cx('span', {
-    'span--open': menuIsOpen,
-    'span--close': !menuIsOpen
+    'span--open': displayMobileSidebar,
+    'span--close': !displayMobileSidebar
   });
 
   const closeSideBar = useMediaQuery('min-width', 768);
@@ -71,21 +70,24 @@ const Navbar = () => {
 
   return (
     <header
-      className={cn(
+      className={cx(
         'w-full fixed bg-white border border-b-400 top-0 right-0 left-0 z-40',
         { 'shadow-md': show }
       )}
     >
       <nav
-        className={cn(
+        className={cx(
           'md:ps-20 nlg:ps-20 nxl:ps-20 lg:ps-64 xl:ps-64',
-          'px-5 md:px-8 py-2 flex items-center justify-between'
+          'px-5 md:px-8 py-2 flex items-center justify-between',
+          {
+            'md:!ps-20': displayMiniSidebar
+          }
         )}
       >
         <motion.button
           whileTap={{ scale: 0.88 }}
-          onClick={toggleSidebar}
-          className="relative items-center justify-center focus:outline-none flex lg:hidden md:hidden border h-[30px] w-[18px] p-5 rounded bg-white"
+          onClick={() => toggleSidebar({ field: 'displayMobileSidebar' })}
+          className="relative items-center justify-center focus:outline-none flex lg:hidden md:hidden border h-[25px] w-[12px] p-5 rounded bg-white"
         >
           <div className={cx('menu-icon-container')}>
             <span className={menuSpanClass}></span>
@@ -98,10 +100,10 @@ const Navbar = () => {
             <SearchBar />
           </div>
         </div>
-        <div className="flex items-center space-s-8">
+        <div className="flex items-center space-s-5">
           <Link
             target="_blank"
-            className="bg-white hover:text-accent text-gray-700  shadow hover:border-blue-300 border rounded-full w-10 h-10 flex items-center justify-center"
+            className="bg-white hover:text-accent text-gray-700 shadow hover:border-blue-300 border rounded-sm w-10 h-10 flex items-center justify-center"
             href={`https://${alias}.dropgala.com`}
           >
             <ShopIcon />

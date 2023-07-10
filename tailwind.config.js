@@ -51,7 +51,7 @@ module.exports = {
         'sidenav-color': '#ccc',
         'sidenav-active-color': '#383749cf',
         'sidenav-active-hover-color': '#36326fcf',
-        'sidenav-color-secondary': '#aaa6a0',
+        'sidenav-color-secondary': '#cdcdce',
         'sidenav-divider': 'rgba(255,255,255,0.2)',
         'fb-color': '#4267B2',
         social: {

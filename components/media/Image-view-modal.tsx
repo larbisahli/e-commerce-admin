@@ -25,7 +25,7 @@ const ImageViewModal = ({}: Props) => {
       {/* MODEL */}
       <Modal open={isOpen} onClose={closeModal}>
         {view === MEDIA_ITEM_MODAL && (
-          <div className="flex overflow-y-auto flex-col bg-white md:h-fit h-[100vh] w-[100vw] md:w-[70vw] 2xl:w-[60vw]">
+          <div className="flex max-h-screen overflow-y-auto flex-col bg-white md:h-fit h-[100vh] w-[100vw] md:w-[70vw] 2xl:w-[60vw]">
             <div className="p-4 h-fit min-h-[400px] w-full">
               <div className="flex items-center mt-3 md:mb-0 justify-end mb-16">
                 <Button>Save</Button>

@@ -3,9 +3,49 @@ import ImageComponent from '@components/ImageComponent';
 import isEmpty from 'lodash/isEmpty';
 import React from 'react';
 
-const Thumbs = ({ photos, handleImageRemoval }) => {
-  if (isEmpty(photos)) {
-    return null;
+const Thumbs = ({ isThumbnail, photos, handleImageRemoval }) => {
+  if (isEmpty(photos) && isThumbnail) {
+    return (
+      <ul className="flex flex-wrap items-center">
+        <li className="m-2">
+          <div
+            style={{ border: '2px dashed #d1d9e0' }}
+            className="w-22 h-22 border-dotted rounded flex items-center justify-center"
+          >
+            <ImageComponent
+              src={'placeholders/image.jpg'}
+              customPlaceholder={'placeholders/image__placeholder.png'}
+              width={45}
+              height={45}
+              objectFit="cover"
+            />
+          </div>
+        </li>
+      </ul>
+    );
+  }
+
+  if (isEmpty(photos) && !isThumbnail) {
+    return (
+      <ul className="flex flex-wrap items-center">
+        {Array.from({ length: 3 })?.map((_, idx) => (
+          <li key={idx} className="mt-2 mr-2">
+            <div
+              style={{ border: '2px dashed #d1d9e0' }}
+              className="w-22 h-22 border-dotted rounded flex items-center justify-center"
+            >
+              <ImageComponent
+                src={'placeholders/image.jpg'}
+                customPlaceholder={'placeholders/image__placeholder.png'}
+                width={45}
+                height={45}
+                objectFit="cover"
+              />
+            </div>
+          </li>
+        ))}
+      </ul>
+    );
   }
 
   return (

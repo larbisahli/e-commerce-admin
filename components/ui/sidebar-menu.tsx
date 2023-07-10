@@ -14,7 +14,7 @@ function SidebarMenuItem({ className, item, depth = 0 }: any) {
   const [isOpen, setOpen] = useState(() => router.pathname === item.href);
   const { href, labelTransKey, items, icon } = item;
   const {
-    ui: { displaySidebar },
+    ui: { displayMobileSidebar },
     handleSidebar
   } = useUI();
 
@@ -27,7 +27,8 @@ function SidebarMenuItem({ className, item, depth = 0 }: any) {
       toggleCollapse();
     } else {
       router.push(href);
-      displaySidebar && handleSidebar({ display: false });
+      displayMobileSidebar &&
+        handleSidebar({ field: 'displayMobileSidebar', display: false });
     }
   }
 

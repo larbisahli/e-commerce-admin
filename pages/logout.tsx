@@ -1,24 +1,25 @@
-import Loader from '@components/ui/loader/loader';
-// import { useLogoutMutation } from "@data/user/use-logout.mutation";
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useEffect } from 'react';
+import { CookieNames } from '@ts-types/enums';
+import { ROUTES } from '@utils/routes';
+import Cookies from 'cookies';
+import { GetServerSideProps } from 'next';
 
 function SignOut() {
-  const { t } = useTranslation();
-  // const { mutate: logout } = useLogoutMutation();
-
-  useEffect(() => {
-    // logout();
-  }, []);
-
-  return <Loader text={t('common:signing-out-text')} />;
+  return <div></div>;
 }
 
-export default SignOut;
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { req, res } = context;
 
-export const getStaticProps = async ({ locale }: any) => ({
-  props: {
-    ...(await serverSideTranslations(locale, ['common']))
-  }
-});
+  const cookies = new Cookies(req, res);
+
+  cookies.set(CookieNames.USER_TOKEN_NAME, '', { maxAge: Date.now() });
+
+  return {
+    redirect: {
+      permanent: false,
+      destination: ROUTES.DASHBOARD
+    }
+  };
+};
+
+export default SignOut;

@@ -1,7 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface State {
-  displaySidebar: boolean;
+  displayMobileSidebar: boolean;
+  displayMiniSidebar: boolean;
   displaySublevelSidebar: boolean;
   SublevelSidebarId: string;
   displayModal: boolean;
@@ -10,7 +11,8 @@ export interface State {
 }
 
 const initialState = {
-  displaySidebar: false,
+  displayMobileSidebar: false,
+  displayMiniSidebar: false,
   displaySublevelSidebar: false,
   SublevelSidebarId: null,
   displayModal: false,
@@ -33,12 +35,20 @@ export const UISlice = createSlice({
   reducers: {
     handleSidebar: (
       state: State,
-      action: PayloadAction<{ display: boolean }>
+      action: PayloadAction<{
+        field: 'displayMiniSidebar' | 'displayMobileSidebar';
+        display: boolean;
+      }>
     ) => {
-      state.displaySidebar = action.payload.display;
+      state[action.payload.field] = action.payload.display;
     },
-    toggleSidebar: (state: State) => {
-      state.displaySidebar = !state.displaySidebar;
+    toggleSidebar: (
+      state: State,
+      action: PayloadAction<{
+        field: 'displayMiniSidebar' | 'displayMobileSidebar';
+      }>
+    ) => {
+      state[action.payload.field] = !state[action.payload.field];
     },
     openSublevelSidebar: (
       state: State,
@@ -51,8 +61,8 @@ export const UISlice = createSlice({
       state.displaySublevelSidebar = false;
     },
     closeSidebarIfPresent: (state: State) => {
-      if (!state.displaySidebar) return state;
-      state.displaySidebar = false;
+      if (!state.displayMobileSidebar) return state;
+      state.displayMobileSidebar = false;
     },
     handleModal: (
       state: State,

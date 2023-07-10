@@ -36,7 +36,7 @@ const FormFooter = ({ isSignUp = false }) => {
           style={{ width: '1px', height: '20px' }}
           className="mx-2 bg-gray-300"
         ></span>
-        <Link href={'/'}>
+        <Link href={'/policy'}>
           <a>
             <p>Policy</p>
           </a>
@@ -45,9 +45,9 @@ const FormFooter = ({ isSignUp = false }) => {
           style={{ width: '1px', height: '20px' }}
           className="mx-2 bg-gray-300"
         ></span>
-        <Link href={'/'} passHref>
+        <Link href={'/about-us'} passHref>
           <a>
-            <p>Privacy</p>
+            <p>About us</p>
           </a>
         </Link>
       </div>

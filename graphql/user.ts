@@ -54,6 +54,7 @@ export const USER_AUTH = gql`
       email
       isTenant
       active
+      storeName
       profile {
         id
         image

@@ -206,7 +206,7 @@ const SidebarLabel = ({
     if (hadSubLinks) {
       return;
     }
-    handleSidebar({ display: false });
+    handleSidebar({ field: 'displayMobileSidebar', display: false });
   };
 
   const TagName = sidebarIcons[icon];

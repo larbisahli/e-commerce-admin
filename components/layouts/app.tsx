@@ -1,5 +1,6 @@
 import AdminFooter from '@components/common/admin-footer';
 import SublevelNavigation from '@components/navigation/sublevel-navigation';
+import { useUI } from '@hooks/useUI';
 import cn from 'classnames';
 import React from 'react';
 
@@ -11,6 +12,10 @@ type Props = {
 };
 
 const AppLayout: React.FC = ({ children }: Props) => {
+  const {
+    ui: { displayMiniSidebar }
+  } = useUI();
+
   return (
     <main className="min-h-screen bg-gray-100 h-fit flex flex-col transition-colors duration-150">
       <MobileNavigation />
@@ -21,7 +26,10 @@ const AppLayout: React.FC = ({ children }: Props) => {
         <div
           className={cn(
             'md:ps-20 nlg:ps-20 nxl:ps-20 lg:ps-64 xl:ps-64 pt-20',
-            'w-full h-full'
+            'w-full h-full',
+            {
+              'md:!ps-20 !ps-0': displayMiniSidebar
+            }
           )}
         >
           <Navbar />
