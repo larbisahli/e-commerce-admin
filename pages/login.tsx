@@ -6,6 +6,7 @@ import { SSRProps } from '@ts-types/custom.types';
 import { ROUTES } from '@utils/routes';
 import { GetServerSideProps } from 'next';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -27,8 +28,12 @@ const LoginPage = ({ client }: SSRProps) => {
     <Fragment>
       <div className="flex  h-screen items-center justify-center">
         <div className="flex-1 h-full border border-gray-100">
-          <div className="leading-normal m-2 mx-22 text-blue-600 text-xl font-bold">
-            Dropgala
+          <div className="m-2 mt-5 mx-22">
+            <Link href={'/'}>
+              <a className="leading-normal text-blue-600 text-2xl font-bold">
+                Dropgala
+              </a>
+            </Link>
           </div>
           <div className="max-w-[570px] mx-auto bg-white p-5 sm:p-8">
             <div className="flex flex-col items-center justify-center mt-4 mb-10">

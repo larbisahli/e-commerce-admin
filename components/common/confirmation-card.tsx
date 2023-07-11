@@ -42,7 +42,7 @@ const ConfirmationCard: React.FC<ConfirmationCardProps> = ({
             <TrashIcon className="mt-4 w-12 h-12 m-auto text-accent" />
           )}
           <p className="text-heading text-xl font-bold mt-4">{t(title)}</p>
-          <p className="text-body-dark dark:text-muted leading-relaxed py-2 px-6">
+          <p className="text-body-dark leading-relaxed py-2 px-6">
             {t(description)}
           </p>
           <div className="flex items-center justify-between space-s-4 w-full mt-8">
