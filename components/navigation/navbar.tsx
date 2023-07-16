@@ -33,7 +33,6 @@ const Navbar = () => {
   const [show, setShow] = useState(false);
 
   const controlNavbar = () => {
-    console.log({ x: window.scrollY });
     if (typeof window !== 'undefined') {
       if (window.scrollY > 50) {
         setShow(true);

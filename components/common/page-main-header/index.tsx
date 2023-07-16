@@ -45,7 +45,7 @@ const PageMainHeader = ({
   onLimitChange,
   limit,
   onPagination,
-  total,
+  total = 0,
   currentPage,
   perPage,
   showOnlyPagination = false
@@ -65,7 +65,14 @@ const PageMainHeader = ({
       return null;
     }
     return (
-      <div className="py-2 flex items-center justify-end">
+     <div className='py-2 flex items-center justify-between flex-wrap-reverse'>
+      <div className='flex items-end justify-end py-2 flex-1'>
+        <div className='whitespace-nowrap text-sm text-gray-900 w-full'>
+          <span className=''>{total}</span>
+          <span className='px-1'>records found</span>
+        </div>
+      </div>
+       <div className="flex items-center justify-end flex-wrap">
         <button
           onClick={() => handleOpenDrop('filter')}
           className="text-sub-heading p-2 flex items-center cursor-pointer"
@@ -126,6 +133,7 @@ const PageMainHeader = ({
           <RefreshIcon width="25px" height="25px" />
         </Button>
       </div>
+     </div>
     );
   };
 
