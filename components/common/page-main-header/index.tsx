@@ -65,75 +65,75 @@ const PageMainHeader = ({
       return null;
     }
     return (
-     <div className='py-2 flex items-center justify-between flex-wrap-reverse'>
-      <div className='flex items-end justify-end py-2 flex-1'>
-        <div className='whitespace-nowrap text-sm text-gray-900 w-full'>
-          <span className=''>{total}</span>
-          <span className='px-1'>records found</span>
+      <div className="py-2 flex items-center justify-between flex-wrap-reverse">
+        <div className="flex items-end justify-end py-2 flex-1">
+          <div className="whitespace-nowrap text-sm text-gray-900 w-full">
+            <span className="">{total}</span>
+            <span className="px-1">records found</span>
+          </div>
+        </div>
+        <div className="flex items-center justify-end flex-wrap">
+          <button
+            onClick={() => handleOpenDrop('filter')}
+            className="text-sub-heading p-2 flex items-center cursor-pointer"
+          >
+            <div className="mr-2">
+              <FilterIcon height="1.2em" width="1.2em" />
+            </div>
+            <span className="">Filter</span>
+            <div className="ml-2">
+              <ArrowDown
+                height="1.2em"
+                width="1.2em"
+                className={cn('transition', {
+                  'rotate-180': openDrop === 'filter'
+                })}
+              />
+            </div>
+          </button>
+          <div className="w-[1px] h-[40px] bg-gray-300 mx-2"></div>
+          <button
+            onClick={() => handleOpenDrop('columns')}
+            className="text-sub-heading p-2 flex items-center cursor-pointer"
+          >
+            <div className="mr-2">
+              <SettingsIcon height="1.2em" width="1.2em" />
+            </div>
+            <span className="">Columns</span>
+            <div className="ml-2">
+              <ArrowDown
+                height="1.2em"
+                width="1.2em"
+                className={cn('transition', {
+                  'rotate-180': openDrop === 'columns'
+                })}
+              />
+            </div>
+          </button>
+          <div className="w-[1px] h-[40px] bg-gray-300 mx-2"></div>
+          <button
+            onClick={() => handleOpenDrop('exports')}
+            className="text-sub-heading p-2 flex items-center cursor-pointer"
+          >
+            <div className="mr-2">
+              <ExportIcon height="1.2em" width="1.2em" />
+            </div>
+            <span className="">Exports</span>
+            <div className="ml-2">
+              <ArrowDown
+                height="1.2em"
+                width="1.2em"
+                className={cn('transition', {
+                  'rotate-180': openDrop === 'exports'
+                })}
+              />
+            </div>
+          </button>
+          <Button className="rounded-full bg-white" size="small">
+            <RefreshIcon width="25px" height="25px" />
+          </Button>
         </div>
       </div>
-       <div className="flex items-center justify-end flex-wrap">
-        <button
-          onClick={() => handleOpenDrop('filter')}
-          className="text-sub-heading p-2 flex items-center cursor-pointer"
-        >
-          <div className="mr-2">
-            <FilterIcon height="1.2em" width="1.2em" />
-          </div>
-          <span className="">Filter</span>
-          <div className="ml-2">
-            <ArrowDown
-              height="1.2em"
-              width="1.2em"
-              className={cn('transition', {
-                'rotate-180': openDrop === 'filter'
-              })}
-            />
-          </div>
-        </button>
-        <div className="w-[1px] h-[40px] bg-gray-300 mx-2"></div>
-        <button
-          onClick={() => handleOpenDrop('columns')}
-          className="text-sub-heading p-2 flex items-center cursor-pointer"
-        >
-          <div className="mr-2">
-            <SettingsIcon height="1.2em" width="1.2em" />
-          </div>
-          <span className="">Columns</span>
-          <div className="ml-2">
-            <ArrowDown
-              height="1.2em"
-              width="1.2em"
-              className={cn('transition', {
-                'rotate-180': openDrop === 'columns'
-              })}
-            />
-          </div>
-        </button>
-        <div className="w-[1px] h-[40px] bg-gray-300 mx-2"></div>
-        <button
-          onClick={() => handleOpenDrop('exports')}
-          className="text-sub-heading p-2 flex items-center cursor-pointer"
-        >
-          <div className="mr-2">
-            <ExportIcon height="1.2em" width="1.2em" />
-          </div>
-          <span className="">Exports</span>
-          <div className="ml-2">
-            <ArrowDown
-              height="1.2em"
-              width="1.2em"
-              className={cn('transition', {
-                'rotate-180': openDrop === 'exports'
-              })}
-            />
-          </div>
-        </button>
-        <Button className="rounded-full bg-white" size="small">
-          <RefreshIcon width="25px" height="25px" />
-        </Button>
-      </div>
-     </div>
     );
   };
 

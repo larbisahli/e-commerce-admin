@@ -2,7 +2,8 @@ import { ROUTES } from '@utils/routes';
 
 export const siteSettings = {
   name: 'DropGala',
-  description: 'Great place to buy items with a fair price.',
+  description:
+    'Dropgala is an online platform that provides accessible and user-friendly services for creating and managing online stores.',
   logo: {
     url: '/logo.svg',
     alt: 'DropGala',
@@ -157,6 +158,12 @@ export const siteSettings = {
         icon: 'CouponsIcon'
       },
       {
+        id: 'Wa09XCI',
+        href: ROUTES.MEDIA,
+        label: 'sidebar-nav-item-media',
+        icon: 'ImageFolder'
+      },
+      {
         id: 'JiCQsO',
         href: '#',
         label: 'sidebar-nav-item-shipping-and-delivery',
@@ -177,12 +184,6 @@ export const siteSettings = {
             isSubLink: true
           }
         ]
-      },
-      {
-        id: 'Wa09XCI',
-        href: ROUTES.MEDIA,
-        label: 'sidebar-nav-item-media',
-        icon: 'ImageFolder'
       },
       {
         id: 'WaIqCI',
@@ -216,6 +217,14 @@ export const siteSettings = {
             id: '9YcWhG',
             href: ROUTES.SYSTEM_STORES,
             label: 'sidebar-nav-item-all-stores',
+            padding: '35px',
+            isSubLink: true,
+            disabled: true
+          },
+          {
+            id: '9YcWhG',
+            href: ROUTES.STORE_EXTENSIONS,
+            label: 'sidebar-nav-item-extensions',
             padding: '35px',
             isSubLink: true,
             disabled: true
@@ -303,14 +312,29 @@ export const siteSettings = {
         ]
       },
       {
-        id: 'j6OQzo',
+        id: 'JU3uxd123Sd',
+        href: 'store',
+        label: 'sidebar-nav-item-marketing',
+        icon: 'MarketingIcon',
+        subLinks: [
+          {
+            id: '9YcWhG123SD',
+            href: ROUTES.MARKETING_NEWSLETTER,
+            label: 'sidebar-nav-item-newsletter-recipients',
+            padding: '35px',
+            isSubLink: true,
+            disabled: true
+          }
+        ]
+      },
+      {
+        id: 'j6OQzo123X',
         href: ROUTES.COMING_SOON,
         label: 'sidebar-nav-item-email',
         icon: 'EmailIcon',
-        disabled: true,
         subLinks: [
           {
-            id: 'RVRg5VS',
+            id: 'RVRg1235VS',
             href: ROUTES.COMING_SOON,
             label: 'sidebar-nav-item-email-newsletters',
             padding: '35px',
@@ -335,56 +359,54 @@ export const siteSettings = {
           }
         ]
       },
-      // {
-      //   id: 'W109XCO',
-      //   href: ROUTES.COMING_SOON,
-      //   label: 'sidebar-nav-item-rma',
-      //   icon: 'PackageReturn',
-      //   disabled: true,
-      //   subLinks: [
-      //     {
-      //       id: 'WaIACaCI',
-      //       href: ROUTES.COMING_SOON,
-      //       label: 'sidebar-nav-item-manage-requests',
-      //       padding: '35px',
-      //       isSubLink: true
-      //     },
-      //     {
-      //       id: 'WaIRCAaCI',
-      //       href: ROUTES.COMING_SOON,
-      //       label: 'sidebar-nav-item-customer-pending-requests',
-      //       padding: '35px',
-      //       isSubLink: true
-      //     },
-      //     {
-      //       id: 'WaIECaCI',
-      //       href: ROUTES.COMING_SOON,
-      //       label: 'sidebar-nav-item-item-conditions',
-      //       padding: '35px',
-      //       isSubLink: true
-      //     },
-      //     {
-      //       id: 'WaIOCaCI',
-      //       href: ROUTES.COMING_SOON,
-      //       label: 'sidebar-nav-item-return-reasons',
-      //       padding: '35px',
-      //       isSubLink: true
-      //     },
-      //     {
-      //       id: 'WaIPCaCI',
-      //       href: ROUTES.COMING_SOON,
-      //       label: 'sidebar-nav-item-rma-statuses',
-      //       padding: '35px',
-      //       isSubLink: true
-      //     }
-      //   ]
-      // },
+      {
+        id: 'W109XCO',
+        href: ROUTES.COMING_SOON,
+        label: 'sidebar-nav-item-rma',
+        icon: 'PackageReturn',
+        subLinks: [
+          {
+            id: 'WaIACaCI',
+            href: ROUTES.COMING_SOON,
+            label: 'sidebar-nav-item-manage-requests',
+            padding: '35px',
+            isSubLink: true
+          },
+          {
+            id: 'WaIRCAaCI',
+            href: ROUTES.COMING_SOON,
+            label: 'sidebar-nav-item-customer-pending-requests',
+            padding: '35px',
+            isSubLink: true
+          },
+          {
+            id: 'WaIECaCI',
+            href: ROUTES.COMING_SOON,
+            label: 'sidebar-nav-item-item-conditions',
+            padding: '35px',
+            isSubLink: true
+          },
+          {
+            id: 'WaIOCaCI',
+            href: ROUTES.COMING_SOON,
+            label: 'sidebar-nav-item-return-reasons',
+            padding: '35px',
+            isSubLink: true
+          },
+          {
+            id: 'WaIPCaCI',
+            href: ROUTES.COMING_SOON,
+            label: 'sidebar-nav-item-rma-statuses',
+            padding: '35px',
+            isSubLink: true
+          }
+        ]
+      },
       {
         id: '1239XCO',
         href: ROUTES.COMING_SOON,
         label: 'sidebar-nav-item-blogs',
         icon: 'BlogIcon',
-        disabled: true,
         subLinks: [
           {
             id: '12WaIACaCI',
@@ -398,14 +420,6 @@ export const siteSettings = {
             id: 'WaIRCaXCI',
             href: ROUTES.COMING_SOON,
             label: 'sidebar-nav-item-categories',
-            padding: '35px',
-            isSubLink: true,
-            disabled: true
-          },
-          {
-            id: 'WaIRCaCI',
-            href: ROUTES.COMING_SOON,
-            label: 'sidebar-nav-item-tags',
             padding: '35px',
             isSubLink: true,
             disabled: true
@@ -457,7 +471,7 @@ export const siteSettings = {
             isSubLink: true
           },
           {
-            id: '9YcWhG',
+            id: '9YJKcWhG',
             href: ROUTES.COMING_SOON,
             label: 'sidebar-nav-item-payment-methods',
             padding: '35px',
@@ -465,7 +479,7 @@ export const siteSettings = {
             disabled: true
           },
           {
-            id: '9YcWhG',
+            id: '9YcWMNhG',
             href: ROUTES.COMING_SOON,
             label: 'sidebar-nav-item-tax',
             padding: '35px',
@@ -491,7 +505,7 @@ export const siteSettings = {
         ]
       },
       {
-        id: 'WDIqE0I',
+        id: 'WDIqE0NMI',
         href: ROUTES.COMING_SOON,
         label: 'sidebar-nav-item-support',
         icon: 'SupportIcon',

@@ -54,6 +54,7 @@ export const MEDIA = gql`
           createdAt
         }
         itemsCount
+        createdAt
       }
     }
   }

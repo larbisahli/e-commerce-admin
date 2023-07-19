@@ -1,0 +1,24 @@
+
+  <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+      <title>Dropgala</title>
+      <link>https://dropgala.com/blog</link>
+      <description>Check the latest news of E commerce, marketing, Tech....</description>
+      <language>en-us</language>
+      <managingEditor>larbisahli1905@gmail.com (Dropgala)</managingEditor>
+      <webMaster>larbisahli1905@gmail.com (Dropgala)</webMaster>
+      <lastBuildDate>Sat, 07 Aug 2021 15:32:14 GMT</lastBuildDate>
+      <atom:link href="https://dropgala.com/tags/interview-series/feed.xml" rel="self" type="application/rss+xml"/>
+      
+  <item>
+    <guid>https://dropgala.com/blog/in-conversation-with-descartes</guid>
+    <title>In Conversation With Descartes</title>
+    <link>https://dropgala.com/blog/in-conversation-with-descartes</link>
+    <description>A conversation with descartes concerning his ideas</description>
+    <pubDate>Sat, 07 Aug 2021 15:32:14 GMT</pubDate>
+    <author>larbisahli1905@gmail.com (Dropgala)</author>
+    <category>philosophy</category><category>early moder</category><category>interview series</category>
+  </item>
+
+    </channel>
+  </rss>

@@ -26,7 +26,12 @@ const ActiveLink: React.FC<NextLinkProps & Props> = ({
 }) => {
   const { asPath } = useRouter();
 
-  const A = useMemo(() => asPath?.split('/')?.filter((item) => item), [asPath]);
+  const asPathCleaned = asPath?.split('/admin')[1];
+
+  const A = useMemo(
+    () => asPathCleaned?.split('/')?.filter((item) => item),
+    [asPathCleaned]
+  );
   const B = useMemo(
     () => includes?.split('/')?.filter((item) => item),
     [includes]
@@ -35,13 +40,13 @@ const ActiveLink: React.FC<NextLinkProps & Props> = ({
   const isIncluded = useMemo(
     () =>
       isSubLink
-        ? A.every((value) => B.includes(value))
-        : A.some((value) => B.includes(value)),
+        ? A?.every((value) => B.includes(value))
+        : A?.some((value) => B.includes(value)),
     [isSubLink, A, B]
   );
 
   const class_name =
-    asPath === href || asPath === props.as || isIncluded
+    asPathCleaned === href || asPathCleaned === props.as || isIncluded
       ? `${className} ${activeClassName}`.trim()
       : className;
 

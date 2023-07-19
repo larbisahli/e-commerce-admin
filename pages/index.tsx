@@ -102,7 +102,7 @@ const HomePage = ({ posts }) => {
         <PricingSection />
 
         {/* ----------------- Blog section ---------------------- */}
-        <section className="mt-22 container mx-auto">
+        {/* <section className="mt-22 container mx-auto">
           <LatestBlogsCarousel posts={posts} MAX_DISPLAY={MAX_DISPLAY} />
           {posts.length > MAX_DISPLAY && (
             <div className="flex mt-2 justify-end text-base font-medium leading-6">
@@ -114,7 +114,7 @@ const HomePage = ({ posts }) => {
               </Link>
             </div>
           )}
-        </section>
+        </section> */}
 
         {/* ------------- FAQ ----------------- */}
         <FaqSection />

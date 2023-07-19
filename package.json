@@ -39,6 +39,7 @@
     "draft-js": "^0.11.7",
     "draftjs-to-html": "^0.9.1",
     "esbuild": "^0.18.11",
+    "file-saver": "^2.0.5",
     "framer-motion": "^6.5.1",
     "geoip-country": "^4.1.24",
     "github-slugger": "^2.0.0",

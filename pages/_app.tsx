@@ -66,7 +66,7 @@ function App({ Component, pageProps }: AppProps) {
         <meta property="og:image" content="https://dropgala.com//scandi.webp" />
         <meta
           property="og:image:secure_url"
-          content="https://dropgala.com//scandi.webp"
+          content="https://dropgala.com/scandi.webp"
         />
         <meta property="og:image:type" content="image/webp" />
         <meta property="og:image:width" content="400" />

@@ -47,9 +47,9 @@ const Navigation = () => {
             <Link href="/#pricing">
               <a className="text-gray-800 md:block hidden">Pricing</a>
             </Link>
-            <Link href="/blog">
+            {/* <Link href="/blog">
               <a className="px-8 text-gray-800 md:block hidden">Blogs</a>
-            </Link>
+            </Link> */}
           </div>
           <div className="flex font-medium justify-center items-center">
             {/* <Link href="https://dropgala.com/login">

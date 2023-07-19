@@ -8,6 +8,7 @@ import RecentOrders from '@components/order/recent-orders';
 import Loader from '@components/ui/loader/loader';
 import ColumnChart from '@components/widgets/column-chart';
 import StickerCard from '@components/widgets/sticker-card';
+import Head from 'next/head';
 // import { useAnalyticsQuery } from '@data/analytics/use-analytics.query';
 // import { usePopularProductsQuery } from '@data/analytics/use-popular-products.query';
 // import { useOrdersQuery } from '@data/order/use-orders.query';
@@ -80,6 +81,15 @@ export default function Dashboard() {
   // }
   return (
     <>
+      <Head>
+        <title>Dashboard | Dropgala</title>
+        <link
+          rel="icon"
+          type="image/svg"
+          sizes="32x32"
+          href="/svg/dashboard.svg"
+        />
+      </Head>
       <div className="mb-8">
         <div className="text-xl font-medium">Welcome back!</div>
         <span className="text-sm text-gray-500">

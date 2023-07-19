@@ -1,0 +1,24 @@
+
+  <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+      <title>Dropgala</title>
+      <link>https://dropgala.com/blog</link>
+      <description>Check the latest news of E commerce, marketing, Tech....</description>
+      <language>en-us</language>
+      <managingEditor>larbisahli1905@gmail.com (Dropgala)</managingEditor>
+      <webMaster>larbisahli1905@gmail.com (Dropgala)</webMaster>
+      <lastBuildDate>Tue, 12 Jan 2021 00:00:00 GMT</lastBuildDate>
+      <atom:link href="https://dropgala.com/tags/tailwind/feed.xml" rel="self" type="application/rss+xml"/>
+      
+  <item>
+    <guid>https://dropgala.com/blog/introducing-tailwind-nextjs-starter-blog</guid>
+    <title>Introducing Tailwind Nextjs Starter Blog</title>
+    <link>https://dropgala.com/blog/introducing-tailwind-nextjs-starter-blog</link>
+    <description>Looking for a performant, out of the box template, with all the best in web technology to support your blogging needs? Checkout the Tailwind Nextjs Starter Blog template.</description>
+    <pubDate>Tue, 12 Jan 2021 00:00:00 GMT</pubDate>
+    <author>larbisahli1905@gmail.com (Dropgala)</author>
+    <category>next-js</category><category>tailwind</category><category>guide</category>
+  </item>
+
+    </channel>
+  </rss>
