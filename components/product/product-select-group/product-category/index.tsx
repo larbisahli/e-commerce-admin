@@ -18,7 +18,6 @@ interface TCategorySelect {
 
 interface Props {
   categories: Category[];
-  setInitProductCategories: React.Dispatch<React.SetStateAction<Category[]>>;
 }
 
 interface OptionsVariable {
@@ -27,7 +26,7 @@ interface OptionsVariable {
   orderBy: OrderBy;
 }
 
-const ProductCategory = ({ categories, setInitProductCategories }: Props) => {
+const ProductCategory = ({ categories }: Props) => {
   const { t } = useTranslation('common');
 
   const dispatch = useFormReducer();

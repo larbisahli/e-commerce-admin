@@ -1,42 +1,42 @@
 import { useQuery } from '@apollo/client';
 import AppLayout from '@components/layouts/app';
-import CreateOrUpdateSupplierForm from '@components/suppliers/supplier-form';
+import CreateOrUpdateManufacturerForm from '@components/manufacturer/manufacturer-form';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
-import { SUPPLIER } from '@graphql/supplier';
+import { MANUFACTURER } from '@graphql/manufacturer';
 import { useGetUser } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import type { SSRProps } from '@ts-types/custom.types';
-import type { Suppliers } from '@ts-types/generated';
+import type { ManufacturerType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import type { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-interface TAttribute {
-  supplier: Suppliers;
+interface TManufacturer {
+  manufacturer: ManufacturerType;
 }
 interface OptionsVariable {
   id: number;
 }
 
-export default function UpdateSupplierPage({ client }: SSRProps) {
+export default function UpdateManufacturerPage({ client }: SSRProps) {
   const { t } = useTranslation();
   const { query } = useRouter();
 
-  const supplierId = parseInt(query.supplierId as string, 10);
+  const manufacturerId = parseInt(query.manufacturerId as string, 10);
 
-  const { data, loading, error } = useQuery<TAttribute, OptionsVariable>(
-    SUPPLIER,
+  const { data, loading, error } = useQuery<TManufacturer, OptionsVariable>(
+    MANUFACTURER,
     {
-      variables: { id: supplierId },
+      variables: { id: manufacturerId },
       fetchPolicy: 'cache-and-network'
     }
   );
 
-  const { supplier = [] } = data ?? {};
+  const { manufacturer = [] } = data ?? {};
 
   useGetUser(client);
   useErrorLogger(error);
@@ -53,15 +53,15 @@ export default function UpdateSupplierPage({ client }: SSRProps) {
     <>
       <div className="py-5 sm:py-8 flex border-b border-dashed border-border-base">
         <h1 className="text-lg font-semibold text-heading">
-          {t('form:edit-supplier')}
+          {t('form:edit-manufacturer')}
         </h1>
       </div>
-      <CreateOrUpdateSupplierForm initialValues={supplier} />
+      <CreateOrUpdateManufacturerForm initialValues={manufacturer} />
     </>
   );
 }
 
-UpdateSupplierPage.Layout = AppLayout;
+UpdateManufacturerPage.Layout = AppLayout;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { locale } = context;

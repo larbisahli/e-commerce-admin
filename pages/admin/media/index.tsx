@@ -1,7 +1,5 @@
 import { useQuery } from '@apollo/client';
-import PageMainHeader from '@components/common/page-main-header';
 import PageMainAction from '@components/common/PageMainAction';
-import { UploadIcon } from '@components/icons/upload-icon';
 import AppLayout from '@components/layouts/app';
 import MediaList from '@components/media';
 import ErrorMessage from '@components/ui/error-message';
@@ -10,19 +8,19 @@ import { MEDIA } from '@graphql/media';
 import { useErrorLogger, useGetUser } from '@hooks/index';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
-import { MediaType, OrderBy, SortOrder } from '@ts-types/generated';
+import { MediaType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import { isEmpty } from 'lodash';
 import type { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useState } from 'react';
 
 interface TMedia {
   media: {
     parent: MediaType;
     children: MediaType[];
+    mediaTotalCount: { count: number };
   };
 }
 
@@ -66,7 +64,7 @@ export default function Files({ client }: SSRProps) {
         <link rel="icon" type="image/svg" sizes="32x32" href="/svg/media.svg" />
       </Head>
       <PageMainAction
-        title={t('form:input-label-media')}
+        title={t('form:input-label-media-library')}
         label={t('form:button-label-upload-image')}
       />
       <MediaList media={media} refetch={refetch} />

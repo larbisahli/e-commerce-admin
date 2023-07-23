@@ -235,8 +235,10 @@ const ProductContent = ({ state, initialValues }: Props) => {
             placeholder="Hidden note"
             // error={t(errors.note?.message!)}
             variant="outline"
-            className="mb-5"
           />
+          <p className="text-xs text-gray-500 mb-5">
+            {t('form:hidden-info-note')}
+          </p>
           <div>
             <Label>{t('form:input-label-status')}</Label>
             <Radio

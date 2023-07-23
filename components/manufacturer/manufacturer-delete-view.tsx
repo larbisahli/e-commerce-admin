@@ -4,32 +4,31 @@ import {
   useModalAction,
   useModalState
 } from '@components/ui/modal/modal.context';
-import { DELETE_IMAGE, PHOTOS } from '@graphql/media';
+import { DELETE_MANUFACTURER, MANUFACTURERS } from '@graphql/manufacturer';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetUser } from '@hooks/useGetUser';
 import { notify } from '@lib/notify';
 import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
 
-const CouponDeleteView = () => {
+const ManufacturerDeleteView = () => {
   const { t } = useTranslation();
-
   const [error, setError] = useState(null);
 
   const { userInfo } = useGetUser();
   const csrfToken = userInfo?.csrfToken;
 
-  const [deletePhoto, { loading }] = useMutation(DELETE_IMAGE, {
-    context: {
-      headers: {
-        'x-csrf-token': csrfToken
-      }
-    },
-    refetchQueries: [
-      PHOTOS,
-      'photos' // Query name
-    ]
-  });
+  const [deleteManufacturerValue, { loading }] = useMutation(
+    DELETE_MANUFACTURER,
+    {
+      context: {
+        headers: {
+          'x-csrf-token': csrfToken
+        }
+      },
+      refetchQueries: [MANUFACTURERS, 'Manufacturers']
+    }
+  );
 
   const { id } = useModalState();
   const { closeModal } = useModalAction();
@@ -37,12 +36,12 @@ const CouponDeleteView = () => {
   useErrorLogger(error);
 
   async function handleDelete() {
-    deletePhoto({ variables: { id } })
+    deleteManufacturerValue({ variables: { id } })
       .then(({ data }) => {
         const {
-          deleteImage: { id }
+          deleteManufacturer: { name }
         } = data;
-        if (id) {
+        if (name) {
           notify(t('common:successfully-deleted'), 'success');
         }
         closeModal();
@@ -61,4 +60,4 @@ const CouponDeleteView = () => {
   );
 };
 
-export default CouponDeleteView;
+export default ManufacturerDeleteView;

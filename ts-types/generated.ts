@@ -311,6 +311,7 @@ export interface Product extends CreatedUpdatedByAt {
   thumbnail?: ImageType[];
   gallery?: ImageType[];
   categories?: Array<Category>;
+  manufacturers?: Array<ManufacturerType>;
   suppliers?: Nullable<Array<Suppliers>>;
   tags?: Nullable<Array<Nullable<Tag>>>;
   productShippingInfo?: ProductShippingInfo;
@@ -395,6 +396,14 @@ export interface Suppliers extends CreatedUpdatedByAt {
   country?: Nullable<CountryType>;
   city?: Nullable<Scalars['String']> | { name: string };
   note?: Nullable<Scalars['String']>;
+}
+
+export interface ManufacturerType extends CreatedUpdatedByAt {
+  id: Scalars['Int'];
+  name?: Scalars['String'];
+  website?: Nullable<Scalars['String']>;
+  logo?: ImageType[];
+  description?: Nullable<CountryType>;
 }
 
 export interface HeroCarouselType extends CreatedUpdatedByAt {

@@ -125,7 +125,7 @@ export default function AboutUsForm({ initialValues }: IProps) {
       <div className="flex flex-wrap my-5 sm:my-8">
         <Description
           title={t('form:input-label-page-seo')}
-          details={t('form:type-and-category-help-text')}
+          details={t('form:type-product-group-help-text')}
           className="w-full px-0 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
         />
         <Card className="w-full sm:w-8/12 md:w-2/3">

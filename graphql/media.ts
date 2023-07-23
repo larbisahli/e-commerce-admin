@@ -1,30 +1,5 @@
 import { gql } from '@apollo/client';
 
-export const PHOTOS = gql`
-  query Media($id: ID, $page: Int!, $limit: Int!) {
-    media(id: $id, page: $page, limit: $limit) {
-      parent {
-        id
-        name
-        image {
-          id
-          image
-          placeholder
-          size
-          createdAt
-        }
-        createdAt
-        itemsCount
-      }
-      children {
-        id
-        name
-        itemsCount
-      }
-    }
-  }
-`;
-
 export const MEDIA = gql`
   query Media($id: ID, $page: Int!, $limit: Int!) {
     media(id: $id, page: $page, limit: $limit) {
@@ -36,6 +11,9 @@ export const MEDIA = gql`
           id
           image
           placeholder
+          width
+          height
+          mimeType
           size
           createdAt
         }
@@ -51,18 +29,28 @@ export const MEDIA = gql`
           image
           placeholder
           size
+          width
+          height
+          mimeType
           createdAt
         }
         itemsCount
         createdAt
+      }
+      mediaTotalCount {
+        count
       }
     }
   }
 `;
 
 export const DELETE_IMAGE = gql`
-  mutation DeleteImage($id: Int!) {
-    deleteImage(id: $id) {
+  mutation DeleteMediaImage($parentId: ID, $imageId: Int!, $mediaId: ID!) {
+    deleteMediaImage(
+      parentId: $parentId
+      imageId: $imageId
+      mediaId: $mediaId
+    ) {
       id
     }
   }

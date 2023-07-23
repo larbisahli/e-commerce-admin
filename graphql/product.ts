@@ -92,6 +92,10 @@ export const PRODUCT = gql`
         id
         name
       }
+      manufacturers {
+        id
+        name
+      }
       variationOptions {
         id
         title
@@ -153,7 +157,7 @@ export const PRODUCT = gql`
 `;
 
 export const LINKED_PRODUCTS = gql`
-  query Product($id: Int!) {
+  query RelatedProducts($id: Int!) {
     relatedProducts(id: $id) {
       id
       sku
@@ -220,6 +224,7 @@ export const CREATE_PRODUCT = gql`
     $categories: [CategoryInput!]!
     $suppliers: [SupplierInput]
     $tags: [TagInput]
+    $manufacturers: [ManufacturerInput]
     $variationOptions: [VariationOptionInput]
     $variations: [VariationInput]
     $productShippingInfo: ProductShippingInfoInput
@@ -245,6 +250,7 @@ export const CREATE_PRODUCT = gql`
       categories: $categories
       suppliers: $suppliers
       tags: $tags
+      manufacturers: $manufacturers
       variationOptions: $variationOptions
       variations: $variations
       productShippingInfo: $productShippingInfo
@@ -376,6 +382,10 @@ export const UPDATE_PRODUCT_SELECT_GROUP = gql`
         name
       }
       tags {
+        id
+        name
+      }
+      manufacturers {
         id
         name
       }

@@ -22,7 +22,7 @@ import { useState } from 'react';
 
 interface TAttributes {
   attributes: Attribute[];
-  attributesCount: { count: number };
+  attributeCount: { count: number };
 }
 
 interface OptionsVariable {
@@ -55,7 +55,7 @@ export default function AttributePage({ client }: SSRProps) {
     fetchPolicy: 'cache-and-network'
   });
 
-  const { attributes = [], attributesCount: { count } = { count: 0 } } =
+  const { attributes = [], attributeCount: { count } = { count: 0 } } =
     data ?? {};
 
   useGetUser(client);

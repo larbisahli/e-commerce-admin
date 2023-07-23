@@ -30,6 +30,7 @@ export const initialState: ProductFormType = {
   categories: [],
   suppliers: [],
   tags: [],
+  manufacturers: [],
   variations: [],
   variationOptions: [],
   productShippingInfo: {

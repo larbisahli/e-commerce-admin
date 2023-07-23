@@ -17,7 +17,7 @@ interface TSupplierSelect {
 
 interface Props {
   suppliers: Suppliers[];
-  setInitProductSuppliers: React.Dispatch<React.SetStateAction<Suppliers[]>>;
+  // setInitProductSuppliers: React.Dispatch<React.SetStateAction<Suppliers[]>>;
 }
 
 interface OptionsVariable {
@@ -26,7 +26,7 @@ interface OptionsVariable {
   orderBy: OrderBy;
 }
 
-const ProductSupplier = ({ suppliers, setInitProductSuppliers }: Props) => {
+const ProductSupplier = ({ suppliers }: Props) => {
   const { t } = useTranslation();
 
   const dispatch = useFormReducer();
@@ -69,6 +69,7 @@ const ProductSupplier = ({ suppliers, setInitProductSuppliers }: Props) => {
         onChange={onChange}
         isLoading={loading}
       />
+      <p className="text-xs text-gray-500 pt-1">{t('form:hidden-info-note')}</p>
     </div>
   );
 };

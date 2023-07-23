@@ -1,8 +1,8 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-to-interactive-role */
 import 'rc-pagination/assets/index.css';
 
+import { useMutation } from '@apollo/client';
 import { DownloadIcon } from '@components/icons/download-icon';
-import Trash from '@components/icons/trash';
 import ImageComponent from '@components/ImageComponent';
 import Button from '@components/ui/button';
 import Modal from '@components/ui/modal/modal';
@@ -10,6 +10,10 @@ import {
   useModalAction,
   useModalState
 } from '@components/ui/modal/modal.context';
+import { DELETE_IMAGE, MEDIA } from '@graphql/media';
+import { useErrorLogger } from '@hooks/useErrorLogger';
+import { useGetUser } from '@hooks/useGetUser';
+import { notify } from '@lib/notify';
 import { MEDIA_ITEM_MODAL } from '@ts-types/constants';
 import { mediaURL } from '@utils/utils';
 import cn from 'classnames';
@@ -17,31 +21,73 @@ import dayjs from 'dayjs';
 import { saveAs } from 'file-saver';
 import { isEmpty } from 'lodash';
 import { useTranslation } from 'next-i18next';
+import { useState } from 'react';
 
-interface Props {}
-
-const ImageViewModal = ({}: Props) => {
+const ImageViewModal = () => {
   const { t } = useTranslation();
 
-  const { closeModal, openModal } = useModalAction();
-  const { isOpen, view, id, meta } = useModalState();
+  const [error, setError] = useState(null);
 
-  const { name = '', image = [], itemsCount, createdAt } = meta ?? {};
+  const { closeModal } = useModalAction();
+  const { isOpen, view, id: parentId = null, meta } = useModalState();
+
+  console.log({ parentId });
+
+  const { userInfo } = useGetUser();
+  const csrfToken = userInfo?.csrfToken;
+
+  const [deletePhoto, { loading }] = useMutation(DELETE_IMAGE, {
+    context: {
+      headers: {
+        'x-csrf-token': csrfToken
+      }
+    },
+    refetchQueries: [
+      {
+        variables: {
+          id: parentId,
+          page: 1,
+          limit: 10
+        },
+        query: MEDIA
+      }
+    ]
+  });
+
+  useErrorLogger(error);
+
+  const {
+    id: mediaId,
+    name = '',
+    image = [],
+    itemsCount,
+    createdAt
+  } = meta ?? {};
 
   const photo = image[0] ?? {};
 
+  const isFolder = isEmpty(photo);
+
   const renderImage = () => {
-    if (isEmpty(photo)) {
+    if (isFolder) {
       return null;
     }
+
+    const width = Math.round(
+      photo.width > 500 ? photo.width / 1.5 : photo.width
+    );
+    const height = Math.round(
+      photo.height > 600 ? photo.height / 1.5 : photo.height
+    );
 
     return (
       <div className="flex-2 mx-auto">
         <ImageComponent
           src={photo?.image}
           customPlaceholder={photo?.placeholder}
-          width={500}
-          height={500}
+          width={width}
+          height={height}
+          className="rounded-sm shadow"
           objectFit="cover"
         />
       </div>
@@ -49,7 +95,7 @@ const ImageViewModal = ({}: Props) => {
   };
 
   const renderSize = () => {
-    if (isEmpty(photo)) {
+    if (isFolder) {
       return null;
     }
 
@@ -62,7 +108,7 @@ const ImageViewModal = ({}: Props) => {
   };
 
   const renderType = () => {
-    if (isEmpty(photo)) {
+    if (isFolder) {
       return null;
     }
 
@@ -70,18 +116,20 @@ const ImageViewModal = ({}: Props) => {
       <>
         <div className="my-2">
           <span className="font-medium pr-1">File type:</span>
-          <span className="text-gray-800">{'PNG'}</span>
+          <span className="text-gray-800 uppercase">
+            {photo.mimeType?.split('/')[1]}
+          </span>
         </div>
         <div className="my-2">
           <span className="font-medium pr-1">MIME-Type:</span>
-          <span className="text-gray-800">{'image/png'}</span>
+          <span className="text-gray-800">{photo.mimeType}</span>
         </div>
       </>
     );
   };
 
   const renderItems = () => {
-    if (isEmpty(photo)) {
+    if (isFolder) {
       return (
         <div className="my-2">
           <span className="font-medium pr-1">Items:</span>
@@ -93,37 +141,55 @@ const ImageViewModal = ({}: Props) => {
   };
 
   const renderImageDimensions = () => {
-    if (isEmpty(photo)) {
+    if (isFolder) {
       return null;
     }
     return (
       <>
         <div className="my-2">
           <span className="font-medium pr-1">Width:</span>
-          <span className="text-gray-800">{`${785}px`}</span>
+          <span className="text-gray-800">{`${photo.width}px`}</span>
         </div>
         <div className="my-2">
           <span className="font-medium pr-1">Height:</span>
-          <span className="text-gray-800">{`${504}px`}</span>
+          <span className="text-gray-800">{`${photo.height}px`}</span>
         </div>
       </>
     );
   };
 
+  const deleteMediaPhoto = () => {
+    deletePhoto({ variables: { parentId, mediaId, imageId: photo.id } })
+      .then(({ data }) => {
+        const {
+          deleteMediaImage: { id }
+        } = data;
+        if (id) {
+          notify(t('common:successfully-deleted'), 'success');
+        }
+        closeModal();
+      })
+      .catch((err) => {
+        setError(err);
+      });
+  };
+
   const renderDeleteButton = () => {
-    if (isEmpty(photo)) {
+    if (isFolder) {
       return;
     }
 
     return (
-      <div className="absolute bottom-0 right-0">
+      <div className="absolute bottom-0 right-0  pb-4">
         <Button
-          // onClick={onDelete}
-          // loading={deleteBtnLoading}
-          // disabled={deleteBtnLoading}
+          onClick={deleteMediaPhoto}
+          loading={loading}
+          disabled={loading}
           variant="custom"
           className={cn(
-            'w-fit py-2 px-4 bg-red-600 focus:outline-none hover:bg-red-700 focus:bg-red-700 text-light transition ease-in duration-200 text-center text-base font-semibold rounded shadow-md'
+            'w-fit py-2 px-4 bg-red-600 focus:outline-none hover:bg-red-700',
+            'focus:bg-red-700 text-light transition ease-in duration-200',
+            'text-center text-base font-semibold rounded shadow-md'
           )}
         >
           {t('button-delete')}
@@ -133,7 +199,7 @@ const ImageViewModal = ({}: Props) => {
   };
 
   const renderDownloadButton = () => {
-    if (isEmpty(photo)) {
+    if (isFolder) {
       return;
     }
 
@@ -154,7 +220,7 @@ const ImageViewModal = ({}: Props) => {
   };
 
   const renderDate = () => {
-    if (isEmpty(photo)) {
+    if (isFolder) {
       return (
         <div className="my-2">
           <span className="font-medium pr-1">Created at:</span>
@@ -179,7 +245,13 @@ const ImageViewModal = ({}: Props) => {
       {/* MODEL */}
       <Modal open={isOpen} onClose={closeModal}>
         {view === MEDIA_ITEM_MODAL && (
-          <div className="flex max-h-screen overflow-y-auto flex-col bg-white md:h-fit h-[100vh] w-[100vw] md:w-[70vw] 2xl:w-[60vw]">
+          <div
+            className={cn(
+              'flex max-h-screen overflow-y-auto flex-col bg-white md:h-fit',
+              'h-[100vh] w-[100vw] md:w-[70vw] 2xl:w-[60vw]',
+              { '!w-[450px] !h-[400px]': isFolder }
+            )}
+          >
             <div className="p-4 h-fit min-h-[400px] w-full">
               <h3 className="cut-line-1">{name}</h3>
               <div className="flex flex-wrap mt-8">

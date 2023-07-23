@@ -55,6 +55,7 @@ function ProductForm({ setUnsavedChanges, initialValues = {} }: IProps) {
     type,
     categories,
     suppliers,
+    manufacturers,
     tags,
     productSeo,
     variationOptions,
@@ -117,8 +118,8 @@ function ProductForm({ setUnsavedChanges, initialValues = {} }: IProps) {
     [gallery, isUpdateMode]
   );
   const ProductSelectGroupState = useMemo(
-    () => ({ categories, suppliers, tags, isUpdateMode }),
-    [categories, suppliers, tags, isUpdateMode]
+    () => ({ categories, suppliers, tags, manufacturers, isUpdateMode }),
+    [categories, suppliers, tags, manufacturers, isUpdateMode]
   );
   const productContentState = useMemo(
     () => ({

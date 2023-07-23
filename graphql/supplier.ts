@@ -23,8 +23,8 @@ export const SUPPLIERS = gql`
   query Suppliers(
     $page: Int!
     $limit: Int!
-    $orderBy: String!
-    $sortedBy: String!
+    $orderBy: String
+    $sortedBy: String
   ) {
     supplierCount {
       count

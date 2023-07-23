@@ -1,5 +1,5 @@
 import AppLayout from '@components/layouts/app';
-import CreateOrUpdateSupplierForm from '@components/suppliers/supplier-form';
+import CreateOrUpdateManufacturerForm from '@components/manufacturer/manufacturer-form';
 import { useGetUser } from '@hooks/index';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import type { SSRProps } from '@ts-types/custom.types';
@@ -8,7 +8,7 @@ import type { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-export default function CreateSupplierPage({ client }: SSRProps) {
+export default function CreateManufacturerPage({ client }: SSRProps) {
   const { t } = useTranslation();
   useGetUser(client);
 
@@ -19,12 +19,12 @@ export default function CreateSupplierPage({ client }: SSRProps) {
           {t('form:create-supplier')}
         </h1>
       </div>
-      <CreateOrUpdateSupplierForm />
+      <CreateOrUpdateManufacturerForm />
     </>
   );
 }
 
-CreateSupplierPage.Layout = AppLayout;
+CreateManufacturerPage.Layout = AppLayout;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { locale } = context;

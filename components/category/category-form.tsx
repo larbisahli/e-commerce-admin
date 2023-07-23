@@ -161,7 +161,7 @@ export default function CreateOrUpdateCategoriesForm({
         if (!isEmpty(data)) {
           notify(t('common:successfully-created'), 'success');
           reset();
-          router.push(ROUTES.CATEGORIES);
+          router.push(ROUTES.CATEGORY);
         }
       }
     });
@@ -176,7 +176,7 @@ export default function CreateOrUpdateCategoriesForm({
       onCompleted: (data: { updateCategory: Category }) => {
         if (!isEmpty(data)) {
           notify(t('common:successfully-updated'), 'success');
-          router.push(ROUTES.CATEGORIES);
+          router.push(ROUTES.CATEGORY);
         }
       }
     });

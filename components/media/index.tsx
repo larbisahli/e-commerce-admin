@@ -23,7 +23,9 @@ type IProps = {
   media: {
     parent: MediaType;
     children: MediaType[];
+    mediaTotalCount: { count: number };
   };
+  // eslint-disable-next-line no-unused-vars
   refetch: (variables?: Partial<any>) => Promise<ApolloQueryResult<any>>;
 };
 
@@ -77,6 +79,8 @@ const MediaList = ({ media, refetch }: IProps) => {
     return null;
   };
 
+  const { count = 0 } = media?.mediaTotalCount ?? {};
+
   return (
     <>
       <ImageViewModal />
@@ -109,7 +113,10 @@ const MediaList = ({ media, refetch }: IProps) => {
             {t('form:button-label-add-folder')}
           </Button>
         </div>
-        <div className="mt-14 flex flex-wrap">
+        {
+          <div className=" text-sm font-medium text-gray-700 text-right pt-3">{`${count} records found`}</div>
+        }
+        <div className="mt-8 flex flex-wrap">
           {loadingImage && (
             <Loader height="10vh" text={t('common:text-loading')} />
           )}

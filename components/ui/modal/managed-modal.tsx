@@ -3,8 +3,8 @@ import {
   BAN_CUSTOMER,
   DELETE_ATTRIBUTE,
   DELETE_COUPON,
+  DELETE_MANUFACTURER,
   DELETE_ORDER_STATUS,
-  // DELETE_PHOTO,
   DELETE_PRODUCT,
   DELETE_SHIPPING,
   DELETE_SLIDER,
@@ -52,9 +52,9 @@ const SliderDeleteView = dynamic(
   () => import('@components/hero-carousel/slider-delete-view')
 );
 
-// const PhotoDeleteView = dynamic(
-//   () => import('@components/media/file-delete-view')
-// );
+const ManufacturerDeleteView = dynamic(
+  () => import('@components/manufacturer/manufacturer-delete-view')
+);
 
 // const AttributeExportImport = dynamic(
 //   () => import('@components/attribute/attribute-import-export')
@@ -76,7 +76,7 @@ const ManagedModal = () => {
       {view === DELETE_USER && <UserDeleteView />}
       {view === DELETE_SUPPLIER && <SupplierDeleteView />}
       {view === DELETE_SLIDER && <SliderDeleteView />}
-      {/* {view === DELETE_PHOTO && <PhotoDeleteView />} */}
+      {view === DELETE_MANUFACTURER && <ManufacturerDeleteView />}
     </Modal>
   );
 };

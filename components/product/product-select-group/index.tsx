@@ -8,7 +8,13 @@ import { UPDATE_PRODUCT_SELECT_GROUP } from '@graphql/product';
 import { useDifferenceWith } from '@hooks/useDifferenceWith';
 import { useGetUser } from '@hooks/useGetUser';
 import { notify } from '@lib/notify';
-import { Category, Product, Suppliers, Tag } from '@ts-types/generated';
+import {
+  Category,
+  ManufacturerType,
+  Product,
+  Suppliers,
+  Tag
+} from '@ts-types/generated';
 import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
@@ -23,6 +29,7 @@ interface Props {
   initialValues: Product;
   state: {
     categories: Product['categories'];
+    manufacturers: Product['manufacturers'];
     tags: Product['tags'];
     suppliers: Product['suppliers'];
     isUpdateMode: boolean;
@@ -35,7 +42,7 @@ const ProductSelectGroup = ({ state, initialValues }: Props) => {
 
   const productId = parseInt(query.productId as string, 10);
 
-  const { categories, suppliers, tags, isUpdateMode } = state;
+  const { categories, manufacturers, suppliers, tags, isUpdateMode } = state;
 
   const [initProductCategories, setInitProductCategories] = useState<
     Category[]
@@ -46,6 +53,9 @@ const ProductSelectGroup = ({ state, initialValues }: Props) => {
   const [initProductSuppliers, setInitProductSuppliers] = useState<Suppliers[]>(
     () => initialValues?.suppliers
   );
+  const [initProductManufacturers, setInitProductManufacturers] = useState<
+    ManufacturerType[]
+  >(() => initialValues?.manufacturers);
 
   // __ CATEGORIES __
   const { additions: additionalCategories, deletions: deletedCategories } =
@@ -59,6 +69,10 @@ const ProductSelectGroup = ({ state, initialValues }: Props) => {
   const { additions: additionalTags, deletions: deletedTags } =
     useDifferenceWith(tags, initProductTags, isUpdateMode);
 
+  // __ TAGS __
+  const { additions: additionalManufacturer, deletions: deletedManufacturer } =
+    useDifferenceWith(manufacturers, initProductManufacturers, isUpdateMode);
+
   const isUpdated = useMemo(() => {
     return (
       !isEmpty(additionalCategories) ||
@@ -66,7 +80,9 @@ const ProductSelectGroup = ({ state, initialValues }: Props) => {
       !isEmpty(additionalSuppliers) ||
       !isEmpty(deletedSuppliers) ||
       !isEmpty(additionalTags) ||
-      !isEmpty(deletedTags)
+      !isEmpty(deletedTags) ||
+      !isEmpty(additionalManufacturer) ||
+      !isEmpty(deletedManufacturer)
     );
   }, [
     additionalCategories,
@@ -74,7 +90,9 @@ const ProductSelectGroup = ({ state, initialValues }: Props) => {
     additionalSuppliers,
     deletedSuppliers,
     additionalTags,
-    deletedTags
+    deletedTags,
+    additionalManufacturer,
+    deletedManufacturer
   ]);
 
   const { userInfo } = useGetUser();
@@ -93,11 +111,13 @@ const ProductSelectGroup = ({ state, initialValues }: Props) => {
           const {
             categories = [],
             tags = [],
-            suppliers = []
+            suppliers = [],
+            manufacturers
           } = data.updateProductSelectGroup;
           setInitProductCategories(categories);
           setInitProductTags(tags);
           setInitProductSuppliers(suppliers);
+          setInitProductManufacturers(manufacturers);
           notify(t('common:successfully-updated'), 'success');
         }
       }
@@ -118,12 +138,14 @@ const ProductSelectGroup = ({ state, initialValues }: Props) => {
         additions: {
           categories: additionalCategories,
           tags: additionalTags,
-          suppliers: additionalSuppliers
+          suppliers: additionalSuppliers,
+          manufacturers: additionalManufacturer
         },
         deletions: {
           categories: deletedCategories,
           tags: deletedTags,
-          suppliers: deletedSuppliers
+          suppliers: deletedSuppliers,
+          manufacturers: deletedManufacturer
         }
       }
     }).catch((err) => {
@@ -150,25 +172,16 @@ const ProductSelectGroup = ({ state, initialValues }: Props) => {
   };
 
   return (
-    <Accordion isUpdated={isUpdated} Title={() => t('form:type-and-category')}>
+    <Accordion isUpdated={isUpdated} Title={() => t('form:type-product-group')}>
       <div className="flex flex-wrap my-5 sm:my-8">
         <Description
-          details={t('form:type-and-category-help-text')}
+          details={t('form:type-product-group-help-text')}
           className="w-full px-0 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
         />
         <Card className="w-full sm:w-8/12 md:w-2/3">
-          <ProductCategory
-            categories={categories}
-            setInitProductCategories={setInitProductCategories}
-          />
-          <ProductManufacturer
-            categories={categories}
-            setInitProductCategories={setInitProductCategories}
-          />
-          <ProductSupplier
-            suppliers={suppliers}
-            setInitProductSuppliers={setInitProductSuppliers}
-          />
+          <ProductCategory categories={categories} />
+          <ProductManufacturer manufacturers={manufacturers} />
+          <ProductSupplier suppliers={suppliers} />
           <ProductTag tags={tags} setInitProductTags={setInitProductTags} />
           {renderSaveButton()}
         </Card>

@@ -16,6 +16,7 @@ const creationVariable = (values: Product): Product => {
       metaImage: values.productSeo.metaImage?.map(({ id }) => ({ id }))
     },
     categories: values?.categories?.map(({ id }) => ({ id })),
+    manufacturer: values?.manufacturer,
     tags: values?.tags?.map(({ id }) => ({ id })),
     suppliers: values?.suppliers?.map(({ id }) => ({ id })),
     thumbnail: values.thumbnail?.map(({ id }) => ({ id })),

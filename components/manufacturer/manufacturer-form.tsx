@@ -1,0 +1,215 @@
+/* eslint-disable jsx-a11y/interactive-supports-focus */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+import 'react-phone-input-2/lib/style.css';
+
+import { useMutation } from '@apollo/client';
+import Card from '@components/common/card';
+import { SaveIcon } from '@components/icons/save-icon';
+import ImageModal from '@components/image-modal';
+import Alert from '@components/ui/alert';
+import Button from '@components/ui/button';
+import Description from '@components/ui/description';
+import Input from '@components/ui/input';
+import TextArea from '@components/ui/text-area';
+import {
+  CREATE_MANUFACTURER,
+  UPDATE_MANUFACTURER
+} from '@graphql/manufacturer';
+import { useGetUser } from '@hooks/index';
+import { useErrorLogger } from '@hooks/useErrorLogger';
+import { notify } from '@lib/index';
+import type { ManufacturerType, Suppliers } from '@ts-types/generated';
+import { ROUTES } from '@utils/routes';
+import isEmpty from 'lodash/isEmpty';
+import { useRouter } from 'next/router';
+import { useTranslation } from 'next-i18next';
+import { useState } from 'react';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+
+type FormValues = ManufacturerType;
+
+type IProps = {
+  initialValues?: ManufacturerType | any;
+};
+
+const defaultValues = {
+  name: '',
+  website: null,
+  description: null
+};
+
+export default function CreateOrUpdateManufacturerForm({
+  initialValues
+}: IProps) {
+  const router = useRouter();
+
+  const [error, setError] = useState(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const { t } = useTranslation();
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    reset,
+    formState: { errors }
+  } = useForm<FormValues>({
+    defaultValues: initialValues ? { ...initialValues } : defaultValues
+  });
+
+  const { userInfo } = useGetUser();
+  const csrfToken = userInfo?.csrfToken;
+
+  const [createManufacturer, { loading: creating }] = useMutation(
+    CREATE_MANUFACTURER,
+    {
+      context: {
+        headers: {
+          'x-csrf-token': csrfToken
+        }
+      },
+      onCompleted: (data: { createSupplier: Suppliers }) => {
+        if (!isEmpty(data)) {
+          notify(t('common:successfully-created'), 'success');
+          reset();
+          router.push(ROUTES.MANUFACTURER);
+        }
+      }
+    }
+  );
+
+  const [updateManufacturer, { loading: updating }] = useMutation(
+    UPDATE_MANUFACTURER,
+    {
+      context: {
+        headers: {
+          'x-csrf-token': csrfToken
+        }
+      },
+      onCompleted: (data: { updateSupplier: Suppliers }) => {
+        if (!isEmpty(data)) {
+          notify(t('common:successfully-updated'), 'success');
+          router.push(ROUTES.MANUFACTURER);
+        }
+      }
+    }
+  );
+
+  useErrorLogger(error);
+
+  const onSubmit = (values: FormValues) => {
+    const variables = {
+      ...values,
+      logo: values.logo?.map(({ id }) => ({ id }))
+    };
+
+    if (isEmpty(initialValues)) {
+      createManufacturer({ variables }).catch((err) => {
+        setError(err);
+      });
+    } else {
+      updateManufacturer({
+        variables: { ...variables, id: initialValues.id }
+      }).catch((err) => {
+        setError(err);
+      });
+    }
+  };
+
+  const logo = watch('logo');
+
+  return (
+    <>
+      {errorMessage ? (
+        <Alert
+          message={t(`common:${errorMessage}`)}
+          variant="error"
+          closeable={true}
+          className="mt-5"
+          onClose={() => setErrorMessage(null)}
+        />
+      ) : null}
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="flex flex-wrap pb-8 border-b border-dashed border-border-base my-5 sm:my-8">
+          <Description
+            title={t('form:input-label-logo')}
+            details={t('form:manufacturer-image-helper-text')}
+            className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
+          />
+          <Card className="w-full sm:w-8/12 md:w-2/3">
+            <ImageModal
+              label="form:label-add-manufacturer-logo"
+              onSelect={(logo) => setValue('logo', logo)}
+              selected={logo}
+              isThumbnail
+            />
+          </Card>
+        </div>
+        <div className="flex flex-wrap pb-8 border-b border-dashed border-border-base my-5 sm:my-8">
+          <Description
+            title={t('common:manufacturer')}
+            details={`${
+              initialValues
+                ? t('form:item-description-update')
+                : t('form:item-description-add')
+            } ${t('form:form-description-manufacturer-name')}`}
+            className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
+          />
+
+          <Card className="w-full sm:w-8/12 md:w-2/3">
+            <div className="grid grid-cols-2 gap-5">
+              <Input
+                label={t('form:input-label-manufacturer-name')}
+                isRequiredLabel
+                {...register('name', { required: 'Name is required' })}
+                error={t(errors.name?.message!)}
+                variant="outline"
+                className="mb-5"
+              />
+              <Input
+                label={t('form:input-label-website')}
+                {...register('website')}
+                error={t(errors.website?.message!)}
+                variant="outline"
+                className="mb-5"
+              />
+            </div>
+            <TextArea
+              label={t('form:item-description')}
+              {...register('description')}
+              error={t(errors.description?.message!)}
+              variant="outline"
+              className="mt-5"
+            />
+          </Card>
+        </div>
+
+        <div className="mb-4 flex justify-end">
+          {initialValues && (
+            <Button
+              variant="outline"
+              onClick={router.back}
+              className="me-4"
+              type="button"
+            >
+              {t('form:button-label-back')}
+            </Button>
+          )}
+
+          <Button
+            loading={creating || updating}
+            disabled={creating || updating}
+          >
+            <div className="mr-1">
+              <SaveIcon width="1.3rem" height="1.3rem" />
+            </div>
+            <div>{t('form:button-label-save')}</div>
+          </Button>
+        </div>
+      </form>
+    </>
+  );
+}

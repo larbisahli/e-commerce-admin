@@ -111,5 +111,14 @@ export const COLUMNS = {
     { label: 'Placed By', key: 'createdBy' },
     { label: 'Last Updated By', key: 'updatedBy' },
     { label: 'Actions', key: 'actions' }
+  ],
+  manufacturer: [
+    { label: 'Logo', key: 'logo' },
+    { label: 'Name', key: 'name' },
+    { label: 'website', key: 'website' },
+    { label: 'Creation Date', key: 'createdAt' },
+    { label: 'Placed By', key: 'createdBy' },
+    { label: 'Updated By', key: 'updatedBy' },
+    { label: 'Actions', key: 'actions' }
   ]
 };

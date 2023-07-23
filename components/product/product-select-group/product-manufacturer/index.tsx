@@ -6,19 +6,19 @@ import {
 // import ValidationError from '@components/ui/form-validation-error';
 import Label from '@components/ui/label';
 import Select from '@components/ui/select/select';
-import { CATEGORIES_FOR_SELECT_ALL } from '@graphql/category';
+import { MANUFACTURERS_FOR_SELECT } from '@graphql/manufacturer';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { Category, OrderBy } from '@ts-types/generated';
+import { Category, ManufacturerType, OrderBy } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
 import React, { memo } from 'react';
 
-interface TCategorySelect {
-  categorySelectAll: Category[];
+interface TManufacturerSelect {
+  manufacturersForSelect: ManufacturerType[];
 }
 
 interface Props {
-  categories: Category[];
-  setInitProductCategories: React.Dispatch<React.SetStateAction<Category[]>>;
+  manufacturers: ManufacturerType[];
+  // setInitProductCategories: React.Dispatch<React.SetStateAction<ManufacturerType[]>>;
 }
 
 interface OptionsVariable {
@@ -27,33 +27,30 @@ interface OptionsVariable {
   orderBy: OrderBy;
 }
 
-const ProductManufacturer = ({
-  categories,
-  setInitProductCategories
-}: Props) => {
+const ProductManufacturer = ({ manufacturers }: Props) => {
   const { t } = useTranslation('common');
 
   const dispatch = useFormReducer();
 
-  const { data, loading, error } = useQuery<TCategorySelect, OptionsVariable>(
-    CATEGORIES_FOR_SELECT_ALL,
-    {
-      variables: {
-        page: 1,
-        limit: 999,
-        orderBy: OrderBy.CREATED_AT
-      },
-      fetchPolicy: 'cache-and-network'
-    }
-  );
+  const { data, loading, error } = useQuery<
+    TManufacturerSelect,
+    OptionsVariable
+  >(MANUFACTURERS_FOR_SELECT, {
+    variables: {
+      page: 1,
+      limit: 999,
+      orderBy: OrderBy.CREATED_AT
+    },
+    fetchPolicy: 'cache-and-network'
+  });
 
-  const { categorySelectAll: options = [] } = data ?? {};
+  const { manufacturersForSelect: options = [] } = data ?? {};
 
   useErrorLogger(error);
 
   const onChange = (values: Category[]) => {
     dispatch({
-      type: Actions.CATEGORIES,
+      type: Actions.MANUFACTURERS,
       payload: {
         values
       }
@@ -62,11 +59,11 @@ const ProductManufacturer = ({
 
   return (
     <div className="mb-5">
-      <Label>{t('form:input-label-manufacturer')}</Label>
+      <Label>{t('form:input-label-manufacturers')}</Label>
       <Select
         options={options}
-        value={categories}
-        name="categories"
+        value={manufacturers}
+        name="manufacturers"
         isMulti
         getOptionLabel={(option: any) => option.name}
         getOptionValue={(option: any) => option.id}
