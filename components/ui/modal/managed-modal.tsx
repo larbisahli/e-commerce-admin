@@ -3,6 +3,7 @@ import {
   BAN_CUSTOMER,
   DELETE_ATTRIBUTE,
   DELETE_COUPON,
+  DELETE_DELIVERY_TIME,
   DELETE_MANUFACTURER,
   DELETE_ORDER_STATUS,
   DELETE_PRODUCT,
@@ -56,6 +57,10 @@ const ManufacturerDeleteView = dynamic(
   () => import('@components/manufacturer/manufacturer-delete-view')
 );
 
+const DeliveryTimeDeleteView = dynamic(
+  () => import('@components/delivery-time/delivery-delete-view')
+);
+
 // const AttributeExportImport = dynamic(
 //   () => import('@components/attribute/attribute-import-export')
 // );
@@ -77,6 +82,7 @@ const ManagedModal = () => {
       {view === DELETE_SUPPLIER && <SupplierDeleteView />}
       {view === DELETE_SLIDER && <SliderDeleteView />}
       {view === DELETE_MANUFACTURER && <ManufacturerDeleteView />}
+      {view === DELETE_DELIVERY_TIME && <DeliveryTimeDeleteView />}
     </Modal>
   );
 };

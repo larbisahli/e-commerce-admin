@@ -1,13 +1,18 @@
 import AppLayout from '@components/layouts/app';
-import RoleCreateUpdateForm from '@components/user-role/role-form';
 import { useGetUser } from '@hooks/index';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { ROUTES } from '@utils/routes';
 import type { GetServerSideProps } from 'next';
+import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+
+const RoleCreateUpdateForm = dynamic(
+  () => import('@components/user-role/role-form'),
+  { ssr: true }
+);
 
 export default function CreateUserPage({ client }: SSRProps) {
   const { t } = useTranslation();

@@ -1,6 +1,5 @@
 import { useQuery } from '@apollo/client';
 import AppLayout from '@components/layouts/app';
-import SettingsForm from '@components/settings/settings-form';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { SETTINGS } from '@graphql/settings';
@@ -11,9 +10,15 @@ import { SSRProps } from '@ts-types/custom.types';
 import { SettingsType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import { GetServerSideProps } from 'next';
+import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+
+const SettingsForm = dynamic(
+  () => import('@components/settings/settings-form'),
+  { ssr: true }
+);
 
 interface tSettings {
   getSettings: SettingsType;

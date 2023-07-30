@@ -285,6 +285,13 @@ export const siteSettings = {
                 isSubLink: true
               }
             ]
+          },
+          {
+            id: 'XDsaWhG',
+            href: ROUTES.STORE_SETTINGS,
+            label: 'sidebar-nav-item-store-settings',
+            padding: '35px',
+            isSubLink: true
           }
         ]
       },

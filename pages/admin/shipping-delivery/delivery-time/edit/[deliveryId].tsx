@@ -1,22 +1,27 @@
 import { useQuery } from '@apollo/client';
 import AppLayout from '@components/layouts/app';
-import CreateOrUpdateShippingForm from '@components/shipping-zone/shipping-form';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
-import { SHIPPING_ZONE } from '@graphql/shipping-zone';
+import { DELIVERY_TIME } from '@graphql/delivery-time';
 import { useGetUser } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import type { SSRProps } from '@ts-types/custom.types';
-import { ShippingZoneType } from '@ts-types/generated';
+import { DeliveryTimeType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import type { GetServerSideProps } from 'next';
+import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-interface ShippingVariable {
+const CreateOrUpdateDeliveryForm = dynamic(
+  () => import('@components/delivery-time/delivery-form'),
+  { ssr: true }
+);
+
+interface DeliveryVariable {
   id: number;
 }
 
@@ -24,15 +29,17 @@ export default function UpdateShippingPage({ client }: SSRProps) {
   const { t } = useTranslation();
   const { query } = useRouter();
 
-  const shippingId = parseInt(query.shippingId as string, 10);
+  const deliveryId = parseInt(query.deliveryId as string, 10);
 
-  const { data, loading, error } = useQuery<ShippingZoneType, ShippingVariable>(
-    SHIPPING_ZONE,
-    {
-      variables: { id: shippingId },
-      fetchPolicy: 'cache-and-network'
-    }
-  );
+  const { data, loading, error } = useQuery<
+    { deliveryTime: DeliveryTimeType },
+    DeliveryVariable
+  >(DELIVERY_TIME, {
+    variables: { id: deliveryId },
+    fetchPolicy: 'cache-and-network'
+  });
+
+  const { deliveryTime } = data ?? {};
 
   useGetUser(client);
   useErrorLogger(error);
@@ -42,13 +49,13 @@ export default function UpdateShippingPage({ client }: SSRProps) {
   }
 
   if (error) {
-    return <ErrorMessage message={t('common:MESSAGE_SOMETHING_WENT_WRONG')} />;
+    return <ErrorMessage message={error.message} />;
   }
 
   return (
     <>
       <Head>
-        <title>Edit Shipping time | Dropgala</title>
+        <title>Delivery time | Dropgala</title>
         <link
           rel="icon"
           type="image/svg"
@@ -61,7 +68,7 @@ export default function UpdateShippingPage({ client }: SSRProps) {
           {t('form:form-title-update-shipping')}
         </h1>
       </div>
-      <CreateOrUpdateShippingForm initialValues={data} />
+      <CreateOrUpdateDeliveryForm initialValues={deliveryTime} />
     </>
   );
 }

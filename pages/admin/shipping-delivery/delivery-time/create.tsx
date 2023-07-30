@@ -1,13 +1,18 @@
 import AppLayout from '@components/layouts/app';
-import CreateOrUpdateShippingForm from '@components/shipping-zone/shipping-form';
 import { useGetUser } from '@hooks/index';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import type { SSRProps } from '@ts-types/custom.types';
 import { ROUTES } from '@utils/routes';
 import type { GetServerSideProps } from 'next';
+import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+
+const CreateOrUpdateDeliveryForm = dynamic(
+  () => import('@components/delivery-time/delivery-form'),
+  { ssr: true }
+);
 
 export default function CreateShippingPage({ client }: SSRProps) {
   const { t } = useTranslation();
@@ -16,7 +21,7 @@ export default function CreateShippingPage({ client }: SSRProps) {
   return (
     <>
       <Head>
-        <title>Create Shipping time | Dropgala</title>
+        <title>Delivery time | Dropgala</title>
         <link
           rel="icon"
           type="image/svg"
@@ -26,10 +31,10 @@ export default function CreateShippingPage({ client }: SSRProps) {
       </Head>
       <div className="py-5 sm:py-8 flex border-b border-dashed border-border-base">
         <h1 className="text-lg font-semibold text-heading">
-          {t('form:form-title-create-shipping-zone')}
+          {t('form:form-title-new-delivery-time')}
         </h1>
       </div>
-      <CreateOrUpdateShippingForm />
+      <CreateOrUpdateDeliveryForm />
     </>
   );
 }

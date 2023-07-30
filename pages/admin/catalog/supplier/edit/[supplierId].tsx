@@ -1,6 +1,5 @@
 import { useQuery } from '@apollo/client';
 import AppLayout from '@components/layouts/app';
-import CreateOrUpdateSupplierForm from '@components/suppliers/supplier-form';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { SUPPLIER } from '@graphql/supplier';
@@ -11,9 +10,15 @@ import type { SSRProps } from '@ts-types/custom.types';
 import type { Suppliers } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import type { GetServerSideProps } from 'next';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+
+const CreateOrUpdateSupplierForm = dynamic(
+  () => import('@components/suppliers/supplier-form'),
+  { ssr: true }
+);
 
 interface TAttribute {
   supplier: Suppliers;
@@ -46,7 +51,7 @@ export default function UpdateSupplierPage({ client }: SSRProps) {
   }
 
   if (error) {
-    return <ErrorMessage message={t('common:MESSAGE_SOMETHING_WENT_WRONG')} />;
+    return <ErrorMessage message={error.message} />;
   }
 
   return (

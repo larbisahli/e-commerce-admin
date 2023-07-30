@@ -1,39 +1,38 @@
 import { useQuery } from '@apollo/client';
-import PageMainAction from '@components/common/PageMainAction';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
-import { THEMES } from '@graphql/theme';
-import { useErrorLogger, useGetUser } from '@hooks/index';
-import { verifyAuth } from '@middleware/utils';
+import { SETTINGS } from '@graphql/settings';
+import { useErrorLogger } from '@hooks/useErrorLogger';
+import { useGetUser } from '@hooks/useGetUser';
+import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
-import { ThemeType } from '@ts-types/generated';
+import { SettingsType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
-import isEmpty from 'lodash/isEmpty';
-import type { GetServerSideProps } from 'next';
+import { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-const ThemeListing = dynamic(() => import('@components/theme/theme-listing'), {
-  ssr: true
-});
+const StoreSettingsForm = dynamic(
+  () => import('@components/settings/store-settings-form'),
+  { ssr: true }
+);
 
-interface TTheme {
-  themes: ThemeType[];
-  themeCount: { count: number };
+interface tSettings {
+  getSettings: SettingsType;
 }
 
-export default function Themes({ client }: SSRProps) {
+export default function StoreSettings({ client }: SSRProps) {
   const { t } = useTranslation();
 
-  const { data, loading, error } = useQuery<TTheme>(THEMES, {
+  const { data, loading, error } = useQuery<tSettings>(SETTINGS, {
     variables: {},
     fetchPolicy: 'cache-and-network'
   });
 
-  const { themes = [] } = data ?? {};
+  const { getSettings: settings } = data ?? {};
 
   useGetUser(client);
   useErrorLogger(error);
@@ -41,31 +40,31 @@ export default function Themes({ client }: SSRProps) {
   if (loading) {
     return <Loader text={t('common:text-loading')} />;
   }
-  if (!isEmpty(error)) {
-    return <ErrorMessage message={error.message} />;
-  }
+
+  if (error) return <ErrorMessage message={error.message} />;
 
   return (
     <>
       <Head>
-        <title>Themes | Dropgala</title>
+        <title>Settings | Dropgala</title>
         <link
           rel="icon"
           type="image/svg"
           sizes="32x32"
-          href="/svg/market.svg"
+          href="/svg/settings.svg"
         />
       </Head>
-      <PageMainAction
-        title={t('form:button-label-themes')}
-        label={t('form:button-label-themes')}
-      />
-      <ThemeListing themes={themes} />
+      <div className="py-5 sm:py-8 flex border-b border-dashed border-border-base">
+        <h1 className="text-lg font-semibold text-heading">
+          {t('form:form-title-store-settings')}
+        </h1>
+      </div>
+      <StoreSettingsForm settings={settings} />
     </>
   );
 }
 
-Themes.Layout = AppLayout;
+StoreSettings.Layout = AppLayout;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { locale } = context;
@@ -80,6 +79,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
+  const { csrfToken, csrfError } = await XSRFHandler(context);
+
   return {
     props: {
       ...(await serverSideTranslations(locale, [
@@ -88,7 +89,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         'form',
         'error'
       ])),
-      client
+      client: { ...(client ?? {}), csrfToken, csrfError }
     }
   };
 };

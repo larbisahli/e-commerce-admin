@@ -1,7 +1,4 @@
 import { useQuery } from '@apollo/client';
-import AttributeList from '@components/attribute/attribute-list';
-import PageMainHeader from '@components/common/page-main-header';
-import PageMainAction from '@components/common/PageMainAction';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
@@ -15,10 +12,32 @@ import { COLUMNS } from '@utils/data/table-columns';
 import { ROUTES } from '@utils/routes';
 import isEmpty from 'lodash/isEmpty';
 import type { GetServerSideProps } from 'next';
+import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useState } from 'react';
+
+const PageMainHeader = dynamic(
+  () => import('@components/common/page-main-header'),
+  {
+    ssr: true,
+    loading: () => <div className="animated-background w-full h-[80px]"></div>
+  }
+);
+
+const PageMainAction = dynamic(
+  () => import('@components/common/PageMainAction'),
+  {
+    ssr: true,
+    loading: () => <div className="animated-background w-full h-[80px]"></div>
+  }
+);
+
+const AttributeList = dynamic(
+  () => import('@components/attribute/attribute-list'),
+  { ssr: true }
+);
 
 interface TAttributes {
   attributes: Attribute[];
@@ -77,7 +96,7 @@ export default function AttributePage({ client }: SSRProps) {
     return <Loader text={t('common:text-loading')} />;
   }
   if (!isEmpty(error)) {
-    return <ErrorMessage message={t('common:MESSAGE_SOMETHING_WENT_WRONG')} />;
+    return <ErrorMessage message={error.message} />;
   }
 
   return (

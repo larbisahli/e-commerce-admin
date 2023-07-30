@@ -14,6 +14,7 @@
   "table-item-status": "Status",
   "table-item-actions": "Actions",
   "table-item-tracking-number": "Tracking Number",
+  "table-item-customer": "Customer",
   "table-item-total": "Total",
   "table-item-order-date": "Order Date",
   "table-item-icon": "Icon",
@@ -63,6 +64,9 @@
   "table-item-company": "Company",
   "table-item-website": "Website",
   "table-item-name": "Name",
+  "table-item-unit-only": "Unit",
+  "table-item-maximum": "Maximum",
+  "table-item-minimum": "Minimum",
   "table-item-theme-title": "Theme title",
   "table-item-theme-path": "Theme path",
   "table-item-resource": "Resource",
@@ -80,5 +84,6 @@
   "table-item-title-title": "Title",
   "table-item-free": "Free",
   "table-item-rate-type": "Rate type",
+  "table-item-delivery-time": "Delivery time",
   "table-item-sku": "sku"
 }

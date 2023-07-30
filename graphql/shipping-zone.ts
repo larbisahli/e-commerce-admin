@@ -4,11 +4,20 @@ export const SHIPPING_ZONE = gql`
   query ShippingZone($id: Int!) {
     shippingZone(id: $id) {
       id
+      logo {
+        id
+        image
+        placeholder
+      }
       name
       displayName
       active
       freeShipping
       rateType
+      deliveryTime {
+        id
+        name
+      }
     }
     zones(id: $id) {
       id
@@ -46,10 +55,19 @@ export const SHIPPING_ZONES = gql`
       sortedBy: $sortedBy
     ) {
       id
+      logo {
+        id
+        image
+        placeholder
+      }
       name
       active
       freeShipping
       rateType
+      deliveryTime {
+        id
+        name
+      }
       createdAt
       updatedAt
       createdBy {
@@ -69,21 +87,25 @@ export const SHIPPING_ZONES = gql`
 export const CREATE_SHIPPING = gql`
   mutation CreateShippingZone(
     $name: String!
+    $logo: [ImageInput]
     $displayName: String!
     $active: Boolean!
     $freeShipping: Boolean!
     $rateType: String
     $shippingRates: [ShippingRateInput]
     $zones: [CountryInput]!
+    $deliveryTime: deliveryTimeInput
   ) {
     createShippingZone(
       name: $name
+      logo: $logo
       displayName: $displayName
       active: $active
       freeShipping: $freeShipping
       rateType: $rateType
       shippingRates: $shippingRates
       zones: $zones
+      deliveryTime: $deliveryTime
     ) {
       id
     }

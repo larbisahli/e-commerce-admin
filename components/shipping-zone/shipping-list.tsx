@@ -1,9 +1,16 @@
 import ActionButtons from '@components/common/action-buttons';
+import ImageComponent from '@components/ImageComponent';
 import Badge from '@components/ui/badge/badge';
 import Pagination from '@components/ui/pagination';
 import ProfileCart from '@components/ui/profile-card';
 import { Table } from '@components/ui/table';
-import { CreatedUpdatedByAt, ShippingZoneType } from '@ts-types/generated';
+import { siteSettings } from '@settings/site.settings';
+import {
+  CreatedUpdatedByAt,
+  DeliveryTimeType,
+  ImageType,
+  ShippingZoneType
+} from '@ts-types/generated';
 import { useIsRTL } from '@utils/locals';
 import { ROUTES } from '@utils/routes';
 import dayjs from 'dayjs';
@@ -30,6 +37,29 @@ const ShippingList = ({ shippingZones, selectedColumns }: IProps) => {
         ellipsis: true
       },
       {
+        title: t('table:table-item-logo'),
+        dataIndex: 'logo',
+        key: 'logo',
+        align: alignLeft,
+        width: 85,
+        render: (logo: ImageType) => {
+          const { image, placeholder } = logo[0] ?? {};
+          return (
+            <div className="shadow min-w-0 overflow-hidden rounded-sm w-[65px] h-[65px] border">
+              <ImageComponent
+                src={image ?? siteSettings.product.image}
+                customPlaceholder={
+                  placeholder ?? siteSettings.product.placeholder
+                }
+                width={100}
+                height={100}
+                // objectFit="container"
+              />
+            </div>
+          );
+        }
+      },
+      {
         title: t('table:table-item-name'),
         dataIndex: 'name',
         key: 'name',
@@ -51,8 +81,11 @@ const ShippingList = ({ shippingZones, selectedColumns }: IProps) => {
         render: (rateType: string, record: ShippingZoneType) => {
           if (!rateType)
             return (
-              <div className="!text-sm text-gray-500 capitalize font-medium">
-                None
+              <div
+                title="Not available"
+                className="!text-sm text-gray-500 capitalize font-medium"
+              >
+                N/A
               </div>
             );
           return (
@@ -94,6 +127,20 @@ const ShippingList = ({ shippingZones, selectedColumns }: IProps) => {
               text={freeShipping ? 'Yes' : 'No'}
               color={freeShipping ? 'bg-green-600' : 'bg-red-400'}
             />
+          );
+        }
+      },
+      {
+        title: t('table:table-item-delivery-time'),
+        dataIndex: 'deliveryTime',
+        key: 'deliveryTime',
+        align: 'center',
+        width: 100,
+        render: (deliveryTime: DeliveryTimeType) => {
+          return (
+            <div className="!text-sm text-gray-500 capitalize font-medium">
+              {deliveryTime?.name}
+            </div>
           );
         }
       },

@@ -1,4 +1,5 @@
 import { Table } from '@components/ui/table';
+import usePrice from '@utils/use-price';
 // import { Order, OrderStatus } from '@ts-types/generated';
 import dayjs from 'dayjs';
 // import usePrice from '@utils/use-price';
@@ -17,9 +18,9 @@ const RecentOrders = ({ orders, title }: IProps) => {
 
   const columns = [
     {
-      title: t('table:table-item-tracking-number'),
-      dataIndex: 'tracking_number',
-      key: 'tracking_number',
+      title: t('table:table-item-customer'),
+      dataIndex: 'customer',
+      key: 'customer',
       align: 'center',
       width: 150
     },
@@ -32,8 +33,7 @@ const RecentOrders = ({ orders, title }: IProps) => {
         // const { price } = usePrice({
         //   amount: value
         // });
-        const price = 22;
-        return <span className="whitespace-nowrap">{price}</span>;
+        return <span className="whitespace-nowrap">${value}</span>;
       }
     },
     {

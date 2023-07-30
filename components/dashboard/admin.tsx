@@ -2,6 +2,7 @@ import { CartIconBig } from '@components/icons/cart-icon-bag';
 import { CoinIcon } from '@components/icons/coin-icon';
 import { DollarIcon } from '@components/icons/shops/dollar';
 import { ShopIcon } from '@components/icons/sidebar';
+import { UserIcon } from '@components/icons/user-icon';
 import RecentOrders from '@components/order/recent-orders';
 // import PopularProductList from '@components/product/popular-product-list';
 // import ErrorMessage from '@components/ui/error-message';
@@ -32,8 +33,8 @@ export default function Dashboard() {
   //   }
   // );
 
-  const todays_revenue = 0;
-  const total_revenue = 0;
+  const todays_revenue = '$20';
+  const total_revenue = '3,000 USD';
 
   // const {
   //   data: orderData,
@@ -43,7 +44,53 @@ export default function Dashboard() {
   //   limit: 10,
   //   page: 1
   // });
-  const orderData = {};
+  const orderData = [
+    {
+      customer: 'Isaac frost',
+      total: 12,
+      created_at: Date.now(),
+      status: {
+        color: 'green',
+        name: 'Pending'
+      }
+    },
+    {
+      customer: 'Karl moore',
+      total: 120,
+      created_at: Date.now(),
+      status: {
+        color: 'red',
+        name: 'Canceled'
+      }
+    },
+    {
+      customer: 'Isaac frost',
+      total: 22,
+      created_at: Date.now(),
+      status: {
+        color: 'green',
+        name: 'Pending'
+      }
+    },
+    {
+      customer: 'Isaac frost',
+      total: 42,
+      created_at: Date.now(),
+      status: {
+        color: 'green',
+        name: 'Pending'
+      }
+    },
+    {
+      customer: 'Isaac frost',
+      total: 34,
+      created_at: Date.now(),
+      status: {
+        color: 'green',
+        name: 'Pending'
+      }
+    }
+  ];
   const orderLoading = false;
   const orderError = {};
 
@@ -60,7 +107,6 @@ export default function Dashboard() {
   //   { limit: 10 }
   // );
 
-  const withdrawsData = {};
   const withdrawLoading = false;
 
   if (loading || orderLoading || popularProductLoading || withdrawLoading) {
@@ -73,12 +119,35 @@ export default function Dashboard() {
   //     />
   //   );
   // }
-  let salesByYear: number[] = Array.from({ length: 12 }, (_) => 0);
+  let salesByYear: {} = {
+    sales: Array.from(
+      { length: 12 },
+      (_) => Math.floor(Math.random() * 100) + 1
+    ),
+    revenue: Array.from(
+      { length: 12 },
+      (_) => Math.floor(Math.random() * 150) + 1
+    ),
+    orders: Array.from(
+      { length: 12 },
+      (_) => Math.floor(Math.random() * 100) + 1
+    )
+  };
+
+  let januarySalesByYear: {} = {
+    sales: [],
+    revenue: [],
+    orders: Array.from(
+      { length: 31 },
+      (_) => Math.floor(Math.random() * 140) + 1
+    )
+  };
   // if (!!data?.totalYearSaleByMonth?.length) {
   //   salesByYear = data.totalYearSaleByMonth.map((item: any) =>
   //     item.total.toFixed(2)
   //   );
   // }
+
   return (
     <>
       <Head>
@@ -103,15 +172,7 @@ export default function Dashboard() {
             subtitleTransKey="sticker-card-subtitle-rev"
             icon={<DollarIcon className="w-7 h-7" color="#047857" />}
             iconBgStyle={{ backgroundColor: '#A7F3D0' }}
-            price={total_revenue ?? 90}
-          />
-        </div>
-        <div className="w-full ">
-          <StickerCard
-            titleTransKey="sticker-card-title-order"
-            subtitleTransKey="sticker-card-subtitle-order"
-            icon={<CartIconBig />}
-            price={data?.totalOrders ?? 29}
+            price={total_revenue ?? '$90'}
           />
         </div>
         <div className="w-full ">
@@ -123,18 +184,26 @@ export default function Dashboard() {
         </div>
         <div className="w-full ">
           <StickerCard
-            titleTransKey="sticker-card-title-total-shops"
-            icon={<ShopIcon className="w-6" color="#1D4ED8" />}
-            iconBgStyle={{ backgroundColor: '#93C5FD' }}
-            price={data?.totalShops}
+            titleTransKey="sticker-card-title-order"
+            subcheckouttitleTransKey="sticker-card-subtitle-order"
+            icon={<CartIconBig />}
+            price={data?.totalOrders ?? '$29'}
+          />
+        </div>
+        <div className="w-full">
+          <StickerCard
+            titleTransKey="Unique Customers"
+            icon={<UserIcon />}
+            iconBgStyle={{ backgroundColor: '#124ED8' }}
+            price={data?.totalShops ?? 343}
           />
         </div>
       </div>
 
       <div className="w-full flex flex-wrap mb-6">
         <ColumnChart
-          widgetTitle="Sale History"
-          colors={['#03D3B5']}
+          widgetTitle="Sales History"
+          colors={['#03D3B5', '#124ED8', '#FFA500']}
           series={salesByYear}
           categories={[
             t('common:january'),
@@ -154,9 +223,24 @@ export default function Dashboard() {
       </div>
 
       <div className="w-full flex flex-wrap mb-6">
+        <ColumnChart
+          widgetTitle="January Order History"
+          colors={['#03D3B5']}
+          series={januarySalesByYear}
+          categories={januarySalesByYear?.orders?.map((_, idx) => idx + 1)}
+        />
+      </div>
+
+      <div className="w-full flex flex-wrap mb-6">
         <div className="w-full sm:w-1/2 xl:w-1/2 sm:px-3 sm:pl-0 mb-6 xl:mb-0">
           <RecentOrders
-            orders={orderData?.orders?.data}
+            orders={orderData}
+            title={t('table:recent-order-table-title')}
+          />
+        </div>
+        <div className="w-full sm:w-1/2 xl:w-1/2 sm:px-3 sm:pl-0 mb-6 xl:mb-0">
+          <RecentOrders
+            orders={orderData}
             title={t('table:recent-order-table-title')}
           />
         </div>

@@ -38,9 +38,11 @@ export const COLUMNS = {
     { label: 'Actions', key: 'actions' }
   ],
   'shipping-zone': [
+    { label: 'Logo', key: 'logo' },
     { label: 'Name', key: 'name' },
     { label: 'Company', key: 'company' },
     { label: 'Rate Type', key: 'rateType' },
+    { label: 'Delivery Time', key: 'deliveryTime' },
     { label: 'Status', key: 'active' },
     { label: 'Free', key: 'freeShipping' },
     { label: 'Creation Date', key: 'createdAt' },
@@ -116,6 +118,16 @@ export const COLUMNS = {
     { label: 'Logo', key: 'logo' },
     { label: 'Name', key: 'name' },
     { label: 'website', key: 'website' },
+    { label: 'Creation Date', key: 'createdAt' },
+    { label: 'Placed By', key: 'createdBy' },
+    { label: 'Updated By', key: 'updatedBy' },
+    { label: 'Actions', key: 'actions' }
+  ],
+  'delivery-time': [
+    { label: 'Name', key: 'name' },
+    { label: 'Unit', key: 'timeUnit' },
+    { label: 'Minimum', key: 'minValue' },
+    { label: 'Maximum', key: 'maxValue' },
     { label: 'Creation Date', key: 'createdAt' },
     { label: 'Placed By', key: 'createdBy' },
     { label: 'Updated By', key: 'updatedBy' },

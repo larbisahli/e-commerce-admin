@@ -199,3 +199,29 @@
 .mailchimp > div > button:hover {
   background-color: rgb(74, 122, 211);
 }
+
+@keyframes skeleton-loading {
+  to {
+    background-position: 100%;
+  }
+}
+
+.animated-background {
+  position: relative;
+  animation-duration: 1.25s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-timing-function: infinite;
+  animation-name: skeleton-loading;
+  cursor: progress;
+  background: #f6f6f6;
+  width: 100%;
+  background: linear-gradient(0.25turn, transparent, #cfcfcf, transparent),
+    linear-gradient(#e8e8e8, #e8e8e8),
+    radial-gradient(10px circle at 19px 19px, #eee 50%, transparent 51%),
+    linear-gradient(#eee, #eee);
+  background-repeat: no-repeat;
+  background-size: 50%;
+  background-position: -100%;
+  background-color: #e8e8e8;
+}

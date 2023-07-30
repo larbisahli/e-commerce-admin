@@ -1,6 +1,5 @@
 import { useQuery } from '@apollo/client';
 import AppLayout from '@components/layouts/app';
-import CreateOrUpdateTagForm from '@components/tag/tag-form';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { TAG } from '@graphql/tag';
@@ -10,10 +9,16 @@ import { SSRProps } from '@ts-types/custom.types';
 import { Tag } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import type { GetServerSideProps } from 'next';
+import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+
+const CreateOrUpdateTagForm = dynamic(
+  () => import('@components/tag/tag-form'),
+  { ssr: true }
+);
 
 interface TTag {
   tag: Tag;
@@ -42,7 +47,7 @@ export default function UpdateTagPage({ client }: SSRProps) {
     return <Loader text={t('common:text-loading')} />;
   }
   if (error) {
-    return <ErrorMessage message={t('common:MESSAGE_SOMETHING_WENT_WRONG')} />;
+    return <ErrorMessage message={error.message} />;
   }
 
   return (

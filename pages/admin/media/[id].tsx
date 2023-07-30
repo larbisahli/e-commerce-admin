@@ -1,25 +1,30 @@
 import { useQuery } from '@apollo/client';
-import PageMainHeader from '@components/common/page-main-header';
-import PageMainAction from '@components/common/PageMainAction';
-import { UploadIcon } from '@components/icons/upload-icon';
 import AppLayout from '@components/layouts/app';
-import MediaList from '@components/media';
-import Button from '@components/ui/button';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { MEDIA } from '@graphql/media';
 import { useErrorLogger, useGetUser } from '@hooks/index';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
-import { MediaType, OrderBy, SortOrder } from '@ts-types/generated';
+import { MediaType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import { isEmpty } from 'lodash';
 import type { GetServerSideProps } from 'next';
+import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useState } from 'react';
+
+const PageMainAction = dynamic(
+  () => import('@components/common/PageMainAction'),
+  {
+    ssr: true,
+    loading: () => <div className="animated-background w-full h-[80px]"></div>
+  }
+);
+
+const MediaList = dynamic(() => import('@components/media'), { ssr: true });
 
 interface TMedia {
   media: {
@@ -61,7 +66,7 @@ export default function Files({ client }: SSRProps) {
     return <Loader text={t('common:text-loading')} />;
   }
   if (!isEmpty(error)) {
-    return <ErrorMessage message={t('common:MESSAGE_SOMETHING_WENT_WRONG')} />;
+    return <ErrorMessage message={error.message} />;
   }
 
   return (

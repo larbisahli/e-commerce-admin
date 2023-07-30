@@ -1,13 +1,18 @@
 import AppLayout from '@components/layouts/app';
-import CreateOrUpdateOrderStatusForm from '@components/order-status/order-status-form';
 import { useGetUser } from '@hooks/index';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { ROUTES } from '@utils/routes';
 import type { GetServerSideProps } from 'next';
+import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+
+const CreateOrUpdateOrderStatusForm = dynamic(
+  () => import('@components/order-status/order-status-form'),
+  { ssr: true }
+);
 
 export default function CreateOrderStatusPage({ client }: SSRProps) {
   const { t } = useTranslation();

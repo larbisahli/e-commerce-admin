@@ -234,14 +234,24 @@ export interface Coupon extends CreatedUpdatedByAt {
 export interface ShippingZoneType extends CreatedUpdatedByAt {
   shippingZone: {
     id?: Scalars['Int'];
+    logo: ImageType[];
     name?: Scalars['String'];
     displayName?: Scalars['String'];
     active?: Scalars['Boolean'];
     freeShipping?: Scalars['Boolean'];
+    deliveryTime: DeliveryTimeType;
     rateType?: { id?: number; name?: string; type?: RateType };
   };
   zones?: CountryType[];
   shippingRates?: ShippingRateType[];
+}
+
+export interface DeliveryTimeType extends CreatedUpdatedByAt {
+  id: Scalars['Int'];
+  name: Scalars['String'];
+  timeUnit: { unit: Scalars['String'] };
+  minValue: Scalars['Int'];
+  maxValue: Scalars['Int'];
 }
 
 export interface ShippingRateType {

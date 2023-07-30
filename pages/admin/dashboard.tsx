@@ -8,7 +8,6 @@ import dynamic from 'next/dynamic';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const AdminDashboard = dynamic(() => import('@components/dashboard/admin'));
-// const OwnerDashboard = dynamic(() => import("@components/dashboard/owner"));
 
 export default function Dashboard({ client }: SSRProps) {
   useGetUser(client);

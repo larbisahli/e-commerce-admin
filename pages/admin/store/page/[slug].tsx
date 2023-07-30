@@ -1,7 +1,5 @@
 import { useQuery } from '@apollo/client';
-import PageMainAction from '@components/common/PageMainAction';
 import AppLayout from '@components/layouts/app';
-import PageForm from '@components/pages/page-form';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { GET_PAGE } from '@graphql/pages';
@@ -12,10 +10,23 @@ import type { PageType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import isEmpty from 'lodash/isEmpty';
 import type { GetServerSideProps } from 'next';
+import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+
+const PageMainAction = dynamic(
+  () => import('@components/common/PageMainAction'),
+  {
+    ssr: true,
+    loading: () => <div className="animated-background w-full h-[80px]"></div>
+  }
+);
+
+const PageForm = dynamic(() => import('@components/pages/page-form'), {
+  ssr: true
+});
 
 interface TPage {
   getPage: PageType;
@@ -49,7 +60,7 @@ export default function AboutUs({ client }: SSRProps) {
     return <Loader text={t('common:text-loading')} />;
   }
   if (!isEmpty(error)) {
-    return <ErrorMessage message={t('common:MESSAGE_SOMETHING_WENT_WRONG')} />;
+    return <ErrorMessage message={error.message} />;
   }
 
   return (

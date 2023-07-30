@@ -1,33 +1,52 @@
 import { useQuery } from '@apollo/client';
-import PageMainHeader from '@components/common/page-main-header';
-import PageMainAction from '@components/common/PageMainAction';
 import AppLayout from '@components/layouts/app';
-import ShippingList from '@components/shipping-zone/shipping-list';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
-import { SHIPPING_ZONES } from '@graphql/shipping-zone';
+import { DELIVERY_TIMES } from '@graphql/delivery-time';
 import { useGetUser } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useTableColumn } from '@hooks/useTableColumn';
-import { verifyAuth } from '@middleware/utils';
+import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import type { SSRProps } from '@ts-types/custom.types';
-import type { ShippingZoneType } from '@ts-types/generated';
+import type { DeliveryTimeType } from '@ts-types/generated';
 import { OrderBy, SortOrder } from '@ts-types/generated';
 import { COLUMNS } from '@utils/data/table-columns';
 import { ROUTES } from '@utils/routes';
 import isEmpty from 'lodash/isEmpty';
 import type { GetServerSideProps } from 'next';
+import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useState } from 'react';
 
-interface TShipping {
-  shippingZones: ShippingZoneType[];
-  shippingZoneCount: { count: number };
+const PageMainHeader = dynamic(
+  () => import('@components/common/page-main-header'),
+  {
+    ssr: true,
+    loading: () => <div className="animated-background w-full h-[80px]"></div>
+  }
+);
+
+const PageMainAction = dynamic(
+  () => import('@components/common/PageMainAction'),
+  {
+    ssr: true,
+    loading: () => <div className="animated-background w-full h-[80px]"></div>
+  }
+);
+
+const DeliveryList = dynamic(
+  () => import('@components/delivery-time/delivery-list'),
+  { ssr: true }
+);
+
+interface TDelivery {
+  deliveryTimes: DeliveryTimeType[];
+  deliveryTimeCount: { count: number };
 }
 
-interface ShippingVariable {
+interface DeliveryVariable {
   page: number;
   limit: number;
   orderBy: OrderBy;
@@ -42,12 +61,12 @@ export default function ShippingZonesPage({ client }: SSRProps) {
   const [orderBy, setOrder] = useState(OrderBy.CREATED_AT);
 
   const { selectedTableColumns, handleColumnChange } =
-    useTableColumn('shipping-zone');
+    useTableColumn('delivery-time');
 
   const { data, loading, error, fetchMore } = useQuery<
-    TShipping,
-    ShippingVariable
-  >(SHIPPING_ZONES, {
+    TDelivery,
+    DeliveryVariable
+  >(DELIVERY_TIMES, {
     variables: {
       page,
       limit: limit.value,
@@ -57,7 +76,7 @@ export default function ShippingZonesPage({ client }: SSRProps) {
     fetchPolicy: 'cache-and-network'
   });
 
-  const { shippingZones = [], shippingZoneCount: { count } = { count: 0 } } =
+  const { deliveryTimes = [], deliveryTimeCount: { count } = { count: 0 } } =
     data ?? {};
 
   useGetUser(client);
@@ -79,13 +98,13 @@ export default function ShippingZonesPage({ client }: SSRProps) {
     return <Loader text={t('common:text-loading')} />;
   }
   if (!isEmpty(error)) {
-    return <ErrorMessage message={t('common:MESSAGE_SOMETHING_WENT_WRONG')} />;
+    return <ErrorMessage message={error.message} />;
   }
 
   return (
     <>
       <Head>
-        <title>Shipping time | Dropgala</title>
+        <title>Delivery time | Dropgala</title>
         <link
           rel="icon"
           type="image/svg"
@@ -94,12 +113,12 @@ export default function ShippingZonesPage({ client }: SSRProps) {
         />
       </Head>
       <PageMainAction
-        href={`${ROUTES.SHIPPING_ZONE}/create`}
-        title={t('form:button-label-add-shipping-zone')}
-        label={t('form:input-label-shipping-zones')}
+        href={`${ROUTES.DELIVERY_TIME}/create`}
+        title={t('form:button-label-add-delivery-time')}
+        label={t('form:input-label-delivery-times')}
       />
       <PageMainHeader
-        columns={COLUMNS['shipping-zone']}
+        columns={COLUMNS['delivery-time']}
         selectedColumns={selectedTableColumns}
         handleColumnChange={handleColumnChange}
         onLimitChange={(value) => {
@@ -111,8 +130,8 @@ export default function ShippingZonesPage({ client }: SSRProps) {
         currentPage={page}
         perPage={limit.value}
       />
-      <ShippingList
-        shippingZones={shippingZones}
+      <DeliveryList
+        deliveryTimes={deliveryTimes}
         selectedColumns={selectedTableColumns}
       />
     </>
@@ -133,6 +152,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
+  const { csrfToken, csrfError } = await XSRFHandler(context);
+
   return {
     props: {
       ...(await serverSideTranslations(locale!, [
@@ -141,7 +162,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         'form',
         'error'
       ])),
-      client
+      client: { ...(client ?? {}), csrfToken, csrfError }
     }
   };
 };

@@ -73,12 +73,13 @@ const ImageViewModal = () => {
       return null;
     }
 
-    const width = Math.round(
-      photo.width > 500 ? photo.width / 1.5 : photo.width
-    );
-    const height = Math.round(
-      photo.height > 600 ? photo.height / 1.5 : photo.height
-    );
+    const { width, height } =
+      photo.width > 600
+        ? {
+            width: Math.round(photo.width / 1.5),
+            height: Math.round(photo.height / 1.5)
+          }
+        : photo;
 
     return (
       <div className="flex-2 mx-auto">

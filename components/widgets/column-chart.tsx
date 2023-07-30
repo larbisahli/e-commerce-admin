@@ -1,7 +1,7 @@
+import { ArrowDown } from '@components/icons/arrow-down';
+import { ArrowUp } from '@components/icons/arrow-up';
 import Chart from '@components/ui/chart';
 import cn from 'classnames';
-import { ArrowUp } from '@components/icons/arrow-up';
-import { ArrowDown } from '@components/icons/arrow-down';
 
 const BarChart = ({
   widgetTitle,
@@ -74,8 +74,16 @@ const BarChart = ({
     },
     series: [
       {
-        name: 'Sale',
-        data: series
+        name: 'Sales',
+        data: series.sales
+      },
+      {
+        name: 'Revenue',
+        data: series.revenue
+      },
+      {
+        name: 'Orders',
+        data: series.orders
       }
     ]
   };

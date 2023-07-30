@@ -1,12 +1,17 @@
 import AppLayout from '@components/layouts/app';
-import CreateOrUpdateSupplierForm from '@components/suppliers/supplier-form';
 import { useGetUser } from '@hooks/index';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import type { SSRProps } from '@ts-types/custom.types';
 import { ROUTES } from '@utils/routes';
 import type { GetServerSideProps } from 'next';
+import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+
+const CreateOrUpdateSupplierForm = dynamic(
+  () => import('@components/suppliers/supplier-form'),
+  { ssr: true }
+);
 
 export default function CreateSupplierPage({ client }: SSRProps) {
   const { t } = useTranslation();

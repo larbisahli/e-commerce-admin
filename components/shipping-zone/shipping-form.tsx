@@ -1,12 +1,14 @@
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import Card from '@components/common/card';
 import { SaveIcon } from '@components/icons/save-icon';
+import ImageModal from '@components/image-modal';
 import Button from '@components/ui/button';
 import Checkbox from '@components/ui/checkbox';
 import Description from '@components/ui/description';
 import Input from '@components/ui/input';
 import Label from '@components/ui/label';
 import SelectInput from '@components/ui/select-input';
+import { DELIVERY_TIME_SELECT } from '@graphql/delivery-time';
 import { CREATE_SHIPPING, UPDATE_SHIPPING } from '@graphql/shipping-zone';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
@@ -16,8 +18,8 @@ import {
 } from '@hooks/index';
 import { notify } from '@lib/notify';
 import { Nullable } from '@ts-types/custom.types';
-import { RateType } from '@ts-types/enums';
-import { ShippingZoneType } from '@ts-types/generated';
+import { OrderBy, RateType } from '@ts-types/enums';
+import { DeliveryTimeType, ShippingZoneType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import clone from 'lodash/clone';
 import isEmpty from 'lodash/isEmpty';
@@ -34,6 +36,8 @@ import { updateVariable } from './variablesSubmission';
 const defaultValues = {
   shippingZone: {
     name: '',
+    logo: [],
+    deliveryTime: {},
     displayName: '',
     active: false,
     freeShipping: false,
@@ -49,9 +53,21 @@ type IProps = {
   initialValues?: Nullable<ShippingZoneType>;
 };
 
+interface TDelivery {
+  deliveryTimeSelect: DeliveryTimeType[];
+}
+
+interface DeliveryVariable {
+  page: number;
+  limit: number;
+  orderBy: OrderBy;
+}
+
 export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
   const router = useRouter();
   const { t } = useTranslation();
+
+  console.log({ initialValues });
 
   const [error, setError] = useState(null);
   const [unsavedChanges, setUnsavedChanges] = useState(true);
@@ -85,7 +101,8 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
           shippingZone: {
             ...initialValues?.shippingZone,
             rateType:
-              initialValues?.shippingZone?.rateType === RateType.WEIGHT
+              (initialValues?.shippingZone?.rateType as unknown as string) ===
+              RateType.WEIGHT
                 ? { id: 1, name: 'Weight', type: RateType.WEIGHT }
                 : { id: 0, name: 'Price', type: RateType.PRICE }
           },
@@ -101,6 +118,21 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
             })
         }
   });
+
+  const {
+    data,
+    loading,
+    error: deliveryTimeError
+  } = useQuery<TDelivery, DeliveryVariable>(DELIVERY_TIME_SELECT, {
+    variables: {
+      page: 1,
+      limit: 999,
+      orderBy: OrderBy.CREATED_AT
+    },
+    fetchPolicy: 'cache-and-network'
+  });
+
+  const { deliveryTimeSelect = [] } = data ?? {};
 
   const { userInfo } = useGetUser();
   const csrfToken = userInfo?.csrfToken;
@@ -141,6 +173,7 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
   });
 
   useErrorLogger(error);
+  useErrorLogger(deliveryTimeError);
 
   const onSubmit = async (values: ShippingZoneType) => {
     const checkFailed = shippingRatesValidation(values.shippingRates, false);
@@ -151,10 +184,12 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
 
     const variables = {
       name: shippingZone?.name,
+      logo: shippingZone?.logo?.map(({ id }) => ({ id })),
       displayName: shippingZone?.displayName,
       active: shippingZone?.active,
       freeShipping: shippingZone?.freeShipping,
       rateType: shippingZone?.rateType?.type,
+      deliveryTime: { id: shippingZone?.deliveryTime?.id },
       shippingRates: shippingRates?.map((rate) => {
         return {
           id: rate?.id,
@@ -261,8 +296,32 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
     }
   };
 
+  const logo = watch('shippingZone.logo');
+
+  // Set Logo since a problem with shippingZone.logo to be set automatically
+  useEffect(() => {
+    if (!isEmpty(initialValues)) {
+      setValue('shippingZone.logo', initialValues?.shippingZone?.logo);
+    }
+  }, [initialValues, setValue]);
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      <div className="flex flex-wrap pb-8 border-b border-dashed border-border-base my-5 sm:my-8">
+        <Description
+          title={t('form:input-label-logo')}
+          details={t('form:shipping-logo-helper-text')}
+          className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
+        />
+        <Card className="w-full sm:w-8/12 md:w-2/3">
+          <ImageModal
+            label="form:label-add-shipping-logo"
+            onSelect={(photo) => setValue('shippingZone.logo', photo)}
+            selected={logo}
+            isThumbnail
+          />
+        </Card>
+      </div>
       <div className="flex flex-wrap my-5 sm:my-8">
         <Description
           title={t('form:item-shipping-information')}
@@ -304,6 +363,31 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
             <Checkbox
               {...register('shippingZone.active')}
               label={t('form:input-label-activate-shipping')}
+            />
+          </div>
+        </Card>
+      </div>
+      {/* DELIVERY TIMES */}
+      <div className="flex flex-wrap my-5 sm:my-8">
+        <Description
+          title={t('form:item-delivery-time')}
+          details={
+            initialValues
+              ? t('form:item-shipping-zones-info-update-select')
+              : t('form:item-shipping-zones-info-add-select')
+          }
+          className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
+        />
+        <Card className="w-full sm:w-8/12 md:w-2/3">
+          <div>
+            <Label>{t('form:input-label-delivery-time')}</Label>
+            <SelectInput
+              name="shippingZone.deliveryTime"
+              control={control}
+              loading={loading}
+              getOptionLabel={(option: any) => option.name}
+              getOptionValue={(option: any) => option.id}
+              options={deliveryTimeSelect}
             />
           </div>
         </Card>

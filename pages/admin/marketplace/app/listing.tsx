@@ -1,7 +1,6 @@
 import { useQuery } from '@apollo/client';
 import PageMainAction from '@components/common/PageMainAction';
 import AppLayout from '@components/layouts/app';
-import ThemeList from '@components/theme/theme-listing';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { THEMES } from '@graphql/theme';
@@ -12,9 +11,14 @@ import { ThemeType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import isEmpty from 'lodash/isEmpty';
 import type { GetServerSideProps } from 'next';
+import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+
+const ThemeList = dynamic(() => import('@components/theme/theme-listing'), {
+  ssr: true
+});
 
 interface TTheme {
   themes: ThemeType[];
@@ -38,7 +42,7 @@ export default function Themes({ client }: SSRProps) {
     return <Loader text={t('common:text-loading')} />;
   }
   if (!isEmpty(error)) {
-    return <ErrorMessage message={t('common:MESSAGE_SOMETHING_WENT_WRONG')} />;
+    return <ErrorMessage message={error.message} />;
   }
 
   return (

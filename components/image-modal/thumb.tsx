@@ -88,7 +88,7 @@ const ImageThumb = ({
             checked={isCurrentImage}
             style={{
               // transform: isCurrentImage ? 'translateY(-5px)' : null,
-              zIndex: isCurrentImage ? 100 : null,
+              zIndex: 100,
               top: '6px',
               left: '6px'
             }}

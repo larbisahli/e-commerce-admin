@@ -1,13 +1,18 @@
 import AppLayout from '@components/layouts/app';
-import CreateOrUpdateShippingForm from '@components/shipping-zone/shipping-form';
 import { useGetUser } from '@hooks/index';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import type { SSRProps } from '@ts-types/custom.types';
 import { ROUTES } from '@utils/routes';
 import type { GetServerSideProps } from 'next';
+import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+
+const CreateOrUpdateShippingForm = dynamic(
+  () => import('@components/shipping-zone/shipping-form'),
+  { ssr: true }
+);
 
 export default function CreateShippingPage({ client }: SSRProps) {
   const { t } = useTranslation();

@@ -1,5 +1,4 @@
 import { useQuery } from '@apollo/client';
-import CreateOrUpdateAttributeForm from '@components/attribute/attribute-form';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
@@ -11,10 +10,16 @@ import type { SSRProps } from '@ts-types/custom.types';
 import type { Attribute } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import type { GetServerSideProps } from 'next';
+import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+
+const CreateOrUpdateAttributeForm = dynamic(
+  () => import('@components/attribute/attribute-form'),
+  { ssr: true }
+);
 
 interface TAttribute {
   attribute: Attribute;
@@ -47,7 +52,7 @@ export default function UpdateAttributePage({ client }: SSRProps) {
   }
 
   if (error) {
-    return <ErrorMessage message={t('common:MESSAGE_SOMETHING_WENT_WRONG')} />;
+    return <ErrorMessage message={error.message} />;
   }
 
   return (

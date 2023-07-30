@@ -1,6 +1,5 @@
 import { useQuery } from '@apollo/client';
 import AppLayout from '@components/layouts/app';
-import CreateOrUpdateOrderStatusForm from '@components/order-status/order-status-form';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { ORDER_STATUS } from '@graphql/order-status';
@@ -11,10 +10,16 @@ import { SSRProps } from '@ts-types/custom.types';
 import { OrderStatus } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import type { GetServerSideProps } from 'next';
+import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+
+const CreateOrUpdateOrderStatusForm = dynamic(
+  () => import('@components/order-status/order-status-form'),
+  { ssr: true }
+);
 
 interface TOrderStatus {
   orderStatus: OrderStatus;
@@ -46,7 +51,7 @@ export default function UpdateOrderStatusPage({ client }: SSRProps) {
     return <Loader text={t('common:text-loading')} />;
   }
   if (error) {
-    return <ErrorMessage message={t('common:MESSAGE_SOMETHING_WENT_WRONG')} />;
+    return <ErrorMessage message={error.message} />;
   }
 
   return (
