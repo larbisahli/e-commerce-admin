@@ -6,7 +6,6 @@ import ValidationError from '@components/ui/form-validation-error';
 // import Loader from '@components/ui/loader/loader';
 // import ProgressBox from '@components/ui/progress-box/progress-box';
 import SelectInput from '@components/ui/select-input';
-import { Table } from '@components/ui/table';
 // import { useOrderQuery } from "@data/order/use-order.query";
 // import { useUpdateOrderMutation } from "@data/order/use-order-update.mutation";
 // import { useOrderStatusesQuery } from "@data/order-status/use-order-statuses.query";
@@ -14,12 +13,18 @@ import { siteSettings } from '@settings/site.settings';
 // import { Attachment } from '@ts-types/generated';
 import { formatAddress } from '@utils/format-address';
 import { useIsRTL } from '@utils/locals';
+import dynamic from 'next/dynamic';
 // import usePrice from '@utils/use-price';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useForm } from 'react-hook-form';
+
+const Table = dynamic(
+  () => import('@components/ui/table').then((mod) => mod.Table),
+  { ssr: false }
+);
 
 type FormValues = {
   order_status: any;

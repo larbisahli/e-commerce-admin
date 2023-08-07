@@ -1,4 +1,5 @@
 import { useQuery } from '@apollo/client';
+import CouponList from '@components/coupon/coupon-list';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
@@ -33,10 +34,6 @@ const PageMainAction = dynamic(
     loading: () => <div className="animated-background w-full h-[80px]"></div>
   }
 );
-
-const CouponList = dynamic(() => import('@components/coupon/coupon-list'), {
-  ssr: true
-});
 
 interface TCoupon {
   coupons: Coupon[];

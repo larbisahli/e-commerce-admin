@@ -1,12 +1,16 @@
 import ActionButtons from '@components/common/action-buttons';
 import Pagination from '@components/ui/pagination';
-import { Table } from '@components/ui/table';
 import { siteSettings } from '@settings/site.settings';
-import { UserPaginator } from '@ts-types/generated';
 import { useIsRTL } from '@utils/locals';
+import dynamic from 'next/dynamic';
 import Image from 'next/image';
 // import { useMeQuery } from '@data/user/use-me.query';
 import { useTranslation } from 'next-i18next';
+
+const Table = dynamic(
+  () => import('@components/ui/table').then((mod) => mod.Table),
+  { ssr: false }
+);
 
 type IProps = {
   customers: UserPaginator | null | undefined;

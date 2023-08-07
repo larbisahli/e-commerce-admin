@@ -1,25 +1,80 @@
 {
-  "name": "DropGala",
-  "short_name": "DropGala",
+  "name": "Dropgala",
+  "short_name": "Dropgala",
+  "description": "Dropgala is an online platform that provides accessible and user-friendly services for creating and managing online stores.",
   "lang": "en-US",
-  "description": "Great place to start selling",
-  "start_url": "/",
-  "scope": "https://business.dropgala.com/",
-  "display": "standalone",
+  "start_url": "/login",
   "orientation": "portrait",
-  "theme_color": "#020024",
-  "background_color": "#020024",
-  "categories": ["admin"],
+  "display": "standalone",
+  "scope": "/login",
   "icons": [
     {
-      "src": "/favicons//android-chrome-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png"
+      "src": "/favicon/icons/icon_ios_120x120.png",
+      "type": "image/png",
+      "sizes": "120x120",
+      "purpose": "any"
     },
     {
-      "src": "/favicons//android-chrome-256x256.png",
-      "sizes": "256x256",
-      "type": "image/png"
+      "src": "/favicon/icons/icon_ios_152x152.png",
+      "type": "image/png",
+      "sizes": "152x152",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon/icons/icon_ios_167x167.png",
+      "type": "image/png",
+      "sizes": "167x167",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon/icons/icon_ios_180x180.png",
+      "type": "image/png",
+      "sizes": "180x180",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon/icons/icon_android_36x36.png",
+      "type": "image/png",
+      "sizes": "36x36",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon/icons/icon_android_48x48.png",
+      "type": "image/png",
+      "sizes": "48x48",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon/icons/icon_android_72x72.png",
+      "type": "image/png",
+      "sizes": "72x72",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon/icons/icon_android_96x96.png",
+      "type": "image/png",
+      "sizes": "96x96",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon/icons/icon_android_144x144.png",
+      "type": "image/png",
+      "sizes": "144x144",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon/icons/icon_android_192x192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon/icons/icon_android_512x512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any"
     }
-  ]
+  ],
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff"
 }

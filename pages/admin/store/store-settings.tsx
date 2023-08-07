@@ -2,7 +2,7 @@ import { useQuery } from '@apollo/client';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
-import { SETTINGS } from '@graphql/settings';
+import { STORE_SETTINGS } from '@graphql/settings';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetUser } from '@hooks/useGetUser';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
@@ -21,18 +21,18 @@ const StoreSettingsForm = dynamic(
 );
 
 interface tSettings {
-  getSettings: SettingsType;
+  getStoreSettings: SettingsType;
 }
 
 export default function StoreSettings({ client }: SSRProps) {
   const { t } = useTranslation();
 
-  const { data, loading, error } = useQuery<tSettings>(SETTINGS, {
+  const { data, loading, error } = useQuery<tSettings>(STORE_SETTINGS, {
     variables: {},
     fetchPolicy: 'cache-and-network'
   });
 
-  const { getSettings: settings } = data ?? {};
+  const { getStoreSettings: settings } = data ?? {};
 
   useGetUser(client);
   useErrorLogger(error);

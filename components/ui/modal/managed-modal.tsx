@@ -11,7 +11,8 @@ import {
   DELETE_SLIDER,
   DELETE_SUPPLIER,
   DELETE_TAG,
-  DELETE_USER
+  DELETE_USER,
+  FAVICON_VIEWER_MODAL
 } from '@ts-types/constants';
 import dynamic from 'next/dynamic';
 
@@ -61,6 +62,10 @@ const DeliveryTimeDeleteView = dynamic(
   () => import('@components/delivery-time/delivery-delete-view')
 );
 
+const FaviconModalView = dynamic(
+  () => import('@components/settings/favicon-modal-view')
+);
+
 // const AttributeExportImport = dynamic(
 //   () => import('@components/attribute/attribute-import-export')
 // );
@@ -83,6 +88,7 @@ const ManagedModal = () => {
       {view === DELETE_SLIDER && <SliderDeleteView />}
       {view === DELETE_MANUFACTURER && <ManufacturerDeleteView />}
       {view === DELETE_DELIVERY_TIME && <DeliveryTimeDeleteView />}
+      {view === FAVICON_VIEWER_MODAL && <FaviconModalView />}
     </Modal>
   );
 };

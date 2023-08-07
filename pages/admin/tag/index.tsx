@@ -1,5 +1,6 @@
 import { useQuery } from '@apollo/client';
 import AppLayout from '@components/layouts/app';
+import TagList from '@components/tag/tag-list';
 import { Error } from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { TAGS } from '@graphql/tag';
@@ -33,10 +34,6 @@ const PageMainAction = dynamic(
     loading: () => <div className="animated-background w-full h-[80px]"></div>
   }
 );
-
-const TagList = dynamic(() => import('@components/tag/tag-list'), {
-  ssr: true
-});
 
 interface TTags {
   tags: Tag[];

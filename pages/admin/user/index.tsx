@@ -2,6 +2,7 @@ import { useQuery } from '@apollo/client';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
+import UserList from '@components/user/user-list';
 import { USERS } from '@graphql/user';
 import { useErrorLogger, useGetUser } from '@hooks/index';
 import { useTableColumn } from '@hooks/useTableColumn';
@@ -33,10 +34,6 @@ const PageMainAction = dynamic(
     loading: () => <div className="animated-background w-full h-[80px]"></div>
   }
 );
-
-const UserList = dynamic(() => import('@components/user/user-list'), {
-  ssr: true
-});
 
 interface TUser {
   users: UserType[];

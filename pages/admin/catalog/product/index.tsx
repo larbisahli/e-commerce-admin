@@ -1,5 +1,6 @@
 import { useQuery } from '@apollo/client';
 import AppLayout from '@components/layouts/app';
+import ProductList from '@components/product/product-list';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { PRODUCTS } from '@graphql/product';
@@ -34,10 +35,6 @@ const PageMainAction = dynamic(
     loading: () => <div className="animated-background w-full h-[80px]"></div>
   }
 );
-
-const ProductList = dynamic(() => import('@components/product/product-list'), {
-  ssr: true
-});
 
 interface TProduct {
   products: Product[];

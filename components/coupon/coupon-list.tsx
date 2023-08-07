@@ -4,15 +4,20 @@ import ActionButtons from '@components/common/action-buttons';
 import { CopyIcon } from '@components/icons/copy';
 import Badge from '@components/ui/badge/badge';
 import ProfileCart from '@components/ui/profile-card';
-import { Table } from '@components/ui/table';
 import { notify } from '@lib/index';
 import { Coupon, CouponType, CreatedUpdatedByAt } from '@ts-types/generated';
 import { useIsRTL } from '@utils/locals';
 import { ROUTES } from '@utils/routes';
 import { CopyToClipboard } from '@utils/utils';
 import dayjs from 'dayjs';
+import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
 import { useMemo } from 'react';
+
+const Table = dynamic(
+  () => import('@components/ui/table').then((mod) => mod.Table),
+  { ssr: false }
+);
 
 type IProps = {
   coupons: Coupon[] | null | undefined;

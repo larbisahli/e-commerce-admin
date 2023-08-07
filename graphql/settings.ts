@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
-export const SETTINGS = gql`
-  query GetSettings {
-    getSettings {
+export const STORE_SETTINGS = gql`
+  query GetStoreSettings {
+    getStoreSettings {
       id
       favicon {
         id
@@ -17,6 +17,8 @@ export const SETTINGS = gql`
       storeName
       storeEmail
       storeNumber
+      addressLine1
+      addressLine2
       currency {
         symbol
         code
@@ -31,6 +33,7 @@ export const SETTINGS = gql`
         }
       }
       maxCheckoutQuantity
+      maxCheckoutAmount
       seo {
         metaTitle
         metaDescription
@@ -47,11 +50,19 @@ export const SETTINGS = gql`
         canonicalUrl
       }
       google {
-        isEnable
-        tagManagerId
+        isEnabled
+        trackingId
+        isTrackVisitors
+        isTrackOrders
+        isTrackUserRegister
+        isTrackUserLogin
+        isTrackCheckoutOptions
+        isTrackProductAddToCart
+        isTrackProductRemoveToCart
+        isTrackCheckout
       }
       facebook {
-        isEnable
+        isEnabled
         AppId
         pageId
       }
@@ -59,31 +70,37 @@ export const SETTINGS = gql`
   }
 `;
 
-export const UPDATE_SETTINGS = gql`
-  mutation UpdateSettings(
+export const UPDATE_STORE_SETTINGS = gql`
+  mutation UpdateStoreSettings(
     $favicon: [ImageInput]
     $logo: [ImageInput]
     $storeName: String
     $storeEmail: String
     $storeNumber: String
+    $addressLine1: String
+    $addressLine2: String
     $currency: CurrencyInput
     $canonicalUrl: String
     $socials: [SocialInput]
     $maxCheckoutQuantity: Int
-    $seo: SettingsSeoInput
+    $maxCheckoutAmount: Int
+    $seo: StoreSettingsSeoInput
     $google: GoogleSettingsInput
     $facebook: FacebookSettingsInput
   ) {
-    updateSettings(
+    updateStoreSettings(
       favicon: $favicon
       logo: $logo
       storeName: $storeName
       storeEmail: $storeEmail
       storeNumber: $storeNumber
+      addressLine1: $addressLine1
+      addressLine2: $addressLine2
       currency: $currency
       canonicalUrl: $canonicalUrl
       socials: $socials
       maxCheckoutQuantity: $maxCheckoutQuantity
+      maxCheckoutAmount: $maxCheckoutAmount
       seo: $seo
       google: $google
       facebook: $facebook

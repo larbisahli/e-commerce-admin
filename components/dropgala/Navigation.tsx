@@ -1,4 +1,5 @@
 import cn from 'classnames';
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
 const { default: Link } = require('next/link');
@@ -37,8 +38,8 @@ const Navigation = () => {
         <div className="flex justify-between content-end w-full">
           <div className="flex items-center">
             <Link href="/">
-              <a className="leading-normal text-center text-blue-600 text-2xl font-bold">
-                Dropgala
+              <a className="leading-normal text-center text-blue-600 pt-2">
+                <Image src={'/logo.svg'} alt="logo" width={120} height={30} />
               </a>
             </Link>
             <Link href="/#features">

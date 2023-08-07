@@ -1,5 +1,6 @@
 import { useQuery } from '@apollo/client';
 import AppLayout from '@components/layouts/app';
+import OrderStatusList from '@components/order-status/order-status-list';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { ORDER_STATUSES } from '@graphql/order-status';
@@ -32,11 +33,6 @@ const PageMainAction = dynamic(
     ssr: true,
     loading: () => <div className="animated-background w-full h-[80px]"></div>
   }
-);
-
-const OrderStatusList = dynamic(
-  () => import('@components/order-status/order-status-list'),
-  { ssr: true }
 );
 
 interface TOrderStatus {

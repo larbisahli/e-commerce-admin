@@ -59,6 +59,8 @@
   "table-item-usage-limit": "Usage limit",
   "table-item-size": "Size",
   "table-item-value": "Value",
+  "table-item-date": "Date",
+  "table-item-message": "Message",
   "table-item-roles": "Roles",
   "table-item-order-amount-limit": "Order Amount Limit",
   "table-item-company": "Company",

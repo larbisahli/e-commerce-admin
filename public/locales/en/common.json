@@ -138,6 +138,8 @@
   "authorized-nav-item-store": "Store",
   "sidebar-nav-item-account-settings": "Account Settings",
   "sidebar-nav-item-payment-methods": "Payment Methods",
+  "sidebar-nav-item-checkout-settings": "Checkout Settings",
+  "sidebar-nav-item-multi-currency": "Multi Currency",
   "sidebar-nav-item-tax": "Tax",
   "authorized-nav-item-account-settings": "Account Settings",
   "authorized-nav-item-logout": "Logout",

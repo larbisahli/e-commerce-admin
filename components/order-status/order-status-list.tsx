@@ -1,7 +1,6 @@
 import ActionButtons from '@components/common/action-buttons';
 import Badge from '@components/ui/badge/badge';
 import ProfileCart from '@components/ui/profile-card';
-import { Table } from '@components/ui/table';
 import {
   CreatedUpdatedByAt,
   OrderStatus,
@@ -10,8 +9,14 @@ import {
 import { useIsRTL } from '@utils/locals';
 import { ROUTES } from '@utils/routes';
 import dayjs from 'dayjs';
+import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
 import { useMemo } from 'react';
+
+const Table = dynamic(
+  () => import('@components/ui/table').then((mod) => mod.Table),
+  { ssr: false }
+);
 
 export type IProps = {
   orderStatuses: OrderStatus[] | undefined | null;

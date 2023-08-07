@@ -1,5 +1,6 @@
 import type { ModalView, Nullable } from '@ts-types/custom.types';
 import React from 'react';
+
 interface State {
   view?: ModalView;
   id?: Nullable<String>;

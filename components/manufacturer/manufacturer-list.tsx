@@ -1,7 +1,6 @@
 import ActionButtons from '@components/common/action-buttons';
 import ImageComponent from '@components/ImageComponent';
 import ProfileCart from '@components/ui/profile-card';
-import { Table } from '@components/ui/table';
 import { siteSettings } from '@settings/site.settings';
 import { DELETE_MANUFACTURER } from '@ts-types/constants';
 import {
@@ -12,10 +11,16 @@ import {
 } from '@ts-types/generated';
 import { useIsRTL } from '@utils/locals';
 import dayjs from 'dayjs';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import React, { useMemo } from 'react';
+
+const Table = dynamic(
+  () => import('@components/ui/table').then((mod) => mod.Table),
+  { ssr: false }
+);
 
 type IProps = {
   manufacturers: ManufacturerType[];

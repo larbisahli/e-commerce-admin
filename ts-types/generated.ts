@@ -454,6 +454,8 @@ export interface SettingsType {
   storeName?: string;
   storeEmail?: string;
   storeNumber?: string;
+  addressLine1?: string;
+  addressLine2?: string;
   currency?: {
     symbol: string;
     name: string;
@@ -472,6 +474,7 @@ export interface SettingsType {
     };
   }[];
   maxCheckoutQuantity?: number;
+  maxCheckoutAmount?: number;
   seo?: {
     metaTitle: string;
     metaDescription: string;
@@ -484,11 +487,19 @@ export interface SettingsType {
     canonicalUrl: string;
   };
   google?: {
-    isEnable: boolean;
-    tagManagerId: string;
+    isEnabled: boolean;
+    trackingId: string;
+    isTrackVisitors: boolean;
+    isTrackOrders: boolean;
+    isTrackUserRegister: boolean;
+    isTrackUserLogin: boolean;
+    isTrackCheckoutOptions: boolean;
+    isTrackProductAddToCart: boolean;
+    isTrackProductRemoveToCart: boolean;
+    isTrackCheckout: boolean;
   };
   facebook?: {
-    isEnable: boolean;
+    isEnabled: boolean;
     appId: string;
     pageId: string;
   };

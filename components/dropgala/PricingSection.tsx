@@ -209,6 +209,15 @@ const PricingSection = () => {
                     <CheckMark width={11} height={11} />
                   </div>
                   <span className="mx-2 text-gray-800 font-medium">
+                    Multinational store
+                  </span>
+                </div>
+                {/* ------------- */}
+                <div className="flex items-center mt-3">
+                  <div className="rounded-full flex items-center justify-center text-white bg-black w-5 h-5">
+                    <CheckMark width={11} height={11} />
+                  </div>
+                  <span className="mx-2 text-gray-800 font-medium">
                     Unlimited customer reviews
                   </span>
                 </div>

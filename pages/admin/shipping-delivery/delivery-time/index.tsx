@@ -1,4 +1,5 @@
 import { useQuery } from '@apollo/client';
+import DeliveryList from '@components/delivery-time/delivery-list';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
@@ -34,11 +35,6 @@ const PageMainAction = dynamic(
     ssr: true,
     loading: () => <div className="animated-background w-full h-[80px]"></div>
   }
-);
-
-const DeliveryList = dynamic(
-  () => import('@components/delivery-time/delivery-list'),
-  { ssr: true }
 );
 
 interface TDelivery {

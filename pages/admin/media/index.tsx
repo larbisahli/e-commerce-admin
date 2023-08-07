@@ -16,7 +16,10 @@ import Head from 'next/head';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-const MediaList = dynamic(() => import('@components/media'), { ssr: true });
+const MediaList = dynamic(() => import('@components/media'), {
+  ssr: true,
+  loading: () => <Loader text={'Loading'} />
+});
 
 interface TMedia {
   media: {

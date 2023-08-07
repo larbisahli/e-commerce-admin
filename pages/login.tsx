@@ -28,10 +28,10 @@ const LoginPage = ({ client }: SSRProps) => {
     <Fragment>
       <div className="flex  h-screen items-center justify-center">
         <div className="flex-1 h-full border border-gray-100">
-          <div className="m-2 mt-5 mx-22">
+          <div className="m-2 mt-5 mx-12">
             <Link href={'/'}>
-              <a className="leading-normal text-blue-600 text-2xl font-bold">
-                Dropgala
+              <a className="leading-normal text-center text-blue-600 pt-2">
+                <Image src={'/logo.svg'} alt="logo" width={120} height={30} />
               </a>
             </Link>
           </div>

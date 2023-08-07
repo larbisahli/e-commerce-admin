@@ -1,12 +1,16 @@
-import { Table } from '@components/ui/table';
-import usePrice from '@utils/use-price';
 // import { Order, OrderStatus } from '@ts-types/generated';
 import dayjs from 'dayjs';
 // import usePrice from '@utils/use-price';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
+import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
+
+const Table = dynamic(
+  () => import('@components/ui/table').then((mod) => mod.Table),
+  { ssr: false }
+);
 
 type IProps = {
   orders: any[];

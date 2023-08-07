@@ -1,7 +1,6 @@
 import ActionButtons from '@components/common/action-buttons';
 import ImageComponent from '@components/ImageComponent';
 import Badge from '@components/ui/badge/badge';
-import { Table } from '@components/ui/table';
 import { siteSettings } from '@settings/site.settings';
 import type { Nullable } from '@ts-types/custom.types';
 import {
@@ -15,8 +14,14 @@ import { useIsRTL } from '@utils/locals';
 import { ROUTES } from '@utils/routes';
 import dayjs from 'dayjs';
 import isEmpty from 'lodash/isEmpty';
+import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
 import { useMemo } from 'react';
+
+const Table = dynamic(
+  () => import('@components/ui/table').then((mod) => mod.Table),
+  { ssr: false }
+);
 
 type IProps = {
   products: Nullable<Product[]>;

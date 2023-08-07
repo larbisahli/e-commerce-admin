@@ -1,23 +1,29 @@
-import Pagination from '@components/ui/pagination';
-import dayjs from 'dayjs';
-import { Table } from '@components/ui/table';
 import ActionButtons from '@components/common/action-buttons';
-import usePrice from '@utils/use-price';
-import { formatAddress } from '@utils/format-address';
-import relativeTime from 'dayjs/plugin/relativeTime';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
+import Pagination from '@components/ui/pagination';
+import { PDFDownloadLink } from '@react-pdf/renderer';
 import {
   Order,
   OrderPaginator,
   OrderStatus,
   UserAddress
 } from '@ts-types/generated';
-import InvoicePdf from './invoice-pdf';
-import { PDFDownloadLink } from '@react-pdf/renderer';
+import { formatAddress } from '@utils/format-address';
+import { useIsRTL } from '@utils/locals';
+import usePrice from '@utils/use-price';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
-import { useIsRTL } from '@utils/locals';
+
+import InvoicePdf from './invoice-pdf';
+
+const Table = dynamic(
+  () => import('@components/ui/table').then((mod) => mod.Table),
+  { ssr: false }
+);
 
 type IProps = {
   orders: OrderPaginator | null | undefined;

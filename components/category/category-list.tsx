@@ -1,14 +1,19 @@
 import ActionButtons from '@components/common/action-buttons';
 import ProfileCart from '@components/ui/profile-card';
-import { Table } from '@components/ui/table';
 import { Category, CreatedUpdatedByAt } from '@ts-types/generated';
 import { useIsRTL } from '@utils/locals';
 import { ROUTES } from '@utils/routes';
 import cn from 'classnames';
 import dayjs from 'dayjs';
 import isEmpty from 'lodash/isEmpty';
+import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
 import React, { useMemo } from 'react';
+
+const Table = dynamic(
+  () => import('@components/ui/table').then((mod) => mod.Table),
+  { ssr: false }
+);
 
 export type IProps = {
   categories: Category[];

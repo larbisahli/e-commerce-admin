@@ -1,5 +1,6 @@
 import { useQuery } from '@apollo/client';
 import AppLayout from '@components/layouts/app';
+import ShippingList from '@components/shipping-zone/shipping-list';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { SHIPPING_ZONES } from '@graphql/shipping-zone';
@@ -34,11 +35,6 @@ const PageMainAction = dynamic(
     ssr: true,
     loading: () => <div className="animated-background w-full h-[80px]"></div>
   }
-);
-
-const ShippingList = dynamic(
-  () => import('@components/shipping-zone/shipping-list'),
-  { ssr: true }
 );
 
 interface TShipping {

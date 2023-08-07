@@ -1,12 +1,17 @@
 import ImageComponent from '@components/ImageComponent';
 import Checkbox from '@components/ui/checkbox';
-import { Table } from '@components/ui/table';
 import { siteSettings } from '@settings/site.settings';
 import type { Nullable } from '@ts-types/custom.types';
 import type { ImageType, Product } from '@ts-types/generated';
 import { useIsRTL } from '@utils/locals';
+import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
 import React, { useMemo } from 'react';
+
+const Table = dynamic(
+  () => import('@components/ui/table').then((mod) => mod.Table),
+  { ssr: false }
+);
 
 type IProps = {
   products: Nullable<Product[]>;

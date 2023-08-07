@@ -1,5 +1,6 @@
 import { useQuery } from '@apollo/client';
 import AppLayout from '@components/layouts/app';
+import SuppliersList from '@components/suppliers/supplier-list';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { SUPPLIERS } from '@graphql/supplier';
@@ -31,11 +32,6 @@ const PageMainAction = dynamic(
     ssr: true,
     loading: () => <div className="animated-background w-full h-[80px]"></div>
   }
-);
-
-const SuppliersList = dynamic(
-  () => import('@components/suppliers/supplier-list'),
-  { ssr: true }
 );
 
 interface TSupplier {

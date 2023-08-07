@@ -1,13 +1,15 @@
 import { useQuery } from '@apollo/client';
+import CategoryList from '@components/category/category-list';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
-import { ATTRIBUTES } from '@graphql/attribute';
+import { CATEGORIES } from '@graphql/category';
 import { useErrorLogger, useGetUser } from '@hooks/index';
 import { useTableColumn } from '@hooks/useTableColumn';
-import { verifyAuth, XSRFHandler } from '@middleware/utils';
+import { verifyAuth } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
-import { Attribute, OrderBy, SortOrder } from '@ts-types/generated';
+import { OrderBy, SortOrder } from '@ts-types/generated';
+import { Category } from '@ts-types/generated';
 import { COLUMNS } from '@utils/data/table-columns';
 import { ROUTES } from '@utils/routes';
 import isEmpty from 'lodash/isEmpty';
@@ -34,14 +36,9 @@ const PageMainAction = dynamic(
   }
 );
 
-const AttributeList = dynamic(
-  () => import('@components/attribute/attribute-list'),
-  { ssr: true }
-);
-
-interface TAttributes {
-  attributes: Attribute[];
-  attributeCount: { count: number };
+interface TCategories {
+  categories: Category[];
+  categoryCount: { count: number };
 }
 
 interface OptionsVariable {
@@ -51,7 +48,7 @@ interface OptionsVariable {
   sortedBy: SortOrder;
 }
 
-export default function AttributePage({ client }: SSRProps) {
+export default function Categories({ client }: SSRProps) {
   const { t } = useTranslation();
 
   const [page, setPage] = useState(1);
@@ -59,12 +56,12 @@ export default function AttributePage({ client }: SSRProps) {
   const [limit, setLimit] = useState({ id: 1, value: 10, label: 10 });
 
   const { selectedTableColumns, handleColumnChange } =
-    useTableColumn('attribute');
+    useTableColumn('category');
 
   const { data, loading, error, fetchMore } = useQuery<
-    TAttributes,
+    TCategories,
     OptionsVariable
-  >(ATTRIBUTES, {
+  >(CATEGORIES, {
     variables: {
       page,
       limit: limit.value,
@@ -74,7 +71,7 @@ export default function AttributePage({ client }: SSRProps) {
     fetchPolicy: 'cache-and-network'
   });
 
-  const { attributes = [], attributeCount: { count } = { count: 0 } } =
+  const { categories = [], categoryCount: { count } = { count: 0 } } =
     data ?? {};
 
   useGetUser(client);
@@ -102,21 +99,21 @@ export default function AttributePage({ client }: SSRProps) {
   return (
     <>
       <Head>
-        <title>Attribute | Dropgala</title>
+        <title>Category | Dropgala</title>
         <link
           rel="icon"
           type="image/svg"
           sizes="32x32"
-          href="/svg/attribute.svg"
+          href="/svg/category.svg"
         />
       </Head>
       <PageMainAction
-        href={`${ROUTES.ATTRIBUTE}/create`}
-        title={t('common:sidebar-nav-item-attributes')}
-        label={t('form:button-label-add-attributes')}
+        href={`${ROUTES.CATEGORY}/create`}
+        title={t('form:input-label-categories')}
+        label={t('form:button-label-add-categories')}
       />
       <PageMainHeader
-        columns={COLUMNS['attribute']}
+        columns={COLUMNS['category']}
         selectedColumns={selectedTableColumns}
         handleColumnChange={handleColumnChange}
         onLimitChange={(value) => {
@@ -128,15 +125,15 @@ export default function AttributePage({ client }: SSRProps) {
         currentPage={page}
         perPage={limit.value}
       />
-      <AttributeList
-        attributes={attributes}
+      <CategoryList
+        categories={categories}
         selectedColumns={selectedTableColumns}
       />
     </>
   );
 }
 
-AttributePage.Layout = AppLayout;
+Categories.Layout = AppLayout;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { locale } = context;
@@ -151,17 +148,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
-  const { csrfToken, csrfError } = await XSRFHandler(context);
-
   return {
     props: {
       ...(await serverSideTranslations(locale!, [
-        'table',
-        'common',
         'form',
+        'common',
+        'table',
         'error'
       ])),
-      client: { ...(client ?? {}), csrfToken, csrfError }
+      client
     }
   };
 };

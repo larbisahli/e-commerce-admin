@@ -1,9 +1,7 @@
 import ActionButtons from '@components/common/action-buttons';
 import ImageComponent from '@components/ImageComponent';
 import Badge from '@components/ui/badge/badge';
-import Pagination from '@components/ui/pagination';
 import ProfileCart from '@components/ui/profile-card';
-import { Table } from '@components/ui/table';
 import { siteSettings } from '@settings/site.settings';
 import {
   CreatedUpdatedByAt,
@@ -14,8 +12,14 @@ import {
 import { useIsRTL } from '@utils/locals';
 import { ROUTES } from '@utils/routes';
 import dayjs from 'dayjs';
+import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
 import { useMemo } from 'react';
+
+const Table = dynamic(
+  () => import('@components/ui/table').then((mod) => mod.Table),
+  { ssr: false }
+);
 
 export type IProps = {
   shippingZones: ShippingZoneType[] | undefined;

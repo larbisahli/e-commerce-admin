@@ -116,7 +116,7 @@ const ImageModal = ({
       <Modal open={isOpen && isCurrentModal} onClose={closeModal}>
         {view === IMAGE_MODAL && (
           <div className="flex overflow-y-auto max-h-screen flex-col bg-white md:h-fit h-[100vh] w-[100vw] md:w-[70vw] 2xl:w-[60vw]">
-            <div className="p-4 font-semibold text-lg bg-green-600 text-white capitalize">
+            <div className="p-4 font-semibold text-lg bg-blue-600 text-white capitalize">
               Choose media
             </div>
             <div className="p-4 h-fit min-h-[400px] w-full">
@@ -201,7 +201,7 @@ const ImageModal = ({
                     })}
                   </ul>
                 </div>
-                <div className="flex items-center mt-3 md:mb-0 justify-end mb-16">
+                <div className="flex items-center mt-3 md:mb-0 justify-end pb-8">
                   <Button
                     variant="outline"
                     className="mr-4"

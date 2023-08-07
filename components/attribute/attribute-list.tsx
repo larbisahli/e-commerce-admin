@@ -1,6 +1,5 @@
 import ActionButtons from '@components/common/action-buttons';
 import ProfileCart from '@components/ui/profile-card';
-import { Table } from '@components/ui/table';
 import {
   Attribute,
   AttributeValue,
@@ -8,9 +7,15 @@ import {
 } from '@ts-types/generated';
 import { useIsRTL } from '@utils/locals';
 import dayjs from 'dayjs';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import React, { useMemo } from 'react';
+
+const Table = dynamic(
+  () => import('@components/ui/table').then((mod) => mod.Table),
+  { ssr: false }
+);
 
 type IProps = {
   attributes: Attribute[];

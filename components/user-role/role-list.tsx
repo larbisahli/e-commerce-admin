@@ -1,10 +1,15 @@
 import ActionButtons from '@components/common/action-buttons';
-import { Table } from '@components/ui/table';
 import { RoleType } from '@ts-types/generated';
 import { useIsRTL } from '@utils/locals';
 import { ROUTES } from '@utils/routes';
+import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
 import { useMemo } from 'react';
+
+const Table = dynamic(
+  () => import('@components/ui/table').then((mod) => mod.Table),
+  { ssr: false }
+);
 
 type IProps = {
   roles: RoleType[] | null | undefined;

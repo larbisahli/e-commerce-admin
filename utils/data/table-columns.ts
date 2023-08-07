@@ -132,5 +132,11 @@ export const COLUMNS = {
     { label: 'Placed By', key: 'createdBy' },
     { label: 'Updated By', key: 'updatedBy' },
     { label: 'Actions', key: 'actions' }
+  ],
+  notification: [
+    { label: 'Title', key: 'title' },
+    { label: 'Date', key: 'date' },
+    { label: 'Message', key: 'content' },
+    { label: 'Actions', key: 'actions' }
   ]
 };

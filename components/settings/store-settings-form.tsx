@@ -1,5 +1,6 @@
 import { useMutation } from '@apollo/client';
 import Card from '@components/common/card';
+import { Eye } from '@components/icons/eye-icon';
 import * as socialIcons from '@components/icons/social';
 import ImageModal from '@components/image-modal';
 import Button from '@components/ui/button';
@@ -8,14 +9,15 @@ import Description from '@components/ui/description';
 import ValidationError from '@components/ui/form-validation-error';
 import Input from '@components/ui/input';
 import Label from '@components/ui/label';
+import { useModalAction } from '@components/ui/modal/modal.context';
 import SelectInput from '@components/ui/select-input';
 import TextArea from '@components/ui/text-area';
-import { UPDATE_SETTINGS } from '@graphql/settings';
+import { UPDATE_STORE_SETTINGS } from '@graphql/settings';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetUser } from '@hooks/useGetUser';
 import { notify } from '@lib/notify';
-import { siteSettings } from '@settings/site.settings';
+import { FAVICON_VIEWER_MODAL } from '@ts-types/constants';
 import { SettingsType } from '@ts-types/generated';
 import { CURRENCY } from '@utils/currency';
 import { isEmpty } from 'lodash';
@@ -102,9 +104,11 @@ export default function StoreSettingsForm({ settings }: IProps) {
 
   const { userInfo } = useGetUser();
 
+  const { openModal } = useModalAction();
+
   const csrfToken = userInfo?.csrfToken;
 
-  const [updateSettings, { loading }] = useMutation(UPDATE_SETTINGS, {
+  const [updateSettings, { loading }] = useMutation(UPDATE_STORE_SETTINGS, {
     context: {
       headers: {
         'x-csrf-token': csrfToken
@@ -153,15 +157,25 @@ export default function StoreSettingsForm({ settings }: IProps) {
       {t('form:logo-help-text')} <br />
       {t('form:logo-dimension-help-text')} &nbsp;
       <span className="font-bold">
-        {siteSettings.logo.width}x{siteSettings.logo.height} {t('common:pixel')}
+        {'350x50'} {t('common:pixel')}
+      </span>
+    </span>
+  );
+
+  const faviconInformation = (
+    <span>
+      {t('form:favicon-help-text')} <br />
+      {t('form:favicon-dimension-help-text')} &nbsp;
+      <span className="font-bold">
+        {'625x625'} {t('common:pixel')}
       </span>
     </span>
   );
 
   useEffect(() => {
-    setLogo(settings.logo);
-    setFavicon(settings.favicon);
-    setOgImage(settings.seo.ogImage);
+    setLogo(settings?.logo);
+    setFavicon(settings?.favicon);
+    setOgImage(settings?.seo?.ogImage);
   }, []);
 
   return (
@@ -186,7 +200,7 @@ export default function StoreSettingsForm({ settings }: IProps) {
       <div className="flex flex-wrap pb-8 border-b border-dashed border-border-base my-5 sm:my-8">
         <Description
           title={t('form:input-label-favicon')}
-          details={logoInformation}
+          details={faviconInformation}
           className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
         />
 
@@ -198,6 +212,18 @@ export default function StoreSettingsForm({ settings }: IProps) {
             modalId="favicon"
             label="form:label-add-store-favicon"
           />
+          <div className="flex justify-end">
+            <Button
+              onClick={(e) => {
+                e.preventDefault();
+                openModal(FAVICON_VIEWER_MODAL, 'modalId');
+              }}
+              variant="outline"
+            >
+              <Eye width={20} height={20} />
+              <span className="mx-1 text-sm">View favicons</span>
+            </Button>
+          </div>
         </Card>
       </div>
 
@@ -230,6 +256,20 @@ export default function StoreSettingsForm({ settings }: IProps) {
             className="mb-5"
             error={t(errors.storeNumber?.message!)}
           />
+          <Input
+            label={t('form:input-label-address-1')}
+            {...register('addressLine1')}
+            error={t(errors.storeName?.message!)}
+            variant="outline"
+            className="mb-5"
+          />
+          <Input
+            label={t('form:input-label-address-2')}
+            {...register('addressLine2')}
+            error={t(errors.storeName?.message!)}
+            variant="outline"
+            className="mb-5"
+          />
           <div className="mb-5">
             <Label>{t('form:input-label-currency')}</Label>
             <SelectInput
@@ -245,6 +285,15 @@ export default function StoreSettingsForm({ settings }: IProps) {
           <Input
             label={`${t('form:input-label-max-checkout-quantity')}`}
             {...register('maxCheckoutQuantity')}
+            type="number"
+            error={t(errors.maxCheckoutQuantity?.message!)}
+            variant="outline"
+            className="mb-5"
+          />
+
+          <Input
+            label={`${t('form:input-label-max-checkout-amount')}`}
+            {...register('maxCheckoutAmount')}
             type="number"
             error={t(errors.maxCheckoutQuantity?.message!)}
             variant="outline"
@@ -329,71 +378,44 @@ export default function StoreSettingsForm({ settings }: IProps) {
           <div className="my-5 flex flex-wrap">
             <div className="flex-1 min-w-[300px]">
               <Checkbox
-                name="google.isTrackOrders"
-                // onChange={handleChange}
-                // onMouseLeaveTopLevel={checkForUpdateHandler}
-                // checked={disableOutOfStock}
+                {...register(`google.isTrackVisitors` as const)}
+                label={'Track Visitors'}
+              />
+              <Checkbox
+                {...register(`google.isTrackOrders` as const)}
                 label={t('form:input-label-track-orders')}
               />
               <Checkbox
-                name="google.isTrackOrdersA"
-                // onChange={handleChange}
-                // onMouseLeaveTopLevel={checkForUpdateHandler}
-                // checked={disableOutOfStock}
+                {...register(`google.isTrackUserLogin` as const)}
                 label={'Track user login'}
               />
               <Checkbox
-                name="google.isTrackOrdersB"
-                // onChange={handleChange}
-                // onMouseLeaveTopLevel={checkForUpdateHandler}
-                // checked={disableOutOfStock}
+                {...register(`google.isTrackUserRegister` as const)}
                 label={'Track user register'}
               />
               <Checkbox
-                name="google.isTrackOrdersF"
-                // onChange={handleChange}
-                // onMouseLeaveTopLevel={checkForUpdateHandler}
-                // checked={disableOutOfStock}
+                {...register(`google.isTrackCheckoutOptions` as const)}
                 label={'Track checkout options'}
               />
             </div>
             <div className="flex-1 min-w-[300px]">
               <Checkbox
-                name="google.isTrackOrdersC"
-                // onChange={handleChange}
-                // onMouseLeaveTopLevel={checkForUpdateHandler}
-                // checked={disableOutOfStock}
+                {...register(`google.isTrackProductAddToCart` as const)}
                 label={'Track product add to cart'}
               />
               <Checkbox
-                name="google.isTrackOrdersD"
-                // onChange={handleChange}
-                // onMouseLeaveTopLevel={checkForUpdateHandler}
-                // checked={disableOutOfStock}
+                {...register(`google.isTrackProductRemoveToCart` as const)}
                 label={'Track product remove from cart'}
               />
               <Checkbox
-                name="google.isTrackOrdersE"
-                // onChange={handleChange}
-                // onMouseLeaveTopLevel={checkForUpdateHandler}
-                // checked={disableOutOfStock}
+                {...register(`google.isTrackCheckout` as const)}
                 label={'Track checkout'}
-              />
-              <Checkbox
-                name="google.isTrackOrdersG"
-                // onChange={handleChange}
-                // onMouseLeaveTopLevel={checkForUpdateHandler}
-                // checked={disableOutOfStock}
-                label={'Track Visitors'}
               />
             </div>
           </div>
           <div className="my-5">
             <Checkbox
-              name="google.active"
-              // onChange={handleChange}
-              // onMouseLeaveTopLevel={checkForUpdateHandler}
-              // checked={disableOutOfStock}
+              {...register(`google.isEnabled` as const)}
               label={t('form:input-label-activate-google-analytics')}
             />
           </div>

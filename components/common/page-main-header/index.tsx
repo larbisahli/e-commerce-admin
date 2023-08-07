@@ -36,6 +36,8 @@ interface Props {
   onLimitChange?: Function;
   limit?: { id: number; value: number; label: number };
   showOnlyPagination?: boolean;
+  isFilterVisible?: boolean;
+  isExportVisible?: boolean;
 }
 
 const PageMainHeader = ({
@@ -48,7 +50,9 @@ const PageMainHeader = ({
   total = 0,
   currentPage,
   perPage,
-  showOnlyPagination = false
+  showOnlyPagination = false,
+  isFilterVisible = true,
+  isExportVisible = true
 }: Props) => {
   const { t } = useTranslation();
 
@@ -73,25 +77,30 @@ const PageMainHeader = ({
           </div>
         </div>
         <div className="flex items-center justify-end flex-wrap">
-          <button
-            onClick={() => handleOpenDrop('filter')}
-            className="text-sub-heading p-2 flex items-center cursor-pointer"
-          >
-            <div className="mr-2">
-              <FilterIcon height="1.2em" width="1.2em" />
-            </div>
-            <span className="">Filter</span>
-            <div className="ml-2">
-              <ArrowDown
-                height="1.2em"
-                width="1.2em"
-                className={cn('transition', {
-                  'rotate-180': openDrop === 'filter'
-                })}
-              />
-            </div>
-          </button>
-          <div className="w-[1px] h-[40px] bg-gray-300 mx-2"></div>
+          {isFilterVisible && (
+            <>
+              <button
+                onClick={() => handleOpenDrop('filter')}
+                className="text-sub-heading p-2 flex items-center cursor-pointer"
+              >
+                <div className="mr-2">
+                  <FilterIcon height="1.2em" width="1.2em" />
+                </div>
+                <span className="">Filter</span>
+                <div className="ml-2">
+                  <ArrowDown
+                    height="1.2em"
+                    width="1.2em"
+                    className={cn('transition', {
+                      'rotate-180': openDrop === 'filter'
+                    })}
+                  />
+                </div>
+                <div className="w-[1px] h-[40px] bg-gray-300 mx-2"></div>
+              </button>
+            </>
+          )}
+
           <button
             onClick={() => handleOpenDrop('columns')}
             className="text-sub-heading p-2 flex items-center cursor-pointer"
@@ -110,25 +119,30 @@ const PageMainHeader = ({
               />
             </div>
           </button>
-          <div className="w-[1px] h-[40px] bg-gray-300 mx-2"></div>
-          <button
-            onClick={() => handleOpenDrop('exports')}
-            className="text-sub-heading p-2 flex items-center cursor-pointer"
-          >
-            <div className="mr-2">
-              <ExportIcon height="1.2em" width="1.2em" />
-            </div>
-            <span className="">Exports</span>
-            <div className="ml-2">
-              <ArrowDown
-                height="1.2em"
-                width="1.2em"
-                className={cn('transition', {
-                  'rotate-180': openDrop === 'exports'
-                })}
-              />
-            </div>
-          </button>
+
+          {isExportVisible && (
+            <>
+              <div className="w-[1px] h-[40px] bg-gray-300 mx-2"></div>
+              <button
+                onClick={() => handleOpenDrop('exports')}
+                className="text-sub-heading p-2 flex items-center cursor-pointer"
+              >
+                <div className="mr-2">
+                  <ExportIcon height="1.2em" width="1.2em" />
+                </div>
+                <span className="">Exports</span>
+                <div className="ml-2">
+                  <ArrowDown
+                    height="1.2em"
+                    width="1.2em"
+                    className={cn('transition', {
+                      'rotate-180': openDrop === 'exports'
+                    })}
+                  />
+                </div>
+              </button>
+            </>
+          )}
           <Button className="rounded-full bg-white" size="small">
             <RefreshIcon width="25px" height="25px" />
           </Button>
@@ -173,7 +187,7 @@ const PageMainHeader = ({
       {/* ----- */}
       {renderControllers()}
       {/* --- Applied Filters --- */}
-      {renderAppliedFilter()}
+      {isFilterVisible && renderAppliedFilter()}
       {/* --- Dropdown --- */}
       {renderColumnsDropdown()}
       {/* ----- */}

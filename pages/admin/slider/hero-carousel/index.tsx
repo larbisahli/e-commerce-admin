@@ -1,4 +1,5 @@
 import { useQuery } from '@apollo/client';
+import HeroCarouselList from '@components/hero-carousel/hero-carousel-list';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
@@ -32,11 +33,6 @@ const PageMainAction = dynamic(
     ssr: true,
     loading: () => <div className="animated-background w-full h-[80px]"></div>
   }
-);
-
-const HeroCarouselList = dynamic(
-  () => import('@components/hero-carousel/hero-carousel-list'),
-  { ssr: true }
 );
 
 interface THeroCarousel {

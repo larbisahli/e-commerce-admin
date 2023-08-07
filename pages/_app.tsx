@@ -46,24 +46,30 @@ function App({ Component, pageProps }: AppProps) {
         <link
           rel="apple-touch-icon"
           sizes="180x180"
-          href="/favicons/apple-touch-icon.png"
+          href="/favicon/icons/icon_ios_180x180.png"
         />
         <link
           rel="icon"
           type="image/png"
-          sizes="32x32"
-          href="/favicons/favicon-32x32.png"
+          sizes="36x36"
+          href="/favicon/icons/icon_android_36x36.png"
         />
         <link
           rel="icon"
           type="image/png"
-          sizes="16x16"
-          href="/favicons/favicon-16x16.png"
+          sizes="48x48"
+          href="/favicon/icons/icon_android_48x48.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="72x72"
+          href="/favicon/icons/icon_android_72x72.png"
         />
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#020024" />
 
-        <meta property="og:image" content="https://dropgala.com//scandi.webp" />
+        <meta property="og:image" content="https://dropgala.com/scandi.webp" />
         <meta
           property="og:image:secure_url"
           content="https://dropgala.com/scandi.webp"
