@@ -67,6 +67,8 @@ const Navbar = () => {
     userInfo: { ali: alias }
   } = useGetUser();
 
+  const rev = 3439.89;
+
   return (
     <header
       className={cx(
@@ -94,6 +96,16 @@ const Navbar = () => {
             <span className={menuSpanClass}></span>
           </div>
         </motion.button>
+        <div className="px-8 flex justify-center">
+          <div className="p-2 px-3 border rounded shadow-sm flex flex-col items-center justify-center">
+            <span className="text-xs text-gray-600 font-medium">
+              {t('common:sticker-card-title-today-rev')}
+            </span>
+            <span className="text-green-500 font-medium">
+              ${rev?.toCommas()}
+            </span>
+          </div>
+        </div>
         <div className="px-8 flex-1 flex justify-center">
           <div className="max-w-[600px] flex-1">
             <SearchBar />

@@ -1,5 +1,6 @@
 import { BanUser } from '@components/icons/ban-user';
 import { CheckMarkCircle } from '@components/icons/checkmark-circle';
+import { CheckMarkFill } from '@components/icons/checkmark-circle-fill';
 import EditIcon from '@components/icons/edit';
 import { Eye } from '@components/icons/eye-icon';
 import Trash from '@components/icons/trash';
@@ -16,6 +17,8 @@ type Props = {
   userStatus?: boolean;
   isShopActive?: boolean;
   approveButton?: boolean;
+  activate?: boolean;
+  activated?: boolean;
 };
 
 const ActionButtons = ({
@@ -24,7 +27,9 @@ const ActionButtons = ({
   editUrl,
   detailsUrl,
   userStatus = false,
-  isUserActive = false
+  isUserActive = false,
+  activate = false,
+  activated = false
 }: Props) => {
   const { t } = useTranslation();
   const { openModal } = useModalAction();
@@ -61,7 +66,7 @@ const ActionButtons = ({
           ) : (
             <button
               onClick={() => handleUserStatus(id, 'active')}
-              className="text-accent transition duration-200 hover:text-accent focus:outline-none"
+              className="text-green-500 transition duration-200 hover:text-green-400 focus:outline-none"
               title={t('text-activate-user')}
             >
               <CheckMarkCircle width={20} />
@@ -87,6 +92,23 @@ const ActionButtons = ({
         >
           <Eye width={24} />
         </Link>
+      )}
+      {activate && (
+        <button
+          onClick={() => handleUserStatus(id, 'active')}
+          className="text-green-500 transition duration-200 hover:text-green-400 focus:outline-none"
+          title={'Activate theme'}
+        >
+          <CheckMarkCircle width={20} />
+        </button>
+      )}
+      {activated && (
+        <div
+          className="text-green-500 transition duration-200 hover:text-green-400 focus:outline-none"
+          title={'Default theme'}
+        >
+          <CheckMarkFill width={20} />
+        </div>
       )}
     </div>
   );

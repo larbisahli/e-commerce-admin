@@ -1,11 +1,17 @@
-import { CheckMark } from '@components/icons/checkmark';
-import { Eye } from '@components/icons/eye-icon';
+import ActionButtons from '@components/common/action-buttons';
 import StarIcon from '@components/icons/star';
 import ImageComponent from '@components/ImageComponent';
-import Button from '@components/ui/button';
-import { ThemeType } from '@ts-types/generated';
-import cn from 'classnames';
+import { siteSettings } from '@settings/site.settings';
+import { ImageType, ThemeType } from '@ts-types/generated';
+import { ROUTES } from '@utils/routes';
+import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
+import { useMemo } from 'react';
+
+const Table = dynamic(
+  () => import('@components/ui/table').then((mod) => mod.Table),
+  { ssr: false }
+);
 
 type IProps = {
   themes: ThemeType[] | null | undefined;
@@ -13,91 +19,156 @@ type IProps = {
 const MyThemeList = ({ themes }: IProps) => {
   const { t } = useTranslation();
 
-  const image = {
-    image: 'store/images/2023/5/1684555033_klcgqdchug.png',
-    placeholder: 'store/images/2023/5/1684555033_klcgqdchug_placeholder.png'
-  };
+  const thumbnail = [
+    {
+      image: 'store/images/2023/5/1684555033_klcgqdchug.png',
+      placeholder: 'store/images/2023/5/1684555033_klcgqdchug_placeholder.png'
+    }
+  ];
+
+  const tableColumns = useMemo(() => {
+    return [
+      {
+        title: t('table:table-item-logo'),
+        dataIndex: 'thumbnail',
+        key: 'thumbnail',
+        align: 'center',
+        width: 85,
+        render: (thumbnail_: ImageType[]) => {
+          const { image, placeholder } = thumbnail[0] ?? {};
+          return (
+            <div className="shadow min-w-0 overflow-hidden rounded-sm w-[100px] h-[100px] border">
+              <ImageComponent
+                src={image ?? siteSettings.product.image}
+                customPlaceholder={
+                  placeholder ?? siteSettings.product.placeholder
+                }
+                width={100}
+                height={100}
+                objectFit="cover"
+              />
+            </div>
+          );
+        }
+      },
+      {
+        title: t('table:table-item-title'),
+        dataIndex: 'title',
+        key: 'title',
+        align: 'center',
+        width: 120,
+        ellipsis: true,
+        render: (title: string) => (
+          <div>
+            <span
+              style={{ width: 'fit-content' }}
+              className="font-medium text-13px md:text-sm capitalize"
+            >
+              {title}
+            </span>
+          </div>
+        )
+      },
+      {
+        title: t('table:table-item-description'),
+        dataIndex: 'description',
+        key: 'description',
+        align: 'center',
+        width: 120,
+        ellipsis: true,
+        render: (description: string) => (
+          <div>
+            <span
+              style={{ width: 'fit-content' }}
+              className="font-medium text-13px md:text-sm capitalize"
+            >
+              {description}
+            </span>
+          </div>
+        )
+      },
+      {
+        title: t('table:table-item-theme-path'),
+        dataIndex: 'themePath',
+        key: 'themePath',
+        align: 'center',
+        width: 120,
+        render: (themePath: string) => (
+          <div>
+            <span
+              style={{ width: 'fit-content' }}
+              className="font-semibold text-13px md:text-sm"
+            >
+              {themePath}
+            </span>
+          </div>
+        )
+      },
+      {
+        title: t('table:table-item-version'),
+        dataIndex: 'version',
+        key: 'version',
+        align: 'center',
+        width: 90,
+        render: (version: string) => (
+          <div>
+            <span
+              style={{ width: 'fit-content' }}
+              className="font-semibold text-gray-400 text-13px md:text-sm"
+            >
+              {`v: ${version}`}
+            </span>
+          </div>
+        )
+      },
+      {
+        title: t('table:table-item-rating'),
+        dataIndex: 'ratingStarCount',
+        key: 'ratingStarCount',
+        align: 'center',
+        width: 100,
+        ellipsis: true,
+        render: (ratingStarCount: number) => (
+          <div className="flex items-center justify-center">
+            {Array.from({ length: ratingStarCount })?.map((_, idx) => (
+              <StarIcon key={idx} />
+            ))}
+            <span className="text-gray-500 text-xs pt-[5px] mx-[3px]">
+              {`(${ratingStarCount})`}
+            </span>
+          </div>
+        )
+      },
+      {
+        title: t('table:table-item-actions'),
+        dataIndex: 'id',
+        key: 'actions',
+        width: 80,
+        align: 'center',
+        render: (id: string, record: ThemeType) => (
+          <ActionButtons
+            id={id}
+            editUrl={record.isDefault ? `${ROUTES.THEME}/${id}` : null}
+            activate={!record.isDefault}
+            activated={record.isDefault}
+            deleteModalView={!record.isDefault ? 'DELETE_STORE_THEME' : null}
+          />
+        )
+      }
+    ];
+  }, [t]);
 
   return (
     <>
-      <div className="overflow-hidden mb-6">
-        {themes?.map((theme) => (
-          <div
-            key={theme.id}
-            className={cn(
-              'relative card my-5 rounded mx-auto max-w-[900px] flex border cursor-pointer hover:shadow-lg',
-              { 'border-green-500': theme.isDefault }
-            )}
-          >
-            {theme.isDefault && (
-              <div className="absolute right-0 top-0 p-1 bg-green-500 text-white">
-                <div>
-                  <CheckMark />
-                </div>
-              </div>
-            )}
-            <div className="min-w-[180px] rounded">
-              <ImageComponent
-                alt={'alt'}
-                src={image.image}
-                customPlaceholder={image.placeholder}
-                width={350}
-                height={300}
-                objectFit="cover"
-                className="rounded"
-              />
-            </div>
-            <div className="p-3 relative min-h-[200px]">
-              <span className="cut-line-1">{theme?.title}</span>
-              <p className="cut-line-3 text-gray-500 text-xs">
-                {theme?.description}
-              </p>
-              <div className="flex items-center justify-between pr-3">
-                <div className="flex items-center justify-end">
-                  {Array.from({ length: theme?.ratingStarCount })?.map(
-                    (_, idx) => (
-                      <StarIcon key={idx} />
-                    )
-                  )}
-                  <span className="text-gray-400 text-xs pt-[5px] mx-[3px]">
-                    {theme?.ratingStarCount}
-                  </span>
-                  <span className="text-blue-500 underline text-sm">
-                    ({theme?.reviewsCount})
-                  </span>
-                </div>
-              </div>
-              <div className="absolute mb-5 bottom-0 flex items-center flex-wrap mt-11 pr-3">
-                {theme.isDefault ? (
-                  <Button
-                    size="small"
-                    className="m-1 bg-blue-600 hover:bg-blue-400"
-                  >
-                    Edit theme
-                  </Button>
-                ) : (
-                  <Button size="small" className="m-1">
-                    Activate
-                  </Button>
-                )}
-                {!theme.isDefault && (
-                  <Button
-                    size="small"
-                    className="m-1 bg-red-500 hover:bg-red-400"
-                  >
-                    Delete
-                  </Button>
-                )}
-                <Button variant="outline" size="small" className="m-1">
-                  <div className="mx-1">
-                    <Eye width={16} height={16} />
-                  </div>
-                  Demo
-                </Button>
-              </div>
-            </div>
-          </div>
-        ))}
+      <div className="card overflow-hidden mb-6">
+        <Table
+          //@ts-ignore
+          columns={tableColumns}
+          emptyText={t('table:empty-table-data')}
+          data={themes}
+          rowKey="id"
+          scroll={{ x: 800 }}
+        />
       </div>
     </>
   );

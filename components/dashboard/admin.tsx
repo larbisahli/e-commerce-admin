@@ -1,3 +1,4 @@
+import AlertIcon from '@components/icons/alert';
 import { CartIconBig } from '@components/icons/cart-icon-bag';
 import { CoinIcon } from '@components/icons/coin-icon';
 import { DollarIcon } from '@components/icons/shops/dollar';
@@ -164,6 +165,22 @@ export default function Dashboard() {
         <span className="text-sm text-gray-500">
           {`You can impact someone's life today.`}
         </span>
+      </div>
+      <div className="mb-8">
+        <div className="text-lg font-medium">Getting started</div>
+        <div className="border rounded shadow w-fit mt-2 pr-12 p-5 pl-3 bg-white flex items-start">
+          <div className="text-yellow-600 mr-2">
+            <AlertIcon />
+          </div>
+          <div className="flex flex-col items-start">
+            <span className="text-sm font-medium text-gray-700">
+              {`Verify your email address to activate your online store.`}
+            </span>
+            <button className="text-sm text-blue-500">
+              {`Resend verification link`}
+            </button>
+          </div>
+        </div>
       </div>
       <div className="w-full grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-6">
         <div className="w-full ">

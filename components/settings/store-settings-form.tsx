@@ -134,6 +134,7 @@ export default function StoreSettingsForm({ settings }: IProps) {
         logo: logo?.map(({ id }) => ({ id })),
         favicon: favicon?.map(({ id }) => ({ id })),
         maxCheckoutQuantity: Number(values.maxCheckoutQuantity),
+        maxCheckoutAmount: Number(values.maxCheckoutAmount),
         socials: values?.socials
           ? values?.socials?.map((social: any) => ({
               icon: {

@@ -63,7 +63,9 @@ export default function Themes({ client }: SSRProps) {
         title={t('form:button-label-your-themes')}
         label={t('form:button-label-your-themes')}
       />
-      <MyThemeList themes={themes} />
+      <div className="mt-12">
+        <MyThemeList themes={themes} />
+      </div>
     </>
   );
 }
