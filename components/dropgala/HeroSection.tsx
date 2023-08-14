@@ -20,29 +20,31 @@ const HeroSection = () => {
             Be the first to know when our revolutionary new site goes live!
           </p>
           <div className="w-full flex justify-center">
-            <MailchimpSubscribe
-              url={process.env.NEXT_PUBLIC_MAILCHIMP_URL}
-              render={({ subscribe, status, message }) => (
-                <div className="mailchimp" id="mailchimp">
-                  <MailchimpSubscribe
-                    url={process.env.NEXT_PUBLIC_MAILCHIMP_URL}
-                    onSubmitted={(formData) => subscribe(formData)}
-                  />
-                  {status === 'sending' && (
-                    <div style={{ color: 'blue' }}>sending...</div>
-                  )}
-                  {status === 'error' && (
-                    <div
-                      style={{ color: 'red' }}
-                      dangerouslySetInnerHTML={{ __html: message }}
+            <div className="w-fit xl:w-full min-w-[400px]">
+              <MailchimpSubscribe
+                url={process.env.NEXT_PUBLIC_MAILCHIMP_URL}
+                render={({ subscribe, status, message }) => (
+                  <div className="mailchimp" id="mailchimp">
+                    <MailchimpSubscribe
+                      url={process.env.NEXT_PUBLIC_MAILCHIMP_URL}
+                      onSubmitted={(formData) => subscribe(formData)}
                     />
-                  )}
-                  {status === 'success' && (
-                    <div style={{ color: 'green' }}>Subscribed !</div>
-                  )}
-                </div>
-              )}
-            />
+                    {status === 'sending' && (
+                      <div style={{ color: 'blue' }}>sending...</div>
+                    )}
+                    {status === 'error' && (
+                      <div
+                        style={{ color: 'red' }}
+                        dangerouslySetInnerHTML={{ __html: message }}
+                      />
+                    )}
+                    {status === 'success' && (
+                      <div style={{ color: 'green' }}>Subscribed !</div>
+                    )}
+                  </div>
+                )}
+              />
+            </div>
           </div>
         </div>
 

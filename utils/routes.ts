@@ -1,8 +1,9 @@
 export const ROUTES = {
   DASHBOARD: '/admin/dashboard',
-  LOGIN: '/login',
-  SIGNUP: '/signup',
-  LOGOUT: '/logout',
+  FORGET_PASSWORD: '/admin/forget-password',
+  LOGIN: '/admin/login',
+  SIGNUP: '/admin/signup',
+  LOGOUT: '/admin/logout',
   ORDER_STATUS: '/admin/sales/order-status',
   ORDERS: '/admin/sales/order',
   PRODUCT: '/admin/catalog/product',

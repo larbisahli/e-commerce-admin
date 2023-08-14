@@ -134,6 +134,7 @@ export default function CreateOrUpdateDeliveryForm({ initialValues }: IProps) {
   const onSubmit = async (values: DeliveryTimeType) => {
     if (values?.minValue > values?.maxValue) {
       notify('Maximum value must be larger than Minimum value', 'error');
+      return;
     }
 
     const variables = {

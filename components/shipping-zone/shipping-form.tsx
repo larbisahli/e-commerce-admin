@@ -373,8 +373,8 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
           title={t('form:item-delivery-time')}
           details={
             initialValues
-              ? t('form:item-shipping-zones-info-update-select')
-              : t('form:item-shipping-zones-info-add-select')
+              ? t('form:item-shipping-zones-delivery-info-update')
+              : t('form:item-shipping-zones-delivery-info-create')
           }
           className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
         />
@@ -398,8 +398,8 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
           title={t('form:item-shipping-zones-info')}
           details={
             initialValues
-              ? t('form:item-shipping-zones-info-update')
-              : t('form:item-shipping-zones-info-create')
+              ? t('form:item-shipping-zones-country-info-update')
+              : t('form:item-shipping-zones-country-info-create')
           }
           className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
         />

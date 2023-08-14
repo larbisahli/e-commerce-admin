@@ -37,7 +37,9 @@ interface FormValues extends UserType {
   notify: boolean;
 }
 
-const defaultValues = {};
+const defaultValues = {
+  profile: []
+};
 
 type IProps = {
   initialValues?: UserType | any;
@@ -141,15 +143,9 @@ const UserCreateUpdateForm = ({ initialValues }: IProps) => {
       firstName: values.firstName,
       lastName: values.lastName,
       phoneNumber: values.phoneNumber,
-      profile: [
-        {
-          id: values.profile[0]?.id
-        }
-      ],
+      profile: (values.profile ?? [])?.map(({ id }) => ({ id })),
       roleId: values.role.id,
-      password: values.password,
-      email: values.email,
-      notify: values.notify
+      email: values.email
     };
 
     setUnsavedChanges(false);
@@ -253,42 +249,12 @@ const UserCreateUpdateForm = ({ initialValues }: IProps) => {
             className="mb-4"
             error={t(errors.email?.message!)}
           />
-          {isEmpty(initialValues) && (
-            <div>
-              <PasswordInput
-                label={t('form:input-label-password')}
-                isRequiredLabel
-                {...register('password')}
-                error={t(errors?.password?.message!)}
-                variant="outline"
-                className="mb-4"
-              />
-              <PasswordInput
-                label={t('form:input-label-confirm-password')}
-                isRequiredLabel
-                {...register('confirmPassword')}
-                error={t(errors?.confirmPassword?.message!)}
-                variant="outline"
-                className="mb-4"
-              />
-            </div>
-          )}
           <SelectRoles control={control} />
           {errors?.role && (
             <p className="my-2 text-xs text-start text-red-500">
               {/* @ts-ignore */}
               {t(errors?.role?.message!)}
             </p>
-          )}
-          {isEmpty(initialValues) && (
-            <div className="mt-8">
-              <Label>{t('form:input-label-notification')}</Label>
-              <Checkbox
-                {...register('notify')}
-                className="mb-4"
-                label={t('form:input-label-notify')}
-              />
-            </div>
           )}
         </Card>
       </div>

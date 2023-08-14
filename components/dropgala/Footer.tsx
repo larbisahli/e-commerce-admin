@@ -1,3 +1,4 @@
+import { ROUTES } from '@utils/routes';
 import Link from 'next/link';
 
 const Footer = () => {
@@ -29,7 +30,7 @@ const Footer = () => {
             Sign up
           </a>
         </Link>
-        <Link href="/login">
+        <Link href={ROUTES.LOGIN}>
           <a className="text-gray-600 text-lg mx-3 hover:text-blue-500">
             Login
           </a>

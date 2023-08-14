@@ -138,7 +138,7 @@ const LoginForm = () => {
           error={t(errors?.password?.message!)}
           variant="outline"
           className="mb-4"
-          forgotPageLink="/forgot-password"
+          forgotPageLink={ROUTES.FORGET_PASSWORD}
         />
         <Button
           className="w-full rounded-sm"

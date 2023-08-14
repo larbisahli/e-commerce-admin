@@ -116,9 +116,7 @@ export const CREATE_USER = gql`
     $phoneNumber: String
     $email: String!
     $profile: [ImageInput]
-    $password: String!
     $roleId: Int!
-    $notify: Boolean
   ) {
     createUser(
       firstName: $firstName
@@ -126,9 +124,7 @@ export const CREATE_USER = gql`
       phoneNumber: $phoneNumber
       email: $email
       profile: $profile
-      password: $password
       roleId: $roleId
-      notify: $notify
     ) {
       id
       firstName
