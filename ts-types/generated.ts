@@ -205,6 +205,11 @@ export interface Tag extends CreatedUpdatedByAt {
   name?: Nullable<Scalars['String']>;
 }
 
+export interface Language extends CreatedUpdatedByAt {
+  id?: Nullable<Scalars['Int']>;
+  name?: Nullable<Scalars['String']>;
+}
+
 export interface OrderStatus extends CreatedUpdatedByAt {
   id?: Nullable<Scalars['Int']>;
   name?: Nullable<Scalars['String']>;

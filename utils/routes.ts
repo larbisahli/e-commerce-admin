@@ -58,7 +58,7 @@ export const ROUTES = {
   MANUFACTURER: '/admin/catalog/manufacturer',
   SUPPLIER: '/admin/catalog/supplier',
   SYSTEM_STORES: '/admin/store/system-store',
-  LANGUAGE: '/admin/store/language',
+  LANGUAGES: '/admin/store/languages',
   STORE_EXTENSIONS: '/admin/store/extensions',
   MARKETING_NEWSLETTER: '/admin/marketing/newsletter'
 };

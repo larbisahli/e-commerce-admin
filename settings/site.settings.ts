@@ -225,11 +225,10 @@ export const siteSettings = {
           },
           {
             id: '9YcWhG',
-            href: ROUTES.LANGUAGE,
+            href: ROUTES.LANGUAGES,
             label: 'sidebar-nav-item-languages',
             padding: '35px',
-            isSubLink: true,
-            disabled: true
+            isSubLink: true
           },
           {
             id: '9YcWhG',

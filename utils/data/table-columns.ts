@@ -138,5 +138,12 @@ export const COLUMNS = {
     { label: 'Date', key: 'date' },
     { label: 'Message', key: 'content' },
     { label: 'Actions', key: 'actions' }
+  ],
+  language: [
+    { label: 'Language', key: 'language' },
+    { label: 'Creation Date', key: 'createdAt' },
+    { label: 'Placed By', key: 'createdBy' },
+    { label: 'Updated By', key: 'updatedBy' },
+    { label: 'Actions', key: 'actions' }
   ]
 };

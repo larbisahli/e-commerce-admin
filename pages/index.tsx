@@ -6,7 +6,6 @@ import LatestBlogsCarousel from '@components/dropgala/LatestBlogsCarousel';
 import Navigation from '@components/dropgala/Navigation';
 import PricingSection from '@components/dropgala/PricingSection';
 import { ArrowNext } from '@components/icons/arrow-next';
-import CountryLanguage from '@ladjs/country-language';
 import { getAllFilesFrontMatter } from '@lib/mdx';
 import Head from 'next/head';
 import Image from 'next/image';
@@ -15,8 +14,6 @@ import Link from 'next/link';
 const MAX_DISPLAY = 4;
 
 const HomePage = ({ posts }) => {
-  console.log({ CountryLanguage, languages: CountryLanguage.getCountries() });
-
   return (
     <div
       className="h-screen pb-14 bg-right bg-cover"

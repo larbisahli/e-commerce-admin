@@ -577,6 +577,13 @@ Overlay Scrollbar - os-theme-thin-dark
   background: rgba(0, 0, 0, 0.15);
   background: rgb(105, 105, 105);
 }
+.os-theme-thin-light > .os-scrollbar-horizontal > .os-scrollbar-track:before,
+.os-theme-thin-light > .os-scrollbar-vertical > .os-scrollbar-track:before {
+  content: '';
+  display: block;
+  position: absolute;
+  background: rgb(197, 197, 197);
+}
 .os-theme-thin-dark > .os-scrollbar-horizontal > .os-scrollbar-track:before,
 .os-theme-thin-dark
   > .os-scrollbar-horizontal
@@ -608,6 +615,16 @@ Overlay Scrollbar - os-theme-thin-dark
   position: absolute;
   background: rgba(0, 0, 0, 0.5);
   background: rgb(209, 209, 209);
+  border-radius: 10px;
+}
+.os-theme-thin-light
+  > .os-scrollbar
+  > .os-scrollbar-track
+  > .os-scrollbar-handle:before {
+  content: '';
+  display: block;
+  position: absolute;
+  background: rgb(37, 37, 37);
   border-radius: 10px;
 }
 .os-theme-thin-dark
@@ -677,4 +694,9 @@ Overlay Scrollbar - os-theme-thin-dark
   > .os-scrollbar-track
   > .os-scrollbar-handle:before {
   transition: width 0.3s, margin-left 0.3s, background 0.2s;
+}
+
+.os-host-overflow > .os-padding {
+  overflow: hidden;
+  margin-block: 15px;
 }
