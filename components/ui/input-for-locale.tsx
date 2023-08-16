@@ -32,7 +32,7 @@ const InputForLocal = React.forwardRef<HTMLInputElement, Props>(
         {label && (
           <label
             htmlFor={name}
-            className={cn('block text-gray-800 text-sm leading-none', {
+            className={cn('block text-gray-800 text-base leading-none', {
               'text-gray-300': disabled
             })}
           >
@@ -44,7 +44,7 @@ const InputForLocal = React.forwardRef<HTMLInputElement, Props>(
           name={name}
           type={type}
           ref={ref}
-          className="w-full outline-none py-1 font-medium text-lg"
+          className="w-full outline-none py-1 font-medium text-lg text-gray-700"
           autoComplete="off"
           autoCorrect="off"
           autoCapitalize="off"

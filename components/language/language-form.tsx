@@ -20,44 +20,46 @@ import cn from 'classnames';
 import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { tagValidationSchema } from './tag-validation-schema';
 
 type FormValues = {
   direction: string;
+  translation: { [key: string]: { [key: string]: string } };
 };
 
 const defaultValues = {
-  direction: { label: 'LTR' }
+  direction: { label: 'LTR' },
+  translation: {}
 };
 
 type IProps = {
-  initialValues?: Tag | any;
+  initialValues?: FormValues | any;
 };
 
 const locales = [
-  { name: 'Common' },
-  { name: 'Exception' },
-  { name: 'Auth' },
-  { name: 'Checkout' },
-  { name: 'Actions' },
-  { name: 'Gateways' },
-  { name: 'Order' },
-  { name: 'Cart' },
-  { name: 'Reviews' },
-  { name: 'Pages' },
-  { name: 'Marketing' },
-  { name: 'Category' },
-  { name: 'Collection' },
-  { name: 'Messages' },
-  { name: 'Emails' },
-  { name: 'Image' },
-  { name: 'Shipping' },
-  { name: 'Billing' },
-  { name: 'Error_codes' },
-  { name: 'Print_order' }
+  { name: 'Common', path: 'en-us/common.ts' },
+  { name: 'Exception', path: 'en-us/exception.ts' },
+  { name: 'Auth', path: 'en-us/auth.ts' },
+  { name: 'Checkout', path: 'en-us/checkout.ts' },
+  { name: 'Actions', path: 'en-us/checkout.ts' },
+  { name: 'Gateways', path: 'en-us/checkout.ts' },
+  { name: 'Order', path: 'en-us/checkout.ts' },
+  { name: 'Cart', path: 'en-us/checkout.ts' },
+  { name: 'Reviews', path: 'en-us/checkout.ts' },
+  { name: 'Pages', path: 'en-us/checkout.ts' },
+  { name: 'Marketing', path: 'en-us/checkout.ts' },
+  { name: 'Category', path: 'en-us/checkout.ts' },
+  { name: 'Collection', path: 'en-us/checkout.ts' },
+  { name: 'Messages', path: 'en-us/checkout.ts' },
+  { name: 'Emails', path: 'en-us/checkout.ts' },
+  { name: 'Image', path: 'en-us/checkout.ts' },
+  { name: 'Shipping', path: 'en-us/checkout.ts' },
+  { name: 'Billing', path: 'en-us/checkout.ts' },
+  { name: 'Error_codes', path: 'en-us/checkout.ts' },
+  { name: 'Print_order', path: 'en-us/checkout.ts' }
 ];
 
 export default function LanguageForm({ initialValues }: IProps) {
@@ -65,16 +67,27 @@ export default function LanguageForm({ initialValues }: IProps) {
   const { t } = useTranslation();
 
   const [error, setError] = useState(null);
+  const [currentLocaleTranslation, setCurrentLocaleTranslation] = useState({});
+  const [currentLocale, setCurrentLocale] = useState(locales[0]);
 
   const {
     register,
     handleSubmit,
     control,
+    setValue,
     reset,
     formState: { errors }
   } = useForm<FormValues>({
     //@ts-ignore
-    defaultValues: initialValues ? initialValues : defaultValues,
+    defaultValues: initialValues
+      ? {
+          ...initialValues,
+          translation: {
+            ...(initialValues?.translation ?? {}),
+            ...currentLocaleTranslation
+          }
+        }
+      : defaultValues,
     resolver: yupResolver(tagValidationSchema)
   });
 
@@ -114,20 +127,23 @@ export default function LanguageForm({ initialValues }: IProps) {
 
   const onSubmit = async (values: FormValues) => {
     const input = {
-      direction: values.direction
+      direction: values.direction,
+      ...values
     };
 
-    if (isEmpty(initialValues)) {
-      createTag({ variables: input }).catch((err) => {
-        setError(err);
-      });
-    } else {
-      updateTag({ variables: { id: initialValues.id, ...input } }).catch(
-        (err) => {
-          setError(err);
-        }
-      );
-    }
+    console.log('========>', { values });
+
+    // if (isEmpty(initialValues)) {
+    //   createTag({ variables: input }).catch((err) => {
+    //     setError(err);
+    //   });
+    // } else {
+    //   updateTag({ variables: { id: initialValues.id, ...input } }).catch(
+    //     (err) => {
+    //       setError(err);
+    //     }
+    //   );
+    // }
   };
 
   function compare(a, b) {
@@ -144,25 +160,44 @@ export default function LanguageForm({ initialValues }: IProps) {
 
   const locals = useMemo(() => {
     return CountryLanguage.getCountries()
-      ?.map(({ code_2 }) => {
-        return CountryLanguage.getCountryMsLocales(code_2)?.map((locale) => {
-          return {
-            ...locale,
-            language: CountryLanguage.getLanguage(code_2)
-          };
-        });
-      })
+      ?.map(({ code_2 }) => CountryLanguage.getCountryMsLocales(code_2))
       ?.filter(Boolean)
       ?.flat()
       ?.sort(compare);
   }, []);
 
-  console.log({
-    A: CountryLanguage.getCountries(),
-    CountryLanguage,
-    locals,
-    f: CountryLanguage.getLanguages()
-  });
+  // Get Countries
+  useEffect(() => {
+    async function getLocaleFile(currentLocale) {
+      const { translation } = await import(
+        `@utils/locales/${currentLocale.path}`
+      );
+      setCurrentLocaleTranslation((prev) => {
+        return {
+          ...prev,
+          [currentLocale.name]: translation
+        };
+      });
+    }
+    getLocaleFile(currentLocale);
+  }, [currentLocale]);
+
+  useEffect(() => {
+    const translation = {
+      ...(initialValues?.translation ?? {}),
+      ...currentLocaleTranslation
+    };
+    Object.keys(translation ?? [])?.forEach((file) => {
+      Object.keys(translation[file] ?? [])?.forEach((field) => {
+        setValue(`translation.${file}.${field}`, translation[file][field]);
+      });
+    });
+  }, [
+    initialValues?.translation,
+    currentLocaleTranslation,
+    currentLocale.name,
+    setValue
+  ]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -216,18 +251,19 @@ export default function LanguageForm({ initialValues }: IProps) {
         <div className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3">
           <Scrollbar
             autoHide="never"
-            className="card px-5 py-4 w-full h-[300px] sm:h-[450px] os-theme-thin-light"
+            className="card px-5 py-4 w-full h-64 sm:h-96 os-theme-thin-light"
           >
             <div className="flex flex-col">
               {locales?.map((local) => {
                 return (
                   <button
                     key={local.name}
+                    onClick={() => setCurrentLocale(local)}
                     className={cn(
                       'border border-gray-300 p-2 rounded-md mb-2 text-left',
                       {
                         'font-medium text-blue-700 bg-blue-100':
-                          local.name === 'Common'
+                          local.name === currentLocale.name
                       }
                     )}
                   >
@@ -239,24 +275,18 @@ export default function LanguageForm({ initialValues }: IProps) {
           </Scrollbar>
         </div>
         <Card className="w-full sm:w-8/12 md:w-2/3">
-          <InputForLocal
-            label={t('form:input-label-name')}
-            {...register('name')}
-            error={t(errors.name?.message!)}
-            className="mb-5"
-          />
-          <InputForLocal
-            label={t('form:input-label-name')}
-            {...register('name')}
-            error={t(errors.name?.message!)}
-            className="mb-5"
-          />
-          <InputForLocal
-            label={t('form:input-label-name')}
-            {...register('name')}
-            error={t(errors.name?.message!)}
-            className="mb-5"
-          />
+          {Object.keys(currentLocaleTranslation[currentLocale.name] ?? [])?.map(
+            (field) => {
+              return (
+                <InputForLocal
+                  key={field}
+                  label={field}
+                  {...register(`translation.${currentLocale.name}.${field}`)}
+                  className="mb-5"
+                />
+              );
+            }
+          )}
         </Card>
       </div>
       <div className="mb-4 flex justify-end">

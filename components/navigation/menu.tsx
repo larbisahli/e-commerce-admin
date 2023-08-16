@@ -34,6 +34,8 @@ export default function NavMenu() {
   } = useGetUser();
   const { image = null, placeholder = null } = profile[0] ?? {};
 
+  console.log({ image, placeholder });
+
   return (
     <Menu as="div" className="relative inline-block text-left">
       <Menu.Button
@@ -44,8 +46,9 @@ export default function NavMenu() {
       >
         <Avatar
           className="shadow-lg !rounded-sm"
-          src={image ?? siteSettings.avatar.image}
-          customPlaceholder={placeholder ?? siteSettings.avatar.placeholder}
+          src={image}
+          firstName={firstName}
+          customPlaceholder={placeholder}
         />
       </Menu.Button>
 

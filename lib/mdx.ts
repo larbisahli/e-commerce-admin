@@ -128,7 +128,7 @@ export async function getAllFilesFrontMatter(folder) {
 
   const allFrontMatter = [];
 
-  files.forEach((file) => {
+  files?.forEach((file) => {
     // Replace is needed to work on Windows
     const fileName = file.slice(prefixPaths.length + 1).replace(/\\/g, '/');
     // Remove Unexpected File

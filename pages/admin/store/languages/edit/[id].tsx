@@ -15,8 +15,8 @@ import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-const CreateOrUpdateTagForm = dynamic(
-  () => import('@components/tag/tag-form'),
+const LanguageForm = dynamic(
+  () => import('@components/language/language-form'),
   { ssr: true }
 );
 
@@ -31,38 +31,37 @@ export default function UpdateTagPage({ client }: SSRProps) {
   const { t } = useTranslation();
   const { query } = useRouter();
 
-  const tagId = parseInt(query.tagId as string, 10);
+  const id = parseInt(query.id as string, 10);
 
-  const { data, loading, error } = useQuery<TTag, OptionsVariable>(TAG, {
-    variables: { id: tagId },
-    fetchPolicy: 'cache-and-network'
-  });
+  // const { data, loading, error } = useQuery<TTag, OptionsVariable>(TAG, {
+  //   variables: { id },
+  //   fetchPolicy: 'cache-and-network'
+  // });
 
-  const { tag = [] } = data ?? {};
+  // const { tag = [] } = data ?? {};
 
   useGetUser(client);
-  useErrorLogger(error);
+  // useErrorLogger(error);
 
-  if (loading) {
-    return <Loader text={t('common:text-loading')} />;
-  }
-  if (error) {
-    return <ErrorMessage message={error.message} />;
-  }
+  // if (loading) {
+  //   return <Loader text={t('common:text-loading')} />;
+  // }
+  // if (error) {
+  //   return <ErrorMessage message={error.message} />;
+  // }
 
   return (
     <>
       <Head>
-        <title>Edit Tag | Dropgala</title>
+        <title>Edit Language | Dropgala</title>
         <link rel="icon" type="image/svg" sizes="32x32" href="/svg/tag.svg" />
       </Head>
       <div className="py-5 sm:py-8 flex border-b border-dashed border-gray-300">
-        <h1 className="text-lg font-semibold text-heading">
-          {t('form:form-title-edit-tags')}
+        <h1 className="text-xl font-semibold text-heading">
+          {t('form:button-label-edit-language')}
         </h1>
       </div>
-
-      <CreateOrUpdateTagForm initialValues={tag} />
+      <LanguageForm />
     </>
   );
 }

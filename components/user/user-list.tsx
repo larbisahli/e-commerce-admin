@@ -52,9 +52,10 @@ const UserList = ({ users, selectedColumns }: IProps) => {
           const { image, placeholder } = profile[0] ?? {};
           return (
             <Avatar
-              src={image ?? siteSettings.avatar.image}
+              src={image}
+              firstName={record?.firstName}
               alt={`${record?.firstName} ${record?.lastName}`}
-              customPlaceholder={placeholder ?? siteSettings.avatar.placeholder}
+              customPlaceholder={placeholder}
             />
           );
         }

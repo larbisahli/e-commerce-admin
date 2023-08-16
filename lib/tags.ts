@@ -12,11 +12,11 @@ export async function getAllTags(type) {
 
   let tagCount = {};
   // Iterate through each post, putting all found tags into `tags`
-  files.forEach((file) => {
+  files?.forEach((file) => {
     const source = fs.readFileSync(path.join(root, 'data', type, file), 'utf8');
     const { data } = matter(source);
     if (data.tags && data.draft !== true) {
-      data.tags.forEach((tag) => {
+      data.tags?.forEach((tag) => {
         const formattedTag = kebabCase(tag);
         if (formattedTag in tagCount) {
           tagCount[formattedTag] += 1;

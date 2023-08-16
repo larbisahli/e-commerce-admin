@@ -101,9 +101,9 @@ export default function Languages({ client }: SSRProps) {
         <link rel="icon" type="image/svg" sizes="32x32" href="/svg/tag.svg" />
       </Head>
       <PageMainAction
-        href={`${ROUTES.LANGUAGES}/create`}
+        href={`${ROUTES.LANGUAGES}/edit/en-us`}
         title={t('common:sidebar-nav-item-languages')}
-        label={t('form:button-label-add-language')}
+        label={t('form:button-label-new-language')}
       />
       <PageMainHeader
         columns={COLUMNS['language']}

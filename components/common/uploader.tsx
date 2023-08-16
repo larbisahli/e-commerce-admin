@@ -30,8 +30,8 @@ export default function Uploader({ setLoading, mediaId = null, refetch }: any) {
       setLoading(true);
 
       try {
-        fileRejections.forEach((file) => {
-          file.errors.forEach((err) => {
+        fileRejections?.forEach((file) => {
+          file.errors?.forEach((err) => {
             if (err.code === 'file-too-large') {
               notify(`Error: Image is larger than 5MB`, 'error');
             }

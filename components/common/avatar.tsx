@@ -1,10 +1,13 @@
 // import Image from 'next/image';
 import ImageComponent from '@components/ImageComponent/index';
+import { siteSettings } from '@settings/site.settings';
 import cn from 'classnames';
-import React from 'react';
+import { isEmpty } from 'lodash';
+import React, { useEffect, useState } from 'react';
 
 type AvatarProps = {
   className?: string;
+  firstName?: string;
   src: string;
   customPlaceholder: string;
   alt?: string;
@@ -15,30 +18,50 @@ type AvatarProps = {
 const Avatar: React.FC<AvatarProps> = ({
   src,
   customPlaceholder,
+  firstName = 'A',
   className,
   alt = 'Avatar',
   width = 'w-10',
   height = 'h-10',
   ...rest
 }) => {
+  const [state, setState] = useState({ src, customPlaceholder });
+
+  useEffect(() => {
+    setState({ src, customPlaceholder });
+  }, [src, customPlaceholder]);
+
   return (
     <div
       className={cn(
-        'relative cursor-pointer overflow-hidden rounded-full',
+        'relative cursor-pointer overflow-hidden rounded-sm',
         className,
         width,
         height
       )}
       {...rest}
     >
-      <ImageComponent
-        alt={alt}
-        src={src}
-        customPlaceholder={customPlaceholder}
-        layout="fill"
-        objectFit="cover"
-        priority={true}
-      />
+      {isEmpty(src) ? (
+        <div className="avatar-profile">
+          {firstName?.charAt(0)?.toUpperCase()}
+        </div>
+      ) : (
+        <ImageComponent
+          alt={alt}
+          src={state?.src}
+          customPlaceholder={state?.customPlaceholder}
+          onError={() => {
+            console.log('----------------->');
+            setState({
+              src: siteSettings.avatar.image,
+              customPlaceholder: siteSettings.avatar.placeholder
+            });
+          }}
+          layout="fill"
+          objectFit="cover"
+          priority={true}
+        />
+      )}
     </div>
   );
 };
