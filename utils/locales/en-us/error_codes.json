@@ -1,0 +1,5 @@
+{
+  "200": "We were unable to process the request at the moment. Try again later!",
+  "400": "Bad gateway request.",
+  "606": "Authorization Failed: Please use a different credit card or payment method and try again."
+}

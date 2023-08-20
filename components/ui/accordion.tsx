@@ -1,11 +1,9 @@
-import 'rc-tooltip/assets/bootstrap_white.css';
-
 import { ArrowCircleDown } from '@components/icons/arrow-circle-down';
 import EditInfoIcon from '@components/icons/edit-info';
 import styles from '@styles/loader.module.css';
 import cn from 'classnames';
-import Tooltip from 'rc-tooltip';
 import React, { useState } from 'react';
+import { Tooltip } from 'react-tooltip';
 
 type CollapseProps = {
   Title: React.FC;
@@ -53,20 +51,20 @@ export const Accordion: React.FC<CollapseProps> = ({
             <div className="flex items-end">
               <Title />
               {isUpdated && (
-                <Tooltip
-                  placement="top"
-                  trigger={['hover', 'click']}
-                  overlay={
-                    <span>
-                      Changes have been made to this section that have not been
-                      saved.
-                    </span>
+                <div
+                  className="pl-3 pb-1 text-gray-500"
+                  data-tooltip-id="update-tooltip"
+                  data-tooltip-content={
+                    'Changes have been made to this section that have not been saved.'
                   }
                 >
-                  <div className="pl-3 pb-1 text-gray-500">
-                    <EditInfoIcon />
-                  </div>
-                </Tooltip>
+                  <EditInfoIcon />
+                  <Tooltip
+                    id="update-tooltip"
+                    className="product-tooltip"
+                    classNameArrow="product-tooltip-arrow"
+                  />
+                </div>
               )}
             </div>
             <div

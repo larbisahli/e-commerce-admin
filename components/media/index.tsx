@@ -106,7 +106,7 @@ const MediaList = ({ media, refetch }: IProps) => {
             onClick={handleNewFolderButton}
             variant="outline"
             size="small"
-            className="!border-blue-400 text-blue-400 hover:!bg-blue-400 hover:text-white"
+            className="!border-blue-500 text-blue-500 hover:!bg-blue-500 hover:text-white"
           >
             {t('form:button-label-add-folder')}
           </Button>

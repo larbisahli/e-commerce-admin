@@ -140,7 +140,9 @@ export const COLUMNS = {
     { label: 'Actions', key: 'actions' }
   ],
   language: [
-    { label: 'Language', key: 'language' },
+    { label: 'Language', key: 'displayName' },
+    { label: 'lcid', key: 'lcid' },
+    { label: 'Status', key: 'isDefault' },
     { label: 'Creation Date', key: 'createdAt' },
     { label: 'Placed By', key: 'createdBy' },
     { label: 'Updated By', key: 'updatedBy' },

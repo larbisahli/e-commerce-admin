@@ -3,18 +3,18 @@ import Card from '@components/common/card';
 import { SaveIcon } from '@components/icons/save-icon';
 import Button from '@components/ui/button';
 import Description from '@components/ui/description';
-import Input from '@components/ui/input';
+import ValidationError from '@components/ui/form-validation-error';
 import InputForLocal from '@components/ui/input-for-locale';
 import Label from '@components/ui/label';
 import Scrollbar from '@components/ui/scrollbar';
 import SelectInput from '@components/ui/select-input';
-import { CREATE_TAG, UPDATE_TAG } from '@graphql/tag';
+import { CREATE_LANGUAGE, UPDATE_LANGUAGE } from '@graphql/language';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useGetUser } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import CountryLanguage from '@ladjs/country-language';
 import { notify } from '@lib/notify';
-import { Tag } from '@ts-types/generated';
+import { LanguageType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import cn from 'classnames';
 import isEmpty from 'lodash/isEmpty';
@@ -26,125 +26,41 @@ import { useForm } from 'react-hook-form';
 import { tagValidationSchema } from './tag-validation-schema';
 
 type FormValues = {
-  direction: string;
+  locale: { displayName: string; langCultureName: string };
+  direction: { label: 'LTR' | 'RTL' };
   translation: { [key: string]: { [key: string]: string } };
 };
 
 const defaultValues = {
+  locale: {
+    langCultureName: 'en-US',
+    displayName: 'English - United States',
+    cultureCode: '0x0409'
+  },
   direction: { label: 'LTR' },
   translation: {}
 };
 
 type IProps = {
-  initialValues?: FormValues | any;
+  initialValues?: LanguageType | any;
+  localeFiles: { [key: string]: string };
+  isFork?: boolean;
 };
 
-const locales = [
-  { name: 'Common', path: 'en-us/common.ts' },
-  { name: 'Exception', path: 'en-us/exception.ts' },
-  { name: 'Auth', path: 'en-us/auth.ts' },
-  { name: 'Checkout', path: 'en-us/checkout.ts' },
-  { name: 'Actions', path: 'en-us/checkout.ts' },
-  { name: 'Gateways', path: 'en-us/checkout.ts' },
-  { name: 'Order', path: 'en-us/checkout.ts' },
-  { name: 'Cart', path: 'en-us/checkout.ts' },
-  { name: 'Reviews', path: 'en-us/checkout.ts' },
-  { name: 'Pages', path: 'en-us/checkout.ts' },
-  { name: 'Marketing', path: 'en-us/checkout.ts' },
-  { name: 'Category', path: 'en-us/checkout.ts' },
-  { name: 'Collection', path: 'en-us/checkout.ts' },
-  { name: 'Messages', path: 'en-us/checkout.ts' },
-  { name: 'Emails', path: 'en-us/checkout.ts' },
-  { name: 'Image', path: 'en-us/checkout.ts' },
-  { name: 'Shipping', path: 'en-us/checkout.ts' },
-  { name: 'Billing', path: 'en-us/checkout.ts' },
-  { name: 'Error_codes', path: 'en-us/checkout.ts' },
-  { name: 'Print_order', path: 'en-us/checkout.ts' }
-];
-
-export default function LanguageForm({ initialValues }: IProps) {
+export default function LanguageForm({
+  initialValues,
+  localeFiles,
+  isFork = false
+}: IProps) {
   const router = useRouter();
   const { t } = useTranslation();
 
+  console.log({ initialValues });
+
   const [error, setError] = useState(null);
-  const [currentLocaleTranslation, setCurrentLocaleTranslation] = useState({});
-  const [currentLocale, setCurrentLocale] = useState(locales[0]);
-
-  const {
-    register,
-    handleSubmit,
-    control,
-    setValue,
-    reset,
-    formState: { errors }
-  } = useForm<FormValues>({
-    //@ts-ignore
-    defaultValues: initialValues
-      ? {
-          ...initialValues,
-          translation: {
-            ...(initialValues?.translation ?? {}),
-            ...currentLocaleTranslation
-          }
-        }
-      : defaultValues,
-    resolver: yupResolver(tagValidationSchema)
-  });
-
-  const { userInfo } = useGetUser();
-  const csrfToken = userInfo?.csrfToken;
-
-  const [createTag, { loading: creating }] = useMutation(CREATE_TAG, {
-    context: {
-      headers: {
-        'x-csrf-token': csrfToken
-      }
-    },
-    onCompleted: (data: { createTag: Tag }) => {
-      if (!isEmpty(data)) {
-        notify(t('common:successfully-created'), 'success');
-        reset();
-        router.push(ROUTES.TAG);
-      }
-    }
-  });
-
-  const [updateTag, { loading: updating }] = useMutation(UPDATE_TAG, {
-    context: {
-      headers: {
-        'x-csrf-token': csrfToken
-      }
-    },
-    onCompleted: (data: { updateTag: Tag }) => {
-      if (!isEmpty(data)) {
-        notify(t('common:successfully-updated'), 'success');
-        router.push(ROUTES.TAG);
-      }
-    }
-  });
-
-  useErrorLogger(error);
-
-  const onSubmit = async (values: FormValues) => {
-    const input = {
-      direction: values.direction,
-      ...values
-    };
-
-    console.log('========>', { values });
-
-    // if (isEmpty(initialValues)) {
-    //   createTag({ variables: input }).catch((err) => {
-    //     setError(err);
-    //   });
-    // } else {
-    //   updateTag({ variables: { id: initialValues.id, ...input } }).catch(
-    //     (err) => {
-    //       setError(err);
-    //     }
-    //   );
-    // }
-  };
+  const [currentLocale, setCurrentLocale] = useState<{ [key: string]: string }>(
+    { actions: localeFiles['actions'] }
+  );
 
   function compare(a, b) {
     const A = a.displayName?.split('-')[0];
@@ -158,7 +74,7 @@ export default function LanguageForm({ initialValues }: IProps) {
     return 0;
   }
 
-  const locals = useMemo(() => {
+  const locales = useMemo(() => {
     return CountryLanguage.getCountries()
       ?.map(({ code_2 }) => CountryLanguage.getCountryMsLocales(code_2))
       ?.filter(Boolean)
@@ -166,38 +82,102 @@ export default function LanguageForm({ initialValues }: IProps) {
       ?.sort(compare);
   }, []);
 
-  // Get Countries
-  useEffect(() => {
-    async function getLocaleFile(currentLocale) {
-      const { translation } = await import(
-        `@utils/locales/${currentLocale.path}`
-      );
-      setCurrentLocaleTranslation((prev) => {
-        return {
-          ...prev,
-          [currentLocale.name]: translation
-        };
+  const {
+    register,
+    handleSubmit,
+    control,
+    setValue,
+    reset,
+    formState: { errors }
+  } = useForm<FormValues>({
+    //@ts-ignore
+    defaultValues: !isEmpty(initialValues)
+      ? {
+          ...initialValues,
+          locale: locales?.find(
+            (locale) =>
+              locale.langCultureName?.toLowerCase() === initialValues.lcid
+          ),
+          direction: { label: initialValues.direction },
+          translation: {
+            ...localeFiles,
+            ...(initialValues?.translation ?? {})
+          }
+        }
+      : defaultValues,
+    resolver: yupResolver(tagValidationSchema)
+  });
+
+  const { userInfo } = useGetUser();
+  const csrfToken = userInfo?.csrfToken;
+
+  const [updateLanguage, { loading: updating }] = useMutation(UPDATE_LANGUAGE, {
+    context: {
+      headers: {
+        'x-csrf-token': csrfToken
+      }
+    },
+    onCompleted: (data: { updateLanguage: LanguageType }) => {
+      if (!isEmpty(data?.updateLanguage)) {
+        notify(t('common:successfully-updated'), 'success');
+        router.push(ROUTES.LANGUAGES);
+      }
+    }
+  });
+
+  const [createLanguage, { loading: creating }] = useMutation(CREATE_LANGUAGE, {
+    context: {
+      headers: {
+        'x-csrf-token': csrfToken
+      }
+    },
+    onCompleted: (data: { createLanguage: LanguageType }) => {
+      if (!isEmpty(data?.createLanguage)) {
+        notify(t('common:successfully-created'), 'success');
+        router.push(ROUTES.LANGUAGES);
+      }
+    }
+  });
+
+  useErrorLogger(error);
+
+  const onSubmit = async (values: FormValues) => {
+    const variables = {
+      displayName: values.locale.displayName,
+      lcid: values.locale.langCultureName?.toLowerCase(),
+      direction: values.direction?.label,
+      translation: values.translation
+    };
+
+    if (isEmpty(initialValues) || isFork) {
+      createLanguage({ variables }).catch((err) => {
+        setError(err);
+      });
+    } else {
+      updateLanguage({
+        variables: { id: initialValues.id, ...variables }
+      }).catch((err) => {
+        setError(err);
       });
     }
-    getLocaleFile(currentLocale);
-  }, [currentLocale]);
+  };
 
   useEffect(() => {
     const translation = {
-      ...(initialValues?.translation ?? {}),
-      ...currentLocaleTranslation
+      ...localeFiles,
+      ...(initialValues?.translation ?? {})
     };
-    Object.keys(translation ?? [])?.forEach((file) => {
-      Object.keys(translation[file] ?? [])?.forEach((field) => {
-        setValue(`translation.${file}.${field}`, translation[file][field]);
+
+    Object.keys(translation)?.forEach((ns) => {
+      Object.keys(translation[ns])?.forEach((field) => {
+        setValue(`translation.${ns}.${field}`, translation[ns][field]);
       });
     });
-  }, [
-    initialValues?.translation,
-    currentLocaleTranslation,
-    currentLocale.name,
-    setValue
-  ]);
+  }, [initialValues?.translation, localeFiles, setValue]);
+
+  const currentLocalLabel = (Object.keys(currentLocale) ?? [])[0];
+
+  console.log({ locales });
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -213,14 +193,6 @@ export default function LanguageForm({ initialValues }: IProps) {
         />
 
         <Card className="w-full sm:w-8/12 md:w-2/3">
-          {/* <Input
-            label={t('form:input-label-name')}
-            isRequiredLabel
-            {...register('name')}
-            error={t(errors.name?.message!)}
-            variant="outline"
-            className="mb-5"
-          /> */}
           <div className="mb-5">
             <Label isRequiredLabel>{t('form:input-label-language')}</Label>
             <SelectInput
@@ -232,8 +204,9 @@ export default function LanguageForm({ initialValues }: IProps) {
               getOptionValue={(option: { langCultureName: string }) =>
                 option?.langCultureName
               }
-              options={locals}
+              options={locales}
             />
+            <ValidationError message={t(errors?.locale?.message)} />
           </div>
           <div className="mb-5">
             <Label isRequiredLabel>{t('form:input-label-direction')}</Label>
@@ -254,20 +227,23 @@ export default function LanguageForm({ initialValues }: IProps) {
             className="card px-5 py-4 w-full h-64 sm:h-96 os-theme-thin-light"
           >
             <div className="flex flex-col">
-              {locales?.map((local) => {
+              {Object.keys(localeFiles)?.map((name) => {
                 return (
                   <button
-                    key={local.name}
-                    onClick={() => setCurrentLocale(local)}
+                    key={name}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setCurrentLocale({ [name]: localeFiles[name] });
+                    }}
                     className={cn(
-                      'border border-gray-300 p-2 rounded-md mb-2 text-left',
+                      'border border-gray-300 p-2 rounded-md mb-2 text-left capitalize',
                       {
                         'font-medium text-blue-700 bg-blue-100':
-                          local.name === currentLocale.name
+                          name === currentLocalLabel
                       }
                     )}
                   >
-                    {local.name}
+                    {name}
                   </button>
                 );
               })}
@@ -275,18 +251,20 @@ export default function LanguageForm({ initialValues }: IProps) {
           </Scrollbar>
         </div>
         <Card className="w-full sm:w-8/12 md:w-2/3">
-          {Object.keys(currentLocaleTranslation[currentLocale.name] ?? [])?.map(
-            (field) => {
+          {Object.keys(localeFiles)?.map((locale) => {
+            return Object.keys(localeFiles[locale])?.map((field) => {
               return (
                 <InputForLocal
                   key={field}
                   label={field}
-                  {...register(`translation.${currentLocale.name}.${field}`)}
-                  className="mb-5"
+                  {...register(`translation.${locale}.${field}`)}
+                  className={cn('mb-5', {
+                    hidden: locale !== currentLocalLabel
+                  })}
                 />
               );
-            }
-          )}
+            });
+          })}
         </Card>
       </div>
       <div className="mb-4 flex justify-end">

@@ -1,12 +1,29 @@
+import { useMutation } from '@apollo/client';
 import ActionButtons from '@components/common/action-buttons';
+import Link from '@components/ui/link';
 import ProfileCart from '@components/ui/profile-card';
-import { CreatedUpdatedByAt, Language, Tag } from '@ts-types/generated';
+import {
+  FORK_LANGUAGE,
+  LANGUAGES,
+  SET_DEFAULT_LANGUAGE
+} from '@graphql/language';
+import { useErrorLogger } from '@hooks/useErrorLogger';
+import { useGetUser } from '@hooks/useGetUser';
+import { notify } from '@lib/notify';
+import {
+  CreatedUpdatedByAt,
+  Language,
+  LanguageType,
+  Tag
+} from '@ts-types/generated';
 import { useIsRTL } from '@utils/locals';
 import { ROUTES } from '@utils/routes';
 import dayjs from 'dayjs';
+import { isEmpty } from 'lodash';
 import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
-import { useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 const Table = dynamic(
   () => import('@components/ui/table').then((mod) => mod.Table),
@@ -21,7 +38,48 @@ export type IProps = {
 const LanguageList = ({ languages, selectedColumns }: IProps) => {
   const { t } = useTranslation();
 
+  const [error, setError] = useState(null);
+  const [currentId, setCurrentId] = useState(null);
+
   const { alignLeft } = useIsRTL();
+
+  const { userInfo } = useGetUser();
+  const csrfToken = userInfo?.csrfToken;
+
+  const [setDefaultLanguage, { loading: settingDefault }] = useMutation(
+    SET_DEFAULT_LANGUAGE,
+    {
+      context: {
+        headers: {
+          'x-csrf-token': csrfToken
+        }
+      },
+      refetchQueries: [LANGUAGES, 'Languages'],
+      onCompleted: (data: { setDefaultLanguage: LanguageType }) => {
+        if (!isEmpty(data.setDefaultLanguage)) {
+          notify(
+            t('common:successfully-updated', {
+              displayName: data.setDefaultLanguage?.displayName
+            }),
+            'success'
+          );
+          setCurrentId(null);
+        }
+      }
+    }
+  );
+
+  useErrorLogger(error);
+
+  const setDefault = useCallback(
+    async (id: number) => {
+      setCurrentId(id);
+      setDefaultLanguage({ variables: { id } }).catch((err) => {
+        setError(err);
+      });
+    },
+    [setDefaultLanguage]
+  );
 
   const columns = useMemo(() => {
     return [
@@ -35,19 +93,55 @@ const LanguageList = ({ languages, selectedColumns }: IProps) => {
       },
       {
         title: t('table:table-item-language'),
-        dataIndex: 'language',
-        key: 'language',
+        dataIndex: 'displayName',
+        key: 'displayName',
+        align: alignLeft,
+        width: 200,
+        ellipsis: true,
+        render: (displayName: string, record: LanguageType) => (
+          <Link href={`${ROUTES.LANGUAGES}/edit/${record.id}`}>
+            <span
+              style={{ width: 'fit-content' }}
+              className="font-medium text-base capitalize text-blue-500"
+            >
+              {displayName}
+            </span>
+          </Link>
+        )
+      },
+      {
+        title: t('table:table-item-status'),
+        dataIndex: 'isDefault',
+        key: 'isDefault',
         align: alignLeft,
         width: 120,
         ellipsis: true,
-        render: (name: string) => (
+        render: (isDefault: boolean) => {
+          if (isDefault) {
+            return (
+              <div>
+                <span
+                  style={{ width: 'fit-content' }}
+                  className="font-medium bg-gray-100 text-gray-500 text-13px md:text-sm rounded shadow-sm block border border-sink-base px-2 py-1 capitalize"
+                >
+                  Default
+                </span>
+              </div>
+            );
+          }
+          return null;
+        }
+      },
+      {
+        title: t('table:table-item-locale-identifier'),
+        dataIndex: 'lcid',
+        key: 'lcid',
+        align: alignLeft,
+        width: 100,
+        ellipsis: true,
+        render: (lcid: string) => (
           <div>
-            <span
-              style={{ width: 'fit-content' }}
-              className="font-medium bg-gray-100 text-13px md:text-sm rounded shadow-sm block border border-sink-base px-2 py-1 capitalize"
-            >
-              {name}
-            </span>
+            <span className="font-medium text-base w-full">{lcid}</span>
           </div>
         )
       },
@@ -56,7 +150,7 @@ const LanguageList = ({ languages, selectedColumns }: IProps) => {
         dataIndex: 'createdAt',
         key: 'createdAt',
         align: alignLeft,
-        width: 180,
+        width: 200,
         render: (createdAt: CreatedUpdatedByAt['createdAt']) => {
           return `${dayjs(createdAt).format('MMM D, YYYY')} at ${dayjs(
             createdAt
@@ -89,18 +183,21 @@ const LanguageList = ({ languages, selectedColumns }: IProps) => {
         title: t('table:table-item-actions'),
         dataIndex: 'id',
         key: 'actions',
-        width: 80,
+        width: 200,
         align: 'center',
-        render: (id: string) => (
+        render: (id: string, record: LanguageType) => (
           <ActionButtons
             id={id}
-            editUrl={`${ROUTES.TAG}/edit/${id}`}
-            deleteModalView="DELETE_TAG"
+            metadata={{ lcid: record.lcid }}
+            copy={`${ROUTES.LANGUAGES}/fork/${id}`}
+            loading={settingDefault && currentId === id}
+            editUrl={`${ROUTES.LANGUAGES}/edit/${id}`}
+            deleteModalView={record.isDefault ? null : 'DELETE_LANGUAGE'}
           />
         )
       }
     ];
-  }, [alignLeft, t]);
+  }, [t, alignLeft, settingDefault, currentId]);
 
   const tableColumns = useMemo(() => {
     return columns?.filter(({ key }) => {

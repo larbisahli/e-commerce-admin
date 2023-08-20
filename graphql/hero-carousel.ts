@@ -7,7 +7,7 @@ export const CREATE_HERO_SLIDE = gql`
     $title: String
     $description: String
     $btnLabel: String
-    $styles: HeroBannerStyleInput!
+    $styles: HeroSlideStyleInput!
     $position: Int!
     $published: Boolean!
   ) {
@@ -34,7 +34,7 @@ export const UPDATE_HERO_SLIDE = gql`
     $title: String
     $description: String
     $btnLabel: String
-    $styles: HeroBannerStyleInput!
+    $styles: HeroSlideStyleInput!
     $position: Int!
     $published: Boolean!
   ) {

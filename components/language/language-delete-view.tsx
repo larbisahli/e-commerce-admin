@@ -4,7 +4,7 @@ import {
   useModalAction,
   useModalState
 } from '@components/ui/modal/modal.context';
-import { DELETE_TAG, TAGS } from '@graphql/tag';
+import { DELETE_LANGUAGE, LANGUAGES } from '@graphql/language';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetUser } from '@hooks/useGetUser';
 import { notify } from '@lib/notify';
@@ -19,25 +19,25 @@ const TagDeleteView = () => {
   const { userInfo } = useGetUser();
   const csrfToken = userInfo?.csrfToken;
 
-  const [deleteAttributeValue, { loading }] = useMutation(DELETE_TAG, {
+  const [deleteLanguage, { loading }] = useMutation(DELETE_LANGUAGE, {
     context: {
       headers: {
         'x-csrf-token': csrfToken
       }
     },
-    refetchQueries: [TAGS, 'Tags']
+    refetchQueries: [LANGUAGES, 'Languages']
   });
 
-  const { id } = useModalState();
+  const { id, meta } = useModalState();
   const { closeModal } = useModalAction();
 
   useErrorLogger(error);
 
   function handleDelete() {
-    deleteAttributeValue({ variables: { id } })
+    deleteLanguage({ variables: { id, lcid: meta.lcid } })
       .then(({ data }) => {
         const {
-          deleteTag: { id }
+          deleteLanguage: { id }
         } = data;
         if (id) {
           notify(t('common:successfully-deleted'), 'success');
@@ -47,7 +47,6 @@ const TagDeleteView = () => {
       .catch((err) => {
         setError(err);
       });
-    closeModal();
   }
   return (
     <ConfirmationCard

@@ -222,6 +222,8 @@
   "update-attribute-value": "Update Attribute Value",
   "edit-attribute": "Edit Attribute",
   "error-name-required": "Name is required",
+  "error-locale-required": "Locale is required",
+  "error-direction-required": "Direction is required",
   "error-display-name-required": "Display name is required",
   "error-icon-required": "Icon is required",
   "text-register": "Register",

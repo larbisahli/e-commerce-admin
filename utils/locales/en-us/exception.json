@@ -1,0 +1,18 @@
+{
+  "no handler for gateway": "No handler for `%s` gateway.",
+  "invalid payment request": "Invalid payment request.",
+  "error paypal payment": "Your payment could not be processed at this time with PayPal",
+  "internal error": "Internal error!",
+  "card declined": "Your card was declined. Reason `%s`",
+  "invalid request": "Invalid request",
+  "gateway auth error": "Could not authenticate to payment gateway. Authentication error!",
+  "gateway internal error": "Something very bad happened on our side. Error was reported!",
+  "invalid addressable": "Invalid addressable type `%s`",
+  "payment instance": "Payment handler must be an instance of `%s`",
+  "missing stripe token": "Request data should contain `stripe_token` field.",
+  "verify form fields": "Please verify the form fields.",
+  "empty collection": "There are no products in this category",
+  "product inventory left": "Product `%s` has only %s item left on stock!",
+  "product_out_of_stock": "Sorry, product `%s` is out of stock!",
+  "gateway error": "Gateway error"
+}

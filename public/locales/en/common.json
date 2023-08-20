@@ -229,6 +229,7 @@
   "text-withdrawal-info": "Withdrawal Information",
   "password-changed-successfully": "Successfully changed your password!",
   "successfully-updated": "successfully updated.",
+  "successfully-duplicated": "successfully duplicate `{{displayName}}`",
   "successfully-added": "successfully added.",
   "successfully-created": "successfully created.",
   "successfully-deleted": "successfully deleted.",

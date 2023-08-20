@@ -175,13 +175,23 @@ const ImageViewModal = () => {
       });
   };
 
-  const renderDeleteButton = () => {
+  const renderActionButtons = () => {
     if (isFolder) {
       return;
     }
 
     return (
-      <div className="absolute bottom-0 right-0  pb-4">
+      <div className="pb-8 pt-10 flex justify-end items-center w-full">
+        <Button
+          onClick={() => saveAs(`${mediaURL}/${photo.image}`, `${name}.png`)}
+          variant="outline"
+          className="text-blue-500 mr-6"
+        >
+          <div className="px-2">
+            <DownloadIcon width={25} height={25} />
+          </div>
+          {'Download'}
+        </Button>
         <Button
           onClick={deleteMediaPhoto}
           loading={loading}
@@ -194,27 +204,6 @@ const ImageViewModal = () => {
           )}
         >
           {t('button-delete')}
-        </Button>
-      </div>
-    );
-  };
-
-  const renderDownloadButton = () => {
-    if (isFolder) {
-      return;
-    }
-
-    return (
-      <div className="my-5">
-        <Button
-          onClick={() => saveAs(`${mediaURL}/${photo.image}`, `${name}.png`)}
-          variant="outline"
-          className="text-blue-500"
-        >
-          <div className="px-2">
-            <DownloadIcon width={25} height={25} />
-          </div>
-          {'Download'}
         </Button>
       </div>
     );
@@ -257,18 +246,21 @@ const ImageViewModal = () => {
               <h3 className="cut-line-1">{name}</h3>
               <div className="flex flex-wrap mt-8">
                 {renderImage()}
-                <div className="flex-1 p-3 relative">
-                  <div className="my-2">
-                    <span className="font-medium pr-1">Name:</span>
-                    <span className="">{name}</span>
+                <div className="flex flex-col w-full">
+                  <div className="flex-1">
+                    <div className="flex-1 p-3 pt-0 relative">
+                      <div className="mb-2">
+                        <span className="font-medium pr-1">Name:</span>
+                        <span className="">{name}</span>
+                      </div>
+                      {renderSize()}
+                      {renderItems()}
+                      {renderType()}
+                      {renderDate()}
+                      {renderImageDimensions()}
+                    </div>
                   </div>
-                  {renderSize()}
-                  {renderItems()}
-                  {renderType()}
-                  {renderDate()}
-                  {renderImageDimensions()}
-                  {renderDeleteButton()}
-                  {renderDownloadButton()}
+                  {renderActionButtons()}
                 </div>
               </div>
             </div>

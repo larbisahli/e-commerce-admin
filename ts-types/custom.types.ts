@@ -4,6 +4,7 @@ import type {
   DELETE_ATTRIBUTE_TYPE,
   DELETE_COUPON_TYPE,
   DELETE_DELIVERY_TIME_TYPE,
+  DELETE_LANGUAGE_TYPE,
   DELETE_MANUFACTURER_TYPE,
   DELETE_ORDER_STATUS_TYPE,
   DELETE_ORDER_TYPE,
@@ -32,6 +33,7 @@ export declare type Scalars = {
   Float: number;
   /** A datetime string with format `Y-m-d H:i:s`, e.g. `2018-05-23 13:43:32`. */
   DateTime: string | number | Date;
+  JSON: { [key: string]: string | number | boolean };
   /**
    * Loose type that allows any value. Be careful when passing in large `Int` or `Float` literals,
    * as they may not be parsed correctly on the server side. Use `String` literals if you are
@@ -67,6 +69,7 @@ export type ModalView =
   | DELETE_DELIVERY_TIME_TYPE
   | DELETE_ORDER_STATUS_TYPE
   | DELETE_TAG_TYPE
+  | DELETE_LANGUAGE_TYPE
   | BAN_CUSTOMER_TYPE
   | BAN_USER_TYPE
   | DELETE_USER_TYPE

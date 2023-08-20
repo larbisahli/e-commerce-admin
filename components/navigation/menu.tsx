@@ -7,7 +7,7 @@ import { ROUTES } from '@utils/routes';
 import cn from 'classnames';
 import classNames from 'classnames/bind';
 import { useTranslation } from 'next-i18next';
-import { Fragment } from 'react';
+import { Fragment, memo } from 'react';
 
 import styles from './scss/index.module.scss';
 
@@ -26,15 +26,13 @@ const authorizedLinks = [
   }
 ];
 
-export default function NavMenu() {
+function NavMenu() {
   const { t } = useTranslation('common');
 
   const {
     userInfo: { profile = [], firstName = '', lastName = '', ali }
   } = useGetUser();
   const { image = null, placeholder = null } = profile[0] ?? {};
-
-  console.log({ image, placeholder });
 
   return (
     <Menu as="div" className="relative inline-block text-left">
@@ -104,3 +102,5 @@ export default function NavMenu() {
     </Menu>
   );
 }
+
+export default memo(NavMenu);

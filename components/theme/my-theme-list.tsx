@@ -150,7 +150,6 @@ const MyThemeList = ({ themes }: IProps) => {
             id={id}
             editUrl={record.isDefault ? `${ROUTES.THEME}/${id}` : null}
             activate={!record.isDefault}
-            activated={record.isDefault}
             deleteModalView={!record.isDefault ? 'DELETE_STORE_THEME' : null}
           />
         )

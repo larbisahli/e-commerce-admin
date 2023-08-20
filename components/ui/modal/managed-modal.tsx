@@ -4,6 +4,7 @@ import {
   DELETE_ATTRIBUTE,
   DELETE_COUPON,
   DELETE_DELIVERY_TIME,
+  DELETE_LANGUAGE,
   DELETE_MANUFACTURER,
   DELETE_ORDER_STATUS,
   DELETE_PRODUCT,
@@ -66,6 +67,10 @@ const FaviconModalView = dynamic(
   () => import('@components/settings/favicon-modal-view')
 );
 
+const LanguageDeleteView = dynamic(
+  () => import('@components/language/language-delete-view')
+);
+
 // const AttributeExportImport = dynamic(
 //   () => import('@components/attribute/attribute-import-export')
 // );
@@ -81,6 +86,7 @@ const ManagedModal = () => {
       {view === DELETE_COUPON && <CouponDeleteView />}
       {view === DELETE_SHIPPING && <ShippingDeleteView />}
       {view === DELETE_TAG && <TagDeleteView />}
+      {view === DELETE_LANGUAGE && <LanguageDeleteView />}
       {view === BAN_CUSTOMER && <BanCustomerView />}
       {view === DELETE_ORDER_STATUS && <OrderStatusDeleteView />}
       {view === DELETE_USER && <UserDeleteView />}

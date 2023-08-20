@@ -76,7 +76,7 @@ export default function UpdateTagPage({ client, localeFiles = {} }: Props) {
           {t('form:button-label-edit-language')}
         </h1>
       </div>
-      <LanguageForm localeFiles={localeFiles} initialValues={language} />
+      <LanguageForm localeFiles={localeFiles} initialValues={language} isFork />
     </>
   );
 }

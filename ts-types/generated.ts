@@ -205,6 +205,16 @@ export interface Tag extends CreatedUpdatedByAt {
   name?: Nullable<Scalars['String']>;
 }
 
+export interface LanguageType extends CreatedUpdatedByAt {
+  id: Scalars['Int'];
+  remoteFilePath: Scalars['String'];
+  displayName: Scalars['String'];
+  lcid: Scalars['String'];
+  direction: Scalars['String'];
+  isDefault: Scalars['Boolean'];
+  translation: Scalars['JSON'];
+}
+
 export interface Language extends CreatedUpdatedByAt {
   id?: Nullable<Scalars['Int']>;
   name?: Nullable<Scalars['String']>;

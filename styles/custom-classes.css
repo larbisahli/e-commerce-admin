@@ -237,3 +237,14 @@
   font-weight: bold;
   background: linear-gradient(#699dea, #2940a8);
 }
+
+.product-tooltip {
+  color: #434343 !important;
+  background-color: rgb(238, 238, 238) !important;
+  border: 1px solid rgb(191, 191, 191) !important;
+}
+
+.product-tooltip-arrow {
+  border-right: 1px solid rgb(191, 191, 191) !important;
+  border-bottom: 1px solid rgb(191, 191, 191) !important;
+}
