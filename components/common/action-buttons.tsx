@@ -24,6 +24,7 @@ type Props = {
   metadata?: { [key: string]: any };
   approveButton?: boolean;
   loading?: boolean;
+  isTenant?: boolean;
   activate?: boolean;
   // eslint-disable-next-line no-unused-vars
   setDefault?: (id: number) => void;
@@ -33,6 +34,7 @@ type Props = {
 const ActionButtons = ({
   id,
   deleteModalView,
+  isTenant = false,
   editUrl,
   detailsUrl,
   copy,
@@ -48,10 +50,12 @@ const ActionButtons = ({
   const { openModal } = useModalAction();
 
   function handleDelete() {
+    if (isTenant) return;
     openModal(deleteModalView, id as string, metadata);
   }
 
   function handleUserStatus(id: string | number, state: string) {
+    if (isTenant) return;
     openModal('BAN_CUSTOMER', id as string, state);
   }
 
@@ -62,7 +66,7 @@ const ActionButtons = ({
           <Loader height="100px" showText={false} />
         </div>
       )}
-      {deleteModalView && (
+      {!isTenant && deleteModalView && (
         <button
           onClick={handleDelete}
           data-tooltip-id="actions-tooltip"
@@ -72,7 +76,7 @@ const ActionButtons = ({
           <Trash width={16} />
         </button>
       )}
-      {userStatus && (
+      {!isTenant && userStatus && (
         <>
           {isUserActive ? (
             <button

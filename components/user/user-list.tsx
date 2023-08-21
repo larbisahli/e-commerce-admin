@@ -3,7 +3,6 @@ import Avatar from '@components/common/avatar';
 import Badge from '@components/ui/badge/badge';
 import ProfileCart from '@components/ui/profile-card';
 import { useGetUser } from '@hooks/index';
-import { siteSettings } from '@settings/site.settings';
 import {
   CreatedUpdatedByAt,
   ImageType,
@@ -12,6 +11,7 @@ import {
 } from '@ts-types/generated';
 import { useIsRTL } from '@utils/locals';
 import { ROUTES } from '@utils/routes';
+import cn from 'classnames';
 import dayjs from 'dayjs';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
@@ -95,17 +95,31 @@ const UserList = ({ users, selectedColumns }: IProps) => {
       },
       {
         title: t('table:table-item-status'),
-        dataIndex: 'active',
-        key: 'active',
+        dataIndex: 'isTenant',
+        key: 'isTenant',
         align: 'center',
-        width: 90,
-        render: (active: boolean) => {
+        width: 250,
+        render: (isTenant: boolean, recode: UserType) => {
           return (
-            <Badge
-              className="!text-sm"
-              text={active ? 'Active' : 'Inactive'}
-              color={active ? 'bg-green-600' : 'bg-red-500'}
-            />
+            <div>
+              <Badge
+                className="mr-2 border !text-sm !text-gray-600 shadow font-medium"
+                text={
+                  isTenant
+                    ? t('table:table-item-owner')
+                    : t('table:table-item-staff')
+                }
+                color={'bg-gray-100'}
+              />
+              <Badge
+                className={cn('!text-sm border', {
+                  'text-red-900': !recode.active,
+                  'text-green-800': recode.active
+                })}
+                text={recode.active ? 'Active' : 'Inactive'}
+                color={recode.active ? 'bg-green-300' : 'bg-red-300'}
+              />
+            </div>
           );
         }
       },
@@ -129,7 +143,7 @@ const UserList = ({ users, selectedColumns }: IProps) => {
             <div>
               <span
                 style={{ width: 'fit-content' }}
-                className="font-medium text-13px md:text-sm rounded block border border-sink-base px-2 py-1 bg-gray-100"
+                className="font-medium block"
               >
                 {phoneNumber ? '+' + phoneNumber : 'N/A'}
               </span>
@@ -183,11 +197,12 @@ const UserList = ({ users, selectedColumns }: IProps) => {
         key: 'actions',
         align: 'center',
         width: 150,
-        render: (id: string, { active }: UserType) => {
+        render: (id: string, { active, isTenant }: UserType) => {
           return (
             <>
               <ActionButtons
                 id={id}
+                isTenant={isTenant}
                 editUrl={`${ROUTES.USER}/edit/${id}`}
                 deleteModalView={userInfo?.id != id ? 'DELETE_USER' : null}
                 userStatus={userInfo?.id != id}

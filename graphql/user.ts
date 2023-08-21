@@ -83,6 +83,7 @@ export const USERS = gql`
       firstName
       lastName
       email
+      isTenant
       phoneNumber
       profile {
         image

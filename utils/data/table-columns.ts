@@ -29,7 +29,7 @@ export const COLUMNS = {
     { label: 'Profile', key: 'profile' },
     { label: 'Name', key: 'firstName' },
     { label: 'Role', key: 'role' },
-    { label: 'Status', key: 'active' },
+    { label: 'Status', key: 'isTenant' },
     { label: 'Email', key: 'email' },
     { label: 'Phone', key: 'phoneNumber' },
     { label: 'Creation Date', key: 'createdAt' },
@@ -142,6 +142,14 @@ export const COLUMNS = {
   language: [
     { label: 'Language', key: 'displayName' },
     { label: 'lcid', key: 'lcid' },
+    { label: 'Status', key: 'isDefault' },
+    { label: 'Creation Date', key: 'createdAt' },
+    { label: 'Placed By', key: 'createdBy' },
+    { label: 'Updated By', key: 'updatedBy' },
+    { label: 'Actions', key: 'actions' }
+  ],
+  'system-store': [
+    { label: 'Store View', key: 'name' },
     { label: 'Status', key: 'isDefault' },
     { label: 'Creation Date', key: 'createdAt' },
     { label: 'Placed By', key: 'createdBy' },

@@ -27,14 +27,6 @@ type FormValues = {
 };
 
 const loginFormSchema = yup.object().shape({
-  alias: yup
-    .string()
-    .test(
-      'len',
-      'Store name must be less then 63 characters',
-      (val) => val.length <= 63 && val.length >= 2
-    )
-    .required('form:error-store-name-required'),
   email: yup.string().email().required('form:error-email-required'),
   password: yup.string().required('form:error-password-required')
 });
@@ -83,8 +75,6 @@ const LoginForm = () => {
   useErrorLogger(error);
 
   function onReCaptchaChange(token) {
-    console.log('Captcha value :>>', token);
-
     const variables = getValues();
 
     setLoading(true);
@@ -111,16 +101,7 @@ const LoginForm = () => {
           ref={_reCaptchaRef}
         />
       </div>
-      <form onSubmit={handleSubmit(onSubmit)} noValidate>
-        <div className="mb-5">
-          <InputSlug
-            {...register('alias')}
-            placeholder={t('form:input-slug')}
-            variant="outline"
-            className="mb-4 mr-2 w-full"
-            error={t(errors?.alias?.message!)}
-          />
-        </div>
+      <form onSubmit={handleSubmit(onSubmit)} noValidate className="pt-8">
         <div className="mb-5 phone-number-class">
           <Input
             {...register('email')}
@@ -141,7 +122,7 @@ const LoginForm = () => {
           forgotPageLink={ROUTES.FORGET_PASSWORD}
         />
         <Button
-          className="w-full rounded-sm"
+          className="w-full rounded-sm mt-8"
           loading={loading && !error}
           disabled={loading}
         >

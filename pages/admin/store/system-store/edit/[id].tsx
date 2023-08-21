@@ -1,13 +1,19 @@
+import { useQuery } from '@apollo/client';
 import AppLayout from '@components/layouts/app';
-import { useGetUser } from '@hooks/index';
+import ErrorMessage from '@components/ui/error-message';
+import Loader from '@components/ui/loader/loader';
+import { LANGUAGE } from '@graphql/language';
+import { useErrorLogger, useGetUser } from '@hooks/index';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
+import { LanguageType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import fs from 'fs';
 import { readFile } from 'fs/promises';
 import type { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import path from 'path';
@@ -17,19 +23,47 @@ const LanguageForm = dynamic(
   { ssr: true }
 );
 
+interface TLanguage {
+  language: LanguageType;
+}
+interface OptionsVariable {
+  id: number;
+}
+
 interface Props extends SSRProps {
   localeFiles: { [key: string]: string };
 }
 
 export default function UpdateTagPage({ client, localeFiles = {} }: Props) {
   const { t } = useTranslation();
+  const { query } = useRouter();
+
+  const id = parseInt(query.id as string, 10);
+
+  const { data, loading, error } = useQuery<TLanguage, OptionsVariable>(
+    LANGUAGE,
+    {
+      variables: { id },
+      fetchPolicy: 'cache-and-network'
+    }
+  );
+
+  const { language = [] } = data ?? {};
 
   useGetUser(client);
+  useErrorLogger(error);
+
+  if (loading) {
+    return <Loader text={t('common:text-loading')} />;
+  }
+  if (error) {
+    return <ErrorMessage message={error.message} />;
+  }
 
   return (
     <>
       <Head>
-        <title>New Language | Dropgala</title>
+        <title>Edit Language | Dropgala</title>
         <link
           rel="icon"
           type="image/svg"
@@ -39,10 +73,10 @@ export default function UpdateTagPage({ client, localeFiles = {} }: Props) {
       </Head>
       <div className="py-5 sm:py-8 flex border-b border-dashed border-gray-300">
         <h1 className="text-xl font-semibold text-heading">
-          {t('form:button-label-new-language')}
+          {t('form:button-label-edit-language')}
         </h1>
       </div>
-      <LanguageForm localeFiles={localeFiles} />
+      <LanguageForm localeFiles={localeFiles} initialValues={language} />
     </>
   );
 }

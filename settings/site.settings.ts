@@ -220,8 +220,7 @@ export const siteSettings = {
             href: ROUTES.SYSTEM_STORES,
             label: 'sidebar-nav-item-all-stores',
             padding: '35px',
-            isSubLink: true,
-            disabled: true
+            isSubLink: true
           },
           {
             id: '9YcWhG',

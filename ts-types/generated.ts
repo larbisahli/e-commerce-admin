@@ -111,6 +111,7 @@ export interface UserType extends CreatedUpdatedByAt {
   role: RoleType;
   roleId?: number;
   active: boolean;
+  isTenant: boolean;
   csrfToken?: string;
   csrfError?: string;
   storeName?: string;
@@ -215,9 +216,13 @@ export interface LanguageType extends CreatedUpdatedByAt {
   translation: Scalars['JSON'];
 }
 
-export interface Language extends CreatedUpdatedByAt {
-  id?: Nullable<Scalars['Int']>;
-  name?: Nullable<Scalars['String']>;
+export interface StoreViewType extends CreatedUpdatedByAt {
+  id: Scalars['Int'];
+  name: Scalars['String'];
+  code: Scalars['String'];
+  isDefault: Scalars['Boolean'];
+  active: Scalars['Boolean'];
+  language: LanguageType;
 }
 
 export interface OrderStatus extends CreatedUpdatedByAt {

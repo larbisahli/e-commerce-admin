@@ -49,29 +49,12 @@ export const LANGUAGE = gql`
   }
 `;
 
-// export const LANGUAGES_FOR_SELECT = gql`
-//   query GetTagsSelect($page: Int!, $limit: Int!, $orderBy: String!) {
-//     tagSelect(page: $page, limit: $limit, orderBy: $orderBy) {
-//       id
-//       name
-//     }
-//   }
-// `;
-
-export const FORK_LANGUAGE = gql`
-  mutation ForkLanguage($id: Int!) {
-    forkLanguage(id: $id) {
+export const LANGUAGES_FOR_SELECT = gql`
+  query GetLanguageSelect($page: Int!, $limit: Int!, $orderBy: String!) {
+    languageSelect(page: $page, limit: $limit, orderBy: $orderBy) {
       id
       displayName
-    }
-  }
-`;
-
-export const SET_DEFAULT_LANGUAGE = gql`
-  mutation SetDefaultLanguage($id: Int!) {
-    setDefaultLanguage(id: $id) {
-      id
-      displayName
+      lcid
     }
   }
 `;

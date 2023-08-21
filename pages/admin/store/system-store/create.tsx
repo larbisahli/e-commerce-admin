@@ -3,17 +3,14 @@ import { useGetUser } from '@hooks/index';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { ROUTES } from '@utils/routes';
-import fs from 'fs';
-import { readFile } from 'fs/promises';
 import type { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import path from 'path';
 
-const LanguageForm = dynamic(
-  () => import('@components/language/language-form'),
+const StoreViewForm = dynamic(
+  () => import('@components/store-views/store-view-form'),
   { ssr: true }
 );
 
@@ -21,7 +18,7 @@ interface Props extends SSRProps {
   localeFiles: { [key: string]: string };
 }
 
-export default function UpdateTagPage({ client, localeFiles = {} }: Props) {
+export default function UpdateTagPage({ client }: Props) {
   const { t } = useTranslation();
 
   useGetUser(client);
@@ -29,20 +26,20 @@ export default function UpdateTagPage({ client, localeFiles = {} }: Props) {
   return (
     <>
       <Head>
-        <title>New Language | Dropgala</title>
+        <title>New Store View | Dropgala</title>
         <link
           rel="icon"
           type="image/svg"
           sizes="32x32"
-          href="/svg/language.svg"
+          href="/svg/system-store.svg"
         />
       </Head>
       <div className="py-5 sm:py-8 flex border-b border-dashed border-gray-300">
         <h1 className="text-xl font-semibold text-heading">
-          {t('form:button-label-new-language')}
+          {t('form:label-new-store-view')}
         </h1>
       </div>
-      <LanguageForm localeFiles={localeFiles} />
+      <StoreViewForm />
     </>
   );
 }
@@ -62,41 +59,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
-  let localeFiles = [];
-
-  try {
-    const languageLocale = 'en-us';
-
-    const files = await fs.promises
-      .readdir(path.resolve(`./utils/locales/${languageLocale}`))
-      .then((f) => f);
-
-    localeFiles = await Promise.all(
-      files?.map(async (f) => {
-        const fileName = f?.split('.')[0];
-
-        const translation = JSON.parse(
-          await readFile(
-            path.resolve(`./utils/locales/${languageLocale}/${f}`),
-            'utf8'
-          )
-        );
-
-        return { [fileName]: translation };
-      })
-    );
-  } catch (error) {
-    console.log({ error });
-  }
-
-  localeFiles = Object.assign({}, ...localeFiles);
-
   const { csrfToken, csrfError } = await XSRFHandler(context);
 
   return {
     props: {
       ...(await serverSideTranslations(locale, ['form', 'common', 'error'])),
-      localeFiles,
       client: { ...(client ?? {}), csrfToken, csrfError }
     }
   };

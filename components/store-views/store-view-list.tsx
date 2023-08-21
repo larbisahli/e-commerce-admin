@@ -1,13 +1,27 @@
+import { useMutation } from '@apollo/client';
 import ActionButtons from '@components/common/action-buttons';
+import Badge from '@components/ui/badge/badge';
 import Link from '@components/ui/link';
 import ProfileCart from '@components/ui/profile-card';
-import { CreatedUpdatedByAt, LanguageType, Tag } from '@ts-types/generated';
+import { LANGUAGES } from '@graphql/language';
+import { SET_DEFAULT_LANGUAGE } from '@graphql/store-view';
+import { useErrorLogger } from '@hooks/useErrorLogger';
+import { useGetUser } from '@hooks/useGetUser';
+import { notify } from '@lib/notify';
+import {
+  CreatedUpdatedByAt,
+  LanguageType,
+  StoreViewType,
+  Tag
+} from '@ts-types/generated';
 import { useIsRTL } from '@utils/locals';
 import { ROUTES } from '@utils/routes';
+import cn from 'classnames';
 import dayjs from 'dayjs';
+import { isEmpty } from 'lodash';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
-import { useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 const Table = dynamic(
   () => import('@components/ui/table').then((mod) => mod.Table),
@@ -15,14 +29,55 @@ const Table = dynamic(
 );
 
 export type IProps = {
-  languages: LanguageType[] | undefined | null;
+  storeViews: StoreViewType[] | undefined | null;
   selectedColumns: string[];
 };
 
-const LanguageList = ({ languages, selectedColumns }: IProps) => {
+const StoreViewList = ({ storeViews, selectedColumns }: IProps) => {
   const { t } = useTranslation();
 
+  const [error, setError] = useState(null);
+  const [currentId, setCurrentId] = useState(null);
+
   const { alignLeft } = useIsRTL();
+
+  const { userInfo } = useGetUser();
+  const csrfToken = userInfo?.csrfToken;
+
+  const [setDefaultLanguage, { loading: settingDefault }] = useMutation(
+    SET_DEFAULT_LANGUAGE,
+    {
+      context: {
+        headers: {
+          'x-csrf-token': csrfToken
+        }
+      },
+      refetchQueries: [LANGUAGES, 'Languages'],
+      onCompleted: (data: { setDefaultLanguage: LanguageType }) => {
+        if (!isEmpty(data.setDefaultLanguage)) {
+          notify(
+            t('common:successfully-updated', {
+              displayName: data.setDefaultLanguage?.displayName
+            }),
+            'success'
+          );
+          setCurrentId(null);
+        }
+      }
+    }
+  );
+
+  useErrorLogger(error);
+
+  const setDefault = useCallback(
+    async (id: number) => {
+      setCurrentId(id);
+      setDefaultLanguage({ variables: { id } }).catch((err) => {
+        setError(err);
+      });
+    },
+    [setDefaultLanguage]
+  );
 
   const columns = useMemo(() => {
     return [
@@ -35,19 +90,19 @@ const LanguageList = ({ languages, selectedColumns }: IProps) => {
         ellipsis: true
       },
       {
-        title: t('table:table-item-language'),
-        dataIndex: 'displayName',
-        key: 'displayName',
+        title: t('table:table-item-store-view'),
+        dataIndex: 'name',
+        key: 'name',
         align: alignLeft,
         width: 200,
         ellipsis: true,
-        render: (displayName: string, record: LanguageType) => (
-          <Link href={`${ROUTES.LANGUAGES}/edit/${record.id}`}>
+        render: (name: string, record: LanguageType) => (
+          <Link href={`${ROUTES.SYSTEM_STORES}/edit/${record.id}`}>
             <span
               style={{ width: 'fit-content' }}
               className="font-medium text-base capitalize text-blue-500"
             >
-              {displayName}
+              {name}
             </span>
           </Link>
         )
@@ -59,16 +114,25 @@ const LanguageList = ({ languages, selectedColumns }: IProps) => {
         align: alignLeft,
         width: 120,
         ellipsis: true,
-        render: (isDefault: boolean) => {
+        render: (isDefault: boolean, recode: StoreViewType) => {
           if (isDefault) {
             return (
               <div>
-                <span
-                  style={{ width: 'fit-content' }}
-                  className="font-medium bg-gray-100 text-gray-500 text-13px md:text-sm rounded shadow-sm block border border-sink-base px-2 py-1 capitalize"
-                >
-                  Default
-                </span>
+                {isDefault && (
+                  <Badge
+                    className="mr-2 border !text-sm !text-gray-600 shadow font-medium"
+                    text={t('table:table-item-default')}
+                    color={'bg-gray-100'}
+                  />
+                )}
+                <Badge
+                  className={cn('!text-sm border', {
+                    'text-red-900': !recode.active,
+                    'text-green-800': recode.active
+                  })}
+                  text={recode.active ? 'Active' : 'Inactive'}
+                  color={recode.active ? 'bg-green-300' : 'bg-red-300'}
+                />
               </div>
             );
           }
@@ -76,15 +140,15 @@ const LanguageList = ({ languages, selectedColumns }: IProps) => {
         }
       },
       {
-        title: t('table:table-item-locale-identifier'),
-        dataIndex: 'lcid',
-        key: 'lcid',
+        title: t('table:table-item-code'),
+        dataIndex: 'code',
+        key: 'code',
         align: alignLeft,
         width: 100,
         ellipsis: true,
-        render: (lcid: string) => (
+        render: (code: string) => (
           <div>
-            <span className="font-medium text-base w-full">{lcid}</span>
+            <span className="font-medium text-base w-full">{code}</span>
           </div>
         )
       },
@@ -133,13 +197,14 @@ const LanguageList = ({ languages, selectedColumns }: IProps) => {
             id={id}
             metadata={{ lcid: record.lcid }}
             copy={`${ROUTES.LANGUAGES}/fork/${id}`}
+            loading={settingDefault && currentId === id}
             editUrl={`${ROUTES.LANGUAGES}/edit/${id}`}
             deleteModalView={record.isDefault ? null : 'DELETE_LANGUAGE'}
           />
         )
       }
     ];
-  }, [t, alignLeft]);
+  }, [t, alignLeft, settingDefault, currentId]);
 
   const tableColumns = useMemo(() => {
     return columns?.filter(({ key }) => {
@@ -156,7 +221,7 @@ const LanguageList = ({ languages, selectedColumns }: IProps) => {
           //@ts-ignore
           columns={tableColumns}
           emptyText={t('table:empty-table-data')}
-          data={languages}
+          data={storeViews}
           rowKey="id"
           scroll={{ x: 800 }}
         />
@@ -165,4 +230,4 @@ const LanguageList = ({ languages, selectedColumns }: IProps) => {
   );
 };
 
-export default LanguageList;
+export default StoreViewList;

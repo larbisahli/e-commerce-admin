@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client';
-import LanguageList from '@components/language/language-list';
 import AppLayout from '@components/layouts/app';
+import StoreViewList from '@components/store-views/store-view-list';
 import { Error } from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { LANGUAGES } from '@graphql/language';
@@ -8,7 +8,7 @@ import { useErrorLogger, useGetUser } from '@hooks/index';
 import { useTableColumn } from '@hooks/useTableColumn';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
-import { LanguageType, OrderBy, SortOrder } from '@ts-types/generated';
+import { OrderBy, SortOrder, StoreViewType } from '@ts-types/generated';
 import { COLUMNS } from '@utils/data/table-columns';
 import { ROUTES } from '@utils/routes';
 import isEmpty from 'lodash/isEmpty';
@@ -35,9 +35,9 @@ const PageMainAction = dynamic(
   }
 );
 
-interface TLanguages {
-  languages: LanguageType[];
-  languageCount: { count: number };
+interface TSystemStore {
+  storeViews: StoreViewType[];
+  storeViewCount: { count: number };
 }
 
 interface OptionsVariable {
@@ -47,7 +47,7 @@ interface OptionsVariable {
   sortedBy: SortOrder;
 }
 
-export default function Languages({ client }: SSRProps) {
+export default function SystemStore({ client }: SSRProps) {
   const { t } = useTranslation();
 
   const [page, setPage] = useState(1);
@@ -55,10 +55,10 @@ export default function Languages({ client }: SSRProps) {
   const [limit, setLimit] = useState({ id: 1, value: 10, label: 10 });
 
   const { selectedTableColumns, handleColumnChange } =
-    useTableColumn('language');
+    useTableColumn('system-store');
 
   const { data, loading, error, fetchMore } = useQuery<
-    TLanguages,
+    TSystemStore,
     OptionsVariable
   >(LANGUAGES, {
     variables: {
@@ -70,7 +70,7 @@ export default function Languages({ client }: SSRProps) {
     fetchPolicy: 'cache-and-network'
   });
 
-  const { languages = [], languageCount: { count } = { count: 0 } } =
+  const { storeViews = [], storeViewCount: { count } = { count: 0 } } =
     data ?? {};
 
   useGetUser(client);
@@ -98,21 +98,21 @@ export default function Languages({ client }: SSRProps) {
   return (
     <>
       <Head>
-        <title>Languages | Dropgala</title>
+        <title>System store | Dropgala</title>
         <link
           rel="icon"
           type="image/svg"
           sizes="32x32"
-          href="/svg/language.svg"
+          href="/svg/system-store.svg"
         />
       </Head>
       <PageMainAction
-        href={`${ROUTES.LANGUAGES}/create`}
-        title={t('common:sidebar-nav-item-languages')}
-        label={t('form:button-label-new-language')}
+        href={`${ROUTES.SYSTEM_STORES}/create`}
+        title={t('common:sidebar-nav-item-store-views')}
+        label={t('common:sidebar-nav-item-create-store-view')}
       />
       <PageMainHeader
-        columns={COLUMNS['language']}
+        columns={COLUMNS['system-store']}
         selectedColumns={selectedTableColumns}
         handleColumnChange={handleColumnChange}
         onLimitChange={(value) => {
@@ -124,15 +124,15 @@ export default function Languages({ client }: SSRProps) {
         currentPage={page}
         perPage={limit.value}
       />
-      <LanguageList
-        languages={languages}
+      <StoreViewList
+        storeViews={storeViews}
         selectedColumns={selectedTableColumns}
       />
     </>
   );
 }
 
-Languages.Layout = AppLayout;
+SystemStore.Layout = AppLayout;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { locale } = context;

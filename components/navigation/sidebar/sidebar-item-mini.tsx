@@ -4,15 +4,9 @@ import * as sidebarIcons from '@components/icons/sidebar';
 import ActiveLink from '@components/ui/activeLink';
 import { useUI } from '@hooks/useUI';
 import cn from 'classnames';
-import classNames from 'classnames/bind';
 import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
 import React, { useMemo } from 'react';
-
-import styles from '../scss/index.module.scss';
-
-let cx = classNames.bind(styles);
-
 interface Props {
   id: string;
   href: string;
@@ -80,7 +74,7 @@ const SidebarItem = ({
           )}
           onClick={() => openSublevelSidebar({ id })}
         >
-          <SidebarLabel icon={icon} />
+          <SidebarLabel icon={icon} label={label} />
         </div>
       ) : (
         <ActiveLink
@@ -102,7 +96,7 @@ const SidebarItem = ({
           )}
           includes={includes}
         >
-          <SidebarLabel icon={icon} />
+          <SidebarLabel icon={icon} label={label} />
         </ActiveLink>
       )}
       {line && (
@@ -114,12 +108,15 @@ const SidebarItem = ({
   );
 };
 
-const SidebarLabel = ({ icon }: { icon: string }) => {
+const SidebarLabel = ({ icon, label }: { icon: string; label: string }) => {
   const TagName = sidebarIcons[icon];
 
   return (
     <React.Fragment>
       {icon && TagName && <TagName className="w-[22px] h-[22px]" />}
+      <span className="text-xs pt-1 text-gray-400 font-medium">
+        {label?.split(' ')[0]}
+      </span>
     </React.Fragment>
   );
 };

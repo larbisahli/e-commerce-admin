@@ -79,6 +79,9 @@ const PasswordInput = React.forwardRef<HTMLInputElement, Props>(
             spellCheck="false"
             {...rest}
           />
+          {error && (
+            <p className="my-2 text-xs text-start text-red-500">{error}</p>
+          )}
           {forgotPageLink && forgotPassHelpText && (
             <div className="flex justify-end mt-1">
               <Link
@@ -101,9 +104,6 @@ const PasswordInput = React.forwardRef<HTMLInputElement, Props>(
             )}
           </label>
         </div>
-        {error && (
-          <p className="my-2 text-xs text-start text-red-500">{error}</p>
-        )}
       </div>
     );
   }

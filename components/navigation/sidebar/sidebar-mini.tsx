@@ -22,7 +22,7 @@ const SidebarMini: React.FC = () => {
   return (
     <aside
       className={cx(
-        'w-20 lg:hidden md:block hidden h-full overflow-y-auto bg-sidenav fixed start-0 bottom-0 pt-4 z-50',
+        'w-22 lg:hidden md:block hidden h-full overflow-y-auto bg-sidenav fixed start-0 bottom-0 pt-4 z-50',
         {
           'md:!block': displayMiniSidebar
         }
