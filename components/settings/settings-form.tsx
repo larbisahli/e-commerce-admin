@@ -9,6 +9,7 @@ import Input from '@components/ui/input';
 import Label from '@components/ui/label';
 import SelectInput from '@components/ui/select-input';
 import TextArea from '@components/ui/text-area';
+import { UPDATE_STORE_SETTINGS } from '@graphql/settings';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetUser } from '@hooks/useGetUser';
@@ -102,7 +103,7 @@ export default function SettingsForm({ settings }: IProps) {
 
   const csrfToken = userInfo?.csrfToken;
 
-  const [updateSettings, { loading }] = useMutation(UPDATE_SETTINGS, {
+  const [updateSettings, { loading }] = useMutation(UPDATE_STORE_SETTINGS, {
     context: {
       headers: {
         'x-csrf-token': csrfToken

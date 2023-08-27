@@ -12,6 +12,7 @@ interface SelectInputProps {
   control: any;
   rules?: any;
   name: string;
+  isSimple?: boolean;
   options: object[];
   [key: string]: unknown;
 }
@@ -26,6 +27,7 @@ const SelectInput = ({
   isMulti,
   isClearable,
   isLoading,
+  isSimple = false,
   closeMenuOnSelect = true,
   hideSelectedOptions = false,
   // isSearchable=true,
@@ -50,6 +52,7 @@ const SelectInput = ({
           isMulti={isMulti}
           isClearable={isClearable}
           isLoading={isLoading}
+          isSimple={isSimple}
           closeMenuOnSelect={closeMenuOnSelect}
           hideSelectedOptions={hideSelectedOptions}
           options={options}

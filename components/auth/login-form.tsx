@@ -2,7 +2,6 @@ import { useMutation } from '@apollo/client';
 import Alert from '@components/ui/alert';
 import Button from '@components/ui/button';
 import Input from '@components/ui/input';
-import InputSlug from '@components/ui/input-slug';
 import PasswordInput from '@components/ui/password-input';
 import { USER_LOGIN } from '@graphql/login';
 import { yupResolver } from '@hookform/resolvers/yup';

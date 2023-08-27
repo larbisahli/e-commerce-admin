@@ -22,10 +22,11 @@ export const selectStyles = {
   control: (_: any, state: any) => ({
     display: 'flex',
     alignItems: 'center',
-    minHeight: 50,
+    minHeight: 45,
     // backgroundColor: '#F3F4F6',
     backgroundColor: '#ffffff',
-    borderRadius: 5,
+    // backgroundColor: '#f5f5f5',
+    borderRadius: 3,
     border: '1px solid #D1D5DB',
     borderColor: state.isFocused ? 'rgb(var(--color-accent-500))' : '#D1D5DB',
     boxShadow:
@@ -37,9 +38,9 @@ export const selectStyles = {
   }),
   dropdownIndicator: (provided: any, state: any) => ({
     ...provided,
-    color: state.isFocused ? '#9CA3AF' : '#cccccc',
+    color: state.isFocused ? '#74787e' : '#9CA3AF',
     '&:hover': {
-      color: '#9CA3AF'
+      color: '#74787e'
     }
   }),
   clearIndicator: (provided: any, state: any) => ({
@@ -53,7 +54,7 @@ export const selectStyles = {
   }),
   menu: (provided: any) => ({
     ...provided,
-    borderRadius: 5,
+    borderRadius: 3,
     border: '1px solid #E5E7EB',
     boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)'
   }),
@@ -66,6 +67,101 @@ export const selectStyles = {
     // fontSize: '1rem',
     fontSize: '0.875rem',
     color: '#4B5563'
+  }),
+  multiValue: (provided: any, _: any) => ({
+    ...provided,
+    backgroundColor: 'rgb(var(--color-accent-400))',
+    borderRadius: 4,
+    overflow: 'hidden',
+    boxShadow: '0 0px 3px 0 rgba(0, 0, 0, 0.1), 0 0px 2px 0 rgba(0, 0, 0, 0.06)'
+  }),
+  multiValueLabel: (provided: any, _: any) => ({
+    ...provided,
+    paddingLeft: 10,
+    fontSize: '0.875rem',
+    color: '#ffffff'
+  }),
+  multiValueRemove: (provided: any, _: any) => ({
+    ...provided,
+    paddingLeft: 0,
+    paddingRight: 8,
+    color: '#ffffff',
+    cursor: 'pointer',
+
+    '&:hover': {
+      backgroundColor: 'rgb(var(--color-accent-300))',
+      color: '#F3F4F6'
+    }
+  }),
+  placeholder: (provided: any, _: any) => ({
+    ...provided,
+    fontSize: '0.875rem',
+    color: 'rgba(107, 114, 128, 0.7)'
+  }),
+  noOptionsMessage: (provided: any, _: any) => ({
+    ...provided,
+    fontSize: '0.875rem',
+    color: 'rgba(107, 114, 128, 0.7)'
+  })
+};
+
+export const simpleSelectStyles = {
+  option: (provided: any, state: any) => ({
+    ...provided,
+    fontSize: '0.875rem',
+    color: state.isSelected ? '#222' : '#6B7280',
+    cursor: 'pointer',
+    borderBottom: state.isSelected
+      ? '1px solid #a6c7f4c4'
+      : '1px solid #E5E7EB',
+    backgroundColor: state.isSelected
+      ? '#cde2ffc4'
+      : state.isFocused
+      ? '#F9FAFB'
+      : '#fff'
+  }),
+  control: (_: any, state: any) => ({
+    display: 'flex',
+    alignItems: 'center',
+    borderRadius: 3,
+    backgroundColor: '#f5f5f5',
+    '&:hover': {
+      backgroundColor: '#e7e7e7'
+    }
+  }),
+  indicatorSeparator: () => ({
+    display: 'none'
+  }),
+  dropdownIndicator: (provided: any, state: any) => ({
+    ...provided,
+    color: state.isFocused ? '#333' : '#74787e',
+    '&:hover': {
+      color: '#333'
+    }
+  }),
+  clearIndicator: (provided: any, state: any) => ({
+    ...provided,
+    color: state.isFocused ? '#9CA3AF' : '#e03d3d',
+    padding: 0,
+    cursor: 'pointer',
+    '&:hover': {
+      color: '#b92f2f'
+    }
+  }),
+  menu: (provided: any) => ({
+    ...provided,
+    borderRadius: 2,
+    border: '1px solid #E5E7EB',
+    boxShadow: 'none'
+  }),
+  valueContainer: (provided: any, _: any) => ({
+    ...provided,
+    paddingLeft: 16
+  }),
+  singleValue: (provided: any, _: any) => ({
+    ...provided,
+    fontSize: '0.875rem',
+    color: '#333'
   }),
   multiValue: (provided: any, _: any) => ({
     ...provided,

@@ -5,17 +5,27 @@ export const CREATE_STORE = gql`
     $firstName: String!
     $lastName: String!
     $email: String!
+    $password: String!
     $storeName: String!
     $alias: String!
     $country: CountryInput!
+    $currency: CurrencyInput!
+    $acceptCondition: Boolean!
+    $phoneNumber: String
+    $token: String
   ) {
     createStore(
       firstName: $firstName
       lastName: $lastName
       email: $email
+      password: $password
       storeName: $storeName
       alias: $alias
       country: $country
+      currency: $currency
+      acceptCondition: $acceptCondition
+      phoneNumber: $phoneNumber
+      token: $token
     ) {
       storeName
     }
