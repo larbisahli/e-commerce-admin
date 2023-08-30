@@ -2,7 +2,6 @@ import Avatar from '@components/common/avatar';
 import Link from '@components/ui/link';
 import { Menu, Transition } from '@headlessui/react';
 import { useGetUser } from '@hooks/index';
-import { siteSettings } from '@settings/site.settings';
 import { ROUTES } from '@utils/routes';
 import cn from 'classnames';
 import classNames from 'classnames/bind';
@@ -30,7 +29,12 @@ function NavMenu() {
   const { t } = useTranslation('common');
 
   const {
-    userInfo: { profile = [], firstName = '', lastName = '', ali }
+    userInfo: {
+      profile = [],
+      firstName = '',
+      lastName = '',
+      store: { alias = '' } = {}
+    }
   } = useGetUser();
   const { image = null, placeholder = null } = profile[0] ?? {};
 
@@ -70,12 +74,12 @@ function NavMenu() {
             <span>Your store:</span>
             <Link
               target="_blank"
-              href={`https://${ali}.dropgala.com`}
+              href={`https://${alias}.dropgala.com`}
               className={cn(
                 'block px-1 text-accent text-sm capitalize font-semibold transition duration-200 hover:text-accent'
               )}
             >
-              {ali}
+              {alias}
             </Link>
           </div>
           <div className="bg-gray-300 h-[1px] my-2 w-full"></div>

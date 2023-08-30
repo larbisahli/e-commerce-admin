@@ -29,10 +29,6 @@ const defaultValues = {
 
 const initialValues = {};
 
-const languageOptions = [
-  { name: 'English', id: 1 },
-  { name: 'Arabic', id: 2 }
-];
 const storeViewOptions = [
   { name: 'All Store Views', id: 0 },
   { name: 'English Store', id: 1 },
@@ -71,24 +67,6 @@ const PageMainAction = ({ href, title, label, onClick, RenderIcon }: Props) => {
               className="h-[45px] flex items-center pb-1 ml-1 cursor-pointer"
               data-tooltip-id="actions-selectors"
               data-tooltip-content={'Select your store view'}
-            >
-              <QuestionMark width="20" height="20" />
-            </div>
-          </div>
-          <div className="flex items-center relative">
-            <Label className="pr-1 mt-1">{t('common:language')}:</Label>
-            <SelectInput
-              isSimple
-              name="language"
-              control={control}
-              getOptionLabel={(option: { name: string }) => option.name}
-              getOptionValue={(option: { id: string }) => option.id}
-              options={languageOptions}
-            />
-            <div
-              data-tooltip-id="actions-selectors"
-              data-tooltip-content={'Select your language'}
-              className="h-[45px] flex items-center pb-1 ml-1 cursor-pointer"
             >
               <QuestionMark width="20" height="20" />
             </div>

@@ -52,9 +52,14 @@ export const USER_AUTH = gql`
       lastName
       phoneNumber
       email
-      isTenant
+      isAdmin
       active
-      storeName
+      store {
+        storeName
+        published
+        tier
+        alias
+      }
       profile {
         id
         image
@@ -62,7 +67,7 @@ export const USER_AUTH = gql`
       }
       role {
         id
-        roleName
+        name
       }
     }
   }

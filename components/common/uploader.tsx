@@ -26,12 +26,12 @@ export default function Uploader({ setLoading, mediaId = null, refetch }: any) {
   const { getRootProps, getInputProps } = useDropzone({
     multiple: true,
     maxSize: 5 * (1024 * 1024),
-    onDrop: async (acceptedFiles, fileRejections) => {
+    onDrop: async (acceptedFiles, fileRejections = []) => {
       setLoading(true);
 
       try {
         fileRejections?.forEach((file) => {
-          file.errors?.forEach((err) => {
+          (file.errors ?? [])?.forEach((err) => {
             if (err.code === 'file-too-large') {
               notify(`Error: Image is larger than 5MB`, 'error');
             }

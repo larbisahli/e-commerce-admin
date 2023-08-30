@@ -46,15 +46,20 @@ export async function verifyAuth(context: GetServerSidePropsContext) {
       algorithms: Alg
     }) as JwtPayload;
 
+    console.log({ payload });
+
     if (
       !payload ||
-      !payload?.uid ||
-      !payload.ali ||
+      !payload.iss ||
+      !payload.ema ||
+      !payload.uid ||
+      !payload.sid ||
       payload.iss !== process.env.TOKEN_ISSUER
     ) {
-      return { error: 'Invalid Access Token' };
+      throw Error('Invalid Access Token');
     }
 
+    console.log('==========================>');
     // fetch for client info
     const { data } = await apolloClient.query<TUser>({
       query: USER_AUTH,
@@ -69,24 +74,22 @@ export async function verifyAuth(context: GetServerSidePropsContext) {
 
     const { userAuth, error } = data ?? {};
 
+    console.log(userAuth, { error });
+
     if (!isEmpty(error) || isEmpty(userAuth)) {
       console.log('Auth Error:>>', { error });
-      return {
-        error: { message: error?.message ?? 'Something happened' }
-      };
+      throw Error(error?.message ?? 'Something happened');
     }
 
     if (!userAuth?.active) {
-      return {
-        error: { message: 'User not active!' }
-      };
+      throw Error('User not active!');
     }
 
     return {
       client: { ...userAuth, ...payload }
     };
   } catch (error) {
-    console.log('verifyAuth Error:>>', { error });
+    console.log('verifyAuth Error:>>', { message: error.message, error });
     const cookies = new Cookies(req, res);
     cookies.set(CookieNames.USER_TOKEN_NAME, '', {
       httpOnly: true,

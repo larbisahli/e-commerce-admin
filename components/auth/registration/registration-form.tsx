@@ -154,7 +154,7 @@ const RegistrationForm = () => {
     setErrorMessage(null);
     createStore({ variables }).catch((error) => {
       const err = error?.graphQLErrors[0];
-      setErrorMessage(`error:${err?.t ?? 'SOMETHING_HAPPENED'}`);
+      setErrorMessage(err?.message ?? 'Something happened');
     });
   }
 

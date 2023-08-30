@@ -114,7 +114,7 @@ export interface UserType extends CreatedUpdatedByAt {
   isTenant: boolean;
   csrfToken?: string;
   csrfError?: string;
-  storeName?: string;
+  store?: SettingsType;
   // JWT
   uid?: string;
   iss?: string;
@@ -476,6 +476,9 @@ export interface SettingsType {
   storeNumber?: string;
   addressLine1?: string;
   addressLine2?: string;
+  alias?: string;
+  published?: boolean;
+  tier?: string;
   currency?: {
     symbol: string;
     name: string;

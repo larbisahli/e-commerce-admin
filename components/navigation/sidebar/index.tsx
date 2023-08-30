@@ -25,7 +25,7 @@ const Sidebar: React.FC<Props> = ({ absolute = false }) => {
   } = useUI();
 
   const {
-    userInfo: { storeName = '' }
+    userInfo: { store: { storeName = '' } = {} }
   } = useGetUser();
 
   return (

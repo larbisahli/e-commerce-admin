@@ -88,12 +88,12 @@ export default function ProductsPage({ client }: SSRProps) {
     });
   };
 
-  // if (loading) {
-  //   return <Loader text={t('common:text-loading')} />;
-  // }
-  // if (!isEmpty(error)) {
-  //   return <ErrorMessage message={error.message} />;
-  // }
+  if (loading) {
+    return <Loader text={t('common:text-loading')} />;
+  }
+  if (!isEmpty(error)) {
+    return <ErrorMessage message={error.message} />;
+  }
 
   return (
     <>
@@ -126,14 +126,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const { locale } = context;
   const { client } = await verifyAuth(context);
 
-  // if (!client) {
-  //   return {
-  //     redirect: {
-  //       permanent: false,
-  //       destination: ROUTES.LOGIN
-  //     }
-  //   };
-  // }
+  if (!client) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: ROUTES.LOGIN
+      }
+    };
+  }
 
   return {
     props: {

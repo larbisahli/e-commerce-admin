@@ -51,8 +51,10 @@ export interface JwtPayload {
   uid: string;
   iss: string;
   iat: number;
-  exp: number;
+  ema: string;
   ali: string;
+  sid: string;
+  tok?: string;
 }
 
 export type SSRProps = {

@@ -18,7 +18,7 @@ const httpLink = new HttpLink({
 const retryLink = new RetryLink({
   delay: {
     initial: 1000,
-    max: Infinity,
+    max: 5000,
     jitter: true
   },
   attempts: {
