@@ -4,7 +4,7 @@ import Badge from '@components/ui/badge/badge';
 import Link from '@components/ui/link';
 import ProfileCart from '@components/ui/profile-card';
 import { LANGUAGES } from '@graphql/language';
-import { SET_DEFAULT_LANGUAGE } from '@graphql/store-view';
+import { SET_DEFAULT_LANGUAGE } from '@graphql/store';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetUser } from '@hooks/useGetUser';
 import { notify } from '@lib/notify';

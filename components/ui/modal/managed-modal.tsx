@@ -52,7 +52,7 @@ const SupplierDeleteView = dynamic(
 );
 
 const SliderDeleteView = dynamic(
-  () => import('@components/hero-carousel/slider-delete-view')
+  () => import('@components/hero-banner/slider-delete-view')
 );
 
 const ManufacturerDeleteView = dynamic(

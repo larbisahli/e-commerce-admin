@@ -205,7 +205,7 @@ export default function CreateOrUpdateCouponForm({ initialValues }: IProps) {
             inputClassName="uppercase"
           />
           <Input
-            label={`${t('form:order-amount-limit')} (${currency.symbol})`}
+            label={`${t('form:order-amount-limit')} (${currency?.symbol})`}
             {...register('orderAmountLimit')}
             type={'number'}
             min={0}
@@ -221,7 +221,7 @@ export default function CreateOrUpdateCouponForm({ initialValues }: IProps) {
               label={`${t('form:input-label-discount-value')} (${
                 couponType?.value === CouponType.Percentage
                   ? '%'
-                  : currency.symbol
+                  : currency?.symbol
               })`}
               {...register('discountValue')}
               type="number"

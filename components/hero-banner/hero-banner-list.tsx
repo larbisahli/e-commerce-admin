@@ -3,7 +3,7 @@ import ImageComponent from '@components/ImageComponent';
 import Badge from '@components/ui/badge/badge';
 import ProfileCart from '@components/ui/profile-card';
 import { siteSettings } from '@settings/site.settings';
-import { CreatedUpdatedByAt, HeroCarouselType } from '@ts-types/generated';
+import { CreatedUpdatedByAt, HeroBannerType } from '@ts-types/generated';
 import { useIsRTL } from '@utils/locals';
 import { ROUTES } from '@utils/routes';
 import dayjs from 'dayjs';
@@ -18,11 +18,11 @@ const Table = dynamic(
 );
 
 export type IProps = {
-  heroCarouselList: HeroCarouselType[];
+  heroBannerList: HeroBannerType[];
   selectedColumns: string[];
 };
 
-const HeroCarouselList = ({ heroCarouselList, selectedColumns }: IProps) => {
+const HeroBannerList = ({ heroBannerList, selectedColumns }: IProps) => {
   const { t } = useTranslation();
   const { alignLeft } = useIsRTL();
 
@@ -127,7 +127,7 @@ const HeroCarouselList = ({ heroCarouselList, selectedColumns }: IProps) => {
         ellipsis: true,
         render: (
           createdBy: CreatedUpdatedByAt['createdBy'],
-          record: HeroCarouselType
+          record: HeroBannerType
         ) => {
           return <ProfileCart user={createdBy} createdAt={record?.createdAt} />;
         }
@@ -141,7 +141,7 @@ const HeroCarouselList = ({ heroCarouselList, selectedColumns }: IProps) => {
         ellipsis: true,
         render: (
           updatedBy: CreatedUpdatedByAt['updatedBy'],
-          record: HeroCarouselType
+          record: HeroBannerType
         ) => {
           return <ProfileCart user={updatedBy} updatedAt={record?.updatedAt} />;
         }
@@ -155,7 +155,7 @@ const HeroCarouselList = ({ heroCarouselList, selectedColumns }: IProps) => {
         render: (id: string) => (
           <ActionButtons
             id={id}
-            editUrl={`${ROUTES.HERO_CAROUSEL}/edit/${id}`}
+            editUrl={`${ROUTES.HERO_BANNER}/edit/${id}`}
             deleteModalView="DELETE_SLIDER"
           />
         )
@@ -178,7 +178,7 @@ const HeroCarouselList = ({ heroCarouselList, selectedColumns }: IProps) => {
           //@ts-ignore
           columns={tableColumns}
           emptyText={t('table:empty-table-data')}
-          data={heroCarouselList}
+          data={heroBannerList}
           rowKey="id"
           scroll={{ x: 800 }}
         />
@@ -187,4 +187,4 @@ const HeroCarouselList = ({ heroCarouselList, selectedColumns }: IProps) => {
   );
 };
 
-export default HeroCarouselList;
+export default HeroBannerList;

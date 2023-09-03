@@ -1,33 +1,31 @@
-import { useSettings } from '@hooks/useSettings';
 import { DefaultSeo as NextDefaultSeo } from 'next-seo';
 
 const DefaultSeo = () => {
-  const settings = useSettings();
   return (
     <NextDefaultSeo
-      title={settings?.siteTitle ?? 'PickBazar'}
-      titleTemplate={`%s | ${settings?.seo?.metaTitle ?? 'E-Commerce'}`}
-      description={settings?.seo?.metaDescription || settings?.siteSubtitle}
-      canonical={settings?.seo?.canonicalUrl}
+      title={'Dropgala'}
+      titleTemplate={'E-Commerce'}
+      description={''}
+      canonical={'dropgala.com'}
       openGraph={{
-        title: settings?.seo?.ogTitle,
-        description: settings?.seo?.ogDescription,
+        title: '',
+        description: '',
         type: 'website',
         locale: 'en_US',
-        site_name: settings?.siteTitle,
+        site_name: '',
         images: [
           {
-            url: settings?.seo?.ogImage?.original,
+            url: '',
             width: 800,
             height: 600,
-            alt: settings?.seo?.ogTitle
+            alt: ''
           }
         ]
       }}
       twitter={{
-        handle: settings?.seo?.twitterHandle,
-        site: settings?.siteTitle,
-        cardType: settings?.seo?.twitterCardType
+        handle: '',
+        site: '',
+        cardType: ''
       }}
       additionalMetaTags={[
         {

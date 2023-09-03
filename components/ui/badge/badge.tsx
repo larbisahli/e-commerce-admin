@@ -21,7 +21,7 @@ const Badge: React.FC<BadgeProps> = (props) => {
   } = props;
 
   const classes = {
-    root: 'px-3 py-2 font-medium  rounded-sm text-xs whitespace-nowrap shadow',
+    root: 'px-3 py-2 font-medium border rounded-sm text-xs whitespace-nowrap shadow',
     default: 'bg-green-600',
     text: 'text-white'
   };

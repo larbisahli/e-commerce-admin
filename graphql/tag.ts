@@ -1,13 +1,30 @@
 import { gql } from '@apollo/client';
 
 export const TAGS = gql`
-  query Tags($page: Int!, $limit: Int!, $orderBy: String!, $sortedBy: String!) {
+  query Tags(
+    $page: Int!
+    $limit: Int!
+    $orderBy: String!
+    $sortedBy: String!
+    $language: LanguageInput!
+    $defaultLanguage: LanguageInput!
+  ) {
     tagCount {
       count
     }
-    tags(page: $page, limit: $limit, orderBy: $orderBy, sortedBy: $sortedBy) {
+    tags(
+      page: $page
+      limit: $limit
+      orderBy: $orderBy
+      sortedBy: $sortedBy
+      language: $language
+      defaultLanguage: $defaultLanguage
+    ) {
       id
       name
+      translated {
+        name
+      }
       createdAt
       updatedAt
       createdBy {
@@ -25,10 +42,17 @@ export const TAGS = gql`
 `;
 
 export const TAG = gql`
-  query Tag($id: Int!) {
-    tag(id: $id) {
+  query Tag(
+    $id: Int!
+    $language: LanguageInput!
+    $defaultLanguage: LanguageInput!
+  ) {
+    tag(id: $id, language: $language, defaultLanguage: $defaultLanguage) {
       id
       name
+      translated {
+        name
+      }
     }
   }
 `;
@@ -43,19 +67,17 @@ export const TAGS_FOR_SELECT = gql`
 `;
 
 export const CREATE_TAG = gql`
-  mutation CreateTag($name: String!) {
-    createTag(name: $name) {
+  mutation CreateTag($name: String!, $language: LanguageInput!) {
+    createTag(name: $name, language: $language) {
       id
-      name
     }
   }
 `;
 
 export const UPDATE_TAG = gql`
-  mutation UpdateTag($id: Int!, $name: String!) {
-    updateTag(id: $id, name: $name) {
+  mutation UpdateTag($id: Int!, $name: String!, $language: LanguageInput!) {
+    updateTag(id: $id, name: $name, language: $language) {
       id
-      name
     }
   }
 `;
@@ -64,7 +86,6 @@ export const DELETE_TAG = gql`
   mutation DeleteTag($id: Int!) {
     deleteTag(id: $id) {
       id
-      name
     }
   }
 `;

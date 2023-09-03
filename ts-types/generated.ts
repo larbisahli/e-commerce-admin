@@ -204,15 +204,19 @@ export interface Attribute extends CreatedUpdatedByAt {
 export interface Tag extends CreatedUpdatedByAt {
   id?: Nullable<Scalars['Int']>;
   name?: Nullable<Scalars['String']>;
+  translated?: {
+    name: string;
+  };
 }
 
 export interface LanguageType extends CreatedUpdatedByAt {
   id: Scalars['Int'];
   remoteFilePath: Scalars['String'];
-  displayName: Scalars['String'];
-  lcid: Scalars['String'];
+  name: Scalars['String'];
+  localeId: Scalars['String'];
   direction: Scalars['String'];
   isDefault: Scalars['Boolean'];
+  active: Scalars['Boolean'];
   translation: Scalars['JSON'];
 }
 
@@ -230,7 +234,9 @@ export interface OrderStatus extends CreatedUpdatedByAt {
   name?: Nullable<Scalars['String']>;
   color?: Nullable<Scalars['String']>;
   privacy?: PrivacyType;
-  // serial: Scalars['Int'];
+  translated?: {
+    name: string;
+  };
 }
 
 export interface Coupon extends CreatedUpdatedByAt {
@@ -436,7 +442,7 @@ export interface ManufacturerType extends CreatedUpdatedByAt {
   description?: Nullable<CountryType>;
 }
 
-export interface HeroCarouselType extends CreatedUpdatedByAt {
+export interface HeroBannerType extends CreatedUpdatedByAt {
   id?: Scalars['Int'];
   destinationUrl?: Nullable<Scalars['String']>;
   thumbnail?: ImageType[];
@@ -455,7 +461,7 @@ export interface HeroCarouselType extends CreatedUpdatedByAt {
   clicks?: Scalars['Int'];
 }
 
-export interface PromoCarouselType extends CreatedUpdatedByAt {
+export interface PromoBannerType extends CreatedUpdatedByAt {
   id?: Scalars['Int'];
   animationSpeed: { value: string; name: string };
   backgroundColor: string;
@@ -479,6 +485,7 @@ export interface SettingsType {
   alias?: string;
   published?: boolean;
   tier?: string;
+  languages?: LanguageType[];
   currency?: {
     symbol: string;
     name: string;

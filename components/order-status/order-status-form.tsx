@@ -1,7 +1,6 @@
 import { useMutation } from '@apollo/client';
 import Card from '@components/common/card';
-import { SaveIcon } from '@components/icons/save-icon';
-import Button from '@components/ui/button';
+import FormActions from '@components/common/FormActions';
 import ColorPicker from '@components/ui/color-picker/color-picker';
 import DisplayColorCode from '@components/ui/color-picker/display-color-code';
 import Description from '@components/ui/description';
@@ -15,9 +14,11 @@ import {
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useGetUser } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
+import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/notify';
 import { OrderStatus, PrivacyType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
+import { placeholder } from '@utils/utils';
 import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
@@ -44,12 +45,13 @@ export default function CreateOrUpdateOrderStatusForm({
   const router = useRouter();
   const { t } = useTranslation();
 
+  const { selectedLanguage } = useSettings();
+
   const [error, setError] = useState(null);
   const {
     register,
     handleSubmit,
     control,
-    reset,
     formState: { errors }
   } = useForm<FormValues>({
     shouldUnregister: true,
@@ -68,11 +70,11 @@ export default function CreateOrUpdateOrderStatusForm({
           'x-csrf-token': csrfToken
         }
       },
-      onCompleted: (data: { createTag: OrderStatus }) => {
+      onCompleted: (data: { createOrderStatus: OrderStatus }) => {
         if (!isEmpty(data)) {
+          const { id } = data.createOrderStatus;
           notify(t('common:successfully-created'), 'success');
-          reset();
-          router.push(ROUTES.ORDER_STATUS);
+          router.push(`${ROUTES.ORDER_STATUS}/edit/${id}`);
         }
       }
     }
@@ -86,7 +88,7 @@ export default function CreateOrUpdateOrderStatusForm({
           'x-csrf-token': csrfToken
         }
       },
-      onCompleted: (data: { updateTag: OrderStatus }) => {
+      onCompleted: (data: { updateOrderStatus: OrderStatus }) => {
         if (!isEmpty(data)) {
           notify(t('common:successfully-updated'), 'success');
           router.push(ROUTES.ORDER_STATUS);
@@ -103,7 +105,8 @@ export default function CreateOrUpdateOrderStatusForm({
         variables: {
           name: values.name,
           color: values.color,
-          privacy: values.privacy
+          privacy: values.privacy,
+          language: selectedLanguage
         }
       }).catch((err) => {
         setError(err);
@@ -114,7 +117,8 @@ export default function CreateOrUpdateOrderStatusForm({
           id: initialValues.id,
           name: values.name,
           color: values.color,
-          privacy: values.privacy
+          privacy: values.privacy,
+          language: selectedLanguage
         }
       }).catch((err) => {
         setError(err);
@@ -122,8 +126,30 @@ export default function CreateOrUpdateOrderStatusForm({
     }
   };
 
+  const renderDescInfo = () => {
+    if (isEmpty(initialValues)) {
+      return (
+        <p className="text-sm text-gray-600 mb-12">
+          {`"New order status" is displayed in the system default language.
+         Always maintain new data in your chosen system default language.`}
+        </p>
+      );
+    }
+  };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      <FormActions
+        forceDefaultLang={isEmpty(initialValues)}
+        title={
+          isEmpty(initialValues)
+            ? t('form:form-title-new-order-status')
+            : t('form:form-title-edit-order-status')
+        }
+        loading={creating || updating}
+        disabled={creating || updating}
+      />
+      {renderDescInfo()}
       <div className="flex flex-wrap my-5 sm:my-8">
         <Description
           title={t('form:input-label-description')}
@@ -141,6 +167,11 @@ export default function CreateOrUpdateOrderStatusForm({
             isRequiredLabel
             {...register('name')}
             error={t(errors.name?.message!)}
+            placeholder={placeholder(
+              initialValues,
+              'name',
+              'Enter status name'
+            )}
             variant="outline"
             className="mb-5"
           />
@@ -169,26 +200,6 @@ export default function CreateOrUpdateOrderStatusForm({
             <DisplayColorCode control={control} />
           </ColorPicker>
         </Card>
-      </div>
-
-      <div className="mb-4 flex items-center justify-end">
-        {initialValues && (
-          <Button
-            variant="outline"
-            onClick={router.back}
-            className="me-4"
-            type="button"
-          >
-            {t('form:button-label-back')}
-          </Button>
-        )}
-
-        <Button loading={creating || updating} disabled={creating || updating}>
-          <div className="mr-1">
-            <SaveIcon width="1.3rem" height="1.3rem" />
-          </div>
-          <div>{t('form:button-label-save')}</div>
-        </Button>
       </div>
     </form>
   );

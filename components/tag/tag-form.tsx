@@ -1,16 +1,17 @@
 import { useMutation } from '@apollo/client';
 import Card from '@components/common/card';
-import { SaveIcon } from '@components/icons/save-icon';
-import Button from '@components/ui/button';
+import FormActions from '@components/common/FormActions';
 import Description from '@components/ui/description';
 import Input from '@components/ui/input';
 import { CREATE_TAG, UPDATE_TAG } from '@graphql/tag';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useGetUser } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
+import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/notify';
 import { Tag } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
+import { placeholder } from '@utils/utils';
 import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
@@ -40,13 +41,14 @@ export default function CreateOrUpdateTagForm({ initialValues }: IProps) {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors }
   } = useForm<FormValues>({
     //@ts-ignore
     defaultValues: initialValues ? initialValues : defaultValues,
     resolver: yupResolver(tagValidationSchema)
   });
+
+  const { selectedLanguage } = useSettings();
 
   const { userInfo } = useGetUser();
   const csrfToken = userInfo?.csrfToken;
@@ -59,9 +61,9 @@ export default function CreateOrUpdateTagForm({ initialValues }: IProps) {
     },
     onCompleted: (data: { createTag: Tag }) => {
       if (!isEmpty(data)) {
+        const { id } = data.createTag;
         notify(t('common:successfully-created'), 'success');
-        reset();
-        router.push(ROUTES.TAG);
+        router.push(`${ROUTES.TAG}/edit/${id}`);
       }
     }
   });
@@ -84,6 +86,7 @@ export default function CreateOrUpdateTagForm({ initialValues }: IProps) {
 
   const onSubmit = async (values: FormValues) => {
     const input = {
+      language: selectedLanguage,
       name: values.name
     };
 
@@ -100,49 +103,55 @@ export default function CreateOrUpdateTagForm({ initialValues }: IProps) {
     }
   };
 
+  const renderDescInfo = () => {
+    if (isEmpty(initialValues)) {
+      return (
+        <p className="text-sm text-gray-600 mb-12">
+          {`"New tag" is displayed in the system default language.
+         Always maintain new data in your chosen system default language.`}
+        </p>
+      );
+    }
+  };
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex flex-wrap my-5 sm:my-8">
-        <Description
-          title={t('form:input-label-description')}
-          details={`${
-            initialValues
-              ? t('form:item-description-edit')
-              : t('form:item-description-add')
-          } ${t('form:tag-description-helper-text')}`}
-          className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8 "
+    <>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <FormActions
+          forceDefaultLang={isEmpty(initialValues)}
+          title={
+            isEmpty(initialValues)
+              ? t('form:form-title-new-tag')
+              : t('form:form-title-edit-tag')
+          }
+          loading={creating || updating}
+          disabled={creating || updating}
         />
-
-        <Card className="w-full sm:w-8/12 md:w-2/3">
-          <Input
-            label={t('form:input-label-name')}
-            isRequiredLabel
-            {...register('name')}
-            error={t(errors.name?.message!)}
-            variant="outline"
-            className="mb-5"
+        {renderDescInfo()}
+        <div className="flex flex-wrap my-5 sm:my-8">
+          <Description
+            title={t('form:input-label-description')}
+            details={`${
+              initialValues
+                ? t('form:item-description-edit')
+                : t('form:item-description-add')
+            } ${t('form:tag-description-helper-text')}`}
+            className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8 "
           />
-        </Card>
-      </div>
-      <div className="mb-4 flex justify-end">
-        {initialValues && (
-          <Button
-            variant="outline"
-            onClick={router.back}
-            className="me-4"
-            type="button"
-          >
-            {t('form:button-label-back')}
-          </Button>
-        )}
 
-        <Button loading={creating || updating} disabled={creating || updating}>
-          <div className="mr-1">
-            <SaveIcon width="1.3rem" height="1.3rem" />
-          </div>
-          <div>{t('form:button-label-save')}</div>
-        </Button>
-      </div>
-    </form>
+          <Card className="w-full sm:w-8/12 md:w-2/3">
+            <Input
+              label={t('form:input-label-name')}
+              isRequiredLabel
+              {...register('name')}
+              error={t(errors.name?.message!)}
+              placeholder={placeholder(initialValues, 'name', 'Enter tag name')}
+              variant="outline"
+              className="mb-5"
+            />
+          </Card>
+        </div>
+      </form>
+    </>
   );
 }

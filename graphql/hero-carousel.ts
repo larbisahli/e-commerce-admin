@@ -62,8 +62,8 @@ export const DELETE_HERO_SLIDE = gql`
   }
 `;
 
-export const HERO_CAROUSEL_LIST = gql`
-  query HeroCarouselList($page: Int!, $limit: Int!) {
+export const HERO_BANNER_LIST = gql`
+  query HeroBannerList($page: Int!, $limit: Int!) {
     heroSlideListCount {
       count
     }

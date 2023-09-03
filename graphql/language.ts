@@ -17,8 +17,9 @@ export const LANGUAGES = gql`
       sortedBy: $sortedBy
     ) {
       id
-      displayName
-      lcid
+      name
+      localeId
+      active
       direction
       isDefault
       createdAt
@@ -41,8 +42,9 @@ export const LANGUAGE = gql`
   query Language($id: Int!) {
     language(id: $id) {
       id
-      displayName
-      lcid
+      name
+      localeId
+      active
       direction
       translation
     }
@@ -53,8 +55,8 @@ export const LANGUAGES_FOR_SELECT = gql`
   query GetLanguageSelect($page: Int!, $limit: Int!, $orderBy: String!) {
     languageSelect(page: $page, limit: $limit, orderBy: $orderBy) {
       id
-      displayName
-      lcid
+      name
+      localeId
     }
   }
 `;
@@ -62,46 +64,46 @@ export const LANGUAGES_FOR_SELECT = gql`
 export const UPDATE_LANGUAGE = gql`
   mutation UpdateLanguage(
     $id: Int!
-    $displayName: String!
-    $lcid: String!
+    $name: String!
+    $localeId: String!
     $direction: String!
     $translation: JSONObject!
   ) {
     updateLanguage(
       id: $id
-      displayName: $displayName
-      lcid: $lcid
+      name: $name
+      localeId: $localeId
       direction: $direction
       translation: $translation
     ) {
       id
-      displayName
+      name
     }
   }
 `;
 
 export const CREATE_LANGUAGE = gql`
   mutation CreateLanguage(
-    $displayName: String!
-    $lcid: String!
+    $name: String!
+    $localeId: String!
     $direction: String!
     $translation: JSONObject!
   ) {
     createLanguage(
-      displayName: $displayName
-      lcid: $lcid
+      name: $displayName
+      localeId: $localeId
       direction: $direction
       translation: $translation
     ) {
       id
-      displayName
+      name
     }
   }
 `;
 
 export const DELETE_LANGUAGE = gql`
-  mutation DeleteLanguage($id: Int!, $lcid: String!) {
-    deleteLanguage(id: $id, lcid: $lcid) {
+  mutation DeleteLanguage($id: Int!, $localeId: String!) {
+    deleteLanguage(id: $id, localeId: $localeId) {
       id
     }
   }

@@ -1,23 +1,25 @@
 import { useQuery } from '@apollo/client';
 import AppLayout from '@components/layouts/app';
 import TagList from '@components/tag/tag-list';
-import { Error } from '@components/ui/error-message';
+import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { TAGS } from '@graphql/tag';
 import { useErrorLogger, useGetUser } from '@hooks/index';
+import { useSettings } from '@hooks/useSettings';
 import { useTableColumn } from '@hooks/useTableColumn';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
-import { SSRProps } from '@ts-types/custom.types';
+import { SSRProps, TableQueryVariables } from '@ts-types/custom.types';
 import { OrderBy, SortOrder, Tag } from '@ts-types/generated';
 import { COLUMNS } from '@utils/data/table-columns';
 import { ROUTES } from '@utils/routes';
+import cn from 'classnames';
 import isEmpty from 'lodash/isEmpty';
 import type { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 const PageMainHeader = dynamic(
   () => import('@components/common/page-main-header'),
@@ -40,13 +42,6 @@ interface TTags {
   tagCount: { count: number };
 }
 
-interface OptionsVariable {
-  page: number;
-  limit: number;
-  orderBy: OrderBy;
-  sortedBy: SortOrder;
-}
-
 export default function Tags({ client }: SSRProps) {
   const { t } = useTranslation();
 
@@ -56,18 +51,28 @@ export default function Tags({ client }: SSRProps) {
 
   const { selectedTableColumns, handleColumnChange } = useTableColumn('tag');
 
-  const { data, loading, error, fetchMore } = useQuery<TTags, OptionsVariable>(
-    TAGS,
-    {
-      variables: {
-        page,
-        limit: limit.value,
-        orderBy,
-        sortedBy: SortOrder.Desc
-      },
-      fetchPolicy: 'cache-and-network'
-    }
+  const { languages, selectedLanguage } = useSettings();
+
+  const defaultLanguage = useMemo(
+    () => languages?.find((lang) => lang.isDefault),
+    [languages]
   );
+
+  const { data, loading, error, fetchMore } = useQuery<
+    TTags,
+    TableQueryVariables
+  >(TAGS, {
+    variables: {
+      page,
+      limit: limit.value,
+      orderBy,
+      sortedBy: SortOrder.Desc,
+      language: selectedLanguage,
+      defaultLanguage
+    },
+    fetchPolicy: 'cache-and-network',
+    skip: isEmpty(selectedLanguage)
+  });
 
   const { tags = [], tagCount: { count } = { count: 0 } } = data ?? {};
 
@@ -86,11 +91,8 @@ export default function Tags({ client }: SSRProps) {
     });
   }
 
-  if (loading) {
-    return <Loader text={t('common:text-loading')} />;
-  }
   if (!isEmpty(error)) {
-    return <Error message={error.message} />;
+    return <ErrorMessage message={error.message} />;
   }
 
   return (
@@ -117,7 +119,10 @@ export default function Tags({ client }: SSRProps) {
         currentPage={page}
         perPage={limit.value}
       />
-      <TagList tags={tags} selectedColumns={selectedTableColumns} />
+      {loading && <Loader text={t('common:text-loading')} />}
+      <div className={cn({ hidden: loading })}>
+        <TagList tags={tags} selectedColumns={selectedTableColumns} />
+      </div>
     </>
   );
 }

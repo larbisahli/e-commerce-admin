@@ -58,7 +58,7 @@ export default function usePrice(data?: PriceProps | null) {
     return baseAmount
       ? formatVariantPrice({ amount, baseAmount, currencyCode, locale })
       : formatPrice({ amount, currencyCode, locale });
-  }, [amount, baseAmount, currencyCode]);
+  }, [amount, baseAmount, currencyCode, locale]);
 
   return typeof value === 'string'
     ? { price: value, basePrice: null, discount: null }

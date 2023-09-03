@@ -5,19 +5,21 @@ import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { ORDER_STATUSES } from '@graphql/order-status';
 import { useErrorLogger, useGetUser } from '@hooks/index';
+import { useSettings } from '@hooks/useSettings';
 import { useTableColumn } from '@hooks/useTableColumn';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
-import { SSRProps } from '@ts-types/custom.types';
+import { SSRProps, TableQueryVariables } from '@ts-types/custom.types';
 import { OrderBy, OrderStatus, SortOrder } from '@ts-types/generated';
 import { COLUMNS } from '@utils/data/table-columns';
 import { ROUTES } from '@utils/routes';
+import cn from 'classnames';
 import isEmpty from 'lodash/isEmpty';
 import type { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 const PageMainHeader = dynamic(
   () => import('@components/common/page-main-header'),
@@ -40,13 +42,6 @@ interface TOrderStatus {
   orderStatusCount: { count: number };
 }
 
-interface OptionsVariable {
-  page: number;
-  limit: number;
-  orderBy: OrderBy;
-  sortedBy: SortOrder;
-}
-
 export default function OrderStatusPage({ client }: SSRProps) {
   const { t } = useTranslation();
 
@@ -57,17 +52,27 @@ export default function OrderStatusPage({ client }: SSRProps) {
   const { selectedTableColumns, handleColumnChange } =
     useTableColumn('order-status');
 
+  const { languages, selectedLanguage } = useSettings();
+
+  const defaultLanguage = useMemo(
+    () => languages?.find((lang) => lang.isDefault),
+    [languages]
+  );
+
   const { data, loading, error, fetchMore } = useQuery<
     TOrderStatus,
-    OptionsVariable
+    TableQueryVariables
   >(ORDER_STATUSES, {
     variables: {
       page,
       limit: limit.value,
       orderBy,
-      sortedBy: SortOrder.Desc
+      sortedBy: SortOrder.Desc,
+      language: selectedLanguage,
+      defaultLanguage
     },
-    fetchPolicy: 'cache-and-network'
+    fetchPolicy: 'cache-and-network',
+    skip: isEmpty(selectedLanguage)
   });
 
   const { orderStatuses = [], orderStatusCount: { count = 0 } = { count: 0 } } =
@@ -88,9 +93,6 @@ export default function OrderStatusPage({ client }: SSRProps) {
     });
   }
 
-  if (loading) {
-    return <Loader text={t('common:text-loading')} />;
-  }
   if (!isEmpty(error)) {
     return <ErrorMessage message={error.message} />;
   }
@@ -119,10 +121,13 @@ export default function OrderStatusPage({ client }: SSRProps) {
         currentPage={page}
         perPage={limit.value}
       />
-      <OrderStatusList
-        selectedColumns={selectedTableColumns}
-        orderStatuses={orderStatuses}
-      />
+      {loading && <Loader text={t('common:text-loading')} />}
+      <div className={cn({ hidden: loading })}>
+        <OrderStatusList
+          selectedColumns={selectedTableColumns}
+          orderStatuses={orderStatuses}
+        />
+      </div>
     </>
   );
 }

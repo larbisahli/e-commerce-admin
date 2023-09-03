@@ -16,7 +16,7 @@ const Loader = (props: Props) => {
     showText = true,
     text = 'Loading...',
     simple,
-    height = 'calc(100vh - 200px)',
+    height = 'calc(100px)',
     borderColor
   } = props;
   return (

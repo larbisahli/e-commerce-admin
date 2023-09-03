@@ -248,3 +248,7 @@
   border-right: 1px solid rgb(191, 191, 191) !important;
   border-bottom: 1px solid rgb(191, 191, 191) !important;
 }
+
+.custom-tooltip {
+  font-size: 13px !important;
+}

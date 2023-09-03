@@ -25,7 +25,7 @@ export type IProps = {
 const OrderStatusList = ({ orderStatuses, selectedColumns }: IProps) => {
   const { t } = useTranslation();
 
-  const { alignLeft, alignRight } = useIsRTL();
+  const { alignLeft } = useIsRTL();
 
   const columns = useMemo(() => {
     return [
@@ -50,7 +50,7 @@ const OrderStatusList = ({ orderStatuses, selectedColumns }: IProps) => {
                        rounded-md bg-white py-[5px] px-[10px] shadow-md"
             style={{ color: record?.color }}
           >
-            {name}
+            {name ?? record?.translated?.name}
           </span>
         )
       },
@@ -114,8 +114,8 @@ const OrderStatusList = ({ orderStatuses, selectedColumns }: IProps) => {
         title: t('table:table-item-actions'),
         dataIndex: 'id',
         key: 'actions',
-        align: alignRight,
-        width: 80,
+        align: 'center',
+        width: 150,
         render: (id: string) => (
           <ActionButtons
             id={id}
@@ -125,7 +125,7 @@ const OrderStatusList = ({ orderStatuses, selectedColumns }: IProps) => {
         )
       }
     ];
-  }, [alignLeft, alignRight, t]);
+  }, [alignLeft, t]);
 
   const tableColumns = useMemo(() => {
     return columns?.filter(({ key }) => {

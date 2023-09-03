@@ -6,7 +6,6 @@ import { ROUTES } from '@utils/routes';
 import type { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
-import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const CreateOrUpdateOrderStatusForm = dynamic(
@@ -15,7 +14,6 @@ const CreateOrUpdateOrderStatusForm = dynamic(
 );
 
 export default function CreateOrderStatusPage({ client }: SSRProps) {
-  const { t } = useTranslation();
   useGetUser(client);
 
   return (
@@ -24,11 +22,6 @@ export default function CreateOrderStatusPage({ client }: SSRProps) {
         <title>Create Order Status | Dropgala</title>
         <link rel="icon" type="image/svg" sizes="32x32" href="/svg/media.svg" />
       </Head>
-      <div className="py-5 sm:py-8 flex border-b border-dashed border-border-base">
-        <h1 className="text-lg font-semibold text-heading">
-          {t('form:form-title-create-order-status')}
-        </h1>
-      </div>
       <CreateOrUpdateOrderStatusForm />
     </>
   );

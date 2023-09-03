@@ -46,8 +46,6 @@ export async function verifyAuth(context: GetServerSidePropsContext) {
       algorithms: Alg
     }) as JwtPayload;
 
-    console.log({ payload });
-
     if (
       !payload ||
       !payload.iss ||
@@ -59,7 +57,6 @@ export async function verifyAuth(context: GetServerSidePropsContext) {
       throw Error('Invalid Access Token');
     }
 
-    console.log('==========================>');
     // fetch for client info
     const { data } = await apolloClient.query<TUser>({
       query: USER_AUTH,
@@ -73,8 +70,6 @@ export async function verifyAuth(context: GetServerSidePropsContext) {
     });
 
     const { userAuth, error } = data ?? {};
-
-    console.log(userAuth, { error });
 
     if (!isEmpty(error) || isEmpty(userAuth)) {
       console.log('Auth Error:>>', { error });

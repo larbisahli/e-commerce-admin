@@ -1,4 +1,5 @@
 import ActionButtons from '@components/common/action-buttons';
+import Badge from '@components/ui/badge/badge';
 import Link from '@components/ui/link';
 import ProfileCart from '@components/ui/profile-card';
 import { CreatedUpdatedByAt, LanguageType, Tag } from '@ts-types/generated';
@@ -35,19 +36,19 @@ const LanguageList = ({ languages, selectedColumns }: IProps) => {
         ellipsis: true
       },
       {
-        title: t('table:table-item-language'),
-        dataIndex: 'displayName',
-        key: 'displayName',
+        title: t('table:table-item-name'),
+        dataIndex: 'name',
+        key: 'name',
         align: alignLeft,
         width: 200,
         ellipsis: true,
-        render: (displayName: string, record: LanguageType) => (
+        render: (name: string, record: LanguageType) => (
           <Link href={`${ROUTES.LANGUAGES}/edit/${record.id}`}>
             <span
               style={{ width: 'fit-content' }}
               className="font-medium text-base capitalize text-blue-500"
             >
-              {displayName}
+              {name}
             </span>
           </Link>
         )
@@ -56,35 +57,37 @@ const LanguageList = ({ languages, selectedColumns }: IProps) => {
         title: t('table:table-item-status'),
         dataIndex: 'isDefault',
         key: 'isDefault',
-        align: alignLeft,
-        width: 120,
+        align: 'center',
+        width: 140,
         ellipsis: true,
-        render: (isDefault: boolean) => {
-          if (isDefault) {
-            return (
-              <div>
-                <span
-                  style={{ width: 'fit-content' }}
-                  className="font-medium bg-gray-100 text-gray-500 text-13px md:text-sm rounded shadow-sm block border border-sink-base px-2 py-1 capitalize"
-                >
-                  Default
-                </span>
-              </div>
-            );
-          }
-          return null;
+        render: (isDefault: boolean, record: LanguageType) => {
+          return (
+            <div className="flex items-center gap-1">
+              {isDefault && (
+                <Badge
+                  text={'Default'}
+                  textColor={'text-gray-600'}
+                  color={'bg-gray-100'}
+                />
+              )}
+              <Badge
+                text={record?.active ? 'Publish' : 'Draft'}
+                color={record?.active ? 'bg-green-600' : 'bg-yellow-500'}
+              />
+            </div>
+          );
         }
       },
       {
         title: t('table:table-item-locale-identifier'),
-        dataIndex: 'lcid',
-        key: 'lcid',
+        dataIndex: 'localeId',
+        key: 'localeId',
         align: alignLeft,
         width: 100,
         ellipsis: true,
-        render: (lcid: string) => (
+        render: (localeId: string) => (
           <div>
-            <span className="font-medium text-base w-full">{lcid}</span>
+            <span className="font-medium text-base w-full">{localeId}</span>
           </div>
         )
       },
@@ -131,7 +134,9 @@ const LanguageList = ({ languages, selectedColumns }: IProps) => {
         render: (id: string, record: LanguageType) => (
           <ActionButtons
             id={id}
-            metadata={{ lcid: record.lcid }}
+            activated={record.isDefault}
+            setDefault={!record.isDefault && (() => {})}
+            metadata={{ localeId: record.localeId }}
             copy={`${ROUTES.LANGUAGES}/fork/${id}`}
             editUrl={`${ROUTES.LANGUAGES}/edit/${id}`}
             deleteModalView={record.isDefault ? null : 'DELETE_LANGUAGE'}

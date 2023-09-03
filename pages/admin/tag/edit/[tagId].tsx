@@ -4,16 +4,19 @@ import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { TAG } from '@graphql/tag';
 import { useErrorLogger, useGetUser } from '@hooks/index';
+import { useSettings } from '@hooks/useSettings';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
-import { SSRProps } from '@ts-types/custom.types';
+import { LanguageProps, SSRProps } from '@ts-types/custom.types';
 import { Tag } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
+import { isEmpty } from 'lodash';
 import type { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useMemo } from 'react';
 
 const CreateOrUpdateTagForm = dynamic(
   () => import('@components/tag/tag-form'),
@@ -23,7 +26,8 @@ const CreateOrUpdateTagForm = dynamic(
 interface TTag {
   tag: Tag;
 }
-interface OptionsVariable {
+
+interface OptionsVariable extends LanguageProps {
   id: number;
 }
 
@@ -33,9 +37,17 @@ export default function UpdateTagPage({ client }: SSRProps) {
 
   const tagId = parseInt(query.tagId as string, 10);
 
+  const { languages, selectedLanguage } = useSettings();
+
+  const defaultLanguage = useMemo(
+    () => languages?.find((lang) => lang.isDefault),
+    [languages]
+  );
+
   const { data, loading, error } = useQuery<TTag, OptionsVariable>(TAG, {
-    variables: { id: tagId },
-    fetchPolicy: 'cache-and-network'
+    variables: { id: tagId, language: selectedLanguage, defaultLanguage },
+    fetchPolicy: 'cache-and-network',
+    skip: isEmpty(selectedLanguage)
   });
 
   const { tag = [] } = data ?? {};
@@ -44,8 +56,9 @@ export default function UpdateTagPage({ client }: SSRProps) {
   useErrorLogger(error);
 
   if (loading) {
-    return <Loader text={t('common:text-loading')} />;
+    return <Loader text={t('common:text-loading')} height="400px" />;
   }
+
   if (error) {
     return <ErrorMessage message={error.message} />;
   }
@@ -56,12 +69,6 @@ export default function UpdateTagPage({ client }: SSRProps) {
         <title>Edit Tag | Dropgala</title>
         <link rel="icon" type="image/svg" sizes="32x32" href="/svg/tag.svg" />
       </Head>
-      <div className="py-5 sm:py-8 flex border-b border-dashed border-gray-300">
-        <h1 className="text-lg font-semibold text-heading">
-          {t('form:form-title-edit-tags')}
-        </h1>
-      </div>
-
       <CreateOrUpdateTagForm initialValues={tag} />
     </>
   );

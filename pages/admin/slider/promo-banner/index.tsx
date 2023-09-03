@@ -7,7 +7,7 @@ import { PROMO_SLIDER } from '@graphql/promo-slide';
 import { useErrorLogger, useGetUser } from '@hooks/index';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import type { SSRProps } from '@ts-types/custom.types';
-import type { PromoCarouselType } from '@ts-types/generated';
+import type { PromoBannerType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import isEmpty from 'lodash/isEmpty';
 import type { GetServerSideProps } from 'next';
@@ -17,18 +17,18 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const CreateOrUpdatePromoSlideForm = dynamic(
-  () => import('@components/promo-carousel/promo-slide-form'),
+  () => import('@components/promo-banner/promo-slide-form'),
   { ssr: true }
 );
 
-interface THeroCarousel {
-  promoSlide: PromoCarouselType;
+interface THeroBanner {
+  promoSlide: PromoBannerType;
 }
 
 export default function PromoSliders({ client }: SSRProps) {
   const { t } = useTranslation();
 
-  const { data, loading, error } = useQuery<THeroCarousel>(PROMO_SLIDER, {
+  const { data, loading, error } = useQuery<THeroBanner>(PROMO_SLIDER, {
     variables: {},
     fetchPolicy: 'cache-and-network'
   });
@@ -56,7 +56,7 @@ export default function PromoSliders({ client }: SSRProps) {
           href="/svg/slider.svg"
         />
       </Head>
-      <PageMainAction title={t('form:input-label-promo-carousel')} label="" />
+      <PageMainAction title={t('form:input-label-promo-banner')} label="" />
       <CreateOrUpdatePromoSlideForm initialValues={promoSlide} />
     </>
   );

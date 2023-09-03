@@ -41,7 +41,7 @@ const RateComponent = ({
   const { currency } = useSettings();
 
   const currencySymbol =
-    rateType.type === RateType.PRICE ? `(${currency.symbol})` : '';
+    rateType.type === RateType.PRICE ? `(${currency?.symbol})` : '';
 
   return (
     <div className="relative border border-solid border-border-200 last:border-0 mt-4 rounded-md">

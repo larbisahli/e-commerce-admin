@@ -1,14 +1,14 @@
 import { useQuery } from '@apollo/client';
-import HeroCarouselList from '@components/hero-carousel/hero-carousel-list';
+import HeroCarouselList from '@components/hero-banner/hero-carousel-list';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
-import { HERO_CAROUSEL_LIST } from '@graphql/hero-carousel';
+import { HERO_BANNER_LIST } from '@graphql/hero-carousel';
 import { useErrorLogger, useGetUser } from '@hooks/index';
 import { useTableColumn } from '@hooks/useTableColumn';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
-import { HeroCarouselType } from '@ts-types/generated';
+import { HeroBannerType } from '@ts-types/generated';
 import { COLUMNS } from '@utils/data/table-columns';
 import { ROUTES } from '@utils/routes';
 import isEmpty from 'lodash/isEmpty';
@@ -35,8 +35,8 @@ const PageMainAction = dynamic(
   }
 );
 
-interface THeroCarousel {
-  heroSlideList: HeroCarouselType[];
+interface THeroBanner {
+  heroSlideList: HeroBannerType[];
   heroSlideListCount: { count: number };
 }
 
@@ -45,19 +45,19 @@ interface OptionsVariable {
   limit: number;
 }
 
-export default function HeroCarousel({ client }: SSRProps) {
+export default function HeroBanner({ client }: SSRProps) {
   const { t } = useTranslation();
 
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState({ id: 1, value: 10, label: 10 });
 
   const { selectedTableColumns, handleColumnChange } =
-    useTableColumn('hero-carousel');
+    useTableColumn('hero-banner');
 
   const { data, loading, error, fetchMore } = useQuery<
-    THeroCarousel,
+    THeroBanner,
     OptionsVariable
-  >(HERO_CAROUSEL_LIST, {
+  >(HERO_BANNER_LIST, {
     variables: {
       page,
       limit: limit.value
@@ -91,7 +91,7 @@ export default function HeroCarousel({ client }: SSRProps) {
   return (
     <>
       <Head>
-        <title>Hero Slider | Dropgala</title>
+        <title>Hero Banner | Dropgala</title>
         <link
           rel="icon"
           type="image/svg"
@@ -100,8 +100,8 @@ export default function HeroCarousel({ client }: SSRProps) {
         />
       </Head>
       <PageMainAction
-        href={`${ROUTES.HERO_CAROUSEL}/create`}
-        title={t('form:input-label-hero-carousel')}
+        href={`${ROUTES.HERO_BANNER}/create`}
+        title={t('form:input-label-hero-banner')}
         label={t('form:button-label-add-slide')}
       />
       <PageMainHeader
@@ -117,15 +117,15 @@ export default function HeroCarousel({ client }: SSRProps) {
         currentPage={page}
         perPage={limit.value}
       />
-      <HeroCarouselList
-        heroCarouselList={heroSlideList}
+      <HeroBannerList
+        heroBannerList={heroSlideList}
         selectedColumns={selectedTableColumns}
       />
     </>
   );
 }
 
-HeroCarousel.Layout = AppLayout;
+HeroBanner.Layout = AppLayout;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { locale } = context;

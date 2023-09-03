@@ -1,41 +1,21 @@
 import { gql } from '@apollo/client';
 
-export const STORE_VIEWS = gql`
-  query StoreViews(
-    $page: Int!
-    $limit: Int!
-    $orderBy: String!
-    $sortedBy: String!
-  ) {
-    storeViewCount {
-      count
-    }
-    storeViews(
-      page: $page
-      limit: $limit
-      orderBy: $orderBy
-      sortedBy: $sortedBy
-    ) {
-      id
-      name
-      code
-      language {
-        id
-        displayName
+export const STORE_CONFIG = gql`
+  query GetStoreAdminConfig {
+    getStoreAdminConfig {
+      storeName
+      storeEmail
+      storeNumber
+      currency {
+        symbol
+        code
+        name
       }
-      active
-      isDefault
-      createdAt
-      updatedAt
-      createdBy {
+      languages {
         id
-        firstName
-        lastName
-      }
-      updatedBy {
-        id
-        firstName
-        lastName
+        name
+        localeId
+        isDefault
       }
     }
   }
@@ -52,6 +32,7 @@ export const STORE_VIEW = gql`
         displayName
         lcid
       }
+
       active
       isDefault
     }

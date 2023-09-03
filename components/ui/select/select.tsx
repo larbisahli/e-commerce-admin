@@ -6,7 +6,7 @@ import { selectStyles, simpleSelectStyles } from './select.styles';
 export type Ref = any;
 
 interface SelectProps extends Props {
-  isSimple: boolean;
+  isSimple?: boolean;
 }
 
 export const Select = React.forwardRef<Ref, SelectProps>((props, ref) => (

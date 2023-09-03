@@ -5,16 +5,19 @@ import Loader from '@components/ui/loader/loader';
 import { ORDER_STATUS } from '@graphql/order-status';
 import { useGetUser } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
+import { useSettings } from '@hooks/useSettings';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
-import { SSRProps } from '@ts-types/custom.types';
+import { LanguageProps, SSRProps } from '@ts-types/custom.types';
 import { OrderStatus } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
+import { isEmpty } from 'lodash';
 import type { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useMemo } from 'react';
 
 const CreateOrUpdateOrderStatusForm = dynamic(
   () => import('@components/order-status/order-status-form'),
@@ -24,7 +27,7 @@ const CreateOrUpdateOrderStatusForm = dynamic(
 interface TOrderStatus {
   orderStatus: OrderStatus;
 }
-interface OptionsVariable {
+interface OptionsVariable extends LanguageProps {
   id: number;
 }
 
@@ -34,11 +37,19 @@ export default function UpdateOrderStatusPage({ client }: SSRProps) {
 
   const statusId = parseInt(query.statusId as string, 10);
 
+  const { languages, selectedLanguage } = useSettings();
+
+  const defaultLanguage = useMemo(
+    () => languages?.find((lang) => lang.isDefault),
+    [languages]
+  );
+
   const { data, loading, error } = useQuery<TOrderStatus, OptionsVariable>(
     ORDER_STATUS,
     {
-      variables: { id: statusId },
-      fetchPolicy: 'cache-and-network'
+      variables: { id: statusId, language: selectedLanguage, defaultLanguage },
+      fetchPolicy: 'cache-and-network',
+      skip: isEmpty(selectedLanguage)
     }
   );
 
@@ -60,11 +71,6 @@ export default function UpdateOrderStatusPage({ client }: SSRProps) {
         <title>Edit Order Status | Dropgala</title>
         <link rel="icon" type="image/svg" sizes="32x32" href="/svg/media.svg" />
       </Head>
-      <div className="py-5 sm:py-8 flex border-b border-dashed border-border-base">
-        <h1 className="text-lg font-semibold text-heading">
-          {t('form:form-title-edit-order-status')}
-        </h1>
-      </div>
       <CreateOrUpdateOrderStatusForm initialValues={orderStatus} />
     </>
   );

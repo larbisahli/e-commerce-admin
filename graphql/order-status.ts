@@ -6,6 +6,8 @@ export const ORDER_STATUSES = gql`
     $limit: Int!
     $orderBy: String!
     $sortedBy: String!
+    $language: LanguageInput!
+    $defaultLanguage: LanguageInput!
   ) {
     orderStatusCount {
       count
@@ -15,10 +17,15 @@ export const ORDER_STATUSES = gql`
       limit: $limit
       orderBy: $orderBy
       sortedBy: $sortedBy
+      language: $language
+      defaultLanguage: $defaultLanguage
     ) {
       id
       name
       color
+      translated {
+        name
+      }
       privacy
       createdAt
       updatedAt
@@ -37,10 +44,21 @@ export const ORDER_STATUSES = gql`
 `;
 
 export const ORDER_STATUS = gql`
-  query GetOrderStatus($id: Int!) {
-    orderStatus(id: $id) {
+  query GetOrderStatus(
+    $id: Int!
+    $language: LanguageInput!
+    $defaultLanguage: LanguageInput!
+  ) {
+    orderStatus(
+      id: $id
+      language: $language
+      defaultLanguage: $defaultLanguage
+    ) {
       id
       name
+      translated {
+        name
+      }
       color
       privacy
     }
@@ -52,10 +70,15 @@ export const CREATE_ORDER_STATUS = gql`
     $name: String!
     $color: String!
     $privacy: String!
+    $language: LanguageInput!
   ) {
-    createOrderStatus(name: $name, color: $color, privacy: $privacy) {
+    createOrderStatus(
+      name: $name
+      color: $color
+      privacy: $privacy
+      language: $language
+    ) {
       id
-      name
     }
   }
 `;
@@ -66,10 +89,16 @@ export const UPDATE_ORDER_STATUS = gql`
     $name: String!
     $color: String!
     $privacy: String!
+    $language: LanguageInput!
   ) {
-    updateOrderStatus(id: $id, name: $name, color: $color, privacy: $privacy) {
+    updateOrderStatus(
+      id: $id
+      name: $name
+      color: $color
+      privacy: $privacy
+      language: $language
+    ) {
       id
-      name
     }
   }
 `;
@@ -78,7 +107,6 @@ export const DELETE_ORDER_STATUS = gql`
   mutation DeleteOrderStatus($id: Int!) {
     deleteOrderStatus(id: $id) {
       id
-      name
     }
   }
 `;

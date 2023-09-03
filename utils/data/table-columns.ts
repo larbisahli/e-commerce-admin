@@ -63,7 +63,7 @@ export const COLUMNS = {
     { label: 'Updated By', key: 'updatedBy' },
     { label: 'Actions', key: 'actions' }
   ],
-  'hero-carousel': [
+  'hero-banner': [
     { label: 'Thumbnail', key: 'thumbnail' },
     { label: 'Title', key: 'title' },
     { label: 'Clicks', key: 'clicks' },
@@ -140,8 +140,8 @@ export const COLUMNS = {
     { label: 'Actions', key: 'actions' }
   ],
   language: [
-    { label: 'Language', key: 'displayName' },
-    { label: 'lcid', key: 'lcid' },
+    { label: 'Language', key: 'name' },
+    { label: 'locale ID', key: 'localeId' },
     { label: 'Status', key: 'isDefault' },
     { label: 'Creation Date', key: 'createdAt' },
     { label: 'Placed By', key: 'createdBy' },

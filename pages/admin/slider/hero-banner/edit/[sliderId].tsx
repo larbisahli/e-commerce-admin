@@ -2,11 +2,11 @@ import { useQuery } from '@apollo/client';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
-import { HERO_SLIDE } from '@graphql/hero-carousel';
+import { HERO_SLIDE } from '@graphql/hero-banner';
 import { useErrorLogger, useGetUser } from '@hooks/index';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
-import { HeroCarouselType } from '@ts-types/generated';
+import { HeroBannerType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import type { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
@@ -16,12 +16,12 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const CreateOrUpdateSlideForm = dynamic(
-  () => import('@components/hero-carousel/hero-slide-form'),
+  () => import('@components/hero-banner/hero-slide-form'),
   { ssr: true }
 );
 
 interface THeroSlider {
-  heroSlide: HeroCarouselType;
+  heroSlide: HeroBannerType;
 }
 interface OptionsVariable {
   id: number;

@@ -40,13 +40,14 @@ const TagList = ({ tags, selectedColumns }: IProps) => {
         align: alignLeft,
         width: 120,
         ellipsis: true,
-        render: (name: string) => (
+        render: (name: string, record: Tag) => (
           <div>
             <span
               style={{ width: 'fit-content' }}
-              className="font-medium bg-gray-100 text-13px md:text-sm rounded shadow-sm block border border-sink-base px-2 py-1 capitalize"
+              className="font-medium bg-gray-100 text-13px md:text-sm rounded-sm
+              shadow-sm block border border-sink-base px-2 py-1 capitalize"
             >
-              {name}
+              {name ?? record?.translated?.name}
             </span>
           </div>
         )
@@ -71,7 +72,7 @@ const TagList = ({ tags, selectedColumns }: IProps) => {
         width: 150,
         ellipsis: true,
         render: (createdBy: CreatedUpdatedByAt['createdBy'], record: Tag) => {
-          return <ProfileCart user={createdBy} createdAt={record?.updatedAt} />;
+          return <ProfileCart user={createdBy} createdAt={record?.createdAt} />;
         }
       },
       {
@@ -89,7 +90,7 @@ const TagList = ({ tags, selectedColumns }: IProps) => {
         title: t('table:table-item-actions'),
         dataIndex: 'id',
         key: 'actions',
-        width: 80,
+        width: 150,
         align: 'center',
         render: (id: string) => (
           <ActionButtons

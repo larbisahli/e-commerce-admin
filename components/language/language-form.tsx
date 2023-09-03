@@ -2,6 +2,7 @@ import { useMutation } from '@apollo/client';
 import Card from '@components/common/card';
 import { SaveIcon } from '@components/icons/save-icon';
 import Button from '@components/ui/button';
+import Checkbox from '@components/ui/checkbox';
 import Description from '@components/ui/description';
 import ValidationError from '@components/ui/form-validation-error';
 import InputForLocal from '@components/ui/input-for-locale';
@@ -28,6 +29,7 @@ import { tagValidationSchema } from './tag-validation-schema';
 type FormValues = {
   locale: { displayName: string; langCultureName: string };
   direction: { label: 'LTR' | 'RTL' };
+  active: boolean;
   translation: { [key: string]: { [key: string]: string } };
 };
 
@@ -38,6 +40,7 @@ const defaultValues = {
     cultureCode: '0x0409'
   },
   direction: { label: 'LTR' },
+  active: true,
   translation: {}
 };
 
@@ -87,7 +90,6 @@ export default function LanguageForm({
     handleSubmit,
     control,
     setValue,
-    reset,
     formState: { errors }
   } = useForm<FormValues>({
     //@ts-ignore
@@ -96,7 +98,7 @@ export default function LanguageForm({
           ...initialValues,
           locale: locales?.find(
             (locale) =>
-              locale.langCultureName?.toLowerCase() === initialValues.lcid
+              locale.langCultureName?.toLowerCase() === initialValues.localeId
           ),
           direction: { label: initialValues.direction },
           translation: {
@@ -143,9 +145,10 @@ export default function LanguageForm({
 
   const onSubmit = async (values: FormValues) => {
     const variables = {
-      displayName: values.locale.displayName,
-      lcid: values.locale.langCultureName?.toLowerCase(),
+      name: values.locale.displayName,
+      localeId: values.locale.langCultureName?.toLowerCase(),
       direction: values.direction?.label,
+      active: values.active,
       translation: values.translation
     };
 
@@ -216,6 +219,12 @@ export default function LanguageForm({
               getOptionLabel={(option: { label: string }) => option?.label}
               getOptionValue={(option: { label: string }) => option?.label}
               options={[{ label: 'LTR' }, { label: 'RTL' }]}
+            />
+          </div>
+          <div className="flex-1 min-w-[300px]">
+            <Checkbox
+              {...register(`active` as const)}
+              label={t('form:label-active')}
             />
           </div>
         </Card>

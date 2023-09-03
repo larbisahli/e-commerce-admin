@@ -19,7 +19,7 @@ import type {
   MEDIA_ITEM_MODAL_TYPE,
   PRODUCT_MODAL_TYPE
 } from './constants';
-import { SortOrder, UserType } from './generated';
+import { LanguageType, OrderBy, SortOrder, UserType } from './generated';
 
 // Nullable can be assigned to a value or can be assigned to null.
 export declare type Nullable<T> = T | null;
@@ -120,6 +120,15 @@ export type CurrencyType = {
   name_plural: string;
 };
 
+export interface TableQueryVariables {
+  page: number;
+  limit: number;
+  orderBy: OrderBy;
+  sortedBy: SortOrder;
+  language: LanguageType;
+  defaultLanguage: LanguageType;
+}
+
 // export type ProductsQueryOptionsType = {
 //   page?: number;
 //   shop_id?: number;
@@ -156,3 +165,8 @@ export type CurrencyType = {
 //   orderBy?: string;
 //   sortedBy?: SortOrder;
 // };
+
+export interface LanguageProps {
+  language: LanguageType;
+  defaultLanguage: LanguageType;
+}

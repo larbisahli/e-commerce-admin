@@ -15,7 +15,7 @@ import {
   useWarnIfUnsavedChanges
 } from '@hooks/index';
 import { notify } from '@lib/index';
-import type { PromoCarouselType } from '@ts-types/generated';
+import type { PromoBannerType } from '@ts-types/generated';
 import cn from 'classnames';
 import ReactHtmlParser from 'html-react-parser';
 import cloneDeep from 'lodash/cloneDeep';
@@ -45,7 +45,7 @@ const animationSpeedOptions = [
   { value: '100s', name: '100 seconds' }
 ];
 
-type FormValues = PromoCarouselType;
+type FormValues = PromoBannerType;
 
 const defaultValues = {
   animationSpeed: { value: '10s', name: '10 seconds' },
@@ -56,7 +56,7 @@ const defaultValues = {
 };
 
 type IProps = {
-  initialValues?: PromoCarouselType | any;
+  initialValues?: PromoBannerType | any;
 };
 
 export default function CreateOrUpdatePromoSlideForm({
@@ -76,11 +76,11 @@ export default function CreateOrUpdatePromoSlideForm({
             animationSpeed: animationSpeedOptions?.find(
               (e) => e.value === initialValues.animationSpeed
             ),
-            status: (initialValues as PromoCarouselType)?.published
+            status: (initialValues as PromoBannerType)?.published
               ? 'publish'
               : 'draft'
           })
-        : (defaultValues as PromoCarouselType)
+        : (defaultValues as PromoBannerType)
     });
 
   const { fields, append, remove } = useFieldArray({
@@ -100,7 +100,7 @@ export default function CreateOrUpdatePromoSlideForm({
           'x-csrf-token': csrfToken
         }
       },
-      onCompleted: (data: { updatePromoSlide: PromoCarouselType }) => {
+      onCompleted: (data: { updatePromoSlide: PromoBannerType }) => {
         if (!isEmpty(data)) {
           notify(t('common:successfully-created'), 'success');
         }

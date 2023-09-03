@@ -52,7 +52,7 @@ const PageMainHeader = ({
   perPage,
   showOnlyPagination = false,
   isFilterVisible = true,
-  isExportVisible = true
+  isExportVisible = false
 }: Props) => {
   const { t } = useTranslation();
 

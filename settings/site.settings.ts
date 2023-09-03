@@ -195,15 +195,15 @@ export const siteSettings = {
         subLinks: [
           {
             id: 'WaIE1CI',
-            href: ROUTES.HERO_CAROUSEL,
-            label: 'sidebar-nav-item-hero-carousel',
+            href: ROUTES.HERO_BANNER,
+            label: 'sidebar-nav-item-hero-banner',
             padding: '35px',
             isSubLink: true
           },
           {
             id: 'WaIE3WCI',
-            href: ROUTES.PROMO_SLIDER,
-            label: 'sidebar-nav-item-promo-sliders',
+            href: ROUTES.PROMO_BANNER,
+            label: 'sidebar-nav-item-promo-banner',
             padding: '35px',
             isSubLink: true
           }

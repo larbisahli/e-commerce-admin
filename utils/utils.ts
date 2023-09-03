@@ -180,3 +180,10 @@ export const CopyToClipboard = (
 //   return isEqual(value, productShippingInfo[key]) ?
 //       result : result.concat(key);
 // }, []);
+
+export const placeholder = (initialValues: any, key: string, placeholder) => {
+  if (initialValues && key in initialValues) {
+    return initialValues[key] ?? initialValues?.translated[key] ?? placeholder;
+  }
+  return placeholder;
+};

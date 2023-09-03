@@ -146,7 +146,7 @@ function ProductSimpleForm({
           className="mb-5"
         />
         <Input
-          label={`${t('form:input-label-compare-price')} (${currency.symbol})`}
+          label={`${t('form:input-label-compare-price')} (${currency?.symbol})`}
           name="comparePrice"
           value={comparePrice}
           onChange={handleChange}
@@ -157,7 +157,7 @@ function ProductSimpleForm({
           className="mb-5"
         />
         <Input
-          label={`${t('form:input-label-buying-price')} (${currency.symbol})`}
+          label={`${t('form:input-label-buying-price')} (${currency?.symbol})`}
           name="buyingPrice"
           value={buyingPrice}
           onChange={handleChange}

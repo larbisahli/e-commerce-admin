@@ -129,7 +129,7 @@ const ActionButtons = ({
       {activated && (
         <div
           className="text-green-500 transition duration-200 hover:text-green-400 focus:outline-none border hover:shadow-xl rounded-sm h-9 w-9 flex items-center justify-center"
-          title={'Default theme'}
+          title={'Default'}
         >
           <CheckMarkFill width={20} />
         </div>

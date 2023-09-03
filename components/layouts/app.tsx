@@ -1,8 +1,11 @@
 import AdminFooter from '@components/common/admin-footer';
 import SublevelNavigation from '@components/navigation/sublevel-navigation';
+import { useAppDispatch } from '@hooks/useGetUser';
+import { useSettings } from '@hooks/useSettings';
 import { useUI } from '@hooks/useUI';
+import { fetchStoreSettings, setCurrentLanguage } from '@store/settings';
 import cn from 'classnames';
-import React from 'react';
+import React, { useEffect, useMemo } from 'react';
 
 import { Navbar, Sidebar, SidebarMini } from '../navigation/index';
 import MobileNavigation from '../navigation/mobile-navigation';
@@ -15,6 +18,24 @@ const AppLayout: React.FC = ({ children }: Props) => {
   const {
     ui: { displayMiniSidebar }
   } = useUI();
+
+  const dispatch = useAppDispatch();
+
+  const { languages = [] } = useSettings();
+
+  // Fetch store settings
+  useEffect(() => {
+    dispatch(fetchStoreSettings());
+  }, [dispatch]);
+
+  const defaultLanguage = useMemo(
+    () => languages?.find((lang) => lang.isDefault),
+    [languages]
+  );
+
+  useEffect(() => {
+    dispatch(setCurrentLanguage({ language: defaultLanguage }));
+  }, [defaultLanguage, dispatch]);
 
   return (
     <main className="min-h-screen bg-gray-100 h-fit flex flex-col transition-colors duration-150">

@@ -10,7 +10,7 @@ import Label from '@components/ui/label';
 import Radio from '@components/ui/radio';
 import SelectInput from '@components/ui/select-input';
 import { LANGUAGES_FOR_SELECT } from '@graphql/language';
-import { CREATE_STORE_VIEW, UPDATE_STORE_VIEW } from '@graphql/store-view';
+import { CREATE_STORE_VIEW, UPDATE_STORE_VIEW } from '@graphql/store';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useGetUser } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';

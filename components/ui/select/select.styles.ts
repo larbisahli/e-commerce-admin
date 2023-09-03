@@ -23,9 +23,7 @@ export const selectStyles = {
     display: 'flex',
     alignItems: 'center',
     minHeight: 45,
-    // backgroundColor: '#F3F4F6',
-    backgroundColor: '#ffffff',
-    // backgroundColor: '#f5f5f5',
+    backgroundColor: state.isDisabled ? '#eee' : '#ffffff',
     borderRadius: 3,
     border: '1px solid #D1D5DB',
     borderColor: state.isFocused ? 'rgb(var(--color-accent-500))' : '#D1D5DB',
@@ -62,11 +60,11 @@ export const selectStyles = {
     ...provided,
     paddingLeft: 16
   }),
-  singleValue: (provided: any, _: any) => ({
+  singleValue: (provided: any, state: any) => ({
     ...provided,
     // fontSize: '1rem',
     fontSize: '0.875rem',
-    color: '#4B5563'
+    color: state.isDisabled ? '#777' : '#4B5563'
   }),
   multiValue: (provided: any, _: any) => ({
     ...provided,

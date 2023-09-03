@@ -10,7 +10,7 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const CreateOrUpdateSlideForm = dynamic(
-  () => import('@components/hero-carousel/hero-slide-form'),
+  () => import('@components/hero-banner/hero-slide-form'),
   { ssr: true }
 );
 
