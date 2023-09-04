@@ -4,10 +4,12 @@ import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { HERO_SLIDE } from '@graphql/hero-banner';
 import { useErrorLogger, useGetUser } from '@hooks/index';
+import { useSettings } from '@hooks/useSettings';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
-import { SSRProps } from '@ts-types/custom.types';
+import { LanguageProps, SSRProps } from '@ts-types/custom.types';
 import { HeroBannerType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
+import { isEmpty } from 'lodash';
 import type { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
@@ -23,7 +25,7 @@ const CreateOrUpdateSlideForm = dynamic(
 interface THeroSlider {
   heroSlide: HeroBannerType;
 }
-interface OptionsVariable {
+interface OptionsVariable extends LanguageProps {
   id: number;
 }
 
@@ -33,11 +35,14 @@ export default function UpdateHeroSliderPage({ client }: SSRProps) {
 
   const sliderId = parseInt(query.sliderId as string, 10);
 
+  const { defaultLanguage, selectedLanguage } = useSettings();
+
   const { data, loading, error } = useQuery<THeroSlider, OptionsVariable>(
     HERO_SLIDE,
     {
-      variables: { id: sliderId },
-      fetchPolicy: 'cache-and-network'
+      variables: { id: sliderId, language: selectedLanguage, defaultLanguage },
+      fetchPolicy: 'cache-and-network',
+      skip: isEmpty(selectedLanguage),
     }
   );
 

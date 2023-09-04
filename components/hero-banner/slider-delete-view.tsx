@@ -4,7 +4,7 @@ import {
   useModalAction,
   useModalState
 } from '@components/ui/modal/modal.context';
-import { DELETE_HERO_SLIDE, HERO_CAROUSEL_LIST } from '@graphql/hero-carousel';
+import { DELETE_HERO_SLIDE, HERO_CAROUSEL_LIST } from '@graphql/hero-banner';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetUser } from '@hooks/useGetUser';
 import { notify } from '@lib/notify';

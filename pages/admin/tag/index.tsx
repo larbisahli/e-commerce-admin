@@ -3,6 +3,7 @@ import AppLayout from '@components/layouts/app';
 import TagList from '@components/tag/tag-list';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
+import TablePlaceholder from '@components/ui/placeholders/Table';
 import { TAGS } from '@graphql/tag';
 import { useErrorLogger, useGetUser } from '@hooks/index';
 import { useSettings } from '@hooks/useSettings';
@@ -19,7 +20,7 @@ import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
 const PageMainHeader = dynamic(
   () => import('@components/common/page-main-header'),
@@ -51,12 +52,7 @@ export default function Tags({ client }: SSRProps) {
 
   const { selectedTableColumns, handleColumnChange } = useTableColumn('tag');
 
-  const { languages, selectedLanguage } = useSettings();
-
-  const defaultLanguage = useMemo(
-    () => languages?.find((lang) => lang.isDefault),
-    [languages]
-  );
+  const { defaultLanguage, selectedLanguage } = useSettings();
 
   const { data, loading, error, fetchMore } = useQuery<
     TTags,
@@ -119,10 +115,7 @@ export default function Tags({ client }: SSRProps) {
         currentPage={page}
         perPage={limit.value}
       />
-      {loading && <Loader text={t('common:text-loading')} />}
-      <div className={cn({ hidden: loading })}>
-        <TagList tags={tags} selectedColumns={selectedTableColumns} />
-      </div>
+        <TagList loading={loading} tags={tags} selectedColumns={selectedTableColumns} />
     </>
   );
 }

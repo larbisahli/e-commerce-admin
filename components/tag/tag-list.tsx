@@ -1,4 +1,5 @@
 import ActionButtons from '@components/common/action-buttons';
+import { TableRowPlaceholder } from '@components/ui/placeholders/Table';
 import ProfileCart from '@components/ui/profile-card';
 import { CreatedUpdatedByAt, Tag } from '@ts-types/generated';
 import { useIsRTL } from '@utils/locals';
@@ -16,12 +17,23 @@ const Table = dynamic(
 export type IProps = {
   tags: Tag[] | undefined | null;
   selectedColumns: string[];
+  loading: boolean
 };
 
-const TagList = ({ tags, selectedColumns }: IProps) => {
+interface TableTagProps extends Tag {
+  loading: boolean
+}
+
+const TagList = ({ tags, selectedColumns, loading }: IProps) => {
   const { t } = useTranslation();
 
   const { alignLeft } = useIsRTL();
+
+  const tagPlaceholderRows = useMemo(()=>{
+    return Array.from({ length: 8 })?.map(() => ({loading: true}))
+  }, [])
+
+  console.log({tagPlaceholderRows})
 
   const columns = useMemo(() => {
     return [
@@ -40,17 +52,21 @@ const TagList = ({ tags, selectedColumns }: IProps) => {
         align: alignLeft,
         width: 120,
         ellipsis: true,
-        render: (name: string, record: Tag) => (
-          <div>
-            <span
-              style={{ width: 'fit-content' }}
-              className="font-medium bg-gray-100 text-13px md:text-sm rounded-sm
-              shadow-sm block border border-sink-base px-2 py-1 capitalize"
-            >
-              {name ?? record?.translated?.name}
-            </span>
-          </div>
-        )
+        render: (name: string, record: TableTagProps) => {
+          if(record?.loading){
+           return <TableRowPlaceholder/>
+          }
+
+          return <div>
+          <span
+            style={{ width: 'fit-content' }}
+            className="font-medium bg-gray-100 text-13px md:text-sm rounded-sm
+            shadow-sm block border border-sink-base px-2 py-1 capitalize"
+          >
+            {name ?? record?.translated?.name}
+          </span>
+        </div>
+        }
       },
       {
         title: t('table:table-item-created-at'),
@@ -58,7 +74,10 @@ const TagList = ({ tags, selectedColumns }: IProps) => {
         key: 'createdAt',
         align: alignLeft,
         width: 180,
-        render: (createdAt: CreatedUpdatedByAt['createdAt']) => {
+        render: (createdAt: CreatedUpdatedByAt['createdAt'], record: TableTagProps) => {
+          if(record?.loading){
+            return <TableRowPlaceholder/>
+           }
           return `${dayjs(createdAt).format('MMM D, YYYY')} at ${dayjs(
             createdAt
           ).format('h:mm A')}`;
@@ -71,7 +90,10 @@ const TagList = ({ tags, selectedColumns }: IProps) => {
         align: alignLeft,
         width: 150,
         ellipsis: true,
-        render: (createdBy: CreatedUpdatedByAt['createdBy'], record: Tag) => {
+        render: (createdBy: CreatedUpdatedByAt['createdBy'], record: TableTagProps) => {
+          if(record?.loading){
+            return <TableRowPlaceholder/>
+           }
           return <ProfileCart user={createdBy} createdAt={record?.createdAt} />;
         }
       },
@@ -82,7 +104,10 @@ const TagList = ({ tags, selectedColumns }: IProps) => {
         align: alignLeft,
         width: 150,
         ellipsis: true,
-        render: (updatedBy: CreatedUpdatedByAt['updatedBy'], record: Tag) => {
+        render: (updatedBy: CreatedUpdatedByAt['updatedBy'], record: TableTagProps) => {
+          if(record?.loading){
+            return <TableRowPlaceholder/>
+           }
           return <ProfileCart user={updatedBy} updatedAt={record?.updatedAt} />;
         }
       },
@@ -92,13 +117,16 @@ const TagList = ({ tags, selectedColumns }: IProps) => {
         key: 'actions',
         width: 150,
         align: 'center',
-        render: (id: string) => (
-          <ActionButtons
+        render: (id: string, record: TableTagProps) => {
+          if(record?.loading){
+            return <TableRowPlaceholder center/>
+           }
+         return <ActionButtons
             id={id}
             editUrl={`${ROUTES.TAG}/edit/${id}`}
             deleteModalView="DELETE_TAG"
           />
-        )
+        }
       }
     ];
   }, [alignLeft, t]);
@@ -118,7 +146,7 @@ const TagList = ({ tags, selectedColumns }: IProps) => {
           //@ts-ignore
           columns={tableColumns}
           emptyText={t('table:empty-table-data')}
-          data={tags}
+          data={loading ? tagPlaceholderRows: tags }
           rowKey="id"
           scroll={{ x: 800 }}
         />

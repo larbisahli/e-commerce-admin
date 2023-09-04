@@ -11,7 +11,7 @@ import Input from '@components/ui/input';
 import Label from '@components/ui/label';
 import Radio from '@components/ui/radio';
 import TextArea from '@components/ui/text-area';
-import { CREATE_HERO_SLIDE, UPDATE_HERO_SLIDE } from '@graphql/hero-carousel';
+import { CREATE_HERO_SLIDE, UPDATE_HERO_SLIDE } from '@graphql/hero-banner';
 import {
   useErrorLogger,
   useGetUser,

@@ -5,10 +5,12 @@ import Loader from '@components/ui/loader/loader';
 import { SUPPLIER } from '@graphql/supplier';
 import { useGetUser } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
+import { useSettings } from '@hooks/useSettings';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
-import type { SSRProps } from '@ts-types/custom.types';
+import type { LanguageProps, SSRProps } from '@ts-types/custom.types';
 import type { Suppliers } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
+import { isEmpty } from 'lodash';
 import type { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
@@ -23,7 +25,7 @@ const CreateOrUpdateSupplierForm = dynamic(
 interface TAttribute {
   supplier: Suppliers;
 }
-interface OptionsVariable {
+interface OptionsVariable extends LanguageProps {
   id: number;
 }
 
@@ -33,11 +35,14 @@ export default function UpdateSupplierPage({ client }: SSRProps) {
 
   const supplierId = parseInt(query.supplierId as string, 10);
 
+  const { defaultLanguage, selectedLanguage } = useSettings();
+
   const { data, loading, error } = useQuery<TAttribute, OptionsVariable>(
     SUPPLIER,
     {
-      variables: { id: supplierId },
-      fetchPolicy: 'cache-and-network'
+      variables: { id: supplierId, language: selectedLanguage, defaultLanguage},
+      fetchPolicy: 'cache-and-network',
+      skip: isEmpty(selectedLanguage)
     }
   );
 

@@ -16,7 +16,6 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useMemo } from 'react';
 
 const CreateOrUpdateTagForm = dynamic(
   () => import('@components/tag/tag-form'),
@@ -37,17 +36,12 @@ export default function UpdateTagPage({ client }: SSRProps) {
 
   const tagId = parseInt(query.tagId as string, 10);
 
-  const { languages, selectedLanguage } = useSettings();
-
-  const defaultLanguage = useMemo(
-    () => languages?.find((lang) => lang.isDefault),
-    [languages]
-  );
+  const { defaultLanguage, selectedLanguage } = useSettings();
 
   const { data, loading, error } = useQuery<TTag, OptionsVariable>(TAG, {
     variables: { id: tagId, language: selectedLanguage, defaultLanguage },
     fetchPolicy: 'cache-and-network',
-    skip: isEmpty(selectedLanguage)
+    skip: isEmpty(selectedLanguage),
   });
 
   const { tag = [] } = data ?? {};

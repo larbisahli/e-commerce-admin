@@ -19,7 +19,7 @@ import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
 const PageMainHeader = dynamic(
   () => import('@components/common/page-main-header'),
@@ -52,12 +52,7 @@ export default function OrderStatusPage({ client }: SSRProps) {
   const { selectedTableColumns, handleColumnChange } =
     useTableColumn('order-status');
 
-  const { languages, selectedLanguage } = useSettings();
-
-  const defaultLanguage = useMemo(
-    () => languages?.find((lang) => lang.isDefault),
-    [languages]
-  );
+  const { defaultLanguage, selectedLanguage } = useSettings();
 
   const { data, loading, error, fetchMore } = useQuery<
     TOrderStatus,

@@ -5,10 +5,12 @@ import Loader from '@components/ui/loader/loader';
 import { MANUFACTURER } from '@graphql/manufacturer';
 import { useGetUser } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
+import { useSettings } from '@hooks/useSettings';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
-import type { SSRProps } from '@ts-types/custom.types';
+import type { LanguageProps, SSRProps } from '@ts-types/custom.types';
 import type { ManufacturerType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
+import { isEmpty } from 'lodash';
 import type { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
@@ -23,7 +25,7 @@ const CreateOrUpdateManufacturerForm = dynamic(
 interface TManufacturer {
   manufacturer: ManufacturerType;
 }
-interface OptionsVariable {
+interface OptionsVariable extends LanguageProps {
   id: number;
 }
 
@@ -33,11 +35,14 @@ export default function UpdateManufacturerPage({ client }: SSRProps) {
 
   const manufacturerId = parseInt(query.manufacturerId as string, 10);
 
+  const { defaultLanguage, selectedLanguage } = useSettings();
+
   const { data, loading, error } = useQuery<TManufacturer, OptionsVariable>(
     MANUFACTURER,
     {
-      variables: { id: manufacturerId },
-      fetchPolicy: 'cache-and-network'
+      variables: { id: manufacturerId, language: selectedLanguage, defaultLanguage },
+      fetchPolicy: 'cache-and-network',
+      skip: isEmpty(selectedLanguage)
     }
   );
 

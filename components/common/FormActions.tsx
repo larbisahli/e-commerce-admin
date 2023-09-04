@@ -11,7 +11,7 @@ import cn from 'classnames';
 import { isEmpty } from 'lodash';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
-import { memo, useEffect, useMemo, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 
 interface Props {
@@ -42,12 +42,7 @@ const FormActions = ({
     threshold: 1
   });
 
-  const { languages = [], isLoading, selectedLanguage } = useSettings();
-
-  const defaultLanguage = useMemo(
-    () => languages?.find((lang) => lang.isDefault),
-    [languages]
-  );
+  const { defaultLanguage, languages = [], isLoading, selectedLanguage } = useSettings();
 
   const dispatch = useAppDispatch();
 

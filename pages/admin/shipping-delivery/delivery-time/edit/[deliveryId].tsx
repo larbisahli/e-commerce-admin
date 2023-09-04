@@ -5,10 +5,12 @@ import Loader from '@components/ui/loader/loader';
 import { DELIVERY_TIME } from '@graphql/delivery-time';
 import { useGetUser } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
+import { useSettings } from '@hooks/useSettings';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
-import type { SSRProps } from '@ts-types/custom.types';
+import type { LanguageProps, SSRProps } from '@ts-types/custom.types';
 import { DeliveryTimeType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
+import { isEmpty } from 'lodash';
 import type { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
@@ -21,7 +23,7 @@ const CreateOrUpdateDeliveryForm = dynamic(
   { ssr: true }
 );
 
-interface DeliveryVariable {
+interface DeliveryVariable extends LanguageProps {
   id: number;
 }
 
@@ -31,12 +33,15 @@ export default function UpdateShippingPage({ client }: SSRProps) {
 
   const deliveryId = parseInt(query.deliveryId as string, 10);
 
+  const { defaultLanguage, selectedLanguage } = useSettings();
+
   const { data, loading, error } = useQuery<
     { deliveryTime: DeliveryTimeType },
     DeliveryVariable
   >(DELIVERY_TIME, {
-    variables: { id: deliveryId },
-    fetchPolicy: 'cache-and-network'
+    variables: { id: deliveryId, language: selectedLanguage, defaultLanguage},
+    fetchPolicy: 'cache-and-network',
+    skip: isEmpty(selectedLanguage)
   });
 
   const { deliveryTime } = data ?? {};

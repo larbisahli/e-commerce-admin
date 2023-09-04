@@ -6,13 +6,15 @@ import Loader from '@components/ui/loader/loader';
 import { PRODUCTS } from '@graphql/product';
 import { useGetUser } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
+import { useSettings } from '@hooks/useSettings';
 import { useTableColumn } from '@hooks/useTableColumn';
 import { verifyAuth } from '@middleware/utils';
-import type { SSRProps } from '@ts-types/custom.types';
+import type { SSRProps, TableQueryVariables } from '@ts-types/custom.types';
 import type { Product } from '@ts-types/generated';
 import { OrderBy, SortOrder } from '@ts-types/generated';
 import { COLUMNS } from '@utils/data/table-columns';
 import { ROUTES } from '@utils/routes';
+import cn from 'classnames'
 import isEmpty from 'lodash/isEmpty';
 import type { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
@@ -41,13 +43,6 @@ interface TProduct {
   productCount: { count: number };
 }
 
-interface ProductVariable {
-  page: number;
-  limit: number;
-  orderBy: OrderBy;
-  sortedBy: SortOrder;
-}
-
 export default function ProductsPage({ client }: SSRProps) {
   const { t } = useTranslation();
 
@@ -58,15 +53,19 @@ export default function ProductsPage({ client }: SSRProps) {
   const { selectedTableColumns, handleColumnChange } =
     useTableColumn('product');
 
+    const { defaultLanguage, selectedLanguage } = useSettings();
+
   const { data, loading, error, fetchMore } = useQuery<
     TProduct,
-    ProductVariable
+    TableQueryVariables
   >(PRODUCTS, {
     variables: {
       page,
       limit: limit.value,
       orderBy,
-      sortedBy: SortOrder.Desc
+      sortedBy: SortOrder.Desc,
+      language: selectedLanguage,
+      defaultLanguage
     },
     fetchPolicy: 'cache-and-network'
   });
@@ -88,9 +87,6 @@ export default function ProductsPage({ client }: SSRProps) {
     });
   };
 
-  if (loading) {
-    return <Loader text={t('common:text-loading')} />;
-  }
   if (!isEmpty(error)) {
     return <ErrorMessage message={error.message} />;
   }
@@ -115,7 +111,10 @@ export default function ProductsPage({ client }: SSRProps) {
         currentPage={page}
         perPage={limit.value}
       />
+      {loading && <Loader text={t('common:text-loading')} />}
+      <div className={cn({ hidden: loading })}>
       <ProductList products={products} selectedColumns={selectedTableColumns} />
+      </div>
     </>
   );
 }

@@ -5,10 +5,12 @@ import Loader from '@components/ui/loader/loader';
 import { ATTRIBUTE } from '@graphql/attribute';
 import { useGetUser } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
+import { useSettings } from '@hooks/useSettings';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
-import type { SSRProps } from '@ts-types/custom.types';
+import type { LanguageProps, SSRProps } from '@ts-types/custom.types';
 import type { Attribute } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
+import { isEmpty } from 'lodash';
 import type { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
@@ -24,7 +26,7 @@ const CreateOrUpdateAttributeForm = dynamic(
 interface TAttribute {
   attribute: Attribute;
 }
-interface OptionsVariable {
+interface OptionsVariable  extends LanguageProps {
   id: number;
 }
 
@@ -34,11 +36,14 @@ export default function UpdateAttributePage({ client }: SSRProps) {
 
   const attributeId = parseInt(query.attributeId as string, 10);
 
+  const { defaultLanguage, selectedLanguage } = useSettings();
+
   const { data, loading, error } = useQuery<TAttribute, OptionsVariable>(
     ATTRIBUTE,
     {
-      variables: { id: attributeId },
-      fetchPolicy: 'cache-and-network'
+      variables: { id: attributeId, language: selectedLanguage, defaultLanguage },
+      fetchPolicy: 'cache-and-network',
+      skip: isEmpty(selectedLanguage)
     }
   );
 

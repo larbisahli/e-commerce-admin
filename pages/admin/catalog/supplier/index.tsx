@@ -5,12 +5,14 @@ import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { SUPPLIERS } from '@graphql/supplier';
 import { useErrorLogger, useGetUser } from '@hooks/index';
+import { useSettings } from '@hooks/useSettings';
 import { useTableColumn } from '@hooks/useTableColumn';
 import { verifyAuth } from '@middleware/utils';
-import { SSRProps } from '@ts-types/custom.types';
+import { SSRProps, TableQueryVariables } from '@ts-types/custom.types';
 import { OrderBy, SortOrder, Suppliers } from '@ts-types/generated';
 import { COLUMNS } from '@utils/data/table-columns';
 import { ROUTES } from '@utils/routes';
+import cn from 'classnames'
 import isEmpty from 'lodash/isEmpty';
 import type { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
@@ -39,13 +41,6 @@ interface TSupplier {
   supplierCount: { count: number };
 }
 
-interface OptionsVariable {
-  page: number;
-  limit: number;
-  orderBy: OrderBy;
-  sortedBy: SortOrder;
-}
-
 export default function SuppliersPage({ client }: SSRProps) {
   const { t } = useTranslation();
 
@@ -56,17 +51,22 @@ export default function SuppliersPage({ client }: SSRProps) {
   const { selectedTableColumns, handleColumnChange } =
     useTableColumn('supplier');
 
+    const { defaultLanguage, selectedLanguage } = useSettings();
+
   const { data, loading, error, fetchMore } = useQuery<
     TSupplier,
-    OptionsVariable
+    TableQueryVariables
   >(SUPPLIERS, {
     variables: {
       page,
       limit: limit.value,
       orderBy,
-      sortedBy: SortOrder.Desc
+      sortedBy: SortOrder.Desc,
+      language: selectedLanguage,
+      defaultLanguage
     },
-    fetchPolicy: 'cache-and-network'
+    fetchPolicy: 'cache-and-network',
+    skip: isEmpty(selectedLanguage)
   });
 
   const { suppliers = [], supplierCount: { count } = { count: 0 } } =
@@ -87,9 +87,6 @@ export default function SuppliersPage({ client }: SSRProps) {
     });
   };
 
-  if (loading) {
-    return <Loader text={t('common:text-loading')} />;
-  }
   if (!isEmpty(error)) {
     return <ErrorMessage message={error.message} />;
   }
@@ -114,10 +111,13 @@ export default function SuppliersPage({ client }: SSRProps) {
         currentPage={page}
         perPage={limit.value}
       />
+      {loading && <Loader text={t('common:text-loading')} />}
+      <div className={cn({ hidden: loading })}>
       <SuppliersList
         selectedColumns={selectedTableColumns}
         suppliers={suppliers}
       />
+      </div>
     </>
   );
 }

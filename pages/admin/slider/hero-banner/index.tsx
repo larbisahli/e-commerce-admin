@@ -1,16 +1,18 @@
 import { useQuery } from '@apollo/client';
-import HeroCarouselList from '@components/hero-banner/hero-carousel-list';
+import HeroBannerList from '@components/hero-banner/hero-banner-list';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
-import { HERO_BANNER_LIST } from '@graphql/hero-carousel';
+import { HERO_BANNER_LIST } from '@graphql/hero-banner';
 import { useErrorLogger, useGetUser } from '@hooks/index';
+import { useSettings } from '@hooks/useSettings';
 import { useTableColumn } from '@hooks/useTableColumn';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
-import { SSRProps } from '@ts-types/custom.types';
+import { LanguageProps, SSRProps } from '@ts-types/custom.types';
 import { HeroBannerType } from '@ts-types/generated';
 import { COLUMNS } from '@utils/data/table-columns';
 import { ROUTES } from '@utils/routes';
+import cn from 'classnames'
 import isEmpty from 'lodash/isEmpty';
 import type { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
@@ -40,7 +42,7 @@ interface THeroBanner {
   heroSlideListCount: { count: number };
 }
 
-interface OptionsVariable {
+interface OptionsVariable extends LanguageProps {
   page: number;
   limit: number;
 }
@@ -54,15 +56,20 @@ export default function HeroBanner({ client }: SSRProps) {
   const { selectedTableColumns, handleColumnChange } =
     useTableColumn('hero-banner');
 
+  const { defaultLanguage, selectedLanguage } = useSettings();
+
   const { data, loading, error, fetchMore } = useQuery<
     THeroBanner,
     OptionsVariable
   >(HERO_BANNER_LIST, {
     variables: {
       page,
-      limit: limit.value
+      limit: limit.value,
+      language: selectedLanguage,
+      defaultLanguage
     },
-    fetchPolicy: 'cache-and-network'
+    fetchPolicy: 'cache-and-network',
+    skip: isEmpty(selectedLanguage)
   });
 
   const { heroSlideList = [], heroSlideListCount: { count } = { count: 0 } } =
@@ -81,9 +88,6 @@ export default function HeroBanner({ client }: SSRProps) {
     });
   };
 
-  if (loading) {
-    return <Loader text={t('common:text-loading')} />;
-  }
   if (!isEmpty(error)) {
     return <ErrorMessage message={error.message} />;
   }
@@ -117,10 +121,14 @@ export default function HeroBanner({ client }: SSRProps) {
         currentPage={page}
         perPage={limit.value}
       />
+
+        {loading && <Loader text={t('common:text-loading')} />}
+      <div className={cn({ hidden: loading })}>
       <HeroBannerList
         heroBannerList={heroSlideList}
         selectedColumns={selectedTableColumns}
       />
+      </div>
     </>
   );
 }

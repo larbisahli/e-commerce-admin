@@ -5,10 +5,12 @@ import Loader from '@components/ui/loader/loader';
 import { PRODUCT } from '@graphql/product';
 import { useGetUser } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
+import { useSettings } from '@hooks/useSettings';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
-import type { SSRProps } from '@ts-types/custom.types';
+import type { LanguageProps, SSRProps } from '@ts-types/custom.types';
 import type { Product } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
+import { isEmpty } from 'lodash';
 import type { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
@@ -22,7 +24,7 @@ const CreateOrUpdateProductForm = dynamic(() => import('@components/product'), {
 interface TProduct {
   product: Product;
 }
-interface productVariable {
+interface productVariable extends LanguageProps {
   id: number;
 }
 
@@ -32,11 +34,14 @@ export default function UpdateProductPage({ client }: SSRProps) {
 
   const productId = parseInt(query.productId as string, 10);
 
+  const { defaultLanguage, selectedLanguage } = useSettings();
+
   const { data, loading, error } = useQuery<TProduct, productVariable>(
     PRODUCT,
     {
-      variables: { id: productId },
-      fetchPolicy: 'cache-and-network'
+      variables: { id: productId, language: selectedLanguage, defaultLanguage },
+      fetchPolicy: 'cache-and-network',
+      skip: isEmpty(selectedLanguage)
     }
   );
 

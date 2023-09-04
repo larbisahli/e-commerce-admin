@@ -216,7 +216,7 @@
   cursor: progress;
   background: #f6f6f6;
   width: 100%;
-  background: linear-gradient(0.25turn, transparent, #cfcfcf, transparent),
+  background: linear-gradient(0.25turn, transparent, #cfcfcfd9, transparent),
     linear-gradient(#e8e8e8, #e8e8e8),
     radial-gradient(10px circle at 19px 19px, #eee 50%, transparent 51%),
     linear-gradient(#eee, #eee);
