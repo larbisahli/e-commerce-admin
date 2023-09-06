@@ -62,13 +62,13 @@ const Input = React.forwardRef<HTMLInputElement, Props>(
           <label
             htmlFor={name}
             className={cn(
-              'block text-body-dark font-semibold text-sm leading-none mb-2',
+              'mb-2 block text-sm font-semibold leading-none text-body-dark',
               { 'text-gray-300': disabled }
             )}
           >
             {label}
             {isRequiredLabel && (
-              <span title="Required filed" className="text-red-500 m-[1px]">
+              <span title="Required filed" className="m-[1px] text-red-500">
                 *
               </span>
             )}
@@ -90,7 +90,7 @@ const Input = React.forwardRef<HTMLInputElement, Props>(
         />
         {note && <p className="mt-2 text-xs text-body">{note}</p>}
         {error && (
-          <p className="my-2 text-xs text-start text-red-500">{error}</p>
+          <p className="my-2 text-start text-xs text-red-500">{error}</p>
         )}
       </div>
     );

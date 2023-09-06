@@ -53,7 +53,7 @@ const ThemePage = ({ theme }: IProps) => {
 
   return (
     <>
-      <div className="overflow-hidden mb-6 mx-auto max-w-[1000px]">
+      <div className="mx-auto mb-6 max-w-[1000px] overflow-hidden">
         <div className="">
           <Button
             variant="outline"
@@ -68,10 +68,10 @@ const ThemePage = ({ theme }: IProps) => {
         {!isEmpty(theme) && (
           <div className="mt-8">
             {/* ----- HEAD */}
-            <div className="flex h-full sm:flex-nowrap flex-wrap justify-between">
-              <div className="flex h-full flex-2 mb-5">
+            <div className="flex h-full flex-wrap justify-between sm:flex-nowrap">
+              <div className="flex-2 mb-5 flex h-full">
                 <div className="">
-                  <div className="w-20 h-full pr-3">
+                  <div className="h-full w-20 pr-3">
                     <ImageComponent
                       src={'placeholders/image.jpg'}
                       customPlaceholder={'placeholders/image__placeholder.png'}
@@ -81,27 +81,25 @@ const ThemePage = ({ theme }: IProps) => {
                     />
                   </div>
                 </div>
-                <div className="p-1 flex-col h-full max-w-[700px]">
-                  <h2 className="font-bold text-xl">{theme?.title}</h2>
-                  <div className="text-gray-400 text-xs mt-1">{`Version: ${
+                <div className="h-full max-w-[700px] flex-col p-1">
+                  <h2 className="text-xl font-bold">{theme?.title}</h2>
+                  <div className="mt-1 text-xs text-gray-400">{`Version: ${
                     theme?.version ?? 'v1'
                   }`}</div>
-                  <span className="text-gray-400 text-xs">by:</span>
-                  <span className="text-xs mx-1 text-blue-400">{`Dropgala`}</span>
-                  <p className="text-gray-600 text-sm my-2">
+                  <span className="text-xs text-gray-400">by:</span>
+                  <span className="mx-1 text-xs text-blue-400">{`Dropgala`}</span>
+                  <p className="my-2 text-sm text-gray-600">
                     {theme?.description}
                   </p>
                   <div className="flex items-center justify-between pr-3">
                     <div className="flex items-center justify-end">
                       {Array.from({ length: theme?.ratingStarCount })?.map(
-                        (_, idx) => (
-                          <StarIcon key={idx} />
-                        )
+                        (_, idx) => <StarIcon key={idx} />
                       )}
-                      <span className="text-gray-400 text-xs pt-[5px] mx-[3px]">
+                      <span className="mx-[3px] pt-[5px] text-xs text-gray-400">
                         {theme?.ratingStarCount}
                       </span>
-                      <span className="text-blue-500 underline text-sm">
+                      <span className="text-sm text-blue-500 underline">
                         ({theme?.reviewsCount})
                       </span>
                     </div>
@@ -110,27 +108,27 @@ const ThemePage = ({ theme }: IProps) => {
               </div>
               <div className="w-fit flex-grow">
                 {theme?.installed ? (
-                  <div className="max-w-[170px] sm:min-w-[170px] flex flex-col justify-end self-start">
-                    <Button className="text-sm rounded-md bg-green-500 hover:bg-green-500">
+                  <div className="flex max-w-[170px] flex-col justify-end self-start sm:min-w-[170px]">
+                    <Button className="rounded-md bg-green-500 text-sm hover:bg-green-500">
                       <CheckMark />
                       <span className="pl-1">Theme added</span>
                     </Button>
                   </div>
                 ) : (
-                  <div className="max-w-[170px] sm:min-w-[170px] flex flex-col justify-end self-start">
+                  <div className="flex max-w-[170px] flex-col justify-end self-start sm:min-w-[170px]">
                     <Button
                       loading={loading}
                       onClick={handleThemeCall}
-                      className="text-sm rounded-md"
+                      className="rounded-md text-sm"
                     >
                       Add Theme
                     </Button>
                     {theme?.isFree ? (
-                      <div className="text-lg font-semibold text-gray-900 mt-3 text-right">
+                      <div className="mt-3 text-right text-lg font-semibold text-gray-900">
                         Free
                       </div>
                     ) : (
-                      <div className="text-lg font-semibold text-gray-900 mt-2 text-right">
+                      <div className="mt-2 text-right text-lg font-semibold text-gray-900">
                         {theme?.price}
                       </div>
                     )}
@@ -140,7 +138,7 @@ const ThemePage = ({ theme }: IProps) => {
             </div>
             {/* ------ GALLERY */}
             <div className="mt-11">
-              <div className="w-full h-full m-3">
+              <div className="m-3 h-full w-full">
                 <Image alt="" src="/scandi.webp" width={1000} height={600} />
               </div>
             </div>

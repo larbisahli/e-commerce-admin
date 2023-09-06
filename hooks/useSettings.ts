@@ -13,5 +13,5 @@ export const useSettings = () => {
     [settings?.languages]
   );
 
-  return {...settings, defaultLanguage};
+  return { ...settings, defaultLanguage };
 };

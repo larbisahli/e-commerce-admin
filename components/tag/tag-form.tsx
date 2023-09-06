@@ -106,7 +106,7 @@ export default function CreateOrUpdateTagForm({ initialValues }: IProps) {
   const renderDescInfo = () => {
     if (isEmpty(initialValues)) {
       return (
-        <p className="text-sm text-gray-600 mb-12">
+        <p className="mb-12 text-sm text-gray-600">
           {`"New tag" is displayed in the system default language.
          Always maintain new data in your chosen system default language.`}
         </p>
@@ -128,7 +128,7 @@ export default function CreateOrUpdateTagForm({ initialValues }: IProps) {
           disabled={creating || updating}
         />
         {renderDescInfo()}
-        <div className="flex flex-wrap my-5 sm:my-8">
+        <div className="my-5 flex flex-wrap sm:my-8">
           <Description
             title={t('form:input-label-description')}
             details={`${
@@ -136,7 +136,7 @@ export default function CreateOrUpdateTagForm({ initialValues }: IProps) {
                 ? t('form:item-description-edit')
                 : t('form:item-description-add')
             } ${t('form:tag-description-helper-text')}`}
-            className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8 "
+            className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5 "
           />
 
           <Card className="w-full sm:w-8/12 md:w-2/3">

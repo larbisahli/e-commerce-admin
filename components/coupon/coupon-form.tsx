@@ -183,7 +183,7 @@ export default function CreateOrUpdateCouponForm({ initialValues }: IProps) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex flex-wrap my-5 sm:my-8">
+      <div className="my-5 flex flex-wrap sm:my-8">
         <Description
           title={t('form:input-label-description')}
           details={`${
@@ -191,7 +191,7 @@ export default function CreateOrUpdateCouponForm({ initialValues }: IProps) {
               ? t('form:item-description-edit')
               : t('form:item-description-add')
           } ${t('form:coupon-form-info-help-text')}`}
-          className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8 "
+          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5 "
         />
 
         <Card className="w-full sm:w-8/12 md:w-2/3">
@@ -242,7 +242,7 @@ export default function CreateOrUpdateCouponForm({ initialValues }: IProps) {
             min="0"
           />
           <div className="flex flex-col sm:flex-row">
-            <div className="w-full sm:w-1/2 p-0 sm:pe-2 mb-5 sm:mb-0">
+            <div className="mb-5 w-full p-0 sm:mb-0 sm:w-1/2 sm:pe-2">
               <Label>{t('form:coupon-active-from')}</Label>
               <Controller
                 control={control}
@@ -265,7 +265,7 @@ export default function CreateOrUpdateCouponForm({ initialValues }: IProps) {
               />
               <ValidationError message={t(errors.couponStartDate?.message!)} />
             </div>
-            <div className="w-full sm:w-1/2 p-0 sm:ps-2">
+            <div className="w-full p-0 sm:w-1/2 sm:ps-2">
               <Label>{t('form:coupon-expire-at')}</Label>
 
               <Controller
@@ -291,7 +291,7 @@ export default function CreateOrUpdateCouponForm({ initialValues }: IProps) {
           </div>
         </Card>
       </div>
-      <div className="mb-4 flex justify-end items-center">
+      <div className="mb-4 flex items-center justify-end">
         {initialValues && (
           <Button
             variant="outline"

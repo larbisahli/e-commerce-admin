@@ -153,7 +153,7 @@ export default function CreateOrUpdatePromoSlideForm({
           }}
         />
       </div>
-      <div className="flex flex-wrap my-5 sm:my-8">
+      <div className="my-5 flex flex-wrap sm:my-8">
         <Description
           title={t('form:input-label-description')}
           details={`${
@@ -161,7 +161,7 @@ export default function CreateOrUpdatePromoSlideForm({
               ? t('form:item-description-edit')
               : t('form:item-description-add')
           } ${t('form:hero-slider-description-helper-text')}`}
-          className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
+          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
         />
         <Card className="w-full sm:w-8/12 md:w-2/3">
           <div>
@@ -215,7 +215,7 @@ export default function CreateOrUpdatePromoSlideForm({
           </div>
         </Card>
       </div>
-      <div className="flex flex-wrap my-5 sm:my-8">
+      <div className="my-5 flex flex-wrap sm:my-8">
         <Description
           title={t('form:input-label-sliders')}
           details={`${
@@ -223,16 +223,16 @@ export default function CreateOrUpdatePromoSlideForm({
               ? t('form:item-description-edit')
               : t('form:item-description-add')
           } ${t('form:hero-slider-style-helper-text')}`}
-          className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
+          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
         />
         <Card className="w-full sm:w-8/12 md:w-2/3">
           <div>
             {fields.map((slide, index) => (
               <div
-                className="border-b border-dashed border-border-500 mb-5 last:border-0 md:py-8"
+                className="border-border-500 mb-5 border-b border-dashed last:border-0 md:py-8"
                 key={index}
               >
-                <div className="flex justify-between flex-col">
+                <div className="flex flex-col justify-between">
                   <Label>{t('form:input-label-title')}</Label>
                   <Editor
                     name={`sliders.${index}.content`}
@@ -240,14 +240,14 @@ export default function CreateOrUpdatePromoSlideForm({
                     onChange={(value) =>
                       setValue(`sliders.${index}.content`, value)
                     }
-                    className="sm:col-span-2  mb-5"
+                    className="mb-5  sm:col-span-2"
                     defaultValue=""
                   />
                   <div>
                     <button
                       onClick={() => remove(index)}
                       type="button"
-                      className="text-sm text-red-500 hover:text-red-700 transition-colors duration-200 focus:outline-none sm:mt-4 sm:col-span-1"
+                      className="text-sm text-red-500 transition-colors duration-200 hover:text-red-700 focus:outline-none sm:col-span-1 sm:mt-4"
                     >
                       {t('form:button-label-remove')}
                     </button>
@@ -301,8 +301,8 @@ const DisplayColorCode = ({ color }: { color: string }) => {
     <>
       {color !== null && (
         <span
-          className="ms-3 px-2 py-1 text-sm text-heading bg-gray-100
-                         border border-border-200 rounded"
+          className="rounded border border-border-200 bg-gray-100 px-2 py-1
+                         text-sm text-heading ms-3"
         >
           {color}
         </span>
@@ -341,12 +341,12 @@ const PromoSlider = ({
     <div
       style={{ backgroundColor: backgroundColor }}
       id="promoSlide"
-      className="h-[40px] overflow-hidden w-full relative text-white text-center"
+      className="relative h-[40px] w-full overflow-hidden text-center text-white"
     >
       <div
         style={{ animationDuration: animationSpeed }}
         className={cn(
-          'flex absolute',
+          'absolute flex',
           {
             'animate-marquee2-infinite':
               direction === 'LTR' && sliders.length > 1
@@ -361,7 +361,7 @@ const PromoSlider = ({
           <div
             key={idx}
             style={{ width: `${width}px` }}
-            className="flex justify-center items-center h-[40px]"
+            className="flex h-[40px] items-center justify-center"
           >
             <span className="h-fit">{ReactHtmlParser(content ?? '')}</span>
           </div>

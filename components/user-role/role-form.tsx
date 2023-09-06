@@ -112,11 +112,11 @@ const RoleCreateUpdateForm = ({ initialValues }: IProps) => {
 
   return (
     <form onSubmit={onSubmit} noValidate>
-      <div className="flex flex-wrap pb-8 border-b border-dashed border-border-base my-5 sm:my-8">
+      <div className="my-5 flex flex-wrap border-b border-dashed border-border-base pb-8 sm:my-8">
         <Description
           title={t('form:input-label-image')}
           details={t('form:category-image-helper-text')}
-          className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-[25%] md:w-[25%] sm:py-8"
+          className="w-full px-0 pb-5 sm:w-[25%] sm:py-8 sm:pe-4 md:w-[25%] md:pe-5"
         />
 
         <Card className="w-full sm:w-[75%] md:w-[75%]">
@@ -130,7 +130,7 @@ const RoleCreateUpdateForm = ({ initialValues }: IProps) => {
               className="mb-4"
             />
           </div>
-          <div className="mt-5 block text-body-dark font-semibold text-sm leading-none mb-2">
+          <div className="mt-5 mb-2 block text-sm font-semibold leading-none text-body-dark">
             Permissions
           </div>
           <div>

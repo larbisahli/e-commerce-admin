@@ -25,15 +25,15 @@ export default class ErrorBoundary extends React.Component {
     if ((this.state as { hasError: boolean }).hasError) {
       // You can render any custom fallback UI
       return (
-        <div className="lg:px-24 lg:py-24 md:py-20 md:px-44 px-4 py-24 items-center flex justify-center flex-col-reverse lg:flex-row md:gap-28 gap-16">
-          <div className="xl:pt-24 w-full xl:w-1/2 relative pb-12 lg:pb-0">
+        <div className="flex flex-col-reverse items-center justify-center gap-16 px-4 py-24 md:gap-28 md:py-20 md:px-44 lg:flex-row lg:px-24 lg:py-24">
+          <div className="relative w-full pb-12 lg:pb-0 xl:w-1/2 xl:pt-24">
             <div className="relative">
-              <h1 className="my-2 text-gray-800 font-bold text-2xl">
+              <h1 className="my-2 text-2xl font-bold text-gray-800">
                 Looks like you've found the doorway to the great nothing
               </h1>
               <div className="py-2">
                 <Link href={ROUTES.DASHBOARD}>
-                  <a className="sm:w-full lg:w-auto border rounded md py-4 px-8 text-center bg-indigo-600 text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-700 focus:ring-opacity-50">
+                  <a className="md rounded border bg-indigo-600 py-4 px-8 text-center text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-700 focus:ring-opacity-50 sm:w-full lg:w-auto">
                     Take me there!
                   </a>
                 </Link>

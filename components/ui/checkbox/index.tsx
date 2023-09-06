@@ -46,13 +46,13 @@ const Checkbox = React.forwardRef<HTMLInputElement, Props>(
 
           <label
             htmlFor={id ?? name}
-            className={`${labelClassName ?? ''} text-body text-sm`}
+            className={`${labelClassName ?? ''} text-sm text-body`}
           >
             {label}
           </label>
         </div>
 
-        {error && <p className="my-2 text-xs text-end text-red-500">{error}</p>}
+        {error && <p className="my-2 text-end text-xs text-red-500">{error}</p>}
       </div>
     );
   }

@@ -10,7 +10,7 @@ const Step3Form = ({ control, setValue, countries, country, phoneNumber }) => {
   const { t } = useTranslation();
 
   return (
-    <div className="h-full mb-8">
+    <div className="mb-8 h-full">
       <div className="mb-5">
         <Label>{t('form:input-label-country')}</Label>
         <SelectInput

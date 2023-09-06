@@ -1,8 +1,11 @@
 import ActionButtons from '@components/common/action-buttons';
 import Avatar from '@components/common/avatar';
 import Badge from '@components/ui/badge/badge';
+import Loader from '@components/ui/loader/loader';
+import { TableRowPlaceholder } from '@components/ui/placeholders/Table';
 import ProfileCart from '@components/ui/profile-card';
 import { useGetUser } from '@hooks/index';
+import { usePlaceholder } from '@hooks/usePlaceholder';
 import {
   CreatedUpdatedByAt,
   ImageType,
@@ -19,18 +22,26 @@ import { useMemo } from 'react';
 
 const Table = dynamic(
   () => import('@components/ui/table').then((mod) => mod.Table),
-  { ssr: false }
+  { ssr: false, loading: () => <Loader text={'Loading'} /> }
 );
 
 type IProps = {
   users: UserType[] | null | undefined;
   selectedColumns: string[];
+  loading: boolean;
 };
-const UserList = ({ users, selectedColumns }: IProps) => {
+
+interface TableRowProps extends UserType {
+  loading: boolean;
+}
+
+const UserList = ({ loading, users, selectedColumns }: IProps) => {
   const { t } = useTranslation();
   const { alignLeft } = useIsRTL();
 
   const { userInfo } = useGetUser();
+
+  const { tablePlaceholderRow } = usePlaceholder();
 
   const columns = useMemo(() => {
     return [
@@ -48,7 +59,11 @@ const UserList = ({ users, selectedColumns }: IProps) => {
         key: 'profile',
         align: 'center',
         width: 74,
-        render: (profile: ImageType, record: UserType) => {
+        render: (profile: ImageType, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
+
           const { image, placeholder } = profile[0] ?? {};
           return (
             <Avatar
@@ -67,11 +82,16 @@ const UserList = ({ users, selectedColumns }: IProps) => {
         align: alignLeft,
         width: 180,
         ellipsis: true,
-        render: (firstName: string, record: UserType) => (
-          <span className="font-semibold text-gray-800 capitalize">
-            {`${firstName} ${record?.lastName}`}
-          </span>
-        )
+        render: (firstName: string, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
+          return (
+            <span className="font-semibold capitalize text-gray-800">
+              {`${firstName} ${record?.lastName}`}
+            </span>
+          );
+        }
       },
       {
         title: t('table:table-item-roles'),
@@ -80,12 +100,15 @@ const UserList = ({ users, selectedColumns }: IProps) => {
         align: alignLeft,
         ellipsis: true,
         width: 200,
-        render: (role: RoleType) => {
+        render: (role: RoleType, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
           return (
             <div>
               <span
                 style={{ width: 'fit-content' }}
-                className="font-medium text-13px md:text-sm rounded block border border-sink-base px-2 py-1 bg-gray-100"
+                className="text-13px border-sink-base block rounded border bg-gray-100 px-2 py-1 font-medium md:text-sm"
               >
                 {role.roleName}
               </span>
@@ -99,11 +122,14 @@ const UserList = ({ users, selectedColumns }: IProps) => {
         key: 'isTenant',
         align: 'center',
         width: 250,
-        render: (isTenant: boolean, recode: UserType) => {
+        render: (isTenant: boolean, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
           return (
             <div>
               <Badge
-                className="mr-2 border !text-sm !text-gray-600 shadow font-medium"
+                className="mr-2 border !text-sm font-medium !text-gray-600 shadow"
                 text={
                   isTenant
                     ? t('table:table-item-owner')
@@ -112,12 +138,12 @@ const UserList = ({ users, selectedColumns }: IProps) => {
                 color={'bg-gray-100'}
               />
               <Badge
-                className={cn('!text-sm border', {
-                  'text-red-900': !recode.active,
-                  'text-green-800': recode.active
+                className={cn('border !text-sm', {
+                  'text-red-900': !record.active,
+                  'text-green-800': record.active
                 })}
-                text={recode.active ? 'Active' : 'Inactive'}
-                color={recode.active ? 'bg-green-300' : 'bg-red-300'}
+                text={record.active ? 'Active' : 'Inactive'}
+                color={record.active ? 'bg-green-300' : 'bg-red-300'}
               />
             </div>
           );
@@ -129,7 +155,13 @@ const UserList = ({ users, selectedColumns }: IProps) => {
         key: 'email',
         align: alignLeft,
         width: 200,
-        ellipsis: true
+        ellipsis: true,
+        render: (email: string, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
+          return email;
+        }
       },
       {
         title: t('table:table-item-phone'),
@@ -138,12 +170,15 @@ const UserList = ({ users, selectedColumns }: IProps) => {
         align: alignLeft,
         width: 200,
         ellipsis: true,
-        render: (phoneNumber: number) => {
+        render: (phoneNumber: number, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
           return (
             <div>
               <span
                 style={{ width: 'fit-content' }}
-                className="font-medium block"
+                className="block font-medium"
               >
                 {phoneNumber ? '+' + phoneNumber : 'N/A'}
               </span>
@@ -157,7 +192,13 @@ const UserList = ({ users, selectedColumns }: IProps) => {
         key: 'createdAt',
         align: alignLeft,
         width: 200,
-        render: (createdAt: CreatedUpdatedByAt['createdAt']) => {
+        render: (
+          createdAt: CreatedUpdatedByAt['createdAt'],
+          record: TableRowProps
+        ) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
           return `${dayjs(createdAt).format('MMM D, YYYY')} at ${dayjs(
             createdAt
           ).format('h:mm A')}`;
@@ -172,8 +213,11 @@ const UserList = ({ users, selectedColumns }: IProps) => {
         ellipsis: true,
         render: (
           createdBy: CreatedUpdatedByAt['createdBy'],
-          record: UserType
+          record: TableRowProps
         ) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
           return <ProfileCart user={createdBy} createdAt={record?.createdAt} />;
         }
       },
@@ -186,8 +230,11 @@ const UserList = ({ users, selectedColumns }: IProps) => {
         ellipsis: true,
         render: (
           updatedBy: CreatedUpdatedByAt['updatedBy'],
-          record: UserType
+          record: TableRowProps
         ) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
           return <ProfileCart user={updatedBy} updatedAt={record?.updatedAt} />;
         }
       },
@@ -197,18 +244,23 @@ const UserList = ({ users, selectedColumns }: IProps) => {
         key: 'actions',
         align: 'center',
         width: 150,
-        render: (id: string, { active, isTenant }: UserType) => {
+        render: (
+          id: string,
+          { active, isTenant }: UserType,
+          record: TableRowProps
+        ) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
           return (
-            <>
-              <ActionButtons
-                id={id}
-                isTenant={isTenant}
-                editUrl={`${ROUTES.USER}/edit/${id}`}
-                deleteModalView={userInfo?.id != id ? 'DELETE_USER' : null}
-                userStatus={userInfo?.id != id}
-                isUserActive={active}
-              />
-            </>
+            <ActionButtons
+              id={id}
+              isTenant={isTenant}
+              editUrl={`${ROUTES.USER}/edit/${id}`}
+              deleteModalView={userInfo?.id != id ? 'DELETE_USER' : null}
+              userStatus={userInfo?.id != id}
+              isUserActive={active}
+            />
           );
         }
       }
@@ -224,18 +276,15 @@ const UserList = ({ users, selectedColumns }: IProps) => {
   }, [columns, selectedColumns]);
 
   return (
-    <>
-      <div className="card overflow-hidden mb-6">
-        <Table
-          // @ts-ignore
-          columns={tableColumns}
-          emptyText={t('table:empty-table-data')}
-          data={users}
-          rowKey="id"
-          scroll={{ x: 800 }}
-        />
-      </div>
-    </>
+    <Table
+      // @ts-ignore
+      columns={tableColumns}
+      emptyText={t('table:empty-table-data')}
+      data={loading ? tablePlaceholderRow : users}
+      rowKey="id"
+      scroll={{ x: 800 }}
+      className="card mb-6 overflow-hidden"
+    />
   );
 };
 

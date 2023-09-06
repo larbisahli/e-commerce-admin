@@ -175,7 +175,7 @@ const ResetPassword = () => {
           error={t(errors.passwordConfirmation?.message!)}
         />
         <Button
-          className="w-full h-11 mt-8"
+          className="mt-8 h-11 w-full"
           loading={loading}
           disabled={loading}
         >

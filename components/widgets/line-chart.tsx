@@ -93,8 +93,8 @@ const LineChart = ({
   };
 
   return (
-    <div className="bg-light shadow-sm rounded w-full h-full">
-      <div className="p-8 flex items-start justify-between">
+    <div className="h-full w-full rounded bg-light shadow-sm">
+      <div className="flex items-start justify-between p-8">
         <h3 className="text-base font-semibold text-heading">{widgetTitle}</h3>
       </div>
 

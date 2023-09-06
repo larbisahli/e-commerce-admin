@@ -101,7 +101,7 @@ const LoginForm = () => {
         />
       </div>
       <form onSubmit={handleSubmit(onSubmit)} noValidate className="pt-8">
-        <div className="mb-5 phone-number-class">
+        <div className="phone-number-class mb-5">
           <Input
             {...register('email')}
             type="email"
@@ -121,7 +121,7 @@ const LoginForm = () => {
           forgotPageLink={ROUTES.FORGET_PASSWORD}
         />
         <Button
-          className="w-full rounded-sm mt-8"
+          className="mt-8 w-full rounded-sm"
           loading={loading && !error}
           disabled={loading}
         >
@@ -140,7 +140,7 @@ const LoginForm = () => {
         <div className=" p-5 text-center">
           <span className="mr-1 text-gray-600">{t('dont-have-account')}</span>
           <Link href={ROUTES.SIGNUP}>
-            <a className="text-blue-500 font-normal">
+            <a className="font-normal text-blue-500">
               {t('create-an-account')}
             </a>
           </Link>

@@ -14,7 +14,7 @@ import type { DeliveryTimeType } from '@ts-types/generated';
 import { OrderBy, SortOrder } from '@ts-types/generated';
 import { COLUMNS } from '@utils/data/table-columns';
 import { ROUTES } from '@utils/routes';
-import cn from 'classnames'
+import cn from 'classnames';
 import isEmpty from 'lodash/isEmpty';
 import type { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
@@ -27,7 +27,7 @@ const PageMainHeader = dynamic(
   () => import('@components/common/page-main-header'),
   {
     ssr: true,
-    loading: () => <div className="animated-background w-full h-[80px]"></div>
+    loading: () => <div className="animated-background h-[80px] w-full"></div>
   }
 );
 
@@ -35,7 +35,7 @@ const PageMainAction = dynamic(
   () => import('@components/common/PageMainAction'),
   {
     ssr: true,
-    loading: () => <div className="animated-background w-full h-[80px]"></div>
+    loading: () => <div className="animated-background h-[80px] w-full"></div>
   }
 );
 
@@ -54,7 +54,7 @@ export default function ShippingZonesPage({ client }: SSRProps) {
   const { selectedTableColumns, handleColumnChange } =
     useTableColumn('delivery-time');
 
-    const { defaultLanguage, selectedLanguage } = useSettings();
+  const { defaultLanguage, selectedLanguage } = useSettings();
 
   const { data, loading, error, fetchMore } = useQuery<
     TDelivery,
@@ -123,12 +123,12 @@ export default function ShippingZonesPage({ client }: SSRProps) {
         currentPage={page}
         perPage={limit.value}
       />
-      {loading && <Loader text={t('common:text-loading')} />}
       <div className={cn({ hidden: loading })}>
-      <DeliveryList
-        deliveryTimes={deliveryTimes}
-        selectedColumns={selectedTableColumns}
-      />
+        <DeliveryList
+          loading={loading}
+          deliveryTimes={deliveryTimes}
+          selectedColumns={selectedTableColumns}
+        />
       </div>
     </>
   );

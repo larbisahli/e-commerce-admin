@@ -96,25 +96,25 @@ const OrderStatusDeleteView = () => {
   console.log({ fav: favicons(alias) });
 
   return (
-    <div className="z-50 flex overflow-y-auto max-h-screen flex-col bg-white md:h-fit h-[100vh] w-[100vw] md:w-[70vw] 2xl:w-[60vw]">
-      <div className="p-4 font-semibold text-lg bg-blue-600 text-white capitalize">
+    <div className="z-50 flex h-[100vh] max-h-screen w-[100vw] flex-col overflow-y-auto bg-white md:h-fit md:w-[70vw] 2xl:w-[60vw]">
+      <div className="bg-blue-600 p-4 text-lg font-semibold capitalize text-white">
         Store favicons
       </div>
-      <div className="p-4 h-fit min-h-[400px] w-full">
-        <div className="flex item-center">
+      <div className="h-fit min-h-[400px] w-full p-4">
+        <div className="item-center flex">
           <p className="text-gray-500">
             Auto generated favicons for your Progressive Web App (PWA) store.
           </p>
         </div>
-        <div className="flex border-t flex-col justify-between relative my-5 flex-1">
+        <div className="relative my-5 flex flex-1 flex-col justify-between border-t">
           <div className="h-full w-full">
-            <ul className="my-4 flex flex-col w-full overflow-y-auto">
+            <ul className="my-4 flex w-full flex-col overflow-y-auto">
               {favicons(alias)
                 ?.sort((a, b) => a.width - b.width)
                 ?.map((favicon) => {
                   return (
-                    <li key={favicon.src} className="flex items-center m-2">
-                      <div className="flex flex-col text-sm text-gray-600 font-semibold mr-2">
+                    <li key={favicon.src} className="m-2 flex items-center">
+                      <div className="mr-2 flex flex-col text-sm font-semibold text-gray-600">
                         <span className="py-1">{favicon.sizes}</span>
                         <span>{favicon.type}</span>
                       </div>
@@ -137,7 +137,7 @@ const OrderStatusDeleteView = () => {
                 })}
             </ul>
           </div>
-          <div className="flex items-center mt-3 md:mb-0 justify-end pb-16">
+          <div className="mt-3 flex items-center justify-end pb-16 md:mb-0">
             <Button
               variant="outline"
               className="mr-4"

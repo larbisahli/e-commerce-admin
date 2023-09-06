@@ -1,10 +1,9 @@
 import ActionButtons from '@components/common/action-buttons';
+import Loader from '@components/ui/loader/loader';
+import { TableRowPlaceholder } from '@components/ui/placeholders/Table';
 import ProfileCart from '@components/ui/profile-card';
-import {
-  CreatedUpdatedByAt,
-  DeliveryTimeType,
-  ShippingZoneType
-} from '@ts-types/generated';
+import { usePlaceholder } from '@hooks/usePlaceholder';
+import { CreatedUpdatedByAt, DeliveryTimeType } from '@ts-types/generated';
 import { useIsRTL } from '@utils/locals';
 import { ROUTES } from '@utils/routes';
 import dayjs from 'dayjs';
@@ -14,17 +13,24 @@ import { useMemo } from 'react';
 
 const Table = dynamic(
   () => import('@components/ui/table').then((mod) => mod.Table),
-  { ssr: false }
+  { ssr: false, loading: () => <Loader text={'Loading'} /> }
 );
+
+interface TableRowProps extends DeliveryTimeType {
+  loading: boolean;
+}
 
 export type IProps = {
   deliveryTimes: DeliveryTimeType[] | undefined;
   selectedColumns: string[];
+  loading: boolean;
 };
 
-const DeliveryList = ({ deliveryTimes, selectedColumns }: IProps) => {
+const DeliveryList = ({ loading, deliveryTimes, selectedColumns }: IProps) => {
   const { t } = useTranslation();
   const { alignLeft } = useIsRTL();
+
+  const { tablePlaceholderRow } = usePlaceholder();
 
   const columns = useMemo(() => {
     return [
@@ -43,7 +49,10 @@ const DeliveryList = ({ deliveryTimes, selectedColumns }: IProps) => {
         align: alignLeft,
         width: 150,
         ellipsis: true,
-        render: (name: string) => {
+        render: (name: string, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
           return <span className="capitalize">{name}</span>;
         }
       },
@@ -54,7 +63,10 @@ const DeliveryList = ({ deliveryTimes, selectedColumns }: IProps) => {
         align: alignLeft,
         width: 150,
         ellipsis: true,
-        render: ({ unit }: { unit: string }) => {
+        render: ({ unit }: { unit: string }, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
           return <span className="capitalize">{unit}</span>;
         }
       },
@@ -65,7 +77,10 @@ const DeliveryList = ({ deliveryTimes, selectedColumns }: IProps) => {
         align: alignLeft,
         width: 150,
         ellipsis: true,
-        render: (minValue: number) => {
+        render: (minValue: number, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
           return <span className="capitalize">{minValue}</span>;
         }
       },
@@ -76,7 +91,10 @@ const DeliveryList = ({ deliveryTimes, selectedColumns }: IProps) => {
         align: alignLeft,
         width: 150,
         ellipsis: true,
-        render: (maxValue: number) => {
+        render: (maxValue: number, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
           return <span className="capitalize">{maxValue}</span>;
         }
       },
@@ -86,7 +104,13 @@ const DeliveryList = ({ deliveryTimes, selectedColumns }: IProps) => {
         key: 'createdAt',
         align: alignLeft,
         width: 200,
-        render: (createdAt: CreatedUpdatedByAt['createdAt']) => {
+        render: (
+          createdAt: CreatedUpdatedByAt['createdAt'],
+          record: TableRowProps
+        ) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
           return `${dayjs(createdAt).format('MMM D, YYYY')} at ${dayjs(
             createdAt
           ).format('h:mm A')}`;
@@ -101,8 +125,11 @@ const DeliveryList = ({ deliveryTimes, selectedColumns }: IProps) => {
         ellipsis: true,
         render: (
           createdBy: CreatedUpdatedByAt['createdBy'],
-          record: ShippingZoneType
+          record: TableRowProps
         ) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
           return <ProfileCart user={createdBy} createdAt={record?.createdAt} />;
         }
       },
@@ -115,8 +142,11 @@ const DeliveryList = ({ deliveryTimes, selectedColumns }: IProps) => {
         ellipsis: true,
         render: (
           updatedBy: CreatedUpdatedByAt['updatedBy'],
-          record: ShippingZoneType
+          record: TableRowProps
         ) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
           return <ProfileCart user={updatedBy} updatedAt={record?.updatedAt} />;
         }
       },
@@ -125,13 +155,18 @@ const DeliveryList = ({ deliveryTimes, selectedColumns }: IProps) => {
         dataIndex: 'id',
         key: 'actions',
         align: 'center',
-        render: (id: string) => (
-          <ActionButtons
-            id={id}
-            editUrl={`${ROUTES.DELIVERY_TIME}/edit/${id}`}
-            deleteModalView="DELETE_DELIVERY_TIME"
-          />
-        ),
+        render: (id: string, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
+          return (
+            <ActionButtons
+              id={id}
+              editUrl={`${ROUTES.DELIVERY_TIME}/edit/${id}`}
+              deleteModalView="DELETE_DELIVERY_TIME"
+            />
+          );
+        },
         width: 200
       }
     ];
@@ -146,18 +181,15 @@ const DeliveryList = ({ deliveryTimes, selectedColumns }: IProps) => {
   }, [columns, selectedColumns]);
 
   return (
-    <>
-      <div className="card overflow-hidden mb-8">
-        <Table
-          //@ts-ignore
-          columns={tableColumns}
-          emptyText={t('table:empty-table-data')}
-          data={deliveryTimes}
-          rowKey="id"
-          scroll={{ x: 900 }}
-        />
-      </div>
-    </>
+    <Table
+      //@ts-ignore
+      columns={tableColumns}
+      emptyText={t('table:empty-table-data')}
+      data={loading ? tablePlaceholderRow : deliveryTimes}
+      rowKey="id"
+      scroll={{ x: 900 }}
+      className="card mb-8 overflow-hidden"
+    />
   );
 };
 

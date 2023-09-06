@@ -15,14 +15,14 @@ const Label: React.FC<Props> = ({
   return (
     <label
       className={cn(
-        'block text-gray-600 font-semibold text-sm leading-none mb-2',
+        'mb-2 block text-sm font-semibold leading-none text-gray-600',
         className
       )}
       {...rest}
     >
       {children}
       {isRequiredLabel && (
-        <span title="Required filed" className="text-red-500 m-[1px]">
+        <span title="Required filed" className="m-[1px] text-red-500">
           *
         </span>
       )}

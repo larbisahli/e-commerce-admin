@@ -51,10 +51,10 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, Props>((props, ref) => {
   return (
     <div className={className}>
       {label && (
-        <label className="block text-body-dark font-semibold text-sm leading-none mb-3">
+        <label className="mb-3 block text-sm font-semibold leading-none text-body-dark">
           {label}
           {isRequiredLabel && (
-            <span title="Requited filed" className="text-red-500 m-[1px]">
+            <span title="Requited filed" className="m-[1px] text-red-500">
               *
             </span>
           )}

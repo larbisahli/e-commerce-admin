@@ -8,8 +8,8 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 export default function SignUp({ client }: SSRProps) {
   useGetUser(client);
   return (
-    <div className="flex items-center justify-center min-h-screen h-fit">
-      <div className="mx-auto max-w-xl p-5 sm:p-8 min-h-screen h-fit w-full">
+    <div className="flex h-fit min-h-screen items-center justify-center">
+      <div className="mx-auto h-fit min-h-screen w-full max-w-xl p-5 sm:p-8">
         <RegistrationForm />
       </div>
     </div>

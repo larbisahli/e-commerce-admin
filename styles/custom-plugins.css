@@ -412,7 +412,7 @@
 * RC Pagination
 */
 .rc-pagination {
-  @apply flex items-center flex-wrap;
+  @apply flex flex-wrap items-center;
 }
 
 .rc-pagination .rc-pagination-item,
@@ -420,17 +420,17 @@
 .rc-pagination .rc-pagination-next,
 .rc-pagination.rc-pagination-simple .rc-pagination-prev,
 .rc-pagination.rc-pagination-simple .rc-pagination-next {
-  @apply w-8 h-8 me-2 flex items-center justify-center rounded border border-border-base bg-gray-50 hover:border-accent  hover:text-accent focus:border-accent focus:text-accent;
+  @apply flex h-8 w-8 items-center justify-center rounded border border-border-base bg-gray-50 me-2 hover:border-accent  hover:text-accent focus:border-accent focus:text-accent;
 }
 
 .rc-pagination .rc-pagination-prev.rc-pagination-disabled,
 .rc-pagination .rc-pagination-next.rc-pagination-disabled {
-  @apply text-muted hover:text-muted hover:border-border-base focus:border-border-base;
+  @apply text-muted hover:border-border-base hover:text-muted focus:border-border-base;
 }
 
 .rc-pagination .rc-pagination-prev svg,
 .rc-pagination .rc-pagination-next svg {
-  @apply w-4 h-4 rtl:transform rtl:rotate-180;
+  @apply h-4 w-4 rtl:rotate-180 rtl:transform;
 }
 
 .rc-pagination .rc-pagination-item a {
@@ -462,7 +462,7 @@
 
 .rc-pagination .rc-pagination-options .rc-pagination-options-quick-jumper input,
 .rc-pagination.rc-pagination-simple .rc-pagination-simple-pager input {
-  @apply h-8 border border-border-base bg-gray-50 rounded px-2 font-body text-sm text-heading hover:border-accent focus:border-accent focus:outline-none;
+  @apply h-8 rounded border border-border-base bg-gray-50 px-2 font-body text-sm text-heading hover:border-accent focus:border-accent focus:outline-none;
 }
 
 /* RC Table */
@@ -477,11 +477,11 @@
 
 .rc-table tr th,
 .rc-table tr td {
-  @apply font-body border-0 border-b border-border-200;
+  @apply border-0 border-b border-border-200 font-body;
 }
 
 .rc-table thead.rc-table-thead th {
-  @apply py-3 px-3 font-body text-sm font-semibold text-heading border-border-200 whitespace-nowrap first:ps-4 last:pe-4;
+  @apply whitespace-nowrap border-border-200 py-3 px-3 font-body text-sm font-semibold text-heading first:ps-4 last:pe-4;
   background-color: #f7f8f9;
 }
 
@@ -503,7 +503,7 @@
 }
 
 .rc-table tr.rc-table-expanded-row > td {
-  @apply p-0 whitespace-normal border border-gray-50 bg-gray-200;
+  @apply whitespace-normal border border-gray-50 bg-gray-200 p-0;
 }
 
 .rc-table tr.rc-table-expanded-row tr.rc-table-row {
@@ -529,7 +529,7 @@
 
 .Toastify__toast--success {
   background-color: rgb(12, 156, 12);
-  @apply text-white font-semibold;
+  @apply font-semibold text-white;
 }
 
 .Toastify__toast-theme--colored.Toastify__toast--error {
@@ -687,13 +687,19 @@ Overlay Scrollbar - os-theme-thin-dark
   > .os-scrollbar-horizontal
   > .os-scrollbar-track
   > .os-scrollbar-handle:before {
-  transition: height 0.3s, margin-top 0.3s, background 0.2s;
+  transition:
+    height 0.3s,
+    margin-top 0.3s,
+    background 0.2s;
 }
 .os-theme-thin-dark.os-host-transition
   > .os-scrollbar-vertical
   > .os-scrollbar-track
   > .os-scrollbar-handle:before {
-  transition: width 0.3s, margin-left 0.3s, background 0.2s;
+  transition:
+    width 0.3s,
+    margin-left 0.3s,
+    background 0.2s;
 }
 
 .os-host-overflow > .os-padding {

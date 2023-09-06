@@ -168,8 +168,8 @@ export default function Dashboard() {
       </div>
       <div className="mb-8">
         <div className="text-lg font-medium">Getting started</div>
-        <div className="border rounded shadow w-fit mt-2 pr-12 p-5 pl-3 bg-white flex items-start">
-          <div className="text-yellow-600 mr-2">
+        <div className="mt-2 flex w-fit items-start rounded border bg-white p-5 pr-12 pl-3 shadow">
+          <div className="mr-2 text-yellow-600">
             <AlertIcon />
           </div>
           <div className="flex flex-col items-start">
@@ -182,12 +182,12 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
-      <div className="w-full grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-6">
+      <div className="mb-6 grid w-full grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
         <div className="w-full ">
           <StickerCard
             titleTransKey="sticker-card-title-rev"
             subtitleTransKey="sticker-card-subtitle-rev"
-            icon={<DollarIcon className="w-7 h-7" color="#047857" />}
+            icon={<DollarIcon className="h-7 w-7" color="#047857" />}
             iconBgStyle={{ backgroundColor: '#A7F3D0' }}
             price={total_revenue ?? '$90'}
           />
@@ -217,7 +217,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div className="w-full flex flex-wrap mb-6">
+      <div className="mb-6 flex w-full flex-wrap">
         <ColumnChart
           widgetTitle="Sales History"
           colors={['#03D3B5', '#124ED8', '#FFA500']}
@@ -239,7 +239,7 @@ export default function Dashboard() {
         />
       </div>
 
-      <div className="w-full flex flex-wrap mb-6">
+      <div className="mb-6 flex w-full flex-wrap">
         <ColumnChart
           widgetTitle="January Order History"
           colors={['#03D3B5']}
@@ -248,14 +248,14 @@ export default function Dashboard() {
         />
       </div>
 
-      <div className="w-full flex flex-wrap mb-6">
-        <div className="w-full sm:w-1/2 xl:w-1/2 sm:px-3 sm:pl-0 mb-6 xl:mb-0">
+      <div className="mb-6 flex w-full flex-wrap">
+        <div className="mb-6 w-full sm:w-1/2 sm:px-3 sm:pl-0 xl:mb-0 xl:w-1/2">
           <RecentOrders
             orders={orderData}
             title={t('table:recent-order-table-title')}
           />
         </div>
-        <div className="w-full sm:w-1/2 xl:w-1/2 sm:px-3 sm:pl-0 mb-6 xl:mb-0">
+        <div className="mb-6 w-full sm:w-1/2 sm:px-3 sm:pl-0 xl:mb-0 xl:w-1/2">
           <RecentOrders
             orders={orderData}
             title={t('table:recent-order-table-title')}
@@ -270,7 +270,7 @@ export default function Dashboard() {
           />
         </div> */}
       </div>
-      <div className="w-full sm:pe-0 mb-6 xl:mb-0">
+      <div className="mb-6 w-full sm:pe-0 xl:mb-0">
         {/* <PopularProductList
           products={popularProductData}
           title={t('table:popular-products-table-title')}

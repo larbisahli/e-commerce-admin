@@ -25,7 +25,7 @@ const CreateOrUpdateCategoriesForm = dynamic(
 interface TCategory {
   category: Category;
 }
-interface OptionsVariable extends LanguageProps  {
+interface OptionsVariable extends LanguageProps {
   id: number;
 }
 
@@ -40,7 +40,11 @@ export default function UpdateCategoriesPage({ client }: SSRProps) {
   const { data, loading, error } = useQuery<TCategory, OptionsVariable>(
     CATEGORY,
     {
-      variables: { id: categoryId, language: selectedLanguage, defaultLanguage },
+      variables: {
+        id: categoryId,
+        language: selectedLanguage,
+        defaultLanguage
+      },
       fetchPolicy: 'cache-and-network',
       skip: isEmpty(selectedLanguage)
     }
@@ -69,7 +73,7 @@ export default function UpdateCategoriesPage({ client }: SSRProps) {
           href="/svg/category.svg"
         />
       </Head>
-      <div className="py-5 sm:py-8 flex border-b border-dashed border-border-base">
+      <div className="flex border-b border-dashed border-border-base py-5 sm:py-8">
         <h1 className="text-lg font-semibold text-heading">
           {t('form:form-title-edit-category')}
         </h1>

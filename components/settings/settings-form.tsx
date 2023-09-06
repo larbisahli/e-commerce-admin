@@ -48,9 +48,9 @@ const socialIcon = [
 export const updatedIcons = socialIcon.map((item: any) => {
   const TagName = socialIcons[item.value];
   item.label = (
-    <div className="flex space-s-4 items-center text-body">
-      <span className="flex w-4 h-4 items-center justify-center">
-        {TagName && <TagName className="w-4 h-4" />}
+    <div className="flex items-center text-body space-s-4">
+      <span className="flex h-4 w-4 items-center justify-center">
+        {TagName && <TagName className="h-4 w-4" />}
       </span>
       <span>{item.label}</span>
     </div>
@@ -165,11 +165,11 @@ export default function SettingsForm({ settings }: IProps) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex flex-wrap pb-8 border-b border-dashed border-border-base my-5 sm:my-8">
+      <div className="my-5 flex flex-wrap border-b border-dashed border-border-base pb-8 sm:my-8">
         <Description
           title={t('form:input-label-logo')}
           details={logoInformation}
-          className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
+          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
         />
 
         <Card className="w-full sm:w-8/12 md:w-2/3">
@@ -182,11 +182,11 @@ export default function SettingsForm({ settings }: IProps) {
           />
         </Card>
       </div>
-      <div className="flex flex-wrap pb-8 border-b border-dashed border-border-base my-5 sm:my-8">
+      <div className="my-5 flex flex-wrap border-b border-dashed border-border-base pb-8 sm:my-8">
         <Description
           title={t('form:input-label-favicon')}
           details={logoInformation}
-          className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
+          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
         />
 
         <Card className="w-full sm:w-8/12 md:w-2/3">
@@ -200,11 +200,11 @@ export default function SettingsForm({ settings }: IProps) {
         </Card>
       </div>
 
-      <div className="flex flex-wrap pb-8 border-b border-dashed border-border-base my-5 sm:my-8">
+      <div className="my-5 flex flex-wrap border-b border-dashed border-border-base pb-8 sm:my-8">
         <Description
           title={t('form:form-title-information')}
           details={t('form:site-info-help-text')}
-          className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
+          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
         />
 
         <Card className="w-full sm:w-8/12 md:w-2/3">
@@ -251,11 +251,11 @@ export default function SettingsForm({ settings }: IProps) {
           />
         </Card>
       </div>
-      <div className="flex flex-wrap pb-8 border-b border-dashed border-border-base my-5 sm:my-8">
+      <div className="my-5 flex flex-wrap border-b border-dashed border-border-base pb-8 sm:my-8">
         <Description
           title="SEO"
           details={t('form:tax-form-seo-info-help-text')}
-          className="w-full px-0 sm:pr-4 md:pr-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
+          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pr-4 md:w-1/3 md:pr-5"
         />
 
         <Card className="w-full sm:w-8/12 md:w-2/3">
@@ -309,11 +309,11 @@ export default function SettingsForm({ settings }: IProps) {
         </Card>
       </div>
 
-      <div className="flex flex-wrap pb-8 border-b border-dashed border-gray-300 my-5 sm:my-8">
+      <div className="my-5 flex flex-wrap border-b border-dashed border-gray-300 pb-8 sm:my-8">
         <Description
           title={t('form:shop-settings')}
           details={t('form:shop-settings-helper-text')}
-          className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
+          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
         />
 
         <Card className="w-full sm:w-8/12 md:w-2/3">
@@ -321,10 +321,10 @@ export default function SettingsForm({ settings }: IProps) {
           <div>
             {socialFields.map((item, index: number) => (
               <div
-                className="border-b border-dashed border-border-200 first:border-t last:border-b-0 first:mt-5 md:first:mt-10 py-5 md:py-8"
+                className="border-b border-dashed border-border-200 py-5 first:mt-5 first:border-t last:border-b-0 md:py-8 md:first:mt-10"
                 key={index}
               >
-                <div className="grid grid-cols-1 sm:grid-cols-5 gap-5">
+                <div className="grid grid-cols-1 gap-5 sm:grid-cols-5">
                   <div className="sm:col-span-2">
                     <Label className="whitespace-nowrap">
                       {t('form:input-label-select-platform')}
@@ -349,7 +349,7 @@ export default function SettingsForm({ settings }: IProps) {
                       socialRemove(index);
                     }}
                     type="button"
-                    className="text-sm text-red-500 hover:text-red-700 transition-colors duration-200 focus:outline-none sm:mt-4 sm:col-span-1"
+                    className="text-sm text-red-500 transition-colors duration-200 hover:text-red-700 focus:outline-none sm:col-span-1 sm:mt-4"
                   >
                     {t('form:button-label-remove')}
                   </button>

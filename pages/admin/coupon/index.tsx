@@ -2,7 +2,6 @@ import { useQuery } from '@apollo/client';
 import CouponList from '@components/coupon/coupon-list';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
-import Loader from '@components/ui/loader/loader';
 import { COUPONS } from '@graphql/coupons';
 import { useErrorLogger, useGetUser } from '@hooks/index';
 import { useTableColumn } from '@hooks/useTableColumn';
@@ -23,7 +22,7 @@ const PageMainHeader = dynamic(
   () => import('@components/common/page-main-header'),
   {
     ssr: true,
-    loading: () => <div className="animated-background w-full h-[80px]"></div>
+    loading: () => <div className="animated-background h-[80px] w-full"></div>
   }
 );
 
@@ -31,7 +30,7 @@ const PageMainAction = dynamic(
   () => import('@components/common/PageMainAction'),
   {
     ssr: true,
-    loading: () => <div className="animated-background w-full h-[80px]"></div>
+    loading: () => <div className="animated-background h-[80px] w-full"></div>
   }
 );
 
@@ -86,9 +85,6 @@ export default function Coupons({ client }: SSRProps) {
     });
   }
 
-  if (loading) {
-    return <Loader text={t('common:text-loading')} />;
-  }
   if (!isEmpty(error)) {
     return <ErrorMessage message={error.message} />;
   }
@@ -122,7 +118,11 @@ export default function Coupons({ client }: SSRProps) {
         currentPage={page}
         perPage={limit.value}
       />
-      <CouponList coupons={coupons} selectedColumns={selectedTableColumns} />
+      <CouponList
+        loading={loading}
+        coupons={coupons}
+        selectedColumns={selectedTableColumns}
+      />
     </>
   );
 }

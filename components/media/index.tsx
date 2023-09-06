@@ -61,14 +61,14 @@ const MediaList = ({ media, refetch }: IProps) => {
   const renderEmptyMedia = () => {
     if (isEmpty(media?.children)) {
       return (
-        <div className=" w-full flex items-center justify-center flex-col pt-8">
+        <div className=" flex w-full flex-col items-center justify-center pt-8">
           <div className="text-blue-400">
             <EmptyFolderSvg />
           </div>
-          <span className="text-gray-600 font-medium text-lg capitalize">
+          <span className="text-lg font-medium capitalize text-gray-600">
             Nothing found
           </span>
-          <p className="text-gray-500 text-sm">
+          <p className="text-sm text-gray-500">
             Try to create a new folder or upload an image
           </p>
         </div>
@@ -82,12 +82,12 @@ const MediaList = ({ media, refetch }: IProps) => {
   return (
     <>
       <ImageViewModal />
-      <div className="relative py-4 m-2">
+      <div className="relative m-2 py-4">
         <Uploader setLoading={setLoading} mediaId={id} refetch={refetch} />
       </div>
       <div className="mb-6">
         <div
-          className={cn('flex justify-end items-center', {
+          className={cn('flex items-center justify-end', {
             'justify-between': id
           })}
         >
@@ -95,7 +95,7 @@ const MediaList = ({ media, refetch }: IProps) => {
             <Button
               variant="outline"
               onClick={back}
-              className="me-4 flex justify-center items-center"
+              className="flex items-center justify-center me-4"
               type="button"
             >
               <ArrowPrev width={18} height={18} />
@@ -112,7 +112,7 @@ const MediaList = ({ media, refetch }: IProps) => {
           </Button>
         </div>
         {
-          <div className=" text-sm font-medium text-gray-700 text-right pt-3">{`${count} records found`}</div>
+          <div className=" pt-3 text-right text-sm font-medium text-gray-700">{`${count} records found`}</div>
         }
         <div className="mt-8 flex flex-wrap">
           {loadingImage && (

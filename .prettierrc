@@ -8,5 +8,10 @@
   "bracketSpacing": true,
   "jsxBracketSameLine": false,
   "arrowParens": "always",
-  "proseWrap": "always"
+  "proseWrap": "always",
+  "tailwindFunctions": ["classnames"],
+  "tailwindConfig": "tailwind.config.js",
+  "plugins": [
+    "prettier-plugin-tailwindcss"
+  ]
 }

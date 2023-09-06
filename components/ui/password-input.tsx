@@ -58,10 +58,10 @@ const PasswordInput = React.forwardRef<HTMLInputElement, Props>(
 
     return (
       <div className={className}>
-        <div className="flex items-center justify-between mb-3">
+        <div className="mb-3 flex items-center justify-between">
           <label
             htmlFor={name}
-            className="text-body-dark font-semibold text-sm leading-none"
+            className="text-sm font-semibold leading-none text-body-dark"
           >
             {label}
           </label>
@@ -80,13 +80,13 @@ const PasswordInput = React.forwardRef<HTMLInputElement, Props>(
             {...rest}
           />
           {error && (
-            <p className="my-2 text-xs text-start text-red-500">{error}</p>
+            <p className="my-2 text-start text-xs text-red-500">{error}</p>
           )}
           {forgotPageLink && forgotPassHelpText && (
-            <div className="flex justify-end mt-1">
+            <div className="mt-1 flex justify-end">
               <Link
                 href={forgotPageLink}
-                className="text-sm text-gray-700 transition-colors duration-200 focus:outline-none focus:text-accent-700 focus:font-semibold hover:text-accent-hover"
+                className="text-sm text-gray-700 transition-colors duration-200 hover:text-accent-hover focus:font-semibold focus:text-accent-700 focus:outline-none"
               >
                 {forgotPassHelpText}
               </Link>
@@ -94,13 +94,13 @@ const PasswordInput = React.forwardRef<HTMLInputElement, Props>(
           )}
           <label
             htmlFor={name}
-            className="absolute end-4 top-5 -mt-2 text-body"
+            className="absolute top-5 -mt-2 text-body end-4"
             onClick={() => setShow((prev) => !prev)}
           >
             {show ? (
-              <EyeOff className="w-5 h-5" />
+              <EyeOff className="h-5 w-5" />
             ) : (
-              <Eye className="w-5 h-5" />
+              <Eye className="h-5 w-5" />
             )}
           </label>
         </div>

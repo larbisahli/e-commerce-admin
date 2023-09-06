@@ -2,7 +2,6 @@ import { useQuery } from '@apollo/client';
 import HeroBannerList from '@components/hero-banner/hero-banner-list';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
-import Loader from '@components/ui/loader/loader';
 import { HERO_BANNER_LIST } from '@graphql/hero-banner';
 import { useErrorLogger, useGetUser } from '@hooks/index';
 import { useSettings } from '@hooks/useSettings';
@@ -12,7 +11,6 @@ import { LanguageProps, SSRProps } from '@ts-types/custom.types';
 import { HeroBannerType } from '@ts-types/generated';
 import { COLUMNS } from '@utils/data/table-columns';
 import { ROUTES } from '@utils/routes';
-import cn from 'classnames'
 import isEmpty from 'lodash/isEmpty';
 import type { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
@@ -25,7 +23,7 @@ const PageMainHeader = dynamic(
   () => import('@components/common/page-main-header'),
   {
     ssr: true,
-    loading: () => <div className="animated-background w-full h-[80px]"></div>
+    loading: () => <div className="animated-background h-[80px] w-full"></div>
   }
 );
 
@@ -33,7 +31,7 @@ const PageMainAction = dynamic(
   () => import('@components/common/PageMainAction'),
   {
     ssr: true,
-    loading: () => <div className="animated-background w-full h-[80px]"></div>
+    loading: () => <div className="animated-background h-[80px] w-full"></div>
   }
 );
 
@@ -122,13 +120,11 @@ export default function HeroBanner({ client }: SSRProps) {
         perPage={limit.value}
       />
 
-        {loading && <Loader text={t('common:text-loading')} />}
-      <div className={cn({ hidden: loading })}>
       <HeroBannerList
+        loading={loading}
         heroBannerList={heroSlideList}
         selectedColumns={selectedTableColumns}
       />
-      </div>
     </>
   );
 }

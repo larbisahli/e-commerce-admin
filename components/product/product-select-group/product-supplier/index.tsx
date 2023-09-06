@@ -69,7 +69,7 @@ const ProductSupplier = ({ suppliers }: Props) => {
         onChange={onChange}
         isLoading={loading}
       />
-      <p className="text-xs text-gray-500 pt-1">{t('form:hidden-info-note')}</p>
+      <p className="pt-1 text-xs text-gray-500">{t('form:hidden-info-note')}</p>
     </div>
   );
 };

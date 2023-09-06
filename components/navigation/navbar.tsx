@@ -72,14 +72,14 @@ const Navbar = () => {
   return (
     <header
       className={cx(
-        'w-full fixed bg-white border border-b-400 top-0 right-0 left-0 z-40',
+        'border-b-400 fixed top-0 right-0 left-0 z-40 w-full border bg-white',
         { 'shadow-md': show }
       )}
     >
       <nav
         className={cx(
-          'md:ps-20 nlg:ps-20 nxl:ps-20 lg:ps-64 xl:ps-64',
-          'px-5 md:px-8 py-2 flex items-center justify-between',
+          'nlg:ps-20 nxl:ps-20 md:ps-20 lg:ps-64 xl:ps-64',
+          'flex items-center justify-between px-5 py-2 md:px-8',
           {
             'md:!ps-20': displayMiniSidebar
           }
@@ -88,7 +88,7 @@ const Navbar = () => {
         <motion.button
           whileTap={{ scale: 0.88 }}
           onClick={() => toggleSidebar({ field: 'displayMobileSidebar' })}
-          className="relative items-center justify-center focus:outline-none flex lg:hidden md:hidden border h-[25px] w-[12px] p-5 rounded bg-white"
+          className="relative flex h-[25px] w-[12px] items-center justify-center rounded border bg-white p-5 focus:outline-none md:hidden lg:hidden"
         >
           <div className={cx('menu-icon-container')}>
             <span className={menuSpanClass}></span>
@@ -96,17 +96,17 @@ const Navbar = () => {
             <span className={menuSpanClass}></span>
           </div>
         </motion.button>
-        <div className="px-8 flex justify-center">
-          <div className="p-2 px-3 border rounded shadow-sm flex flex-col items-center justify-center">
-            <span className="text-xs text-gray-600 font-medium">
+        <div className="flex justify-center px-8">
+          <div className="flex flex-col items-center justify-center rounded border p-2 px-3 shadow-sm">
+            <span className="text-xs font-medium text-gray-600">
               {t('common:sticker-card-title-today-rev')}
             </span>
-            <span className="text-green-500 font-medium">
+            <span className="font-medium text-green-500">
               ${rev?.toCommas()}
             </span>
           </div>
         </div>
-        <div className="px-8 flex-1 flex justify-center">
+        <div className="flex flex-1 justify-center px-8">
           <div className="max-w-[600px] flex-1">
             <SearchBar />
           </div>
@@ -114,7 +114,7 @@ const Navbar = () => {
         <div className="flex items-center space-s-5">
           <Link
             target="_blank"
-            className="bg-white hover:text-accent text-gray-700 shadow hover:border-blue-300 border rounded-sm w-10 h-10 flex items-center justify-center"
+            className="flex h-10 w-10 items-center justify-center rounded-sm border bg-white text-gray-700 shadow hover:border-blue-300 hover:text-accent"
             href={`https://${alias}.dropgala.com`}
           >
             <ShopIcon />

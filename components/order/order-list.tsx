@@ -1,4 +1,5 @@
 import ActionButtons from '@components/common/action-buttons';
+import Loader from '@components/ui/loader/loader';
 import Pagination from '@components/ui/pagination';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import {
@@ -22,7 +23,7 @@ import InvoicePdf from './invoice-pdf';
 
 const Table = dynamic(
   () => import('@components/ui/table').then((mod) => mod.Table),
-  { ssr: false }
+  { ssr: false, loading: () => <Loader text={'Loading'} /> }
 );
 
 type IProps = {
@@ -143,7 +144,7 @@ const OrderList = ({ orders, onPagination }: IProps) => {
 
   return (
     <>
-      <div className="card overflow-hidden mb-6">
+      <div className="card mb-6 overflow-hidden">
         <Table
           //@ts-ignore
           columns={columns}
@@ -159,7 +160,7 @@ const OrderList = ({ orders, onPagination }: IProps) => {
       </div>
 
       {!!paginatorInfo?.total && (
-        <div className="flex justify-end items-center">
+        <div className="flex items-center justify-end">
           <Pagination
             total={paginatorInfo?.total}
             current={paginatorInfo?.currentPage}

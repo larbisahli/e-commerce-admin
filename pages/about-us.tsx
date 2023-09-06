@@ -5,7 +5,7 @@ import Link from 'next/link';
 const HomePage = () => {
   return (
     <div
-      className="h-screen pb-14 bg-right bg-cover"
+      className="h-screen bg-cover bg-right pb-14"
       // style={{ backgroundImage: "url('/bg.svg')" }}
     >
       <Head>
@@ -22,13 +22,13 @@ const HomePage = () => {
       {/* <!--Main--> */}
       <main className="pt-20">
         {/* ------------------ About us section ------------------ */}
-        <section className="container mt-22 mb-60  px-6 mx-auto flex flex-wrap flex-col-reverse md:flex-row items-center justify-between">
+        <section className="container mx-auto mt-22  mb-60 flex flex-col-reverse flex-wrap items-center justify-between px-6 md:flex-row">
           {/* <!--Left Col--> */}
-          <div className="w-full flex flex-col justify-center items-center overflow-y-hidden">
-            <h2 className="my-4 text-xl md:text-3xl text-gray-800 font-bold leading-tight text-center slide-in-bottom-h1">
+          <div className="flex w-full flex-col items-center justify-center overflow-y-hidden">
+            <h2 className="slide-in-bottom-h1 my-4 text-center text-xl font-bold leading-tight text-gray-800 md:text-3xl">
               About us
             </h2>
-            <p className="leading-normal max-w-[1000px] text-gray-700 pb-8 text-base text-center slide-in-bottom-subtitle">
+            <p className="slide-in-bottom-subtitle max-w-[1000px] pb-8 text-center text-base leading-normal text-gray-700">
               Dropgala is an online platform that provides accessible and
               user-friendly services for creating and managing online stores.
               With a strong focus on merchant and entrepreneur needs, Dropgala
@@ -41,35 +41,35 @@ const HomePage = () => {
           </div>
         </section>
         {/* <!--Footer--> */}
-        <div className="container mx-auto w-full mt-16 pt-8 pb-6 text-sm text-center md:text-left fade-in border-t border-dotted border-gray-300">
-          <div className="flex justify-center items-center">
+        <div className="fade-in container mx-auto mt-16 w-full border-t border-dotted border-gray-300 pt-8 pb-6 text-center text-sm md:text-left">
+          <div className="flex items-center justify-center">
             <Link href="/about-us">
-              <a className="text-gray-600 text-lg mx-3 hover:text-blue-500">
+              <a className="mx-3 text-lg text-gray-600 hover:text-blue-500">
                 About us
               </a>
             </Link>
             <Link href="/policy">
-              <a className="text-gray-600 text-lg mx-3 hover:text-blue-500">
+              <a className="mx-3 text-lg text-gray-600 hover:text-blue-500">
                 Policy
               </a>
             </Link>
             <Link href="/support">
-              <a className="text-gray-600 text-lg mx-3 hover:text-blue-500">
+              <a className="mx-3 text-lg text-gray-600 hover:text-blue-500">
                 Support
               </a>
             </Link>
             <Link href="/signup">
-              <a className="text-gray-600 text-lg mx-3 hover:text-blue-500">
+              <a className="mx-3 text-lg text-gray-600 hover:text-blue-500">
                 Sign up
               </a>
             </Link>
             <Link href="/login">
-              <a className="text-gray-600 text-lg mx-3 hover:text-blue-500">
+              <a className="mx-3 text-lg text-gray-600 hover:text-blue-500">
                 Login
               </a>
             </Link>
           </div>
-          <div className="flex justify-center items-center mb-12 mt-4">
+          <div className="mb-12 mt-4 flex items-center justify-center">
             <span className="text-xl font-bold text-gray-400">dropgala</span>
           </div>
           <p className="text-gray-500 no-underline hover:no-underline">

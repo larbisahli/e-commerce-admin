@@ -42,7 +42,7 @@ const ColumnsComponent = ({
 
   return (
     <div className="flex items-center justify-between">
-      <div className="flex items-center flex-wrap flex-1">
+      <div className="flex flex-1 flex-wrap items-center">
         {columns?.map((column) => {
           return (
             <Column
@@ -79,7 +79,7 @@ const Column = ({
     );
   }, [selectedColumns, column]);
   return (
-    <div key={column.key} className="mr-3 my-4">
+    <div key={column.key} className="my-4 mr-3">
       <div className="text-xl">
         <Checkbox
           id={column.key}

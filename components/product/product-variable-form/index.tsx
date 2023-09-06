@@ -44,12 +44,13 @@ interface CartesianType {
 
 function getCartesianProduct(values: VariationType[]) {
   const formattedValues = values
-    ?.map((v) =>
-      v.selectedValues?.map((a) => ({
-        id: a.id,
-        name: v.attribute.name,
-        value: a.value
-      }))
+    ?.map(
+      (v) =>
+        v.selectedValues?.map((a) => ({
+          id: a.id,
+          name: v.attribute.name,
+          value: a.value
+        }))
     )
     .filter((i: any) => i !== undefined);
 
@@ -335,7 +336,7 @@ function ProductVariableForm({
   const renderSaveButton = () => {
     if (isUpdated) {
       return (
-        <div className="mt-8 flex justify-end border-t pt-4 m-5">
+        <div className="m-5 mt-8 flex justify-end border-t pt-4">
           <Button
             loading={updateLoading}
             disabled={updateLoading}
@@ -353,18 +354,18 @@ function ProductVariableForm({
   };
 
   return (
-    <div className="flex flex-wrap pb-8 my-5 sm:my-8">
+    <div className="my-5 flex flex-wrap pb-8 sm:my-8">
       <Description
         details={`${
           initVariableProductInformation
             ? t('form:item-description-update')
             : t('form:item-description-choose')
         } ${t('form:form-description-variation-product-info')}`}
-        className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
+        className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
       />
-      <Card className="w-full sm:w-8/12 md:w-2/3 p-0 md:p-0">
+      <Card className="w-full p-0 sm:w-8/12 md:w-2/3 md:p-0">
         <div className="border-t border-dashed border-border-200">
-          <Title className="text-lg uppercase text-center px-5 md:px-8 mb-0 mt-8">
+          <Title className="mb-0 mt-8 px-5 text-center text-lg uppercase md:px-8">
             {t('form:form-title-options')}
           </Title>
           <div>
@@ -397,8 +398,8 @@ function ProductVariableForm({
 
           {/* Preview generation section start */}
           {!!variationOptions?.length && (
-            <div className="border-t border-dashed border-border-200 pt-5 md:pt-8 mt-5 md:mt-8">
-              <Title className="text-lg uppercase text-center px-5 md:px-8 mb-0">
+            <div className="mt-5 border-t border-dashed border-border-200 pt-5 md:mt-8 md:pt-8">
+              <Title className="mb-0 px-5 text-center text-lg uppercase md:px-8">
                 {variationOptions?.length}{' '}
                 {variationOptions?.length > 1
                   ? t('form:variations')

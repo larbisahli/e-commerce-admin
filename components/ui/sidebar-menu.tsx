@@ -45,16 +45,16 @@ function SidebarMenuItem({ className, item, depth = 0 }: any) {
         initial={false}
         animate={{ backgroundColor: '#ffffff' }}
         onClick={onClick}
-        className="py-3 rounded-md"
+        className="rounded-md py-3"
       >
         <button
           className={cn(
-            'flex w-full items-center text-base text-start outline-none border-0 focus:outline-none focus:ring-0 focus:text-accent',
+            'flex w-full items-center border-0 text-start text-base outline-none focus:text-accent focus:outline-none focus:ring-0',
             router.pathname === href ? 'text-accent' : 'text-heading',
             className
           )}
         >
-          {TagName && <TagName className="w-5 h-5 me-4" />}
+          {TagName && <TagName className="h-5 w-5 me-4" />}
           <p className="flex-1">{t(labelTransKey)}</p>
           <span>{expandIcon}</span>
         </button>
@@ -72,7 +72,7 @@ function SidebarMenuItem({ className, item, depth = 0 }: any) {
                 collapsed: { opacity: 0, height: 0 }
               }}
               transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}
-              className="ms-4 text-xs"
+              className="text-xs ms-4"
             >
               {items?.map((currentItem) => {
                 const childDepth = depth + 1;

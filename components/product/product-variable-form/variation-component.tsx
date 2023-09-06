@@ -74,7 +74,7 @@ const VariationComponent = ({
   }, [loading, AttributeId, attributes]);
 
   return (
-    <div className="border-b border-dashed border-border-200 last:border-0 p-5 md:p-8">
+    <div className="border-b border-dashed border-border-200 p-5 last:border-0 md:p-8">
       <div className="flex items-center justify-between">
         <Title className="mb-0">
           {t('form:form-title-options')} {index + 1}
@@ -82,8 +82,8 @@ const VariationComponent = ({
         <button
           onClick={remove}
           type="button"
-          className="text-sm text-red-500 hover:text-red-700
-            transition-colors duration-200 focus:outline-none"
+          className="text-sm text-red-500 transition-colors
+            duration-200 hover:text-red-700 focus:outline-none"
         >
           {t('form:button-label-remove')}
         </button>
@@ -105,7 +105,7 @@ const VariationComponent = ({
           />
         </div>
 
-        <div className="mt-5 col-span-2">
+        <div className="col-span-2 mt-5">
           <Label isRequiredLabel>{t('form:input-label-attribute-value')}</Label>
           <Select
             value={variant?.selectedValues}

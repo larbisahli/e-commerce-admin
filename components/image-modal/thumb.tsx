@@ -58,13 +58,13 @@ const ImageThumb = ({
       <li
         key={photo?.id}
         title={name}
-        className="w-36 h-48 hover:bg-blue-100 flex justify-center flex-col items-center rounded-sm"
+        className="flex h-48 w-36 flex-col items-center justify-center rounded-sm hover:bg-blue-100"
       >
         <label
           htmlFor={photo?.id?.toString()}
           title={size ? `size: ${size}` : ''}
           className={cn(
-            'flex transition-all overflow-hidden border-2 w-28 h-28 border-border-200 rounded relative cursor-pointer',
+            'relative flex h-28 w-28 cursor-pointer overflow-hidden rounded border-2 border-border-200 transition-all',
             {
               '!border-2': isCurrentImage,
               '!border-green-300': isCurrentImage,
@@ -72,7 +72,7 @@ const ImageThumb = ({
             }
           )}
         >
-          <div className="absolute top-0 right-0 left-0 bottom-0 w-28 h-28 z-40 flex justify-center items-center text-white">
+          <div className="absolute top-0 right-0 left-0 bottom-0 z-40 flex h-28 w-28 items-center justify-center text-white">
             <ImageComponent
               src={photo?.image}
               customPlaceholder={photo?.placeholder}
@@ -83,7 +83,7 @@ const ImageThumb = ({
           <Checkbox
             name="image"
             id={photo?.id?.toString()}
-            className="transition-all absolute z-30"
+            className="absolute z-30 transition-all"
             onChange={(e) => handleSelectImage(e, photo)}
             checked={isCurrentImage}
             style={{
@@ -94,7 +94,7 @@ const ImageThumb = ({
             }}
           />
         </label>
-        <span className="text-gray-500 mt-4  text-sm cut-line-1 text-center break-all">
+        <span className="cut-line-1 mt-4  break-all text-center text-sm text-gray-500">
           {name}
         </span>
       </li>

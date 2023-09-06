@@ -24,7 +24,7 @@ const Truncate: React.FC<ReadMoreProps> = ({
         <>
           ...
           <button
-            className="ms-1 text-sm font-semibold text-accent hover:text-accent-hover outline-none focus:outline-none"
+            className="text-sm font-semibold text-accent outline-none ms-1 hover:text-accent-hover focus:outline-none"
             onClick={onClick}
           >
             {buttonText}

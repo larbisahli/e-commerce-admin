@@ -46,11 +46,11 @@ const RegisterCheckbox = React.forwardRef<HTMLInputElement, Props>(
 
           <label
             htmlFor={id ?? name}
-            className={`${labelClassName ?? ''} text-body text-sm`}
+            className={`${labelClassName ?? ''} text-sm text-body`}
           >
             <span>I agree to Dropgala</span>
             <Link href={'/conditions'}>
-              <a className="text-accent px-1" target="_blank">
+              <a className="px-1 text-accent" target="_blank">
                 terms and conditions
               </a>
             </Link>
@@ -58,7 +58,7 @@ const RegisterCheckbox = React.forwardRef<HTMLInputElement, Props>(
           </label>
         </div>
         {error && (
-          <p className="my-2 text-xs text-start text-red-500">{error}</p>
+          <p className="my-2 text-start text-xs text-red-500">{error}</p>
         )}
       </div>
     );

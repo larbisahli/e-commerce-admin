@@ -1,13 +1,15 @@
 import ActionButtons from '@components/common/action-buttons';
 import ImageComponent from '@components/ImageComponent';
+import Loader from '@components/ui/loader/loader';
+import { TableRowPlaceholder } from '@components/ui/placeholders/Table';
 import ProfileCart from '@components/ui/profile-card';
+import { usePlaceholder } from '@hooks/usePlaceholder';
 import { siteSettings } from '@settings/site.settings';
 import { DELETE_MANUFACTURER } from '@ts-types/constants';
 import {
   CreatedUpdatedByAt,
   ImageType,
-  ManufacturerType,
-  Suppliers
+  ManufacturerType
 } from '@ts-types/generated';
 import { useIsRTL } from '@utils/locals';
 import dayjs from 'dayjs';
@@ -19,19 +21,30 @@ import React, { useMemo } from 'react';
 
 const Table = dynamic(
   () => import('@components/ui/table').then((mod) => mod.Table),
-  { ssr: false }
+  { ssr: false, loading: () => <Loader text={'Loading'} /> }
 );
 
 type IProps = {
   manufacturers: ManufacturerType[];
   selectedColumns: string[];
+  loading: boolean;
 };
 
-const ManufacturerList = ({ manufacturers, selectedColumns }: IProps) => {
+interface TableRowProps extends ManufacturerType {
+  loading: boolean;
+}
+
+const ManufacturerList = ({
+  loading,
+  manufacturers,
+  selectedColumns
+}: IProps) => {
   const { t } = useTranslation();
   const router = useRouter();
 
   const { alignLeft, alignRight } = useIsRTL();
+
+  const { tablePlaceholderRow } = usePlaceholder();
 
   const columns = useMemo(() => {
     return [
@@ -49,10 +62,15 @@ const ManufacturerList = ({ manufacturers, selectedColumns }: IProps) => {
         key: 'logo',
         align: alignLeft,
         width: 85,
-        render: (logo: ImageType[]) => {
+        render: (logo: ImageType[], record: TableRowProps) => {
           const { image, placeholder } = logo[0] ?? {};
+
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
+
           return (
-            <div className="shadow min-w-0 overflow-hidden rounded-sm w-[65px] h-[65px] border">
+            <div className="h-[65px] w-[65px] min-w-0 overflow-hidden rounded-sm border shadow">
               <ImageComponent
                 src={image ?? siteSettings.product.image}
                 customPlaceholder={
@@ -73,11 +91,14 @@ const ManufacturerList = ({ manufacturers, selectedColumns }: IProps) => {
         align: alignLeft,
         width: 150,
         ellipsis: true,
-        render: (name: string) => {
+        render: (name: string, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
           return (
             <span
               title={name}
-              className="font-semibold text-gray-800 capitalize"
+              className="font-semibold capitalize text-gray-800"
             >
               {name}
             </span>
@@ -91,7 +112,10 @@ const ManufacturerList = ({ manufacturers, selectedColumns }: IProps) => {
         align: alignLeft,
         width: 160,
         // ellipsis: true,
-        render: (website: string) => {
+        render: (website: string, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
           return (
             <Link href={website}>
               <a target="_blank" title={website} className="text-blue-400">
@@ -107,7 +131,13 @@ const ManufacturerList = ({ manufacturers, selectedColumns }: IProps) => {
         key: 'createdAt',
         align: alignLeft,
         width: 190,
-        render: (createdAt: CreatedUpdatedByAt['updatedAt']) => {
+        render: (
+          createdAt: CreatedUpdatedByAt['updatedAt'],
+          record: TableRowProps
+        ) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
           return `${dayjs(createdAt).format('MMM D, YYYY')} at ${dayjs(
             createdAt
           ).format('h:mm A')}`;
@@ -122,8 +152,11 @@ const ManufacturerList = ({ manufacturers, selectedColumns }: IProps) => {
         ellipsis: true,
         render: (
           createdBy: CreatedUpdatedByAt['createdBy'],
-          record: Suppliers
+          record: TableRowProps
         ) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
           return <ProfileCart user={createdBy} createdAt={record?.createdAt} />;
         }
       },
@@ -136,8 +169,11 @@ const ManufacturerList = ({ manufacturers, selectedColumns }: IProps) => {
         ellipsis: true,
         render: (
           updatedBy: CreatedUpdatedByAt['updatedBy'],
-          record: Suppliers
+          record: TableRowProps
         ) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
           return <ProfileCart user={updatedBy} updatedAt={record?.updatedAt} />;
         }
       },
@@ -147,13 +183,18 @@ const ManufacturerList = ({ manufacturers, selectedColumns }: IProps) => {
         key: 'actions',
         align: alignRight,
         width: 80,
-        render: (id: string) => (
-          <ActionButtons
-            id={id}
-            editUrl={`${router.asPath}/edit/${id}`}
-            deleteModalView={DELETE_MANUFACTURER}
-          />
-        )
+        render: (id: string, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
+          return (
+            <ActionButtons
+              id={id}
+              editUrl={`${router.asPath}/edit/${id}`}
+              deleteModalView={DELETE_MANUFACTURER}
+            />
+          );
+        }
       }
     ];
   }, [alignLeft, alignRight, router.asPath, t]);
@@ -167,18 +208,15 @@ const ManufacturerList = ({ manufacturers, selectedColumns }: IProps) => {
   }, [columns, selectedColumns]);
 
   return (
-    <React.Fragment>
-      <div className="card overflow-hidden mb-6">
-        <Table
-          // @ts-ignore
-          columns={tableColumns}
-          emptyText={t('table:empty-table-data')}
-          data={manufacturers}
-          rowKey="id"
-          scroll={{ x: 380 }}
-        />
-      </div>
-    </React.Fragment>
+    <Table
+      // @ts-ignore
+      columns={tableColumns}
+      emptyText={t('table:empty-table-data')}
+      data={loading ? tablePlaceholderRow : manufacturers}
+      rowKey="id"
+      scroll={{ x: 380 }}
+      className="card mb-6 overflow-hidden"
+    />
   );
 };
 

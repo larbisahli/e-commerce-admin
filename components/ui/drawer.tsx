@@ -52,7 +52,7 @@ const Drawer: FC<SidebarProps> = ({
             animate="to"
             exit="from"
             variants={variant === 'right' ? fadeInRight() : fadeInLeft()}
-            className="fixed inset-0 overflow-hidden h-full z-40"
+            className="fixed inset-0 z-40 h-full overflow-hidden"
           >
             <div className="absolute inset-0 overflow-hidden">
               <motion.div
@@ -68,12 +68,12 @@ const Drawer: FC<SidebarProps> = ({
               />
               <div
                 className={cn(
-                  'absolute inset-y-0 max-w-full flex outline-none',
+                  'absolute inset-y-0 flex max-w-full outline-none',
                   variant === 'right' ? 'end-0' : 'start-0'
                 )}
               >
                 <div className="h-full max-w-md">
-                  <div className="h-full flex flex-col text-body bg-light shadow-xl">
+                  <div className="flex h-full flex-col bg-light text-body shadow-xl">
                     {children}
                   </div>
                 </div>

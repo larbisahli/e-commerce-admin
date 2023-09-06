@@ -8,10 +8,10 @@ interface Props {
 }
 const PageTabs = ({ tabs }: Props) => {
   return (
-    <div className="bg-white p-2 shadow mb-5">
+    <div className="mb-5 bg-white p-2 shadow">
       {tabs?.map(({ label, href }, idx) => (
         <Link href={href} key={idx}>
-          <a className="px-12 rounded-md py-2 max-w-[150px] capitalize">
+          <a className="max-w-[150px] rounded-md px-12 py-2 capitalize">
             {label}
           </a>
         </Link>

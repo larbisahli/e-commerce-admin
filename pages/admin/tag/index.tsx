@@ -26,7 +26,7 @@ const PageMainHeader = dynamic(
   () => import('@components/common/page-main-header'),
   {
     ssr: true,
-    loading: () => <div className="animated-background w-full h-[80px]"></div>
+    loading: () => <div className="animated-background h-[80px] w-full"></div>
   }
 );
 
@@ -34,7 +34,7 @@ const PageMainAction = dynamic(
   () => import('@components/common/PageMainAction'),
   {
     ssr: true,
-    loading: () => <div className="animated-background w-full h-[80px]"></div>
+    loading: () => <div className="animated-background h-[80px] w-full"></div>
   }
 );
 
@@ -115,7 +115,11 @@ export default function Tags({ client }: SSRProps) {
         currentPage={page}
         perPage={limit.value}
       />
-        <TagList loading={loading} tags={tags} selectedColumns={selectedTableColumns} />
+      <TagList
+        loading={loading}
+        tags={tags}
+        selectedColumns={selectedTableColumns}
+      />
     </>
   );
 }

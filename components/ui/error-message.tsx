@@ -3,12 +3,12 @@ interface Props {
 }
 
 export const Error = ({ message }: Props) => {
-  return <p className="my-2 text-xs text-start text-red-500">{message}</p>;
+  return <p className="my-2 text-start text-xs text-red-500">{message}</p>;
 };
 
 const ErrorMessage = ({ message }: Props) => {
   return (
-    <p className="bg-red-400 p-5 mt-16 mx-auto max-w-sm min-w-min text-center text-lg text-light font-semibold rounded-sm">
+    <p className="mx-auto mt-16 min-w-min max-w-sm rounded-sm bg-red-400 p-5 text-center text-lg font-semibold text-light">
       {message}
     </p>
   );

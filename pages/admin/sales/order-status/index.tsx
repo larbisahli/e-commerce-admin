@@ -2,7 +2,6 @@ import { useQuery } from '@apollo/client';
 import AppLayout from '@components/layouts/app';
 import OrderStatusList from '@components/order-status/order-status-list';
 import ErrorMessage from '@components/ui/error-message';
-import Loader from '@components/ui/loader/loader';
 import { ORDER_STATUSES } from '@graphql/order-status';
 import { useErrorLogger, useGetUser } from '@hooks/index';
 import { useSettings } from '@hooks/useSettings';
@@ -12,7 +11,6 @@ import { SSRProps, TableQueryVariables } from '@ts-types/custom.types';
 import { OrderBy, OrderStatus, SortOrder } from '@ts-types/generated';
 import { COLUMNS } from '@utils/data/table-columns';
 import { ROUTES } from '@utils/routes';
-import cn from 'classnames';
 import isEmpty from 'lodash/isEmpty';
 import type { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
@@ -25,7 +23,7 @@ const PageMainHeader = dynamic(
   () => import('@components/common/page-main-header'),
   {
     ssr: true,
-    loading: () => <div className="animated-background w-full h-[80px]"></div>
+    loading: () => <div className="animated-background h-[80px] w-full"></div>
   }
 );
 
@@ -33,7 +31,7 @@ const PageMainAction = dynamic(
   () => import('@components/common/PageMainAction'),
   {
     ssr: true,
-    loading: () => <div className="animated-background w-full h-[80px]"></div>
+    loading: () => <div className="animated-background h-[80px] w-full"></div>
   }
 );
 
@@ -116,13 +114,11 @@ export default function OrderStatusPage({ client }: SSRProps) {
         currentPage={page}
         perPage={limit.value}
       />
-      {loading && <Loader text={t('common:text-loading')} />}
-      <div className={cn({ hidden: loading })}>
-        <OrderStatusList
-          selectedColumns={selectedTableColumns}
-          orderStatuses={orderStatuses}
-        />
-      </div>
+      <OrderStatusList
+        loading={loading}
+        selectedColumns={selectedTableColumns}
+        orderStatuses={orderStatuses}
+      />
     </>
   );
 }

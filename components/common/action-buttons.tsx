@@ -60,9 +60,9 @@ const ActionButtons = ({
   }
 
   return (
-    <div className="space-s-2 flex items-center justify-center w-auto">
+    <div className="flex w-auto items-center justify-center space-s-2">
       {loading && (
-        <div className="absolute inset-0 bg-white opacity-70 flex items-center">
+        <div className="absolute inset-0 flex items-center bg-white opacity-70">
           <Loader height="100px" showText={false} />
         </div>
       )}
@@ -71,7 +71,7 @@ const ActionButtons = ({
           onClick={handleDelete}
           data-tooltip-id="actions-tooltip"
           data-tooltip-content={t('text-delete')}
-          className="text-gray-500 transition duration-200 hover:text-red-600 focus:outline-none border hover:shadow-xl rounded-sm h-9 w-9 flex items-center justify-center"
+          className="flex h-9 w-9 items-center justify-center rounded-sm border text-gray-500 transition duration-200 hover:text-red-600 hover:shadow-xl focus:outline-none"
         >
           <Trash width={16} />
         </button>
@@ -81,7 +81,7 @@ const ActionButtons = ({
           {isUserActive ? (
             <button
               onClick={() => handleUserStatus(id, 'ban')}
-              className="text-gray-500 transition duration-200 hover:text-red-600 focus:outline-none border hover:shadow-xl rounded-sm h-9 w-9 flex items-center justify-center"
+              className="flex h-9 w-9 items-center justify-center rounded-sm border text-gray-500 transition duration-200 hover:text-red-600 hover:shadow-xl focus:outline-none"
               title={t('text-ban-user')}
             >
               <BanUser width={20} />
@@ -89,7 +89,7 @@ const ActionButtons = ({
           ) : (
             <button
               onClick={() => handleUserStatus(id, 'active')}
-              className="text-green-500 transition duration-200 hover:text-green-400 focus:outline-none border hover:shadow-xl rounded-sm h-9 w-9 flex items-center justify-center"
+              className="flex h-9 w-9 items-center justify-center rounded-sm border text-green-500 transition duration-200 hover:text-green-400 hover:shadow-xl focus:outline-none"
               title={t('text-activate-user')}
             >
               <CheckMarkCircle width={20} />
@@ -103,7 +103,7 @@ const ActionButtons = ({
           href={copy}
           data-tooltip-id="actions-tooltip"
           data-tooltip-content="Duplicate language"
-          className="text-gray-500 transition duration-200 hover:text-green-500 focus:outline-none border hover:shadow-xl rounded-sm h-9 w-9 flex items-center justify-center"
+          className="flex h-9 w-9 items-center justify-center rounded-sm border text-gray-500 transition duration-200 hover:text-green-500 hover:shadow-xl focus:outline-none"
         >
           <CopyIcon width={20} />
         </Link>
@@ -111,7 +111,7 @@ const ActionButtons = ({
       {detailsUrl && (
         <Link
           href={detailsUrl}
-          className="text-gray-500 ml-2 text-base transition duration-200 hover:text-heading border hover:shadow-xl rounded-sm h-9 w-9 flex items-center justify-center"
+          className="ml-2 flex h-9 w-9 items-center justify-center rounded-sm border text-base text-gray-500 transition duration-200 hover:text-heading hover:shadow-xl"
           title={t('text-view')}
         >
           <Eye width={24} />
@@ -120,7 +120,7 @@ const ActionButtons = ({
       {activate && (
         <button
           onClick={() => handleUserStatus(id, 'active')}
-          className="text-gray-500 transition duration-200 focus:outline-none border hover:shadow-xl rounded-sm h-9 w-9 flex items-center justify-center"
+          className="flex h-9 w-9 items-center justify-center rounded-sm border text-gray-500 transition duration-200 hover:shadow-xl focus:outline-none"
           title={'Activate theme'}
         >
           <CheckMarkCircle width={20} />
@@ -128,7 +128,7 @@ const ActionButtons = ({
       )}
       {activated && (
         <div
-          className="text-green-500 transition duration-200 hover:text-green-400 focus:outline-none border hover:shadow-xl rounded-sm h-9 w-9 flex items-center justify-center"
+          className="flex h-9 w-9 items-center justify-center rounded-sm border text-green-500 transition duration-200 hover:text-green-400 hover:shadow-xl focus:outline-none"
           title={'Default'}
         >
           <CheckMarkFill width={20} />
@@ -137,7 +137,7 @@ const ActionButtons = ({
       {setDefault instanceof Function && (
         <button
           onClick={() => setDefault(id as number)}
-          className="text-gray-500 transition duration-200 hover:text-green-400 focus:outline-none border hover:shadow-xl rounded-sm h-9 w-9 flex items-center justify-center"
+          className="flex h-9 w-9 items-center justify-center rounded-sm border text-gray-500 transition duration-200 hover:text-green-400 hover:shadow-xl focus:outline-none"
           data-tooltip-id="actions-tooltip"
           data-tooltip-content={'Set as default'}
         >
@@ -149,7 +149,7 @@ const ActionButtons = ({
           href={editUrl}
           data-tooltip-id="actions-tooltip"
           data-tooltip-content={t('text-edit')}
-          className="text-gray-500 text-base hover:text-blue-600 transition duration-200 border hover:shadow-xl rounded-sm h-9 w-9 flex items-center justify-center"
+          className="flex h-9 w-9 items-center justify-center rounded-sm border text-base text-gray-500 transition duration-200 hover:text-blue-600 hover:shadow-xl"
         >
           <EditIcon width={16} />
         </Link>

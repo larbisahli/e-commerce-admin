@@ -10,28 +10,28 @@ const MapWidget = ({ data, totalText }: any) => {
   };
 
   return (
-    <div className="bg-light shadow-sm rounded w-full h-full">
-      <div className="flex w-full my-auto mx-0 py-12 px-9">
-        <div className="w-5/12 flex flex-col items-center justify-center py-12 pe-8">
-          <span className="text-xs text-body mb-1 whitespace-nowrap">
+    <div className="h-full w-full rounded bg-light shadow-sm">
+      <div className="my-auto mx-0 flex w-full py-12 px-9">
+        <div className="flex w-5/12 flex-col items-center justify-center py-12 pe-8">
+          <span className="mb-1 whitespace-nowrap text-xs text-body">
             {totalText}
           </span>
 
-          <span className="text-xl text-heading font-semibold">
+          <span className="text-xl font-semibold text-heading">
             {numberWithCommas(
               data.reduce((a: any, { value }: any) => a + value, 0)
             )}
           </span>
         </div>
 
-        <div className="w-7/12 flex flex-col">
+        <div className="flex w-7/12 flex-col">
           {data.map((item: any, index: number) => (
             <div
-              className="w-full flex flex-col mb-4 pe-12 last:mb-0"
+              className="mb-4 flex w-full flex-col pe-12 last:mb-0"
               key={index}
             >
-              <div className="w-full flex items-baseline mb-3">
-                <span className="text-sm text-heading font-semibold">
+              <div className="mb-3 flex w-full items-baseline">
+                <span className="text-sm font-semibold text-heading">
                   {item.name}
                 </span>
                 <span className="text-xs font-semibold  text-heading ms-2">
@@ -52,21 +52,21 @@ const MapWidget = ({ data, totalText }: any) => {
           ))}
         </div>
       </div>
-      <div className="w-full flex border border-border-100">
-        <div className="w-full flex flex-wrap  flex-shrink-0 py-5 px-5 md:px-4 justify-around">
+      <div className="flex w-full border border-border-100">
+        <div className="flex w-full flex-shrink-0  flex-wrap justify-around py-5 px-5 md:px-4">
           {data.map((item: any, index: number) => (
             <div
-              className="w-1/2 md:w-1/4 flex flex-col justify-between py-4 px-4 md:px-3"
+              className="flex w-1/2 flex-col justify-between py-4 px-4 md:w-1/4 md:px-3"
               key={index}
             >
-              <span className="text-xs text-body mb-1 whitespace-nowrap truncate">
+              <span className="mb-1 truncate whitespace-nowrap text-xs text-body">
                 <span
-                  className="w-2 h-2 inline-block rounded-full me-1"
+                  className="inline-block h-2 w-2 rounded-full me-1"
                   style={{ backgroundColor: item.color }}
                 />
                 {item.name}
               </span>
-              <span className="text-xl text-heading font-semibold">
+              <span className="text-xl font-semibold text-heading">
                 {numberWithCommas(item.value)}
               </span>
             </div>

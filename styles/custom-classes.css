@@ -58,13 +58,15 @@
   overflow-y: hidden;
   max-height: 0px;
   backdrop-filter: none;
-  transition: background 0.44s 0.2s cubic-bezier(0.52, 0.16, 0.24, 1),
+  transition:
+    background 0.44s 0.2s cubic-bezier(0.52, 0.16, 0.24, 1),
     max-height 0.56s cubic-bezier(0.52, 0.16, 0.24, 1);
 }
 
 .sub-nav-height-transition-open {
   max-height: 800px;
-  transition: background 0.36s cubic-bezier(0.32, 0.08, 0.24, 1),
+  transition:
+    background 0.36s cubic-bezier(0.32, 0.08, 0.24, 1),
     max-height 0.56s cubic-bezier(0.52, 0.16, 0.24, 1);
   border-bottom: 1px solid #333;
 }
@@ -86,7 +88,7 @@
 
 .editor-class {
   min-height: 150px;
-  @apply p-2 rounded appearance-none transition duration-300 ease-in-out text-heading text-sm hover:outline-none hover:ring-0 border border-border-base hover:border-accent;
+  @apply appearance-none rounded border border-border-base p-2 text-sm text-heading transition duration-300 ease-in-out hover:border-accent hover:outline-none hover:ring-0;
 }
 
 .checkbox-rounded + label:before {
@@ -127,7 +129,8 @@
   z-index: -1;
   height: 100%;
   width: 100%;
-  box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.08),
+  box-shadow:
+    0px 1px 3px 0px rgba(0, 0, 0, 0.08),
     0px 0px 15px 5px rgba(0, 0, 0, 0.1);
   border-radius: 4px;
 }

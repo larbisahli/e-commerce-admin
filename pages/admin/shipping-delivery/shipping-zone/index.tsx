@@ -2,7 +2,6 @@ import { useQuery } from '@apollo/client';
 import AppLayout from '@components/layouts/app';
 import ShippingList from '@components/shipping-zone/shipping-list';
 import ErrorMessage from '@components/ui/error-message';
-import Loader from '@components/ui/loader/loader';
 import { SHIPPING_ZONES } from '@graphql/shipping-zone';
 import { useGetUser } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
@@ -25,7 +24,7 @@ const PageMainHeader = dynamic(
   () => import('@components/common/page-main-header'),
   {
     ssr: true,
-    loading: () => <div className="animated-background w-full h-[80px]"></div>
+    loading: () => <div className="animated-background h-[80px] w-full"></div>
   }
 );
 
@@ -33,7 +32,7 @@ const PageMainAction = dynamic(
   () => import('@components/common/PageMainAction'),
   {
     ssr: true,
-    loading: () => <div className="animated-background w-full h-[80px]"></div>
+    loading: () => <div className="animated-background h-[80px] w-full"></div>
   }
 );
 
@@ -90,9 +89,6 @@ export default function ShippingZonesPage({ client }: SSRProps) {
     });
   };
 
-  if (loading) {
-    return <Loader text={t('common:text-loading')} />;
-  }
   if (!isEmpty(error)) {
     return <ErrorMessage message={error.message} />;
   }
@@ -127,6 +123,7 @@ export default function ShippingZonesPage({ client }: SSRProps) {
         perPage={limit.value}
       />
       <ShippingList
+        loading={loading}
         shippingZones={shippingZones}
         selectedColumns={selectedTableColumns}
       />

@@ -58,7 +58,7 @@ const InputSlug = React.forwardRef<HTMLInputElement, Props>(
         {label && (
           <label
             htmlFor={name}
-            className="block text-body-dark font-semibold text-sm leading-none mb-3"
+            className="mb-3 block text-sm font-semibold leading-none text-body-dark"
           >
             {label}
           </label>
@@ -73,11 +73,11 @@ const InputSlug = React.forwardRef<HTMLInputElement, Props>(
             autoCorrect="off"
             autoCapitalize="off"
             spellCheck="false"
-            className="px-4 h-full outline-none w-full"
+            className="h-full w-full px-4 outline-none"
             aria-invalid={error ? 'true' : 'false'}
             {...rest}
           />
-          <div className="relative flex justify-center items-center">
+          <div className="relative flex items-center justify-center">
             <span className="pr-3 text-accent">.dropgala.com</span>
             {/* <div className="pr-3 text-gray-500">
               <PopoverInfo />
@@ -85,7 +85,7 @@ const InputSlug = React.forwardRef<HTMLInputElement, Props>(
           </div>
         </div>
         {error && (
-          <p className="my-2 text-xs text-start text-red-500">{error}</p>
+          <p className="my-2 text-start text-xs text-red-500">{error}</p>
         )}
       </div>
     );

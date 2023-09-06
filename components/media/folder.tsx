@@ -114,13 +114,13 @@ export default function Folder({
           onBlur={onSubmit}
           contentEditable={isCreateMode}
           id="editable_input"
-          className="text-gray-500 mt-4 break-all outline-none capitalize
-       px-2 rounded-sm focus:outline-blue-300 w-44 text-center"
+          className="mt-4 w-44 break-all rounded-sm px-2
+       text-center capitalize text-gray-500 outline-none focus:outline-blue-300"
         ></span>
       );
     }
     return (
-      <span className="text-gray-500 text-center cut-line-2 mt-4 break-all capitalize">
+      <span className="cut-line-2 mt-4 break-all text-center capitalize text-gray-500">
         {folder?.name}
       </span>
     );
@@ -129,7 +129,7 @@ export default function Folder({
   const renderSpinner = () => {
     if (creating || updating) {
       return (
-        <span className="absolute border-t-blue-400 my-2 h-8 w-8 ms-2 rounded-full border-2 border-transparent border-t-2 animate-spin" />
+        <span className="absolute my-2 h-8 w-8 animate-spin rounded-full border-2 border-t-2 border-transparent border-t-blue-400 ms-2" />
       );
     }
     return null;
@@ -148,13 +148,13 @@ export default function Folder({
       <Link href={`${ROUTES.MEDIA}/${folder?.id}`}>
         <a
           title={folder?.name}
-          className=" relative flex flex-col items-center w-48 h-fit p-5 hover:bg-blue-100 cursor-pointer"
+          className=" relative flex h-fit w-48 cursor-pointer flex-col items-center p-5 hover:bg-blue-100"
         >
           {renderSpinner()}
-          <div className="border relative group border-gray-300 flex justify-center bg-gray-100 items-center h-40 w-40 rounded">
+          <div className="group relative flex h-40 w-40 items-center justify-center rounded border border-gray-300 bg-gray-100">
             <button
               onClick={handleModalClick}
-              className="group-hover:block px-1 cursor-pointer hidden bg-white text-black top-0 absolute right-0 z-30"
+              className="absolute top-0 right-0 z-30 hidden cursor-pointer bg-white px-1 text-black group-hover:block"
             >
               <div className="rotate-90">
                 <DotsIcon />
@@ -174,18 +174,18 @@ export default function Folder({
     return (
       <div
         title={folder?.name}
-        className="flex flex-col items-center w-48 h-fit p-5 hover:bg-blue-100 group"
+        className="group flex h-fit w-48 flex-col items-center p-5 hover:bg-blue-100"
       >
-        <div className="relative border border-gray-300 flex justify-center bg-gray-100 items-center h-40 w-40 rounded">
+        <div className="relative flex h-40 w-40 items-center justify-center rounded border border-gray-300 bg-gray-100">
           <button
             onClick={handleModalClick}
-            className="group-hover:block px-1 cursor-pointer hidden bg-white text-black top-0 absolute right-0 z-30"
+            className="absolute top-0 right-0 z-30 hidden cursor-pointer bg-white px-1 text-black group-hover:block"
           >
             <div className="rotate-90">
               <DotsIcon />
             </div>
           </button>
-          <div className="bg-black p-[2px] text-white text-xs top-0 rounded-sm absolute left-0 z-30">
+          <div className="absolute top-0 left-0 z-30 rounded-sm bg-black p-[2px] text-xs text-white">
             {photo?.size?.formatBytes()}
           </div>
           <ImageComponent

@@ -2,7 +2,6 @@ import { useQuery } from '@apollo/client';
 import CategoryList from '@components/category/category-list';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
-import Loader from '@components/ui/loader/loader';
 import { CATEGORIES } from '@graphql/category';
 import { useErrorLogger, useGetUser } from '@hooks/index';
 import { useSettings } from '@hooks/useSettings';
@@ -13,7 +12,6 @@ import { OrderBy, SortOrder } from '@ts-types/generated';
 import { Category } from '@ts-types/generated';
 import { COLUMNS } from '@utils/data/table-columns';
 import { ROUTES } from '@utils/routes';
-import cn from 'classnames'
 import isEmpty from 'lodash/isEmpty';
 import type { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
@@ -26,7 +24,7 @@ const PageMainHeader = dynamic(
   () => import('@components/common/page-main-header'),
   {
     ssr: true,
-    loading: () => <div className="animated-background w-full h-[80px]"></div>
+    loading: () => <div className="animated-background h-[80px] w-full"></div>
   }
 );
 
@@ -34,7 +32,7 @@ const PageMainAction = dynamic(
   () => import('@components/common/PageMainAction'),
   {
     ssr: true,
-    loading: () => <div className="animated-background w-full h-[80px]"></div>
+    loading: () => <div className="animated-background h-[80px] w-full"></div>
   }
 );
 
@@ -64,7 +62,7 @@ export default function Categories({ client }: SSRProps) {
       limit: limit.value,
       orderBy,
       sortedBy: SortOrder.Desc,
-      language:selectedLanguage,
+      language: selectedLanguage,
       defaultLanguage
     },
     fetchPolicy: 'cache-and-network',
@@ -122,13 +120,11 @@ export default function Categories({ client }: SSRProps) {
         currentPage={page}
         perPage={limit.value}
       />
-      {loading && <Loader text={t('common:text-loading')} />}
-      <div className={cn({ hidden: loading })}>
-        <CategoryList
-          categories={categories}
-          selectedColumns={selectedTableColumns}
-        />
-      </div>
+      <CategoryList
+        loading={loading}
+        categories={categories}
+        selectedColumns={selectedTableColumns}
+      />
     </>
   );
 }

@@ -2,7 +2,6 @@ import { useQuery } from '@apollo/client';
 import AttributeList from '@components/attribute/attribute-list';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
-import Loader from '@components/ui/loader/loader';
 import { ATTRIBUTES } from '@graphql/attribute';
 import { useErrorLogger, useGetUser } from '@hooks/index';
 import { useSettings } from '@hooks/useSettings';
@@ -12,7 +11,6 @@ import { SSRProps, TableQueryVariables } from '@ts-types/custom.types';
 import { Attribute, OrderBy, SortOrder } from '@ts-types/generated';
 import { COLUMNS } from '@utils/data/table-columns';
 import { ROUTES } from '@utils/routes';
-import cn from 'classnames'
 import isEmpty from 'lodash/isEmpty';
 import type { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
@@ -25,7 +23,7 @@ const PageMainHeader = dynamic(
   () => import('@components/common/page-main-header'),
   {
     ssr: true,
-    loading: () => <div className="animated-background w-full h-[80px]"></div>
+    loading: () => <div className="animated-background h-[80px] w-full"></div>
   }
 );
 
@@ -33,7 +31,7 @@ const PageMainAction = dynamic(
   () => import('@components/common/PageMainAction'),
   {
     ssr: true,
-    loading: () => <div className="animated-background w-full h-[80px]"></div>
+    loading: () => <div className="animated-background h-[80px] w-full"></div>
   }
 );
 
@@ -52,7 +50,7 @@ export default function AttributePage({ client }: SSRProps) {
   const { selectedTableColumns, handleColumnChange } =
     useTableColumn('attribute');
 
-    const { defaultLanguage, selectedLanguage } = useSettings();
+  const { defaultLanguage, selectedLanguage } = useSettings();
 
   const { data, loading, error, fetchMore } = useQuery<
     TAttributes,
@@ -63,7 +61,7 @@ export default function AttributePage({ client }: SSRProps) {
       limit: limit.value,
       orderBy,
       sortedBy: SortOrder.Desc,
-      language:selectedLanguage,
+      language: selectedLanguage,
       defaultLanguage
     },
     fetchPolicy: 'cache-and-network',
@@ -121,13 +119,11 @@ export default function AttributePage({ client }: SSRProps) {
         currentPage={page}
         perPage={limit.value}
       />
-      {loading && <Loader text={t('common:text-loading')} />}
-      <div className={cn({ hidden: loading })}>
       <AttributeList
+        loading={loading}
         attributes={attributes}
         selectedColumns={selectedTableColumns}
       />
-      </div>
     </>
   );
 }

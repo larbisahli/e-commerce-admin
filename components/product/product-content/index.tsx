@@ -191,14 +191,14 @@ const ProductContent = ({ state, initialValues }: Props) => {
       isUpdated={isUpdated}
       Title={() => <>{t('form:item-label-content')}</>}
     >
-      <div className="flex flex-wrap my-5 sm:my-8">
+      <div className="my-5 flex flex-wrap sm:my-8">
         <Description
           details={`${
             initialValues
               ? t('form:item-description-edit')
               : t('form:item-description-add')
           } ${t('form:product-description-help-text')}`}
-          className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
+          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
         />
 
         <Card className="w-full sm:w-8/12 md:w-2/3">
@@ -236,7 +236,7 @@ const ProductContent = ({ state, initialValues }: Props) => {
             // error={t(errors.note?.message!)}
             variant="outline"
           />
-          <p className="text-xs text-gray-500 mb-5">
+          <p className="mb-5 text-xs text-gray-500">
             {t('form:hidden-info-note')}
           </p>
           <div>

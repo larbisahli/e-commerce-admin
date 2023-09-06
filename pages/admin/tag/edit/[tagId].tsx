@@ -41,7 +41,7 @@ export default function UpdateTagPage({ client }: SSRProps) {
   const { data, loading, error } = useQuery<TTag, OptionsVariable>(TAG, {
     variables: { id: tagId, language: selectedLanguage, defaultLanguage },
     fetchPolicy: 'cache-and-network',
-    skip: isEmpty(selectedLanguage),
+    skip: isEmpty(selectedLanguage)
   });
 
   const { tag = [] } = data ?? {};

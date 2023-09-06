@@ -46,7 +46,7 @@ const MobileNavigation: React.FC = () => {
                 />
               )
             )}
-            <div className="w-full h-32"></div>
+            <div className="h-32 w-full"></div>
           </div>
         </DrawerWrapper>
       </Drawer>

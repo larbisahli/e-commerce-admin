@@ -49,10 +49,10 @@ const CrossSellProducts = ({
 
   return (
     <>
-      <div className="flex items-end justify-between flex-wrap xl:flex-nowrap">
-        <div className="xl:mb-0 mb-3">
-          <span className="font-medium text-base">Cross-Sell Products</span>
-          <p className="text-sm text-body xl:max-w-[75%] max-w-full">{`These "impulse-buy" products appear next to the shopping cart as cross-sells to the items already in the shopping cart.`}</p>
+      <div className="flex flex-wrap items-end justify-between xl:flex-nowrap">
+        <div className="mb-3 xl:mb-0">
+          <span className="text-base font-medium">Cross-Sell Products</span>
+          <p className="max-w-full text-sm text-body xl:max-w-[75%]">{`These "impulse-buy" products appear next to the shopping cart as cross-sells to the items already in the shopping cart.`}</p>
         </div>
         <div className="ml-0 xl:ml-2">
           <Button

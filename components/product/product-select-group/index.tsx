@@ -173,10 +173,10 @@ const ProductSelectGroup = ({ state, initialValues }: Props) => {
 
   return (
     <Accordion isUpdated={isUpdated} Title={() => t('form:type-product-group')}>
-      <div className="flex flex-wrap my-5 sm:my-8">
+      <div className="my-5 flex flex-wrap sm:my-8">
         <Description
           details={t('form:type-product-group-help-text')}
-          className="w-full px-0 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
+          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 md:w-1/3"
         />
         <Card className="w-full sm:w-8/12 md:w-2/3">
           <ProductCategory categories={categories} />

@@ -10,7 +10,7 @@ import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import type { LanguageProps, SSRProps } from '@ts-types/custom.types';
 import type { PromoBannerType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
-import cn from 'classnames'
+import cn from 'classnames';
 import isEmpty from 'lodash/isEmpty';
 import type { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
@@ -32,14 +32,17 @@ export default function PromoSliders({ client }: SSRProps) {
 
   const { defaultLanguage, selectedLanguage } = useSettings();
 
-  const { data, loading, error } = useQuery<THeroBanner, LanguageProps>(PROMO_SLIDER, {
-    variables: {
-      language: selectedLanguage,
-      defaultLanguage
-    },
-    fetchPolicy: 'cache-and-network',
-    skip: isEmpty(selectedLanguage)
-  });
+  const { data, loading, error } = useQuery<THeroBanner, LanguageProps>(
+    PROMO_SLIDER,
+    {
+      variables: {
+        language: selectedLanguage,
+        defaultLanguage
+      },
+      fetchPolicy: 'cache-and-network',
+      skip: isEmpty(selectedLanguage)
+    }
+  );
 
   const { promoSlide = {} } = data ?? {};
 
@@ -64,7 +67,7 @@ export default function PromoSliders({ client }: SSRProps) {
       {loading && <Loader text={t('common:text-loading')} />}
       <PageMainAction title={t('form:input-label-promo-banner')} label="" />
       <div className={cn({ hidden: loading })}>
-      <CreateOrUpdatePromoSlideForm initialValues={promoSlide} />
+        <CreateOrUpdatePromoSlideForm initialValues={promoSlide} />
       </div>
     </>
   );

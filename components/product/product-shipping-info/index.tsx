@@ -205,20 +205,20 @@ function ProductShippingInfoForm({ state, initialValues }: Props) {
       isUpdated={isUpdated}
       Title={() => t('form:form-title-product-shipping-info')}
     >
-      <div className="flex flex-wrap my-5 sm:my-8">
+      <div className="my-5 flex flex-wrap sm:my-8">
         <Description
           details={`${
             initialValues
               ? t('form:item-description-edit')
               : t('form:item-description-add')
           } ${t('form:form-description-simple-product-info')}`}
-          className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
+          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
         />
 
         <Card className="w-full sm:w-8/12 md:w-2/3">
           {/* Width */}
           <Label>{t('form:input-label-weight')}</Label>
-          <div className="flex items-center mb-5">
+          <div className="mb-5 flex items-center">
             <Input
               name="weight"
               value={weight}
@@ -248,7 +248,7 @@ function ProductShippingInfoForm({ state, initialValues }: Props) {
           /> */}
           {/* Volume */}
           <Label>{t('form:input-label-volume')}</Label>
-          <div className="flex items-center mb-5">
+          <div className="mb-5 flex items-center">
             <Input
               name="volume"
               value={volume}
@@ -278,7 +278,7 @@ function ProductShippingInfoForm({ state, initialValues }: Props) {
           /> */}
           {/* Dimensions */}
           <Label className="mb-3">{t('form:input-label-dimensions')}</Label>
-          <div className="flex items-center mb-5 flex-wrap">
+          <div className="mb-5 flex flex-wrap items-center">
             <div>
               <Label
                 style={{
@@ -296,7 +296,7 @@ function ProductShippingInfoForm({ state, initialValues }: Props) {
                 onBlur={checkForUpdateHandler}
                 type="number"
                 variant="outline"
-                className="w-24 mr-2"
+                className="mr-2 w-24"
               />
             </div>
             <div>
@@ -316,7 +316,7 @@ function ProductShippingInfoForm({ state, initialValues }: Props) {
                 onBlur={checkForUpdateHandler}
                 type="number"
                 variant="outline"
-                className="w-24 mr-2"
+                className="mr-2 w-24"
               />
             </div>
             <div>
@@ -336,7 +336,7 @@ function ProductShippingInfoForm({ state, initialValues }: Props) {
                 onBlur={checkForUpdateHandler}
                 type="number"
                 variant="outline"
-                className="w-24 mr-2"
+                className="mr-2 w-24"
               />
             </div>
             <div className="w-36">

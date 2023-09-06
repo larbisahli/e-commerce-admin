@@ -91,8 +91,8 @@ export default function Uploader({ setLoading, mediaId = null, refetch }: any) {
       >
         <input {...getInputProps()} />
         <UploadIcon className="text-gray-400" />
-        <p className="text-body text-sm mt-4 text-center">
-          <span className="text-accent font-semibold">
+        <p className="mt-4 text-center text-sm text-body">
+          <span className="font-semibold text-accent">
             {t('text-upload-highlight')}
           </span>{' '}
           {t('text-upload-message')}

@@ -217,10 +217,10 @@ const ProductSeo = ({ state, initialValues }: Props) => {
 
   return (
     <Accordion isUpdated={isUpdated} Title={() => t('form:form-title-seo')}>
-      <div className="flex flex-wrap my-5 sm:my-8">
+      <div className="my-5 flex flex-wrap sm:my-8">
         <Description
           details={t('form:type-and-category-help-text')}
-          className="w-full px-0 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
+          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 md:w-1/3"
         />
         <Card className="w-full sm:w-8/12 md:w-2/3">
           <Input
@@ -270,9 +270,9 @@ const ProductSeo = ({ state, initialValues }: Props) => {
           />
           <div
             style={{ fontSize: '.75rem' }}
-            className="mb-5 flex items-center flex-wrap"
+            className="mb-5 flex flex-wrap items-center"
           >
-            <p className="text-body mr-2">
+            <p className="mr-2 text-body">
               Meta Description should optimally be between 150-160 characters
             </p>
             {metaDescription?.length < 160 ? (

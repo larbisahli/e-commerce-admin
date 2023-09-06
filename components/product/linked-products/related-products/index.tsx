@@ -49,10 +49,10 @@ const RelatedProducts = ({
 
   return (
     <>
-      <div className="flex items-end justify-between flex-wrap xl:flex-nowrap">
-        <div className="xl:mb-0 mb-3">
-          <span className="font-medium text-base">Related Products</span>
-          <p className="text-sm text-body xl:max-w-[75%] max-w-full">
+      <div className="flex flex-wrap items-end justify-between xl:flex-nowrap">
+        <div className="mb-3 xl:mb-0">
+          <span className="text-base font-medium">Related Products</span>
+          <p className="max-w-full text-sm text-body xl:max-w-[75%]">
             Related products are shown to customers in addition to the item the
             customer is looking at.
           </p>

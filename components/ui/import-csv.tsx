@@ -19,15 +19,15 @@ export default function ImportCsv({ onDrop, loading, title }: any) {
         <input {...getInputProps()} />
         {loading && (
           <span
-            className="h-[30px] w-[30px] ms-2 rounded-full border-2 border-transparent border-t-2 animate-spin"
+            className="h-[30px] w-[30px] animate-spin rounded-full border-2 border-t-2 border-transparent ms-2"
             style={{
               borderTopColor: 'rgb(var(--color-accent))'
             }}
           />
         )}
         {!loading && <UploadIcon className="text-muted-light" />}
-        <p className="text-body text-sm mt-4 text-center">
-          <span className="text-accent font-semibold">{title}</span>
+        <p className="mt-4 text-center text-sm text-body">
+          <span className="font-semibold text-accent">{title}</span>
         </p>
       </div>
     </section>

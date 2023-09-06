@@ -72,10 +72,7 @@ export default function CreateOrUpdateSupplierForm({ initialValues }: IProps) {
       const { Countries } = await import('@utils/countries');
       setCountries(Countries);
       if (isEmpty(initialValues?.country)) {
-        setValue(
-          'country',
-          Countries?.find(({ iso2 }) => iso2 == 'US')
-        );
+        setValue('country', Countries?.find(({ iso2 }) => iso2 == 'US'));
       }
     }
     getCountries();
@@ -157,7 +154,7 @@ export default function CreateOrUpdateSupplierForm({ initialValues }: IProps) {
         />
       ) : null}
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex flex-wrap pb-8 border-b border-dashed border-border-base my-5 sm:my-8">
+        <div className="my-5 flex flex-wrap border-b border-dashed border-border-base pb-8 sm:my-8">
           <Description
             title={t('common:supplier')}
             details={`${
@@ -165,7 +162,7 @@ export default function CreateOrUpdateSupplierForm({ initialValues }: IProps) {
                 ? t('form:item-description-update')
                 : t('form:item-description-add')
             } ${t('form:form-description-supplier-name')}`}
-            className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
+            className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
           />
 
           <Card className="w-full sm:w-8/12 md:w-2/3">

@@ -133,11 +133,11 @@ export default function CreateOrUpdateManufacturerForm({
         />
       ) : null}
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex flex-wrap pb-8 border-b border-dashed border-border-base my-5 sm:my-8">
+        <div className="my-5 flex flex-wrap border-b border-dashed border-border-base pb-8 sm:my-8">
           <Description
             title={t('form:input-label-logo')}
             details={t('form:manufacturer-image-helper-text')}
-            className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
+            className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
           />
           <Card className="w-full sm:w-8/12 md:w-2/3">
             <ImageModal
@@ -148,7 +148,7 @@ export default function CreateOrUpdateManufacturerForm({
             />
           </Card>
         </div>
-        <div className="flex flex-wrap pb-8 border-b border-dashed border-border-base my-5 sm:my-8">
+        <div className="my-5 flex flex-wrap border-b border-dashed border-border-base pb-8 sm:my-8">
           <Description
             title={t('common:manufacturer')}
             details={`${
@@ -156,7 +156,7 @@ export default function CreateOrUpdateManufacturerForm({
                 ? t('form:item-description-update')
                 : t('form:item-description-add')
             } ${t('form:form-description-manufacturer-name')}`}
-            className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
+            className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
           />
 
           <Card className="w-full sm:w-8/12 md:w-2/3">

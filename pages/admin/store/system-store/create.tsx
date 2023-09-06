@@ -34,7 +34,7 @@ export default function UpdateTagPage({ client }: Props) {
           href="/svg/system-store.svg"
         />
       </Head>
-      <div className="py-5 sm:py-8 flex border-b border-dashed border-gray-300">
+      <div className="flex border-b border-dashed border-gray-300 py-5 sm:py-8">
         <h1 className="text-xl font-semibold text-heading">
           {t('form:label-new-store-view')}
         </h1>

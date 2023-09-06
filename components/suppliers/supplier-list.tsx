@@ -1,28 +1,37 @@
 import ActionButtons from '@components/common/action-buttons';
+import Loader from '@components/ui/loader/loader';
+import { TableRowPlaceholder } from '@components/ui/placeholders/Table';
 import ProfileCart from '@components/ui/profile-card';
+import { usePlaceholder } from '@hooks/usePlaceholder';
 import { CreatedUpdatedByAt, Suppliers } from '@ts-types/generated';
 import { useIsRTL } from '@utils/locals';
 import dayjs from 'dayjs';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
-import React, { useMemo } from 'react';
+import React, { memo, useMemo } from 'react';
 
 const Table = dynamic(
   () => import('@components/ui/table').then((mod) => mod.Table),
-  { ssr: false }
+  { ssr: false, loading: () => <Loader text={'Loading'} /> }
 );
 
 type IProps = {
   suppliers: Suppliers[];
   selectedColumns: string[];
+  loading: boolean;
 };
 
-const SuppliersList = ({ suppliers, selectedColumns }: IProps) => {
+interface TableRowProps extends Suppliers {
+  loading: boolean;
+}
+
+const SuppliersList = ({ loading, suppliers, selectedColumns }: IProps) => {
   const { t } = useTranslation();
   const router = useRouter();
 
   const { alignLeft, alignRight } = useIsRTL();
+  const { tablePlaceholderRow } = usePlaceholder();
 
   const columns = useMemo(() => {
     return [
@@ -41,9 +50,12 @@ const SuppliersList = ({ suppliers, selectedColumns }: IProps) => {
         align: alignLeft,
         width: 100,
         ellipsis: true,
-        render: (supplier_name: string) => {
+        render: (supplier_name: string, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
           return (
-            <span className="font-semibold text-gray-800 capitalize">
+            <span className="font-semibold capitalize text-gray-800">
               {supplier_name}
             </span>
           );
@@ -56,9 +68,12 @@ const SuppliersList = ({ suppliers, selectedColumns }: IProps) => {
         align: alignLeft,
         width: 160,
         ellipsis: true,
-        render: (company: string) => {
+        render: (company: string, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
           return (
-            <span title={company} className="text-gray-800 capitalize">
+            <span title={company} className="capitalize text-gray-800">
               {company}
             </span>
           );
@@ -71,11 +86,14 @@ const SuppliersList = ({ suppliers, selectedColumns }: IProps) => {
         align: alignLeft,
         width: 150,
         ellipsis: true,
-        render: (phoneNumber: string) => {
+        render: (phoneNumber: string, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
           return (
             <span
               title={`+${phoneNumber}`}
-              className="text-gray-800 capitalize"
+              className="capitalize text-gray-800"
             >
               {`+${phoneNumber}`}
             </span>
@@ -88,7 +106,13 @@ const SuppliersList = ({ suppliers, selectedColumns }: IProps) => {
         key: 'createdAt',
         align: alignLeft,
         width: 190,
-        render: (createdAt: CreatedUpdatedByAt['updatedAt']) => {
+        render: (
+          createdAt: CreatedUpdatedByAt['updatedAt'],
+          record: TableRowProps
+        ) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
           return `${dayjs(createdAt).format('MMM D, YYYY')} at ${dayjs(
             createdAt
           ).format('h:mm A')}`;
@@ -103,8 +127,11 @@ const SuppliersList = ({ suppliers, selectedColumns }: IProps) => {
         ellipsis: true,
         render: (
           createdBy: CreatedUpdatedByAt['createdBy'],
-          record: Suppliers
+          record: TableRowProps
         ) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
           return <ProfileCart user={createdBy} createdAt={record?.createdAt} />;
         }
       },
@@ -117,8 +144,11 @@ const SuppliersList = ({ suppliers, selectedColumns }: IProps) => {
         ellipsis: true,
         render: (
           updatedBy: CreatedUpdatedByAt['updatedBy'],
-          record: Suppliers
+          record: TableRowProps
         ) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
           return <ProfileCart user={updatedBy} updatedAt={record?.updatedAt} />;
         }
       },
@@ -128,13 +158,18 @@ const SuppliersList = ({ suppliers, selectedColumns }: IProps) => {
         key: 'actions',
         align: alignRight,
         width: 80,
-        render: (id: string) => (
-          <ActionButtons
-            id={id}
-            editUrl={`${router.asPath}/edit/${id}`}
-            deleteModalView="DELETE_SUPPLIER"
-          />
-        )
+        render: (id: string, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
+          return (
+            <ActionButtons
+              id={id}
+              editUrl={`${router.asPath}/edit/${id}`}
+              deleteModalView="DELETE_SUPPLIER"
+            />
+          );
+        }
       }
     ];
   }, [alignLeft, alignRight, router.asPath, t]);
@@ -148,19 +183,16 @@ const SuppliersList = ({ suppliers, selectedColumns }: IProps) => {
   }, [columns, selectedColumns]);
 
   return (
-    <React.Fragment>
-      <div className="card overflow-hidden mb-6">
-        <Table
-          // @ts-ignore
-          columns={tableColumns}
-          emptyText={t('table:empty-table-data')}
-          data={suppliers}
-          rowKey="id"
-          scroll={{ x: 380 }}
-        />
-      </div>
-    </React.Fragment>
+    <Table
+      // @ts-ignore
+      columns={tableColumns}
+      emptyText={t('table:empty-table-data')}
+      data={loading ? tablePlaceholderRow : suppliers}
+      rowKey="id"
+      scroll={{ x: 380 }}
+      className="card mb-6 overflow-hidden"
+    />
   );
 };
 
-export default SuppliersList;
+export default memo(SuppliersList);

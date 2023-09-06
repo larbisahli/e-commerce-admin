@@ -38,14 +38,14 @@ const NotificationMenu: React.FC<MenuType> = ({ data }) => {
   return (
     <>
       <button
-        className="relative flex items-center justify-center rounded outline-none transition duration-300 ease-in-out text-heading focus:ring-1 focus:outline-none"
+        className="relative flex items-center justify-center rounded text-heading outline-none transition duration-300 ease-in-out focus:outline-none focus:ring-1"
         aria-label="show notifications"
         {...triggerProps}
         onClick={() => setOpen(!isOpen)}
       >
         <Bell className="h-5 w-5" />
 
-        <div className="flex absolute -top-1 end-0 text-green-500">
+        <div className="absolute -top-1 flex text-green-500 end-0">
           <Dot />
         </div>
       </button>
@@ -63,14 +63,14 @@ const NotificationMenu: React.FC<MenuType> = ({ data }) => {
                 stiffness: 800,
                 damping: 35
               }}
-              className="w-80 bg-light rounded shadow-base z-20 overflow-hidden"
+              className="z-20 w-80 overflow-hidden rounded bg-light shadow-base"
             >
-              <div className="flex items-center justify-between px-4 py-3 border-b border-border-200">
-                <span className="text-lg text-heading font-semibold">
+              <div className="flex items-center justify-between border-b border-border-200 px-4 py-3">
+                <span className="text-lg font-semibold text-heading">
                   Notification
                 </span>
 
-                <button className="text-red-500 text-sm font-semibold transition duration-200 hover:text-red-600 focus:outline-none focus:ring-1">
+                <button className="text-sm font-semibold text-red-500 transition duration-200 hover:text-red-600 focus:outline-none focus:ring-1">
                   Clear all
                 </button>
               </div>
@@ -84,8 +84,8 @@ const NotificationMenu: React.FC<MenuType> = ({ data }) => {
                   />
                 ))
               ) : (
-                <div className="bg-light flex items-center justify-center border-b border-border-200">
-                  <p className="text-sm text-body py-5">
+                <div className="flex items-center justify-center border-b border-border-200 bg-light">
+                  <p className="py-5 text-sm text-body">
                     You don't have any notifications.
                   </p>
                 </div>
@@ -93,7 +93,7 @@ const NotificationMenu: React.FC<MenuType> = ({ data }) => {
 
               <a
                 href="#"
-                className="flex items-center justify-center bg-light text-sm text-green-500 font-semibold h-11 px-4 transition duration-200 ease-in-out hover:text-green-600"
+                className="flex h-11 items-center justify-center bg-light px-4 text-sm font-semibold text-green-500 transition duration-200 ease-in-out hover:text-green-600"
               >
                 See all notifications
               </a>

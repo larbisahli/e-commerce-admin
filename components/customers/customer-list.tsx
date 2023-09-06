@@ -1,4 +1,5 @@
 import ActionButtons from '@components/common/action-buttons';
+import Loader from '@components/ui/loader/loader';
 import Pagination from '@components/ui/pagination';
 import { siteSettings } from '@settings/site.settings';
 import { useIsRTL } from '@utils/locals';
@@ -9,7 +10,7 @@ import { useTranslation } from 'next-i18next';
 
 const Table = dynamic(
   () => import('@components/ui/table').then((mod) => mod.Table),
-  { ssr: false }
+  { ssr: false, loading: () => <Loader text={'Loading'} /> }
 );
 
 type IProps = {
@@ -39,7 +40,7 @@ const CustomerList = ({ customers, onPagination }: IProps) => {
           layout="fixed"
           width={42}
           height={42}
-          className="rounded overflow-hidden"
+          className="overflow-hidden rounded"
         />
       )
     },
@@ -87,7 +88,7 @@ const CustomerList = ({ customers, onPagination }: IProps) => {
 
   return (
     <>
-      <div className="card overflow-hidden mb-6">
+      <div className="card mb-6 overflow-hidden">
         {/* @ts-ignore */}
         <Table
           columns={columns}
@@ -99,7 +100,7 @@ const CustomerList = ({ customers, onPagination }: IProps) => {
       </div>
 
       {!!paginatorInfo.total && (
-        <div className="flex justify-end items-center">
+        <div className="flex items-center justify-end">
           <Pagination
             total={paginatorInfo.total}
             current={paginatorInfo.currentPage}

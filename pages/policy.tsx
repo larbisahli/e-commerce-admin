@@ -5,7 +5,7 @@ import Link from 'next/link';
 const HomePage = () => {
   return (
     <div
-      className="h-screen pb-14 bg-right bg-cover"
+      className="h-screen bg-cover bg-right pb-14"
       // style={{ backgroundImage: "url('/bg.svg')" }}
     >
       <Head>
@@ -22,13 +22,13 @@ const HomePage = () => {
       {/* <!--Main--> */}
       <main className="pt-20">
         {/* ------------------ About us section ------------------ */}
-        <section className="max-w-2xl container mt-22 mb-60  px-6 mx-auto flex flex-wrap flex-col-reverse md:flex-row items-center justify-between">
+        <section className="container mx-auto mt-22 mb-60  flex max-w-2xl flex-col-reverse flex-wrap items-center justify-between px-6 md:flex-row">
           {/* <!--Left Col--> */}
           <div className="w-full overflow-y-hidden">
-            <h2 className="my-4 text-xl  md:text-3xl text-gray-800 font-bold leading-tight slide-in-bottom-h1">
+            <h2 className="slide-in-bottom-h1 my-4  text-xl font-bold leading-tight text-gray-800 md:text-3xl">
               Privacy Policy
             </h2>
-            <p className="leading-normal max-w-[1000px] text-gray-800 pb-8 text-base slide-in-bottom-subtitle">
+            <p className="slide-in-bottom-subtitle max-w-[1000px] pb-8 text-base leading-normal text-gray-800">
               This Data Protection Notice (“Notice”) sets out the basis which
               Dropgala Pte Ltd (“we”, “us”, or “our”) may collect, use, disclose
               or otherwise process personal data of our customers in accordance
@@ -40,11 +40,11 @@ const HomePage = () => {
             </p>
           </div>
           <div className="w-full overflow-y-hidden">
-            <h2 className="my-4 text-xl  md:text-3xl text-gray-800 font-bold leading-tight slide-in-bottom-h1">
+            <h2 className="slide-in-bottom-h1 my-4  text-xl font-bold leading-tight text-gray-800 md:text-3xl">
               PERSONAL DATA
             </h2>
             <ul>
-              <ol className="leading-normal max-w-[1000px] text-gray-800 pb-8 text-base slide-in-bottom-subtitle">
+              <ol className="slide-in-bottom-subtitle max-w-[1000px] pb-8 text-base leading-normal text-gray-800">
                 1. As used in this Notice: “customer” means an individual who
                 (a) has contacted us through any means to find out more about
                 any goods or services we provide, or (b) may, or has, entered
@@ -54,24 +54,24 @@ const HomePage = () => {
                 (b) from that data and other information to which we have or are
                 likely to have access.
               </ol>
-              <ol className="leading-normal max-w-[1000px] text-gray-800 pb-8 text-base slide-in-bottom-subtitle">
+              <ol className="slide-in-bottom-subtitle max-w-[1000px] pb-8 text-base leading-normal text-gray-800">
                 2. Depending on the nature of your interaction with us, some
                 examples of personal data which we may collect from you include
                 name, residential address, email address, telephone number and
                 financial information.
               </ol>
-              <ol className="leading-normal max-w-[1000px] text-gray-800 pb-8 text-base slide-in-bottom-subtitle">
+              <ol className="slide-in-bottom-subtitle max-w-[1000px] pb-8 text-base leading-normal text-gray-800">
                 3. Other terms used in this Notice shall have the meanings given
                 to them in the PDPA (where the context so permits).
               </ol>
             </ul>
           </div>
           <div className="w-full overflow-y-hidden">
-            <h2 className="my-4 text-xl  md:text-3xl text-gray-800 font-bold leading-tight slide-in-bottom-h1">
+            <h2 className="slide-in-bottom-h1 my-4  text-xl font-bold leading-tight text-gray-800 md:text-3xl">
               COLLECTION, USE AND DISCLOSURE OF PERSONAL DATA
             </h2>
             <ul>
-              <ol className="leading-normal max-w-[1000px] text-gray-800 pb-8 text-base slide-in-bottom-subtitle">
+              <ol className="slide-in-bottom-subtitle max-w-[1000px] pb-8 text-base leading-normal text-gray-800">
                 4. We generally do not collect your personal data unless (a) it
                 is provided to us voluntarily by you directly or via a third
                 party who has been duly authorised by you to disclose your
@@ -87,57 +87,57 @@ const HomePage = () => {
                 which has not been notified to you (except where permitted or
                 authorised by law).
               </ol>
-              <ol className="leading-normal max-w-[1000px] text-gray-800 pb-8 text-base slide-in-bottom-subtitle">
+              <ol className="slide-in-bottom-subtitle max-w-[1000px] pb-8 text-base leading-normal text-gray-800">
                 5. We may collect and use your personal data for any or all of
                 the following purposes: (a) performing obligations in the course
                 of or in connection with our provision of the goods and/or
                 services requested by you;
               </ol>
-              <ol className="leading-normal max-w-[1000px] text-gray-800 pb-8 text-base slide-in-bottom-subtitle">
+              <ol className="slide-in-bottom-subtitle max-w-[1000px] pb-8 text-base leading-normal text-gray-800">
                 (b) verifying your identity;
               </ol>
-              <ol className="leading-normal max-w-[1000px] text-gray-800 pb-8 text-base slide-in-bottom-subtitle">
+              <ol className="slide-in-bottom-subtitle max-w-[1000px] pb-8 text-base leading-normal text-gray-800">
                 (c) responding to, handling, and processing queries, requests,
                 applications, complaints, and feedback from you;
               </ol>
-              <ol className="leading-normal max-w-[1000px] text-gray-800 pb-8 text-base slide-in-bottom-subtitle">
+              <ol className="slide-in-bottom-subtitle max-w-[1000px] pb-8 text-base leading-normal text-gray-800">
                 (d) managing your relationship with us;
               </ol>
-              <ol className="leading-normal max-w-[1000px] text-gray-800 pb-8 text-base slide-in-bottom-subtitle">
+              <ol className="slide-in-bottom-subtitle max-w-[1000px] pb-8 text-base leading-normal text-gray-800">
                 (e) processing payment or credit transactions;
               </ol>
-              <ol className="leading-normal max-w-[1000px] text-gray-800 pb-8 text-base slide-in-bottom-subtitle">
+              <ol className="slide-in-bottom-subtitle max-w-[1000px] pb-8 text-base leading-normal text-gray-800">
                 (f) complying with any applicable laws, regulations, codes of
                 practice, guidelines, or rules, or to assist in law enforcement
                 and investigations conducted by any governmental and/or
                 regulatory authority;
               </ol>
-              <ol className="leading-normal max-w-[1000px] text-gray-800 pb-8 text-base slide-in-bottom-subtitle">
+              <ol className="slide-in-bottom-subtitle max-w-[1000px] pb-8 text-base leading-normal text-gray-800">
                 (g) any other purposes for which you have provided the
                 information;
               </ol>
-              <ol className="leading-normal max-w-[1000px] text-gray-800 pb-8 text-base slide-in-bottom-subtitle">
+              <ol className="slide-in-bottom-subtitle max-w-[1000px] pb-8 text-base leading-normal text-gray-800">
                 (h) transmitting to any unaffiliated third parties including our
                 third party service providers and agents, and relevant
                 governmental and/or regulatory authorities, whether in Singapore
                 or abroad, for the aforementioned purposes; and
               </ol>
-              <ol className="leading-normal max-w-[1000px] text-gray-800 pb-8 text-base slide-in-bottom-subtitle">
+              <ol className="slide-in-bottom-subtitle max-w-[1000px] pb-8 text-base leading-normal text-gray-800">
                 (i) any other incidental business purposes related to or in
                 connection with the above.
               </ol>
-              <ol className="leading-normal max-w-[1000px] text-gray-800 pb-8 text-base slide-in-bottom-subtitle">
+              <ol className="slide-in-bottom-subtitle max-w-[1000px] pb-8 text-base leading-normal text-gray-800">
                 6. We may disclose your personal data: (a) where such disclosure
                 is required for performing obligations in the course of or in
                 connection with our provision of the goods and services
                 requested by you; or
               </ol>
-              <ol className="leading-normal max-w-[1000px] text-gray-800 pb-8 text-base slide-in-bottom-subtitle">
+              <ol className="slide-in-bottom-subtitle max-w-[1000px] pb-8 text-base leading-normal text-gray-800">
                 (b) to third party service providers, agents and other
                 organisations we have engaged to perform any of the functions
                 with reference to the above mentioned purposes.
               </ol>
-              <ol className="leading-normal max-w-[1000px] text-gray-800 pb-8 text-base slide-in-bottom-subtitle">
+              <ol className="slide-in-bottom-subtitle max-w-[1000px] pb-8 text-base leading-normal text-gray-800">
                 7. The purposes listed in the above clauses may continue to
                 apply even in situations where your relationship with us (for
                 example, pursuant to a contract) has been terminated or altered
@@ -149,35 +149,35 @@ const HomePage = () => {
           </div>
         </section>
         {/* <!--Footer--> */}
-        <div className="container mx-auto w-full mt-16 pt-8 pb-6 text-sm text-center md:text-left fade-in border-t border-dotted border-gray-300">
-          <div className="flex justify-center items-center">
+        <div className="fade-in container mx-auto mt-16 w-full border-t border-dotted border-gray-300 pt-8 pb-6 text-center text-sm md:text-left">
+          <div className="flex items-center justify-center">
             <Link href="/about-us">
-              <a className="text-gray-600 text-lg mx-3 hover:text-blue-500">
+              <a className="mx-3 text-lg text-gray-600 hover:text-blue-500">
                 About us
               </a>
             </Link>
             <Link href="/policy">
-              <a className="text-gray-600 text-lg mx-3 hover:text-blue-500">
+              <a className="mx-3 text-lg text-gray-600 hover:text-blue-500">
                 Policy
               </a>
             </Link>
             <Link href="/support">
-              <a className="text-gray-600 text-lg mx-3 hover:text-blue-500">
+              <a className="mx-3 text-lg text-gray-600 hover:text-blue-500">
                 Support
               </a>
             </Link>
             <Link href="/signup">
-              <a className="text-gray-600 text-lg mx-3 hover:text-blue-500">
+              <a className="mx-3 text-lg text-gray-600 hover:text-blue-500">
                 Sign up
               </a>
             </Link>
             <Link href="/login">
-              <a className="text-gray-600 text-lg mx-3 hover:text-blue-500">
+              <a className="mx-3 text-lg text-gray-600 hover:text-blue-500">
                 Login
               </a>
             </Link>
           </div>
-          <div className="flex justify-center items-center mb-12 mt-4">
+          <div className="mb-12 mt-4 flex items-center justify-center">
             <span className="text-xl font-bold text-gray-400">dropgala</span>
           </div>
           <p className="text-gray-500 no-underline hover:no-underline">

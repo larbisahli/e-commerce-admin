@@ -1,7 +1,6 @@
 import { useQuery } from '@apollo/client';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
-import Loader from '@components/ui/loader/loader';
 import UserList from '@components/user/user-list';
 import { USERS } from '@graphql/user';
 import { useErrorLogger, useGetUser } from '@hooks/index';
@@ -23,7 +22,7 @@ const PageMainHeader = dynamic(
   () => import('@components/common/page-main-header'),
   {
     ssr: true,
-    loading: () => <div className="animated-background w-full h-[80px]"></div>
+    loading: () => <div className="animated-background h-[80px] w-full"></div>
   }
 );
 
@@ -31,7 +30,7 @@ const PageMainAction = dynamic(
   () => import('@components/common/PageMainAction'),
   {
     ssr: true,
-    loading: () => <div className="animated-background w-full h-[80px]"></div>
+    loading: () => <div className="animated-background h-[80px] w-full"></div>
   }
 );
 
@@ -86,9 +85,6 @@ export default function User({ client }: SSRProps) {
     });
   }
 
-  if (loading) {
-    return <Loader text={t('common:text-loading')} />;
-  }
   if (!isEmpty(error)) {
     return <ErrorMessage message={error.message} />;
   }
@@ -117,7 +113,11 @@ export default function User({ client }: SSRProps) {
         currentPage={page}
         perPage={limit.value}
       />
-      <UserList users={users} selectedColumns={selectedTableColumns} />
+      <UserList
+        loading={loading}
+        users={users}
+        selectedColumns={selectedTableColumns}
+      />
     </>
   );
 }

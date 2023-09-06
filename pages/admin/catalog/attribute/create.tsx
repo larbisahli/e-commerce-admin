@@ -29,7 +29,7 @@ export default function CreateAttributePage({ client }: SSRProps) {
           href="/svg/attribute.svg"
         />
       </Head>
-      <div className="py-5 sm:py-8 flex border-b border-dashed border-border-base">
+      <div className="flex border-b border-dashed border-border-base py-5 sm:py-8">
         <h1 className="text-lg font-semibold text-heading">
           {t('form:create-attribute')}
         </h1>

@@ -167,11 +167,11 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex flex-wrap pb-8 border-b border-dashed border-border-base my-5 sm:my-8">
+      <div className="my-5 flex flex-wrap border-b border-dashed border-border-base pb-8 sm:my-8">
         <Description
           title={t('form:input-label-image')}
           details={t('form:hero-slider-image-helper-text')}
-          className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
+          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
         />
 
         <Card className="w-full sm:w-8/12 md:w-2/3">
@@ -197,7 +197,7 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
         </Card>
       </div>
 
-      <div className="flex flex-wrap my-5 sm:my-8">
+      <div className="my-5 flex flex-wrap sm:my-8">
         <Description
           title={t('form:input-label-description')}
           details={`${
@@ -205,7 +205,7 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
               ? t('form:item-description-edit')
               : t('form:item-description-add')
           } ${t('form:hero-slider-description-helper-text')}`}
-          className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
+          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
         />
 
         <Card className="w-full sm:w-8/12 md:w-2/3">
@@ -242,7 +242,7 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
             variant="outline"
             className="mb-5"
           />
-          <div className="flex items-center my-5">
+          <div className="my-5 flex items-center">
             <Label className="mb-0">{t('form:input-label-alignment')}:</Label>
             <Radio
               {...register('styles.align')}
@@ -284,7 +284,7 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
           </div>
         </Card>
       </div>
-      <div className="flex flex-wrap my-5 sm:my-8">
+      <div className="my-5 flex flex-wrap sm:my-8">
         <Description
           title={t('form:input-label-slider-styles')}
           details={`${
@@ -292,7 +292,7 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
               ? t('form:item-description-edit')
               : t('form:item-description-add')
           } ${t('form:hero-slider-style-helper-text')}`}
-          className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
+          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
         />
 
         <Card className="w-full sm:w-8/12 md:w-2/3">
@@ -348,7 +348,7 @@ const DisplayColorCode = ({ color }: { color: string }) => {
   return (
     <>
       {color !== null && (
-        <span className="ms-3 px-2 py-1 text-sm text-heading bg-gray-100 border border-border-200 rounded">
+        <span className="rounded border border-border-200 bg-gray-100 px-2 py-1 text-sm text-heading ms-3">
           {color}
         </span>
       )}

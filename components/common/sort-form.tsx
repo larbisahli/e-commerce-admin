@@ -32,9 +32,9 @@ const SortForm: React.FC<Props> = ({
   const { t } = useTranslation('common');
 
   return (
-    <div className={cn('flex items-end w-full', className)}>
+    <div className={cn('flex w-full items-end', className)}>
       {onLimitChange instanceof Function && (
-        <div className="w-[150px] mr-5">
+        <div className="mr-5 w-[150px]">
           <Select
             options={[
               { id: 1, value: 10, label: 10 },

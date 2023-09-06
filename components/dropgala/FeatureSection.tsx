@@ -11,10 +11,10 @@ const FeatureSection = () => {
   return (
     <section
       id="features"
-      className="p-5 px-11 mt-32 container mx-auto rounded w-full"
+      className="container mx-auto mt-32 w-full rounded p-5 px-11"
     >
       <div className="flex flex-col items-center">
-        <h2 className="my-5 text-3xl text-gray-800 font-bold leading-tight text-center md:text-left slide-in-bottom-h1">
+        <h2 className="slide-in-bottom-h1 my-5 text-center text-3xl font-bold leading-tight text-gray-800 md:text-left">
           Features
         </h2>
         <p>
@@ -23,12 +23,12 @@ const FeatureSection = () => {
       </div>
       <div className="mt-8 grid grid-cols-1 gap-5 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
         {/*  */}
-        <div className="shadow h-[280px] border bg-white rounded-lg">
-          <div className=" flex justify-center items-center flex-col p-4">
+        <div className="h-[280px] rounded-lg border bg-white shadow">
+          <div className=" flex flex-col items-center justify-center p-4">
             <div className="py-3 text-gray-700">
               <ShipIcon />
             </div>
-            <div className="font-medium pt-1">Seamless COD Management</div>
+            <div className="pt-1 font-medium">Seamless COD Management</div>
             <div className="pt-5 text-center text-gray-700">
               <p>
                 Manage your Cash on Delivery orders in one place, from leads
@@ -38,12 +38,12 @@ const FeatureSection = () => {
           </div>
         </div>
         {/*  */}
-        <div className="shadow h-[280px] border bg-white rounded-lg">
-          <div className=" flex justify-center items-center flex-col p-4">
+        <div className="h-[280px] rounded-lg border bg-white shadow">
+          <div className=" flex flex-col items-center justify-center p-4">
             <div className="py-3 text-gray-800">
               <SheetsIcon />
             </div>
-            <div className="font-medium pt-1">Google Sheet Integration</div>
+            <div className="pt-1 font-medium">Google Sheet Integration</div>
             <div className="pt-5 text-center text-gray-700">
               <p>
                 Supercharge your business operations with our seamless Google
@@ -54,12 +54,12 @@ const FeatureSection = () => {
           </div>
         </div>
         {/*  */}
-        <div className="shadow h-[280px] border bg-white rounded-lg">
-          <div className=" flex justify-center items-center flex-col p-4">
+        <div className="h-[280px] rounded-lg border bg-white shadow">
+          <div className=" flex flex-col items-center justify-center p-4">
             <div className="py-3 text-gray-500">
               <CurrencyConvertIcon />
             </div>
-            <div className="font-medium pt-1">Multi Currency Converter</div>
+            <div className="pt-1 font-medium">Multi Currency Converter</div>
             <div className="pt-5 text-center text-gray-700">
               <p>
                 Offer seamless customer experiences with automatic currency
@@ -70,12 +70,12 @@ const FeatureSection = () => {
           </div>
         </div>
         {/*  */}
-        <div className="shadow h-[280px] border bg-white rounded-lg">
-          <div className=" flex justify-center items-center flex-col p-4">
+        <div className="h-[280px] rounded-lg border bg-white shadow">
+          <div className=" flex flex-col items-center justify-center p-4">
             <div className="py-3 text-gray-800">
               <ExpressCheckoutIcon />
             </div>
-            <div className="font-medium pt-1">Express checkout form</div>
+            <div className="pt-1 font-medium">Express checkout form</div>
             <div className="pt-5 text-center text-gray-700">
               <p>
                 Boost conversions with a streamlined shopping experience—let
@@ -86,12 +86,12 @@ const FeatureSection = () => {
           </div>
         </div>
         {/*  */}
-        <div className="shadow h-[280px] border bg-white rounded-lg">
-          <div className=" flex justify-center items-center flex-col p-4">
+        <div className="h-[280px] rounded-lg border bg-white shadow">
+          <div className=" flex flex-col items-center justify-center p-4">
             <div className="py-3 text-gray-700">
               <UpSellIcon />
             </div>
-            <div className="font-medium pt-1">One Click UpSell</div>
+            <div className="pt-1 font-medium">One Click UpSell</div>
             <div className="pt-5 text-center text-gray-700">
               <p>
                 Effortlessly increase sales with post-purchase upsell,
@@ -103,12 +103,12 @@ const FeatureSection = () => {
           </div>
         </div>
         {/*  */}
-        <div className="shadow h-[280px] border bg-white rounded-lg">
-          <div className=" flex justify-center items-center flex-col p-4">
+        <div className="h-[280px] rounded-lg border bg-white shadow">
+          <div className=" flex flex-col items-center justify-center p-4">
             <div className="py-3 text-gray-700">
               <AnalyticsIcon />
             </div>
-            <div className="font-medium pt-1">SEO Support</div>
+            <div className="pt-1 font-medium">SEO Support</div>
             <div className="pt-5 text-center text-gray-700">
               <p>
                 Boost your product page rankings in search results. Unlock free
@@ -119,12 +119,12 @@ const FeatureSection = () => {
           </div>
         </div>
         {/*  */}
-        <div className="shadow h-[270px] border bg-white rounded-lg">
-          <div className=" flex justify-center items-center flex-col p-4">
+        <div className="h-[270px] rounded-lg border bg-white shadow">
+          <div className=" flex flex-col items-center justify-center p-4">
             <div className="py-3 text-gray-700">
               <PluginIcon />
             </div>
-            <div className="font-medium pt-1">Pixels Integration</div>
+            <div className="pt-1 font-medium">Pixels Integration</div>
             <div className="pt-5 text-center text-gray-700">
               <p>
                 Attract high-quality leads to your store effortlessly with our
@@ -134,12 +134,12 @@ const FeatureSection = () => {
           </div>
         </div>
         {/*  */}
-        <div className="shadow h-[270px] border bg-white rounded-lg">
-          <div className=" flex justify-center items-center flex-col p-4">
+        <div className="h-[270px] rounded-lg border bg-white shadow">
+          <div className=" flex flex-col items-center justify-center p-4">
             <div className="py-3 text-gray-700">
               <ThumbUpIcon />
             </div>
-            <div className="font-medium pt-1">Products Reviews</div>
+            <div className="pt-1 font-medium">Products Reviews</div>
             <div className="pt-5 text-center text-gray-700">
               <p>
                 {`Increase your store's conversion by up to 50% by adding real

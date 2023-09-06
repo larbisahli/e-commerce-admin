@@ -42,7 +42,12 @@ const FormActions = ({
     threshold: 1
   });
 
-  const { defaultLanguage, languages = [], isLoading, selectedLanguage } = useSettings();
+  const {
+    defaultLanguage,
+    languages = [],
+    isLoading,
+    selectedLanguage
+  } = useSettings();
 
   const dispatch = useAppDispatch();
 
@@ -64,8 +69,8 @@ const FormActions = ({
 
   const renderActions = () => {
     return (
-      <div className="flex items-center md:w-fit md:justify-start justify-between w-full">
-        <div className="h-[45px] flex items-center  relative w-[220px] justify-end mr-4">
+      <div className="flex w-full items-center justify-between md:w-fit md:justify-start">
+        <div className="relative mr-4 flex  h-[45px] w-[220px] items-center justify-end">
           <Select
             options={languages}
             value={selectedLanguage}
@@ -90,7 +95,7 @@ const FormActions = ({
 
   const renderBackButton = () => {
     return (
-      <div className="flex items-center w-full md:w-fit md:mb-0 mb-2">
+      <div className="mb-2 flex w-full items-center md:mb-0 md:w-fit">
         <Button variant="outline" onClick={router.back} type="button">
           <ArrowPrev />
           {t('form:button-label-back')}
@@ -104,15 +109,15 @@ const FormActions = ({
       return (
         <div
           className={cn(
-            'transition-all border-y border-t-0 border-gray-300 duration-100 ease-linear opacity-100',
-            'fixed left-0 right-0 top-[75px] z-40 pr-8 bg-gray-100 md:ps-20 nlg:ps-20 nxl:ps-20 lg:ps-64 xl:ps-64',
+            'border-y border-t-0 border-gray-300 opacity-100 transition-all duration-100 ease-linear',
+            'nlg:ps-20 nxl:ps-20 fixed left-0 right-0 top-[75px] z-40 bg-gray-100 pr-8 md:ps-20 lg:ps-64 xl:ps-64',
             {
-              'md:!ps-20 !ps-0': displayMiniSidebar,
+              '!ps-0 md:!ps-20': displayMiniSidebar,
               'invisible !opacity-0': inView
             }
           )}
         >
-          <div className="pl-4 md:pl-8 flex items-center md:justify-between p-3 px-0 flex-wrap justify-center">
+          <div className="flex flex-wrap items-center justify-center p-3 px-0 pl-4 md:justify-between md:pl-8">
             {renderBackButton()}
             {renderActions()}
           </div>
@@ -125,8 +130,8 @@ const FormActions = ({
   return (
     <>
       <div ref={ref}>
-        <h1 className="text-xl mb-3 font-semibold text-heading">{title}</h1>
-        <div className="mb-3 flex items-center md:justify-between border-y border-gray-300 p-3 px-0 flex-wrap justify-center">
+        <h1 className="mb-3 text-xl font-semibold text-heading">{title}</h1>
+        <div className="mb-3 flex flex-wrap items-center justify-center border-y border-gray-300 p-3 px-0 md:justify-between">
           {renderBackButton()}
           {renderActions()}
         </div>

@@ -19,7 +19,7 @@ const ProfileCart = ({
             ).format('h:mm A')}`
           : ''
       }
-      className="flex items-center min-w-max"
+      className="flex min-w-max items-center"
     >
       <div className="px-1 font-medium">
         {`${user?.firstName ?? ''} ${user?.lastName ?? ''}`}

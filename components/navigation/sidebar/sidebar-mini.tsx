@@ -22,18 +22,18 @@ const SidebarMini: React.FC = () => {
   return (
     <aside
       className={cx(
-        'w-22 lg:hidden md:block hidden h-full overflow-y-auto bg-sidenav fixed start-0 bottom-0 pt-4 z-50',
+        'fixed bottom-0 z-50 hidden h-full w-22 overflow-y-auto bg-sidenav pt-4 start-0 md:block lg:hidden',
         {
           'md:!block': displayMiniSidebar
         }
       )}
     >
-      <Scrollbar className="flex flex-col w-full h-full">
-        <div className="relative flex justify-center items-center">
+      <Scrollbar className="flex h-full w-full flex-col">
+        <div className="relative flex items-center justify-center">
           <motion.button
             whileTap={{ scale: 0.88 }}
             onClick={() => toggleSidebar({ field: 'displayMiniSidebar' })}
-            className="relative items-center justify-center flex h-[25px] w-[12px] p-5 rounded"
+            className="relative flex h-[25px] w-[12px] items-center justify-center rounded p-5"
           >
             <div className={cx('menu-icon-container')}>
               <span
@@ -51,7 +51,7 @@ const SidebarMini: React.FC = () => {
             </div>
           </motion.button>
         </div>
-        <div className="flex justify-center my-2">
+        <div className="my-2 flex justify-center">
           <div className="h-[2px] w-[76%] bg-sidenav-divider"></div>
         </div>
         {siteSettings.sidebarLinks?.admin?.map(
@@ -70,7 +70,7 @@ const SidebarMini: React.FC = () => {
             />
           )
         )}
-        <div className="w-full h-32"></div>
+        <div className="h-32 w-full"></div>
       </Scrollbar>
     </aside>
   );

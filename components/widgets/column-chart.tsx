@@ -89,12 +89,12 @@ const BarChart = ({
   };
 
   return (
-    <div className="bg-light shadow-sm rounded w-full h-full">
-      <div className="p-8 flex items-center justify-between">
+    <div className="h-full w-full rounded bg-light shadow-sm">
+      <div className="flex items-center justify-between p-8">
         <h3 className="text-sm text-heading">{widgetTitle}</h3>
 
         <div className="flex flex-col">
-          <span className="text-lg text-green-500 font-semibold">
+          <span className="text-lg font-semibold text-green-500">
             {prefix}
             {totalValue}
           </span>
@@ -125,7 +125,7 @@ const BarChart = ({
         </div>
       </div>
 
-      <div className="flex flex-wrap w-full" style={{ display: 'block' }}>
+      <div className="flex w-full flex-wrap" style={{ display: 'block' }}>
         <Chart
           options={options.options}
           series={options.series}

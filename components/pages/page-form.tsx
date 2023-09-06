@@ -94,7 +94,7 @@ export default function AboutUsForm({ initialValues }: IProps) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex flex-wrap my-5 sm:my-8">
+      <div className="my-5 flex flex-wrap sm:my-8">
         <Description
           title={t('form:input-label-page-content')}
           details={`${
@@ -102,7 +102,7 @@ export default function AboutUsForm({ initialValues }: IProps) {
               ? t('form:item-description-edit')
               : t('form:item-description-add')
           } ${t('form:hero-slider-description-helper-text')}`}
-          className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
+          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
         />
         <Card className="w-full sm:w-8/12 md:w-2/3">
           <Input
@@ -122,11 +122,11 @@ export default function AboutUsForm({ initialValues }: IProps) {
           />
         </Card>
       </div>
-      <div className="flex flex-wrap my-5 sm:my-8">
+      <div className="my-5 flex flex-wrap sm:my-8">
         <Description
           title={t('form:input-label-page-seo')}
           details={t('form:type-product-group-help-text')}
-          className="w-full px-0 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
+          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 md:w-1/3"
         />
         <Card className="w-full sm:w-8/12 md:w-2/3">
           <Input
@@ -144,9 +144,9 @@ export default function AboutUsForm({ initialValues }: IProps) {
           />
           <div
             style={{ fontSize: '.75rem' }}
-            className="mb-5 flex items-center flex-wrap"
+            className="mb-5 flex flex-wrap items-center"
           >
-            <p className="text-body mr-2">
+            <p className="mr-2 text-body">
               Meta Description should optimally be between 150-160 characters
             </p>
             {metaDesLen < 160 ? (

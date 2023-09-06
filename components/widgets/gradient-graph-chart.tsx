@@ -81,15 +81,15 @@ const GradientGraphChart = ({
   };
 
   return (
-    <div className="bg-light shadow-sm rounded w-full h-full">
-      <div className="p-8 flex items-start justify-between">
+    <div className="h-full w-full rounded bg-light shadow-sm">
+      <div className="flex items-start justify-between p-8">
         <div className="flex flex-col ms-auto">
           {/* label */}
           <span className="text-xs text-body">{topRowTitle}</span>
 
           {/* series */}
           <span
-            className="text-lg text-heading font-semibold"
+            className="text-lg font-semibold text-heading"
             style={{ color: colors[0] }}
           >
             {bottomRowData[0].value - bottomRowData[1].value}%
@@ -106,12 +106,12 @@ const GradientGraphChart = ({
         />
       </div>
 
-      <div className="p-8 flex items-start justify-between pt-0">
+      <div className="flex items-start justify-between p-8 pt-0">
         {bottomRowData &&
           bottomRowData.map((item: any, index: number) => (
             <div className="flex flex-col" key={index}>
               <span className="text-xs text-body">{item.label}</span>
-              <span className="text-lg text-heading font-semibold mt-1 mb-2">
+              <span className="mt-1 mb-2 text-lg font-semibold text-heading">
                 {item.valueText}
               </span>
 

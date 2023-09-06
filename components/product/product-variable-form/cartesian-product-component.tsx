@@ -94,13 +94,13 @@ const CartesianProductComponent = ({
       Title={() => (
         <Title className="!text-lg">
           {t('form:form-title-variant')}:{' '}
-          <span className="text-blue-600 font-semibold">{title}</span>
+          <span className="font-semibold text-blue-600">{title}</span>
         </Title>
       )}
     >
       <div
         key={`fieldAttributeValues-${index}`}
-        className="border-b last:border-0 border-dashed border-border-200 p-5 md:p-8 md:last:pb-0 mb-5 last:mb-8 mt-5"
+        className="mb-5 mt-5 border-b border-dashed border-border-200 p-5 last:mb-8 last:border-0 md:p-8 md:last:pb-0"
       >
         <div className="grid grid-cols-3 gap-3">
           <Input
@@ -118,9 +118,9 @@ const CartesianProductComponent = ({
             className="mb-2 ml-1"
           />
           <Input
-            label={`${t('form:input-label-compare-price')} (${
-              currency?.symbol
-            })`}
+            label={`${t(
+              'form:input-label-compare-price'
+            )} (${currency?.symbol})`}
             name="comparePrice"
             min={0}
             onChange={HandleInputChange}
@@ -132,9 +132,9 @@ const CartesianProductComponent = ({
             className="mb-2 ml-1"
           />
           <Input
-            label={`${t('form:input-label-buying-price')} (${
-              currency?.symbol
-            })`}
+            label={`${t(
+              'form:input-label-buying-price'
+            )} (${currency?.symbol})`}
             type="number"
             name="buyingPrice"
             min={0}

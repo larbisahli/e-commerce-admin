@@ -38,7 +38,7 @@ const AppLayout: React.FC = ({ children }: Props) => {
   }, [defaultLanguage, dispatch]);
 
   return (
-    <main className="min-h-screen bg-gray-100 h-fit flex flex-col transition-colors duration-150">
+    <main className="flex h-fit min-h-screen flex-col bg-gray-100 transition-colors duration-150">
       <MobileNavigation />
       <SublevelNavigation />
       <div className="flex flex-1 pt-5 pb-16">
@@ -46,15 +46,15 @@ const AppLayout: React.FC = ({ children }: Props) => {
         <Sidebar />
         <div
           className={cn(
-            'md:ps-20 nlg:ps-20 nxl:ps-20 lg:ps-64 xl:ps-64 pt-20',
-            'w-full h-full',
+            'nlg:ps-20 nxl:ps-20 pt-20 md:ps-20 lg:ps-64 xl:ps-64',
+            'h-full w-full',
             {
-              'md:!ps-20 !ps-0': displayMiniSidebar
+              '!ps-0 md:!ps-20': displayMiniSidebar
             }
           )}
         >
           <Navbar />
-          <div className="p-4 md:p-8 overflow-y-auto h-full">{children}</div>
+          <div className="h-full overflow-y-auto p-4 md:p-8">{children}</div>
         </div>
       </div>
       <AdminFooter />

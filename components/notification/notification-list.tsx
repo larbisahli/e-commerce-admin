@@ -1,7 +1,7 @@
 import ActionButtons from '@components/common/action-buttons';
+import Loader from '@components/ui/loader/loader';
 import { CreatedUpdatedByAt, RoleType } from '@ts-types/generated';
 import { useIsRTL } from '@utils/locals';
-import { ROUTES } from '@utils/routes';
 import dayjs from 'dayjs';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
@@ -9,7 +9,7 @@ import { useMemo } from 'react';
 
 const Table = dynamic(
   () => import('@components/ui/table').then((mod) => mod.Table),
-  { ssr: false }
+  { ssr: false, loading: () => <Loader text={'Loading'} /> }
 );
 
 type IProps = {
@@ -60,7 +60,7 @@ const NotificationList = ({ notifications }: IProps) => {
         width: 150,
         ellipsis: false,
         render: (content: string) => (
-          <div className="font-medium text-gray-700 w-full">{content}</div>
+          <div className="w-full font-medium text-gray-700">{content}</div>
         )
       },
       {
@@ -82,18 +82,15 @@ const NotificationList = ({ notifications }: IProps) => {
   }, [alignLeft]);
 
   return (
-    <>
-      <div className="card overflow-hidden mb-6">
-        <Table
-          // @ts-ignore
-          columns={columns}
-          emptyText={t('table:empty-table-data')}
-          data={notifications}
-          rowKey="id"
-          scroll={{ x: 800 }}
-        />
-      </div>
-    </>
+    <Table
+      // @ts-ignore
+      columns={columns}
+      emptyText={t('table:empty-table-data')}
+      data={notifications}
+      rowKey="id"
+      scroll={{ x: 800 }}
+      className="card mb-6 overflow-hidden"
+    />
   );
 };
 

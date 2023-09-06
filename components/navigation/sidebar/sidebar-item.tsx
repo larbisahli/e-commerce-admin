@@ -94,10 +94,10 @@ const SidebarItem = ({
       {hadSubLinks ? (
         <div
           className={cn(
-            'overflow-hidden cursor-pointer justify-between flex w-full pl-6 hover:!bg-sidenav-active-hover-color p-2 items-center text-base text-sidenav-color text-start focus:text-accent hover:border-solid hover:border-white hover:text-white border-l-2 border-transparent border-solid',
+            'flex w-full cursor-pointer items-center justify-between overflow-hidden border-l-2 border-solid border-transparent p-2 pl-6 text-start text-base text-sidenav-color hover:border-solid hover:border-white hover:!bg-sidenav-active-hover-color hover:text-white focus:text-accent',
             {
               'nav-sub-links-bg': !!padding,
-              '!text-white !bg-sidenav-active-hover-color border-blue-300 border-solid':
+              'border-solid border-blue-300 !bg-sidenav-active-hover-color !text-white':
                 sublevelOpen
             },
             {
@@ -127,7 +127,7 @@ const SidebarItem = ({
                 })
           }
           className={cn(
-            'overflow-hidden flex w-full pl-6 hover:bg-sidenav-active-hover-color p-2 items-center text-base text-sidenav-color hover:text-white text-start focus:text-white hover:border-solid hover:border-white hover:border-l-2 border-l-2 border-transparent border-solid',
+            'flex w-full items-center overflow-hidden border-l-2 border-solid border-transparent p-2 pl-6 text-start text-base text-sidenav-color hover:border-l-2 hover:border-solid hover:border-white hover:bg-sidenav-active-hover-color hover:text-white focus:text-white',
             { 'nav-sub-links-bg': !!padding && !isSublevel },
             {
               'pointer-events-none opacity-70': disabled
@@ -184,7 +184,7 @@ const SidebarItem = ({
         </div>
       )}
       {line && (
-        <div className="flex justify-center my-3">
+        <div className="my-3 flex justify-center">
           <div className="h-[1px] w-[90%] bg-sidenav-divider"></div>
         </div>
       )}
@@ -214,7 +214,7 @@ const SidebarLabel = ({
   return (
     <React.Fragment>
       <div className="flex items-center" style={{ paddingLeft: padding }}>
-        {icon && TagName && <TagName className="w-5 h-5 me-4" />}
+        {icon && TagName && <TagName className="h-5 w-5 me-4" />}
         <span onClick={handleCloseSidebar}>{label}</span>
       </div>
       {hadSubLinks && (

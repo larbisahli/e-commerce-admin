@@ -105,8 +105,8 @@ const ProductModal = () => {
 
   return (
     <Modal open={open} onClose={onClose}>
-      <div className="flex max-h-screen overflow-y-auto flex-col bg-white md:h-fit h-[100vh] w-[100vw] md:w-[60vw] 2xl:w-[50vw]">
-        <div className="p-4 font-semibold text-lg bg-green-600 text-white uppercase">
+      <div className="flex h-[100vh] max-h-screen w-[100vw] flex-col overflow-y-auto bg-white md:h-fit md:w-[60vw] 2xl:w-[50vw]">
+        <div className="bg-green-600 p-4 text-lg font-semibold uppercase text-white">
           Products
         </div>
         {loading ? (
@@ -118,7 +118,7 @@ const ProductModal = () => {
               selectedProducts={selectedProducts}
               setSelectedProducts={setSelectedProducts}
             />
-            <div className="p-5 flex items-center m-3 md:mb-0 justify-between mb-16">
+            <div className="m-3 mb-16 flex items-center justify-between p-5 md:mb-0">
               <div className="flex-1">
                 <Pagination2
                   total={count}

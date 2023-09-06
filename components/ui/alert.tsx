@@ -38,7 +38,7 @@ const Alert: React.FC<AlertProps> = ({
   return (
     <div
       className={cn(
-        'flex items-center justify-between relative rounded py-4 px-5 shadow-sm',
+        'relative flex items-center justify-between rounded py-4 px-5 shadow-sm',
         variantClasses[variant],
         className
       )}
@@ -51,10 +51,10 @@ const Alert: React.FC<AlertProps> = ({
           aria-label="Close"
           onClick={onClose}
           title="Close alert"
-          className="-me-0.5 -mt-3 flex items-center justify-center rounded-full flex-shrink-0 w-6 h-6 text-red-500 absolute end-2 top-1/2 transition-colors duration-200 hover:bg-gray-300 hover:bg-opacity-25 focus:outline-none focus:bg-gray-300 focus:bg-opacity-25"
+          className="absolute top-1/2 -mt-3 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full text-red-500 transition-colors duration-200 -me-0.5 end-2 hover:bg-gray-300 hover:bg-opacity-25 focus:bg-gray-300 focus:bg-opacity-25 focus:outline-none"
         >
           <span aria-hidden="true">
-            <CloseIcon className="w-3 h-3" />
+            <CloseIcon className="h-3 w-3" />
           </span>
         </button>
       )}

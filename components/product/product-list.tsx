@@ -1,6 +1,9 @@
 import ActionButtons from '@components/common/action-buttons';
 import ImageComponent from '@components/ImageComponent';
 import Badge from '@components/ui/badge/badge';
+import Loader from '@components/ui/loader/loader';
+import { TableRowPlaceholder } from '@components/ui/placeholders/Table';
+import { usePlaceholder } from '@hooks/usePlaceholder';
 import { siteSettings } from '@settings/site.settings';
 import type { Nullable } from '@ts-types/custom.types';
 import {
@@ -16,21 +19,28 @@ import dayjs from 'dayjs';
 import isEmpty from 'lodash/isEmpty';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
-import { useMemo } from 'react';
+import { memo, useMemo } from 'react';
 
 const Table = dynamic(
   () => import('@components/ui/table').then((mod) => mod.Table),
-  { ssr: false }
+  { ssr: false, loading: () => <Loader text={'Loading'} /> }
 );
 
 type IProps = {
   products: Nullable<Product[]>;
   selectedColumns: string[];
+  loading: boolean;
 };
 
-const ProductList = ({ products, selectedColumns }: IProps) => {
+interface TableRowProps extends Product {
+  loading: boolean;
+}
+
+const ProductList = ({ loading, products, selectedColumns }: IProps) => {
   const { t } = useTranslation();
   const { alignLeft, alignRight } = useIsRTL();
+
+  const { tablePlaceholderRow } = usePlaceholder();
 
   let columns = useMemo(() => {
     return [
@@ -48,10 +58,13 @@ const ProductList = ({ products, selectedColumns }: IProps) => {
         key: 'thumbnail',
         align: alignLeft,
         width: 85,
-        render: (thumbnail: ImageType) => {
+        render: (thumbnail: ImageType, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
           const { image, placeholder } = thumbnail[0] ?? {};
           return (
-            <div className="shadow min-w-0 overflow-hidden rounded-sm w-[65px] h-[65px] border">
+            <div className="h-[65px] w-[65px] min-w-0 overflow-hidden rounded-sm border shadow">
               <ImageComponent
                 src={image ?? siteSettings.product.image}
                 customPlaceholder={
@@ -71,7 +84,13 @@ const ProductList = ({ products, selectedColumns }: IProps) => {
         key: 'name',
         align: alignLeft,
         width: 200,
-        ellipsis: true
+        ellipsis: true,
+        render: (name: string, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
+          return name;
+        }
       },
       {
         title: t('table:table-item-sku'),
@@ -80,7 +99,10 @@ const ProductList = ({ products, selectedColumns }: IProps) => {
         align: alignLeft,
         width: 80,
         ellipsis: true,
-        render: (sku: string) => {
+        render: (sku: string, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
           return !isEmpty(sku) ? sku : 'N/A';
         }
       },
@@ -91,7 +113,10 @@ const ProductList = ({ products, selectedColumns }: IProps) => {
         width: 180,
         align: 'center',
         ellipsis: true,
-        render: (categories: Category[]) => {
+        render: (categories: Category[], record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
           const categories_values = categories
             ?.map(({ name }: Category, index: number) => {
               return index > 0 ? `, ${name}` : `${name}`;
@@ -100,7 +125,7 @@ const ProductList = ({ products, selectedColumns }: IProps) => {
           return (
             <span
               title={categories_values}
-              className="whitespace-nowrap truncate"
+              className="truncate whitespace-nowrap"
             >
               {!isEmpty(categories) ? categories_values : 'N/A'}
             </span>
@@ -113,7 +138,10 @@ const ProductList = ({ products, selectedColumns }: IProps) => {
         key: 'salePrice',
         align: alignRight,
         width: 100,
-        render: (salePrice: number, record: Product) => {
+        render: (salePrice: number, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
           if (record.type.id === ProductType.Variable) {
             return (
               <span
@@ -135,7 +163,13 @@ const ProductList = ({ products, selectedColumns }: IProps) => {
         dataIndex: 'quantity',
         key: 'quantity',
         align: 'center',
-        width: 100
+        width: 100,
+        render: (quantity: string, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
+          return quantity;
+        }
       },
       {
         title: t('table:table-item-status'),
@@ -143,12 +177,17 @@ const ProductList = ({ products, selectedColumns }: IProps) => {
         key: 'published',
         align: 'center',
         width: 100,
-        render: (published: boolean) => (
-          <Badge
-            text={published ? 'Publish' : 'Draft'}
-            color={published ? 'bg-green-600' : 'bg-yellow-500'}
-          />
-        )
+        render: (published: boolean, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
+          return (
+            <Badge
+              text={published ? 'Publish' : 'Draft'}
+              color={published ? 'bg-green-600' : 'bg-yellow-500'}
+            />
+          );
+        }
       },
       {
         title: t('table:table-item-created-at'),
@@ -156,7 +195,14 @@ const ProductList = ({ products, selectedColumns }: IProps) => {
         key: 'createdAt',
         align: alignLeft,
         width: 180,
-        render: (createdAt: CreatedUpdatedByAt['createdAt']) => {
+        render: (
+          createdAt: CreatedUpdatedByAt['createdAt'],
+          record: TableRowProps
+        ) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
+
           return `${dayjs(createdAt).format('MMM D, YYYY')} at ${dayjs(
             createdAt
           ).format('h:mm A')}`;
@@ -169,7 +215,13 @@ const ProductList = ({ products, selectedColumns }: IProps) => {
         align: alignLeft,
         width: 150,
         ellipsis: true,
-        render: (createdBy: CreatedUpdatedByAt['createdBy']) => {
+        render: (
+          createdBy: CreatedUpdatedByAt['createdBy'],
+          record: TableRowProps
+        ) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
           return (
             <div>{`${createdBy?.firstName ?? ''} ${
               createdBy?.lastName ?? ''
@@ -184,7 +236,13 @@ const ProductList = ({ products, selectedColumns }: IProps) => {
         align: alignLeft,
         width: 150,
         ellipsis: true,
-        render: (updatedBy: CreatedUpdatedByAt['updatedBy']) => {
+        render: (
+          updatedBy: CreatedUpdatedByAt['updatedBy'],
+          record: TableRowProps
+        ) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
           return (
             <div>{`${updatedBy?.firstName ?? ''} ${
               updatedBy?.lastName ?? ''
@@ -197,14 +255,19 @@ const ProductList = ({ products, selectedColumns }: IProps) => {
         dataIndex: 'id',
         key: 'actions',
         align: 'center',
-        width: 80,
-        render: (id: string) => (
-          <ActionButtons
-            id={id}
-            editUrl={`${ROUTES.PRODUCT}/edit/${id}`}
-            deleteModalView="DELETE_PRODUCT"
-          />
-        )
+        width: 120,
+        render: (id: string, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
+          return (
+            <ActionButtons
+              id={id}
+              editUrl={`${ROUTES.PRODUCT}/edit/${id}`}
+              deleteModalView="DELETE_PRODUCT"
+            />
+          );
+        }
       }
     ];
   }, [alignLeft, alignRight, t]);
@@ -218,19 +281,16 @@ const ProductList = ({ products, selectedColumns }: IProps) => {
   }, [columns, selectedColumns]);
 
   return (
-    <>
-      <div className="card overflow-hidden mb-6">
-        <Table
-          /* @ts-ignore */
-          columns={tableColumns}
-          emptyText={t('table:empty-table-data')}
-          data={products}
-          rowKey="id"
-          scroll={{ x: 800 }}
-        />
-      </div>
-    </>
+    <Table
+      /* @ts-ignore */
+      columns={tableColumns}
+      emptyText={t('table:empty-table-data')}
+      data={loading ? tablePlaceholderRow : products}
+      rowKey="id"
+      scroll={{ x: 800 }}
+      className="card mb-6 overflow-hidden"
+    />
   );
 };
 
-export default ProductList;
+export default memo(ProductList);

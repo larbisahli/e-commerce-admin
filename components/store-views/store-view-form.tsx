@@ -176,7 +176,7 @@ export default function StoreViewForm({ initialValues }: IProps) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex flex-wrap my-5 sm:my-8">
+      <div className="my-5 flex flex-wrap sm:my-8">
         <Description
           title={t('form:input-label-description')}
           details={`${
@@ -184,7 +184,7 @@ export default function StoreViewForm({ initialValues }: IProps) {
               ? t('form:item-description-edit')
               : t('form:item-description-add')
           } ${t('form:store-view-description-helper-text')}`}
-          className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8 "
+          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5 "
         />
 
         <Card className="w-full sm:w-8/12 md:w-2/3">
@@ -229,9 +229,9 @@ export default function StoreViewForm({ initialValues }: IProps) {
           />
           <div
             style={{ fontSize: '.75rem' }}
-            className="mb-5 flex items-center flex-wrap"
+            className="mb-5 flex flex-wrap items-center"
           >
-            <p className="text-body mr-2">
+            <p className="mr-2 text-body">
               Store code must be between 2-10 characters
             </p>
             {code?.length <= 10 ? (

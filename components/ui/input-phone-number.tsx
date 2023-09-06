@@ -55,11 +55,11 @@ const InputPhoneNumber = React.forwardRef<HTMLInputElement, Props>(
       <div className={className}>
         <label
           htmlFor={name}
-          className="block text-body-dark font-semibold text-sm leading-none mb-3"
+          className="mb-3 block text-sm font-semibold leading-none text-body-dark"
         >
           {label}
         </label>
-        <div className="flex justify-center duration-300 ease-in-out no-number-arrows">
+        <div className="no-number-arrows flex justify-center duration-300 ease-in-out">
           <div>{children}</div>
           <input
             id={name}
@@ -77,7 +77,7 @@ const InputPhoneNumber = React.forwardRef<HTMLInputElement, Props>(
         </div>
         {note && <p className="mt-2 text-xs text-body">{note}</p>}
         {error && (
-          <p className="my-2 text-xs text-start text-red-500">{error}</p>
+          <p className="my-2 text-start text-xs text-red-500">{error}</p>
         )}
       </div>
     );

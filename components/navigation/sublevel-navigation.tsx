@@ -64,7 +64,7 @@ const SublevelNavigation: React.FC = () => {
       <DrawerWrapper
         onClose={closeSublevelSidebar}
         label={t(SublevelBarLinks?.label)}
-        className="pl-22 xl:pl-76 lg:block"
+        className="xl:pl-76 pl-22 lg:block"
       >
         <div className="flex flex-col py-3">
           {SublevelBarLinks?.subLinks?.map(
@@ -85,7 +85,7 @@ const SublevelNavigation: React.FC = () => {
               />
             )
           )}
-          <div className="w-full h-32"></div>
+          <div className="h-32 w-full"></div>
         </div>
       </DrawerWrapper>
     </Drawer>

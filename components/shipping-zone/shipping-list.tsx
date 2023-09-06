@@ -1,7 +1,10 @@
 import ActionButtons from '@components/common/action-buttons';
 import ImageComponent from '@components/ImageComponent';
 import Badge from '@components/ui/badge/badge';
+import Loader from '@components/ui/loader/loader';
+import { TableRowPlaceholder } from '@components/ui/placeholders/Table';
 import ProfileCart from '@components/ui/profile-card';
+import { usePlaceholder } from '@hooks/usePlaceholder';
 import { siteSettings } from '@settings/site.settings';
 import {
   CreatedUpdatedByAt,
@@ -18,17 +21,24 @@ import { useMemo } from 'react';
 
 const Table = dynamic(
   () => import('@components/ui/table').then((mod) => mod.Table),
-  { ssr: false }
+  { ssr: false, loading: () => <Loader text={'Loading'} /> }
 );
 
 export type IProps = {
   shippingZones: ShippingZoneType[] | undefined;
   selectedColumns: string[];
+  loading: boolean;
 };
 
-const ShippingList = ({ shippingZones, selectedColumns }: IProps) => {
+interface TableRowProps extends ShippingZoneType {
+  loading: boolean;
+}
+
+const ShippingList = ({ loading, shippingZones, selectedColumns }: IProps) => {
   const { t } = useTranslation();
   const { alignLeft } = useIsRTL();
+
+  const { tablePlaceholderRow } = usePlaceholder();
 
   const columns = useMemo(() => {
     return [
@@ -46,10 +56,14 @@ const ShippingList = ({ shippingZones, selectedColumns }: IProps) => {
         key: 'logo',
         align: alignLeft,
         width: 85,
-        render: (logo: ImageType) => {
+        render: (logo: ImageType, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
+
           const { image, placeholder } = logo[0] ?? {};
           return (
-            <div className="shadow min-w-0 overflow-hidden rounded-sm w-[65px] h-[65px] border">
+            <div className="h-[65px] w-[65px] min-w-0 overflow-hidden rounded-sm border shadow">
               <ImageComponent
                 src={image ?? siteSettings.product.image}
                 customPlaceholder={
@@ -70,7 +84,10 @@ const ShippingList = ({ shippingZones, selectedColumns }: IProps) => {
         align: alignLeft,
         width: 150,
         ellipsis: true,
-        render: (name: string) => {
+        render: (name: string, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
           return (
             <span className="font-semibold capitalize text-accent">{name}</span>
           );
@@ -82,19 +99,22 @@ const ShippingList = ({ shippingZones, selectedColumns }: IProps) => {
         key: 'rateType',
         align: 'center',
         width: 90,
-        render: (rateType: string, record: ShippingZoneType) => {
+        render: (rateType: string, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
           if (!rateType)
             return (
               <div
                 title="Not available"
-                className="!text-sm text-gray-500 capitalize font-medium"
+                className="!text-sm font-medium capitalize text-gray-500"
               >
                 N/A
               </div>
             );
           return (
             <Badge
-              className="!text-sm capitalize font-semibold"
+              className="!text-sm font-semibold capitalize"
               text={record?.shippingZone?.freeShipping ? 'No Rate' : rateType}
               color={'bg-gray-100'}
               textColor={'text-gray-500'}
@@ -108,7 +128,10 @@ const ShippingList = ({ shippingZones, selectedColumns }: IProps) => {
         key: 'active',
         align: 'center',
         width: 90,
-        render: (active: boolean) => {
+        render: (active: boolean, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
           return (
             <Badge
               className="!text-sm"
@@ -124,7 +147,10 @@ const ShippingList = ({ shippingZones, selectedColumns }: IProps) => {
         key: 'freeShipping',
         align: 'center',
         width: 90,
-        render: (freeShipping: boolean) => {
+        render: (freeShipping: boolean, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
           return (
             <Badge
               className="!text-sm"
@@ -140,9 +166,12 @@ const ShippingList = ({ shippingZones, selectedColumns }: IProps) => {
         key: 'deliveryTime',
         align: 'center',
         width: 100,
-        render: (deliveryTime: DeliveryTimeType) => {
+        render: (deliveryTime: DeliveryTimeType, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
           return (
-            <div className="!text-sm text-gray-500 capitalize font-medium">
+            <div className="!text-sm font-medium capitalize text-gray-500">
               {deliveryTime?.name}
             </div>
           );
@@ -154,7 +183,13 @@ const ShippingList = ({ shippingZones, selectedColumns }: IProps) => {
         key: 'createdAt',
         align: alignLeft,
         width: 200,
-        render: (createdAt: CreatedUpdatedByAt['createdAt']) => {
+        render: (
+          createdAt: CreatedUpdatedByAt['createdAt'],
+          record: TableRowProps
+        ) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
           return `${dayjs(createdAt).format('MMM D, YYYY')} at ${dayjs(
             createdAt
           ).format('h:mm A')}`;
@@ -169,8 +204,11 @@ const ShippingList = ({ shippingZones, selectedColumns }: IProps) => {
         ellipsis: true,
         render: (
           createdBy: CreatedUpdatedByAt['createdBy'],
-          record: ShippingZoneType
+          record: TableRowProps
         ) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
           return <ProfileCart user={createdBy} createdAt={record?.createdAt} />;
         }
       },
@@ -183,8 +221,11 @@ const ShippingList = ({ shippingZones, selectedColumns }: IProps) => {
         ellipsis: true,
         render: (
           updatedBy: CreatedUpdatedByAt['updatedBy'],
-          record: ShippingZoneType
+          record: TableRowProps
         ) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
           return <ProfileCart user={updatedBy} updatedAt={record?.updatedAt} />;
         }
       },
@@ -193,13 +234,18 @@ const ShippingList = ({ shippingZones, selectedColumns }: IProps) => {
         dataIndex: 'id',
         key: 'actions',
         align: 'center',
-        render: (id: string) => (
-          <ActionButtons
-            id={id}
-            editUrl={`${ROUTES.SHIPPING_ZONE}/edit/${id}`}
-            deleteModalView="DELETE_SHIPPING"
-          />
-        ),
+        render: (id: string, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
+          return (
+            <ActionButtons
+              id={id}
+              editUrl={`${ROUTES.SHIPPING_ZONE}/edit/${id}`}
+              deleteModalView="DELETE_SHIPPING"
+            />
+          );
+        },
         width: 200
       }
     ];
@@ -214,18 +260,15 @@ const ShippingList = ({ shippingZones, selectedColumns }: IProps) => {
   }, [columns, selectedColumns]);
 
   return (
-    <>
-      <div className="card overflow-hidden mb-8">
-        <Table
-          //@ts-ignore
-          columns={tableColumns}
-          emptyText={t('table:empty-table-data')}
-          data={shippingZones}
-          rowKey="id"
-          scroll={{ x: 900 }}
-        />
-      </div>
-    </>
+    <Table
+      //@ts-ignore
+      columns={tableColumns}
+      emptyText={t('table:empty-table-data')}
+      data={loading ? tablePlaceholderRow : shippingZones}
+      rowKey="id"
+      scroll={{ x: 900 }}
+      className="card mb-8 overflow-hidden"
+    />
   );
 };
 

@@ -184,7 +184,7 @@ export default function LanguageForm({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex flex-wrap my-5 sm:my-8">
+      <div className="my-5 flex flex-wrap sm:my-8">
         <Description
           title={t('form:input-label-description')}
           details={`${
@@ -192,7 +192,7 @@ export default function LanguageForm({
               ? t('form:item-description-edit')
               : t('form:item-description-add')
           } ${t('form:tag-description-helper-text')}`}
-          className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8 "
+          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5 "
         />
 
         <Card className="w-full sm:w-8/12 md:w-2/3">
@@ -221,7 +221,7 @@ export default function LanguageForm({
               options={[{ label: 'LTR' }, { label: 'RTL' }]}
             />
           </div>
-          <div className="flex-1 min-w-[300px]">
+          <div className="min-w-[300px] flex-1">
             <Checkbox
               {...register(`active` as const)}
               label={t('form:label-active')}
@@ -229,11 +229,11 @@ export default function LanguageForm({
           </div>
         </Card>
       </div>
-      <div className="flex flex-wrap my-5 sm:my-8">
-        <div className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3">
+      <div className="my-5 flex flex-wrap sm:my-8">
+        <div className="w-full px-0 pb-5 sm:w-4/12 sm:pe-4 md:w-1/3 md:pe-5">
           <Scrollbar
             autoHide="never"
-            className="card px-5 py-4 w-full h-64 sm:h-96 os-theme-thin-light"
+            className="card os-theme-thin-light h-64 w-full px-5 py-4 sm:h-96"
           >
             <div className="flex flex-col">
               {Object.keys(localeFiles)?.map((name) => {
@@ -245,9 +245,9 @@ export default function LanguageForm({
                       setCurrentLocale({ [name]: localeFiles[name] });
                     }}
                     className={cn(
-                      'border border-gray-300 p-2 rounded-md mb-2 text-left capitalize',
+                      'mb-2 rounded-md border border-gray-300 p-2 text-left capitalize',
                       {
-                        'font-medium text-blue-700 bg-blue-100':
+                        'bg-blue-100 font-medium text-blue-700':
                           name === currentLocalLabel
                       }
                     )}

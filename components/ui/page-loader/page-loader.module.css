@@ -5,7 +5,9 @@
   border: 16px solid #f3f3f3;
   border-top: 16px solid #00d2a8;
   border-radius: 50%;
-  animation: spin 2s linear infinite, heart-beat 2s linear infinite;
+  animation:
+    spin 2s linear infinite,
+    heart-beat 2s linear infinite;
   background-color: #fff;
   text-align: center;
   line-height: 120px;

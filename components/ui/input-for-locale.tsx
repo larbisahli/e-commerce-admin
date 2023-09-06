@@ -28,11 +28,11 @@ const InputForLocal = React.forwardRef<HTMLInputElement, Props>(
     ref
   ) => {
     return (
-      <div className={cn('border rounded p-3', className)}>
+      <div className={cn('rounded border p-3', className)}>
         {label && (
           <label
             htmlFor={name}
-            className={cn('block text-gray-700 text-base leading-none', {
+            className={cn('block text-base leading-none text-gray-700', {
               'text-gray-300': disabled
             })}
           >
@@ -44,7 +44,7 @@ const InputForLocal = React.forwardRef<HTMLInputElement, Props>(
           name={name}
           type={type}
           ref={ref}
-          className="w-full outline-none py-1 font-medium text-lg text-gray-600"
+          className="w-full py-1 text-lg font-medium text-gray-600 outline-none"
           autoComplete="off"
           autoCorrect="off"
           autoCapitalize="off"
@@ -55,7 +55,7 @@ const InputForLocal = React.forwardRef<HTMLInputElement, Props>(
         />
         {note && <p className="mt-2 text-xs text-body">{note}</p>}
         {error && (
-          <p className="my-2 text-xs text-start text-red-500">{error}</p>
+          <p className="my-2 text-start text-xs text-red-500">{error}</p>
         )}
       </div>
     );

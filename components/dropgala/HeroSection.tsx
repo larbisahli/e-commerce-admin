@@ -10,17 +10,17 @@ const HeroSection = () => {
 
   return (
     <section id="subscription" className="bg-slate-100">
-      <div className="container pt-12 md:pt-12 px-6 mx-auto flex flex-wrap flex-col md:flex-row items-center justify-between">
+      <div className="container mx-auto flex flex-col flex-wrap items-center justify-between px-6 pt-12 md:flex-row md:pt-12">
         {/* <!--Left Col--> */}
-        <div className="flex flex-col w-full xl:w-2/5 justify-center lg:items-start overflow-y-hidden">
-          <h1 className="my-4 text-center text-2xl md:text-4xl text-blue-500 font-bold leading-tight xl:text-left slide-in-bottom-h1">
+        <div className="flex w-full flex-col justify-center overflow-y-hidden lg:items-start xl:w-2/5">
+          <h1 className="slide-in-bottom-h1 my-4 text-center text-2xl font-bold leading-tight text-blue-500 md:text-4xl xl:text-left">
             Start your online store and kickstart your e-commerce business today
           </h1>
-          <p className="leading-normal text-gray-700 pb-8 text-base w-full text-center xl:text-left slide-in-bottom-subtitle">
+          <p className="slide-in-bottom-subtitle w-full pb-8 text-center text-base leading-normal text-gray-700 xl:text-left">
             Be the first to know when our revolutionary new site goes live!
           </p>
-          <div className="w-full flex justify-center">
-            <div className="w-fit xl:w-full min-w-[400px]">
+          <div className="flex w-full justify-center">
+            <div className="w-fit min-w-[400px] xl:w-full">
               <MailchimpSubscribe
                 url={process.env.NEXT_PUBLIC_MAILCHIMP_URL}
                 render={({ subscribe, status, message }) => (
@@ -49,12 +49,12 @@ const HeroSection = () => {
         </div>
 
         {/* <!--Right Col--> */}
-        <div className="max-w-[800px] xl:w-3/5 py-6 overflow-y-hidden w-fit">
+        <div className="w-fit max-w-[800px] overflow-y-hidden py-6 xl:w-3/5">
           {/* <img src=""/> */}
           <Image
             alt=""
             src="/scandi.webp"
-            className="w-5/6 mx-auto lg:mr-0 slide-in-bottom"
+            className="slide-in-bottom mx-auto w-5/6 lg:mr-0"
             width={800}
             height={500}
           />

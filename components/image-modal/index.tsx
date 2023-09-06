@@ -115,12 +115,12 @@ const ImageModal = ({
       {/* MODEL */}
       <Modal open={isOpen && isCurrentModal} onClose={closeModal}>
         {view === IMAGE_MODAL && (
-          <div className="flex overflow-y-auto max-h-screen flex-col bg-white md:h-fit h-[100vh] w-[100vw] md:w-[70vw] 2xl:w-[60vw]">
-            <div className="p-4 font-semibold text-lg bg-blue-600 text-white capitalize">
+          <div className="flex h-[100vh] max-h-screen w-[100vw] flex-col overflow-y-auto bg-white md:h-fit md:w-[70vw] 2xl:w-[60vw]">
+            <div className="bg-blue-600 p-4 text-lg font-semibold capitalize text-white">
               Choose media
             </div>
-            <div className="p-4 h-fit min-h-[400px] w-full">
-              <div className="w-fit text-gray-500 text-sm">
+            <div className="h-fit min-h-[400px] w-full p-4">
+              <div className="w-fit text-sm text-gray-500">
                 Your media files are encrypted for security reasons and only
                 accessed by you.
               </div>
@@ -136,7 +136,7 @@ const ImageModal = ({
                 </Button>
               </div>
               {uploadVisible && (
-                <div className="py-4 m-2">
+                <div className="m-2 py-4">
                   <Uploader
                     setLoading={setLoading}
                     mediaId={parent?.id}
@@ -144,11 +144,11 @@ const ImageModal = ({
                   />
                 </div>
               )}
-              <div className="flex item-center">
+              <div className="item-center flex">
                 {!!parent?.name && (
                   <button
                     className={cn(
-                      'flex hover:text-black text-lg p-2 items-center justify-center text-gray-500 underline'
+                      'flex items-center justify-center p-2 text-lg text-gray-500 underline hover:text-black'
                     )}
                     onClick={() => handleClick(parent?.parentId)}
                   >
@@ -159,19 +159,19 @@ const ImageModal = ({
                   </button>
                 )}
               </div>
-              <div className="flex border-t flex-col justify-between relative my-5 flex-1">
-                <div className="absolute z-10 top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+              <div className="relative my-5 flex flex-1 flex-col justify-between border-t">
+                <div className="absolute top-1/3 left-1/2 z-10 -translate-x-1/2 -translate-y-1/2 transform">
                   {loading && (
                     <Loader height="20vh" text={t('common:text-loading')} />
                   )}
                 </div>
                 <div className="h-full w-full">
-                  <ul className="my-4 flex flex-wrap w-full overflow-y-auto min-h-[400px] md:max-h-[600px]">
+                  <ul className="my-4 flex min-h-[400px] w-full flex-wrap overflow-y-auto md:max-h-[600px]">
                     {loadingImage && (
-                      <li className="bg-blue-100 rounded-sm w-36 h-40 mt-2 me-2 relative">
-                        <div className="relative min-w-0 w-36 h-40 overflow-hidden rounded-sm">
-                          <div className="h-full flex items-center justify-center">
-                            <Loader simple={true} className="w-6 h-6" />
+                      <li className="relative mt-2 h-40 w-36 rounded-sm bg-blue-100 me-2">
+                        <div className="relative h-40 w-36 min-w-0 overflow-hidden rounded-sm">
+                          <div className="flex h-full items-center justify-center">
+                            <Loader simple={true} className="h-6 w-6" />
                           </div>
                         </div>
                       </li>
@@ -201,7 +201,7 @@ const ImageModal = ({
                     })}
                   </ul>
                 </div>
-                <div className="flex items-center mt-3 md:mb-0 justify-end pb-8">
+                <div className="mt-3 flex items-center justify-end pb-8 md:mb-0">
                   <Button
                     variant="outline"
                     className="mr-4"

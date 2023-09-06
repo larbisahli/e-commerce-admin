@@ -3,7 +3,10 @@
 import ActionButtons from '@components/common/action-buttons';
 import { CopyIcon } from '@components/icons/copy';
 import Badge from '@components/ui/badge/badge';
+import Loader from '@components/ui/loader/loader';
+import { TableRowPlaceholder } from '@components/ui/placeholders/Table';
 import ProfileCart from '@components/ui/profile-card';
+import { usePlaceholder } from '@hooks/usePlaceholder';
 import { notify } from '@lib/index';
 import { Coupon, CouponType, CreatedUpdatedByAt } from '@ts-types/generated';
 import { useIsRTL } from '@utils/locals';
@@ -16,17 +19,24 @@ import { useMemo } from 'react';
 
 const Table = dynamic(
   () => import('@components/ui/table').then((mod) => mod.Table),
-  { ssr: false }
+  { ssr: false, loading: () => <Loader text={'Loading'} /> }
 );
+
+interface TableRowProps extends Coupon {
+  loading: boolean;
+}
 
 type IProps = {
   coupons: Coupon[] | null | undefined;
   selectedColumns: string[];
+  loading: boolean;
 };
 
-const CouponList = ({ coupons, selectedColumns }: IProps) => {
+const CouponList = ({ loading, coupons, selectedColumns }: IProps) => {
   const { t } = useTranslation();
   const { alignLeft } = useIsRTL();
+
+  const { tablePlaceholderRow } = usePlaceholder();
 
   const columns = useMemo(() => {
     return [
@@ -45,26 +55,31 @@ const CouponList = ({ coupons, selectedColumns }: IProps) => {
         align: alignLeft,
         width: 150,
         ellipsis: true,
-        render: (code: string) => (
-          <>
-            <div
-              role="button"
-              className="flex items-center text-accent"
-              onClick={(event) =>
-                CopyToClipboard(event, (value) => {
-                  notify(`Coupon (${value}) successfully copied`, 'success');
-                })
-              }
-            >
-              <span className="font-semibold capitalize whitespace-nowrap">
-                {code}
-              </span>
-              <span style={{ pointerEvents: 'none' }} className="m-1">
-                <CopyIcon />
-              </span>
-            </div>
-          </>
-        )
+        render: (code: string, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
+          return (
+            <>
+              <div
+                role="button"
+                className="flex items-center text-accent"
+                onClick={(event) =>
+                  CopyToClipboard(event, (value) => {
+                    notify(`Coupon (${value}) successfully copied`, 'success');
+                  })
+                }
+              >
+                <span className="whitespace-nowrap font-semibold capitalize">
+                  {code}
+                </span>
+                <span style={{ pointerEvents: 'none' }} className="m-1">
+                  <CopyIcon />
+                </span>
+              </div>
+            </>
+          );
+        }
       },
       {
         title: t('table:table-item-order-amount-limit'),
@@ -73,11 +88,16 @@ const CouponList = ({ coupons, selectedColumns }: IProps) => {
         align: 'center',
         ellipsis: true,
         width: 180,
-        render: (orderAmountLimit: number) => (
-          <span className="whitespace-nowrap">
-            {orderAmountLimit ? `${orderAmountLimit} USD` : 'Any'}
-          </span>
-        )
+        render: (orderAmountLimit: number, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
+          return (
+            <span className="whitespace-nowrap">
+              {orderAmountLimit ? `${orderAmountLimit} USD` : 'Any'}
+            </span>
+          );
+        }
       },
       {
         title: t('table:table-item-value'),
@@ -86,7 +106,11 @@ const CouponList = ({ coupons, selectedColumns }: IProps) => {
         align: 'center',
         ellipsis: true,
         width: 135,
-        render: (discountValue: number, record: Coupon) => {
+        render: (discountValue: number, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
+
           const className =
             'font-medium bg-gray-100 w-full text-13px md:text-sm rounded block border border-sink-base px-2 py-1';
 
@@ -112,9 +136,13 @@ const CouponList = ({ coupons, selectedColumns }: IProps) => {
         align: 'center',
         ellipsis: true,
         width: 100,
-        render: (active: string, recode: Coupon) => {
-          const expired = Date.now() >= Number(recode.couponEndDate.valueOf());
-          const limited = recode.timesUsed === recode.maxUsage;
+        render: (active: string, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
+
+          const expired = Date.now() >= Number(record.couponEndDate.valueOf());
+          const limited = record.timesUsed === record.maxUsage;
           return (
             <Badge
               className="!text-sm"
@@ -131,7 +159,10 @@ const CouponList = ({ coupons, selectedColumns }: IProps) => {
         align: 'center',
         ellipsis: true,
         width: 140,
-        render: (timesUsed: number) => {
+        render: (timesUsed: number, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
           return <span>{timesUsed ?? 0}</span>;
         }
       },
@@ -142,7 +173,10 @@ const CouponList = ({ coupons, selectedColumns }: IProps) => {
         align: 'center',
         ellipsis: true,
         width: 100,
-        render: (maxUsage: number) => {
+        render: (maxUsage: number, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
           return <span>{maxUsage}</span>;
         }
       },
@@ -153,12 +187,17 @@ const CouponList = ({ coupons, selectedColumns }: IProps) => {
         align: 'center',
         ellipsis: true,
         width: 180,
-        render: (couponStartDate: string) => (
-          <span className="whitespace-nowrap">
-            {dayjs(couponStartDate).format('DD/MM/YYYY')} at{' '}
-            {dayjs(couponStartDate).format('h:mm A')}
-          </span>
-        )
+        render: (couponStartDate: string, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
+          return (
+            <span className="whitespace-nowrap">
+              {dayjs(couponStartDate).format('DD/MM/YYYY')} at{' '}
+              {dayjs(couponStartDate).format('h:mm A')}
+            </span>
+          );
+        }
       },
       {
         title: t('table:table-item-end-date'),
@@ -167,12 +206,17 @@ const CouponList = ({ coupons, selectedColumns }: IProps) => {
         align: 'center',
         ellipsis: true,
         width: 180,
-        render: (couponEndDate: string) => (
-          <span className="whitespace-nowrap">
-            {dayjs(couponEndDate).format('DD/MM/YYYY')} at{' '}
-            {dayjs(couponEndDate).format('h:mm A')}
-          </span>
-        )
+        render: (couponEndDate: string, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
+          return (
+            <span className="whitespace-nowrap">
+              {dayjs(couponEndDate).format('DD/MM/YYYY')} at{' '}
+              {dayjs(couponEndDate).format('h:mm A')}
+            </span>
+          );
+        }
       },
       {
         title: t('table:table-item-created-by'),
@@ -183,8 +227,11 @@ const CouponList = ({ coupons, selectedColumns }: IProps) => {
         ellipsis: true,
         render: (
           createdBy: CreatedUpdatedByAt['createdBy'],
-          record: Coupon
+          record: TableRowProps
         ) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
           return <ProfileCart user={createdBy} createdAt={record?.createdAt} />;
         }
       },
@@ -197,8 +244,11 @@ const CouponList = ({ coupons, selectedColumns }: IProps) => {
         ellipsis: true,
         render: (
           updatedBy: CreatedUpdatedByAt['updatedBy'],
-          record: Coupon
+          record: TableRowProps
         ) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
           return <ProfileCart user={updatedBy} updatedAt={record?.updatedAt} />;
         }
       },
@@ -208,13 +258,18 @@ const CouponList = ({ coupons, selectedColumns }: IProps) => {
         key: 'actions',
         align: 'center',
         width: 100,
-        render: (id: string) => (
-          <ActionButtons
-            id={id}
-            editUrl={`${ROUTES.COUPON}/edit/${id}`}
-            deleteModalView="DELETE_COUPON"
-          />
-        )
+        render: (id: string, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
+          return (
+            <ActionButtons
+              id={id}
+              editUrl={`${ROUTES.COUPON}/edit/${id}`}
+              deleteModalView="DELETE_COUPON"
+            />
+          );
+        }
       }
     ];
   }, [alignLeft, t]);
@@ -228,18 +283,15 @@ const CouponList = ({ coupons, selectedColumns }: IProps) => {
   }, [columns, selectedColumns]);
 
   return (
-    <>
-      <div className="card overflow-hidden mb-6">
-        <Table
-          //@ts-ignore
-          columns={tableColumns}
-          emptyText={t('table:empty-table-data')}
-          data={coupons}
-          rowKey="id"
-          scroll={{ x: 800 }}
-        />
-      </div>
-    </>
+    <Table
+      //@ts-ignore
+      columns={tableColumns}
+      emptyText={t('table:empty-table-data')}
+      data={loading ? tablePlaceholderRow : coupons}
+      rowKey="id"
+      scroll={{ x: 800 }}
+      className="card mb-6 overflow-hidden"
+    />
   );
 };
 

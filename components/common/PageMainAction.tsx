@@ -33,7 +33,7 @@ const PageMainAction = ({ href, title, label, onClick, RenderIcon }: Props) => {
 
   const { ref, inView } = useInView({
     /* Optional options */
-    threshold: 0
+    threshold: 1
   });
 
   const dispatch = useAppDispatch();
@@ -50,7 +50,7 @@ const PageMainAction = ({ href, title, label, onClick, RenderIcon }: Props) => {
 
   const renderLanguageSelect = () => {
     return (
-      <div className="h-[45px] flex items-center relative w-[220px] justify-end">
+      <div className="relative flex h-[45px] w-[220px] items-center justify-end">
         <Select
           options={languages}
           value={selectedLanguage}
@@ -70,16 +70,16 @@ const PageMainAction = ({ href, title, label, onClick, RenderIcon }: Props) => {
       return (
         <div
           className={cn(
-            'flex items-center pl-4 md:pl-8 transition-all duration-100 ease-linear opacity-100 mb-5 ',
-            'justify-end border-y border-t-0 border-gray-300 p-3 px-0 fixed left-0 right-0 top-[75px]',
-            'z-40 pr-8 bg-gray-100 md:ps-20 nlg:ps-20 nxl:ps-20 lg:ps-64 xl:ps-64',
+            'mb-5 flex items-center pl-4 opacity-100 transition-all duration-100 ease-linear md:pl-8 ',
+            'fixed left-0 right-0 top-[75px] justify-end border-y border-t-0 border-gray-300 p-3 px-0',
+            'nlg:ps-20 nxl:ps-20 z-40 bg-gray-100 pr-8 md:ps-20 lg:ps-64 xl:ps-64',
             {
-              'md:!ps-20 !ps-0': displayMiniSidebar,
+              '!ps-0 md:!ps-20': displayMiniSidebar,
               'invisible !opacity-0': inView
             }
           )}
         >
-          <h1 className="pl-4 md:pl-8 text-2xl flex-1 flex text-gray-700 font-bold">
+          <h1 className="flex flex-1 pl-4 text-2xl font-bold text-gray-700 md:pl-8">
             {title}
           </h1>
           {renderLanguageSelect()}
@@ -98,12 +98,12 @@ const PageMainAction = ({ href, title, label, onClick, RenderIcon }: Props) => {
           onClick={onClick}
           className="h-[45px] ms-4 md:ms-6"
         >
-          <div className="w-full flex items-center justify-center">
-            <div className="hidden md:flex items-center justify-center">
+          <div className="flex w-full items-center justify-center">
+            <div className="hidden items-center justify-center md:flex">
               {RenderIcon ? <RenderIcon /> : <Add width="1rem" height="1rem" />}
               <span className="m-1">{label}</span>
             </div>
-            <div className="md:hidden flex items-center justify-center">
+            <div className="flex items-center justify-center md:hidden">
               {RenderIcon ? <RenderIcon /> : <Add width="1rem" height="1rem" />}
               <span className="m-1">{t('form:button-label-add')}</span>
             </div>
@@ -116,11 +116,11 @@ const PageMainAction = ({ href, title, label, onClick, RenderIcon }: Props) => {
 
   return (
     <>
-      <h1 className="text-2xl text-gray-700 font-bold mb-4">{title}</h1>
+      <h1 className="mb-4 text-2xl font-bold text-gray-700">{title}</h1>
       <div
         ref={ref}
         className={
-          'flex items-center mb-5 justify-end border-y border-gray-300 p-3 px-0'
+          'mb-5 flex items-center justify-end border-y border-gray-300 p-3 px-0'
         }
       >
         {renderLanguageSelect()}

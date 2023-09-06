@@ -17,29 +17,29 @@ const StickerCard = ({
 }: any) => {
   const { t } = useTranslation('widgets');
   return (
-    <div className="flex flex-col w-full h-full p-7 rounded bg-light">
-      <div className="w-full flex justify-between mb-auto pb-8">
-        <div className="w-full flex flex-col">
-          <span className="text-base text-heading font-semibold mb-1">
+    <div className="flex h-full w-full flex-col rounded bg-light p-7">
+      <div className="mb-auto flex w-full justify-between pb-8">
+        <div className="flex w-full flex-col">
+          <span className="mb-1 text-base font-semibold text-heading">
             {t(titleTransKey)}
           </span>
-          <span className="text-xs text-body font-semibold">
+          <span className="text-xs font-semibold text-body">
             {t(subtitleTransKey)}
           </span>
         </div>
 
         <div
-          className="w-12 h-12 rounded-full bg-gray-200 flex flex-shrink-0 items-center justify-center ms-3"
+          className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-gray-200 ms-3"
           style={iconBgStyle}
         >
           {icon}
         </div>
       </div>
 
-      <span className="text-xl font-semibold text-heading mb-2">{price}</span>
+      <span className="mb-2 text-xl font-semibold text-heading">{price}</span>
       {indicator === 'up' && (
         <span
-          className="text-sm text-body font-semibold mb-12 inline-block"
+          className="mb-12 inline-block text-sm font-semibold text-body"
           style={{ color: '#03D3B5' }}
         >
           <IosArrowUp width="9px" height="11px" className="inline-block" />{' '}
@@ -49,7 +49,7 @@ const StickerCard = ({
       )}
       {indicator === 'down' && (
         <span
-          className="text-sm text-body font-semibold mb-12 inline-block"
+          className="mb-12 inline-block text-sm font-semibold text-body"
           style={{ color: '#FC6687' }}
         >
           <IosArrowDown width="9px" height="11px" className="inline-block" />{' '}
@@ -59,7 +59,7 @@ const StickerCard = ({
       )}
       {link && (
         <a
-          className="text-xs text-purple-700 no-underline font-semibold"
+          className="text-xs font-semibold text-purple-700 no-underline"
           href={link}
           target="_blank"
         >

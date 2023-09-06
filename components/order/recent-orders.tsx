@@ -1,4 +1,5 @@
 // import { Order, OrderStatus } from '@ts-types/generated';
+import Loader from '@components/ui/loader/loader';
 import dayjs from 'dayjs';
 // import usePrice from '@utils/use-price';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -9,7 +10,7 @@ import { useTranslation } from 'next-i18next';
 
 const Table = dynamic(
   () => import('@components/ui/table').then((mod) => mod.Table),
-  { ssr: false }
+  { ssr: false, loading: () => <Loader text={'Loading'} /> }
 );
 
 type IProps = {
@@ -74,8 +75,8 @@ const RecentOrders = ({ orders, title }: IProps) => {
 
   return (
     <>
-      <div className="rounded overflow-hidden shadow mb-6">
-        <h3 className="text-heading text-center font-semibold px-4 py-3 bg-light border-b border-border-200">
+      <div className="mb-6 overflow-hidden rounded shadow">
+        <h3 className="border-b border-border-200 bg-light px-4 py-3 text-center font-semibold text-heading">
           {title}
         </h3>
         <Table

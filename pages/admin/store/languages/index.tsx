@@ -2,7 +2,6 @@ import { useQuery } from '@apollo/client';
 import LanguageList from '@components/language/language-list';
 import AppLayout from '@components/layouts/app';
 import { Error } from '@components/ui/error-message';
-import Loader from '@components/ui/loader/loader';
 import { LANGUAGES } from '@graphql/language';
 import { useErrorLogger, useGetUser } from '@hooks/index';
 import { useTableColumn } from '@hooks/useTableColumn';
@@ -23,7 +22,7 @@ const PageMainHeader = dynamic(
   () => import('@components/common/page-main-header'),
   {
     ssr: true,
-    loading: () => <div className="animated-background w-full h-[80px]"></div>
+    loading: () => <div className="animated-background h-[80px] w-full"></div>
   }
 );
 
@@ -31,7 +30,7 @@ const PageMainAction = dynamic(
   () => import('@components/common/PageMainAction'),
   {
     ssr: true,
-    loading: () => <div className="animated-background w-full h-[80px]"></div>
+    loading: () => <div className="animated-background h-[80px] w-full"></div>
   }
 );
 
@@ -88,9 +87,6 @@ export default function Languages({ client }: SSRProps) {
     });
   }
 
-  if (loading) {
-    return <Loader text={t('common:text-loading')} />;
-  }
   if (!isEmpty(error)) {
     return <Error message={error.message} />;
   }
@@ -125,6 +121,7 @@ export default function Languages({ client }: SSRProps) {
         perPage={limit.value}
       />
       <LanguageList
+        loading={loading}
         languages={languages}
         selectedColumns={selectedTableColumns}
       />

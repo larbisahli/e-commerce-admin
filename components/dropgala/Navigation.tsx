@@ -30,29 +30,29 @@ const Navigation = () => {
 
   return (
     <nav
-      className={cn('w-full px-6 py-3 fixed z-50 transition-all', {
+      className={cn('fixed z-50 w-full px-6 py-3 transition-all', {
         'bg-white shadow': show
       })}
     >
-      <div className="w-full mx-auto container flex items-center justify-between">
-        <div className="flex justify-between content-end w-full">
+      <div className="container mx-auto flex w-full items-center justify-between">
+        <div className="flex w-full content-end justify-between">
           <div className="flex items-center">
             <Link href="/">
-              <a className="leading-normal text-center text-blue-600 pt-2">
+              <a className="pt-2 text-center leading-normal text-blue-600">
                 <Image src={'/logo.svg'} alt="logo" width={120} height={30} />
               </a>
             </Link>
             <Link href="/#features">
-              <a className="px-8 text-gray-800 md:block hidden">Features</a>
+              <a className="hidden px-8 text-gray-800 md:block">Features</a>
             </Link>
             <Link href="/#pricing">
-              <a className="text-gray-800 md:block hidden">Pricing</a>
+              <a className="hidden text-gray-800 md:block">Pricing</a>
             </Link>
             {/* <Link href="/blog">
               <a className="px-8 text-gray-800 md:block hidden">Blogs</a>
             </Link> */}
           </div>
-          <div className="flex font-medium justify-center items-center">
+          <div className="flex items-center justify-center font-medium">
             {/* <Link href="https://dropgala.com/login">
             <a className="inline-block border text-gray-800 border-gray-300 mx-3 no-underline rounded-sm hover:text-underline text-center py-3 px-8">
               Login
@@ -64,7 +64,7 @@ const Navigation = () => {
             </a>
           </Link> */}
             <Link href="#subscription">
-              <a className="inline-block text-white bg-blue-600 no-underline rounded-full border-blue-300 font-medium hover:text-underline text-center py-2 px-5">
+              <a className="hover:text-underline inline-block rounded-full border-blue-300 bg-blue-600 py-2 px-5 text-center font-medium text-white no-underline">
                 Join Our Waitlist!
               </a>
             </Link>

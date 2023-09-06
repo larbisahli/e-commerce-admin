@@ -2,7 +2,6 @@ import { useQuery } from '@apollo/client';
 import AppLayout from '@components/layouts/app';
 import ManufacturerList from '@components/manufacturer/manufacturer-list';
 import ErrorMessage from '@components/ui/error-message';
-import Loader from '@components/ui/loader/loader';
 import { MANUFACTURERS } from '@graphql/manufacturer';
 import { useErrorLogger, useGetUser } from '@hooks/index';
 import { useSettings } from '@hooks/useSettings';
@@ -12,7 +11,6 @@ import { SSRProps, TableQueryVariables } from '@ts-types/custom.types';
 import { ManufacturerType, OrderBy, SortOrder } from '@ts-types/generated';
 import { COLUMNS } from '@utils/data/table-columns';
 import { ROUTES } from '@utils/routes';
-import cn from 'classnames'
 import isEmpty from 'lodash/isEmpty';
 import type { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
@@ -24,7 +22,7 @@ const PageMainHeader = dynamic(
   () => import('@components/common/page-main-header'),
   {
     ssr: true,
-    loading: () => <div className="animated-background w-full h-[80px]"></div>
+    loading: () => <div className="animated-background h-[80px] w-full"></div>
   }
 );
 
@@ -32,7 +30,7 @@ const PageMainAction = dynamic(
   () => import('@components/common/PageMainAction'),
   {
     ssr: true,
-    loading: () => <div className="animated-background w-full h-[80px]"></div>
+    loading: () => <div className="animated-background h-[80px] w-full"></div>
   }
 );
 
@@ -40,7 +38,6 @@ interface TSupplier {
   manufacturers: ManufacturerType[];
   manufacturerCount: { count: number };
 }
-
 
 export default function ManufacturerPage({ client }: SSRProps) {
   const { t } = useTranslation();
@@ -52,7 +49,7 @@ export default function ManufacturerPage({ client }: SSRProps) {
   const { selectedTableColumns, handleColumnChange } =
     useTableColumn('manufacturer');
 
-    const { defaultLanguage, selectedLanguage } = useSettings();
+  const { defaultLanguage, selectedLanguage } = useSettings();
 
   const { data, loading, error, fetchMore } = useQuery<
     TSupplier,
@@ -112,14 +109,11 @@ export default function ManufacturerPage({ client }: SSRProps) {
         currentPage={page}
         perPage={limit.value}
       />
-
-       {loading && <Loader text={t('common:text-loading')} />}
-      <div className={cn({ hidden: loading })}>
       <ManufacturerList
+        loading={loading}
         selectedColumns={selectedTableColumns}
         manufacturers={manufacturers}
       />
-      </div>
     </>
   );
 }

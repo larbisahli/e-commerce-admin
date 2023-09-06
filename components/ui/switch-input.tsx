@@ -15,7 +15,7 @@ const SwitchInput = ({ control, label, name, errors }: Props) => {
   const { t } = useTranslation();
   return (
     <div className="flex items-center">
-      <div className="block text-body-dark font-semibold text-sm leading-none mr-2">
+      <div className="mr-2 block text-sm font-semibold leading-none text-body-dark">
         {label}
       </div>
       <Controller
@@ -27,13 +27,13 @@ const SwitchInput = ({ control, label, name, errors }: Props) => {
             onChange={onChange}
             className={`${
               value ? 'bg-green-600' : 'bg-gray-200'
-            } relative inline-flex items-center h-6 rounded-full w-11`}
+            } relative inline-flex h-6 w-11 items-center rounded-full`}
           >
             <span className="sr-only">Enable {label}</span>
             <span
               className={`${
                 value ? 'translate-x-6' : 'translate-x-1'
-              } inline-block w-4 h-4 transform bg-light rounded-full`}
+              } inline-block h-4 w-4 transform rounded-full bg-light`}
             />
           </Switch>
         )}

@@ -6,10 +6,10 @@ const PricingSection = () => {
   return (
     <section
       id="pricing"
-      className="p-5 sm:px-11 mt-32 container mx-auto rounded w-full"
+      className="container mx-auto mt-32 w-full rounded p-5 sm:px-11"
     >
       <div className="flex flex-col items-center">
-        <h2 className="my-5 text-3xl text-gray-800 font-bold leading-tight text-center md:text-left slide-in-bottom-h1">
+        <h2 className="slide-in-bottom-h1 my-5 text-center text-3xl font-bold leading-tight text-gray-800 md:text-left">
           Pricing
         </h2>
         <p className="text-center">
@@ -17,44 +17,44 @@ const PricingSection = () => {
         </p>
       </div>
       <div className="w-full pt-8">
-        <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-2 xl:grid-cols-3 mx-auto w-fit">
+        <div className="mx-auto mt-8 grid w-fit grid-cols-1 gap-8 lg:grid-cols-2 xl:grid-cols-3">
           {/* STARTUP */}
-          <div className="shadow h-[800px] mt-11 border-2 bg-white rounded-xl min-w-[300px] sm:w-[400px]">
+          <div className="mt-11 h-[800px] min-w-[300px] rounded-xl border-2 bg-white shadow sm:w-[400px]">
             <div className="p-5">
-              <div className="font-semibold text-2xl pt-1">Basic</div>
+              <div className="pt-1 text-2xl font-semibold">Basic</div>
               <div className="pt-5">
-                <span className="text-black font-bold text-5xl">FREE</span>
+                <span className="text-5xl font-bold text-black">FREE</span>
               </div>
               <div className="pt-5">
                 <Link href="#subscription">
-                  <a className="inline-block text-black hover:text-white hover:bg-gray-900 font-medium rounded-[10px] border-black border no-underline w-full hover:text-underline text-center py-2 px-8">
+                  <a className="hover:text-underline inline-block w-full rounded-[10px] border border-black py-2 px-8 text-center font-medium text-black no-underline hover:bg-gray-900 hover:text-white">
                     Get Started
                   </a>
                 </Link>
               </div>
-              <div className="pt-5 text-center text-gray-700 my-3">
+              <div className="my-3 pt-5 text-center text-gray-700">
                 {/* ------------ */}
-                <div className="flex items-center mt-3">
-                  <div className="rounded-full flex items-center justify-center text-white bg-black w-5 h-5">
+                <div className="mt-3 flex items-center">
+                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-black text-white">
                     <CheckMark width={11} height={11} />
                   </div>
-                  <span className="mx-2 text-gray-800 font-medium">
+                  <span className="mx-2 font-medium text-gray-800">
                     1 store
                   </span>
                 </div>
                 {/* ------------- */}
-                <div className="flex items-center mt-3">
-                  <div className="rounded-full flex items-center justify-center text-white bg-black w-5 h-5">
+                <div className="mt-3 flex items-center">
+                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-black text-white">
                     <CheckMark width={11} height={11} />
                   </div>
-                  <span className="mx-2 text-gray-800 font-medium">1 user</span>
+                  <span className="mx-2 font-medium text-gray-800">1 user</span>
                 </div>
                 {/* ------------- */}
-                <div className="flex items-center mt-3">
-                  <div className="rounded-full flex items-center justify-center text-white bg-black w-5 h-5">
+                <div className="mt-3 flex items-center">
+                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-black text-white">
                     <CheckMark width={11} height={11} />
                   </div>
-                  <span className="mx-2 text-gray-800 font-medium">
+                  <span className="mx-2 font-medium text-gray-800">
                     20 images upload
                   </span>
                 </div>
@@ -62,162 +62,162 @@ const PricingSection = () => {
             </div>
           </div>
           {/* PREMIUM */}
-          <div className="shadow h-[900px] border-2 bg-white rounded-xl border-gray-600 min-w-[300px] sm:w-[400px]">
+          <div className="h-[900px] min-w-[300px] rounded-xl border-2 border-gray-600 bg-white shadow sm:w-[400px]">
             <div className="p-5">
-              <div className="font-semibold text-3xl pt-1">Premium</div>
+              <div className="pt-1 text-3xl font-semibold">Premium</div>
               <div className="pt-5">
-                <span className="text-black font-bold text-5xl">$15</span>
-                <span className="text-gray-500 ml-1">/month</span>
+                <span className="text-5xl font-bold text-black">$15</span>
+                <span className="ml-1 text-gray-500">/month</span>
               </div>
               <div className="pt-5">
                 <Link href="#subscription">
-                  <a className="inline-block font-medium  text-white rounded-[10px] bg-black hover:bg-gray-900 no-underline w-full hover:text-underline text-center py-2 px-8">
+                  <a className="hover:text-underline inline-block  w-full rounded-[10px] bg-black py-2 px-8 text-center font-medium text-white no-underline hover:bg-gray-900">
                     Get Started
                   </a>
                 </Link>
               </div>
-              <div className="pt-5 text-center text-gray-700 my-3">
+              <div className="my-3 pt-5 text-center text-gray-700">
                 {/* ------------ */}
-                <div className="flex items-center mt-3">
-                  <div className="rounded-full flex items-center justify-center text-white bg-black w-5 h-5">
+                <div className="mt-3 flex items-center">
+                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-black text-white">
                     <CheckMark width={11} height={11} />
                   </div>
-                  <span className="mx-2 text-black font-semibold">
+                  <span className="mx-2 font-semibold text-black">
                     All Basic Features
                   </span>
                 </div>
                 {/* ------------- */}
-                <div className="flex items-center mt-3">
-                  <div className="rounded-full flex items-center justify-center text-white bg-black w-5 h-5">
+                <div className="mt-3 flex items-center">
+                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-black text-white">
                     <CheckMark width={11} height={11} />
                   </div>
-                  <span className="mx-2 text-gray-800 font-medium">
+                  <span className="mx-2 font-medium text-gray-800">
                     Unlimited products
                   </span>
                 </div>
                 {/* ------------- */}
-                <div className="flex items-center mt-3">
-                  <div className="rounded-full flex items-center justify-center text-white bg-black w-5 h-5">
+                <div className="mt-3 flex items-center">
+                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-black text-white">
                     <CheckMark width={11} height={11} />
                   </div>
-                  <span className="mx-2 text-gray-800 font-medium">
+                  <span className="mx-2 font-medium text-gray-800">
                     Unlimited images upload
                   </span>
                 </div>
                 {/* ------------- */}
-                <div className="flex items-center mt-3">
-                  <div className="rounded-full flex items-center justify-center text-white bg-black w-5 h-5">
+                <div className="mt-3 flex items-center">
+                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-black text-white">
                     <CheckMark width={11} height={11} />
                   </div>
-                  <span className="mx-2 text-gray-800 font-medium">
+                  <span className="mx-2 font-medium text-gray-800">
                     Custom domain
                   </span>
                 </div>
                 {/* ------------- */}
-                <div className="flex items-center mt-3">
-                  <div className="rounded-full flex items-center justify-center text-white bg-black w-5 h-5">
+                <div className="mt-3 flex items-center">
+                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-black text-white">
                     <CheckMark width={11} height={11} />
                   </div>
-                  <span className="mx-2 text-gray-800 font-medium">
+                  <span className="mx-2 font-medium text-gray-800">
                     5 users
                   </span>
                 </div>
                 {/* ------------- */}
-                <div className="flex items-center mt-3">
-                  <div className="rounded-full flex items-center justify-center text-white bg-black w-5 h-5">
+                <div className="mt-3 flex items-center">
+                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-black text-white">
                     <CheckMark width={11} height={11} />
                   </div>
-                  <span className="mx-2 text-gray-800 font-medium">
+                  <span className="mx-2 font-medium text-gray-800">
                     5 Roles and permissions
                   </span>
                 </div>
                 {/* ------------- */}
-                <div className="flex items-center mt-3">
-                  <div className="rounded-full flex items-center justify-center text-white bg-black w-5 h-5">
+                <div className="mt-3 flex items-center">
+                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-black text-white">
                     <CheckMark width={11} height={11} />
                   </div>
-                  <span className="mx-2 text-gray-800 font-medium">
+                  <span className="mx-2 font-medium text-gray-800">
                     9 Blog Posts
                   </span>
                 </div>
                 {/* ------------- */}
-                <div className="flex items-center mt-3">
-                  <div className="rounded-full flex items-center justify-center text-white bg-black w-5 h-5">
+                <div className="mt-3 flex items-center">
+                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-black text-white">
                     <CheckMark width={11} height={11} />
                   </div>
-                  <span className="mx-2 text-gray-800 font-medium">
+                  <span className="mx-2 font-medium text-gray-800">
                     3 Roles and permissions
                   </span>
                 </div>
                 {/* ------------- */}
-                <div className="flex items-center mt-3">
-                  <div className="rounded-full flex items-center justify-center text-white bg-black w-5 h-5">
+                <div className="mt-3 flex items-center">
+                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-black text-white">
                     <CheckMark width={11} height={11} />
                   </div>
-                  <span className="mx-2 text-gray-800 font-medium">
+                  <span className="mx-2 font-medium text-gray-800">
                     Unlimited monthly sales
                   </span>
                 </div>
                 {/* ------------- */}
-                <div className="flex items-center mt-3">
-                  <div className="rounded-full flex items-center justify-center text-white bg-black w-5 h-5">
+                <div className="mt-3 flex items-center">
+                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-black text-white">
                     <CheckMark width={11} height={11} />
                   </div>
-                  <span className="mx-2 text-gray-800 font-medium">
+                  <span className="mx-2 font-medium text-gray-800">
                     Multicurrencies
                   </span>
                 </div>
                 {/* ------------- */}
-                <div className="flex items-center mt-3">
-                  <div className="rounded-full flex items-center justify-center text-white bg-black w-5 h-5">
+                <div className="mt-3 flex items-center">
+                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-black text-white">
                     <CheckMark width={11} height={11} />
                   </div>
-                  <span className="mx-2 text-gray-800 font-medium">
+                  <span className="mx-2 font-medium text-gray-800">
                     Customer support 24/7
                   </span>
                 </div>
                 {/* ------------- */}
-                <div className="flex items-center mt-3">
-                  <div className="rounded-full flex items-center justify-center text-white bg-black w-5 h-5">
+                <div className="mt-3 flex items-center">
+                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-black text-white">
                     <CheckMark width={11} height={11} />
                   </div>
-                  <span className="mx-2 text-gray-800 font-medium">
+                  <span className="mx-2 font-medium text-gray-800">
                     Google Sheets
                   </span>
                 </div>
                 {/* ------------- */}
-                <div className="flex items-center mt-3">
-                  <div className="rounded-full flex items-center justify-center text-white bg-black w-5 h-5">
+                <div className="mt-3 flex items-center">
+                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-black text-white">
                     <CheckMark width={11} height={11} />
                   </div>
-                  <span className="mx-2 text-gray-800 font-medium">
+                  <span className="mx-2 font-medium text-gray-800">
                     Multiple templates
                   </span>
                 </div>
                 {/* ------------- */}
-                <div className="flex items-center mt-3">
-                  <div className="rounded-full flex items-center justify-center text-white bg-black w-5 h-5">
+                <div className="mt-3 flex items-center">
+                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-black text-white">
                     <CheckMark width={11} height={11} />
                   </div>
-                  <span className="mx-2 text-gray-800 font-medium">
+                  <span className="mx-2 font-medium text-gray-800">
                     Multilanguages store
                   </span>
                 </div>
                 {/* ------------- */}
-                <div className="flex items-center mt-3">
-                  <div className="rounded-full flex items-center justify-center text-white bg-black w-5 h-5">
+                <div className="mt-3 flex items-center">
+                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-black text-white">
                     <CheckMark width={11} height={11} />
                   </div>
-                  <span className="mx-2 text-gray-800 font-medium">
+                  <span className="mx-2 font-medium text-gray-800">
                     Multinational store
                   </span>
                 </div>
                 {/* ------------- */}
-                <div className="flex items-center mt-3">
-                  <div className="rounded-full flex items-center justify-center text-white bg-black w-5 h-5">
+                <div className="mt-3 flex items-center">
+                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-black text-white">
                     <CheckMark width={11} height={11} />
                   </div>
-                  <span className="mx-2 text-gray-800 font-medium">
+                  <span className="mx-2 font-medium text-gray-800">
                     Unlimited customer reviews
                   </span>
                 </div>
@@ -225,63 +225,63 @@ const PricingSection = () => {
             </div>
           </div>
           {/* BUSINESS */}
-          <div className="shadow border-2 mt-11 h-[800px] bg-white rounded-xl  min-w-[300px] sm:w-[400px]">
+          <div className="mt-11 h-[800px] min-w-[300px] rounded-xl border-2 bg-white  shadow sm:w-[400px]">
             <div className="p-5">
-              <div className="font-semibold text-3xl pt-1">Business</div>
+              <div className="pt-1 text-3xl font-semibold">Business</div>
               <div className="pt-5">
-                <span className="text-black font-bold text-5xl">$50</span>
-                <span className="text-gray-500 ml-1">/month</span>
+                <span className="text-5xl font-bold text-black">$50</span>
+                <span className="ml-1 text-gray-500">/month</span>
               </div>
               <div className="pt-5">
                 <Link href="#subscription">
-                  <a className="inline-block text-black hover:text-white hover:bg-gray-900 font-medium rounded-[10px] border-black border no-underline w-full hover:text-underline text-center py-2 px-8">
+                  <a className="hover:text-underline inline-block w-full rounded-[10px] border border-black py-2 px-8 text-center font-medium text-black no-underline hover:bg-gray-900 hover:text-white">
                     Get Started
                   </a>
                 </Link>
               </div>
-              <div className="pt-5 text-center text-gray-700 my-3">
+              <div className="my-3 pt-5 text-center text-gray-700">
                 {/* ------------ */}
-                <div className="flex items-center mt-3">
-                  <div className="rounded-full flex items-center justify-center text-white bg-black w-5 h-5">
+                <div className="mt-3 flex items-center">
+                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-black text-white">
                     <CheckMark width={11} height={11} />
                   </div>
-                  <span className="mx-2 text-black font-semibold">
+                  <span className="mx-2 font-semibold text-black">
                     All Premium Features
                   </span>
                 </div>
                 {/* ------------- */}
-                <div className="flex items-center mt-3">
-                  <div className="rounded-full flex items-center justify-center text-white bg-black w-5 h-5">
+                <div className="mt-3 flex items-center">
+                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-black text-white">
                     <CheckMark width={11} height={11} />
                   </div>
-                  <span className="mx-2 text-gray-800 font-medium">
+                  <span className="mx-2 font-medium text-gray-800">
                     Unlimited users
                   </span>
                 </div>
                 {/* ------------- */}
-                <div className="flex items-center mt-3">
-                  <div className="rounded-full flex items-center justify-center text-white bg-black w-5 h-5">
+                <div className="mt-3 flex items-center">
+                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-black text-white">
                     <CheckMark width={11} height={11} />
                   </div>
-                  <span className="mx-2 text-gray-800 font-medium">
+                  <span className="mx-2 font-medium text-gray-800">
                     Unlimited Roles and permissions
                   </span>
                 </div>
                 {/* ------------- */}
-                <div className="flex items-center mt-3">
-                  <div className="rounded-full flex items-center justify-center text-white bg-black w-5 h-5">
+                <div className="mt-3 flex items-center">
+                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-black text-white">
                     <CheckMark width={11} height={11} />
                   </div>
-                  <span className="mx-2 text-gray-800 font-medium">
+                  <span className="mx-2 font-medium text-gray-800">
                     VIP Support
                   </span>
                 </div>
                 {/* ------------- */}
-                <div className="flex items-center mt-3">
-                  <div className="rounded-full flex items-center justify-center text-white bg-black w-5 h-5">
+                <div className="mt-3 flex items-center">
+                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-black text-white">
                     <CheckMark width={11} height={11} />
                   </div>
-                  <span className="mx-2 text-gray-800 font-medium">
+                  <span className="mx-2 font-medium text-gray-800">
                     Unlimited Blog Posts
                   </span>
                 </div>

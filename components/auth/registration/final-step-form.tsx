@@ -18,7 +18,7 @@ const FinalStepForm = () => {
   }, []);
 
   return (
-    <div className="h-full mb-8">
+    <div className="mb-8 h-full">
       {showConfetti && (
         <Confetti
           width={width}
@@ -30,19 +30,19 @@ const FinalStepForm = () => {
           recycle={false}
         />
       )}
-      <div className="flex items-center justify-center flex-col">
+      <div className="flex flex-col items-center justify-center">
         <PartyPopper />
-        <h1 className="my-5 text-gray-700 font-bold text-2xl">
+        <h1 className="my-5 text-2xl font-bold text-gray-700">
           {t('common:congrats')}
         </h1>
-        <p className="text-gray-700 text-sm">
+        <p className="text-sm text-gray-700">
           {"You're now just one step away from realizing your dream business."}
         </p>
       </div>
 
       <div className="mt-16 mb-32">
-        <div className="border flex items-center p-5 rounded-md">
-          <div className="text-blue-500 mr-5">
+        <div className="flex items-center rounded-md border p-5">
+          <div className="mr-5 text-blue-500">
             <LetterOpen />
           </div>
           <div className="text-sm text-gray-500">

@@ -7,12 +7,12 @@ const PageLoader = () => {
   return (
     <div
       className={cn(
-        'w-full h-screen flex flex-col items-center justify-center'
+        'flex h-screen w-full flex-col items-center justify-center'
       )}
     >
-      <div className="flex relative">
+      <div className="relative flex">
         <div className={styles.page_loader}></div>
-        <h3 className="text-sm font-semibold text-body italic absolute top-1/2 -mt-2 w-full text-center">
+        <h3 className="absolute top-1/2 -mt-2 w-full text-center text-sm font-semibold italic text-body">
           {t('text-loading')}
         </h3>
       </div>

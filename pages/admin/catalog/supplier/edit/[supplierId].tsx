@@ -40,7 +40,11 @@ export default function UpdateSupplierPage({ client }: SSRProps) {
   const { data, loading, error } = useQuery<TAttribute, OptionsVariable>(
     SUPPLIER,
     {
-      variables: { id: supplierId, language: selectedLanguage, defaultLanguage},
+      variables: {
+        id: supplierId,
+        language: selectedLanguage,
+        defaultLanguage
+      },
       fetchPolicy: 'cache-and-network',
       skip: isEmpty(selectedLanguage)
     }
@@ -61,7 +65,7 @@ export default function UpdateSupplierPage({ client }: SSRProps) {
 
   return (
     <>
-      <div className="py-5 sm:py-8 flex border-b border-dashed border-border-base">
+      <div className="flex border-b border-dashed border-border-base py-5 sm:py-8">
         <h1 className="text-lg font-semibold text-heading">
           {t('form:edit-supplier')}
         </h1>

@@ -7,7 +7,7 @@ type Props = {
 };
 
 const Card: React.FC<Props> = ({ className, ...props }) => {
-  return <div className={cn('p-5 md:p-8 card', className)} {...props} />;
+  return <div className={cn('card p-5 md:p-8', className)} {...props} />;
 };
 
 export default Card;

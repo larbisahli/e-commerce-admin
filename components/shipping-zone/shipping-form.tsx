@@ -307,11 +307,11 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex flex-wrap pb-8 border-b border-dashed border-border-base my-5 sm:my-8">
+      <div className="my-5 flex flex-wrap border-b border-dashed border-border-base pb-8 sm:my-8">
         <Description
           title={t('form:input-label-logo')}
           details={t('form:shipping-logo-helper-text')}
-          className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
+          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
         />
         <Card className="w-full sm:w-8/12 md:w-2/3">
           <ImageModal
@@ -322,7 +322,7 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
           />
         </Card>
       </div>
-      <div className="flex flex-wrap my-5 sm:my-8">
+      <div className="my-5 flex flex-wrap sm:my-8">
         <Description
           title={t('form:item-shipping-information')}
           details={
@@ -330,7 +330,7 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
               ? t('form:item-shipping-information-desc-update')
               : t('form:item-shipping-information-desc-create')
           }
-          className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
+          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
         />
         <Card className="w-full sm:w-8/12 md:w-2/3">
           <div className="mb-5">
@@ -341,7 +341,7 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
               error={t(errors.shippingZone?.name?.message!)}
               placeholder="Name ( The name you'll remember )"
               variant="outline"
-              className="w-full mb-5"
+              className="mb-5 w-full"
             />
             <Input
               label={t('form:input-label-display-name')}
@@ -368,7 +368,7 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
         </Card>
       </div>
       {/* DELIVERY TIMES */}
-      <div className="flex flex-wrap my-5 sm:my-8">
+      <div className="my-5 flex flex-wrap sm:my-8">
         <Description
           title={t('form:item-delivery-time')}
           details={
@@ -376,7 +376,7 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
               ? t('form:item-shipping-zones-delivery-info-update')
               : t('form:item-shipping-zones-delivery-info-create')
           }
-          className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
+          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
         />
         <Card className="w-full sm:w-8/12 md:w-2/3">
           <div>
@@ -393,7 +393,7 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
         </Card>
       </div>
       {/* ZONES */}
-      <div className="flex flex-wrap my-5 sm:my-8">
+      <div className="my-5 flex flex-wrap sm:my-8">
         <Description
           title={t('form:item-shipping-zones-info')}
           details={
@@ -401,7 +401,7 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
               ? t('form:item-shipping-zones-country-info-update')
               : t('form:item-shipping-zones-country-info-create')
           }
-          className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
+          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
         />
         <Card className="w-full sm:w-8/12 md:w-2/3">
           <div>
@@ -421,7 +421,7 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
       </div>
       {/* TYPES */}
       {!freeShipping && (
-        <div className="flex flex-wrap my-5 sm:my-8">
+        <div className="my-5 flex flex-wrap sm:my-8">
           <Description
             title={t('form:item-shipping-rate-type')}
             details={
@@ -429,7 +429,7 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
                 ? t('form:item-shipping-rate-type-update')
                 : t('form:item-shipping-rate-type-create')
             }
-            className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
+            className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
           />
           <Card className="w-full sm:w-8/12 md:w-2/3">
             <div>
@@ -450,7 +450,7 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
       )}
       {/* RATES */}
       {!freeShipping && (
-        <div className="flex flex-wrap my-5 sm:my-8">
+        <div className="my-5 flex flex-wrap sm:my-8">
           <Description
             title={t('form:item-shipping-rates')}
             details={
@@ -458,7 +458,7 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
                 ? t('form:item-shipping-rates-update')
                 : t('form:item-shipping-rates-create')
             }
-            className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
+            className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
           />
           <Card className="w-full sm:w-8/12 md:w-2/3">
             <div>
@@ -479,7 +479,7 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
               <Button
                 type="button"
                 onClick={handleRateAppend}
-                className="w-full sm:w-auto mt-3"
+                className="mt-3 w-full sm:w-auto"
               >
                 {t('form:button-label-add-rate')}
               </Button>

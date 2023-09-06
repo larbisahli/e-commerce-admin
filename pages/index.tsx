@@ -16,7 +16,7 @@ const MAX_DISPLAY = 4;
 const HomePage = ({ posts }) => {
   return (
     <div
-      className="h-screen pb-14 bg-right bg-cover"
+      className="h-screen bg-cover bg-right pb-14"
       // style={{ backgroundImage: "url('/bg.svg')" }}
     >
       <Head>
@@ -36,30 +36,30 @@ const HomePage = ({ posts }) => {
         <HeroSection />
 
         {/* ------------------ e-commerce tools section ------------------ */}
-        <section className="container my-14 px-6 mx-auto flex flex-wrap flex-col-reverse md:flex-row items-center justify-between">
+        <section className="container my-14 mx-auto flex flex-col-reverse flex-wrap items-center justify-between px-6 md:flex-row">
           {/* <!--Right Col--> */}
-          <div className="max-w-[800px] mx-auto xl:w-3/5 py-6 overflow-y-hidden w-fit">
+          <div className="mx-auto w-fit max-w-[800px] overflow-y-hidden py-6 xl:w-3/5">
             {/* <img src=""/> */}
             <Image
               alt=""
               src="/store-setup.png"
-              className="w-5/6 mx-auto lg:mr-0 slide-in-bottom"
+              className="slide-in-bottom mx-auto w-5/6 lg:mr-0"
               width={530}
               height={300}
             />
           </div>
 
           {/* <!--Left Col--> */}
-          <div className="flex flex-col w-full xl:w-2/5 justify-center items-center lg:items-start overflow-y-hidden">
-            <h2 className="my-4 text-xl md:text-3xl text-gray-800 font-bold leading-tight text-center md:text-left slide-in-bottom-h1">
+          <div className="flex w-full flex-col items-center justify-center overflow-y-hidden lg:items-start xl:w-2/5">
+            <h2 className="slide-in-bottom-h1 my-4 text-center text-xl font-bold leading-tight text-gray-800 md:text-left md:text-3xl">
               All the e-commerce tools you need in one place.
             </h2>
-            <p className="leading-normal text-gray-700 pb-8 text-base text-center md:text-left slide-in-bottom-subtitle">
+            <p className="slide-in-bottom-subtitle pb-8 text-center text-base leading-normal text-gray-700 md:text-left">
               Get all the design, fulfillment, payment, and analytics tools you
               need to manage your business seamlessly
             </p>
             <Link href={'#features'}>
-              <a className="px-3 w-[115px] py-2 border border-gray-300 rounded">
+              <a className="w-[115px] rounded border border-gray-300 px-3 py-2">
                 Learn more
               </a>
             </Link>
@@ -67,13 +67,13 @@ const HomePage = ({ posts }) => {
         </section>
 
         {/* ------------------ Free section ------------------ */}
-        <section className="container my-24 px-6 mx-auto flex flex-wrap flex-col-reverse md:flex-row items-center justify-between">
+        <section className="container my-24 mx-auto flex flex-col-reverse flex-wrap items-center justify-between px-6 md:flex-row">
           {/* <!--Left Col--> */}
-          <div className="w-full flex flex-col justify-center items-center overflow-y-hidden">
-            <h2 className="my-4 text-xl md:text-3xl text-gray-800 font-bold leading-tight text-center slide-in-bottom-h1">
+          <div className="flex w-full flex-col items-center justify-center overflow-y-hidden">
+            <h2 className="slide-in-bottom-h1 my-4 text-center text-xl font-bold leading-tight text-gray-800 md:text-3xl">
               Create your online store. It’s free.
             </h2>
-            <p className="leading-normal max-w-[700px] text-gray-800 pb-8 text-lg text-center slide-in-bottom-subtitle">
+            <p className="slide-in-bottom-subtitle max-w-[700px] pb-8 text-center text-lg leading-normal text-gray-800">
               Get started today for free! Dropgala provides you with all the
               services, tools, support, and competitive advantages you need to
               launch your online business. Take your first steps towards
@@ -88,7 +88,7 @@ const HomePage = ({ posts }) => {
               </a>
           </Link> */}
             <Link href="#subscription">
-              <a className="inline-block text-white bg-blue-600 no-underline rounded-xl border-blue-300 text-lg font-medium hover:text-underline text-center py-3 px-8">
+              <a className="hover:text-underline inline-block rounded-xl border-blue-300 bg-blue-600 py-3 px-8 text-center text-lg font-medium text-white no-underline">
                 Join Our Waitlist!
               </a>
             </Link>
@@ -120,13 +120,13 @@ const HomePage = ({ posts }) => {
         <FaqSection />
 
         {/* ------------------ Join us section ------------------ */}
-        <section className="container my-22 px-6 mx-auto flex flex-wrap flex-col-reverse md:flex-row items-center justify-between">
+        <section className="container my-22 mx-auto flex flex-col-reverse flex-wrap items-center justify-between px-6 md:flex-row">
           {/* <!--Left Col--> */}
-          <div className="w-full flex flex-col justify-center items-center overflow-y-hidden">
-            <h2 className="my-4 text-xl md:text-3xl text-gray-800 font-bold leading-tight text-center slide-in-bottom-h1">
+          <div className="flex w-full flex-col items-center justify-center overflow-y-hidden">
+            <h2 className="slide-in-bottom-h1 my-4 text-center text-xl font-bold leading-tight text-gray-800 md:text-3xl">
               Join us
             </h2>
-            <p className="leading-normal text-gray-800 pb-4 text-center slide-in-bottom-subtitle max-w-5xl">
+            <p className="slide-in-bottom-subtitle max-w-5xl pb-4 text-center leading-normal text-gray-800">
               {`Join us on this exciting journey and unlock the potential of your
             online business. Together, let's revolutionize the way we build and
             scale e-commerce stores!`}
@@ -139,7 +139,7 @@ const HomePage = ({ posts }) => {
               </a>
           </Link> */}
             <Link href="#subscription">
-              <a className="inline-block text-white bg-blue-600 no-underline rounded-full border-blue-300 text-lg font-medium hover:text-underline text-center py-3 px-8">
+              <a className="hover:text-underline inline-block rounded-full border-blue-300 bg-blue-600 py-3 px-8 text-center text-lg font-medium text-white no-underline">
                 Join Our Waitlist!
               </a>
             </Link>

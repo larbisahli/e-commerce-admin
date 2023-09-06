@@ -1,5 +1,6 @@
 import ImageComponent from '@components/ImageComponent';
 import Checkbox from '@components/ui/checkbox';
+import Loader from '@components/ui/loader/loader';
 import { siteSettings } from '@settings/site.settings';
 import type { Nullable } from '@ts-types/custom.types';
 import type { ImageType, Product } from '@ts-types/generated';
@@ -10,7 +11,7 @@ import React, { useMemo } from 'react';
 
 const Table = dynamic(
   () => import('@components/ui/table').then((mod) => mod.Table),
-  { ssr: false }
+  { ssr: false, loading: () => <Loader text={'Loading'} /> }
 );
 
 type IProps = {
@@ -63,7 +64,7 @@ const ProductListMini = ({
         render: (thumbnail: ImageType) => {
           const { image, placeholder } = thumbnail[0] ?? {};
           return (
-            <div className="shadow min-w-0 overflow-hidden rounded-sm w-[45px] h-[45px] border">
+            <div className="h-[45px] w-[45px] min-w-0 overflow-hidden rounded-sm border shadow">
               <ImageComponent
                 src={image ?? siteSettings.product.image}
                 customPlaceholder={
@@ -85,7 +86,7 @@ const ProductListMini = ({
         width: 80,
         ellipsis: true,
         render: (name: string) => (
-          <div className="text-gray-600 font-semibold">{name}</div>
+          <div className="font-semibold text-gray-600">{name}</div>
         )
       },
       {
@@ -107,18 +108,15 @@ const ProductListMini = ({
   }, [selectedProducts]);
 
   return (
-    <>
-      <div className="card overflow-hidden mb-6">
-        <Table
-          /* @ts-ignore */
-          columns={tableColumns}
-          emptyText={t('table:empty-table-data')}
-          data={products}
-          rowKey="id"
-          scroll={{ x: 400 }}
-        />
-      </div>
-    </>
+    <Table
+      /* @ts-ignore */
+      columns={tableColumns}
+      emptyText={t('table:empty-table-data')}
+      data={products}
+      rowKey="id"
+      scroll={{ x: 400 }}
+      className="card mb-6 overflow-hidden"
+    />
   );
 };
 

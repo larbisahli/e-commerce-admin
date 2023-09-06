@@ -3,6 +3,7 @@ import AppLayout from '@components/layouts/app';
 import Button from '@components/ui/button';
 // import ErrorMessage from '@components/ui/error-message';
 import ValidationError from '@components/ui/form-validation-error';
+import Loader from '@components/ui/loader/loader';
 // import Loader from '@components/ui/loader/loader';
 // import ProgressBox from '@components/ui/progress-box/progress-box';
 import SelectInput from '@components/ui/select-input';
@@ -23,7 +24,7 @@ import { useForm } from 'react-hook-form';
 
 const Table = dynamic(
   () => import('@components/ui/table').then((mod) => mod.Table),
-  { ssr: false }
+  { ssr: false, loading: () => <Loader text={'Loading'} /> }
 );
 
 type FormValues = {
@@ -146,16 +147,16 @@ export default function OrderDetailsPage() {
 
   return (
     <Card>
-      <div className="flex flex-col lg:flex-row items-center">
-        <h3 className="text-2xl font-semibold text-heading text-center lg:text-start w-full lg:w-1/3 mb-8 lg:mb-0 whitespace-nowrap">
+      <div className="flex flex-col items-center lg:flex-row">
+        <h3 className="mb-8 w-full whitespace-nowrap text-center text-2xl font-semibold text-heading lg:mb-0 lg:w-1/3 lg:text-start">
           {t('form:input-label-order-id')} - {data?.order?.tracking_number}
         </h3>
 
         <form
           onSubmit={handleSubmit(ChangeStatus)}
-          className="flex items-start ms-auto w-full lg:w-2/4"
+          className="flex w-full items-start ms-auto lg:w-2/4"
         >
-          <div className="w-full me-5 z-20">
+          <div className="z-20 w-full me-5">
             <SelectInput
               name="order_status"
               control={control}
@@ -178,7 +179,7 @@ export default function OrderDetailsPage() {
         </form>
       </div>
 
-      <div className="my-5 lg:my-10 flex justify-center items-center">
+      <div className="my-5 flex items-center justify-center lg:my-10">
         {/* <ProgressBox
           data={orderStatusData?.order_statuses?.data}
           status={data?.order?.status?.serial!}
@@ -199,7 +200,7 @@ export default function OrderDetailsPage() {
           <span>{t('common:no-order-found')}</span>
         )}
 
-        <div className="border-t-4 border-double border-border-200 flex flex-col w-full sm:w-1/2 md:w-1/3 ms-auto px-4 py-4 space-y-2">
+        <div className="flex w-full flex-col space-y-2 border-t-4 border-double border-border-200 px-4 py-4 ms-auto sm:w-1/2 md:w-1/3">
           <div className="flex items-center justify-between text-sm text-body">
             <span>{t('common:order-sub-total')}</span>
             {/* <span>{subtotal}</span> */}
@@ -220,7 +221,7 @@ export default function OrderDetailsPage() {
             {/* <span>{discount}</span> */}
             <span>{21}</span>
           </div>
-          <div className="flex items-center justify-between text-base text-heading font-semibold">
+          <div className="flex items-center justify-between text-base font-semibold text-heading">
             <span>{t('common:order-total')}</span>
             {/* <span>{total}</span> */}
             <span>{56}</span>
@@ -229,12 +230,12 @@ export default function OrderDetailsPage() {
       </div>
 
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between">
-        <div className="w-full sm:w-1/2 sm:pe-8 mb-10 sm:mb-0">
-          <h3 className="text-heading font-semibold mb-3 pb-2 border-b border-border-200">
+        <div className="mb-10 w-full sm:mb-0 sm:w-1/2 sm:pe-8">
+          <h3 className="mb-3 border-b border-border-200 pb-2 font-semibold text-heading">
             {t('common:billing-address')}
           </h3>
 
-          <div className="text-sm text-body flex flex-col items-start space-y-1">
+          <div className="flex flex-col items-start space-y-1 text-sm text-body">
             <span>{data?.order?.customer?.name}</span>
             {data?.order?.billing_address && (
               <span>{formatAddress(data.order.billing_address)}</span>
@@ -246,11 +247,11 @@ export default function OrderDetailsPage() {
         </div>
 
         <div className="w-full sm:w-1/2 sm:ps-8">
-          <h3 className="text-heading text-start font-semibold sm:text-end mb-3 pb-2 border-b border-border-200">
+          <h3 className="mb-3 border-b border-border-200 pb-2 text-start font-semibold text-heading sm:text-end">
             {t('common:shipping-address')}
           </h3>
 
-          <div className="text-sm text-body text-start sm:text-end flex flex-col items-start sm:items-end space-y-1">
+          <div className="flex flex-col items-start space-y-1 text-start text-sm text-body sm:items-end sm:text-end">
             <span>{data?.order?.customer?.name}</span>
             {data?.order?.shipping_address && (
               <span>{formatAddress(data?.order.shipping_address)}</span>

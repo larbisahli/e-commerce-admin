@@ -170,7 +170,7 @@ export default function CreateOrUpdateDeliveryForm({ initialValues }: IProps) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex flex-wrap my-5 sm:my-8">
+      <div className="my-5 flex flex-wrap sm:my-8">
         <Description
           title={t('form:item-delivery-time')}
           details={
@@ -178,7 +178,7 @@ export default function CreateOrUpdateDeliveryForm({ initialValues }: IProps) {
               ? t('form:item-delivery-time-desc-update')
               : t('form:item-delivery-time-desc-create')
           }
-          className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
+          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
         />
         <Card className="w-full sm:w-8/12 md:w-2/3">
           <div className="mb-5">
@@ -188,7 +188,7 @@ export default function CreateOrUpdateDeliveryForm({ initialValues }: IProps) {
               {...register('name')}
               error={t(errors?.name?.message!)}
               variant="outline"
-              className="w-full mb-8"
+              className="mb-8 w-full"
             />
           </div>
           <div>
@@ -202,7 +202,7 @@ export default function CreateOrUpdateDeliveryForm({ initialValues }: IProps) {
             />
             <ValidationError message={errors?.timeUnit?.message} />
           </div>
-          <div className="grid grid-cols-2 gap-5 my-8">
+          <div className="my-8 grid grid-cols-2 gap-5">
             <Input
               label={t('form:input-label-minimum')}
               isRequiredLabel

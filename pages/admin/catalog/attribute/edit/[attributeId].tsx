@@ -26,7 +26,7 @@ const CreateOrUpdateAttributeForm = dynamic(
 interface TAttribute {
   attribute: Attribute;
 }
-interface OptionsVariable  extends LanguageProps {
+interface OptionsVariable extends LanguageProps {
   id: number;
 }
 
@@ -41,7 +41,11 @@ export default function UpdateAttributePage({ client }: SSRProps) {
   const { data, loading, error } = useQuery<TAttribute, OptionsVariable>(
     ATTRIBUTE,
     {
-      variables: { id: attributeId, language: selectedLanguage, defaultLanguage },
+      variables: {
+        id: attributeId,
+        language: selectedLanguage,
+        defaultLanguage
+      },
       fetchPolicy: 'cache-and-network',
       skip: isEmpty(selectedLanguage)
     }
@@ -71,7 +75,7 @@ export default function UpdateAttributePage({ client }: SSRProps) {
           href="/svg/attribute.svg"
         />
       </Head>
-      <div className="py-5 sm:py-8 flex border-b border-dashed border-border-base">
+      <div className="flex border-b border-dashed border-border-base py-5 sm:py-8">
         <h1 className="text-lg font-semibold text-heading">
           {t('form:edit-attribute')}
         </h1>

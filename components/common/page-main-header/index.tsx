@@ -69,19 +69,19 @@ const PageMainHeader = ({
       return null;
     }
     return (
-      <div className="py-2 flex items-center justify-between flex-wrap-reverse">
-        <div className="flex items-end justify-end py-2 flex-1">
-          <div className="whitespace-nowrap text-sm text-gray-900 w-full">
+      <div className="flex flex-wrap-reverse items-center justify-between py-2">
+        <div className="flex flex-1 items-end justify-end py-2">
+          <div className="w-full whitespace-nowrap text-sm text-gray-900">
             <span className="">{total}</span>
             <span className="px-1">records found</span>
           </div>
         </div>
-        <div className="flex items-center justify-end flex-wrap">
+        <div className="flex flex-wrap items-center justify-end">
           {isFilterVisible && (
             <>
               <button
                 onClick={() => handleOpenDrop('filter')}
-                className="text-sub-heading p-2 flex items-center cursor-pointer"
+                className="flex cursor-pointer items-center p-2 text-sub-heading"
               >
                 <div className="mr-2">
                   <FilterIcon height="1.2em" width="1.2em" />
@@ -96,14 +96,14 @@ const PageMainHeader = ({
                     })}
                   />
                 </div>
-                <div className="w-[1px] h-[40px] bg-gray-300 mx-2"></div>
+                <div className="mx-2 h-[40px] w-[1px] bg-gray-300"></div>
               </button>
             </>
           )}
 
           <button
             onClick={() => handleOpenDrop('columns')}
-            className="text-sub-heading p-2 flex items-center cursor-pointer"
+            className="flex cursor-pointer items-center p-2 text-sub-heading"
           >
             <div className="mr-2">
               <SettingsIcon height="1.2em" width="1.2em" />
@@ -122,10 +122,10 @@ const PageMainHeader = ({
 
           {isExportVisible && (
             <>
-              <div className="w-[1px] h-[40px] bg-gray-300 mx-2"></div>
+              <div className="mx-2 h-[40px] w-[1px] bg-gray-300"></div>
               <button
                 onClick={() => handleOpenDrop('exports')}
-                className="text-sub-heading p-2 flex items-center cursor-pointer"
+                className="flex cursor-pointer items-center p-2 text-sub-heading"
               >
                 <div className="mr-2">
                   <ExportIcon height="1.2em" width="1.2em" />
@@ -156,11 +156,11 @@ const PageMainHeader = ({
       return null;
     }
     return (
-      <div className="border-y border-gray-300 py-3 my-5 flex items-center justify-between">
+      <div className="my-5 flex items-center justify-between border-y border-gray-300 py-3">
         <div>
           <div className="text-base text-sub-heading">Active filters:</div>
         </div>
-        <button className="text-blue-500 font-medium">Clear All</button>
+        <button className="font-medium text-blue-500">Clear All</button>
       </div>
     );
   };
@@ -183,7 +183,7 @@ const PageMainHeader = ({
   };
 
   return (
-    <div className="p-3 mb-8">
+    <div className="mb-8 p-3">
       {/* ----- */}
       {renderControllers()}
       {/* --- Applied Filters --- */}
@@ -193,8 +193,8 @@ const PageMainHeader = ({
       {/* ----- */}
       <div className="flex items-center justify-end">
         {onLimitChange instanceof Function && (
-          <div className="flex items-center mr-5">
-            <div className="w-[90px] flex item-center">
+          <div className="mr-5 flex items-center">
+            <div className="item-center flex w-[90px]">
               <Select
                 options={[
                   { id: 1, value: 10, label: 10 },
@@ -206,11 +206,11 @@ const PageMainHeader = ({
                 name="Limit"
               />
             </div>
-            <span className="text-heading font-light">Per page</span>
+            <span className="font-light text-heading">Per page</span>
           </div>
         )}
         {!!total && (
-          <div className="flex justify-end items-center">
+          <div className="flex items-center justify-end">
             <Pagination
               total={total}
               current={currentPage}

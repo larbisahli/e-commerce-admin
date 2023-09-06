@@ -2,6 +2,7 @@ import { useMutation } from '@apollo/client';
 import ActionButtons from '@components/common/action-buttons';
 import Badge from '@components/ui/badge/badge';
 import Link from '@components/ui/link';
+import Loader from '@components/ui/loader/loader';
 import ProfileCart from '@components/ui/profile-card';
 import { LANGUAGES } from '@graphql/language';
 import { SET_DEFAULT_LANGUAGE } from '@graphql/store';
@@ -25,7 +26,7 @@ import { useCallback, useMemo, useState } from 'react';
 
 const Table = dynamic(
   () => import('@components/ui/table').then((mod) => mod.Table),
-  { ssr: false }
+  { ssr: false, loading: () => <Loader text={'Loading'} /> }
 );
 
 export type IProps = {
@@ -100,7 +101,7 @@ const StoreViewList = ({ storeViews, selectedColumns }: IProps) => {
           <Link href={`${ROUTES.SYSTEM_STORES}/edit/${record.id}`}>
             <span
               style={{ width: 'fit-content' }}
-              className="font-medium text-base capitalize text-blue-500"
+              className="text-base font-medium capitalize text-blue-500"
             >
               {name}
             </span>
@@ -120,13 +121,13 @@ const StoreViewList = ({ storeViews, selectedColumns }: IProps) => {
               <div>
                 {isDefault && (
                   <Badge
-                    className="mr-2 border !text-sm !text-gray-600 shadow font-medium"
+                    className="mr-2 border !text-sm font-medium !text-gray-600 shadow"
                     text={t('table:table-item-default')}
                     color={'bg-gray-100'}
                   />
                 )}
                 <Badge
-                  className={cn('!text-sm border', {
+                  className={cn('border !text-sm', {
                     'text-red-900': !recode.active,
                     'text-green-800': recode.active
                   })}
@@ -148,7 +149,7 @@ const StoreViewList = ({ storeViews, selectedColumns }: IProps) => {
         ellipsis: true,
         render: (code: string) => (
           <div>
-            <span className="font-medium text-base w-full">{code}</span>
+            <span className="w-full text-base font-medium">{code}</span>
           </div>
         )
       },
@@ -216,7 +217,7 @@ const StoreViewList = ({ storeViews, selectedColumns }: IProps) => {
 
   return (
     <>
-      <div className="card overflow-hidden mb-6">
+      <div className="card mb-6 overflow-hidden">
         <Table
           //@ts-ignore
           columns={tableColumns}

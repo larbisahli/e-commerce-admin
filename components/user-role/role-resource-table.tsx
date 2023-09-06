@@ -1,4 +1,5 @@
 import Checkbox from '@components/ui/checkbox';
+import Loader from '@components/ui/loader/loader';
 import { ACTION_PRIVILEGES } from '@ts-types/enums';
 import { ResourcePermissionType } from '@ts-types/index';
 import { useIsRTL } from '@utils/locals';
@@ -8,7 +9,7 @@ import React, { useMemo } from 'react';
 
 const Table = dynamic(
   () => import('@components/ui/table').then((mod) => mod.Table),
-  { ssr: false }
+  { ssr: false, loading: () => <Loader text={'Loading'} /> }
 );
 
 type IProps = {
@@ -115,7 +116,7 @@ const RoleResourceTable = ({ setRoles, roles }: IProps) => {
 
   return (
     <>
-      <div className="card overflow-hidden mb-6">
+      <div className="card mb-6 overflow-hidden">
         <Table
           // @ts-ignore
           columns={columns}
@@ -168,7 +169,7 @@ const RenderResourceComponent = ({
         });
       }}
       checked={selectAll ? selectAllValue : value}
-      className="w-full flex justify-center"
+      className="flex w-full justify-center"
     />
   );
 };

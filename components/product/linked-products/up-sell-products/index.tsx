@@ -49,10 +49,10 @@ const UpSellProducts = ({
 
   return (
     <>
-      <div className="flex items-end justify-between flex-wrap xl:flex-nowrap">
-        <div className="xl:mb-0 mb-3">
-          <span className="font-medium text-base">Up-Sell Products</span>
-          <p className="text-sm text-body xl:max-w-[75%] max-w-full">
+      <div className="flex flex-wrap items-end justify-between xl:flex-nowrap">
+        <div className="mb-3 xl:mb-0">
+          <span className="text-base font-medium">Up-Sell Products</span>
+          <p className="max-w-full text-sm text-body xl:max-w-[75%]">
             An up-sell item is offered to the customer as a pricier or
             higher-quality alternative to the product the customer is looking
             at.

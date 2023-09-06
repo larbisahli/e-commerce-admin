@@ -146,12 +146,8 @@ export const CATEGORY = gql`
     $id: Int!
     $language: LanguageInput!
     $defaultLanguage: LanguageInput!
-    ) {
-    category(
-      id: $id
-      language: $language
-      defaultLanguage: $defaultLanguage
-      ) {
+  ) {
+    category(id: $id, language: $language, defaultLanguage: $defaultLanguage) {
       id
       parentId
       parent {
@@ -194,11 +190,12 @@ export const CATEGORIES_FOR_SELECT = gql`
     $language: LanguageInput!
   ) {
     categorySelect(
-      id: $id,
-      page: $page,
-      limit: $limit,
-      orderBy: $orderBy,
-      language: $language) {
+      id: $id
+      page: $page
+      limit: $limit
+      orderBy: $orderBy
+      language: $language
+    ) {
       id
       name
     }
@@ -206,12 +203,18 @@ export const CATEGORIES_FOR_SELECT = gql`
 `;
 
 export const CATEGORIES_FOR_SELECT_ALL = gql`
-  query CategorySelectAll($page: Int!, $limit: Int!, $orderBy: String!, $language: LanguageInput!) {
+  query CategorySelectAll(
+    $page: Int!
+    $limit: Int!
+    $orderBy: String!
+    $language: LanguageInput!
+  ) {
     categorySelectAll(
-      page: $page,
-      limit: $limit,
-      orderBy: $orderBy,
-      language: $language) {
+      page: $page
+      limit: $limit
+      orderBy: $orderBy
+      language: $language
+    ) {
       id
       name
     }

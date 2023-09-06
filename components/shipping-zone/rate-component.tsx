@@ -44,15 +44,15 @@ const RateComponent = ({
     rateType.type === RateType.PRICE ? `(${currency?.symbol})` : '';
 
   return (
-    <div className="relative border border-solid border-border-200 last:border-0 mt-4 rounded-md">
-      <div className="border-b flex items-center justify-between py-2 px-4">
-        <div className="text-green-700 text-sm font-medium">{`Rate #${
+    <div className="relative mt-4 rounded-md border border-solid border-border-200 last:border-0">
+      <div className="flex items-center justify-between border-b py-2 px-4">
+        <div className="text-sm font-medium text-green-700">{`Rate #${
           index + 1
         }`}</div>
         {fields?.length - 1 === index && (
           <button
             onClick={removeRateValue}
-            className="p-1 bg-red-500 text-white rounded-full hover:bg-red-400"
+            className="rounded-full bg-red-500 p-1 text-white hover:bg-red-400"
           >
             <CloseIcon width="1rem" height="1rem" />
           </button>
@@ -62,7 +62,7 @@ const RateComponent = ({
       <input {...register(`shippingRates.${index}.index`)} type="hidden" />
       <div
         style={{ background: '#f9f9f958' }}
-        className="border border-solid border-gray-200 p-2 m-4 rounded-md"
+        className="m-4 rounded-md border border-solid border-gray-200 p-2"
       >
         <div className="flex items-center">
           {rateType.type === RateType.WEIGHT && (
@@ -79,7 +79,7 @@ const RateComponent = ({
             </div>
           )}
           <Input
-            className="sm:col-span-2 mr-2"
+            className="mr-2 sm:col-span-2"
             label={`${t('form:input-label-min')} ${
               rateType.type
             } ${currencySymbol}`}
@@ -91,7 +91,7 @@ const RateComponent = ({
             {...register(`shippingRates.${index}.minValue` as const)}
           />
           <Input
-            className="sm:col-span-2 mr-2"
+            className="mr-2 sm:col-span-2"
             label={`${t('form:input-label-max')} ${
               rateType.type
             } ${currencySymbol}`}

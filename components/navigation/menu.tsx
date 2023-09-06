@@ -42,12 +42,12 @@ function NavMenu() {
     <Menu as="div" className="relative inline-block text-left">
       <Menu.Button
         className={cx(
-          'flex items-center bg-white text-gray-700 shadow-lg border rounded-sm focus:outline-none',
+          'flex items-center rounded-sm border bg-white text-gray-700 shadow-lg focus:outline-none',
           'border-hover'
         )}
       >
         <Avatar
-          className="shadow-lg !rounded-sm"
+          className="!rounded-sm shadow-lg"
           src={image}
           firstName={firstName}
           customPlaceholder={placeholder}
@@ -65,28 +65,28 @@ function NavMenu() {
       >
         <Menu.Items
           as="ul"
-          className="absolute shadow right-0 w-48 py-4 mt-1 origin-top-right bg-white rounded-sm border shadow-700 focus:outline-none"
+          className="shadow-700 absolute right-0 mt-1 w-48 origin-top-right rounded-sm border bg-white py-4 shadow focus:outline-none"
         >
           {firstName && (
-            <div className="px-4 text-gray-600 text-sm capitalize">{`${firstName} ${lastName}`}</div>
+            <div className="px-4 text-sm capitalize text-gray-600">{`${firstName} ${lastName}`}</div>
           )}
-          <div className="px-4 text-gray-600 text-xs flex items-center">
+          <div className="flex items-center px-4 text-xs text-gray-600">
             <span>Your store:</span>
             <Link
               target="_blank"
               href={`https://${alias}.dropgala.com`}
               className={cn(
-                'block px-1 text-accent text-sm capitalize font-semibold transition duration-200 hover:text-accent'
+                'block px-1 text-sm font-semibold capitalize text-accent transition duration-200 hover:text-accent'
               )}
             >
               {alias}
             </Link>
           </div>
-          <div className="bg-gray-300 h-[1px] my-2 w-full"></div>
+          <div className="my-2 h-[1px] w-full bg-gray-300"></div>
           {authorizedLinks.map(({ href, labelTransKey, target }, idx) => (
             <Menu.Item key={idx}>
               {({ active }) => (
-                <li className="cursor-pointer last:border-0 flex">
+                <li className="flex cursor-pointer last:border-0">
                   <Link
                     target={target}
                     href={href}

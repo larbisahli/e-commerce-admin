@@ -10,7 +10,7 @@ export default function User({ client }: SSRProps) {
   useGetUser(client);
 
   return (
-    <div className="pt-12 flex items-center justify-center">
+    <div className="flex items-center justify-center pt-12">
       <h1 className="text-6xl">Great thing coming soon.</h1>
     </div>
   );

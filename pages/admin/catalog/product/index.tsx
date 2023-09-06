@@ -2,7 +2,6 @@ import { useQuery } from '@apollo/client';
 import AppLayout from '@components/layouts/app';
 import ProductList from '@components/product/product-list';
 import ErrorMessage from '@components/ui/error-message';
-import Loader from '@components/ui/loader/loader';
 import { PRODUCTS } from '@graphql/product';
 import { useGetUser } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
@@ -14,7 +13,6 @@ import type { Product } from '@ts-types/generated';
 import { OrderBy, SortOrder } from '@ts-types/generated';
 import { COLUMNS } from '@utils/data/table-columns';
 import { ROUTES } from '@utils/routes';
-import cn from 'classnames'
 import isEmpty from 'lodash/isEmpty';
 import type { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
@@ -26,7 +24,7 @@ const PageMainHeader = dynamic(
   () => import('@components/common/page-main-header'),
   {
     ssr: true,
-    loading: () => <div className="animated-background w-full h-[80px]"></div>
+    loading: () => <div className="animated-background h-[80px] w-full"></div>
   }
 );
 
@@ -34,7 +32,7 @@ const PageMainAction = dynamic(
   () => import('@components/common/PageMainAction'),
   {
     ssr: true,
-    loading: () => <div className="animated-background w-full h-[80px]"></div>
+    loading: () => <div className="animated-background h-[80px] w-full"></div>
   }
 );
 
@@ -53,7 +51,7 @@ export default function ProductsPage({ client }: SSRProps) {
   const { selectedTableColumns, handleColumnChange } =
     useTableColumn('product');
 
-    const { defaultLanguage, selectedLanguage } = useSettings();
+  const { defaultLanguage, selectedLanguage } = useSettings();
 
   const { data, loading, error, fetchMore } = useQuery<
     TProduct,
@@ -111,10 +109,11 @@ export default function ProductsPage({ client }: SSRProps) {
         currentPage={page}
         perPage={limit.value}
       />
-      {loading && <Loader text={t('common:text-loading')} />}
-      <div className={cn({ hidden: loading })}>
-      <ProductList products={products} selectedColumns={selectedTableColumns} />
-      </div>
+      <ProductList
+        loading={loading}
+        products={products}
+        selectedColumns={selectedTableColumns}
+      />
     </>
   );
 }

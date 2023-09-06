@@ -43,7 +43,7 @@ const Step2Form = ({ control, register, errors, alias }) => {
         onKeyDown={() => setExecuteCheckQuery(false)}
         onKeyUp={() => setExecuteCheckQuery(true)}
       />
-      <div className="pt-1 mb-4 text-gray-500 text-xs flex items-center ">
+      <div className="mb-4 flex items-center pt-1 text-xs text-gray-500 ">
         <span className="pr-1">
           <InfoSvg width="0.9rem" height="0.9rem" />
         </span>
@@ -115,9 +115,9 @@ const AliasViewer = ({ alias, executeCheckQuery }) => {
   }, [executeCheckQuery, alias, aliasCheck]);
 
   return alias ? (
-    <div className="flex w-fit min-w-full items-center justify-center p-3 mb-3">
+    <div className="mb-3 flex w-fit min-w-full items-center justify-center p-3">
       {loading ? (
-        <div style={{ color: '#969594' }} className="animate-spin mr-2">
+        <div style={{ color: '#969594' }} className="mr-2 animate-spin">
           <ArrowSync width={30} height={30} />
         </div>
       ) : exists ? (

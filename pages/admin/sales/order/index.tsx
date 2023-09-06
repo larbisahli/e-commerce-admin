@@ -43,18 +43,18 @@ export default function Orders() {
   }
   return (
     <>
-      <Card className="flex flex-col md:flex-row items-center justify-between mb-8">
-        <div className="md:w-1/4 mb-4 md:mb-0">
-          <h1 className="text-lg font-semibold text-heading pb-3">
+      <Card className="mb-8 flex flex-col items-center justify-between md:flex-row">
+        <div className="mb-4 md:mb-0 md:w-1/4">
+          <h1 className="pb-3 text-lg font-semibold text-heading">
             {t('form:input-label-orders')}
           </h1>
         </div>
 
-        <div className="w-full md:w-3/4 flex flex-col md:flex-row items-center ms-auto">
+        <div className="flex w-full flex-col items-center ms-auto md:w-3/4 md:flex-row">
           <Search onSearch={handleSearch} />
           <SortForm
             showLabel={false}
-            className="w-full md:w-1/2 md:ms-5 mt-5 md:mt-0 flex-shrink-0"
+            className="mt-5 w-full flex-shrink-0 md:mt-0 md:w-1/2 md:ms-5"
             onSortChange={({ value }: { value: SortOrder }) => {
               setColumn(value);
             }}

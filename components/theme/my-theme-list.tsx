@@ -1,6 +1,7 @@
 import ActionButtons from '@components/common/action-buttons';
 import StarIcon from '@components/icons/star';
 import ImageComponent from '@components/ImageComponent';
+import Loader from '@components/ui/loader/loader';
 import { siteSettings } from '@settings/site.settings';
 import { ImageType, ThemeType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
@@ -10,7 +11,7 @@ import { useMemo } from 'react';
 
 const Table = dynamic(
   () => import('@components/ui/table').then((mod) => mod.Table),
-  { ssr: false }
+  { ssr: false, loading: () => <Loader text={'Loading'} /> }
 );
 
 type IProps = {
@@ -37,7 +38,7 @@ const MyThemeList = ({ themes }: IProps) => {
         render: (thumbnail_: ImageType[]) => {
           const { image, placeholder } = thumbnail[0] ?? {};
           return (
-            <div className="shadow min-w-0 overflow-hidden rounded-sm w-[100px] h-[100px] border">
+            <div className="h-[100px] w-[100px] min-w-0 overflow-hidden rounded-sm border shadow">
               <ImageComponent
                 src={image ?? siteSettings.product.image}
                 customPlaceholder={
@@ -62,7 +63,7 @@ const MyThemeList = ({ themes }: IProps) => {
           <div>
             <span
               style={{ width: 'fit-content' }}
-              className="font-medium text-13px md:text-sm capitalize"
+              className="text-13px font-medium capitalize md:text-sm"
             >
               {title}
             </span>
@@ -80,7 +81,7 @@ const MyThemeList = ({ themes }: IProps) => {
           <div>
             <span
               style={{ width: 'fit-content' }}
-              className="font-medium text-13px md:text-sm capitalize"
+              className="text-13px font-medium capitalize md:text-sm"
             >
               {description}
             </span>
@@ -97,7 +98,7 @@ const MyThemeList = ({ themes }: IProps) => {
           <div>
             <span
               style={{ width: 'fit-content' }}
-              className="font-semibold text-13px md:text-sm"
+              className="text-13px font-semibold md:text-sm"
             >
               {themePath}
             </span>
@@ -114,7 +115,7 @@ const MyThemeList = ({ themes }: IProps) => {
           <div>
             <span
               style={{ width: 'fit-content' }}
-              className="font-semibold text-gray-400 text-13px md:text-sm"
+              className="text-13px font-semibold text-gray-400 md:text-sm"
             >
               {`v: ${version}`}
             </span>
@@ -133,7 +134,7 @@ const MyThemeList = ({ themes }: IProps) => {
             {Array.from({ length: ratingStarCount })?.map((_, idx) => (
               <StarIcon key={idx} />
             ))}
-            <span className="text-gray-500 text-xs pt-[5px] mx-[3px]">
+            <span className="mx-[3px] pt-[5px] text-xs text-gray-500">
               {`(${ratingStarCount})`}
             </span>
           </div>
@@ -158,18 +159,15 @@ const MyThemeList = ({ themes }: IProps) => {
   }, [t]);
 
   return (
-    <>
-      <div className="card overflow-hidden mb-6">
-        <Table
-          //@ts-ignore
-          columns={tableColumns}
-          emptyText={t('table:empty-table-data')}
-          data={themes}
-          rowKey="id"
-          scroll={{ x: 800 }}
-        />
-      </div>
-    </>
+    <Table
+      //@ts-ignore
+      columns={tableColumns}
+      emptyText={t('table:empty-table-data')}
+      data={themes}
+      rowKey="id"
+      scroll={{ x: 800 }}
+      className="card mb-6 overflow-hidden"
+    />
   );
 };
 

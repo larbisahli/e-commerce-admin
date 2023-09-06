@@ -12,28 +12,28 @@ const FaqSection = () => {
     });
   };
   return (
-    <section className="p-5 sm:px-11 mt-32 container mx-auto flex flex-col rounded bg-gray-100 w-full">
-      <div className="flex items-center justify-center flex-col my-7">
-        <h2 className="text-2xl text-gray-800 font-bold leading-tight text-center md:text-left slide-in-bottom-h1">
+    <section className="container mx-auto mt-32 flex w-full flex-col rounded bg-gray-100 p-5 sm:px-11">
+      <div className="my-7 flex flex-col items-center justify-center">
+        <h2 className="slide-in-bottom-h1 text-center text-2xl font-bold leading-tight text-gray-800 md:text-left">
           Frequently asked questions
         </h2>
-        <p className="text-gray-600 self-center text-sm">
+        <p className="self-center text-sm text-gray-600">
           Find answers to the most frequently asked questions
         </p>
       </div>
       {/* 1 */}
       <button
-        className="bg-white shadow p-4 rounded my-3"
+        className="my-3 rounded bg-white p-4 shadow"
         onClick={() => handleFaq(1)}
       >
         <div className="flex items-center justify-between">
-          <span className="text-gray-900 font-medium leading-tight text-center md:text-left slide-in-bottom-h1">
+          <span className="slide-in-bottom-h1 text-center font-medium leading-tight text-gray-900 md:text-left">
             Is there a trial period?
           </span>
           <ArrowDown width={20} height={20} />
         </div>
         <div
-          className={cn('pt-5 text-gray-800 text-left hidden max-w-4xl', {
+          className={cn('hidden max-w-4xl pt-5 text-left text-gray-800', {
             '!block': openFAQ === 1
           })}
         >
@@ -44,17 +44,17 @@ const FaqSection = () => {
       </button>
       {/* 2 */}
       <button
-        className="bg-white shadow p-4 rounded my-3"
+        className="my-3 rounded bg-white p-4 shadow"
         onClick={() => handleFaq(2)}
       >
         <div className="flex items-center justify-between">
-          <span className="text-gray-900 font-medium leading-tight text-center md:text-left slide-in-bottom-h1">
+          <span className="slide-in-bottom-h1 text-center font-medium leading-tight text-gray-900 md:text-left">
             Can I use Dropgala for dropshipping?
           </span>
           <ArrowDown width={20} height={20} />
         </div>
         <div
-          className={cn('pt-5 text-gray-800 text-left hidden max-w-4xl', {
+          className={cn('hidden max-w-4xl pt-5 text-left text-gray-800', {
             '!block': openFAQ === 2
           })}
         >
@@ -68,18 +68,18 @@ const FaqSection = () => {
       </button>
       {/* 3 */}
       <button
-        className="bg-white shadow p-4 rounded my-3"
+        className="my-3 rounded bg-white p-4 shadow"
         onClick={() => handleFaq(3)}
       >
         <div className="flex items-center justify-between">
-          <span className="text-gray-900 font-medium leading-tight text-center md:text-left slide-in-bottom-h1">
+          <span className="slide-in-bottom-h1 text-center font-medium leading-tight text-gray-900 md:text-left">
             I created my online store last week but have not received any orders
             yet. Why??
           </span>
           <ArrowDown width={20} height={20} />
         </div>
         <div
-          className={cn('pt-5 text-gray-800 text-left hidden max-w-4xl', {
+          className={cn('hidden max-w-4xl pt-5 text-left text-gray-800', {
             '!block': openFAQ === 3
           })}
         >
@@ -93,17 +93,17 @@ const FaqSection = () => {
       </button>
       {/* 4 */}
       <button
-        className="bg-white shadow p-4 rounded my-3"
+        className="my-3 rounded bg-white p-4 shadow"
         onClick={() => handleFaq(4)}
       >
         <div className="flex items-center justify-between">
-          <span className="text-gray-900 font-medium leading-tight text-center md:text-left slide-in-bottom-h1">
+          <span className="slide-in-bottom-h1 text-center font-medium leading-tight text-gray-900 md:text-left">
             Is my store secure?
           </span>
           <ArrowDown width={20} height={20} />
         </div>
         <div
-          className={cn('pt-5 text-gray-800 text-left hidden max-w-4xl', {
+          className={cn('hidden max-w-4xl pt-5 text-left text-gray-800', {
             '!block': openFAQ === 4
           })}
         >
@@ -115,17 +115,17 @@ const FaqSection = () => {
       </button>
       {/* 5 */}
       <button
-        className="bg-white shadow p-4 rounded my-3"
+        className="my-3 rounded bg-white p-4 shadow"
         onClick={() => handleFaq(5)}
       >
         <div className="flex items-center justify-between">
-          <span className="text-gray-900 font-medium leading-tight text-center md:text-left slide-in-bottom-h1">
+          <span className="slide-in-bottom-h1 text-center font-medium leading-tight text-gray-900 md:text-left">
             I have my own domain name, can I use it?
           </span>
           <ArrowDown width={20} height={20} />
         </div>
         <div
-          className={cn('pt-5 text-gray-800 text-left hidden max-w-4xl', {
+          className={cn('hidden max-w-4xl pt-5 text-left text-gray-800', {
             '!block': openFAQ === 5
           })}
         >
@@ -137,17 +137,17 @@ const FaqSection = () => {
       </button>
       {/* 6 */}
       <button
-        className="bg-white shadow p-4 rounded my-3"
+        className="my-3 rounded bg-white p-4 shadow"
         onClick={() => handleFaq(6)}
       >
         <div className="flex items-center justify-between">
-          <span className="text-gray-900 font-medium leading-tight text-center md:text-left slide-in-bottom-h1">
+          <span className="slide-in-bottom-h1 text-center font-medium leading-tight text-gray-900 md:text-left">
             Do you take sales charges?
           </span>
           <ArrowDown width={20} height={20} />
         </div>
         <div
-          className={cn('pt-5 text-gray-800 text-left hidden max-w-4xl', {
+          className={cn('hidden max-w-4xl pt-5 text-left text-gray-800', {
             '!block': openFAQ === 6
           })}
         >
@@ -159,17 +159,17 @@ const FaqSection = () => {
       </button>
       {/* 7 */}
       <button
-        className="bg-white shadow p-4 rounded my-3"
+        className="my-3 rounded bg-white p-4 shadow"
         onClick={() => handleFaq(7)}
       >
         <div className="flex items-center justify-between">
-          <span className="text-gray-900 font-medium leading-tight text-center md:text-left slide-in-bottom-h1">
+          <span className="slide-in-bottom-h1 text-center font-medium leading-tight text-gray-900 md:text-left">
             Does Dropgala take care of storage and shipping of my products?
           </span>
           <ArrowDown width={20} height={20} />
         </div>
         <div
-          className={cn('pt-5 text-gray-800 text-left hidden max-w-4xl', {
+          className={cn('hidden max-w-4xl pt-5 text-left text-gray-800', {
             '!block': openFAQ === 7
           })}
         >

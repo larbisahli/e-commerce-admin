@@ -49,7 +49,12 @@
   background: #ffffff;
   width: 2px;
   height: 2px;
-  box-shadow: 2px 0 0 #ffffff, 4px 0 0 #ffffff, 4px -2px 0 #ffffff,
-    4px -4px 0 #ffffff, 4px -6px 0 #ffffff, 4px -8px 0 #ffffff;
+  box-shadow:
+    2px 0 0 #ffffff,
+    4px 0 0 #ffffff,
+    4px -2px 0 #ffffff,
+    4px -4px 0 #ffffff,
+    4px -6px 0 #ffffff,
+    4px -8px 0 #ffffff;
   transform: rotate(45deg);
 }

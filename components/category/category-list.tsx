@@ -1,5 +1,8 @@
 import ActionButtons from '@components/common/action-buttons';
+import Loader from '@components/ui/loader/loader';
+import { TableRowPlaceholder } from '@components/ui/placeholders/Table';
 import ProfileCart from '@components/ui/profile-card';
+import { usePlaceholder } from '@hooks/usePlaceholder';
 import { Category, CreatedUpdatedByAt } from '@ts-types/generated';
 import { useIsRTL } from '@utils/locals';
 import { ROUTES } from '@utils/routes';
@@ -12,17 +15,24 @@ import React, { useMemo } from 'react';
 
 const Table = dynamic(
   () => import('@components/ui/table').then((mod) => mod.Table),
-  { ssr: false }
+  { ssr: false, loading: () => <Loader text={'Loading'} /> }
 );
 
 export type IProps = {
   categories: Category[];
   selectedColumns: string[];
+  loading: boolean;
 };
 
-const CategoryList = ({ categories, selectedColumns }: IProps) => {
+interface TableRowProps extends Category {
+  loading: boolean;
+}
+
+const CategoryList = ({ loading, categories, selectedColumns }: IProps) => {
   const { t } = useTranslation();
   const { alignLeft } = useIsRTL();
+
+  const { tablePlaceholderRow } = usePlaceholder();
 
   const columns = useMemo(() => {
     return [
@@ -41,13 +51,16 @@ const CategoryList = ({ categories, selectedColumns }: IProps) => {
         align: alignLeft,
         width: 200,
         ellipsis: true,
-        render: (name: string, record: Category) => {
+        render: (name: string, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
           return (
             <span
-              className={cn('font-semibold text-gray-800 capitalize', {
+              className={cn('font-semibold capitalize text-gray-800', {
                 'pl-3': record?.level === 2,
                 'pl-6': record?.level === 3,
-                'text-gray-600 font-medium': record?.level !== 1
+                'font-medium text-gray-600': record?.level !== 1
               })}
             >
               {name}
@@ -61,7 +74,13 @@ const CategoryList = ({ categories, selectedColumns }: IProps) => {
         key: 'description',
         align: alignLeft,
         width: 150,
-        ellipsis: true
+        ellipsis: true,
+        render: (description: string, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
+          return description;
+        }
       },
       {
         title: t('table:table-item-menu'),
@@ -70,7 +89,10 @@ const CategoryList = ({ categories, selectedColumns }: IProps) => {
         align: 'center',
         width: 120,
         ellipsis: true,
-        render: (includeInMenu: boolean) => {
+        render: (includeInMenu: boolean, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
           return <span>{includeInMenu ? 'Yes' : 'No'}</span>;
         }
       },
@@ -79,14 +101,26 @@ const CategoryList = ({ categories, selectedColumns }: IProps) => {
         dataIndex: 'level',
         key: 'level',
         align: 'center',
-        width: 80
+        width: 80,
+        render: (level: number, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
+          return level;
+        }
       },
       {
         title: t('table:table-item-position'),
         dataIndex: 'position',
         key: 'position',
         align: 'center',
-        width: 80
+        width: 80,
+        render: (position: number, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
+          return position;
+        }
       },
       {
         title: t('table:table-item-created-at'),
@@ -94,7 +128,13 @@ const CategoryList = ({ categories, selectedColumns }: IProps) => {
         key: 'createdAt',
         align: alignLeft,
         width: 180,
-        render: (createdAt: CreatedUpdatedByAt['createdAt']) => {
+        render: (
+          createdAt: CreatedUpdatedByAt['createdAt'],
+          record: TableRowProps
+        ) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
           return `${dayjs(createdAt).format('MMM D, YYYY')} at ${dayjs(
             createdAt
           ).format('h:mm A')}`;
@@ -109,8 +149,11 @@ const CategoryList = ({ categories, selectedColumns }: IProps) => {
         ellipsis: true,
         render: (
           createdBy: CreatedUpdatedByAt['createdBy'],
-          record: Category
+          record: TableRowProps
         ) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
           return <ProfileCart user={createdBy} createdAt={record?.createdAt} />;
         }
       },
@@ -123,8 +166,11 @@ const CategoryList = ({ categories, selectedColumns }: IProps) => {
         ellipsis: true,
         render: (
           updatedBy: CreatedUpdatedByAt['updatedBy'],
-          record: Category
+          record: TableRowProps
         ) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
           return <ProfileCart user={updatedBy} updatedAt={record?.updatedAt} />;
         }
       },
@@ -134,9 +180,12 @@ const CategoryList = ({ categories, selectedColumns }: IProps) => {
         key: 'actions',
         align: 'center',
         width: 80,
-        render: (id: string) => (
-          <ActionButtons id={id} editUrl={`${ROUTES.CATEGORY}/edit/${id}`} />
-        )
+        render: (id: string, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
+          <ActionButtons id={id} editUrl={`${ROUTES.CATEGORY}/edit/${id}`} />;
+        }
       }
     ];
   }, [alignLeft, t]);
@@ -150,23 +199,20 @@ const CategoryList = ({ categories, selectedColumns }: IProps) => {
   }, [columns, selectedColumns]);
 
   return (
-    <React.Fragment>
-      <div className="card overflow-hidden mb-6">
-        <Table
-          //@ts-ignore
-          columns={tableColumns}
-          emptyText={t('table:empty-table-data')}
-          data={categories}
-          rowKey={(record) => record.id}
-          key="id"
-          scroll={{ x: 800 }}
-          expandable={{
-            expandedRowRender: () => <></>,
-            rowExpandable: (record: Category) => !isEmpty(record?.children)
-          }}
-        />
-      </div>
-    </React.Fragment>
+    <Table
+      //@ts-ignore
+      columns={tableColumns}
+      emptyText={t('table:empty-table-data')}
+      data={loading ? tablePlaceholderRow : categories}
+      rowKey={(record) => record.id}
+      key="id"
+      scroll={{ x: 800 }}
+      expandable={{
+        expandedRowRender: () => <></>,
+        rowExpandable: (record: Category) => !isEmpty(record?.children)
+      }}
+      className="card mb-6 overflow-hidden"
+    />
   );
 };
 

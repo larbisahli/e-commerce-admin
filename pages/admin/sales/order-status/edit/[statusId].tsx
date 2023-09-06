@@ -2,6 +2,8 @@ import { useQuery } from '@apollo/client';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
+import { FormPlaceholder } from '@components/ui/placeholders/Form';
+import { FormActionPlaceholder } from '@components/ui/placeholders/FormAction';
 import { ORDER_STATUS } from '@graphql/order-status';
 import { useGetUser } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
@@ -52,8 +54,13 @@ export default function UpdateOrderStatusPage({ client }: SSRProps) {
   useGetUser(client);
   useErrorLogger(error);
 
-  if (loading) {
-    return <Loader text={t('common:text-loading')} />;
+  if (isEmpty(orderStatus) || loading) {
+    return (
+      <div>
+        <FormActionPlaceholder />
+        <FormPlaceholder />
+      </div>
+    );
   }
   if (error) {
     return <ErrorMessage message={error.message} />;

@@ -78,14 +78,14 @@ const Search: React.FC<SearchProps> = ({
     <form
       noValidate
       role="search"
-      className={cn('w-full flex items-center relative', className)}
+      className={cn('relative flex w-full items-center', className)}
       onSubmit={handleSubmit(onSearch)}
     >
       <label htmlFor="search" className="sr-only">
         {t('form:input-label-search')}
       </label>
-      <button className="outline-none absolute start-1 focus:outline-none active:outline-none p-2 text-body">
-        <SearchIcon className="w-5 h-5" />
+      <button className="absolute p-2 text-body outline-none start-1 focus:outline-none active:outline-none">
+        <SearchIcon className="h-5 w-5" />
       </button>
       <input
         type="text"
@@ -102,9 +102,9 @@ const Search: React.FC<SearchProps> = ({
         <button
           type="button"
           onClick={clear}
-          className="outline-none absolute end-1 focus:outline-none active:outline-none p-2 text-body"
+          className="absolute p-2 text-body outline-none end-1 focus:outline-none active:outline-none"
         >
-          <CloseIcon className="w-5 h-5" />
+          <CloseIcon className="h-5 w-5" />
         </button>
       )}
     </form>

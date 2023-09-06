@@ -68,26 +68,26 @@ const RenderNotificationItem = ({ content }) => {
     <div
       onMouseEnter={() => setIsHover(true)}
       onMouseLeave={() => setIsHover(false)}
-      className="px-4 py-3 border-t"
+      className="border-t px-4 py-3"
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center">
-          <span className="w-2 h-2 bg-blue-400 rounded-full mr-2"></span>
-          <span className="text-gray-700 text-sm font-semibold">
+          <span className="mr-2 h-2 w-2 rounded-full bg-blue-400"></span>
+          <span className="text-sm font-semibold text-gray-700">
             {content?.title}
           </span>
         </div>
         {isHover ? (
-          <button className="text-gray-500 text-sm font-semibold">
+          <button className="text-sm font-semibold text-gray-500">
             <CloseIcon width={20} height={20} />
           </button>
         ) : (
-          <span className="text-gray-500 text-xs">
+          <span className="text-xs text-gray-500">
             {dayjs(content?.date).fromNow()}
           </span>
         )}
       </div>
-      <p className="text-xs text-gray-600 cut-line-3 px-1 pt-2">
+      <p className="cut-line-3 px-1 pt-2 text-xs text-gray-600">
         {content?.content}
       </p>
     </div>
@@ -108,13 +108,13 @@ export default function NavNotification() {
       )}
       <Menu.Button
         className={cx(
-          'flex items-center border rounded-sm focus:outline-none',
+          'flex items-center rounded-sm border focus:outline-none',
           'border-hover'
         )}
       >
         <div
           className={cn(
-            'flex items-center bg-white text-gray-500 justify-center cursor-pointer w-10 h-10 overflow-hidden rounded-full'
+            'flex h-10 w-10 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-white text-gray-500'
           )}
         >
           <Bell width={25} height={25} />
@@ -131,12 +131,12 @@ export default function NavNotification() {
       >
         <Menu.Items
           as="ul"
-          className="absolute shadow notificationContainer right-0 w-96 py-4 mt-1 origin-top-right bg-white focus:outline-none"
+          className="notificationContainer absolute right-0 mt-1 w-96 origin-top-right bg-white py-4 shadow focus:outline-none"
         >
           <div className="notificationWrapper">
             <div className="notificationWrapper">
               {hasNotification && (
-                <div className="p-3 pt-0 w-full font-semibold text-lg text-gray-600">
+                <div className="w-full p-3 pt-0 text-lg font-semibold text-gray-600">
                   Notifications
                 </div>
               )}
@@ -157,12 +157,12 @@ export default function NavNotification() {
 
 function NotificationEmpty() {
   return (
-    <div className="overflow-hidden text-sm h-40 px-5 flex flex-col items-center justify-center">
-      <div className="uppercase text-green-700 font-semibold">
+    <div className="flex h-40 flex-col items-center justify-center overflow-hidden px-5 text-sm">
+      <div className="font-semibold uppercase text-green-700">
         There is no notifications
       </div>
-      <div className="h-[1px] w-[50%] bg-gray-200 my-2"></div>
-      <div className="text-gray-500 text-center">
+      <div className="my-2 h-[1px] w-[50%] bg-gray-200"></div>
+      <div className="text-center text-gray-500">
         We will make sure to notify you when something happens
       </div>
     </div>

@@ -92,7 +92,7 @@ const ForgetPassword = () => {
           error={t(errors?.email?.message)}
         />
         <Button
-          className="w-full h-11 mt-8"
+          className="mt-8 h-11 w-full"
           loading={loading}
           disabled={loading}
         >
@@ -103,7 +103,7 @@ const ForgetPassword = () => {
         <Button
           variant="custom"
           onClick={() => router.push(ROUTES.LOGIN)}
-          className="me-4 text-gray-500"
+          className="text-gray-500 me-4"
           type="button"
         >
           <ArrowPrev />

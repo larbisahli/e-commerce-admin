@@ -216,10 +216,7 @@ const RegistrationForm = () => {
 
   useEffect(() => {
     if (!isEmpty(countries)) {
-      setValue(
-        'country',
-        countries?.find(({ iso2: iso }) => iso == iso2)
-      );
+      setValue('country', countries?.find(({ iso2: iso }) => iso == iso2));
     }
   }, [countries, iso2, setValue]);
 
@@ -235,7 +232,7 @@ const RegistrationForm = () => {
   const renderStep = (current) => {
     return (
       <div
-        className={cn('h-2 rounded-sm w-full bg-gray-200 transition-all', {
+        className={cn('h-2 w-full rounded-sm bg-gray-200 transition-all', {
           '!bg-blue-500': step >= current
         })}
       ></div>
@@ -246,8 +243,8 @@ const RegistrationForm = () => {
     if (step === 3) {
       return (
         <div
-          className="text-green-700 flex bg-green-100 border rounded
-        shadow p-2 items-center font-medium absolute right-0 text-sm"
+          className="absolute right-0 flex items-center rounded
+        border bg-green-100 p-2 text-sm font-medium text-green-700 shadow"
         >
           <div className="pr-1">
             {' '}
@@ -258,26 +255,26 @@ const RegistrationForm = () => {
       );
     }
     return (
-      <div className="text-gray-700 font-medium absolute right-0 text-sm">{`Step ${step}/3`}</div>
+      <div className="absolute right-0 text-sm font-medium text-gray-700">{`Step ${step}/3`}</div>
     );
   };
 
   const renderStepDesc = () => {
     if (step === 0) {
       return (
-        <p className="text-gray-600 pt-2">{t('common:sign-up-step1-desc')}</p>
+        <p className="pt-2 text-gray-600">{t('common:sign-up-step1-desc')}</p>
       );
     } else if (step === 1) {
-      <p className="text-gray-600 pt-2">{t('common:sign-up-step2-desc')} </p>;
+      <p className="pt-2 text-gray-600">{t('common:sign-up-step2-desc')} </p>;
     } else if (step === 2) {
-      <p className="text-gray-600 pt-2">{t('common:sign-up-step3-desc')} </p>;
+      <p className="pt-2 text-gray-600">{t('common:sign-up-step3-desc')} </p>;
     }
     return null;
   };
 
   return (
     <div className="h-full">
-      <div className="absolute invisible">
+      <div className="invisible absolute">
         <ReCAPTCHA
           sitekey={process.env.RECAPTCHA_SITE_KEY}
           badge="bottomright"
@@ -286,21 +283,21 @@ const RegistrationForm = () => {
           ref={_reCaptchaRef}
         />
       </div>
-      <div className="flex flex-col justify-center items-center mb-9">
-        <div className="m-2 mt-5 mx-12 relative w-full flex justify-center">
+      <div className="mb-9 flex flex-col items-center justify-center">
+        <div className="relative m-2 mx-12 mt-5 flex w-full justify-center">
           <Link href={'/'}>
-            <a className="leading-normal text-center text-blue-600 pt-2">
+            <a className="pt-2 text-center leading-normal text-blue-600">
               <Image src={'/logo.svg'} alt="logo" width={120} height={30} />
             </a>
           </Link>
           {renderStepChecker()}
         </div>
-        <div className="grid grid-cols-3 gap-2 w-full mb-5">
+        <div className="mb-5 grid w-full grid-cols-3 gap-2">
           {renderStep(1)}
           {renderStep(2)}
           {renderStep(3)}
         </div>
-        <h3 className="text-center font-medium text-lg mt-4">
+        <h3 className="mt-4 text-center text-lg font-medium">
           {step !== 3 && t('common:sign-up-create-store')}
         </h3>
         {renderStepDesc()}
@@ -356,7 +353,7 @@ const RegistrationForm = () => {
             </Button>
             {step !== 0 && (
               <Button
-                className="w-full text-gray-500 mt-2 !border-none !outline-none"
+                className="mt-2 w-full !border-none text-gray-500 !outline-none"
                 variant="custom"
                 onClick={(e) => {
                   e.preventDefault();
@@ -387,9 +384,9 @@ const RegistrationForm = () => {
           />
         ) : null}
         {step !== 3 && (
-          <div className="p-5 text-center mt-9">
+          <div className="mt-9 p-5 text-center">
             <Link href={ROUTES.LOGIN}>
-              <a className="text-blue-600 font-normal text-sm">
+              <a className="text-sm font-normal text-blue-600">
                 {t('already-have-account')}
               </a>
             </Link>

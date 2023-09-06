@@ -1,4 +1,5 @@
 import ActionButtons from '@components/common/action-buttons';
+import Loader from '@components/ui/loader/loader';
 import { RoleType } from '@ts-types/generated';
 import { useIsRTL } from '@utils/locals';
 import { ROUTES } from '@utils/routes';
@@ -8,7 +9,7 @@ import { useMemo } from 'react';
 
 const Table = dynamic(
   () => import('@components/ui/table').then((mod) => mod.Table),
-  { ssr: false }
+  { ssr: false, loading: () => <Loader text={'Loading'} /> }
 );
 
 type IProps = {
@@ -39,7 +40,7 @@ const RoleList = ({ roles }: IProps) => {
           <div>
             <span
               style={{ width: 'fit-content' }}
-              className="font-medium text-13px md:text-sm rounded block border border-sink-base px-2 py-1 bg-gray-100"
+              className="text-13px border-sink-base block rounded border bg-gray-100 px-2 py-1 font-medium md:text-sm"
             >
               {roleName}
             </span>
@@ -69,18 +70,15 @@ const RoleList = ({ roles }: IProps) => {
   }, [alignLeft]);
 
   return (
-    <>
-      <div className="card overflow-hidden mb-6">
-        <Table
-          // @ts-ignore
-          columns={columns}
-          emptyText={t('table:empty-table-data')}
-          data={roles}
-          rowKey="id"
-          scroll={{ x: 800 }}
-        />
-      </div>
-    </>
+    <Table
+      // @ts-ignore
+      columns={columns}
+      emptyText={t('table:empty-table-data')}
+      data={roles}
+      rowKey="id"
+      scroll={{ x: 800 }}
+      className="card mb-6 overflow-hidden"
+    />
   );
 };
 

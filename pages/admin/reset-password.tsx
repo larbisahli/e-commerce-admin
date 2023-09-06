@@ -17,20 +17,20 @@ const ResetPasswordPage = ({ client }: SSRProps) => {
   return (
     <Fragment>
       <div className="flex  h-screen items-center justify-center">
-        <div className="flex-1 h-full border border-gray-100">
-          <div className="m-2 mt-5 mx-12">
+        <div className="h-full flex-1 border border-gray-100">
+          <div className="m-2 mx-12 mt-5">
             <Link href={'/'}>
-              <a className="leading-normal text-center text-blue-600 pt-2">
+              <a className="pt-2 text-center leading-normal text-blue-600">
                 <Image src={'/logo.svg'} alt="logo" width={120} height={30} />
               </a>
             </Link>
           </div>
-          <div className="max-w-[570px] mx-auto bg-white p-5 sm:p-8">
-            <div className="flex flex-col items-center justify-center mt-4 mb-10">
+          <div className="mx-auto max-w-[570px] bg-white p-5 sm:p-8">
+            <div className="mt-4 mb-10 flex flex-col items-center justify-center">
               <h3 className="text-center text-xl font-medium ">
                 {t('form:text-reset-your-password')}
               </h3>
-              <p className="text-gray-600 text-sm py-2">
+              <p className="py-2 text-sm text-gray-600">
                 {t('form:password-help-text')}
               </p>
             </div>

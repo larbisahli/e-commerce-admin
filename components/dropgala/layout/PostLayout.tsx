@@ -6,7 +6,7 @@ import siteMetadata from '@data/siteMetadata';
 
 function PageTitle({ children }) {
   return (
-    <h1 className="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 sm:text-4xl sm:leading-10 md:text-5xl md:leading-14">
+    <h1 className="md:leading-14 text-3xl font-extrabold leading-9 tracking-tight text-gray-900 sm:text-4xl sm:leading-10 md:text-5xl">
       {children}
     </h1>
   );
@@ -43,7 +43,7 @@ export default function PostLayout({
       <article>
         <div className="xl:divide-y xl:divide-gray-200">
           <header className="pt-6 xl:pb-6">
-            <div className="space-y-1 my-10 text-center">
+            <div className="my-10 space-y-1 text-center">
               <dl className="space-y-10">
                 <div className="mb-4">
                   <dt className="sr-only">Published on</dt>
@@ -55,7 +55,7 @@ export default function PostLayout({
                       )}
                     </time>
                   </dd>
-                  <span className="text-gray-500 font-base leading-6 ">
+                  <span className="font-base leading-6 text-gray-500 ">
                     {readingTime.text}
                   </span>
                 </div>
@@ -107,7 +107,7 @@ export default function PostLayout({
               </dd>
             </dl>
             <div className="divide-y divide-gray-200 dark:divide-gray-700 xl:col-span-3 xl:row-span-2 xl:pb-0">
-              <div className="prose px-2 max-w-none pt-10 pb-8">{children}</div>
+              <div className="prose max-w-none px-2 pt-10 pb-8">{children}</div>
             </div>
             <footer>
               <div className="divide-gray-200 text-sm font-medium leading-5 xl:col-start-1 xl:row-start-2 xl:divide-y">

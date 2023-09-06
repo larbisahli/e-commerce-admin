@@ -102,7 +102,7 @@ const ImageViewModal = () => {
 
     return (
       <div className="my-2">
-        <span className="font-medium pr-1">Size:</span>
+        <span className="pr-1 font-medium">Size:</span>
         <span className="text-gray-800">{photo?.size?.formatBytes()}</span>
       </div>
     );
@@ -116,13 +116,13 @@ const ImageViewModal = () => {
     return (
       <>
         <div className="my-2">
-          <span className="font-medium pr-1">File type:</span>
-          <span className="text-gray-800 uppercase">
+          <span className="pr-1 font-medium">File type:</span>
+          <span className="uppercase text-gray-800">
             {photo.mimeType?.split('/')[1]}
           </span>
         </div>
         <div className="my-2">
-          <span className="font-medium pr-1">MIME-Type:</span>
+          <span className="pr-1 font-medium">MIME-Type:</span>
           <span className="text-gray-800">{photo.mimeType}</span>
         </div>
       </>
@@ -133,7 +133,7 @@ const ImageViewModal = () => {
     if (isFolder) {
       return (
         <div className="my-2">
-          <span className="font-medium pr-1">Items:</span>
+          <span className="pr-1 font-medium">Items:</span>
           <span className="text-gray-800">{itemsCount}</span>
         </div>
       );
@@ -148,11 +148,11 @@ const ImageViewModal = () => {
     return (
       <>
         <div className="my-2">
-          <span className="font-medium pr-1">Width:</span>
+          <span className="pr-1 font-medium">Width:</span>
           <span className="text-gray-800">{`${photo.width}px`}</span>
         </div>
         <div className="my-2">
-          <span className="font-medium pr-1">Height:</span>
+          <span className="pr-1 font-medium">Height:</span>
           <span className="text-gray-800">{`${photo.height}px`}</span>
         </div>
       </>
@@ -181,11 +181,11 @@ const ImageViewModal = () => {
     }
 
     return (
-      <div className="pb-8 pt-10 flex justify-end items-center w-full">
+      <div className="flex w-full items-center justify-end pb-8 pt-10">
         <Button
           onClick={() => saveAs(`${mediaURL}/${photo.image}`, `${name}.png`)}
           variant="outline"
-          className="text-blue-500 mr-6"
+          className="mr-6 text-blue-500"
         >
           <div className="px-2">
             <DownloadIcon width={25} height={25} />
@@ -198,9 +198,9 @@ const ImageViewModal = () => {
           disabled={loading}
           variant="custom"
           className={cn(
-            'w-fit py-2 px-4 bg-red-600 focus:outline-none hover:bg-red-700',
-            'focus:bg-red-700 text-light transition ease-in duration-200',
-            'text-center text-base font-semibold rounded shadow-md'
+            'w-fit bg-red-600 py-2 px-4 hover:bg-red-700 focus:outline-none',
+            'text-light transition duration-200 ease-in focus:bg-red-700',
+            'rounded text-center text-base font-semibold shadow-md'
           )}
         >
           {t('button-delete')}
@@ -213,7 +213,7 @@ const ImageViewModal = () => {
     if (isFolder) {
       return (
         <div className="my-2">
-          <span className="font-medium pr-1">Created at:</span>
+          <span className="pr-1 font-medium">Created at:</span>
           <span className="">{`${dayjs(createdAt).format(
             'MMM D, YYYY'
           )} at ${dayjs(createdAt).format('h:mm A')}`}</span>
@@ -222,7 +222,7 @@ const ImageViewModal = () => {
     }
     return (
       <div className="my-2">
-        <span className="font-medium pr-1">Uploaded at:</span>
+        <span className="pr-1 font-medium">Uploaded at:</span>
         <span className="">{`${dayjs(photo.createdAt).format(
           'MMM D, YYYY'
         )} at ${dayjs(photo.createdAt).format('h:mm A')}`}</span>
@@ -237,20 +237,20 @@ const ImageViewModal = () => {
         {view === MEDIA_ITEM_MODAL && (
           <div
             className={cn(
-              'flex max-h-screen overflow-y-auto flex-col bg-white md:h-fit',
+              'flex max-h-screen flex-col overflow-y-auto bg-white md:h-fit',
               'h-[100vh] w-[100vw] md:w-[70vw] 2xl:w-[60vw]',
-              { '!w-[450px] !h-[400px]': isFolder }
+              { '!h-[400px] !w-[450px]': isFolder }
             )}
           >
-            <div className="p-4 h-fit min-h-[400px] w-full">
+            <div className="h-fit min-h-[400px] w-full p-4">
               <h3 className="cut-line-1">{name}</h3>
-              <div className="flex flex-wrap mt-8">
+              <div className="mt-8 flex flex-wrap">
                 {renderImage()}
-                <div className="flex flex-col w-full">
+                <div className="flex w-full flex-col">
                   <div className="flex-1">
-                    <div className="flex-1 p-3 pt-0 relative">
+                    <div className="relative flex-1 p-3 pt-0">
                       <div className="mb-2">
-                        <span className="font-medium pr-1">Name:</span>
+                        <span className="pr-1 font-medium">Name:</span>
                         <span className="">{name}</span>
                       </div>
                       {renderSize()}

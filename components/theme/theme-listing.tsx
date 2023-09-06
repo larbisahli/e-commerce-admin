@@ -18,12 +18,12 @@ const ThemeListing = ({ themes }: IProps) => {
 
   return (
     <>
-      <div className="overflow-hidden mb-6 flex flex-wrap items-center justify-start">
+      <div className="mb-6 flex flex-wrap items-center justify-start overflow-hidden">
         {themes?.map((theme, idx) => (
           <Link key={idx} href={`${ROUTES.MARKETPLACE_THEME_PAGE}/${theme.id}`}>
             <a
               key={idx}
-              className="card m-3 border w-[250px] h-[370px] cursor-pointer hover:shadow-lg"
+              className="card m-3 h-[370px] w-[250px] cursor-pointer border hover:shadow-lg"
             >
               <div>
                 <ImageComponent
@@ -35,22 +35,20 @@ const ThemeListing = ({ themes }: IProps) => {
                   objectFit="cover"
                 />
               </div>
-              <div className="pl-3 pr-2 py-1 h-[100px]">
+              <div className="h-[100px] py-1 pl-3 pr-2">
                 <span className="cut-line-1">{theme?.title}</span>
-                <p className="cut-line-3 text-gray-500 text-xs">
+                <p className="cut-line-3 text-xs text-gray-500">
                   {theme?.description}
                 </p>
-                <div className="flex items-center justify-between mt-11 pr-3">
+                <div className="mt-11 flex items-center justify-between pr-3">
                   <div className="flex items-center justify-end">
                     {Array.from({ length: theme?.ratingStarCount })?.map(
-                      (_, idx) => (
-                        <StarIcon key={idx} />
-                      )
+                      (_, idx) => <StarIcon key={idx} />
                     )}
-                    <span className="text-gray-400 text-xs pt-[5px] mx-[3px]">
+                    <span className="mx-[3px] pt-[5px] text-xs text-gray-400">
                       {theme?.ratingStarCount}
                     </span>
-                    <span className="text-blue-500 underline text-sm">
+                    <span className="text-sm text-blue-500 underline">
                       ({theme?.reviewsCount})
                     </span>
                   </div>

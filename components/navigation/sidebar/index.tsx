@@ -31,7 +31,7 @@ const Sidebar: React.FC<Props> = ({ absolute = false }) => {
   return (
     <aside
       className={cx(
-        'w-64 xl:w-64 overflow-y-auto bg-sidenav fixed start-0 bottom-0 h-full z-50',
+        'fixed bottom-0 z-50 h-full w-64 overflow-y-auto bg-sidenav start-0 xl:w-64',
         {
           hidden: !absolute,
           'lg:block': !absolute,
@@ -40,13 +40,13 @@ const Sidebar: React.FC<Props> = ({ absolute = false }) => {
         }
       )}
     >
-      <Scrollbar className="flex flex-col w-full h-full">
-        <div className="py-3 pl-6 flex items-center">
+      <Scrollbar className="flex h-full w-full flex-col">
+        <div className="flex items-center py-3 pl-6">
           <div className="relative">
             <motion.button
               whileTap={{ scale: 0.88 }}
               onClick={() => toggleSidebar({ field: 'displayMiniSidebar' })}
-              className="relative items-center justify-center flex h-[25px] w-[12px] p-5 rounded"
+              className="relative flex h-[25px] w-[12px] items-center justify-center rounded p-5"
             >
               <div className={cx('menu-icon-container')}>
                 <span
@@ -64,11 +64,11 @@ const Sidebar: React.FC<Props> = ({ absolute = false }) => {
               </div>
             </motion.button>
           </div>
-          <div className="px-2 pt-1  text-white font-medium text-lg capitalize cut-line-1">
+          <div className="cut-line-1 px-2  pt-1 text-lg font-medium capitalize text-white">
             {storeName}
           </div>
         </div>
-        <div className="flex justify-center mb-3">
+        <div className="mb-3 flex justify-center">
           <div className="h-[1px] w-[90%] bg-sidenav-divider"></div>
         </div>
         {siteSettings.sidebarLinks.admin.map(
@@ -89,7 +89,7 @@ const Sidebar: React.FC<Props> = ({ absolute = false }) => {
             />
           )
         )}
-        <div className="w-full h-32"></div>
+        <div className="h-32 w-full"></div>
       </Scrollbar>
     </aside>
   );

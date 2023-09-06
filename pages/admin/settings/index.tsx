@@ -74,11 +74,11 @@ export default function Settings({ client }: SSRProps) {
         title={t('form:form-title-settings')}
         label={t('form:form-title-settings')}
       />
-      <section className="grid grid-cols-1 p-5 sm:grid-cols-2 md:grid-cols-3  xl:grid-cols-3 gap-5 bg-white max-w-[900px] mx-auto mt-20 border shadow-sm rounded-md">
+      <section className="mx-auto mt-20 grid max-w-[900px] grid-cols-1  gap-5 rounded-md border bg-white p-5 shadow-sm sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3">
         {settingRoutes?.map(({ label, url, renderIcon }) => (
           <Link key={label} href={url}>
-            <a className="flex items-center text-gray-500 cursor-pointer m-2 hover:text-blue-500">
-              <div className="flex justify-center items-center bg-gray-100 border rounded-full w-12 h-12 mr-3">
+            <a className="m-2 flex cursor-pointer items-center text-gray-500 hover:text-blue-500">
+              <div className="mr-3 flex h-12 w-12 items-center justify-center rounded-full border bg-gray-100">
                 {renderIcon()}
               </div>
               <span className="font-medium">{t(label)}</span>

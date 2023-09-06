@@ -41,14 +41,14 @@ export default function Customers() {
   }
   return (
     <>
-      <Card className="flex flex-col md:flex-row items-center mb-8">
-        <div className="md:w-1/4 mb-4 md:mb-0">
+      <Card className="mb-8 flex flex-col items-center md:flex-row">
+        <div className="mb-4 md:mb-0 md:w-1/4">
           <h1 className="text-lg font-semibold text-heading">
             {t('form:input-label-users')}
           </h1>
         </div>
 
-        <div className="w-full md:w-3/4 flex items-center ms-auto">
+        <div className="flex w-full items-center ms-auto md:w-3/4">
           <Search onSearch={handleSearch} />
           <LinkButton
             href={`${ROUTES.USER}/create`}

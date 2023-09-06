@@ -125,14 +125,15 @@ export default function CreateOrUpdateAttributeForm({ initialValues }: IProps) {
       });
     } else {
       const changes = initialValues?.values
-        ?.map((att_value_init: AttributeValue) =>
-          fields?.values.find((att_value) => {
-            return (
-              att_value.id === att_value_init.id &&
-              (att_value.value != att_value_init.value ||
-                att_value.color != att_value_init.color)
-            );
-          })
+        ?.map(
+          (att_value_init: AttributeValue) =>
+            fields?.values.find((att_value) => {
+              return (
+                att_value.id === att_value_init.id &&
+                (att_value.value != att_value_init.value ||
+                  att_value.color != att_value_init.color)
+              );
+            })
         )
         .filter(function (x) {
           return x !== undefined;
@@ -188,7 +189,7 @@ export default function CreateOrUpdateAttributeForm({ initialValues }: IProps) {
         />
       ) : null}
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex flex-wrap pb-8 border-b border-dashed border-border-base my-5 sm:my-8">
+        <div className="my-5 flex flex-wrap border-b border-dashed border-border-base pb-8 sm:my-8">
           <Description
             title={t('common:attribute')}
             details={`${
@@ -196,7 +197,7 @@ export default function CreateOrUpdateAttributeForm({ initialValues }: IProps) {
                 ? t('form:item-description-update')
                 : t('form:item-description-add')
             } ${t('form:form-description-attribute-name')}`}
-            className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
+            className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
           />
 
           <Card className="w-full sm:w-8/12 md:w-2/3">
@@ -211,7 +212,7 @@ export default function CreateOrUpdateAttributeForm({ initialValues }: IProps) {
           </Card>
         </div>
 
-        <div className="flex flex-wrap my-5 sm:my-8">
+        <div className="my-5 flex flex-wrap sm:my-8">
           <Description
             title={t('common:attribute-values')}
             details={`${
@@ -219,14 +220,14 @@ export default function CreateOrUpdateAttributeForm({ initialValues }: IProps) {
                 ? t('form:item-description-update')
                 : t('form:item-description-add')
             } ${t('form:form-description-attribute-value')}`}
-            className="w-full px-0 sm:pe-4 md:pe-5 pb-5 sm:w-4/12 md:w-1/3 sm:py-8"
+            className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
           />
 
           <Card className="w-full sm:w-8/12 md:w-2/3">
             <div>
               {fields.map((item, index) => (
                 <div
-                  className="border-b border-dashed border-border-200 last:border-0 py-5 md:py-8"
+                  className="border-b border-dashed border-border-200 py-5 last:border-0 md:py-8"
                   key={index}
                 >
                   <div className="flex justify-between">
@@ -246,12 +247,12 @@ export default function CreateOrUpdateAttributeForm({ initialValues }: IProps) {
                     <button
                       onClick={() => removeAttributeValue(item, index)}
                       type="button"
-                      className="text-sm text-red-500 hover:text-red-700 transition-colors duration-200 focus:outline-none sm:mt-4 sm:col-span-1"
+                      className="text-sm text-red-500 transition-colors duration-200 hover:text-red-700 focus:outline-none sm:col-span-1 sm:mt-4"
                     >
                       {t('form:button-label-remove')}
                       {deleteAttributeLoading && deletedIndex === index && (
                         <span
-                          className="absolute h-4 w-4 ms-2 rounded-full border-2 border-transparent border-t-2 animate-spin"
+                          className="absolute h-4 w-4 animate-spin rounded-full border-2 border-t-2 border-transparent ms-2"
                           style={{
                             borderTopColor: 'red'
                           }}
@@ -331,16 +332,16 @@ const ColorPicker = React.forwardRef<HTMLInputElement, Props>(
     }, [color]);
 
     return (
-      <div className="flex items-end relative">
+      <div className="relative flex items-end">
         <button
           style={{ fontSize: '.8rem' }}
-          className="bg-white hover:bg-gray-100 text w-full font-semibold p-3 border border-gray-200 rounded shadow"
+          className="text w-full rounded border border-gray-200 bg-white p-3 font-semibold shadow hover:bg-gray-100"
           onClick={handleClick}
         >
           <span>Pick Color</span>
           <span
             style={{ background: currentColor, height: '15px' }}
-            className={cn('absolute top-0 left-0 rounded-full w-full', {
+            className={cn('absolute top-0 left-0 w-full rounded-full', {
               shadow: !isEmpty(currentColor),
               'border-gray-400': !isEmpty(currentColor),
               border: !isEmpty(currentColor)
