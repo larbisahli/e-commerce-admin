@@ -1,7 +1,8 @@
 import { useQuery } from '@apollo/client';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
-import Loader from '@components/ui/loader/loader';
+import { FormPlaceholder } from '@components/ui/placeholders/Form';
+import { FormActionPlaceholder } from '@components/ui/placeholders/FormAction';
 import { LANGUAGE } from '@graphql/language';
 import { useErrorLogger, useGetUser } from '@hooks/index';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
@@ -10,11 +11,11 @@ import { LanguageType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import fs from 'fs';
 import { readFile } from 'fs/promises';
+import { isEmpty } from 'lodash';
 import type { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import path from 'path';
 
@@ -35,7 +36,6 @@ interface Props extends SSRProps {
 }
 
 export default function UpdateTagPage({ client, localeFiles = {} }: Props) {
-  const { t } = useTranslation();
   const { query } = useRouter();
 
   const id = parseInt(query.id as string, 10);
@@ -53,8 +53,13 @@ export default function UpdateTagPage({ client, localeFiles = {} }: Props) {
   useGetUser(client);
   useErrorLogger(error);
 
-  if (loading) {
-    return <Loader text={t('common:text-loading')} />;
+  if (isEmpty(language) || loading) {
+    return (
+      <div>
+        <FormActionPlaceholder />
+        <FormPlaceholder />
+      </div>
+    );
   }
   if (error) {
     return <ErrorMessage message={error.message} />;
@@ -71,11 +76,6 @@ export default function UpdateTagPage({ client, localeFiles = {} }: Props) {
           href="/svg/language.svg"
         />
       </Head>
-      <div className="flex border-b border-dashed border-gray-300 py-5 sm:py-8">
-        <h1 className="text-xl font-semibold text-heading">
-          {t('form:button-label-edit-language')}
-        </h1>
-      </div>
       <LanguageForm localeFiles={localeFiles} initialValues={language} isFork />
     </>
   );

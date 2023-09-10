@@ -54,7 +54,7 @@ export default function HeroBanner({ client }: SSRProps) {
   const { selectedTableColumns, handleColumnChange } =
     useTableColumn('hero-banner');
 
-  const { defaultLanguage, selectedLanguage } = useSettings();
+  const { selectedLanguage } = useSettings();
 
   const { data, loading, error, fetchMore } = useQuery<
     THeroBanner,
@@ -63,8 +63,7 @@ export default function HeroBanner({ client }: SSRProps) {
     variables: {
       page,
       limit: limit.value,
-      language: selectedLanguage,
-      defaultLanguage
+      language: selectedLanguage
     },
     fetchPolicy: 'cache-and-network',
     skip: isEmpty(selectedLanguage)

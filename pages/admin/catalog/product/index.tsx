@@ -51,7 +51,7 @@ export default function ProductsPage({ client }: SSRProps) {
   const { selectedTableColumns, handleColumnChange } =
     useTableColumn('product');
 
-  const { defaultLanguage, selectedLanguage } = useSettings();
+  const { selectedLanguage } = useSettings();
 
   const { data, loading, error, fetchMore } = useQuery<
     TProduct,
@@ -62,8 +62,7 @@ export default function ProductsPage({ client }: SSRProps) {
       limit: limit.value,
       orderBy,
       sortedBy: SortOrder.Desc,
-      language: selectedLanguage,
-      defaultLanguage
+      language: selectedLanguage
     },
     fetchPolicy: 'cache-and-network'
   });

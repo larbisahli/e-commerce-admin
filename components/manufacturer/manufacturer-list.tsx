@@ -13,6 +13,7 @@ import {
 } from '@ts-types/generated';
 import { useIsRTL } from '@utils/locals';
 import dayjs from 'dayjs';
+import { isEmpty } from 'lodash';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -63,7 +64,7 @@ const ManufacturerList = ({
         align: alignLeft,
         width: 85,
         render: (logo: ImageType[], record: TableRowProps) => {
-          const { image, placeholder } = logo[0] ?? {};
+          const { image = '', placeholder = '' } = isEmpty(logo) ? {} : logo[0];
 
           if (record?.loading) {
             return <TableRowPlaceholder />;

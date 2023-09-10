@@ -3,6 +3,7 @@ import Loader from '@components/ui/loader/loader';
 import { TableRowPlaceholder } from '@components/ui/placeholders/Table';
 import ProfileCart from '@components/ui/profile-card';
 import { usePlaceholder } from '@hooks/usePlaceholder';
+import { AttributeTypes } from '@ts-types/enums';
 import {
   Attribute,
   AttributeValue,
@@ -14,6 +15,7 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import React, { useMemo } from 'react';
+import { Tooltip } from 'react-tooltip';
 
 const Table = dynamic(
   () => import('@components/ui/table').then((mod) => mod.Table),
@@ -34,7 +36,7 @@ const AttributeList = ({ loading, attributes, selectedColumns }: IProps) => {
   const { t } = useTranslation();
   const router = useRouter();
 
-  const { alignLeft, alignRight } = useIsRTL();
+  const { alignLeft } = useIsRTL();
 
   const { tablePlaceholderRow } = usePlaceholder();
 
@@ -53,7 +55,7 @@ const AttributeList = ({ loading, attributes, selectedColumns }: IProps) => {
         dataIndex: 'name',
         key: 'name',
         align: alignLeft,
-        width: 100,
+        width: 180,
         ellipsis: true,
         render: (name: string, record: TableRowProps) => {
           if (record?.loading) {
@@ -61,7 +63,7 @@ const AttributeList = ({ loading, attributes, selectedColumns }: IProps) => {
           }
           return (
             <span className="font-semibold capitalize text-gray-800">
-              {name}
+              {name ?? 'N/A'}
             </span>
           );
         }
@@ -71,24 +73,83 @@ const AttributeList = ({ loading, attributes, selectedColumns }: IProps) => {
         dataIndex: 'values',
         key: 'values',
         align: alignLeft,
-        ellipsis: true,
-        width: 200,
+        // ellipsis: true,
+        width: 240,
         render: (values: AttributeValue[], record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
 
-          const att_values = values
-            ?.map(({ value }: AttributeValue, index: number) => {
-              return index > 0 ? `, ${value}` : `${value}`;
-            })
-            ?.join('');
+          if (record.type === AttributeTypes.TEXT) {
+            const att_values = values
+              ?.map(({ value }: AttributeValue, index: number) => {
+                return index > 0 ? `, ${value ?? 'N/A'}` : `${value ?? 'N/A'}`;
+              })
+              ?.join('');
+            return (
+              <>
+                <Tooltip
+                  id={`att-v-value-tooltip-${att_values}`}
+                  className="custom-tooltip z-50"
+                >
+                  <div className="flex flex-col items-center">
+                    <span className="max-w-[200px]">{att_values}</span>
+                  </div>
+                </Tooltip>
+                <div
+                  data-tooltip-id={`att-v-value-tooltip-${att_values}`}
+                  className="whitespace-wrap"
+                >
+                  {att_values}
+                </div>
+              </>
+            );
+          }
 
           return (
-            <span title={att_values} className="whitespace-nowrap">
-              {att_values}
-            </span>
+            <div className="flex flex-wrap items-center">
+              {values?.map((value, idx) => {
+                const color = value?.value || value?.translated?.value;
+                if (color) {
+                  return (
+                    <>
+                      <div
+                        key={idx}
+                        data-tooltip-id={`att-v-color-tooltip-${idx}-${color}-${value?.name}`}
+                        data-tooltip-content={value?.name ?? 'N/A'}
+                        className="m-1 h-6 w-6 rounded-sm border border-gray-300 shadow"
+                        style={{ background: color }}
+                      />
+                      <Tooltip
+                        place="right"
+                        className="z-50"
+                        id={`att-v-color-tooltip-${idx}-${color}-${value?.name}`}
+                      />
+                    </>
+                  );
+                }
+                return (
+                  <div key={idx} className="m-1 rounded-sm border p-1 shadow">
+                    N/A
+                  </div>
+                );
+              })}
+            </div>
           );
+        }
+      },
+      {
+        title: t('table:table-item-type'),
+        dataIndex: 'type',
+        key: 'type',
+        align: 'center',
+        width: 80,
+        ellipsis: true,
+        render: (name: string, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
+          return <span className="capitalize text-gray-600">{name}</span>;
         }
       },
       {
@@ -147,8 +208,8 @@ const AttributeList = ({ loading, attributes, selectedColumns }: IProps) => {
         title: t('table:table-item-actions'),
         dataIndex: 'id',
         key: 'actions',
-        align: alignRight,
-        width: 80,
+        align: 'center',
+        width: 150,
         render: (id: string, record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
@@ -163,7 +224,7 @@ const AttributeList = ({ loading, attributes, selectedColumns }: IProps) => {
         }
       }
     ];
-  }, [alignLeft, alignRight, router.asPath, t]);
+  }, [alignLeft, router.asPath, t]);
 
   const tableColumns = useMemo(() => {
     return columns?.filter(({ key }) => {

@@ -1,4 +1,6 @@
 // import { Category } from '@ts-types/generated';
+import { Console } from 'console';
+import { isEmpty } from 'lodash';
 import React from 'react';
 
 export const PRODUCTION_ENV = process.env.NODE_ENV === 'production';
@@ -182,8 +184,19 @@ export const CopyToClipboard = (
 // }, []);
 
 export const placeholder = (initialValues: any, key: string, placeholder) => {
-  if (initialValues && key in initialValues) {
-    return initialValues[key] ?? initialValues?.translated[key] ?? placeholder;
+  try {
+    if (
+      !isEmpty(initialValues) &&
+      key in initialValues &&
+      !isEmpty(initialValues?.translated) &&
+      key in initialValues.translated
+    ) {
+      return (
+        initialValues[key] ?? initialValues?.translated[key] ?? placeholder
+      );
+    }
+  } catch (err) {
+    console.log('placeholder ::>', err);
   }
   return placeholder;
 };

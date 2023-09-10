@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import type { Nullable, Scalars } from './custom.types';
-import { RateType } from './enums';
+import { AttributeTypes, RateType } from './enums';
 
 export enum SortOrder {
   Asc = 'ASC',
@@ -136,14 +136,19 @@ export interface Category extends CreatedUpdatedByAt {
   includeInMenu?: Scalars['Boolean'];
   position?: Scalars['Int'];
   parent?: Nullable<CategoryRefLevel2>;
-  categorySeo?: {
+  urlKey: Scalars['String'];
+  metaRobots: { value: Scalars['String'] };
+  breadcrumbsPriority: number;
+  metaImage: ImageType[];
+  metaTitle: Scalars['String'];
+  metaKeywords: Scalars['String'];
+  metaDescription: Scalars['String'];
+  translated?: {
+    name?: Scalars['String'];
+    description?: Nullable<Scalars['String']>;
     metaTitle: Scalars['String'];
-    urlKey: Scalars['String'];
     metaKeywords: Scalars['String'];
     metaDescription: Scalars['String'];
-    metaRobots: { value: Scalars['String'] };
-    breadcrumbsPriority: number;
-    metaImage: ImageType[];
   };
 }
 
@@ -192,20 +197,28 @@ export interface AttributeValue {
   id?: Scalars['Int'];
   attributeId?: Scalars['Int'];
   value?: Scalars['String'];
-  color?: Nullable<Scalars['String']>;
+  name?: Nullable<Scalars['String']>;
+  translated?: {
+    value?: Scalars['String'];
+    name?: Nullable<Scalars['String']>;
+  };
 }
 
 export interface Attribute extends CreatedUpdatedByAt {
   id?: Scalars['Int'];
   name?: Scalars['String'];
+  type?: AttributeTypes | { label: string; id: string };
   values?: AttributeValue[] | [];
+  translated?: {
+    name?: Scalars['String'];
+  };
 }
 
 export interface Tag extends CreatedUpdatedByAt {
   id?: Nullable<Scalars['Int']>;
   name?: Nullable<Scalars['String']>;
   translated?: {
-    name: string;
+    name?: Nullable<Scalars['String']>;
   };
 }
 

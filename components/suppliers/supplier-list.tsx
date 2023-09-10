@@ -156,8 +156,8 @@ const SuppliersList = ({ loading, suppliers, selectedColumns }: IProps) => {
         title: t('table:table-item-actions'),
         dataIndex: 'id',
         key: 'actions',
-        align: alignRight,
-        width: 80,
+        align: 'center',
+        width: 140,
         render: (id: string, record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
@@ -172,7 +172,7 @@ const SuppliersList = ({ loading, suppliers, selectedColumns }: IProps) => {
         }
       }
     ];
-  }, [alignLeft, alignRight, router.asPath, t]);
+  }, [alignLeft, router.asPath, t]);
 
   const tableColumns = useMemo(() => {
     return columns?.filter(({ key }) => {

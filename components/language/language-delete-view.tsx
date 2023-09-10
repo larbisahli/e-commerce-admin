@@ -34,7 +34,7 @@ const TagDeleteView = () => {
   useErrorLogger(error);
 
   function handleDelete() {
-    deleteLanguage({ variables: { id, lcid: meta.lcid } })
+    deleteLanguage({ variables: { id, localeId: meta.localeId } })
       .then(({ data }) => {
         const {
           deleteLanguage: { id }

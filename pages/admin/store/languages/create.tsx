@@ -8,7 +8,6 @@ import { readFile } from 'fs/promises';
 import type { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
-import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import path from 'path';
 
@@ -22,10 +21,7 @@ interface Props extends SSRProps {
 }
 
 export default function UpdateTagPage({ client, localeFiles = {} }: Props) {
-  const { t } = useTranslation();
-
   useGetUser(client);
-
   return (
     <>
       <Head>
@@ -37,11 +33,6 @@ export default function UpdateTagPage({ client, localeFiles = {} }: Props) {
           href="/svg/language.svg"
         />
       </Head>
-      <div className="flex border-b border-dashed border-gray-300 py-5 sm:py-8">
-        <h1 className="text-xl font-semibold text-heading">
-          {t('form:button-label-new-language')}
-        </h1>
-      </div>
       <LanguageForm localeFiles={localeFiles} />
     </>
   );

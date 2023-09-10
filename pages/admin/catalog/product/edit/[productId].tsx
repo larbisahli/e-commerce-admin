@@ -34,12 +34,12 @@ export default function UpdateProductPage({ client }: SSRProps) {
 
   const productId = parseInt(query.productId as string, 10);
 
-  const { defaultLanguage, selectedLanguage } = useSettings();
+  const { selectedLanguage } = useSettings();
 
   const { data, loading, error } = useQuery<TProduct, productVariable>(
     PRODUCT,
     {
-      variables: { id: productId, language: selectedLanguage, defaultLanguage },
+      variables: { id: productId, language: selectedLanguage },
       fetchPolicy: 'cache-and-network',
       skip: isEmpty(selectedLanguage)
     }

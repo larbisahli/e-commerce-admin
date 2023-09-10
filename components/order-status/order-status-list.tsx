@@ -69,7 +69,7 @@ const OrderStatusList = ({
                        py-[5px] px-[10px] font-semibold capitalize shadow-md"
               style={{ color: record?.color }}
             >
-              {name ?? record?.translated?.name}
+              {name ?? record?.translated?.name ?? 'N/A'}
             </span>
           );
         }

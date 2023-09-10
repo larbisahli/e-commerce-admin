@@ -1,7 +1,8 @@
 import { useQuery } from '@apollo/client';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
-import Loader from '@components/ui/loader/loader';
+import { FormPlaceholder } from '@components/ui/placeholders/Form';
+import { FormActionPlaceholder } from '@components/ui/placeholders/FormAction';
 import { MANUFACTURER } from '@graphql/manufacturer';
 import { useGetUser } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
@@ -13,6 +14,7 @@ import { ROUTES } from '@utils/routes';
 import { isEmpty } from 'lodash';
 import type { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -35,15 +37,14 @@ export default function UpdateManufacturerPage({ client }: SSRProps) {
 
   const manufacturerId = parseInt(query.manufacturerId as string, 10);
 
-  const { defaultLanguage, selectedLanguage } = useSettings();
+  const { selectedLanguage } = useSettings();
 
   const { data, loading, error } = useQuery<TManufacturer, OptionsVariable>(
     MANUFACTURER,
     {
       variables: {
         id: manufacturerId,
-        language: selectedLanguage,
-        defaultLanguage
+        language: selectedLanguage
       },
       fetchPolicy: 'cache-and-network',
       skip: isEmpty(selectedLanguage)
@@ -55,8 +56,13 @@ export default function UpdateManufacturerPage({ client }: SSRProps) {
   useGetUser(client);
   useErrorLogger(error);
 
-  if (loading) {
-    return <Loader text={t('common:text-loading')} />;
+  if (isEmpty(manufacturer) || loading) {
+    return (
+      <div>
+        <FormActionPlaceholder />
+        <FormPlaceholder />
+      </div>
+    );
   }
 
   if (error) {
@@ -65,11 +71,15 @@ export default function UpdateManufacturerPage({ client }: SSRProps) {
 
   return (
     <>
-      <div className="flex border-b border-dashed border-border-base py-5 sm:py-8">
-        <h1 className="text-lg font-semibold text-heading">
-          {t('form:edit-manufacturer')}
-        </h1>
-      </div>
+      <Head>
+        <title>Edit Manufacturer | Dropgala</title>
+        <link
+          rel="icon"
+          type="image/svg"
+          sizes="32x32"
+          href="/svg/manufacturer.svg"
+        />
+      </Head>
       <CreateOrUpdateManufacturerForm initialValues={manufacturer} />
     </>
   );

@@ -33,13 +33,13 @@ export default function UpdateShippingPage({ client }: SSRProps) {
 
   const deliveryId = parseInt(query.deliveryId as string, 10);
 
-  const { defaultLanguage, selectedLanguage } = useSettings();
+  const { selectedLanguage } = useSettings();
 
   const { data, loading, error } = useQuery<
     { deliveryTime: DeliveryTimeType },
     DeliveryVariable
   >(DELIVERY_TIME, {
-    variables: { id: deliveryId, language: selectedLanguage, defaultLanguage },
+    variables: { id: deliveryId, language: selectedLanguage },
     fetchPolicy: 'cache-and-network',
     skip: isEmpty(selectedLanguage)
   });

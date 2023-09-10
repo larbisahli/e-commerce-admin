@@ -17,6 +17,7 @@ import {
 } from '@graphql/manufacturer';
 import { useGetUser } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
+import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/index';
 import type { ManufacturerType, Suppliers } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
@@ -46,6 +47,8 @@ export default function CreateOrUpdateManufacturerForm({
 
   const [error, setError] = useState(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const { selectedLanguage } = useSettings();
 
   const { t } = useTranslation();
 
@@ -103,6 +106,7 @@ export default function CreateOrUpdateManufacturerForm({
   const onSubmit = (values: FormValues) => {
     const variables = {
       ...values,
+      language: selectedLanguage,
       logo: values.logo?.map(({ id }) => ({ id }))
     };
 

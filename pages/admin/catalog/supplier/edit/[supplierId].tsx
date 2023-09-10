@@ -1,11 +1,11 @@
 import { useQuery } from '@apollo/client';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
-import Loader from '@components/ui/loader/loader';
+import { FormPlaceholder } from '@components/ui/placeholders/Form';
+import { FormActionPlaceholder } from '@components/ui/placeholders/FormAction';
 import { SUPPLIER } from '@graphql/supplier';
 import { useGetUser } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useSettings } from '@hooks/useSettings';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import type { LanguageProps, SSRProps } from '@ts-types/custom.types';
 import type { Suppliers } from '@ts-types/generated';
@@ -13,8 +13,8 @@ import { ROUTES } from '@utils/routes';
 import { isEmpty } from 'lodash';
 import type { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const CreateOrUpdateSupplierForm = dynamic(
@@ -25,28 +25,22 @@ const CreateOrUpdateSupplierForm = dynamic(
 interface TAttribute {
   supplier: Suppliers;
 }
-interface OptionsVariable extends LanguageProps {
+interface OptionsVariable {
   id: number;
 }
 
 export default function UpdateSupplierPage({ client }: SSRProps) {
-  const { t } = useTranslation();
   const { query } = useRouter();
 
   const supplierId = parseInt(query.supplierId as string, 10);
-
-  const { defaultLanguage, selectedLanguage } = useSettings();
 
   const { data, loading, error } = useQuery<TAttribute, OptionsVariable>(
     SUPPLIER,
     {
       variables: {
-        id: supplierId,
-        language: selectedLanguage,
-        defaultLanguage
+        id: supplierId
       },
-      fetchPolicy: 'cache-and-network',
-      skip: isEmpty(selectedLanguage)
+      fetchPolicy: 'cache-and-network'
     }
   );
 
@@ -55,8 +49,13 @@ export default function UpdateSupplierPage({ client }: SSRProps) {
   useGetUser(client);
   useErrorLogger(error);
 
-  if (loading) {
-    return <Loader text={t('common:text-loading')} />;
+  if (isEmpty(supplier) || loading) {
+    return (
+      <div>
+        <FormActionPlaceholder />
+        <FormPlaceholder />
+      </div>
+    );
   }
 
   if (error) {
@@ -65,11 +64,15 @@ export default function UpdateSupplierPage({ client }: SSRProps) {
 
   return (
     <>
-      <div className="flex border-b border-dashed border-border-base py-5 sm:py-8">
-        <h1 className="text-lg font-semibold text-heading">
-          {t('form:edit-supplier')}
-        </h1>
-      </div>
+      <Head>
+        <title>New Supplier | Dropgala</title>
+        <link
+          rel="icon"
+          type="image/svg"
+          sizes="32x32"
+          href="/svg/supplier.svg"
+        />
+      </Head>
       <CreateOrUpdateSupplierForm initialValues={supplier} />
     </>
   );

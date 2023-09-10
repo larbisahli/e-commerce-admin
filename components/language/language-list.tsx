@@ -1,17 +1,23 @@
+import { useMutation } from '@apollo/client';
 import ActionButtons from '@components/common/action-buttons';
 import Badge from '@components/ui/badge/badge';
 import Link from '@components/ui/link';
 import Loader from '@components/ui/loader/loader';
 import { TableRowPlaceholder } from '@components/ui/placeholders/Table';
 import ProfileCart from '@components/ui/profile-card';
+import { LANGUAGES, SET_DEFAULT_LANGUAGE } from '@graphql/language';
+import { useErrorLogger } from '@hooks/useErrorLogger';
+import { useGetUser } from '@hooks/useGetUser';
 import { usePlaceholder } from '@hooks/usePlaceholder';
+import { notify } from '@lib/notify';
 import { CreatedUpdatedByAt, LanguageType } from '@ts-types/generated';
 import { useIsRTL } from '@utils/locals';
 import { ROUTES } from '@utils/routes';
 import dayjs from 'dayjs';
+import { isEmpty } from 'lodash';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
-import { useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 const Table = dynamic(
   () => import('@components/ui/table').then((mod) => mod.Table),
@@ -31,9 +37,50 @@ interface TableRowProps extends LanguageType {
 const LanguageList = ({ loading, languages, selectedColumns }: IProps) => {
   const { t } = useTranslation();
 
+  const [error, setError] = useState(null);
+  const [currentId, setCurrentId] = useState(null);
+
   const { alignLeft } = useIsRTL();
 
   const { tablePlaceholderRow } = usePlaceholder();
+
+  const { userInfo } = useGetUser();
+  const csrfToken = userInfo?.csrfToken;
+
+  const [setDefaultLanguage, { loading: settingDefault }] = useMutation(
+    SET_DEFAULT_LANGUAGE,
+    {
+      context: {
+        headers: {
+          'x-csrf-token': csrfToken
+        }
+      },
+      refetchQueries: [LANGUAGES, 'Languages'],
+      onCompleted: (data: { setDefaultLanguage: LanguageType }) => {
+        if (!isEmpty(data.setDefaultLanguage)) {
+          notify(
+            t('common:successfully-updated', {
+              displayName: data.setDefaultLanguage?.name
+            }),
+            'success'
+          );
+          setCurrentId(null);
+        }
+      }
+    }
+  );
+
+  useErrorLogger(error);
+
+  const setDefault = useCallback(
+    async (id: number) => {
+      setCurrentId(id);
+      setDefaultLanguage({ variables: { id } }).catch((err) => {
+        setError(err);
+      });
+    },
+    [setDefaultLanguage]
+  );
 
   const columns = useMemo(() => {
     return [
@@ -73,19 +120,19 @@ const LanguageList = ({ loading, languages, selectedColumns }: IProps) => {
         dataIndex: 'isDefault',
         key: 'isDefault',
         align: 'center',
-        width: 140,
+        width: 230,
         ellipsis: true,
         render: (isDefault: boolean, record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
           return (
-            <div className="flex items-center gap-1">
+            <div className="flex flex-wrap items-center justify-center gap-1">
               {isDefault && (
                 <Badge
                   text={'Default'}
-                  textColor={'text-gray-600'}
-                  color={'bg-gray-100'}
+                  textColor={'text-white'}
+                  color={'bg-accent'}
                 />
               )}
               <Badge
@@ -109,7 +156,9 @@ const LanguageList = ({ loading, languages, selectedColumns }: IProps) => {
           }
           return (
             <div>
-              <span className="w-full text-base font-medium">{localeId}</span>
+              <span className="w-full font-medium text-gray-600">
+                {localeId}
+              </span>
             </div>
           );
         }
@@ -180,7 +229,8 @@ const LanguageList = ({ loading, languages, selectedColumns }: IProps) => {
             <ActionButtons
               id={id}
               activated={record.isDefault}
-              setDefault={!record.isDefault && (() => {})}
+              loading={settingDefault && currentId === id}
+              setDefault={!record.isDefault && setDefault}
               metadata={{ localeId: record.localeId }}
               copy={`${ROUTES.LANGUAGES}/fork/${id}`}
               editUrl={`${ROUTES.LANGUAGES}/edit/${id}`}
@@ -190,7 +240,7 @@ const LanguageList = ({ loading, languages, selectedColumns }: IProps) => {
         }
       }
     ];
-  }, [t, alignLeft]);
+  }, [t, alignLeft, settingDefault, currentId, setDefault]);
 
   const tableColumns = useMemo(() => {
     return columns?.filter(({ key }) => {

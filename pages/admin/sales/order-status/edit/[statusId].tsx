@@ -1,7 +1,6 @@
 import { useQuery } from '@apollo/client';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
-import Loader from '@components/ui/loader/loader';
 import { FormPlaceholder } from '@components/ui/placeholders/Form';
 import { FormActionPlaceholder } from '@components/ui/placeholders/FormAction';
 import { ORDER_STATUS } from '@graphql/order-status';
@@ -38,12 +37,12 @@ export default function UpdateOrderStatusPage({ client }: SSRProps) {
 
   const statusId = parseInt(query.statusId as string, 10);
 
-  const { defaultLanguage, selectedLanguage } = useSettings();
+  const { selectedLanguage } = useSettings();
 
   const { data, loading, error } = useQuery<TOrderStatus, OptionsVariable>(
     ORDER_STATUS,
     {
-      variables: { id: statusId, language: selectedLanguage, defaultLanguage },
+      variables: { id: statusId, language: selectedLanguage },
       fetchPolicy: 'cache-and-network',
       skip: isEmpty(selectedLanguage)
     }

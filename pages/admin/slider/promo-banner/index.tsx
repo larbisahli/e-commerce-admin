@@ -30,14 +30,13 @@ interface THeroBanner {
 export default function PromoSliders({ client }: SSRProps) {
   const { t } = useTranslation();
 
-  const { defaultLanguage, selectedLanguage } = useSettings();
+  const { selectedLanguage } = useSettings();
 
   const { data, loading, error } = useQuery<THeroBanner, LanguageProps>(
     PROMO_SLIDER,
     {
       variables: {
-        language: selectedLanguage,
-        defaultLanguage
+        language: selectedLanguage
       },
       fetchPolicy: 'cache-and-network',
       skip: isEmpty(selectedLanguage)

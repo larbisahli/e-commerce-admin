@@ -1,7 +1,8 @@
 import { useQuery } from '@apollo/client';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
-import Loader from '@components/ui/loader/loader';
+import { FormPlaceholder } from '@components/ui/placeholders/Form';
+import { FormActionPlaceholder } from '@components/ui/placeholders/FormAction';
 import { TAG } from '@graphql/tag';
 import { useErrorLogger, useGetUser } from '@hooks/index';
 import { useSettings } from '@hooks/useSettings';
@@ -36,10 +37,10 @@ export default function UpdateTagPage({ client }: SSRProps) {
 
   const tagId = parseInt(query.tagId as string, 10);
 
-  const { defaultLanguage, selectedLanguage } = useSettings();
+  const { selectedLanguage } = useSettings();
 
   const { data, loading, error } = useQuery<TTag, OptionsVariable>(TAG, {
-    variables: { id: tagId, language: selectedLanguage, defaultLanguage },
+    variables: { id: tagId, language: selectedLanguage },
     fetchPolicy: 'cache-and-network',
     skip: isEmpty(selectedLanguage)
   });
@@ -49,8 +50,13 @@ export default function UpdateTagPage({ client }: SSRProps) {
   useGetUser(client);
   useErrorLogger(error);
 
-  if (loading) {
-    return <Loader text={t('common:text-loading')} height="400px" />;
+  if (isEmpty(tag) || loading) {
+    return (
+      <div>
+        <FormActionPlaceholder />
+        <FormPlaceholder />
+      </div>
+    );
   }
 
   if (error) {

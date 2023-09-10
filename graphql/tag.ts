@@ -7,7 +7,6 @@ export const TAGS = gql`
     $orderBy: String!
     $sortedBy: String!
     $language: LanguageInput!
-    $defaultLanguage: LanguageInput!
   ) {
     tagCount {
       count
@@ -18,7 +17,6 @@ export const TAGS = gql`
       orderBy: $orderBy
       sortedBy: $sortedBy
       language: $language
-      defaultLanguage: $defaultLanguage
     ) {
       id
       name
@@ -42,12 +40,8 @@ export const TAGS = gql`
 `;
 
 export const TAG = gql`
-  query Tag(
-    $id: Int!
-    $language: LanguageInput!
-    $defaultLanguage: LanguageInput!
-  ) {
-    tag(id: $id, language: $language, defaultLanguage: $defaultLanguage) {
+  query Tag($id: Int!, $language: LanguageInput!) {
+    tag(id: $id, language: $language) {
       id
       name
       translated {

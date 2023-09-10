@@ -60,9 +60,9 @@ const TagList = ({ tags, selectedColumns, loading }: IProps) => {
               <span
                 style={{ width: 'fit-content' }}
                 className="text-13px border-sink-base block rounded-sm border
-            bg-gray-100 px-2 py-1 font-medium capitalize shadow-sm md:text-sm"
+                      bg-gray-100 px-2 py-1 font-medium capitalize shadow-sm md:text-sm"
               >
-                {name ?? record?.translated?.name}
+                {name ?? record?.translated?.name ?? 'N/A'}
               </span>
             </div>
           );

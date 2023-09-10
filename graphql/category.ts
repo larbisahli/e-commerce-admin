@@ -8,7 +8,13 @@ export const CREATE_CATEGORY = gql`
     $includeInMenu: Boolean!
     $position: Int!
     $thumbnail: [ImageInput]
-    $categorySeo: CategorySeoInput!
+    $urlKey: String!
+    $metaTitle: String!
+    $metaKeywords: String
+    $metaDescription: String
+    $metaRobots: String!
+    $breadcrumbsPriority: Int
+    $metaImage: [ImageInput]
     $language: LanguageInput!
   ) {
     createCategory(
@@ -18,7 +24,13 @@ export const CREATE_CATEGORY = gql`
       includeInMenu: $includeInMenu
       position: $position
       thumbnail: $thumbnail
-      categorySeo: $categorySeo
+      urlKey: $urlKey
+      metaTitle: $metaTitle
+      metaKeywords: $metaKeywords
+      metaDescription: $metaDescription
+      metaRobots: $metaRobots
+      breadcrumbsPriority: $breadcrumbsPriority
+      metaImage: $metaImage
       language: $language
     ) {
       id
@@ -36,7 +48,13 @@ export const UPDATE_CATEGORY = gql`
     $includeInMenu: Boolean!
     $position: Int!
     $thumbnail: [ImageInput]
-    $categorySeo: CategorySeoInput!
+    $urlKey: String!
+    $metaTitle: String!
+    $metaKeywords: String
+    $metaDescription: String
+    $metaRobots: String!
+    $breadcrumbsPriority: Int
+    $metaImage: [ImageInput]
     $language: LanguageInput!
   ) {
     updateCategory(
@@ -47,11 +65,16 @@ export const UPDATE_CATEGORY = gql`
       includeInMenu: $includeInMenu
       position: $position
       thumbnail: $thumbnail
-      categorySeo: $categorySeo
+      urlKey: $urlKey
+      metaTitle: $metaTitle
+      metaKeywords: $metaKeywords
+      metaDescription: $metaDescription
+      metaRobots: $metaRobots
+      breadcrumbsPriority: $breadcrumbsPriority
+      metaImage: $metaImage
       language: $language
     ) {
       id
-      name
     }
   }
 `;
@@ -63,7 +86,6 @@ export const CATEGORIES = gql`
     $orderBy: String!
     $sortedBy: String!
     $language: LanguageInput!
-    $defaultLanguage: LanguageInput!
   ) {
     categoryCount {
       count
@@ -74,12 +96,13 @@ export const CATEGORIES = gql`
       orderBy: $orderBy
       sortedBy: $sortedBy
       language: $language
-      defaultLanguage: $defaultLanguage
     ) {
       id
       parentId
       name
-      description
+      translated {
+        name
+      }
       includeInMenu
       level
       position
@@ -87,7 +110,9 @@ export const CATEGORIES = gql`
         id
         parentId
         name
-        description
+        translated {
+          name
+        }
         includeInMenu
         level
         position
@@ -95,7 +120,9 @@ export const CATEGORIES = gql`
           id
           parentId
           name
-          description
+          translated {
+            name
+          }
           includeInMenu
           level
           position
@@ -142,12 +169,8 @@ export const CATEGORIES = gql`
 `;
 
 export const CATEGORY = gql`
-  query Category(
-    $id: Int!
-    $language: LanguageInput!
-    $defaultLanguage: LanguageInput!
-  ) {
-    category(id: $id, language: $language, defaultLanguage: $defaultLanguage) {
+  query Category($id: Int!, $language: LanguageInput!) {
+    category(id: $id, language: $language) {
       id
       parentId
       parent {
@@ -158,24 +181,29 @@ export const CATEGORY = gql`
       description
       includeInMenu
       position
+      translated {
+        name
+        description
+        metaTitle
+        metaKeywords
+        metaDescription
+      }
       thumbnail {
         id
         image
         placeholder
       }
       hasChildren
-      categorySeo {
-        urlKey
-        metaTitle
-        metaKeywords
-        metaDescription
-        metaRobots
-        breadcrumbsPriority
-        metaImage {
-          id
-          image
-          placeholder
-        }
+      urlKey
+      metaTitle
+      metaKeywords
+      metaDescription
+      metaRobots
+      breadcrumbsPriority
+      metaImage {
+        id
+        image
+        placeholder
       }
     }
   }

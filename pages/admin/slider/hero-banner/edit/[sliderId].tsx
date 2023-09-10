@@ -35,12 +35,12 @@ export default function UpdateHeroSliderPage({ client }: SSRProps) {
 
   const sliderId = parseInt(query.sliderId as string, 10);
 
-  const { defaultLanguage, selectedLanguage } = useSettings();
+  const { selectedLanguage } = useSettings();
 
   const { data, loading, error } = useQuery<THeroSlider, OptionsVariable>(
     HERO_SLIDE,
     {
-      variables: { id: sliderId, language: selectedLanguage, defaultLanguage },
+      variables: { id: sliderId, language: selectedLanguage },
       fetchPolicy: 'cache-and-network',
       skip: isEmpty(selectedLanguage)
     }

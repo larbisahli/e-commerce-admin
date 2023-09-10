@@ -4,16 +4,16 @@ import SuppliersList from '@components/suppliers/supplier-list';
 import ErrorMessage from '@components/ui/error-message';
 import { SUPPLIERS } from '@graphql/supplier';
 import { useErrorLogger, useGetUser } from '@hooks/index';
-import { useSettings } from '@hooks/useSettings';
 import { useTableColumn } from '@hooks/useTableColumn';
 import { verifyAuth } from '@middleware/utils';
-import { SSRProps, TableQueryVariables } from '@ts-types/custom.types';
+import { SSRProps } from '@ts-types/custom.types';
 import { OrderBy, SortOrder, Suppliers } from '@ts-types/generated';
 import { COLUMNS } from '@utils/data/table-columns';
 import { ROUTES } from '@utils/routes';
 import isEmpty from 'lodash/isEmpty';
 import type { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
+import Head from 'next/head';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useState } from 'react';
@@ -39,6 +39,13 @@ interface TSupplier {
   supplierCount: { count: number };
 }
 
+export interface Variables {
+  page: number;
+  limit: number;
+  orderBy: OrderBy;
+  sortedBy: SortOrder;
+}
+
 export default function SuppliersPage({ client }: SSRProps) {
   const { t } = useTranslation();
 
@@ -49,23 +56,18 @@ export default function SuppliersPage({ client }: SSRProps) {
   const { selectedTableColumns, handleColumnChange } =
     useTableColumn('supplier');
 
-  const { defaultLanguage, selectedLanguage } = useSettings();
-
-  const { data, loading, error, fetchMore } = useQuery<
-    TSupplier,
-    TableQueryVariables
-  >(SUPPLIERS, {
-    variables: {
-      page,
-      limit: limit.value,
-      orderBy,
-      sortedBy: SortOrder.Desc,
-      language: selectedLanguage,
-      defaultLanguage
-    },
-    fetchPolicy: 'cache-and-network',
-    skip: isEmpty(selectedLanguage)
-  });
+  const { data, loading, error, fetchMore } = useQuery<TSupplier, Variables>(
+    SUPPLIERS,
+    {
+      variables: {
+        page,
+        limit: limit.value,
+        orderBy,
+        sortedBy: SortOrder.Desc
+      },
+      fetchPolicy: 'cache-and-network'
+    }
+  );
 
   const { suppliers = [], supplierCount: { count } = { count: 0 } } =
     data ?? {};
@@ -91,7 +93,17 @@ export default function SuppliersPage({ client }: SSRProps) {
 
   return (
     <>
+      <Head>
+        <title>Suppliers | Dropgala</title>
+        <link
+          rel="icon"
+          type="image/svg"
+          sizes="32x32"
+          href="/svg/supplier.svg"
+        />
+      </Head>
       <PageMainAction
+        showSelectLanguage={false}
         href={`${ROUTES.SUPPLIER}/create`}
         title={t('form:button-label-add-supplier')}
         label={t('common:sidebar-nav-item-suppliers')}

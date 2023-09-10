@@ -1,7 +1,8 @@
 import { useQuery } from '@apollo/client';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
-import Loader from '@components/ui/loader/loader';
+import { FormPlaceholder } from '@components/ui/placeholders/Form';
+import { FormActionPlaceholder } from '@components/ui/placeholders/FormAction';
 import { CATEGORY } from '@graphql/category';
 import { useErrorLogger, useGetUser } from '@hooks/index';
 import { useSettings } from '@hooks/useSettings';
@@ -35,15 +36,14 @@ export default function UpdateCategoriesPage({ client }: SSRProps) {
 
   const categoryId = parseInt(query.categoryId as string, 10);
 
-  const { defaultLanguage, selectedLanguage } = useSettings();
+  const { selectedLanguage } = useSettings();
 
   const { data, loading, error } = useQuery<TCategory, OptionsVariable>(
     CATEGORY,
     {
       variables: {
         id: categoryId,
-        language: selectedLanguage,
-        defaultLanguage
+        language: selectedLanguage
       },
       fetchPolicy: 'cache-and-network',
       skip: isEmpty(selectedLanguage)
@@ -55,8 +55,13 @@ export default function UpdateCategoriesPage({ client }: SSRProps) {
   useGetUser(client);
   useErrorLogger(error);
 
-  if (loading) {
-    return <Loader text={t('common:text-loading')} />;
+  if (isEmpty(category) || loading) {
+    return (
+      <div>
+        <FormActionPlaceholder />
+        <FormPlaceholder />
+      </div>
+    );
   }
   if (error) {
     return <ErrorMessage message={error.message} />;
@@ -73,11 +78,6 @@ export default function UpdateCategoriesPage({ client }: SSRProps) {
           href="/svg/category.svg"
         />
       </Head>
-      <div className="flex border-b border-dashed border-border-base py-5 sm:py-8">
-        <h1 className="text-lg font-semibold text-heading">
-          {t('form:form-title-edit-category')}
-        </h1>
-      </div>
       <CreateOrUpdateCategoriesForm initialValues={category} />
     </>
   );

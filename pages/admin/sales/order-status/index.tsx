@@ -50,7 +50,7 @@ export default function OrderStatusPage({ client }: SSRProps) {
   const { selectedTableColumns, handleColumnChange } =
     useTableColumn('order-status');
 
-  const { defaultLanguage, selectedLanguage } = useSettings();
+  const { selectedLanguage } = useSettings();
 
   const { data, loading, error, fetchMore } = useQuery<
     TOrderStatus,
@@ -61,8 +61,7 @@ export default function OrderStatusPage({ client }: SSRProps) {
       limit: limit.value,
       orderBy,
       sortedBy: SortOrder.Desc,
-      language: selectedLanguage,
-      defaultLanguage
+      language: selectedLanguage
     },
     fetchPolicy: 'cache-and-network',
     skip: isEmpty(selectedLanguage)

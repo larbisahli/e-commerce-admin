@@ -14,6 +14,7 @@ import { ROUTES } from '@utils/routes';
 import isEmpty from 'lodash/isEmpty';
 import type { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
+import Head from 'next/head';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useState } from 'react';
@@ -49,7 +50,7 @@ export default function ManufacturerPage({ client }: SSRProps) {
   const { selectedTableColumns, handleColumnChange } =
     useTableColumn('manufacturer');
 
-  const { defaultLanguage, selectedLanguage } = useSettings();
+  const { selectedLanguage } = useSettings();
 
   const { data, loading, error, fetchMore } = useQuery<
     TSupplier,
@@ -60,8 +61,7 @@ export default function ManufacturerPage({ client }: SSRProps) {
       limit: limit.value,
       orderBy,
       sortedBy: SortOrder.Desc,
-      language: selectedLanguage,
-      defaultLanguage
+      language: selectedLanguage
     },
     fetchPolicy: 'cache-and-network',
     skip: isEmpty(selectedLanguage)
@@ -91,6 +91,15 @@ export default function ManufacturerPage({ client }: SSRProps) {
 
   return (
     <>
+      <Head>
+        <title>Manufacturers | Dropgala</title>
+        <link
+          rel="icon"
+          type="image/svg"
+          sizes="32x32"
+          href="/svg/manufacturer.svg"
+        />
+      </Head>
       <PageMainAction
         href={`${ROUTES.MANUFACTURER}/create`}
         title={t('form:button-label-add-manufacturer')}

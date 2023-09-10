@@ -90,7 +90,7 @@ export const CREATE_LANGUAGE = gql`
     $translation: JSONObject!
   ) {
     createLanguage(
-      name: $displayName
+      name: $name
       localeId: $localeId
       direction: $direction
       translation: $translation
@@ -105,6 +105,15 @@ export const DELETE_LANGUAGE = gql`
   mutation DeleteLanguage($id: Int!, $localeId: String!) {
     deleteLanguage(id: $id, localeId: $localeId) {
       id
+    }
+  }
+`;
+
+export const SET_DEFAULT_LANGUAGE = gql`
+  mutation SetDefaultLanguage($id: Int!) {
+    setDefaultLanguage(id: $id) {
+      id
+      name
     }
   }
 `;

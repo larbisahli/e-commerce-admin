@@ -10,6 +10,11 @@ export enum OrderBy {
   UPDATED_AT = 'updated_at'
 }
 
+export enum AttributeTypes {
+  COLOR = 'color',
+  TEXT = 'text'
+}
+
 export enum ErrorNames {
   USER_ALREADY_EXIST = 'USER_ALREADY_EXIST',
   EMAIL_ALREADY_EXIST = 'EMAIL_ALREADY_EXIST',

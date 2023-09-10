@@ -1,5 +1,6 @@
 import { useMutation } from '@apollo/client';
 import Card from '@components/common/card';
+import FormActions from '@components/common/FormActions';
 import { SaveIcon } from '@components/icons/save-icon';
 import Button from '@components/ui/button';
 import Checkbox from '@components/ui/checkbox';
@@ -7,14 +8,17 @@ import Description from '@components/ui/description';
 import ValidationError from '@components/ui/form-validation-error';
 import InputForLocal from '@components/ui/input-for-locale';
 import Label from '@components/ui/label';
+import Radio from '@components/ui/radio';
 import Scrollbar from '@components/ui/scrollbar';
 import SelectInput from '@components/ui/select-input';
 import { CREATE_LANGUAGE, UPDATE_LANGUAGE } from '@graphql/language';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useGetUser } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
+import { useAppDispatch } from '@hooks/useGetUser';
 import CountryLanguage from '@ladjs/country-language';
 import { notify } from '@lib/notify';
+import { fetchStoreSettings } from '@store/settings';
 import { LanguageType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import cn from 'classnames';
@@ -29,6 +33,7 @@ import { tagValidationSchema } from './tag-validation-schema';
 type FormValues = {
   locale: { displayName: string; langCultureName: string };
   direction: { label: 'LTR' | 'RTL' };
+  status: 'enabled' | 'disabled';
   active: boolean;
   translation: { [key: string]: { [key: string]: string } };
 };
@@ -41,6 +46,7 @@ const defaultValues = {
   },
   direction: { label: 'LTR' },
   active: true,
+  status: 'enabled',
   translation: {}
 };
 
@@ -110,6 +116,8 @@ export default function LanguageForm({
     resolver: yupResolver(tagValidationSchema)
   });
 
+  const dispatch = useAppDispatch();
+
   const { userInfo } = useGetUser();
   const csrfToken = userInfo?.csrfToken;
 
@@ -121,6 +129,8 @@ export default function LanguageForm({
     },
     onCompleted: (data: { updateLanguage: LanguageType }) => {
       if (!isEmpty(data?.updateLanguage)) {
+        // Update store languages
+        dispatch(fetchStoreSettings());
         notify(t('common:successfully-updated'), 'success');
         router.push(ROUTES.LANGUAGES);
       }
@@ -135,6 +145,8 @@ export default function LanguageForm({
     },
     onCompleted: (data: { createLanguage: LanguageType }) => {
       if (!isEmpty(data?.createLanguage)) {
+        // Update store languages
+        dispatch(fetchStoreSettings());
         notify(t('common:successfully-created'), 'success');
         router.push(ROUTES.LANGUAGES);
       }
@@ -148,7 +160,7 @@ export default function LanguageForm({
       name: values.locale.displayName,
       localeId: values.locale.langCultureName?.toLowerCase(),
       direction: values.direction?.label,
-      active: values.active,
+      active: values.status === 'enabled',
       translation: values.translation
     };
 
@@ -180,10 +192,20 @@ export default function LanguageForm({
 
   const currentLocalLabel = (Object.keys(currentLocale) ?? [])[0];
 
-  console.log({ locales });
-
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      <FormActions
+        backLink={ROUTES.LANGUAGES}
+        forceDefaultLang={isEmpty(initialValues)}
+        title={
+          isEmpty(initialValues)
+            ? t('form:label-new-language')
+            : t('form:label-edit-language')
+        }
+        showSelectLanguage={false}
+        loading={creating || updating}
+        disabled={creating || updating}
+      />
       <div className="my-5 flex flex-wrap sm:my-8">
         <Description
           title={t('form:input-label-description')}
@@ -221,10 +243,20 @@ export default function LanguageForm({
               options={[{ label: 'LTR' }, { label: 'RTL' }]}
             />
           </div>
-          <div className="min-w-[300px] flex-1">
-            <Checkbox
-              {...register(`active` as const)}
-              label={t('form:label-active')}
+          <div>
+            <Label>{t('form:input-label-status')}</Label>
+            <Radio
+              {...register('status')}
+              label={t('form:input-label-enabled')}
+              id={'enabled'}
+              value={'enabled'}
+              className="mb-2"
+            />
+            <Radio
+              {...register('status')}
+              id={'disabled'}
+              label={t('form:input-label-disabled')}
+              value={'disabled'}
             />
           </div>
         </Card>
@@ -275,25 +307,6 @@ export default function LanguageForm({
             });
           })}
         </Card>
-      </div>
-      <div className="mb-4 flex justify-end">
-        {initialValues && (
-          <Button
-            variant="outline"
-            onClick={router.back}
-            className="me-4"
-            type="button"
-          >
-            {t('form:button-label-back')}
-          </Button>
-        )}
-
-        <Button loading={creating || updating} disabled={creating || updating}>
-          <div className="mr-1">
-            <SaveIcon width="1.3rem" height="1.3rem" />
-          </div>
-          <div>{t('form:button-label-save')}</div>
-        </Button>
       </div>
     </form>
   );

@@ -126,7 +126,6 @@ export interface TableQueryVariables {
   orderBy: OrderBy;
   sortedBy: SortOrder;
   language: LanguageType;
-  defaultLanguage: LanguageType;
 }
 
 // export type ProductsQueryOptionsType = {
@@ -168,5 +167,4 @@ export interface TableQueryVariables {
 
 export interface LanguageProps {
   language: LanguageType;
-  defaultLanguage: LanguageType;
 }

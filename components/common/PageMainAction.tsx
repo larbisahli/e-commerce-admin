@@ -16,11 +16,19 @@ interface Props {
   href?: string;
   title: string;
   label: string;
+  showSelectLanguage?: boolean;
   onClick?: (e: any) => void;
   RenderIcon?: () => any;
 }
 
-const PageMainAction = ({ href, title, label, onClick, RenderIcon }: Props) => {
+const PageMainAction = ({
+  href,
+  title,
+  label,
+  onClick,
+  RenderIcon,
+  showSelectLanguage = true
+}: Props) => {
   const { t } = useTranslation();
 
   const {
@@ -33,7 +41,8 @@ const PageMainAction = ({ href, title, label, onClick, RenderIcon }: Props) => {
 
   const { ref, inView } = useInView({
     /* Optional options */
-    threshold: 1
+    threshold: 1,
+    rootMargin: '-50px 0px 0px 0px'
   });
 
   const dispatch = useAppDispatch();
@@ -49,8 +58,12 @@ const PageMainAction = ({ href, title, label, onClick, RenderIcon }: Props) => {
   }, []);
 
   const renderLanguageSelect = () => {
+    if (!showSelectLanguage) {
+      return null;
+    }
+
     return (
-      <div className="relative flex h-[45px] w-[220px] items-center justify-end">
+      <div className="relative flex h-[40px] w-[220px] items-center justify-end">
         <Select
           options={languages}
           value={selectedLanguage}
@@ -96,7 +109,7 @@ const PageMainAction = ({ href, title, label, onClick, RenderIcon }: Props) => {
         <LinkButton
           href={href}
           onClick={onClick}
-          className="h-[45px] ms-4 md:ms-6"
+          className="h-[40px] ms-4 md:ms-6"
         >
           <div className="flex w-full items-center justify-center">
             <div className="hidden items-center justify-center md:flex">

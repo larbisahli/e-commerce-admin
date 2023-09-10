@@ -54,7 +54,7 @@ export default function ShippingZonesPage({ client }: SSRProps) {
   const { selectedTableColumns, handleColumnChange } =
     useTableColumn('delivery-time');
 
-  const { defaultLanguage, selectedLanguage } = useSettings();
+  const { selectedLanguage } = useSettings();
 
   const { data, loading, error, fetchMore } = useQuery<
     TDelivery,
@@ -65,8 +65,7 @@ export default function ShippingZonesPage({ client }: SSRProps) {
       limit: limit.value,
       orderBy,
       sortedBy: SortOrder.Desc,
-      language: selectedLanguage,
-      defaultLanguage
+      language: selectedLanguage
     },
     fetchPolicy: 'cache-and-network',
     skip: isEmpty(selectedLanguage)

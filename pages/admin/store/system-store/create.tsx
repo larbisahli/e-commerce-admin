@@ -4,15 +4,15 @@ import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { ROUTES } from '@utils/routes';
 import type { GetServerSideProps } from 'next';
-import dynamic from 'next/dynamic';
+// import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-const StoreViewForm = dynamic(
-  () => import('@components/store-views/store-view-form'),
-  { ssr: true }
-);
+// const StoreViewForm = dynamic(
+//   () => import('@components/store-views/store-view-form'),
+//   { ssr: true }
+// );
 
 interface Props extends SSRProps {
   localeFiles: { [key: string]: string };
@@ -39,7 +39,7 @@ export default function UpdateTagPage({ client }: Props) {
           {t('form:label-new-store-view')}
         </h1>
       </div>
-      <StoreViewForm />
+      {/* <StoreViewForm /> */}
     </>
   );
 }

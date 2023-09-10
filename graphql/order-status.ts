@@ -7,7 +7,6 @@ export const ORDER_STATUSES = gql`
     $orderBy: String!
     $sortedBy: String!
     $language: LanguageInput!
-    $defaultLanguage: LanguageInput!
   ) {
     orderStatusCount {
       count
@@ -18,7 +17,6 @@ export const ORDER_STATUSES = gql`
       orderBy: $orderBy
       sortedBy: $sortedBy
       language: $language
-      defaultLanguage: $defaultLanguage
     ) {
       id
       name
@@ -44,16 +42,8 @@ export const ORDER_STATUSES = gql`
 `;
 
 export const ORDER_STATUS = gql`
-  query GetOrderStatus(
-    $id: Int!
-    $language: LanguageInput!
-    $defaultLanguage: LanguageInput!
-  ) {
-    orderStatus(
-      id: $id
-      language: $language
-      defaultLanguage: $defaultLanguage
-    ) {
+  query GetOrderStatus($id: Int!, $language: LanguageInput!) {
+    orderStatus(id: $id, language: $language) {
       id
       name
       translated {

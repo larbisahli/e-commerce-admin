@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client';
 import AppLayout from '@components/layouts/app';
-import StoreViewList from '@components/store-views/store-view-list';
+// import StoreViewList from '@components/store-views/store-view-list';
 import { Error } from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { LANGUAGES } from '@graphql/language';
@@ -124,10 +124,10 @@ export default function SystemStore({ client }: SSRProps) {
         currentPage={page}
         perPage={limit.value}
       />
-      <StoreViewList
+      {/* <StoreViewList
         storeViews={storeViews}
         selectedColumns={selectedTableColumns}
-      />
+      /> */}
     </>
   );
 }

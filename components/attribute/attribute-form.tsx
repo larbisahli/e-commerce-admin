@@ -2,11 +2,13 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import { useMutation } from '@apollo/client';
 import Card from '@components/common/card';
-import { SaveIcon } from '@components/icons/save-icon';
+import FormActions from '@components/common/FormActions';
 import Alert from '@components/ui/alert';
 import Button from '@components/ui/button';
 import Description from '@components/ui/description';
 import Input from '@components/ui/input';
+import Label from '@components/ui/label';
+import SelectInput from '@components/ui/select-input';
 import {
   CREATE_ATTRIBUTE,
   DELETE_ATTRIBUTE_VALUE,
@@ -14,10 +16,12 @@ import {
 } from '@graphql/attribute';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetUser } from '@hooks/useGetUser';
+import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/index';
-import { Nullable } from '@ts-types/custom.types';
+import { AttributeTypes } from '@ts-types/enums';
 import { Attribute, AttributeValue } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
+import { placeholder } from '@utils/utils';
 import cn from 'classnames';
 import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
@@ -27,16 +31,20 @@ import React, { InputHTMLAttributes, useEffect } from 'react';
 import { ChromePicker } from 'react-color';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 
-type FormValues = {
-  name?: Nullable<string>;
-  values: AttributeValue[];
-};
+interface FormValues extends Attribute {}
 
 type IProps = {
   initialValues?: Attribute | any;
 };
 
-export default function CreateOrUpdateAttributeForm({ initialValues }: IProps) {
+const attributeTypeOptions = [
+  { label: 'Color', id: AttributeTypes.COLOR },
+  { label: 'Text', id: AttributeTypes.TEXT }
+];
+
+export default function CreateOrUpdateAttributeForm({
+  initialValues = {}
+}: IProps) {
   const { t } = useTranslation();
 
   const router = useRouter();
@@ -48,11 +56,22 @@ export default function CreateOrUpdateAttributeForm({ initialValues }: IProps) {
   const {
     register,
     handleSubmit,
+    watch,
     control,
-    reset,
     formState: { errors }
   } = useForm<FormValues>({
-    defaultValues: initialValues ? initialValues : { name: null, values: [] }
+    defaultValues: isEmpty(initialValues)
+      ? {
+          name: null,
+          type: { label: 'Text', id: AttributeTypes.TEXT },
+          values: []
+        }
+      : {
+          ...initialValues,
+          type: attributeTypeOptions?.find(
+            (op) => op.id === initialValues?.type
+          )
+        }
   });
 
   const { userInfo } = useGetUser();
@@ -64,6 +83,8 @@ export default function CreateOrUpdateAttributeForm({ initialValues }: IProps) {
     keyName: 'key'
   });
 
+  const { selectedLanguage } = useSettings();
+
   const [createAttribute, { loading: creating }] = useMutation(
     CREATE_ATTRIBUTE,
     {
@@ -74,9 +95,9 @@ export default function CreateOrUpdateAttributeForm({ initialValues }: IProps) {
       },
       onCompleted: (data: { createAttribute: Attribute }) => {
         if (!isEmpty(data)) {
+          const { id } = data.createAttribute;
           notify(t('common:successfully-created'), 'success');
-          reset();
-          router.push(ROUTES.ATTRIBUTE);
+          router.push(`${ROUTES.ATTRIBUTE}/edit/${id}`);
         }
       }
     }
@@ -111,30 +132,48 @@ export default function CreateOrUpdateAttributeForm({ initialValues }: IProps) {
   useErrorLogger(error);
 
   const onSubmit = (fields: FormValues) => {
+    console.log({ fields });
+
+    const type = (fields?.type as { label: string; id: string })?.id;
+
     if (!isEmpty(fields?.values)) {
-      const hasEmptyField = fields?.values.find(({ value }) => value === '');
-      if (hasEmptyField) {
+      const hasEmptyValue = fields?.values.find(({ value }) => isEmpty(value));
+      if (hasEmptyValue) {
         notify(t('common:value-required'), 'warning');
         return;
+      }
+
+      if (type === AttributeTypes.COLOR) {
+        const hasEmptyField = fields?.values.find(({ name }) => isEmpty(name));
+        if (hasEmptyField) {
+          notify(t('common:color-name-required'), 'warning');
+          return;
+        }
       }
     }
 
     if (isEmpty(initialValues)) {
-      createAttribute({ variables: fields }).catch((err) => {
+      console.log({ ...fields, type, language: selectedLanguage });
+      createAttribute({
+        variables: { ...fields, type, language: selectedLanguage }
+      }).catch((err) => {
         setError(err);
       });
     } else {
       const changes = initialValues?.values
-        ?.map(
-          (att_value_init: AttributeValue) =>
-            fields?.values.find((att_value) => {
-              return (
-                att_value.id === att_value_init.id &&
-                (att_value.value != att_value_init.value ||
-                  att_value.color != att_value_init.color)
-              );
-            })
-        )
+        ?.map((att_value_init: AttributeValue) => {
+          const value = fields?.values.find((att_value: AttributeValue) => {
+            return (
+              att_value.id === att_value_init.id &&
+              (att_value.name !== att_value_init.name ||
+                att_value.value !== att_value_init.value)
+            );
+          });
+          if (isEmpty(value)) {
+            return undefined;
+          }
+          return { id: value?.id, name: value?.name, value: value?.value };
+        })
         .filter(function (x) {
           return x !== undefined;
         });
@@ -142,13 +181,17 @@ export default function CreateOrUpdateAttributeForm({ initialValues }: IProps) {
       const variables = {
         id: initialValues.id,
         name: fields?.name,
+        type,
+        language: selectedLanguage,
         values: [
           ...changes,
-          ...(fields?.values.filter(function (value) {
+          ...(fields?.values.filter(function (value: AttributeValue) {
             return !value.id;
           }) ?? [])
         ]
       };
+
+      console.log({ variables });
 
       updateAttribute({ variables }).catch((err) => {
         setError(err);
@@ -177,6 +220,27 @@ export default function CreateOrUpdateAttributeForm({ initialValues }: IProps) {
     }
   };
 
+  const renderDescInfo = () => {
+    if (isEmpty(initialValues)) {
+      return (
+        <p className="mb-12 text-sm text-gray-600">
+          {`"New Attribute" is displayed in the system default language.
+         Always maintain new data in your chosen system default language.`}
+        </p>
+      );
+    }
+  };
+
+  const type = watch('type') as { label: string; id: string };
+
+  useEffect(() => {
+    if (!isEmpty(type) && initialValues?.type !== type?.id) {
+      remove();
+    }
+  }, [initialValues?.type, remove, type]);
+
+  const { values = [], type: initType } = initialValues;
+
   return (
     <>
       {errorMessage ? (
@@ -189,6 +253,18 @@ export default function CreateOrUpdateAttributeForm({ initialValues }: IProps) {
         />
       ) : null}
       <form onSubmit={handleSubmit(onSubmit)}>
+        <FormActions
+          backLink={ROUTES.ATTRIBUTE}
+          forceDefaultLang={isEmpty(initialValues)}
+          title={
+            isEmpty(initialValues)
+              ? t('form:form-title-new-attribute')
+              : t('form:form-title-edit-attribute')
+          }
+          loading={creating || updating}
+          disabled={creating || updating}
+        />
+        {renderDescInfo()}
         <div className="my-5 flex flex-wrap border-b border-dashed border-border-base pb-8 sm:my-8">
           <Description
             title={t('common:attribute')}
@@ -206,9 +282,24 @@ export default function CreateOrUpdateAttributeForm({ initialValues }: IProps) {
               isRequiredLabel
               {...register('name', { required: 'Name is required' })}
               error={t(errors.name?.message!)}
+              placeholder={placeholder(
+                initialValues,
+                'name',
+                'Enter attribute name'
+              )}
               variant="outline"
               className="mb-5"
             />
+            <div>
+              <Label>{t('form:input-label-type')}</Label>
+              <SelectInput
+                name="type"
+                control={control}
+                getOptionLabel={(option: { label: string }) => option.label}
+                getOptionValue={(option: { id: string }) => option.id}
+                options={attributeTypeOptions}
+              />
+            </div>
           </Card>
         </div>
 
@@ -231,28 +322,55 @@ export default function CreateOrUpdateAttributeForm({ initialValues }: IProps) {
                   key={index}
                 >
                   <div className="flex justify-between">
-                    <Input
-                      className="sm:col-span-2"
-                      isRequiredLabel
-                      label={t('form:input-label-value')}
-                      variant="outline"
-                      {...register(`values.${index}.value` as const)}
-                      defaultValue={item.value}
-                    />
-                    <ColorPicker
-                      control={control}
-                      color={item.color}
-                      {...register(`values.${index}.color` as const)}
-                    ></ColorPicker>
+                    {type?.id === AttributeTypes.COLOR && (
+                      <Input
+                        className="sm:col-span-2"
+                        isRequiredLabel
+                        label={t('form:input-label-color-name')}
+                        variant="outline"
+                        {...register(`values.${index}.name` as const)}
+                        placeholder={placeholder(
+                          values[index],
+                          'name',
+                          'Enter color name'
+                        )}
+                        defaultValue={item.value}
+                      />
+                    )}
+                    {type?.id === AttributeTypes.TEXT && (
+                      <Input
+                        className="sm:col-span-2"
+                        isRequiredLabel
+                        label={t('form:input-label-value')}
+                        variant="outline"
+                        {...register(`values.${index}.value` as const)}
+                        placeholder={
+                          initType === AttributeTypes.COLOR
+                            ? 'Enter value'
+                            : placeholder(values[index], 'value', 'Enter value')
+                        }
+                        defaultValue={item.value}
+                      />
+                    )}
+                    {type?.id === AttributeTypes.COLOR && (
+                      <ColorPicker
+                        control={control}
+                        color={item.value}
+                        {...register(`values.${index}.value` as const)}
+                      ></ColorPicker>
+                    )}
+
                     <button
                       onClick={() => removeAttributeValue(item, index)}
                       type="button"
-                      className="text-sm text-red-500 transition-colors duration-200 hover:text-red-700 focus:outline-none sm:col-span-1 sm:mt-4"
+                      className="text-sm text-red-500 transition-colors duration-200
+                      hover:text-red-700 focus:outline-none sm:col-span-1 sm:mt-4"
                     >
                       {t('form:button-label-remove')}
                       {deleteAttributeLoading && deletedIndex === index && (
                         <span
-                          className="absolute h-4 w-4 animate-spin rounded-full border-2 border-t-2 border-transparent ms-2"
+                          className="absolute h-4 w-4 animate-spin rounded-full
+                           border-2 border-t-2 border-transparent ms-2"
                           style={{
                             borderTopColor: 'red'
                           }}
@@ -266,35 +384,20 @@ export default function CreateOrUpdateAttributeForm({ initialValues }: IProps) {
 
             <Button
               type="button"
-              onClick={() => append({ value: '', color: '' })}
+              onClick={() =>
+                append({
+                  name: '',
+                  value: type?.id === AttributeTypes.COLOR ? '#fff' : ''
+                })
+              }
               className="w-full sm:w-auto"
             >
-              {t('form:button-label-add-value')}
+              {type?.id === AttributeTypes.COLOR &&
+                t('form:button-label-add-color')}
+              {type?.id === AttributeTypes.TEXT &&
+                t('form:button-label-add-value')}
             </Button>
           </Card>
-        </div>
-
-        <div className="mb-4 flex justify-end">
-          {initialValues && (
-            <Button
-              variant="outline"
-              onClick={router.back}
-              className="me-4"
-              type="button"
-            >
-              {t('form:button-label-back')}
-            </Button>
-          )}
-
-          <Button
-            loading={creating || updating}
-            disabled={creating || updating}
-          >
-            <div className="mr-1">
-              <SaveIcon width="1.3rem" height="1.3rem" />
-            </div>
-            <div>{t('form:button-label-save')}</div>
-          </Button>
         </div>
       </form>
     </>
@@ -317,6 +420,8 @@ const ColorPicker = React.forwardRef<HTMLInputElement, Props>(
     const [displayColorPicker, setDisplayColorPicker] = useState(false);
     const [currentColor, setCurrentColor] = useState('');
 
+    console.log({ color });
+
     const handleClick = (e) => {
       e.preventDefault();
       setDisplayColorPicker((prev) => !prev);
@@ -332,22 +437,27 @@ const ColorPicker = React.forwardRef<HTMLInputElement, Props>(
     }, [color]);
 
     return (
-      <div className="relative flex items-end">
-        <button
-          style={{ fontSize: '.8rem' }}
-          className="text w-full rounded border border-gray-200 bg-white p-3 font-semibold shadow hover:bg-gray-100"
-          onClick={handleClick}
-        >
-          <span>Pick Color</span>
-          <span
-            style={{ background: currentColor, height: '15px' }}
-            className={cn('absolute top-0 left-0 w-full rounded-full', {
+      <div className="relative flex w-fit items-end">
+        <div className="flex w-full items-center">
+          <button
+            onClick={handleClick}
+            style={{ background: currentColor }}
+            className={cn('mr-2 h-11 w-11 rounded-sm shadow', {
               shadow: !isEmpty(currentColor),
-              'border-gray-400': !isEmpty(currentColor),
+              'border-gray-300': !isEmpty(currentColor),
               border: !isEmpty(currentColor)
             })}
-          ></span>
-        </button>
+          ></button>
+          <button
+            style={{ fontSize: '.8rem' }}
+            className="text h-11 w-full rounded-sm border border-gray-200
+                  bg-white p-3 font-semibold shadow hover:bg-gray-100"
+            onClick={handleClick}
+          >
+            <span>Pick Color</span>
+          </button>
+        </div>
+
         {displayColorPicker ? (
           <div className="absolute z-10">
             <div

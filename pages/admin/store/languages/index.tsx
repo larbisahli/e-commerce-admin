@@ -106,6 +106,7 @@ export default function Languages({ client }: SSRProps) {
         href={`${ROUTES.LANGUAGES}/create`}
         title={t('common:sidebar-nav-item-languages')}
         label={t('form:button-label-new-language')}
+        showSelectLanguage={false}
       />
       <PageMainHeader
         columns={COLUMNS['language']}

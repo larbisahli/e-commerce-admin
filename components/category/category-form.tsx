@@ -1,8 +1,7 @@
 import { useMutation, useQuery } from '@apollo/client';
 import Card from '@components/common/card';
-import { SaveIcon } from '@components/icons/save-icon';
+import FormActions from '@components/common/FormActions';
 import ImageModal from '@components/image-modal';
-import Button from '@components/ui/button';
 import Description from '@components/ui/description';
 import Input from '@components/ui/input';
 import Label from '@components/ui/label';
@@ -17,9 +16,12 @@ import {
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useErrorLogger, useWarnIfUnsavedChanges } from '@hooks/index';
 import { useGetUser } from '@hooks/useGetUser';
+import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/index';
+import { LanguageProps } from '@ts-types/custom.types';
 import { Category, OrderBy } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
+import { placeholder } from '@utils/utils';
 import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
@@ -33,7 +35,7 @@ interface TCategorySelect {
   categorySelect: Category[];
 }
 
-interface OptionsVariable {
+interface OptionsVariable extends LanguageProps {
   id: number;
   page: number;
   limit: number;
@@ -45,6 +47,8 @@ function SelectCategories({ control }: { control: Control<FormValues> }) {
   const { query } = useRouter();
   const { categoryId } = query;
 
+  const { selectedLanguage } = useSettings();
+
   const { data, loading, error } = useQuery<TCategorySelect, OptionsVariable>(
     CATEGORIES_FOR_SELECT,
     {
@@ -52,9 +56,11 @@ function SelectCategories({ control }: { control: Control<FormValues> }) {
         id: Number(categoryId),
         page: 1,
         limit: 999,
-        orderBy: OrderBy.CREATED_AT
+        orderBy: OrderBy.CREATED_AT,
+        language: selectedLanguage
       },
-      fetchPolicy: 'cache-and-network'
+      fetchPolicy: 'cache-and-network',
+      skip: isEmpty(selectedLanguage)
     }
   );
 
@@ -88,15 +94,13 @@ const defaultValues = {
   position: 1,
   thumbnail: [],
   icon: null,
-  categorySeo: {
-    urlKey: '',
-    metaTitle: '',
-    metaKeywords: '',
-    metaDescription: '',
-    metaRobots: { value: 'INDEX, FOLLOW' },
-    breadcrumbsPriority: 0,
-    metaImage: []
-  }
+  urlKey: '',
+  metaTitle: '',
+  metaKeywords: '',
+  metaDescription: '',
+  metaRobots: { value: 'INDEX, FOLLOW' },
+  breadcrumbsPriority: 0,
+  metaImage: []
 };
 
 type IProps = {
@@ -124,6 +128,8 @@ export default function CreateOrUpdateCategoriesForm({
 
   const { userInfo } = useGetUser();
 
+  const { selectedLanguage } = useSettings();
+
   const csrfToken = userInfo?.csrfToken;
 
   const {
@@ -133,53 +139,45 @@ export default function CreateOrUpdateCategoriesForm({
     setValue,
     getValues,
     watch,
-    formState: { errors },
-    reset
+    formState: { errors }
   } = useForm<FormValues>({
     defaultValues: isEmpty(initialValues)
       ? defaultValues
       : {
           ...initialValues,
-          categorySeo: isEmpty(initialValues?.categorySeo)
-            ? {}
-            : {
-                ...initialValues?.categorySeo,
-                metaRobots: { value: initialValues?.categorySeo?.metaRobots }
-              }
+          metaRobots: { value: initialValues?.metaRobots }
         },
     resolver: yupResolver(categoryValidationSchema)
   });
 
-  const [createCategory, { loading: creating, reset: resetCreateMutation }] =
-    useMutation(CREATE_CATEGORY, {
-      context: {
-        headers: {
-          'x-csrf-token': csrfToken
-        }
-      },
-      onCompleted: (data: { createCategory: Category }) => {
-        if (!isEmpty(data)) {
-          notify(t('common:successfully-created'), 'success');
-          reset();
-          router.push(ROUTES.CATEGORY);
-        }
+  const [createCategory, { loading: creating }] = useMutation(CREATE_CATEGORY, {
+    context: {
+      headers: {
+        'x-csrf-token': csrfToken
       }
-    });
+    },
+    onCompleted: (data: { createCategory: Category }) => {
+      if (!isEmpty(data)) {
+        const { id } = data.createCategory;
+        notify(t('common:successfully-created'), 'success');
+        router.push(`${ROUTES.CATEGORY}/edit/${id}`);
+      }
+    }
+  });
 
-  const [updateCategory, { loading: updating, reset: resetUpdateMutation }] =
-    useMutation(UPDATE_CATEGORY, {
-      context: {
-        headers: {
-          'x-csrf-token': csrfToken
-        }
-      },
-      onCompleted: (data: { updateCategory: Category }) => {
-        if (!isEmpty(data)) {
-          notify(t('common:successfully-updated'), 'success');
-          router.push(ROUTES.CATEGORY);
-        }
+  const [updateCategory, { loading: updating }] = useMutation(UPDATE_CATEGORY, {
+    context: {
+      headers: {
+        'x-csrf-token': csrfToken
       }
-    });
+    },
+    onCompleted: (data: { updateCategory: Category }) => {
+      if (!isEmpty(data)) {
+        notify(t('common:successfully-updated'), 'success');
+        router.push(ROUTES.CATEGORY);
+      }
+    }
+  });
 
   useErrorLogger(error);
 
@@ -196,26 +194,26 @@ export default function CreateOrUpdateCategoriesForm({
       position: Number(values.position),
       thumbnail: values.thumbnail?.map(({ id }) => ({ id })),
       parentId: isEmpty(values?.parent) ? null : values?.parent?.id,
-      categorySeo: {
-        ...values.categorySeo,
-        breadcrumbsPriority: Number(values.categorySeo.breadcrumbsPriority),
-        metaImage: values.categorySeo.metaImage?.map(({ id }) => ({ id })),
-        metaRobots: values.categorySeo.metaRobots.value
-      }
+      language: selectedLanguage,
+      urlKey: values.urlKey,
+      metaTitle: values.metaTitle,
+      metaKeywords: values.metaKeywords,
+      metaDescription: values.metaDescription,
+      breadcrumbsPriority: Number(values.breadcrumbsPriority),
+      metaImage: values.metaImage?.map(({ id }) => ({ id })),
+      metaRobots: values.metaRobots.value
     };
 
     setUnsavedChanges(false);
     if (isEmpty(initialValues)) {
       createCategory({ variables }).catch((err) => {
         setError(err);
-        resetCreateMutation();
       });
     } else {
       updateCategory({
         variables: { id: initialValues?.id, ...variables }
       }).catch((err) => {
         setError(err);
-        resetUpdateMutation();
       });
     }
   };
@@ -235,9 +233,9 @@ export default function CreateOrUpdateCategoriesForm({
   const thumbnail = watch('thumbnail');
   const includeInMenu = watch('includeInMenu');
   const name = watch('name');
-  const metaDescription = watch('categorySeo.metaDescription');
-  const metaImage = watch('categorySeo.metaImage');
-  const urlKey = watch('categorySeo.urlKey');
+  const metaDescription = watch('metaDescription') ?? '';
+  const metaImage = watch('metaImage');
+  const urlKey = watch('urlKey');
 
   useEffect(() => {
     if (!includeInMenu) {
@@ -247,13 +245,13 @@ export default function CreateOrUpdateCategoriesForm({
 
   useEffect(() => {
     if (!isEmpty(thumbnail) && isEmpty(metaImage)) {
-      setValue('categorySeo.metaImage', thumbnail);
+      setValue('metaImage', thumbnail);
     }
   }, [thumbnail, metaImage]);
 
   useEffect(() => {
     const value = generateSlug(urlKey);
-    setValue('categorySeo.urlKey', value);
+    setValue('urlKey', value);
   }, [urlKey]);
 
   const updateWhenEmpty = (field: string, isSlug = true) => {
@@ -264,8 +262,31 @@ export default function CreateOrUpdateCategoriesForm({
     }
   };
 
+  const renderDescInfo = () => {
+    if (isEmpty(initialValues)) {
+      return (
+        <p className="mb-12 text-sm text-gray-600">
+          {`"New Category" is displayed in the system default language.
+         Always maintain new data in your chosen system default language.`}
+        </p>
+      );
+    }
+  };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      <FormActions
+        backLink={ROUTES.CATEGORY}
+        forceDefaultLang={isEmpty(initialValues)}
+        title={
+          isEmpty(initialValues)
+            ? t('form:form-title-new-category')
+            : t('form:form-title-edit-category')
+        }
+        loading={creating || updating}
+        disabled={creating || updating}
+      />
+      {renderDescInfo()}
       <div className="my-5 flex flex-wrap border-b border-dashed border-border-base pb-8 sm:my-8">
         <Description
           title={t('form:input-label-image')}
@@ -299,6 +320,11 @@ export default function CreateOrUpdateCategoriesForm({
             // @ts-ignore
             {...register('name')}
             error={t(errors.name?.message!)}
+            placeholder={placeholder(
+              initialValues,
+              'name',
+              'Enter category name'
+            )}
             variant="outline"
             className="mb-5"
           />
@@ -306,6 +332,11 @@ export default function CreateOrUpdateCategoriesForm({
             label={t('form:input-label-description')}
             isRequiredLabel
             {...register('description')}
+            placeholder={placeholder(
+              initialValues,
+              'description',
+              'Enter description name'
+            )}
             error={t(errors.description?.message!)}
             variant="outline"
             className="mb-5"
@@ -347,27 +378,30 @@ export default function CreateOrUpdateCategoriesForm({
           <Input
             label={t('form:input-label-meta-title')}
             isRequiredLabel
-            onFocus={() => updateWhenEmpty('categorySeo.metaTitle', false)}
-            // @ts-ignore
-            {...register('categorySeo.metaTitle')}
-            error={t(errors.categorySeo?.metaTitle?.message!)}
+            onFocus={() => updateWhenEmpty('metaTitle', false)}
+            {...register('metaTitle')}
+            placeholder={placeholder(
+              initialValues,
+              'metaTitle',
+              'Enter meta title'
+            )}
+            error={t(errors.metaTitle?.message!)}
             variant="outline"
             className="mb-5"
           />
           <Input
             label={t('form:input-label-url-key')}
             isRequiredLabel
-            onFocus={() => updateWhenEmpty('categorySeo.urlKey')}
-            // @ts-ignore
-            {...register('categorySeo.urlKey')}
-            error={t(errors.categorySeo?.urlKey?.message!)}
+            onFocus={() => updateWhenEmpty('urlKey')}
+            {...register('urlKey')}
+            error={t(errors.urlKey?.message!)}
             variant="outline"
             className="mb-5"
           />
           <div className="mb-5">
             <Label isRequiredLabel>{t('form:input-label-meta-robots')}</Label>
             <SelectInput
-              name="categorySeo.metaRobots"
+              name="metaRobots"
               control={control}
               getOptionLabel={(option: { value: string }) => option.value}
               getOptionValue={(option: { value: string }) => option.value}
@@ -376,16 +410,25 @@ export default function CreateOrUpdateCategoriesForm({
           </div>
           <TextArea
             label={t('form:input-label-meta-keywords')}
-            // @ts-ignore
-            {...register('categorySeo.metaKeywords')}
+            {...register('metaKeywords')}
+            placeholder={placeholder(
+              initialValues,
+              'metaKeywords',
+              'Enter meta keywords'
+            )}
+            note="Use a comma to separate the meta keywords"
             rows={2}
             variant="outline"
             className="mb-5"
           />
           <TextArea
             label={t('form:input-label-meta-description')}
-            // @ts-ignore
-            {...register('categorySeo.metaDescription')}
+            {...register('metaDescription')}
+            placeholder={placeholder(
+              initialValues,
+              'metaKeywords',
+              'Enter meta description'
+            )}
             variant="outline"
           />
           <div style={{ fontSize: '.75rem' }} className="mb-5">
@@ -404,7 +447,7 @@ export default function CreateOrUpdateCategoriesForm({
               )}
             </div>
             <p className="my-2 text-xs text-red-500">
-              {t(errors.categorySeo?.metaDescription?.message!)}
+              {t(errors.metaDescription?.message!)}
             </p>
           </div>
           <Input
@@ -412,14 +455,14 @@ export default function CreateOrUpdateCategoriesForm({
             type="number"
             min={0}
             max={100}
-            {...register('categorySeo.breadcrumbsPriority')}
+            {...register('breadcrumbsPriority')}
             variant="outline"
             className="mb-12"
             note="100 is the highest priority. This setting defines the priority of each category to be selected for the product breadcrumbs."
           />
           <div className="my-5">
             <ImageModal
-              onSelect={(image) => setValue('categorySeo.metaImage', image)}
+              onSelect={(image) => setValue('metaImage', image)}
               isThumbnail
               selected={metaImage}
               modalId="metaImage"
@@ -427,24 +470,6 @@ export default function CreateOrUpdateCategoriesForm({
             />
           </div>
         </Card>
-      </div>
-      <div className="mb-4 flex justify-end">
-        {initialValues && (
-          <Button
-            variant="outline"
-            onClick={router.back}
-            className="me-4"
-            type="button"
-          >
-            {t('form:button-label-back')}
-          </Button>
-        )}
-        <Button loading={creating || updating} disabled={creating || updating}>
-          <div className="mr-1">
-            <SaveIcon width="1.3rem" height="1.3rem" />
-          </div>
-          <div>{t('form:button-label-save')}</div>
-        </Button>
       </div>
     </form>
   );

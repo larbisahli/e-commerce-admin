@@ -52,7 +52,7 @@ export default function Tags({ client }: SSRProps) {
 
   const { selectedTableColumns, handleColumnChange } = useTableColumn('tag');
 
-  const { defaultLanguage, selectedLanguage } = useSettings();
+  const { selectedLanguage } = useSettings();
 
   const { data, loading, error, fetchMore } = useQuery<
     TTags,
@@ -63,8 +63,7 @@ export default function Tags({ client }: SSRProps) {
       limit: limit.value,
       orderBy,
       sortedBy: SortOrder.Desc,
-      language: selectedLanguage,
-      defaultLanguage
+      language: selectedLanguage
     },
     fetchPolicy: 'cache-and-network',
     skip: isEmpty(selectedLanguage)

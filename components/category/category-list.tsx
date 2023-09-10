@@ -63,23 +63,9 @@ const CategoryList = ({ loading, categories, selectedColumns }: IProps) => {
                 'font-medium text-gray-600': record?.level !== 1
               })}
             >
-              {name}
+              {name ?? record?.translated?.name ?? 'N/A'}
             </span>
           );
-        }
-      },
-      {
-        title: t('table:table-item-details'),
-        dataIndex: 'description',
-        key: 'description',
-        align: alignLeft,
-        width: 150,
-        ellipsis: true,
-        render: (description: string, record: TableRowProps) => {
-          if (record?.loading) {
-            return <TableRowPlaceholder />;
-          }
-          return description;
         }
       },
       {
@@ -127,7 +113,7 @@ const CategoryList = ({ loading, categories, selectedColumns }: IProps) => {
         dataIndex: 'createdAt',
         key: 'createdAt',
         align: alignLeft,
-        width: 180,
+        width: 200,
         render: (
           createdAt: CreatedUpdatedByAt['createdAt'],
           record: TableRowProps
@@ -179,12 +165,14 @@ const CategoryList = ({ loading, categories, selectedColumns }: IProps) => {
         dataIndex: 'id',
         key: 'actions',
         align: 'center',
-        width: 80,
+        width: 140,
         render: (id: string, record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
-          <ActionButtons id={id} editUrl={`${ROUTES.CATEGORY}/edit/${id}`} />;
+          return (
+            <ActionButtons id={id} editUrl={`${ROUTES.CATEGORY}/edit/${id}`} />
+          );
         }
       }
     ];

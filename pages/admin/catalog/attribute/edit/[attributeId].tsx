@@ -1,7 +1,8 @@
 import { useQuery } from '@apollo/client';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
-import Loader from '@components/ui/loader/loader';
+import { FormPlaceholder } from '@components/ui/placeholders/Form';
+import { FormActionPlaceholder } from '@components/ui/placeholders/FormAction';
 import { ATTRIBUTE } from '@graphql/attribute';
 import { useGetUser } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
@@ -36,15 +37,14 @@ export default function UpdateAttributePage({ client }: SSRProps) {
 
   const attributeId = parseInt(query.attributeId as string, 10);
 
-  const { defaultLanguage, selectedLanguage } = useSettings();
+  const { selectedLanguage } = useSettings();
 
   const { data, loading, error } = useQuery<TAttribute, OptionsVariable>(
     ATTRIBUTE,
     {
       variables: {
         id: attributeId,
-        language: selectedLanguage,
-        defaultLanguage
+        language: selectedLanguage
       },
       fetchPolicy: 'cache-and-network',
       skip: isEmpty(selectedLanguage)
@@ -56,8 +56,13 @@ export default function UpdateAttributePage({ client }: SSRProps) {
 
   const { attribute = [] } = data ?? {};
 
-  if (loading) {
-    return <Loader text={t('common:text-loading')} />;
+  if (isEmpty(attribute) || loading) {
+    return (
+      <div>
+        <FormActionPlaceholder />
+        <FormPlaceholder />
+      </div>
+    );
   }
 
   if (error) {
@@ -75,11 +80,6 @@ export default function UpdateAttributePage({ client }: SSRProps) {
           href="/svg/attribute.svg"
         />
       </Head>
-      <div className="flex border-b border-dashed border-border-base py-5 sm:py-8">
-        <h1 className="text-lg font-semibold text-heading">
-          {t('form:edit-attribute')}
-        </h1>
-      </div>
       <CreateOrUpdateAttributeForm initialValues={attribute} />
     </>
   );

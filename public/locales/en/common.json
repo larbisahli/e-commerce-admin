@@ -161,6 +161,7 @@
   "update-success": "Successfully updated!",
   "name-required": "You must need to provide a name",
   "value-required": "You must need to provide a value",
+  "color-name-required": "Color name is required",
   "email-required": "You must need to provide your email address",
   "invalid-email": "Provided email address format is not valid",
   "password-required": "You must need to provide your password",

@@ -6,19 +6,17 @@ export const categoryValidationSchema = yup.object().shape({
     .string()
     .required('Description required')
     .typeError('Description required'),
-  categorySeo: yup.object().shape({
-    metaTitle: yup.string().required('Meta Title is required'),
-    urlKey: yup
-      .string()
-      .typeError('Url Key is required')
-      .required('Url Key is required'),
-    metaDescription: yup
-      .string()
-      .nullable(true)
-      .test(
-        'len',
-        'Description Must be less than 160 characters',
-        (val) => val?.length < 160
-      )
-  })
+  metaTitle: yup.string().required('Meta Title is required'),
+  urlKey: yup
+    .string()
+    .typeError('Url Key is required')
+    .required('Url Key is required'),
+  metaDescription: yup
+    .string()
+    .nullable(true)
+    .test(
+      'len',
+      'Description Must be less than 160 characters',
+      (val) => val?.length < 160
+    )
 });

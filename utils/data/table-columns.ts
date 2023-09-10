@@ -89,7 +89,6 @@ export const COLUMNS = {
   ],
   category: [
     { label: 'Name', key: 'name' },
-    { label: 'Details', key: 'description' },
     { label: 'Menu', key: 'includeInMenu' },
     { label: 'Level', key: 'level' },
     { label: 'Position', key: 'position' },
@@ -101,6 +100,7 @@ export const COLUMNS = {
   attribute: [
     { label: 'Name', key: 'name' },
     { label: 'Values', key: 'values' },
+    { label: 'Type', key: 'type' },
     { label: 'Creation Date', key: 'createdAt' },
     { label: 'Placed By', key: 'createdBy' },
     { label: 'Last Updated By', key: 'updatedBy' },

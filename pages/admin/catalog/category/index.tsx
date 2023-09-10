@@ -51,7 +51,7 @@ export default function Categories({ client }: SSRProps) {
   const { selectedTableColumns, handleColumnChange } =
     useTableColumn('category');
 
-  const { defaultLanguage, selectedLanguage } = useSettings();
+  const { selectedLanguage } = useSettings();
 
   const { data, loading, error, fetchMore } = useQuery<
     TCategories,
@@ -62,8 +62,7 @@ export default function Categories({ client }: SSRProps) {
       limit: limit.value,
       orderBy,
       sortedBy: SortOrder.Desc,
-      language: selectedLanguage,
-      defaultLanguage
+      language: selectedLanguage
     },
     fetchPolicy: 'cache-and-network',
     skip: isEmpty(selectedLanguage)

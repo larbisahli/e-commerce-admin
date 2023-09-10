@@ -17,15 +17,19 @@ import { useInView } from 'react-intersection-observer';
 interface Props {
   loading: boolean;
   disabled: boolean;
-  forceDefaultLang: boolean;
+  forceDefaultLang?: boolean;
+  backLink?: string;
   title: string;
+  showSelectLanguage?: boolean;
 }
 
 const FormActions = ({
   loading,
   title,
   disabled,
-  forceDefaultLang = false
+  backLink,
+  forceDefaultLang = false,
+  showSelectLanguage = true
 }: Props) => {
   const router = useRouter();
 
@@ -39,7 +43,8 @@ const FormActions = ({
 
   const { ref, inView } = useInView({
     /* Optional options */
-    threshold: 1
+    threshold: 1,
+    rootMargin: '-40px 0px 0px 0px'
   });
 
   const {
@@ -68,21 +73,51 @@ const FormActions = ({
   }, []);
 
   const renderActions = () => {
+    if (showSelectLanguage) {
+      return (
+        <div className="flex w-full items-center justify-between md:w-fit md:justify-start">
+          <div className="relative ml-4 flex h-[40px] w-[220px] items-center justify-end">
+            <Select
+              options={languages}
+              value={selectedLanguage}
+              name="language"
+              getOptionLabel={(option: any) => option.name}
+              getOptionValue={(option: any) => option.id}
+              onChange={onLanguageChange}
+              isDisabled={forceDefaultLang}
+              isLoading={isLoading}
+              className="w-full"
+            />
+          </div>
+          <Button
+            className="mx-4"
+            variant="outline"
+            onClick={handleGoBack}
+            loading={loading}
+            disabled={disabled}
+          >
+            <div className="text-lg">{t('form:button-label-cancel')}</div>
+          </Button>
+          <Button loading={loading} disabled={disabled}>
+            <div className="mr-1">
+              <SaveIcon width="1.3rem" height="1.3rem" />
+            </div>
+            <div className="text-lg">{t('form:button-label-save')}</div>
+          </Button>
+        </div>
+      );
+    }
     return (
       <div className="flex w-full items-center justify-between md:w-fit md:justify-start">
-        <div className="relative mr-4 flex  h-[45px] w-[220px] items-center justify-end">
-          <Select
-            options={languages}
-            value={selectedLanguage}
-            name="language"
-            getOptionLabel={(option: any) => option.name}
-            getOptionValue={(option: any) => option.id}
-            onChange={onLanguageChange}
-            isDisabled={forceDefaultLang}
-            isLoading={isLoading}
-            className="w-full"
-          />
-        </div>
+        <Button
+          className="mx-4"
+          variant="outline"
+          onClick={handleGoBack}
+          loading={loading}
+          disabled={disabled}
+        >
+          <div className="text-lg">{t('form:button-label-cancel')}</div>
+        </Button>
         <Button loading={loading} disabled={disabled}>
           <div className="mr-1">
             <SaveIcon width="1.3rem" height="1.3rem" />
@@ -93,13 +128,25 @@ const FormActions = ({
     );
   };
 
+  const handleGoBack = (e) => {
+    e.preventDefault();
+
+    if (backLink) {
+      router.push(backLink);
+    } else {
+      router.back();
+    }
+  };
+
   const renderBackButton = () => {
     return (
       <div className="mb-2 flex w-full items-center md:mb-0 md:w-fit">
-        <Button variant="outline" onClick={router.back} type="button">
+        <Button variant="outline" onClick={handleGoBack} type="button">
           <ArrowPrev />
-          {t('form:button-label-back')}
         </Button>
+        {!inView && (
+          <h1 className="ml-8 text-base font-semibold text-heading">{title}</h1>
+        )}
       </div>
     );
   };
