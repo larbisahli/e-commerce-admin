@@ -1,7 +1,7 @@
 import { useMutation } from '@apollo/client';
 import Card from '@components/common/card';
-import { SaveIcon } from '@components/icons/save-icon';
-import Button from '@components/ui/button';
+import { LanguageDefaultDescInfo } from '@components/common/commonComponents';
+import FormActions from '@components/common/FormActions';
 import Description from '@components/ui/description';
 import ValidationError from '@components/ui/form-validation-error';
 import Input from '@components/ui/input';
@@ -17,10 +17,12 @@ import {
   useGetUser,
   useWarnIfUnsavedChanges
 } from '@hooks/index';
+import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/notify';
 import { Nullable } from '@ts-types/custom.types';
 import { DeliveryTimeType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
+import { placeholder } from '@utils/utils';
 import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
@@ -31,9 +33,9 @@ import { deliveryValidationSchema } from './delivery-validation-schema';
 
 const defaultValues = {
   name: '',
-  timeUnit: null,
-  minValue: null,
-  maxValue: null
+  unit: null,
+  min: null,
+  max: null
 };
 
 type FormValues = DeliveryTimeType;
@@ -42,7 +44,7 @@ type IProps = {
   initialValues?: Nullable<DeliveryTimeType>;
 };
 
-const timeUnits = [
+const units = [
   {
     unit: 'hour',
     label: 'Hour'
@@ -72,11 +74,12 @@ export default function CreateOrUpdateDeliveryForm({ initialValues }: IProps) {
   const [error, setError] = useState(null);
   const [unsavedChanges, setUnsavedChanges] = useState(true);
 
+  const { selectedLanguage } = useSettings();
+
   const {
     register,
     handleSubmit,
     control,
-    reset,
     formState: { errors }
   } = useForm<FormValues>({
     shouldUnregister: true,
@@ -85,9 +88,7 @@ export default function CreateOrUpdateDeliveryForm({ initialValues }: IProps) {
       ? defaultValues
       : {
           ...initialValues,
-          timeUnit: timeUnits?.find(
-            ({ unit }) => unit === initialValues?.timeUnit?.unit
-          )
+          unit: units?.find(({ unit }) => unit === initialValues?.unit?.unit)
         }
   });
 
@@ -105,9 +106,9 @@ export default function CreateOrUpdateDeliveryForm({ initialValues }: IProps) {
     },
     onCompleted: (data: { createDeliveryTime: DeliveryTimeType }) => {
       if (!isEmpty(data)) {
-        reset();
+        const { id } = data.createDeliveryTime;
         notify(t('common:successfully-created'), 'success');
-        router.push(ROUTES.DELIVERY_TIME);
+        router.push(`${ROUTES.DELIVERY_TIME}/edit/${id}`);
       }
     }
   });
@@ -132,19 +133,18 @@ export default function CreateOrUpdateDeliveryForm({ initialValues }: IProps) {
   useErrorLogger(error);
 
   const onSubmit = async (values: DeliveryTimeType) => {
-    if (values?.minValue > values?.maxValue) {
+    if (values?.min > values?.max) {
       notify('Maximum value must be larger than Minimum value', 'error');
       return;
     }
 
     const variables = {
       name: values?.name,
-      timeUnit: { unit: values?.timeUnit?.unit },
-      minValue: values?.minValue,
-      maxValue: values?.maxValue
+      unit: { unit: values?.unit?.unit },
+      min: values?.min,
+      max: values?.max,
+      language: selectedLanguage
     };
-
-    console.log({ variables });
 
     setUnsavedChanges(false);
     if (isEmpty(initialValues)) {
@@ -166,10 +166,23 @@ export default function CreateOrUpdateDeliveryForm({ initialValues }: IProps) {
     return confirm(t('common:UNSAVED_CHANGES'));
   });
 
-  console.log({ errors });
-
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      <FormActions
+        backLink={ROUTES.DELIVERY_TIME}
+        forceDefaultLang={isEmpty(initialValues)}
+        title={
+          isEmpty(initialValues)
+            ? t('form:form-title-new-manufacturer')
+            : t('form:form-title-edit-manufacturer')
+        }
+        loading={creating || updating}
+        disabled={creating || updating}
+      />
+      <LanguageDefaultDescInfo
+        label="New delivery time"
+        isVisible={isEmpty(initialValues)}
+      />
       <div className="my-5 flex flex-wrap sm:my-8">
         <Description
           title={t('form:item-delivery-time')}
@@ -186,6 +199,7 @@ export default function CreateOrUpdateDeliveryForm({ initialValues }: IProps) {
               label={t('form:input-label-name')}
               isRequiredLabel
               {...register('name')}
+              placeholder={placeholder(initialValues, 'name', 'Enter name')}
               error={t(errors?.name?.message!)}
               variant="outline"
               className="mb-8 w-full"
@@ -194,56 +208,37 @@ export default function CreateOrUpdateDeliveryForm({ initialValues }: IProps) {
           <div>
             <Label isRequiredLabel>{t('form:input-label-unit')}</Label>
             <SelectInput
-              name="timeUnit"
+              name="unit"
               control={control}
               getOptionLabel={(option: any) => option.label}
               getOptionValue={(option: any) => option.unit}
-              options={timeUnits}
+              options={units}
             />
-            <ValidationError message={errors?.timeUnit?.message} />
+            <ValidationError message={errors?.unit?.message} />
           </div>
           <div className="my-8 grid grid-cols-2 gap-5">
             <Input
               label={t('form:input-label-minimum')}
               isRequiredLabel
-              {...register('minValue')}
+              {...register('min')}
               type="number"
               min={0}
-              error={t(errors.minValue?.message!)}
+              error={t(errors.min?.message!)}
               variant="outline"
               className="mb-5"
             />
             <Input
               label={t('form:input-label-maximum')}
-              {...register('maxValue')}
+              {...register('max')}
               isRequiredLabel
               type="number"
               min={0}
-              error={t(errors.maxValue?.message!)}
+              error={t(errors.max?.message!)}
               variant="outline"
               className="mb-5"
             />
           </div>
         </Card>
-      </div>
-      <div className="mb-4 flex justify-end">
-        {initialValues && (
-          <Button
-            variant="outline"
-            onClick={router.back}
-            className="me-4"
-            type="button"
-          >
-            {t('form:button-label-back')}
-          </Button>
-        )}
-
-        <Button loading={creating || updating} disabled={creating || updating}>
-          <div className="mr-1">
-            <SaveIcon width="1.3rem" height="1.3rem" />
-          </div>
-          <div>{t('form:button-label-save')}</div>
-        </Button>
       </div>
     </form>
   );

@@ -6,7 +6,6 @@ import { ROUTES } from '@utils/routes';
 import type { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
-import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const CreateOrUpdateManufacturerForm = dynamic(
@@ -15,9 +14,7 @@ const CreateOrUpdateManufacturerForm = dynamic(
 );
 
 export default function CreateManufacturerPage({ client }: SSRProps) {
-  const { t } = useTranslation();
   useGetUser(client);
-
   return (
     <>
       <Head>

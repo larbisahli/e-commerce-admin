@@ -6,6 +6,7 @@ export const DELIVERY_TIMES = gql`
     $limit: Int!
     $orderBy: String!
     $sortedBy: String!
+    $language: LanguageInput!
   ) {
     deliveryTimeCount {
       count
@@ -15,14 +16,18 @@ export const DELIVERY_TIMES = gql`
       limit: $limit
       orderBy: $orderBy
       sortedBy: $sortedBy
+      language: $language
     ) {
       id
       name
-      timeUnit {
+      translated {
+        name
+      }
+      unit {
         unit
       }
-      maxValue
-      minValue
+      max
+      min
       createdAt
       updatedAt
       createdBy {
@@ -40,22 +45,35 @@ export const DELIVERY_TIMES = gql`
 `;
 
 export const DELIVERY_TIME = gql`
-  query DeliveryTime($id: Int!) {
-    deliveryTime(id: $id) {
+  query DeliveryTime($id: Int!, $language: LanguageInput!) {
+    deliveryTime(id: $id, language: $language) {
       id
       name
-      timeUnit {
+      translated {
+        name
+      }
+      unit {
         unit
       }
-      maxValue
-      minValue
+      max
+      min
     }
   }
 `;
 
 export const DELIVERY_TIME_SELECT = gql`
-  query DeliveryTimeSelect($page: Int!, $limit: Int!, $orderBy: String!) {
-    deliveryTimeSelect(page: $page, limit: $limit, orderBy: $orderBy) {
+  query DeliveryTimeSelect(
+    $page: Int!
+    $limit: Int!
+    $orderBy: String!
+    $language: LanguageInput!
+  ) {
+    deliveryTimeSelect(
+      page: $page
+      limit: $limit
+      orderBy: $orderBy
+      language: $language
+    ) {
       id
       name
     }
@@ -65,18 +83,19 @@ export const DELIVERY_TIME_SELECT = gql`
 export const CREATE_DELIVERY_TIME = gql`
   mutation CreateDeliveryTime(
     $name: String!
-    $timeUnit: UnitInput
-    $minValue: Int
-    $maxValue: Int
+    $unit: UnitInput!
+    $min: Int!
+    $max: Int!
+    $language: LanguageInput!
   ) {
     createDeliveryTime(
       name: $name
-      timeUnit: $timeUnit
-      minValue: $minValue
-      maxValue: $maxValue
+      unit: $unit
+      min: $min
+      max: $max
+      language: $language
     ) {
       id
-      name
     }
   }
 `;
@@ -85,19 +104,20 @@ export const UPDATE_DELIVERY_TIME = gql`
   mutation UpdateDeliveryTime(
     $id: Int!
     $name: String!
-    $timeUnit: UnitInput
-    $minValue: Int
-    $maxValue: Int
+    $unit: UnitInput!
+    $min: Int!
+    $max: Int!
+    $language: LanguageInput!
   ) {
     updateDeliveryTime(
       id: $id
       name: $name
-      timeUnit: $timeUnit
-      minValue: $minValue
-      maxValue: $maxValue
+      unit: $unit
+      min: $min
+      max: $max
+      language: $language
     ) {
       id
-      name
     }
   }
 `;

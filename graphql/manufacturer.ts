@@ -1,12 +1,16 @@
 import { gql } from '@apollo/client';
 
 export const MANUFACTURER = gql`
-  query Manufacturer($id: Int!) {
-    manufacturer(id: $id) {
+  query Manufacturer($id: Int!, $language: LanguageInput!) {
+    manufacturer(id: $id, language: $language) {
       id
       name
-      website
       description
+      link
+      translated {
+        name
+        description
+      }
       logo {
         id
         image
@@ -22,6 +26,7 @@ export const MANUFACTURERS = gql`
     $limit: Int!
     $orderBy: String
     $sortedBy: String
+    $language: LanguageInput!
   ) {
     manufacturerCount {
       count
@@ -31,10 +36,14 @@ export const MANUFACTURERS = gql`
       limit: $limit
       orderBy: $orderBy
       sortedBy: $sortedBy
+      language: $language
     ) {
       id
       name
-      website
+      link
+      translated {
+        name
+      }
       logo {
         id
         image
@@ -57,8 +66,18 @@ export const MANUFACTURERS = gql`
 `;
 
 export const MANUFACTURERS_FOR_SELECT = gql`
-  query ManufacturersForSelect($page: Int!, $limit: Int!, $orderBy: String!) {
-    manufacturersForSelect(page: $page, limit: $limit, orderBy: $orderBy) {
+  query ManufacturersForSelect(
+    $page: Int!
+    $limit: Int!
+    $orderBy: String!
+    $language: LanguageInput!
+  ) {
+    manufacturersForSelect(
+      page: $page
+      limit: $limit
+      orderBy: $orderBy
+      language: $language
+    ) {
       id
       name
     }
@@ -68,15 +87,17 @@ export const MANUFACTURERS_FOR_SELECT = gql`
 export const CREATE_MANUFACTURER = gql`
   mutation CreateManufacturer(
     $name: String!
-    $website: String
+    $link: String
     $description: String
+    $language: LanguageInput!
     $logo: [ImageInput]
   ) {
     createManufacturer(
       name: $name
-      website: $website
+      link: $link
       description: $description
       logo: $logo
+      language: $language
     ) {
       name
     }
@@ -87,15 +108,17 @@ export const UPDATE_MANUFACTURER = gql`
   mutation UpdateManufacturer(
     $id: Int!
     $name: String!
-    $website: String
+    $link: String
     $description: String
+    $language: LanguageInput!
     $logo: [ImageInput]
   ) {
     updateManufacturer(
       id: $id
       name: $name
-      website: $website
+      link: $link
       description: $description
+      language: $language
       logo: $logo
     ) {
       name

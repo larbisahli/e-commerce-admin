@@ -288,9 +288,12 @@ export interface ShippingZoneType extends CreatedUpdatedByAt {
 export interface DeliveryTimeType extends CreatedUpdatedByAt {
   id: Scalars['Int'];
   name: Scalars['String'];
-  timeUnit: { unit: Scalars['String'] };
-  minValue: Scalars['Int'];
-  maxValue: Scalars['Int'];
+  unit: { unit: Scalars['String'] };
+  min: Scalars['Int'];
+  max: Scalars['Int'];
+  translated: {
+    name: Scalars['String'];
+  };
 }
 
 export interface ShippingRateType {
@@ -450,9 +453,13 @@ export interface Suppliers extends CreatedUpdatedByAt {
 export interface ManufacturerType extends CreatedUpdatedByAt {
   id: Scalars['Int'];
   name?: Scalars['String'];
-  website?: Nullable<Scalars['String']>;
+  link?: Nullable<Scalars['String']>;
   logo?: ImageType[];
   description?: Nullable<CountryType>;
+  translated?: {
+    name?: Scalars['String'];
+    description?: Nullable<CountryType>;
+  };
 }
 
 export interface HeroBannerType extends CreatedUpdatedByAt {

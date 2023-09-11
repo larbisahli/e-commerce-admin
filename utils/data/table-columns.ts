@@ -117,7 +117,6 @@ export const COLUMNS = {
   manufacturer: [
     { label: 'Logo', key: 'logo' },
     { label: 'Name', key: 'name' },
-    { label: 'website', key: 'website' },
     { label: 'Creation Date', key: 'createdAt' },
     { label: 'Placed By', key: 'createdBy' },
     { label: 'Updated By', key: 'updatedBy' },
@@ -125,9 +124,9 @@ export const COLUMNS = {
   ],
   'delivery-time': [
     { label: 'Name', key: 'name' },
-    { label: 'Unit', key: 'timeUnit' },
-    { label: 'Minimum', key: 'minValue' },
-    { label: 'Maximum', key: 'maxValue' },
+    { label: 'Unit', key: 'unit' },
+    { label: 'Minimum', key: 'min' },
+    { label: 'Maximum', key: 'max' },
     { label: 'Creation Date', key: 'createdAt' },
     { label: 'Placed By', key: 'createdBy' },
     { label: 'Updated By', key: 'updatedBy' },

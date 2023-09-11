@@ -1,5 +1,6 @@
 import { useMutation } from '@apollo/client';
 import Card from '@components/common/card';
+import { LanguageDefaultDescInfo } from '@components/common/commonComponents';
 import FormActions from '@components/common/FormActions';
 import Description from '@components/ui/description';
 import Input from '@components/ui/input';
@@ -103,17 +104,6 @@ export default function CreateOrUpdateTagForm({ initialValues }: IProps) {
     }
   };
 
-  const renderDescInfo = () => {
-    if (isEmpty(initialValues)) {
-      return (
-        <p className="mb-12 text-sm text-gray-600">
-          {`"New tag" is displayed in the system default language.
-         Always maintain new data in your chosen system default language.`}
-        </p>
-      );
-    }
-  };
-
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -128,7 +118,10 @@ export default function CreateOrUpdateTagForm({ initialValues }: IProps) {
           loading={creating || updating}
           disabled={creating || updating}
         />
-        {renderDescInfo()}
+        <LanguageDefaultDescInfo
+          label="New tag"
+          isVisible={isEmpty(initialValues)}
+        />
         <div className="my-5 flex flex-wrap sm:my-8">
           <Description
             title={t('form:input-label-description')}

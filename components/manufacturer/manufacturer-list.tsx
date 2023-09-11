@@ -19,6 +19,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import React, { useMemo } from 'react';
+import { Tooltip } from 'react-tooltip';
 
 const Table = dynamic(
   () => import('@components/ui/table').then((mod) => mod.Table),
@@ -43,7 +44,7 @@ const ManufacturerList = ({
   const { t } = useTranslation();
   const router = useRouter();
 
-  const { alignLeft, alignRight } = useIsRTL();
+  const { alignLeft } = useIsRTL();
 
   const { tablePlaceholderRow } = usePlaceholder();
 
@@ -90,39 +91,33 @@ const ManufacturerList = ({
         dataIndex: 'name',
         key: 'name',
         align: alignLeft,
-        width: 150,
+        width: 200,
         ellipsis: true,
         render: (name: string, record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
-          return (
-            <span
-              title={name}
-              className="font-semibold capitalize text-gray-800"
-            >
-              {name}
-            </span>
-          );
-        }
-      },
-      {
-        title: t('table:table-item-website'),
-        dataIndex: 'website',
-        key: 'website',
-        align: alignLeft,
-        width: 160,
-        // ellipsis: true,
-        render: (website: string, record: TableRowProps) => {
-          if (record?.loading) {
-            return <TableRowPlaceholder />;
+
+          if (record?.link) {
+            return (
+              <Link href={record?.link}>
+                <a
+                  target="_blank"
+                  title={record?.link}
+                  className="font-semibold capitalize text-blue-400"
+                >
+                  {name ?? record?.translated?.name}
+                </a>
+              </Link>
+            );
           }
           return (
-            <Link href={website}>
-              <a target="_blank" title={website} className="text-blue-400">
-                {website}
-              </a>
-            </Link>
+            <span
+              title={name ?? record?.translated?.name}
+              className="font-semibold capitalize text-gray-800"
+            >
+              {name ?? record?.translated?.name}
+            </span>
           );
         }
       },
@@ -182,8 +177,8 @@ const ManufacturerList = ({
         title: t('table:table-item-actions'),
         dataIndex: 'id',
         key: 'actions',
-        align: alignRight,
-        width: 80,
+        align: 'center',
+        width: 150,
         render: (id: string, record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
@@ -198,7 +193,7 @@ const ManufacturerList = ({
         }
       }
     ];
-  }, [alignLeft, alignRight, router.asPath, t]);
+  }, [alignLeft, router.asPath, t]);
 
   const tableColumns = useMemo(() => {
     return columns?.filter(({ key }) => {

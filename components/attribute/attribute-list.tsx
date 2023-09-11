@@ -63,7 +63,7 @@ const AttributeList = ({ loading, attributes, selectedColumns }: IProps) => {
           }
           return (
             <span className="font-semibold capitalize text-gray-800">
-              {name ?? 'N/A'}
+              {name ?? record?.translated?.name}
             </span>
           );
         }
@@ -82,8 +82,9 @@ const AttributeList = ({ loading, attributes, selectedColumns }: IProps) => {
 
           if (record.type === AttributeTypes.TEXT) {
             const att_values = values
-              ?.map(({ value }: AttributeValue, index: number) => {
-                return index > 0 ? `, ${value ?? 'N/A'}` : `${value ?? 'N/A'}`;
+              ?.map(({ value, translated }: AttributeValue, index: number) => {
+                const t = translated?.value;
+                return index > 0 ? `, ${value ?? t}` : `${value ?? t}`;
               })
               ?.join('');
             return (
@@ -110,13 +111,13 @@ const AttributeList = ({ loading, attributes, selectedColumns }: IProps) => {
             <div className="flex flex-wrap items-center">
               {values?.map((value, idx) => {
                 const color = value?.value || value?.translated?.value;
-                if (color) {
+                if (color !== 'N/A') {
                   return (
                     <>
                       <div
                         key={idx}
                         data-tooltip-id={`att-v-color-tooltip-${idx}-${color}-${value?.name}`}
-                        data-tooltip-content={value?.name ?? 'N/A'}
+                        data-tooltip-content={value?.name}
                         className="m-1 h-6 w-6 rounded-sm border border-gray-300 shadow"
                         style={{ background: color }}
                       />
@@ -130,7 +131,7 @@ const AttributeList = ({ loading, attributes, selectedColumns }: IProps) => {
                 }
                 return (
                   <div key={idx} className="m-1 rounded-sm border p-1 shadow">
-                    N/A
+                    {color}
                   </div>
                 );
               })}

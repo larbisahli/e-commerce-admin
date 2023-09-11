@@ -1,5 +1,6 @@
 import { useMutation, useQuery } from '@apollo/client';
 import Card from '@components/common/card';
+import { LanguageDefaultDescInfo } from '@components/common/commonComponents';
 import FormActions from '@components/common/FormActions';
 import ImageModal from '@components/image-modal';
 import Description from '@components/ui/description';
@@ -262,17 +263,6 @@ export default function CreateOrUpdateCategoriesForm({
     }
   };
 
-  const renderDescInfo = () => {
-    if (isEmpty(initialValues)) {
-      return (
-        <p className="mb-12 text-sm text-gray-600">
-          {`"New Category" is displayed in the system default language.
-         Always maintain new data in your chosen system default language.`}
-        </p>
-      );
-    }
-  };
-
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormActions
@@ -286,7 +276,10 @@ export default function CreateOrUpdateCategoriesForm({
         loading={creating || updating}
         disabled={creating || updating}
       />
-      {renderDescInfo()}
+      <LanguageDefaultDescInfo
+        label="New Category"
+        isVisible={isEmpty(initialValues)}
+      />
       <div className="my-5 flex flex-wrap border-b border-dashed border-border-base pb-8 sm:my-8">
         <Description
           title={t('form:input-label-image')}

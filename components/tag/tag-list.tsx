@@ -62,7 +62,7 @@ const TagList = ({ tags, selectedColumns, loading }: IProps) => {
                 className="text-13px border-sink-base block rounded-sm border
                       bg-gray-100 px-2 py-1 font-medium capitalize shadow-sm md:text-sm"
               >
-                {name ?? record?.translated?.name ?? 'N/A'}
+                {name ?? record?.translated?.name}
               </span>
             </div>
           );

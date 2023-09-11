@@ -53,49 +53,53 @@ const DeliveryList = ({ loading, deliveryTimes, selectedColumns }: IProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
-          return <span className="capitalize">{name}</span>;
+          return (
+            <span className="capitalize">
+              {name ?? record?.translated?.name}
+            </span>
+          );
         }
       },
       {
         title: t('table:table-item-unit-only'),
-        dataIndex: 'timeUnit',
-        key: 'timeUnit',
+        dataIndex: 'unit',
+        key: 'unit',
         align: alignLeft,
         width: 150,
         ellipsis: true,
-        render: ({ unit }: { unit: string }, record: TableRowProps) => {
+        render: (unit: { unit: string }, record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
-          return <span className="capitalize">{unit}</span>;
+          return <span className="capitalize">{unit?.unit}</span>;
         }
       },
       {
         title: t('table:table-item-minimum'),
-        dataIndex: 'minValue',
-        key: 'minValue',
+        dataIndex: 'min',
+        key: 'min',
         align: alignLeft,
         width: 150,
         ellipsis: true,
-        render: (minValue: number, record: TableRowProps) => {
+        render: (min: number, record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
-          return <span className="capitalize">{minValue}</span>;
+          return <span className="capitalize">{min}</span>;
         }
       },
       {
         title: t('table:table-item-maximum'),
-        dataIndex: 'maxValue',
-        key: 'maxValue',
+        dataIndex: 'max',
+        key: 'max',
         align: alignLeft,
         width: 150,
         ellipsis: true,
-        render: (maxValue: number, record: TableRowProps) => {
+        render: (max: number, record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
-          return <span className="capitalize">{maxValue}</span>;
+          return <span className="capitalize">{max}</span>;
         }
       },
       {
@@ -155,6 +159,7 @@ const DeliveryList = ({ loading, deliveryTimes, selectedColumns }: IProps) => {
         dataIndex: 'id',
         key: 'actions',
         align: 'center',
+        width: 200,
         render: (id: string, record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
@@ -166,8 +171,7 @@ const DeliveryList = ({ loading, deliveryTimes, selectedColumns }: IProps) => {
               deleteModalView="DELETE_DELIVERY_TIME"
             />
           );
-        },
-        width: 200
+        }
       }
     ];
   }, [alignLeft, t]);

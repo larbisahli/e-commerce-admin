@@ -2,7 +2,6 @@ import { useQuery } from '@apollo/client';
 import DeliveryList from '@components/delivery-time/delivery-list';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
-import Loader from '@components/ui/loader/loader';
 import { DELIVERY_TIMES } from '@graphql/delivery-time';
 import { useGetUser } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';

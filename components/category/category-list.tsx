@@ -63,7 +63,7 @@ const CategoryList = ({ loading, categories, selectedColumns }: IProps) => {
                 'font-medium text-gray-600': record?.level !== 1
               })}
             >
-              {name ?? record?.translated?.name ?? 'N/A'}
+              {name ?? record?.translated?.name}
             </span>
           );
         }

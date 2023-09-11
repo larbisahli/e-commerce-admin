@@ -1,5 +1,6 @@
 import { useMutation } from '@apollo/client';
 import Card from '@components/common/card';
+import { LanguageDefaultDescInfo } from '@components/common/commonComponents';
 import FormActions from '@components/common/FormActions';
 import ColorPicker from '@components/ui/color-picker/color-picker';
 import DisplayColorCode from '@components/ui/color-picker/display-color-code';
@@ -126,17 +127,6 @@ export default function CreateOrUpdateOrderStatusForm({
     }
   };
 
-  const renderDescInfo = () => {
-    if (isEmpty(initialValues)) {
-      return (
-        <p className="mb-12 text-sm text-gray-600">
-          {`"New order status" is displayed in the system default language.
-         Always maintain new data in your chosen system default language.`}
-        </p>
-      );
-    }
-  };
-
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormActions
@@ -150,7 +140,10 @@ export default function CreateOrUpdateOrderStatusForm({
         loading={creating || updating}
         disabled={creating || updating}
       />
-      {renderDescInfo()}
+      <LanguageDefaultDescInfo
+        label="New order status"
+        isVisible={isEmpty(initialValues)}
+      />
       <div className="my-5 flex flex-wrap sm:my-8">
         <Description
           title={t('form:input-label-description')}

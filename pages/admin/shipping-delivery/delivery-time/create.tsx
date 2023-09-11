@@ -6,7 +6,6 @@ import { ROUTES } from '@utils/routes';
 import type { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
-import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const CreateOrUpdateDeliveryForm = dynamic(
@@ -15,9 +14,7 @@ const CreateOrUpdateDeliveryForm = dynamic(
 );
 
 export default function CreateShippingPage({ client }: SSRProps) {
-  const { t } = useTranslation();
   useGetUser(client);
-
   return (
     <>
       <Head>
@@ -29,11 +26,6 @@ export default function CreateShippingPage({ client }: SSRProps) {
           href="/svg/deliveryTime.svg"
         />
       </Head>
-      <div className="flex border-b border-dashed border-border-base py-5 sm:py-8">
-        <h1 className="text-lg font-semibold text-heading">
-          {t('form:form-title-new-delivery-time')}
-        </h1>
-      </div>
       <CreateOrUpdateDeliveryForm />
     </>
   );

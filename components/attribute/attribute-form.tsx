@@ -2,6 +2,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import { useMutation } from '@apollo/client';
 import Card from '@components/common/card';
+import { LanguageDefaultDescInfo } from '@components/common/commonComponents';
 import FormActions from '@components/common/FormActions';
 import Alert from '@components/ui/alert';
 import Button from '@components/ui/button';
@@ -220,17 +221,6 @@ export default function CreateOrUpdateAttributeForm({
     }
   };
 
-  const renderDescInfo = () => {
-    if (isEmpty(initialValues)) {
-      return (
-        <p className="mb-12 text-sm text-gray-600">
-          {`"New Attribute" is displayed in the system default language.
-         Always maintain new data in your chosen system default language.`}
-        </p>
-      );
-    }
-  };
-
   const type = watch('type') as { label: string; id: string };
 
   useEffect(() => {
@@ -264,7 +254,10 @@ export default function CreateOrUpdateAttributeForm({
           loading={creating || updating}
           disabled={creating || updating}
         />
-        {renderDescInfo()}
+        <LanguageDefaultDescInfo
+          label="New Attribute"
+          isVisible={isEmpty(initialValues)}
+        />
         <div className="my-5 flex flex-wrap border-b border-dashed border-border-base pb-8 sm:my-8">
           <Description
             title={t('common:attribute')}

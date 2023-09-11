@@ -4,10 +4,10 @@ import 'react-phone-input-2/lib/style.css';
 
 import { useMutation } from '@apollo/client';
 import Card from '@components/common/card';
-import { SaveIcon } from '@components/icons/save-icon';
+import { LanguageDefaultDescInfo } from '@components/common/commonComponents';
+import FormActions from '@components/common/FormActions';
 import ImageModal from '@components/image-modal';
 import Alert from '@components/ui/alert';
-import Button from '@components/ui/button';
 import Description from '@components/ui/description';
 import Input from '@components/ui/input';
 import TextArea from '@components/ui/text-area';
@@ -21,6 +21,7 @@ import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/index';
 import type { ManufacturerType, Suppliers } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
+import { placeholder } from '@utils/utils';
 import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
@@ -74,11 +75,11 @@ export default function CreateOrUpdateManufacturerForm({
           'x-csrf-token': csrfToken
         }
       },
-      onCompleted: (data: { createSupplier: Suppliers }) => {
+      onCompleted: (data: { createManufacturer: ManufacturerType }) => {
         if (!isEmpty(data)) {
+          const { id } = data.createManufacturer;
           notify(t('common:successfully-created'), 'success');
-          reset();
-          router.push(ROUTES.MANUFACTURER);
+          router.push(`${ROUTES.MANUFACTURER}/edit/${id}`);
         }
       }
     }
@@ -137,6 +138,21 @@ export default function CreateOrUpdateManufacturerForm({
         />
       ) : null}
       <form onSubmit={handleSubmit(onSubmit)}>
+        <FormActions
+          backLink={ROUTES.MANUFACTURER}
+          forceDefaultLang={isEmpty(initialValues)}
+          title={
+            isEmpty(initialValues)
+              ? t('form:form-title-new-delivery-time')
+              : t('form:form-title-edit-delivery-time')
+          }
+          loading={creating || updating}
+          disabled={creating || updating}
+        />
+        <LanguageDefaultDescInfo
+          label="New Manufacturer"
+          isVisible={isEmpty(initialValues)}
+        />
         <div className="my-5 flex flex-wrap border-b border-dashed border-border-base pb-8 sm:my-8">
           <Description
             title={t('form:input-label-logo')}
@@ -170,13 +186,19 @@ export default function CreateOrUpdateManufacturerForm({
                 isRequiredLabel
                 {...register('name', { required: 'Name is required' })}
                 error={t(errors.name?.message!)}
+                placeholder={placeholder(
+                  initialValues,
+                  'name',
+                  'Enter manufacturer name'
+                )}
                 variant="outline"
                 className="mb-5"
               />
               <Input
                 label={t('form:input-label-website')}
-                {...register('website')}
-                error={t(errors.website?.message!)}
+                {...register('link')}
+                error={t(errors.link?.message!)}
+                placeholder="Enter Manufacturer website url"
                 variant="outline"
                 className="mb-5"
               />
@@ -184,34 +206,16 @@ export default function CreateOrUpdateManufacturerForm({
             <TextArea
               label={t('form:item-description')}
               {...register('description')}
+              placeholder={placeholder(
+                initialValues,
+                'description',
+                'Enter a description'
+              )}
               error={t(errors.description?.message!)}
               variant="outline"
               className="mt-5"
             />
           </Card>
-        </div>
-
-        <div className="mb-4 flex justify-end">
-          {initialValues && (
-            <Button
-              variant="outline"
-              onClick={router.back}
-              className="me-4"
-              type="button"
-            >
-              {t('form:button-label-back')}
-            </Button>
-          )}
-
-          <Button
-            loading={creating || updating}
-            disabled={creating || updating}
-          >
-            <div className="mr-1">
-              <SaveIcon width="1.3rem" height="1.3rem" />
-            </div>
-            <div>{t('form:button-label-save')}</div>
-          </Button>
         </div>
       </form>
     </>

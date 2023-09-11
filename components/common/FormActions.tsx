@@ -93,7 +93,6 @@ const FormActions = ({
             className="mx-4"
             variant="outline"
             onClick={handleGoBack}
-            loading={loading}
             disabled={disabled}
           >
             <div className="text-lg">{t('form:button-label-cancel')}</div>
@@ -113,7 +112,6 @@ const FormActions = ({
           className="mx-4"
           variant="outline"
           onClick={handleGoBack}
-          loading={loading}
           disabled={disabled}
         >
           <div className="text-lg">{t('form:button-label-cancel')}</div>
