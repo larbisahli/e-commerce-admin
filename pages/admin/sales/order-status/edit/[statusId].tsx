@@ -1,8 +1,7 @@
 import { useQuery } from '@apollo/client';
+import { PageFormPlaceholder } from '@components/common/commonComponents';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
-import { FormPlaceholder } from '@components/ui/placeholders/Form';
-import { FormActionPlaceholder } from '@components/ui/placeholders/FormAction';
 import { ORDER_STATUS } from '@graphql/order-status';
 import { useGetUser } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
@@ -21,7 +20,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const CreateOrUpdateOrderStatusForm = dynamic(
   () => import('@components/order-status/order-status-form'),
-  { ssr: true }
+  { ssr: true, loading: () => <PageFormPlaceholder /> }
 );
 
 interface TOrderStatus {
@@ -54,12 +53,7 @@ export default function UpdateOrderStatusPage({ client }: SSRProps) {
   useErrorLogger(error);
 
   if (isEmpty(orderStatus) || loading) {
-    return (
-      <div>
-        <FormActionPlaceholder />
-        <FormPlaceholder />
-      </div>
-    );
+    return <PageFormPlaceholder />;
   }
   if (error) {
     return <ErrorMessage message={error.message} />;

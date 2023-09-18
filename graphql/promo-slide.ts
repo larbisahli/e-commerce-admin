@@ -4,18 +4,22 @@ export const UPDATE_PROMO_SLIDE = gql`
   mutation UpdatePromoSlide(
     $id: Int
     $animationSpeed: String
+    $delaySpeed: String
     $backgroundColor: String
     $direction: String
     $published: Boolean!
     $sliders: [PromoSliderInput]
+    $language: LanguageInput!
   ) {
     updatePromoSlide(
       id: $id
       animationSpeed: $animationSpeed
+      delaySpeed: $delaySpeed
       backgroundColor: $backgroundColor
       direction: $direction
       published: $published
       sliders: $sliders
+      language: $language
     ) {
       id
     }
@@ -23,16 +27,24 @@ export const UPDATE_PROMO_SLIDE = gql`
 `;
 
 export const PROMO_SLIDER = gql`
-  query PromoSlide {
-    promoSlide {
+  query PromoSlide($language: LanguageInput!) {
+    promoSlide(language: $language) {
       id
       animationSpeed
+      delaySpeed
       backgroundColor
-      direction
       published
+      direction
       sliders {
         content
         position
+      }
+      translated {
+        direction
+        sliders {
+          content
+          position
+        }
       }
       updatedAt
       updatedBy {

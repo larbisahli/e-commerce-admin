@@ -1,9 +1,6 @@
 import { useMutation } from '@apollo/client';
 import Card from '@components/common/card';
 import FormActions from '@components/common/FormActions';
-import { SaveIcon } from '@components/icons/save-icon';
-import Button from '@components/ui/button';
-import Checkbox from '@components/ui/checkbox';
 import Description from '@components/ui/description';
 import ValidationError from '@components/ui/form-validation-error';
 import InputForLocal from '@components/ui/input-for-locale';

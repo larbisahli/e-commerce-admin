@@ -1,8 +1,7 @@
 import { useQuery } from '@apollo/client';
+import { PageFormPlaceholder } from '@components/common/commonComponents';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
-import { FormPlaceholder } from '@components/ui/placeholders/Form';
-import { FormActionPlaceholder } from '@components/ui/placeholders/FormAction';
 import { MANUFACTURER } from '@graphql/manufacturer';
 import { useGetUser } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
@@ -21,7 +20,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const CreateOrUpdateManufacturerForm = dynamic(
   () => import('@components/manufacturer/manufacturer-form'),
-  { ssr: true }
+  { ssr: true, loading: () => <PageFormPlaceholder /> }
 );
 
 interface TManufacturer {
@@ -57,12 +56,7 @@ export default function UpdateManufacturerPage({ client }: SSRProps) {
   useErrorLogger(error);
 
   if (isEmpty(manufacturer) || loading) {
-    return (
-      <div>
-        <FormActionPlaceholder />
-        <FormPlaceholder />
-      </div>
-    );
+    return <PageFormPlaceholder />;
   }
 
   if (error) {

@@ -19,7 +19,7 @@ import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/notify';
 import { OrderStatus, PrivacyType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
-import { placeholder } from '@utils/utils';
+import { translationFallback } from '@utils/utils';
 import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
@@ -92,7 +92,6 @@ export default function CreateOrUpdateOrderStatusForm({
       onCompleted: (data: { updateOrderStatus: OrderStatus }) => {
         if (!isEmpty(data)) {
           notify(t('common:successfully-updated'), 'success');
-          router.push(ROUTES.ORDER_STATUS);
         }
       }
     }
@@ -161,7 +160,7 @@ export default function CreateOrUpdateOrderStatusForm({
             isRequiredLabel
             {...register('name')}
             error={t(errors.name?.message!)}
-            placeholder={placeholder(
+            placeholder={translationFallback(
               initialValues,
               'name',
               'Enter status name'

@@ -62,6 +62,7 @@ export default function Themes({ client }: SSRProps) {
       <PageMainAction
         title={t('form:button-label-your-themes')}
         label={t('form:button-label-your-themes')}
+        showSelectLanguage={false}
       />
       <div className="mt-12">
         <MyThemeList themes={themes} />

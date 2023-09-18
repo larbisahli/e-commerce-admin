@@ -21,7 +21,7 @@ import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/index';
 import type { ManufacturerType, Suppliers } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
-import { placeholder } from '@utils/utils';
+import { translationFallback } from '@utils/utils';
 import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
@@ -58,7 +58,6 @@ export default function CreateOrUpdateManufacturerForm({
     handleSubmit,
     watch,
     setValue,
-    reset,
     formState: { errors }
   } = useForm<FormValues>({
     defaultValues: initialValues ? { ...initialValues } : defaultValues
@@ -96,7 +95,6 @@ export default function CreateOrUpdateManufacturerForm({
       onCompleted: (data: { updateSupplier: Suppliers }) => {
         if (!isEmpty(data)) {
           notify(t('common:successfully-updated'), 'success');
-          router.push(ROUTES.MANUFACTURER);
         }
       }
     }
@@ -186,7 +184,7 @@ export default function CreateOrUpdateManufacturerForm({
                 isRequiredLabel
                 {...register('name', { required: 'Name is required' })}
                 error={t(errors.name?.message!)}
-                placeholder={placeholder(
+                placeholder={translationFallback(
                   initialValues,
                   'name',
                   'Enter manufacturer name'
@@ -206,7 +204,7 @@ export default function CreateOrUpdateManufacturerForm({
             <TextArea
               label={t('form:item-description')}
               {...register('description')}
-              placeholder={placeholder(
+              placeholder={translationFallback(
                 initialValues,
                 'description',
                 'Enter a description'

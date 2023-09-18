@@ -20,7 +20,7 @@ import { ImageType } from '@ts-types/generated';
 import cn from 'classnames';
 import { isEmpty } from 'lodash';
 import { useTranslation } from 'next-i18next';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import Folder from './folder';
 import ImageThumb from './thumb';
@@ -60,6 +60,20 @@ const ImageModal = ({
     loading,
     refetch
   } = useFiles({ id: selectedFolderId });
+
+  const sortedChildren = useMemo(() => {
+    let childrenCopy = [...(children ?? [])];
+    try {
+      childrenCopy
+        ?.sort((x, y) => Number(y?.createdAt) - Number(x?.createdAt))
+        ?.sort((x, y) => Number(isEmpty(y?.image)) - Number(isEmpty(x?.image)));
+    } catch (err) {
+      console.log('sorting media', { err });
+    } finally {
+      // eslint-disable-next-line no-unsafe-finally
+      return childrenCopy;
+    }
+  }, [children]);
 
   useEffect(() => {
     if (!isOpen) {
@@ -115,7 +129,10 @@ const ImageModal = ({
       {/* MODEL */}
       <Modal open={isOpen && isCurrentModal} onClose={closeModal}>
         {view === IMAGE_MODAL && (
-          <div className="flex h-[100vh] max-h-screen w-[100vw] flex-col overflow-y-auto bg-white md:h-fit md:w-[70vw] 2xl:w-[60vw]">
+          <div
+            className="flex h-[100vh] max-h-screen w-[100vw] flex-col overflow-y-auto
+            bg-white md:h-fit md:w-[70vw] 2xl:w-[60vw]"
+          >
             <div className="bg-blue-600 p-4 text-lg font-semibold capitalize text-white">
               Choose media
             </div>
@@ -165,8 +182,12 @@ const ImageModal = ({
                     <Loader height="20vh" text={t('common:text-loading')} />
                   )}
                 </div>
-                <div className="h-full w-full">
-                  <ul className="my-4 flex min-h-[400px] w-full flex-wrap overflow-y-auto md:max-h-[600px]">
+                <div className={cn('h-full w-full')}>
+                  <ul
+                    className="my-4 grid min-h-[400px] w-full grid-cols-3 flex-wrap
+                  gap-5 overflow-y-auto sm:grid-cols-4
+                  md:max-h-[600px] md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5 2xl:grid-cols-6"
+                  >
                     {loadingImage && (
                       <li className="relative mt-2 h-40 w-36 rounded-sm bg-blue-100 me-2">
                         <div className="relative h-40 w-36 min-w-0 overflow-hidden rounded-sm">
@@ -176,7 +197,7 @@ const ImageModal = ({
                         </div>
                       </li>
                     )}
-                    {children?.map((child) => {
+                    {sortedChildren?.map((child) => {
                       if (isEmpty(child.image)) {
                         return (
                           <Folder

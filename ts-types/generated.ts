@@ -464,26 +464,32 @@ export interface ManufacturerType extends CreatedUpdatedByAt {
 
 export interface HeroBannerType extends CreatedUpdatedByAt {
   id?: Scalars['Int'];
-  destinationUrl?: Nullable<Scalars['String']>;
+  url?: Nullable<Scalars['String']>;
   thumbnail?: ImageType[];
   title?: Scalars['String'];
   description?: Nullable<Scalars['String']>;
   btnLabel?: Scalars['String'];
+  align?: 'left' | 'center' | 'right';
   styles?: {
-    align?: 'left' | 'center' | 'right';
     textColor?: string;
     btnBgc?: string;
     btnTextColor?: string;
   };
+  translated?: {
+    align?: 'left' | 'center' | 'right';
+    title?: Scalars['String'];
+    btnLabel?: Scalars['String'];
+    description?: Nullable<Scalars['String']>;
+  };
   position?: Scalars['Int'];
   published?: Scalars['Boolean'];
   status?: 'draft' | 'publish';
-  clicks?: Scalars['Int'];
 }
 
 export interface PromoBannerType extends CreatedUpdatedByAt {
   id?: Scalars['Int'];
-  animationSpeed: { value: string; name: string };
+  animationSpeed: { value: number; name: string };
+  delaySpeed: { value: number; name: string };
   backgroundColor: string;
   direction: 'RLT' | 'LTR';
   published?: Scalars['Boolean'];

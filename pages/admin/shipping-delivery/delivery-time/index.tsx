@@ -121,13 +121,11 @@ export default function ShippingZonesPage({ client }: SSRProps) {
         currentPage={page}
         perPage={limit.value}
       />
-      <div className={cn({ hidden: loading })}>
-        <DeliveryList
-          loading={loading}
-          deliveryTimes={deliveryTimes}
-          selectedColumns={selectedTableColumns}
-        />
-      </div>
+      <DeliveryList
+        loading={loading}
+        deliveryTimes={deliveryTimes}
+        selectedColumns={selectedTableColumns}
+      />
     </>
   );
 }

@@ -145,7 +145,6 @@ export default function CreateOrUpdateCouponForm({ initialValues }: IProps) {
     onCompleted: (data: { updateCoupon: Coupon }) => {
       if (!isEmpty(data)) {
         notify(t('common:successfully-updated'), 'success');
-        router.push(ROUTES.COUPON);
       }
     }
   });

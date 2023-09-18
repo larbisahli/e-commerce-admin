@@ -2,9 +2,9 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import { useMutation } from '@apollo/client';
 import Card from '@components/common/card';
-import { SaveIcon } from '@components/icons/save-icon';
+import { LanguageDefaultDescInfo } from '@components/common/commonComponents';
+import FormActions from '@components/common/FormActions';
 import ImageModal from '@components/image-modal';
-import Button from '@components/ui/button';
 import ColorPicker from '@components/ui/color-picker/color-picker';
 import Description from '@components/ui/description';
 import Input from '@components/ui/input';
@@ -17,9 +17,11 @@ import {
   useGetUser,
   useWarnIfUnsavedChanges
 } from '@hooks/index';
+import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/index';
-import type { HeroCarouselType, ImageType } from '@ts-types/generated';
+import type { HeroBannerType, ImageType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
+import { translationFallback } from '@utils/utils';
 import cloneDeep from 'lodash/cloneDeep';
 import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
@@ -30,18 +32,18 @@ import { useForm } from 'react-hook-form';
 
 import HeroBannerCard from './hero-banner-card';
 
-type FormValues = HeroCarouselType;
+type FormValues = HeroBannerType;
 
 const defaultValues = {
   title: '',
-  destinationUrl: null,
+  url: null,
   thumbnail: [],
   description: null,
   btnLabel: null,
   position: 1,
   status: 'draft',
+  align: 'left',
   styles: {
-    align: 'left',
     textColor: '#ffffff',
     btnBgc: '#dcdbdb',
     btnTextColor: '#222121'
@@ -49,7 +51,7 @@ const defaultValues = {
 };
 
 type IProps = {
-  initialValues?: HeroCarouselType | any;
+  initialValues?: HeroBannerType | any;
 };
 
 export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
@@ -59,22 +61,24 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
   const [error, setError] = useState(null);
   const [unsavedChanges, setUnsavedChanges] = useState(true);
 
+  const { selectedLanguage } = useSettings();
+
   const {
     watch,
     register,
     handleSubmit,
     setValue,
-    formState: { errors },
-    reset
+    formState: { errors }
   } = useForm<FormValues>({
     defaultValues: !isEmpty(initialValues)
       ? cloneDeep({
           ...initialValues,
-          status: (initialValues as HeroCarouselType)?.published
+          align: translationFallback(initialValues, 'align', 'left'),
+          status: (initialValues as HeroBannerType)?.published
             ? 'publish'
             : 'draft'
         })
-      : (defaultValues as HeroCarouselType)
+      : (defaultValues as HeroBannerType)
   });
 
   const { userInfo } = useGetUser();
@@ -85,6 +89,7 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
   const btnLabel = watch('btnLabel');
   const title = watch('title');
   const description = watch('description');
+  const align = watch('align');
 
   const [createHeroSlider, { loading: creating, reset: resetCreateMutation }] =
     useMutation(CREATE_HERO_SLIDE, {
@@ -93,11 +98,11 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
           'x-csrf-token': csrfToken
         }
       },
-      onCompleted: (data: { createHeroSlide: HeroCarouselType }) => {
+      onCompleted: (data: { createHeroSlide: HeroBannerType }) => {
         if (!isEmpty(data)) {
+          const { id } = data.createHeroSlide;
           notify(t('common:successfully-created'), 'success');
-          reset();
-          router.push(ROUTES.HERO_CAROUSEL);
+          router.push(`${ROUTES.HERO_BANNER}/edit/${id}`);
         }
       }
     });
@@ -108,10 +113,9 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
           'x-csrf-token': csrfToken
         }
       },
-      onCompleted: (data: { updateCategory: HeroCarouselType }) => {
+      onCompleted: (data: { updateCategory: HeroBannerType }) => {
         if (!isEmpty(data)) {
           notify(t('common:successfully-updated'), 'success');
-          router.push(ROUTES.HERO_CAROUSEL);
         }
       }
     });
@@ -126,7 +130,7 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
 
     const variables = {
       title: values.title,
-      destinationUrl: values.destinationUrl,
+      url: values.url,
       thumbnail: [
         {
           id: values.thumbnail[0]?.id
@@ -136,8 +140,9 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
       btnLabel: values.btnLabel,
       position: Number(values.position),
       published: values.status === 'publish',
+      language: selectedLanguage,
+      align: values.align,
       styles: {
-        align: values.styles.align,
         textColor: values.styles.textColor,
         btnBgc: values.styles.btnBgc,
         btnTextColor: values.styles.btnTextColor
@@ -151,7 +156,7 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
         resetCreateMutation();
       });
     } else {
-      const { id = null } = initialValues as HeroCarouselType;
+      const { id = null } = initialValues as HeroBannerType;
       updateHeroSlider({
         variables: { id, ...variables }
       }).catch((err) => {
@@ -167,6 +172,21 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      <FormActions
+        backLink={ROUTES.HERO_BANNER}
+        forceDefaultLang={isEmpty(initialValues)}
+        title={
+          isEmpty(initialValues)
+            ? t('form:form-title-new-banner')
+            : t('form:form-title-edit-banner')
+        }
+        loading={creating || updating}
+        disabled={creating || updating}
+      />
+      <LanguageDefaultDescInfo
+        label="New hero banner"
+        isVisible={isEmpty(initialValues)}
+      />
       <div className="my-5 flex flex-wrap border-b border-dashed border-border-base pb-8 sm:my-8">
         <Description
           title={t('form:input-label-image')}
@@ -184,12 +204,14 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
             {!isEmpty(thumbnail) && (
               <div className="relative">
                 <div className="my-2 border-b border-dashed border-border-base"></div>
+                <Label>{t('form:input-label-demo')}</Label>
                 <HeroBannerCard
                   thumbnail={thumbnail}
                   btnLabel={btnLabel}
                   title={title}
                   description={description}
                   styles={styles}
+                  align={align}
                 />
               </div>
             )}
@@ -214,24 +236,40 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
             {...register('title')}
             variant="outline"
             className="mb-5"
+            placeholder={translationFallback(
+              initialValues,
+              'title',
+              'Enter a title'
+            )}
           />
           <TextArea
             label={t('form:input-label-description')}
             {...register('description')}
             variant="outline"
+            placeholder={translationFallback(
+              initialValues,
+              'description',
+              'Enter a description'
+            )}
             className="mb-5"
           />
           <Input
             label={t('form:input-label-destination-url')}
-            {...register('destinationUrl')}
+            {...register('url')}
             variant="outline"
             className="mb-5"
+            placeholder="Enter destination url"
           />
           <Input
             label={t('form:input-label-button-label')}
             {...register('btnLabel')}
             variant="outline"
             className="mb-5"
+            placeholder={translationFallback(
+              initialValues,
+              'btnLabel',
+              'Enter a button label'
+            )}
           />
           <Input
             label={`${t('form:input-label-display-order')}`}
@@ -245,21 +283,21 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
           <div className="my-5 flex items-center">
             <Label className="mb-0">{t('form:input-label-alignment')}:</Label>
             <Radio
-              {...register('styles.align')}
+              {...register('align')}
               label={t('form:input-label-left')}
               id="left"
               value="left"
               className="mx-2"
             />
             <Radio
-              {...register('styles.align')}
+              {...register('align')}
               id="center"
               value="center"
               label={t('form:input-label-center')}
               className="mx-2"
             />
             <Radio
-              {...register('styles.align')}
+              {...register('align')}
               id="right"
               value="right"
               label={t('form:input-label-right')}
@@ -320,25 +358,6 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
             <DisplayColorCode color={styles?.btnBgc} />
           </ColorPicker>
         </Card>
-      </div>
-      <div className="mb-4 flex items-center justify-end">
-        {initialValues && (
-          <Button
-            variant="outline"
-            onClick={router.back}
-            className="me-4"
-            type="button"
-          >
-            {t('form:button-label-back')}
-          </Button>
-        )}
-
-        <Button loading={creating || updating} disabled={creating || updating}>
-          <div className="mr-1">
-            <SaveIcon width="1.3rem" height="1.3rem" />
-          </div>
-          <div>{t('form:button-label-save')}</div>
-        </Button>
       </div>
     </form>
   );

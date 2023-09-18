@@ -1,8 +1,7 @@
 import { useQuery } from '@apollo/client';
+import { PageFormPlaceholder } from '@components/common/commonComponents';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
-import { FormPlaceholder } from '@components/ui/placeholders/Form';
-import { FormActionPlaceholder } from '@components/ui/placeholders/FormAction';
 import { LANGUAGE } from '@graphql/language';
 import { useErrorLogger, useGetUser } from '@hooks/index';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
@@ -21,7 +20,7 @@ import path from 'path';
 
 const LanguageForm = dynamic(
   () => import('@components/language/language-form'),
-  { ssr: true }
+  { ssr: true, loading: () => <PageFormPlaceholder /> }
 );
 
 interface TLanguage {
@@ -54,12 +53,7 @@ export default function UpdateTagPage({ client, localeFiles = {} }: Props) {
   useErrorLogger(error);
 
   if (isEmpty(language) || loading) {
-    return (
-      <div>
-        <FormActionPlaceholder />
-        <FormPlaceholder />
-      </div>
-    );
+    return <PageFormPlaceholder />;
   }
   if (error) {
     return <ErrorMessage message={error.message} />;

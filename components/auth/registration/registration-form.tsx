@@ -149,8 +149,6 @@ const RegistrationForm = () => {
       token
     };
 
-    console.log({ values, variables, token });
-
     setErrorMessage(null);
     createStore({ variables }).catch((error) => {
       const err = error?.graphQLErrors[0];

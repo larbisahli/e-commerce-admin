@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import PageMainAction from '@components/common/PageMainAction';
+import { PageFormPlaceholder } from '@components/common/commonComponents';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
@@ -10,7 +10,6 @@ import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import type { LanguageProps, SSRProps } from '@ts-types/custom.types';
 import type { PromoBannerType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
-import cn from 'classnames';
 import isEmpty from 'lodash/isEmpty';
 import type { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
@@ -20,7 +19,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const CreateOrUpdatePromoSlideForm = dynamic(
   () => import('@components/promo-banner/promo-slide-form'),
-  { ssr: true }
+  { ssr: true, loading: () => <PageFormPlaceholder /> }
 );
 
 interface THeroBanner {
@@ -48,6 +47,10 @@ export default function PromoSliders({ client }: SSRProps) {
   useGetUser(client);
   useErrorLogger(error);
 
+  if (isEmpty(promoSlide) || loading) {
+    return <PageFormPlaceholder />;
+  }
+
   if (!isEmpty(error)) {
     return <ErrorMessage message={error.message} />;
   }
@@ -63,11 +66,7 @@ export default function PromoSliders({ client }: SSRProps) {
           href="/svg/slider.svg"
         />
       </Head>
-      {loading && <Loader text={t('common:text-loading')} />}
-      <PageMainAction title={t('form:input-label-promo-banner')} label="" />
-      <div className={cn({ hidden: loading })}>
-        <CreateOrUpdatePromoSlideForm initialValues={promoSlide} />
-      </div>
+      <CreateOrUpdatePromoSlideForm initialValues={promoSlide} />
     </>
   );
 }

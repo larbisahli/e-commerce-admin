@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client';
+import { PageFormPlaceholder } from '@components/common/commonComponents';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
-import Loader from '@components/ui/loader/loader';
 import { HERO_SLIDE } from '@graphql/hero-banner';
 import { useErrorLogger, useGetUser } from '@hooks/index';
 import { useSettings } from '@hooks/useSettings';
@@ -14,12 +14,11 @@ import type { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const CreateOrUpdateSlideForm = dynamic(
   () => import('@components/hero-banner/hero-slide-form'),
-  { ssr: true }
+  { ssr: true, loading: () => <PageFormPlaceholder /> }
 );
 
 interface THeroSlider {
@@ -31,7 +30,6 @@ interface OptionsVariable extends LanguageProps {
 
 export default function UpdateHeroSliderPage({ client }: SSRProps) {
   const { query } = useRouter();
-  const { t } = useTranslation();
 
   const sliderId = parseInt(query.sliderId as string, 10);
 
@@ -51,9 +49,10 @@ export default function UpdateHeroSliderPage({ client }: SSRProps) {
   useGetUser(client);
   useErrorLogger(error);
 
-  if (loading) {
-    return <Loader text={t('common:text-loading')} />;
+  if (isEmpty(heroSlide) || loading) {
+    return <PageFormPlaceholder />;
   }
+
   if (error) {
     return <ErrorMessage message={error.message} />;
   }
@@ -61,7 +60,7 @@ export default function UpdateHeroSliderPage({ client }: SSRProps) {
   return (
     <>
       <Head>
-        <title>Edit Hero slider | Dropgala</title>
+        <title>Edit hero slider | Dropgala</title>
         <link
           rel="icon"
           type="image/svg"
@@ -69,11 +68,6 @@ export default function UpdateHeroSliderPage({ client }: SSRProps) {
           href="/svg/slider.svg"
         />
       </Head>
-      <div className="flex border-b border-dashed border-border-base py-5 sm:py-8">
-        <h1 className="text-lg font-semibold text-heading">
-          {t('form:form-title-edit-hero-slider')}
-        </h1>
-      </div>
       <CreateOrUpdateSlideForm initialValues={heroSlide} />
     </>
   );

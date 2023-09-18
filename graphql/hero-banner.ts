@@ -2,24 +2,28 @@ import { gql } from '@apollo/client';
 
 export const CREATE_HERO_SLIDE = gql`
   mutation CreateHeroSlide(
-    $destinationUrl: String
+    $url: String
     $thumbnail: [ImageInput!]!
     $title: String
     $description: String
     $btnLabel: String
     $styles: HeroSlideStyleInput!
     $position: Int!
+    $align: AlignTypeEnum!
     $published: Boolean!
+    $language: LanguageInput!
   ) {
     createHeroSlide(
-      destinationUrl: $destinationUrl
+      url: $url
       thumbnail: $thumbnail
       title: $title
       description: $description
       btnLabel: $btnLabel
       styles: $styles
+      align: $align
       position: $position
       published: $published
+      language: $language
     ) {
       id
     }
@@ -29,25 +33,29 @@ export const CREATE_HERO_SLIDE = gql`
 export const UPDATE_HERO_SLIDE = gql`
   mutation UpdateHeroSlide(
     $id: Int!
-    $destinationUrl: String
+    $url: String
     $thumbnail: [ImageInput!]!
     $title: String
     $description: String
     $btnLabel: String
     $styles: HeroSlideStyleInput!
     $position: Int!
+    $align: AlignTypeEnum!
     $published: Boolean!
+    $language: LanguageInput!
   ) {
     updateHeroSlide(
       id: $id
-      destinationUrl: $destinationUrl
+      url: $url
       thumbnail: $thumbnail
       title: $title
       description: $description
       btnLabel: $btnLabel
       styles: $styles
+      align: $align
       position: $position
       published: $published
+      language: $language
     ) {
       id
     }
@@ -63,11 +71,11 @@ export const DELETE_HERO_SLIDE = gql`
 `;
 
 export const HERO_BANNER_LIST = gql`
-  query HeroBannerList($page: Int!, $limit: Int!) {
+  query HeroBannerList($page: Int!, $limit: Int!, $language: LanguageInput!) {
     heroSlideListCount {
       count
     }
-    heroSlideList(page: $page, limit: $limit) {
+    heroSlideList(page: $page, limit: $limit, language: $language) {
       id
       thumbnail {
         image
@@ -76,7 +84,9 @@ export const HERO_BANNER_LIST = gql`
       title
       position
       published
-      clicks
+      translated {
+        title
+      }
       createdAt
       updatedAt
       createdBy {
@@ -94,10 +104,10 @@ export const HERO_BANNER_LIST = gql`
 `;
 
 export const HERO_SLIDE = gql`
-  query HeroSlide($id: Int!) {
-    heroSlide(id: $id) {
+  query HeroSlide($id: Int!, $language: LanguageInput!) {
+    heroSlide(id: $id, language: $language) {
       id
-      destinationUrl
+      url
       thumbnail {
         id
         image
@@ -105,9 +115,15 @@ export const HERO_SLIDE = gql`
       }
       title
       description
+      align
       btnLabel
-      styles {
+      translated {
+        title
+        description
         align
+        btnLabel
+      }
+      styles {
         textColor
         btnBgc
         btnTextColor

@@ -1,8 +1,7 @@
 import { useQuery } from '@apollo/client';
+import { PageFormPlaceholder } from '@components/common/commonComponents';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
-import { FormPlaceholder } from '@components/ui/placeholders/Form';
-import { FormActionPlaceholder } from '@components/ui/placeholders/FormAction';
 import { DELIVERY_TIME } from '@graphql/delivery-time';
 import { useGetUser } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
@@ -20,7 +19,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const CreateOrUpdateDeliveryForm = dynamic(
   () => import('@components/delivery-time/delivery-form'),
-  { ssr: true }
+  { ssr: true, loading: () => <PageFormPlaceholder /> }
 );
 
 interface DeliveryVariable extends LanguageProps {
@@ -49,12 +48,7 @@ export default function UpdateShippingPage({ client }: SSRProps) {
   useErrorLogger(error);
 
   if (isEmpty(deliveryTime) || loading) {
-    return (
-      <div>
-        <FormActionPlaceholder />
-        <FormPlaceholder />
-      </div>
-    );
+    return <PageFormPlaceholder />;
   }
 
   if (error) {

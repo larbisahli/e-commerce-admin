@@ -12,7 +12,7 @@ import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/notify';
 import { Tag } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
-import { placeholder } from '@utils/utils';
+import { translationFallback } from '@utils/utils';
 import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
@@ -78,7 +78,6 @@ export default function CreateOrUpdateTagForm({ initialValues }: IProps) {
     onCompleted: (data: { updateTag: Tag }) => {
       if (!isEmpty(data)) {
         notify(t('common:successfully-updated'), 'success');
-        router.push(ROUTES.TAG);
       }
     }
   });
@@ -139,7 +138,11 @@ export default function CreateOrUpdateTagForm({ initialValues }: IProps) {
               isRequiredLabel
               {...register('name')}
               error={t(errors.name?.message!)}
-              placeholder={placeholder(initialValues, 'name', 'Enter tag name')}
+              placeholder={translationFallback(
+                initialValues,
+                'name',
+                'Enter tag name'
+              )}
               variant="outline"
               className="mb-5"
             />

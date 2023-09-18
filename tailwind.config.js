@@ -20,6 +20,7 @@ module.exports = {
   theme: {
     extend: {
       screens: {
+        xsm: '400px',
         '3xl': '1900px'
       },
       fontFamily: {

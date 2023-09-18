@@ -54,6 +54,6 @@ export function useFiles({ id = null }: { id?: string | null }) {
   return {
     fileStore,
     refetch,
-    loading
+    loading: loading && isEmpty(media)
   };
 }

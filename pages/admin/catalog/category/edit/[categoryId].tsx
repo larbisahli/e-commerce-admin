@@ -1,8 +1,7 @@
 import { useQuery } from '@apollo/client';
+import { PageFormPlaceholder } from '@components/common/commonComponents';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
-import { FormPlaceholder } from '@components/ui/placeholders/Form';
-import { FormActionPlaceholder } from '@components/ui/placeholders/FormAction';
 import { CATEGORY } from '@graphql/category';
 import { useErrorLogger, useGetUser } from '@hooks/index';
 import { useSettings } from '@hooks/useSettings';
@@ -20,7 +19,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const CreateOrUpdateCategoriesForm = dynamic(
   () => import('@components/category/category-form'),
-  { ssr: true }
+  { ssr: true, loading: () => <PageFormPlaceholder /> }
 );
 
 interface TCategory {
@@ -56,12 +55,7 @@ export default function UpdateCategoriesPage({ client }: SSRProps) {
   useErrorLogger(error);
 
   if (isEmpty(category) || loading) {
-    return (
-      <div>
-        <FormActionPlaceholder />
-        <FormPlaceholder />
-      </div>
-    );
+    return <PageFormPlaceholder />;
   }
   if (error) {
     return <ErrorMessage message={error.message} />;

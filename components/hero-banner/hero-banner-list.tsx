@@ -89,31 +89,17 @@ const HeroBannerList = ({
         dataIndex: 'title',
         key: 'title',
         align: alignLeft,
-        width: 150,
+        width: 250,
         ellipsis: true,
-        render: (category_name: string, record: TableRowProps) => {
+        render: (title: string, record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
           return (
-            <span className="font-semibold capitalize text-gray-800">
-              {category_name}
+            <span className="font-semibold capitalize text-gray-700">
+              {title ?? record?.translated?.title}
             </span>
           );
-        }
-      },
-      {
-        title: t('table:table-item-clicks'),
-        dataIndex: 'clicks',
-        key: 'clicks',
-        align: 'center',
-        width: 70,
-        ellipsis: true,
-        render: (clicks: number, record: TableRowProps) => {
-          if (record?.loading) {
-            return <TableRowPlaceholder />;
-          }
-          return clicks;
         }
       },
       {
@@ -205,7 +191,7 @@ const HeroBannerList = ({
         dataIndex: 'id',
         key: 'actions',
         align: 'center',
-        width: 100,
+        width: 150,
         render: (id: string, record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;

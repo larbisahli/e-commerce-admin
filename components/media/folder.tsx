@@ -148,7 +148,7 @@ export default function Folder({
       <Link href={`${ROUTES.MEDIA}/${folder?.id}`}>
         <a
           title={folder?.name}
-          className=" relative flex h-fit w-48 cursor-pointer flex-col items-center p-5 hover:bg-blue-100"
+          className="relative flex h-fit w-48 cursor-pointer flex-col items-center p-5 hover:bg-blue-100"
         >
           {renderSpinner()}
           <div className="group relative flex h-40 w-40 items-center justify-center rounded border border-gray-300 bg-gray-100">

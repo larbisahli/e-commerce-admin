@@ -1,13 +1,12 @@
 import { useQuery } from '@apollo/client';
+import { PageFormPlaceholder } from '@components/common/commonComponents';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
-import { FormPlaceholder } from '@components/ui/placeholders/Form';
-import { FormActionPlaceholder } from '@components/ui/placeholders/FormAction';
 import { SUPPLIER } from '@graphql/supplier';
 import { useGetUser } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
-import type { LanguageProps, SSRProps } from '@ts-types/custom.types';
+import type { SSRProps } from '@ts-types/custom.types';
 import type { Suppliers } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import { isEmpty } from 'lodash';
@@ -19,7 +18,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const CreateOrUpdateSupplierForm = dynamic(
   () => import('@components/suppliers/supplier-form'),
-  { ssr: true }
+  { ssr: true, loading: () => <PageFormPlaceholder /> }
 );
 
 interface TAttribute {
@@ -50,12 +49,7 @@ export default function UpdateSupplierPage({ client }: SSRProps) {
   useErrorLogger(error);
 
   if (isEmpty(supplier) || loading) {
-    return (
-      <div>
-        <FormActionPlaceholder />
-        <FormPlaceholder />
-      </div>
-    );
+    return <PageFormPlaceholder />;
   }
 
   if (error) {

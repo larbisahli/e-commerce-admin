@@ -1,6 +1,9 @@
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+
 import { useMutation } from '@apollo/client';
 import Card from '@components/common/card';
-import { SaveIcon } from '@components/icons/save-icon';
+import FormActions from '@components/common/FormActions';
 import Button from '@components/ui/button';
 import ColorPicker from '@components/ui/color-picker/color-picker';
 import Description from '@components/ui/description';
@@ -14,18 +17,18 @@ import {
   useGetUser,
   useWarnIfUnsavedChanges
 } from '@hooks/index';
+import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/index';
 import type { PromoBannerType } from '@ts-types/generated';
-import cn from 'classnames';
 import ReactHtmlParser from 'html-react-parser';
 import cloneDeep from 'lodash/cloneDeep';
 import isEmpty from 'lodash/isEmpty';
 import dynamic from 'next/dynamic';
-import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import React from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
+import Slider from 'react-slick';
 
 const Editor = dynamic(() => import('@components/ui/editor'), {
   loading: () => <Loader height="150px" text="Editor..." />,
@@ -33,22 +36,36 @@ const Editor = dynamic(() => import('@components/ui/editor'), {
 });
 
 const animationSpeedOptions = [
-  { value: '10s', name: '10 seconds' },
-  { value: '20s', name: '20 seconds' },
-  { value: '30s', name: '30 seconds' },
-  { value: '40s', name: '40 seconds' },
-  { value: '50s', name: '50 seconds' },
-  { value: '60s', name: '60 seconds' },
-  { value: '70s', name: '70 seconds' },
-  { value: '80s', name: '80 seconds' },
-  { value: '90s', name: '90 seconds' },
-  { value: '100s', name: '100 seconds' }
+  { value: 1000, name: '1 second' },
+  { value: 2000, name: '2 seconds' },
+  { value: 3000, name: '3 seconds' },
+  { value: 4000, name: '4 seconds' },
+  { value: 5000, name: '5 seconds' },
+  { value: 6000, name: '6 seconds' },
+  { value: 7000, name: '7 seconds' },
+  { value: 8000, name: '8 seconds' },
+  { value: 9000, name: '9 seconds' },
+  { value: 10000, name: '10 seconds' },
+  { value: 15000, name: '15 seconds' },
+  { value: 20000, name: '20 seconds' }
+];
+
+const delaySpeedOptions = [
+  { value: 3000, name: '3 seconds' },
+  { value: 4000, name: '4 seconds' },
+  { value: 5000, name: '5 seconds' },
+  { value: 6000, name: '6 seconds' },
+  { value: 7000, name: '7 seconds' },
+  { value: 8000, name: '8 seconds' },
+  { value: 9000, name: '9 seconds' },
+  { value: 10000, name: '10 seconds' }
 ];
 
 type FormValues = PromoBannerType;
 
 const defaultValues = {
-  animationSpeed: { value: '10s', name: '10 seconds' },
+  animationSpeed: { value: 500, name: '500 Milliseconds' },
+  delaySpeed: { value: 3000, name: '3 seconds' },
   backgroundColor: '#da7c25',
   direction: 'LTR',
   status: 'draft',
@@ -62,11 +79,12 @@ type IProps = {
 export default function CreateOrUpdatePromoSlideForm({
   initialValues
 }: IProps) {
-  const router = useRouter();
   const { t } = useTranslation();
 
   const [error, setError] = useState(null);
   const [unsavedChanges, setUnsavedChanges] = useState(true);
+
+  const { selectedLanguage } = useSettings();
 
   const { watch, register, handleSubmit, control, setValue } =
     useForm<FormValues>({
@@ -75,6 +93,9 @@ export default function CreateOrUpdatePromoSlideForm({
             ...initialValues,
             animationSpeed: animationSpeedOptions?.find(
               (e) => e.value === initialValues.animationSpeed
+            ),
+            delaySpeed: delaySpeedOptions?.find(
+              (e) => e.value === initialValues.delaySpeed
             ),
             status: (initialValues as PromoBannerType)?.published
               ? 'publish'
@@ -92,7 +113,7 @@ export default function CreateOrUpdatePromoSlideForm({
   const { userInfo } = useGetUser();
   const csrfToken = userInfo?.csrfToken;
 
-  const [updatePromoSlider, { loading: creating }] = useMutation(
+  const [updatePromoSlider, { loading: updating }] = useMutation(
     UPDATE_PROMO_SLIDE,
     {
       context: {
@@ -102,7 +123,7 @@ export default function CreateOrUpdatePromoSlideForm({
       },
       onCompleted: (data: { updatePromoSlide: PromoBannerType }) => {
         if (!isEmpty(data)) {
-          notify(t('common:successfully-created'), 'success');
+          notify(t('common:successfully-updated'), 'success');
         }
       }
     }
@@ -115,7 +136,9 @@ export default function CreateOrUpdatePromoSlideForm({
       direction: values.direction,
       backgroundColor: values.backgroundColor,
       animationSpeed: values?.animationSpeed?.value,
+      delaySpeed: values?.delaySpeed?.value,
       published: values.status === 'publish',
+      language: selectedLanguage,
       sliders: values?.sliders?.map((slider, idx) => ({
         ...slider,
         position: idx
@@ -138,14 +161,27 @@ export default function CreateOrUpdatePromoSlideForm({
   const backgroundColor = watch('backgroundColor');
   const direction = watch('direction');
   const animationSpeed = watch('animationSpeed');
+  const delaySpeed = watch('delaySpeed');
   const sliders = watch('sliders');
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="relative">
+      <FormActions
+        hideBackLink
+        showCancel={false}
+        title={
+          isEmpty(initialValues)
+            ? t('form:form-title-new-banner')
+            : t('form:form-title-edit-banner')
+        }
+        loading={updating}
+        disabled={updating}
+      />
+      <div className="">
         <Label>{t('form:input-label-demo')}</Label>
         <PromoSlider
           {...{
+            delaySpeed: delaySpeed?.value,
             animationSpeed: animationSpeed?.value,
             direction,
             sliders,
@@ -164,7 +200,7 @@ export default function CreateOrUpdatePromoSlideForm({
           className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
         />
         <Card className="w-full sm:w-8/12 md:w-2/3">
-          <div>
+          <div className="mb-5">
             <Label>{t('form:input-label-animation-speed')}</Label>
             <SelectInput
               name="animationSpeed"
@@ -172,6 +208,16 @@ export default function CreateOrUpdatePromoSlideForm({
               getOptionLabel={(option) => option.name}
               getOptionValue={(option) => option.value}
               options={animationSpeedOptions}
+            />
+          </div>
+          <div className="mb-5">
+            <Label>{t('form:input-label-delay-speed')}</Label>
+            <SelectInput
+              name="delaySpeed"
+              control={control}
+              getOptionLabel={(option) => option.name}
+              getOptionValue={(option) => option.value}
+              options={delaySpeedOptions}
             />
           </div>
           <ColorPicker
@@ -229,9 +275,14 @@ export default function CreateOrUpdatePromoSlideForm({
           <div>
             {fields.map((slide, index) => (
               <div
-                className="border-border-500 mb-5 border-b border-dashed last:border-0 md:py-8"
+                className="mb-5 border-b border-dashed border-gray-300 last:border-0 md:py-8"
                 key={index}
               >
+                <div className="mb-3 flex justify-center bg-gray-100 py-1">
+                  <span className="text-lg font-semibold text-gray-600">{`Slide ${
+                    index + 1
+                  }`}</span>
+                </div>
                 <div className="flex flex-col justify-between">
                   <Label>{t('form:input-label-title')}</Label>
                   <Editor
@@ -243,11 +294,12 @@ export default function CreateOrUpdatePromoSlideForm({
                     className="mb-5  sm:col-span-2"
                     defaultValue=""
                   />
-                  <div>
+                  <div className="flex justify-end">
                     <button
                       onClick={() => remove(index)}
                       type="button"
-                      className="text-sm text-red-500 transition-colors duration-200 hover:text-red-700 focus:outline-none sm:col-span-1 sm:mt-4"
+                      className="rounded-sm border border-red-400 px-2 py-1 text-sm text-red-500 transition-colors
+                                 duration-200 hover:bg-red-400 hover:text-white focus:outline-none sm:col-span-1 sm:mt-4"
                     >
                       {t('form:button-label-remove')}
                     </button>
@@ -261,10 +313,8 @@ export default function CreateOrUpdatePromoSlideForm({
             type="button"
             onClick={() =>
               append({
-                text: '',
-                textColor: '#000',
-                position: 0,
-                destinationUrl: null
+                content: '',
+                position: 0
               })
             }
             className="w-full sm:w-auto"
@@ -272,25 +322,6 @@ export default function CreateOrUpdatePromoSlideForm({
             {t('form:button-label-add-slide')}
           </Button>
         </Card>
-      </div>
-      <div className="mb-4 flex items-center justify-end">
-        {initialValues && (
-          <Button
-            variant="outline"
-            onClick={router.back}
-            className="me-4"
-            type="button"
-          >
-            {t('form:button-label-back')}
-          </Button>
-        )}
-
-        <Button loading={creating} disabled={creating}>
-          <div className="mr-1">
-            <SaveIcon width="1.3rem" height="1.3rem" />
-          </div>
-          <div>{t('form:button-label-save')}</div>
-        </Button>
       </div>
     </form>
   );
@@ -311,62 +342,43 @@ const DisplayColorCode = ({ color }: { color: string }) => {
   );
 };
 
+const settings = {
+  dots: false,
+  infinite: true,
+  arrows: false,
+  autoplay: true,
+  slidesToShow: 1,
+  slidesToScroll: 1
+};
+
 const PromoSlider = ({
-  animationSpeed,
+  animationSpeed = 500,
   direction,
   sliders,
-  backgroundColor
+  backgroundColor,
+  delaySpeed = 5000
 }) => {
-  const [width, setWidth] = useState(null);
-
-  useEffect(() => {
-    var slideWidth = document.getElementById('promoSlide');
-
-    if (!width) {
-      setWidth(slideWidth.clientWidth);
-    }
-
-    window.addEventListener('resize', () => {
-      setWidth(slideWidth.clientWidth);
-    });
-
-    return () => {
-      window.removeEventListener('resize', () => {
-        setWidth(slideWidth.clientWidth);
-      });
-    };
-  }, []);
-
+  console.log({ animationSpeed, delaySpeed });
   return (
     <div
       style={{ backgroundColor: backgroundColor }}
-      id="promoSlide"
-      className="relative h-[40px] w-full overflow-hidden text-center text-white"
+      className="mb-22 bg-blue-300"
     >
-      <div
-        style={{ animationDuration: animationSpeed }}
-        className={cn(
-          'absolute flex',
-          {
-            'animate-marquee2-infinite':
-              direction === 'LTR' && sliders.length > 1
-          },
-          {
-            'animate-marquee-infinite':
-              direction === 'RTL' && sliders.length > 1
-          }
-        )}
+      <Slider
+        {...settings}
+        rtl={direction === 'RTL'}
+        speed={animationSpeed}
+        autoplaySpeed={delaySpeed}
       >
         {sliders?.map(({ content }, idx) => (
           <div
             key={idx}
-            style={{ width: `${width}px` }}
-            className="flex h-[40px] items-center justify-center"
+            className="!flex h-[40px] w-full items-center justify-center"
           >
-            <span className="h-fit">{ReactHtmlParser(content ?? '')}</span>
+            <div className="w-fit">{ReactHtmlParser(content ?? '')}</div>
           </div>
         ))}
-      </div>
+      </Slider>
     </div>
   );
 };

@@ -22,7 +22,7 @@ import { notify } from '@lib/index';
 import { AttributeTypes } from '@ts-types/enums';
 import { Attribute, AttributeValue } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
-import { placeholder } from '@utils/utils';
+import { translationFallback } from '@utils/utils';
 import cn from 'classnames';
 import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
@@ -115,7 +115,6 @@ export default function CreateOrUpdateAttributeForm({
       onCompleted: (data: { updateAttribute: Attribute }) => {
         if (!isEmpty(data)) {
           notify(t('common:successfully-updated'), 'success');
-          router.push(ROUTES.ATTRIBUTE);
         }
       }
     }
@@ -275,7 +274,7 @@ export default function CreateOrUpdateAttributeForm({
               isRequiredLabel
               {...register('name', { required: 'Name is required' })}
               error={t(errors.name?.message!)}
-              placeholder={placeholder(
+              placeholder={translationFallback(
                 initialValues,
                 'name',
                 'Enter attribute name'
@@ -322,7 +321,7 @@ export default function CreateOrUpdateAttributeForm({
                         label={t('form:input-label-color-name')}
                         variant="outline"
                         {...register(`values.${index}.name` as const)}
-                        placeholder={placeholder(
+                        placeholder={translationFallback(
                           values[index],
                           'name',
                           'Enter color name'
@@ -340,7 +339,11 @@ export default function CreateOrUpdateAttributeForm({
                         placeholder={
                           initType === AttributeTypes.COLOR
                             ? 'Enter value'
-                            : placeholder(values[index], 'value', 'Enter value')
+                            : translationFallback(
+                                values[index],
+                                'value',
+                                'Enter value'
+                              )
                         }
                         defaultValue={item.value}
                       />

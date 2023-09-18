@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import ImageComponent from '@components/ImageComponent';
-import { HeroCarouselType, ImageType } from '@ts-types/generated';
+import type { HeroBannerType, ImageType } from '@ts-types/generated';
 import cn from 'classnames';
 
 interface ShowCaseProps {
@@ -8,7 +8,8 @@ interface ShowCaseProps {
   btnLabel?: string;
   title?: string;
   description?: string;
-  styles?: HeroCarouselType['styles'];
+  styles?: HeroBannerType['styles'];
+  align?: HeroBannerType['align'];
 }
 
 const HeroBannerCard = ({
@@ -16,16 +17,17 @@ const HeroBannerCard = ({
   btnLabel,
   title,
   description,
-  styles
+  styles,
+  align
 }: ShowCaseProps) => {
   return (
     <div
       className={cn(
         'relative flex h-[300px] w-full items-center bg-cover bg-center bg-no-repeat',
         {
-          'justify-start': styles.align === 'left',
-          'justify-center': styles.align === 'center',
-          'justify-end': styles.align === 'right'
+          'justify-start': align === 'left',
+          'justify-center': align === 'center',
+          'justify-end': align === 'right'
         }
       )}
       style={{ zIndex: 0 }}
@@ -45,8 +47,8 @@ const HeroBannerCard = ({
         className={cn(
           ' mx-12 flex h-fit max-w-[480px] flex-col md:max-w-[550px] 2xl:max-w-[600px]',
           {
-            'items-center': styles.align === 'center',
-            'items-end': styles.align === 'right'
+            'items-center': align === 'center',
+            'items-end': align === 'right'
           }
         )}
       >
@@ -62,8 +64,8 @@ const HeroBannerCard = ({
           className={cn(
             'text-sm leading-7 md:text-[17px] md:leading-8 xl:leading-[1.92em] 2xl:text-base',
             {
-              'text-center': styles.align === 'center',
-              'text-end': styles.align === 'right'
+              'text-center': align === 'center',
+              'text-end': align === 'right'
             }
           )}
           style={{ color: styles?.textColor }}

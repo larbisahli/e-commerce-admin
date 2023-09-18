@@ -22,7 +22,7 @@ import { notify } from '@lib/index';
 import { LanguageProps } from '@ts-types/custom.types';
 import { Category, OrderBy } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
-import { placeholder } from '@utils/utils';
+import { translationFallback } from '@utils/utils';
 import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
@@ -175,7 +175,6 @@ export default function CreateOrUpdateCategoriesForm({
     onCompleted: (data: { updateCategory: Category }) => {
       if (!isEmpty(data)) {
         notify(t('common:successfully-updated'), 'success');
-        router.push(ROUTES.CATEGORY);
       }
     }
   });
@@ -313,7 +312,7 @@ export default function CreateOrUpdateCategoriesForm({
             // @ts-ignore
             {...register('name')}
             error={t(errors.name?.message!)}
-            placeholder={placeholder(
+            placeholder={translationFallback(
               initialValues,
               'name',
               'Enter category name'
@@ -325,7 +324,7 @@ export default function CreateOrUpdateCategoriesForm({
             label={t('form:input-label-description')}
             isRequiredLabel
             {...register('description')}
-            placeholder={placeholder(
+            placeholder={translationFallback(
               initialValues,
               'description',
               'Enter description name'
@@ -373,7 +372,7 @@ export default function CreateOrUpdateCategoriesForm({
             isRequiredLabel
             onFocus={() => updateWhenEmpty('metaTitle', false)}
             {...register('metaTitle')}
-            placeholder={placeholder(
+            placeholder={translationFallback(
               initialValues,
               'metaTitle',
               'Enter meta title'
@@ -404,7 +403,7 @@ export default function CreateOrUpdateCategoriesForm({
           <TextArea
             label={t('form:input-label-meta-keywords')}
             {...register('metaKeywords')}
-            placeholder={placeholder(
+            placeholder={translationFallback(
               initialValues,
               'metaKeywords',
               'Enter meta keywords'
@@ -417,7 +416,7 @@ export default function CreateOrUpdateCategoriesForm({
           <TextArea
             label={t('form:input-label-meta-description')}
             {...register('metaDescription')}
-            placeholder={placeholder(
+            placeholder={translationFallback(
               initialValues,
               'metaKeywords',
               'Enter meta description'

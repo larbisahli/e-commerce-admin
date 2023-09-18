@@ -22,7 +22,7 @@ import { notify } from '@lib/notify';
 import { Nullable } from '@ts-types/custom.types';
 import { DeliveryTimeType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
-import { placeholder } from '@utils/utils';
+import { translationFallback } from '@utils/utils';
 import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
@@ -125,7 +125,6 @@ export default function CreateOrUpdateDeliveryForm({ initialValues }: IProps) {
     onCompleted: (data: { updateDeliveryTime: DeliveryTimeType }) => {
       if (!isEmpty(data)) {
         notify(t('common:successfully-updated'), 'success');
-        router.push(ROUTES.DELIVERY_TIME);
       }
     }
   });
@@ -199,7 +198,11 @@ export default function CreateOrUpdateDeliveryForm({ initialValues }: IProps) {
               label={t('form:input-label-name')}
               isRequiredLabel
               {...register('name')}
-              placeholder={placeholder(initialValues, 'name', 'Enter name')}
+              placeholder={translationFallback(
+                initialValues,
+                'name',
+                'Enter name'
+              )}
               error={t(errors?.name?.message!)}
               variant="outline"
               className="mb-8 w-full"

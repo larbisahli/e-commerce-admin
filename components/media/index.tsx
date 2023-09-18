@@ -1,18 +1,19 @@
 /* eslint-disable jsx-a11y/interactive-supports-focus */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import { ApolloQueryResult } from '@apollo/client';
+import FormActions from '@components/common/FormActions';
 import Uploader from '@components/common/uploader';
 import { ArrowPrev } from '@components/icons/arrow-prev';
 import EmptyFolderSvg from '@components/icons/emoty-folder';
 import Button from '@components/ui/button';
-import Loader from '@components/ui/loader/loader';
+import { FormActionPlaceholder } from '@components/ui/placeholders/FormAction';
+import { MediaItemPlaceholder } from '@components/ui/placeholders/MediaItem';
 import { MediaType } from '@ts-types/generated';
 import cn from 'classnames';
-import { isEmpty } from 'lodash';
+import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useMemo, useState } from 'react';
 
 import Folder from './folder';
 import ImageViewModal from './Image-view-modal';
@@ -23,33 +24,30 @@ type IProps = {
     children: MediaType[];
     mediaTotalCount: { count: number };
   };
+  loading: boolean;
   // eslint-disable-next-line no-unused-vars
   refetch: (variables?: Partial<any>) => Promise<ApolloQueryResult<any>>;
 };
 
-type FormValues = {
-  name: string;
-};
-
-const defaultValues = {
-  name: ''
-};
-
-const MediaList = ({ media, refetch }: IProps) => {
+const MediaList = ({ media, refetch, loading }: IProps) => {
   const { t } = useTranslation();
   const { query, back } = useRouter();
 
-  const id = query.id as string;
+  const children = useMemo(() => {
+    let childrenCopy = [...(media?.children ?? [])];
+    try {
+      childrenCopy
+        ?.sort((x, y) => Number(y?.createdAt) - Number(x?.createdAt))
+        ?.sort((x, y) => Number(isEmpty(y?.image)) - Number(isEmpty(x?.image)));
+    } catch (err) {
+      console.log('sorting media', { err });
+    } finally {
+      // eslint-disable-next-line no-unsafe-finally
+      return childrenCopy;
+    }
+  }, [media]);
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors }
-  } = useForm<FormValues>({
-    //@ts-ignore
-    defaultValues: defaultValues
-  });
+  const id = query.id as string;
 
   const [newFolderClicked, setNewFolderClicked] = useState(false);
   const [loadingImage, setLoading] = useState<boolean>(false);
@@ -58,10 +56,12 @@ const MediaList = ({ media, refetch }: IProps) => {
     setNewFolderClicked((prev) => !prev);
   };
 
+  const isMediaReady = !loadingImage && !newFolderClicked && isEmpty(children);
+
   const renderEmptyMedia = () => {
-    if (isEmpty(media?.children)) {
+    if (isMediaReady) {
       return (
-        <div className=" flex w-full flex-col items-center justify-center pt-8">
+        <div className="flex w-full flex-col items-center justify-center pt-8">
           <div className="text-blue-400">
             <EmptyFolderSvg />
           </div>
@@ -79,29 +79,53 @@ const MediaList = ({ media, refetch }: IProps) => {
 
   const { count = 0 } = media?.mediaTotalCount ?? {};
 
+  if (loading) {
+    return (
+      <div>
+        <FormActionPlaceholder />
+        <div className="mt-8 flex w-full justify-center">
+          <div className="grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
+            {Array.from({ length: 8 })?.map((_, idx) => (
+              <MediaItemPlaceholder key={idx} />
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const renderImageLoader = () => {
+    if (!loadingImage) {
+      return null;
+    }
+    return <MediaItemPlaceholder loader />;
+  };
+
   return (
     <>
       <ImageViewModal />
-      <div className="relative m-2 py-4">
-        <Uploader setLoading={setLoading} mediaId={id} refetch={refetch} />
-      </div>
-      <div className="mb-6">
+      <FormActions isCustom>
         <div
-          className={cn('flex items-center justify-end', {
+          className={cn('flex w-full items-center justify-between', {
             'justify-between': id
           })}
         >
-          {id && (
-            <Button
-              variant="outline"
-              onClick={back}
-              className="flex items-center justify-center me-4"
-              type="button"
-            >
-              <ArrowPrev width={18} height={18} />
-              <span className="pl-2">{media.parent.name}</span>
-            </Button>
-          )}
+          <div className="flex items-center">
+            {id && (
+              <Button
+                variant="outline"
+                onClick={back}
+                className="flex items-center justify-center me-4"
+                type="button"
+              >
+                <ArrowPrev width={18} height={18} />
+                <span className="pl-2">{media?.parent?.name}</span>
+              </Button>
+            )}
+            <div className="text-sm font-semibold text-gray-600">{`${count} ${
+              count > 1 ? 'images' : 'image'
+            } found`}</div>
+          </div>
           <Button
             onClick={handleNewFolderButton}
             variant="outline"
@@ -111,13 +135,21 @@ const MediaList = ({ media, refetch }: IProps) => {
             {t('form:button-label-add-folder')}
           </Button>
         </div>
-        {
-          <div className=" pt-3 text-right text-sm font-medium text-gray-700">{`${count} records found`}</div>
-        }
-        <div className="mt-8 flex flex-wrap">
-          {loadingImage && (
-            <Loader height="10vh" text={t('common:text-loading')} />
+      </FormActions>
+
+      <div className="relative m-2 py-4">
+        <Uploader setLoading={setLoading} mediaId={id} refetch={refetch} />
+      </div>
+      <div className="mb-6 mt-8 flex w-full justify-center">
+        <div
+          className={cn(
+            'grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6',
+            {
+              hidden: isMediaReady
+            }
           )}
+        >
+          {renderImageLoader()}
           {newFolderClicked && (
             <Folder
               folder={{}}
@@ -126,11 +158,9 @@ const MediaList = ({ media, refetch }: IProps) => {
               handleNewFolderButton={handleNewFolderButton}
             />
           )}
-          {media?.children?.map((child) => (
-            <Folder key={child.id} folder={child} />
-          ))}
-          {renderEmptyMedia()}
+          {children?.map((child) => <Folder key={child.id} folder={child} />)}
         </div>
+        {renderEmptyMedia()}
       </div>
     </>
   );

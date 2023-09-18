@@ -183,7 +183,11 @@ export const CopyToClipboard = (
 //       result : result.concat(key);
 // }, []);
 
-export const placeholder = (initialValues: any, key: string, placeholder) => {
+export const translationFallback = (
+  initialValues: any,
+  key: string,
+  placeholder
+) => {
   try {
     if (
       !isEmpty(initialValues) &&
@@ -196,7 +200,7 @@ export const placeholder = (initialValues: any, key: string, placeholder) => {
       );
     }
   } catch (err) {
-    console.log('placeholder ::>', err);
+    console.log('translationFallback ::>', err);
   }
   return placeholder;
 };

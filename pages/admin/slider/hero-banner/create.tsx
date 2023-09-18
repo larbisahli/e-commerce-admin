@@ -6,7 +6,6 @@ import { ROUTES } from '@utils/routes';
 import type { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
-import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const CreateOrUpdateSlideForm = dynamic(
@@ -15,13 +14,11 @@ const CreateOrUpdateSlideForm = dynamic(
 );
 
 export default function CreateSlidePage({ client }: SSRProps) {
-  const { t } = useTranslation();
   useGetUser(client);
-
   return (
     <>
       <Head>
-        <title>Create Hero slider | Dropgala</title>
+        <title>New hero slider | Dropgala</title>
         <link
           rel="icon"
           type="image/svg"
@@ -29,11 +26,6 @@ export default function CreateSlidePage({ client }: SSRProps) {
           href="/svg/slider.svg"
         />
       </Head>
-      <div className="flex border-b border-dashed border-border-base py-5 sm:py-8">
-        <h1 className="text-lg font-semibold text-heading">
-          {t('form:form-title-create-slider')}
-        </h1>
-      </div>
       <CreateOrUpdateSlideForm />
     </>
   );

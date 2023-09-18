@@ -15,12 +15,16 @@ import { memo, useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 
 interface Props {
-  loading: boolean;
-  disabled: boolean;
+  loading?: boolean;
+  disabled?: boolean;
   forceDefaultLang?: boolean;
   backLink?: string;
-  title: string;
+  title?: string;
   showSelectLanguage?: boolean;
+  isCustom?: boolean;
+  children?: JSX.Element[] | JSX.Element;
+  hideBackLink?: boolean;
+  showCancel?: boolean;
 }
 
 const FormActions = ({
@@ -29,7 +33,11 @@ const FormActions = ({
   disabled,
   backLink,
   forceDefaultLang = false,
-  showSelectLanguage = true
+  showSelectLanguage = true,
+  hideBackLink = false,
+  showCancel = true,
+  isCustom = false,
+  children
 }: Props) => {
   const router = useRouter();
 
@@ -69,14 +77,18 @@ const FormActions = ({
   useEffect(() => {
     setTimeout(() => {
       setStickyReady(true);
-    }, 500);
+    }, 800);
   }, []);
 
   const renderActions = () => {
+    if (isCustom) {
+      return children;
+    }
+
     if (showSelectLanguage) {
       return (
         <div className="flex w-full items-center justify-between md:w-fit md:justify-start">
-          <div className="relative ml-4 flex h-[40px] w-[220px] items-center justify-end">
+          <div className="relative mr-4 ml-4 flex h-[40px] w-[220px] items-center justify-end">
             <Select
               options={languages}
               value={selectedLanguage}
@@ -89,14 +101,16 @@ const FormActions = ({
               className="w-full"
             />
           </div>
-          <Button
-            className="mx-4"
-            variant="outline"
-            onClick={handleGoBack}
-            disabled={disabled}
-          >
-            <div className="text-lg">{t('form:button-label-cancel')}</div>
-          </Button>
+          {showCancel && (
+            <Button
+              className="mr-4"
+              variant="outline"
+              onClick={handleGoBack}
+              disabled={disabled}
+            >
+              <div className="text-lg">{t('form:button-label-cancel')}</div>
+            </Button>
+          )}
           <Button loading={loading} disabled={disabled}>
             <div className="mr-1">
               <SaveIcon width="1.3rem" height="1.3rem" />
@@ -108,14 +122,16 @@ const FormActions = ({
     }
     return (
       <div className="flex w-full items-center justify-between md:w-fit md:justify-start">
-        <Button
-          className="mx-4"
-          variant="outline"
-          onClick={handleGoBack}
-          disabled={disabled}
-        >
-          <div className="text-lg">{t('form:button-label-cancel')}</div>
-        </Button>
+        {showCancel && (
+          <Button
+            className="mr-4"
+            variant="outline"
+            onClick={handleGoBack}
+            disabled={disabled}
+          >
+            <div className="text-lg">{t('form:button-label-cancel')}</div>
+          </Button>
+        )}
         <Button loading={loading} disabled={disabled}>
           <div className="mr-1">
             <SaveIcon width="1.3rem" height="1.3rem" />
@@ -137,8 +153,16 @@ const FormActions = ({
   };
 
   const renderBackButton = () => {
+    if (isCustom) {
+      return null;
+    }
+
     return (
-      <div className="mb-2 flex w-full items-center md:mb-0 md:w-fit">
+      <div
+        className={cn('mb-2 flex w-full items-center md:mb-0 md:w-fit', {
+          invisible: hideBackLink
+        })}
+      >
         <Button variant="outline" onClick={handleGoBack} type="button">
           <ArrowPrev />
         </Button>
@@ -150,22 +174,22 @@ const FormActions = ({
   };
 
   const renderSticky = () => {
-    if (!isEmpty(languages) && stickyReady) {
+    if (!stickyReady) {
+      return null;
+    }
+
+    if (isCustom) {
+      return children;
+    }
+
+    if (!isEmpty(languages)) {
       return (
         <div
-          className={cn(
-            'border-y border-t-0 border-gray-300 opacity-100 transition-all duration-100 ease-linear',
-            'nlg:ps-20 nxl:ps-20 fixed left-0 right-0 top-[75px] z-40 bg-gray-100 pr-8 md:ps-20 lg:ps-64 xl:ps-64',
-            {
-              '!ps-0 md:!ps-20': displayMiniSidebar,
-              'invisible !opacity-0': inView
-            }
-          )}
+          className="flex w-full flex-wrap items-center justify-center
+       p-3 px-0 md:justify-between"
         >
-          <div className="flex flex-wrap items-center justify-center p-3 px-0 pl-4 md:justify-between md:pl-8">
-            {renderBackButton()}
-            {renderActions()}
-          </div>
+          {renderBackButton()}
+          {renderActions()}
         </div>
       );
     }
@@ -176,12 +200,31 @@ const FormActions = ({
     <>
       <div ref={ref}>
         <h1 className="mb-3 text-xl font-semibold text-heading">{title}</h1>
-        <div className="mb-3 flex flex-wrap items-center justify-center border-y border-gray-300 p-3 px-0 md:justify-between">
+        <div
+          className="mb-3 flex flex-wrap items-center justify-center
+        border-y border-gray-300 p-3 px-0 md:justify-between"
+        >
           {renderBackButton()}
           {renderActions()}
         </div>
       </div>
-      {renderSticky()}
+      <div
+        className={cn(
+          'border-y border-t-0 border-gray-300 opacity-100 transition-all duration-100 ease-linear',
+          'nlg:ps-20 nxl:ps-20 fixed left-0 right-0 top-[75px] z-40 bg-gray-100 pr-8 md:ps-20 lg:ps-64 xl:ps-64',
+          {
+            '!ps-0 md:!ps-20': displayMiniSidebar,
+            'invisible !opacity-0': inView
+          }
+        )}
+      >
+        <div
+          className="flex flex-wrap items-center justify-center p-3
+         px-0 pl-4 md:justify-between md:pl-8"
+        >
+          {renderSticky()}
+        </div>
+      </div>
     </>
   );
 };

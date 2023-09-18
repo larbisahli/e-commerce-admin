@@ -1,5 +1,4 @@
 import { useQuery } from '@apollo/client';
-import PageMainAction from '@components/common/PageMainAction';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
@@ -13,7 +12,6 @@ import { isEmpty } from 'lodash';
 import type { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
-import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const MediaList = dynamic(() => import('@components/media'), {
@@ -36,8 +34,6 @@ interface OptionsVariable {
 }
 
 export default function Files({ client }: SSRProps) {
-  const { t } = useTranslation();
-
   const { data, loading, error, refetch } = useQuery<TMedia, OptionsVariable>(
     MEDIA,
     {
@@ -55,9 +51,6 @@ export default function Files({ client }: SSRProps) {
   useGetUser(client);
   useErrorLogger(error);
 
-  if (loading) {
-    return <Loader text={t('common:text-loading')} />;
-  }
   if (!isEmpty(error)) {
     return <ErrorMessage message={error.message} />;
   }
@@ -68,11 +61,11 @@ export default function Files({ client }: SSRProps) {
         <title>Media | Dropgala</title>
         <link rel="icon" type="image/svg" sizes="32x32" href="/svg/media.svg" />
       </Head>
-      <PageMainAction
-        title={t('form:input-label-media-library')}
-        label={t('form:button-label-upload-image')}
+      <MediaList
+        media={media}
+        refetch={refetch}
+        loading={loading && isEmpty(media)}
       />
-      <MediaList media={media} refetch={refetch} />
     </>
   );
 }
