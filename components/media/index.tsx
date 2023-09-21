@@ -137,7 +137,7 @@ const MediaList = ({ media, refetch, loading }: IProps) => {
         </div>
       </FormActions>
 
-      <div className="relative m-2 py-4">
+      <div className="relative my-2 bg-white">
         <Uploader setLoading={setLoading} mediaId={id} refetch={refetch} />
       </div>
       <div className="mb-6 mt-8 flex w-full justify-center">

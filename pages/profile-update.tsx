@@ -1,4 +1,3 @@
-import ChangePasswordForm from '@components/auth/change-password-from';
 import ProfileUpdateFrom from '@components/auth/profile-update-form';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
@@ -26,7 +25,7 @@ export default function ProfilePage() {
       </div>
 
       <ProfileUpdateFrom me={data} />
-      <ChangePasswordForm />
+      {/* <ChangePasswordForm /> */}
     </>
   );
 }

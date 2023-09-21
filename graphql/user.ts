@@ -8,14 +8,14 @@ export const USER_INFO = gql`
       lastName
       phoneNumber
       email
-      isTenant
+      isAdmin
       profile {
         image
         placeholder
       }
       role {
         id
-        roleName
+        name
       }
     }
   }
@@ -29,7 +29,7 @@ export const USER = gql`
       lastName
       phoneNumber
       email
-      isTenant
+      isAdmin
       active
       profile {
         id
@@ -38,7 +38,7 @@ export const USER = gql`
       }
       role {
         id
-        roleName
+        name
       }
     }
   }
@@ -88,7 +88,7 @@ export const USERS = gql`
       firstName
       lastName
       email
-      isTenant
+      isAdmin
       phoneNumber
       profile {
         image
@@ -97,7 +97,7 @@ export const USERS = gql`
       active
       role {
         id
-        roleName
+        name
       }
       createdAt
       updatedAt

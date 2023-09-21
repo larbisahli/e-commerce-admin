@@ -7,6 +7,7 @@ import {
   EditorState
 } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
+import draftToMarkdown from 'draftjs-to-markdown';
 import isEmpty from 'lodash/isEmpty';
 import React, { memo, useEffect, useMemo, useState } from 'react';
 import { Editor } from 'react-draft-wysiwyg';
@@ -30,20 +31,26 @@ const EditorComponent = (props) => {
     if (block) return;
 
     if (productDescription && stateIsEmpty) {
-      const blocksFromHTML = convertFromHTML(productDescription);
-      const state = ContentState.createFromBlockArray(
-        blocksFromHTML.contentBlocks,
-        blocksFromHTML.entityMap
-      );
+      const state = _convertFromHtml(productDescription);
       setEditorState(EditorState.createWithContent(state));
     } else if (stateIsEmpty) {
       setEditorState(EditorState.createEmpty());
     }
   }, [props.block, props.value, stateIsEmpty]);
 
+  const _convertFromHtml = (content) => {
+    const blocksFromHTML = convertFromHTML(content);
+    const state = ContentState.createFromBlockArray(
+      blocksFromHTML.contentBlocks,
+      blocksFromHTML.entityMap
+    );
+    return state;
+  };
+
   return (
     <div className={props.className}>
       <Editor
+        placeholder={props?.placeholder}
         onBlur={props?.onBlur}
         editorState={editorState}
         onEditorStateChange={onEditorStateChange}

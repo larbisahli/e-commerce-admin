@@ -1,8 +1,7 @@
 import { useMutation } from '@apollo/client';
 import Card from '@components/common/card';
-import { SaveIcon } from '@components/icons/save-icon';
+import FormActions from '@components/common/FormActions';
 import ImageModal from '@components/image-modal';
-import Button from '@components/ui/button';
 import Description from '@components/ui/description';
 import Input from '@components/ui/input';
 import Label from '@components/ui/label';
@@ -10,11 +9,12 @@ import Loader from '@components/ui/loader/loader';
 import TextArea from '@components/ui/text-area';
 import { UPDATE_PAGE } from '@graphql/pages';
 import { useErrorLogger, useGetUser } from '@hooks/index';
+import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/index';
 import type { PageType } from '@ts-types/generated';
+import { translationFallback } from '@utils/utils';
 import isEmpty from 'lodash/isEmpty';
 import dynamic from 'next/dynamic';
-import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
 import React from 'react';
@@ -40,7 +40,6 @@ type IProps = {
 };
 
 export default function AboutUsForm({ initialValues }: IProps) {
-  const router = useRouter();
   const { t } = useTranslation();
 
   const [error, setError] = useState(null);
@@ -49,10 +48,12 @@ export default function AboutUsForm({ initialValues }: IProps) {
     defaultValues: !isEmpty(initialValues) ? initialValues : defaultValues
   });
 
+  const { selectedLanguage } = useSettings();
+
   const { userInfo } = useGetUser();
   const csrfToken = userInfo?.csrfToken;
 
-  const [updatePage, { loading: creating }] = useMutation(UPDATE_PAGE, {
+  const [updatePage, { loading: updating }] = useMutation(UPDATE_PAGE, {
     context: {
       headers: {
         'x-csrf-token': csrfToken
@@ -60,7 +61,7 @@ export default function AboutUsForm({ initialValues }: IProps) {
     },
     onCompleted: (data: { updatePage: PageType }) => {
       if (!isEmpty(data)) {
-        notify(t('common:successfully-created'), 'success');
+        notify(t('common:successfully-updated'), 'success');
       }
     }
   });
@@ -75,8 +76,10 @@ export default function AboutUsForm({ initialValues }: IProps) {
     const variables = {
       name: values.name,
       content: values.content,
-      ogImageId: values?.ogImageId?.map(({ id }) => ({ id })),
-      seo: values?.seo
+      ogMedia: values?.ogMedia?.map(({ id }) => ({ id })),
+      metaTitle: values?.metaTitle,
+      metaDescription: values?.metaDescription,
+      language: selectedLanguage
     };
 
     updatePage({
@@ -86,14 +89,23 @@ export default function AboutUsForm({ initialValues }: IProps) {
     });
   };
 
+  const name = watch('name');
   const content = watch('content');
-  const metaDescription = watch('seo.metaDescription');
-  const ogImageId = watch('ogImageId');
+  const metaDescription = watch('metaDescription');
+  const ogMedia = watch('ogMedia');
 
   const metaDesLen = metaDescription?.length ?? 0;
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      <FormActions
+        forceDefaultLang={isEmpty(initialValues)}
+        title={name ?? initialValues?.translated?.name}
+        loading={updating}
+        disabled={updating}
+        showCancel={false}
+        hideBackLink
+      />
       <div className="my-5 flex flex-wrap sm:my-8">
         <Description
           title={t('form:input-label-page-content')}
@@ -107,6 +119,11 @@ export default function AboutUsForm({ initialValues }: IProps) {
         <Card className="w-full sm:w-8/12 md:w-2/3">
           <Input
             label={t('form:input-label-name')}
+            placeholder={translationFallback(
+              initialValues,
+              'name',
+              'Enter page name'
+            )}
             isRequiredLabel
             {...register('name')}
             variant="outline"
@@ -119,6 +136,7 @@ export default function AboutUsForm({ initialValues }: IProps) {
             onChange={(value) => setValue('content', value)}
             className="mb-5"
             defaultValue=""
+            placeholder={'Enter page content'}
           />
         </Card>
       </div>
@@ -131,16 +149,25 @@ export default function AboutUsForm({ initialValues }: IProps) {
         <Card className="w-full sm:w-8/12 md:w-2/3">
           <Input
             label={t('form:input-label-meta-title')}
-            {...register('seo.metaTitle')}
+            {...register('metaTitle')}
             variant="outline"
             className="mb-5"
-            placeholder="Title..."
+            placeholder={translationFallback(
+              initialValues,
+              'metaTitle',
+              'Enter meta title'
+            )}
           />
           <TextArea
             label={t('form:item-meta-description')}
-            {...register('seo.metaDescription')}
+            {...register('metaDescription')}
             // error={t(errors.productSeo?.metaDescription?.message!)}
             variant="outline"
+            placeholder={translationFallback(
+              initialValues,
+              'metaDescription',
+              'Enter meta description'
+            )}
           />
           <div
             style={{ fontSize: '.75rem' }}
@@ -159,33 +186,14 @@ export default function AboutUsForm({ initialValues }: IProps) {
           </div>
           <div className="my-5">
             <ImageModal
-              onSelect={(img) => setValue('ogImageId', img)}
+              onSelect={(img) => setValue('ogMedia', img)}
               isThumbnail
-              selected={ogImageId}
+              selected={ogMedia}
               modalId="metaImage"
               label="form:label-add-meta-images"
             />
           </div>
         </Card>
-      </div>
-      <div className="mb-4 flex items-center justify-end">
-        {initialValues && (
-          <Button
-            variant="outline"
-            onClick={router.back}
-            className="me-4"
-            type="button"
-          >
-            {t('form:button-label-back')}
-          </Button>
-        )}
-
-        <Button loading={creating} disabled={creating}>
-          <div className="mr-1">
-            <SaveIcon width="1.3rem" height="1.3rem" />
-          </div>
-          <div>{t('form:button-label-save')}</div>
-        </Button>
       </div>
     </form>
   );

@@ -29,7 +29,7 @@ export const COLUMNS = {
     { label: 'Profile', key: 'profile' },
     { label: 'Name', key: 'firstName' },
     { label: 'Role', key: 'role' },
-    { label: 'Status', key: 'isTenant' },
+    { label: 'Status', key: 'isAdmin' },
     { label: 'Email', key: 'email' },
     { label: 'Phone', key: 'phoneNumber' },
     { label: 'Creation Date', key: 'createdAt' },

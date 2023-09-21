@@ -1,12 +1,13 @@
 import { useQuery } from '@apollo/client';
+import { PageFormPlaceholder } from '@components/common/commonComponents';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
-import Loader from '@components/ui/loader/loader';
 import { GET_PAGE } from '@graphql/pages';
 import { useErrorLogger, useGetUser } from '@hooks/index';
+import { useSettings } from '@hooks/useSettings';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import type { SSRProps } from '@ts-types/custom.types';
-import type { PageType } from '@ts-types/generated';
+import type { LanguageType, PageType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import isEmpty from 'lodash/isEmpty';
 import type { GetServerSideProps } from 'next';
@@ -16,16 +17,9 @@ import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-const PageMainAction = dynamic(
-  () => import('@components/common/PageMainAction'),
-  {
-    ssr: true,
-    loading: () => <div className="animated-background h-[80px] w-full"></div>
-  }
-);
-
 const PageForm = dynamic(() => import('@components/pages/page-form'), {
-  ssr: true
+  ssr: true,
+  loading: () => <PageFormPlaceholder />
 });
 
 interface TPage {
@@ -33,6 +27,7 @@ interface TPage {
 }
 interface OptionsVariable {
   slug: string;
+  language: LanguageType;
 }
 
 export default function AboutUs({ client }: SSRProps) {
@@ -42,22 +37,24 @@ export default function AboutUs({ client }: SSRProps) {
 
   const slug = query.slug as string;
 
-  console.log({ slug });
+  const { selectedLanguage } = useSettings();
 
   const { data, loading, error } = useQuery<TPage, OptionsVariable>(GET_PAGE, {
     variables: {
-      slug
+      slug,
+      language: selectedLanguage
     },
-    fetchPolicy: 'cache-and-network'
+    fetchPolicy: 'cache-and-network',
+    skip: isEmpty(selectedLanguage)
   });
 
-  const { getPage = { name: 'Page' } } = data ?? {};
+  const { getPage = {} } = data ?? {};
 
   useGetUser(client);
   useErrorLogger(error);
 
-  if (loading) {
-    return <Loader text={t('common:text-loading')} />;
+  if (isEmpty(getPage) || loading) {
+    return <PageFormPlaceholder />;
   }
   if (!isEmpty(error)) {
     return <ErrorMessage message={error.message} />;
@@ -66,10 +63,9 @@ export default function AboutUs({ client }: SSRProps) {
   return (
     <>
       <Head>
-        <title>{`${getPage?.name} | Dropgala`}</title>
+        <title>{`${getPage?.name ?? ''} | Dropgala`}</title>
         <link rel="icon" type="image/svg" sizes="32x32" href="/svg/store.svg" />
       </Head>
-      <PageMainAction title={getPage?.name} label="" />
       <PageForm initialValues={getPage} />
     </>
   );

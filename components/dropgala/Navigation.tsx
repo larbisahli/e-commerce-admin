@@ -45,9 +45,9 @@ const Navigation = () => {
             <Link href="/#features">
               <a className="hidden px-8 text-gray-800 md:block">Features</a>
             </Link>
-            <Link href="/#pricing">
+            {/* <Link href="/#pricing">
               <a className="hidden text-gray-800 md:block">Pricing</a>
-            </Link>
+            </Link> */}
             {/* <Link href="/blog">
               <a className="px-8 text-gray-800 md:block hidden">Blogs</a>
             </Link> */}

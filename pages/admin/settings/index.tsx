@@ -71,6 +71,8 @@ export default function Settings({ client }: SSRProps) {
         <link rel="icon" type="image/svg" sizes="32x32" href="/svg/user.svg" />
       </Head>
       <PageMainAction
+        showSelectLanguage={false}
+        hideBorder
         title={t('form:form-title-settings')}
         label={t('form:form-title-settings')}
       />

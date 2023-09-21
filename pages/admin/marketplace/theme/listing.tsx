@@ -57,6 +57,8 @@ export default function Themes({ client }: SSRProps) {
         />
       </Head>
       <PageMainAction
+        showSelectLanguage={false}
+        hideBorder
         title={t('form:button-label-themes')}
         label={t('form:button-label-themes')}
       />

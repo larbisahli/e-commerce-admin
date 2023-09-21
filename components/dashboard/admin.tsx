@@ -1,6 +1,7 @@
 import AlertIcon from '@components/icons/alert';
 import { CartIconBig } from '@components/icons/cart-icon-bag';
 import { CoinIcon } from '@components/icons/coin-icon';
+import ExternalLinkIcon from '@components/icons/external-link';
 import { DollarIcon } from '@components/icons/shops/dollar';
 import { ShopIcon } from '@components/icons/sidebar';
 import { UserIcon } from '@components/icons/user-icon';
@@ -10,7 +11,9 @@ import RecentOrders from '@components/order/recent-orders';
 import Loader from '@components/ui/loader/loader';
 import ColumnChart from '@components/widgets/column-chart';
 import StickerCard from '@components/widgets/sticker-card';
+import { ROUTES } from '@utils/routes';
 import Head from 'next/head';
+import Link from 'next/link';
 // import { useAnalyticsQuery } from '@data/analytics/use-analytics.query';
 // import { usePopularProductsQuery } from '@data/analytics/use-popular-products.query';
 // import { useOrdersQuery } from '@data/order/use-orders.query';
@@ -166,22 +169,7 @@ export default function Dashboard() {
           {`You can impact someone's life today.`}
         </span>
       </div>
-      <div className="mb-8">
-        <div className="text-lg font-medium">Getting started</div>
-        <div className="mt-2 flex w-fit items-start rounded border bg-white p-5 pr-12 pl-3 shadow">
-          <div className="mr-2 text-yellow-600">
-            <AlertIcon />
-          </div>
-          <div className="flex flex-col items-start">
-            <span className="text-sm font-medium text-gray-700">
-              {`Verify your email address to activate your online store.`}
-            </span>
-            <button className="text-sm text-blue-500">
-              {`Resend verification link`}
-            </button>
-          </div>
-        </div>
-      </div>
+      <GettingStartedSection />
       <div className="mb-6 grid w-full grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
         <div className="w-full ">
           <StickerCard
@@ -279,3 +267,59 @@ export default function Dashboard() {
     </>
   );
 }
+
+const GettingStartedSection = () => {
+  return (
+    <div className="mb-8 flex flex-wrap">
+      <div className="mb-2 flex flex-1 flex-col">
+        <div className="mb-2 flex flex-1 items-end text-lg font-medium">
+          Getting started
+        </div>
+        <div className="flex min-w-[400px] items-end">
+          {/* Email verification section */}
+          <div className="flex w-fit items-start rounded border bg-white p-5 pr-12 pl-3 shadow-sm">
+            <div className="mr-2 text-yellow-600">
+              <AlertIcon />
+            </div>
+            <div className="flex flex-col items-start">
+              <span className="text-sm font-medium text-gray-700">
+                {`Verify your email address to activate your online store.`}
+              </span>
+              <button className="text-sm text-blue-500">
+                {`Resend verification link`}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="flex flex-1 justify-end">
+        {/* Feedback verification section */}
+        <div
+          className="flex w-[400px] flex-col items-center justify-center
+                 rounded border border-gray-200 bg-white px-8 py-8 shadow-sm"
+        >
+          <h2 className="mb-2 font-semibold text-gray-800">
+            First impression count.
+          </h2>
+          <p className="text-center text-sm font-medium text-gray-600">
+            Share your first impression to help us improve the overall dropgala
+            experience.
+          </p>
+          <Link href={ROUTES.DASHBOARD}>
+            <a
+              target="_blank"
+              className="mt-3 flex items-center rounded-sm border border-gray-300 px-4 py-1 text-gray-500"
+            >
+              <span className="pr-2 font-medium text-gray-600">
+                Give feedback
+              </span>
+              <div className="mb-1">
+                <ExternalLinkIcon width={18} height={18} />
+              </div>
+            </a>
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+};

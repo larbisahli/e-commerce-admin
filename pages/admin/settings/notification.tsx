@@ -52,7 +52,8 @@ export default function UserRole({ client }: SSRProps) {
 
   const { data, loading, error, fetchMore } = useQuery<TRole>(ROLES, {
     variables: {},
-    fetchPolicy: 'cache-and-network'
+    fetchPolicy: 'cache-and-network',
+    skip: true
   });
 
   // const { notifications = [] } = data ?? {};
@@ -111,6 +112,8 @@ export default function UserRole({ client }: SSRProps) {
         <link rel="icon" type="image/svg" sizes="32x32" href="/svg/user.svg" />
       </Head>
       <PageMainAction
+        showSelectLanguage={false}
+        hideBorder
         title={t('common:sidebar-nav-item-notifications')}
         label={t('common:sidebar-nav-item-notifications')}
       />

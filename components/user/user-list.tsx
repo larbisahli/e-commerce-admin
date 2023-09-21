@@ -110,7 +110,7 @@ const UserList = ({ loading, users, selectedColumns }: IProps) => {
                 style={{ width: 'fit-content' }}
                 className="text-13px border-sink-base block rounded border bg-gray-100 px-2 py-1 font-medium md:text-sm"
               >
-                {role.roleName}
+                {role.name}
               </span>
             </div>
           );
@@ -118,11 +118,11 @@ const UserList = ({ loading, users, selectedColumns }: IProps) => {
       },
       {
         title: t('table:table-item-status'),
-        dataIndex: 'isTenant',
-        key: 'isTenant',
+        dataIndex: 'isAdmin',
+        key: 'isAdmin',
         align: 'center',
         width: 250,
-        render: (isTenant: boolean, record: TableRowProps) => {
+        render: (isAdmin: boolean, record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
@@ -131,8 +131,8 @@ const UserList = ({ loading, users, selectedColumns }: IProps) => {
               <Badge
                 className="mr-2 border !text-sm font-medium !text-gray-600 shadow"
                 text={
-                  isTenant
-                    ? t('table:table-item-owner')
+                  isAdmin
+                    ? t('table:table-item-admin')
                     : t('table:table-item-staff')
                 }
                 color={'bg-gray-100'}
@@ -246,7 +246,7 @@ const UserList = ({ loading, users, selectedColumns }: IProps) => {
         width: 150,
         render: (
           id: string,
-          { active, isTenant }: UserType,
+          { active, isAdmin }: UserType,
           record: TableRowProps
         ) => {
           if (record?.loading) {
@@ -255,7 +255,7 @@ const UserList = ({ loading, users, selectedColumns }: IProps) => {
           return (
             <ActionButtons
               id={id}
-              isTenant={isTenant}
+              isAdmin={isAdmin}
               editUrl={`${ROUTES.USER}/edit/${id}`}
               deleteModalView={userInfo?.id != id ? 'DELETE_USER' : null}
               userStatus={userInfo?.id != id}

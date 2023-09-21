@@ -99,7 +99,7 @@ const HomePage = ({ posts }) => {
         <FeatureSection />
 
         {/* ----------------- Pricing ------------------- */}
-        <PricingSection />
+        {/* <PricingSection /> */}
 
         {/* ----------------- Blog section ---------------------- */}
         {/* <section className="mt-22 container mx-auto">

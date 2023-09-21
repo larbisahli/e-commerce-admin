@@ -4,7 +4,7 @@ export const ROLES = gql`
   query Roles {
     roles {
       id
-      roleName
+      name
     }
   }
 `;
@@ -13,15 +13,15 @@ export const ROLE = gql`
   query Role {
     role {
       id
-      roleName
+      name
       # resource
     }
   }
 `;
 
 export const CREATE_ROLE = gql`
-  mutation CreateRole($roleName: String!, $resource: ResourceInput!) {
-    createRole(roleName: $roleName, resource: $resource) {
+  mutation CreateRole($name: String!, $resource: ResourceInput!) {
+    createRole(name: $name, resource: $resource) {
       roleName
     }
   }
@@ -33,7 +33,7 @@ export const UPDATE_ROLE = gql`
     $roleName: String!
     $resource: ResourceInput!
   ) {
-    updateRole(id: $id, roleName: $roleName, resource: $resource) {
+    updateRole(id: $id, name: $name, resource: $resource) {
       roleName
     }
   }

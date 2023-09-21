@@ -80,7 +80,7 @@ export interface CreatedUpdatedByAt {
 
 export interface RoleType {
   id?: string;
-  roleName?: string;
+  name?: string;
 }
 
 export interface ThemeType {
@@ -111,7 +111,7 @@ export interface UserType extends CreatedUpdatedByAt {
   role: RoleType;
   roleId?: number;
   active: boolean;
-  isTenant: boolean;
+  isAdmin: boolean;
   csrfToken?: string;
   csrfError?: string;
   store?: SettingsType;
@@ -566,9 +566,13 @@ export interface PageType {
   slug: string;
   name: string;
   content: string;
+  metaTitle: string;
+  metaDescription: string;
   published: boolean;
-  ogImageId: ImageType[];
-  seo: {
+  ogMedia: ImageType[];
+  translated: {
+    name: string;
+    content: string;
     metaTitle: string;
     metaDescription: string;
   };

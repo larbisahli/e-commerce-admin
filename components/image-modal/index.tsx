@@ -130,30 +130,48 @@ const ImageModal = ({
       <Modal open={isOpen && isCurrentModal} onClose={closeModal}>
         {view === IMAGE_MODAL && (
           <div
-            className="flex h-[100vh] max-h-screen w-[100vw] flex-col overflow-y-auto
+            className="flex h-[100vh] max-h-screen w-[100vw] flex-col overflow-y-auto rounded-sm
             bg-white md:h-fit md:w-[70vw] 2xl:w-[60vw]"
           >
-            <div className="bg-blue-600 p-4 text-lg font-semibold capitalize text-white">
+            <div className="border-b border-gray-200 bg-gray-100 p-4 text-lg font-semibold capitalize text-gray-800 shadow">
               Choose media
             </div>
             <div className="h-fit min-h-[400px] w-full p-4">
-              <div className="w-fit text-sm text-gray-500">
+              <div className="w-fit text-sm text-gray-600">
                 Your media files are encrypted for security reasons and only
                 accessed by you.
               </div>
-              <div className="flex justify-end pt-5 pb-2">
+              <div className="flex justify-between pt-5">
                 <Button
-                  className="flex items-center justify-center"
-                  onClick={() => setUploadVisible(true)}
+                  className="m-0 flex items-center justify-center"
+                  onClick={() => setUploadVisible((prev) => !prev)}
                 >
                   <div className="mx-2">
                     <UploadIcon width="30px" height="30px" />
                   </div>
                   <div>Upload Images</div>
                 </Button>
+                <div className="flex flex-1 items-center justify-end pb-8 md:mb-0">
+                  <Button
+                    variant="outline"
+                    className="mr-4"
+                    onClick={() => closeModal()}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      onSelect(selectedImages);
+                      setSelectedImages([]);
+                      closeModal();
+                    }}
+                  >
+                    Add media
+                  </Button>
+                </div>
               </div>
               {uploadVisible && (
-                <div className="m-2 py-4">
+                <div className="bg-gray-100">
                   <Uploader
                     setLoading={setLoading}
                     mediaId={parent?.id}
@@ -221,24 +239,6 @@ const ImageModal = ({
                       );
                     })}
                   </ul>
-                </div>
-                <div className="mt-3 flex items-center justify-end pb-8 md:mb-0">
-                  <Button
-                    variant="outline"
-                    className="mr-4"
-                    onClick={() => closeModal()}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      onSelect(selectedImages);
-                      setSelectedImages([]);
-                      closeModal();
-                    }}
-                  >
-                    Add media
-                  </Button>
                 </div>
               </div>
             </div>

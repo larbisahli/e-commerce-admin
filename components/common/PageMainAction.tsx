@@ -17,6 +17,7 @@ interface Props {
   title: string;
   label: string;
   showSelectLanguage?: boolean;
+  hideBorder?: boolean;
   onClick?: (e: any) => void;
   RenderIcon?: () => any;
 }
@@ -27,6 +28,7 @@ const PageMainAction = ({
   label,
   onClick,
   RenderIcon,
+  hideBorder = false,
   showSelectLanguage = true
 }: Props) => {
   const { t } = useTranslation();
@@ -132,9 +134,12 @@ const PageMainAction = ({
       <h1 className="mb-4 text-2xl font-bold text-gray-700">{title}</h1>
       <div
         ref={ref}
-        className={
-          'mb-5 flex items-center justify-end border-y border-gray-300 p-3 px-0'
-        }
+        className={cn(
+          'mb-5 flex items-center justify-end border-y border-gray-300 p-3 px-0',
+          {
+            'border-t border-b-0': hideBorder
+          }
+        )}
       >
         {renderLanguageSelect()}
         {renderActionButton()}

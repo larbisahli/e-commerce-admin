@@ -158,16 +158,25 @@ const FormActions = ({
     }
 
     return (
-      <div
-        className={cn('mb-2 flex w-full items-center md:mb-0 md:w-fit', {
-          invisible: hideBackLink
-        })}
-      >
-        <Button variant="outline" onClick={handleGoBack} type="button">
+      <div className={cn('mb-2 flex w-full items-center md:mb-0 md:w-fit')}>
+        <Button
+          variant="outline"
+          onClick={handleGoBack}
+          type="button"
+          className={cn({
+            hidden: hideBackLink
+          })}
+        >
           <ArrowPrev />
         </Button>
         {!inView && (
-          <h1 className="ml-8 text-base font-semibold text-heading">{title}</h1>
+          <h1
+            className={cn('text-base font-semibold text-heading', {
+              'ml-8': !hideBackLink
+            })}
+          >
+            {title}
+          </h1>
         )}
       </div>
     );

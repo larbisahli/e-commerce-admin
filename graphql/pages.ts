@@ -5,15 +5,19 @@ export const UPDATE_PAGE = gql`
     $slug: String!
     $name: String
     $content: String
-    $ogImageId: [ImageInput]
-    $seo: PageSeoInput
+    $metaTitle: String
+    $metaDescription: String
+    $ogMedia: [ImageInput]
+    $language: LanguageInput!
   ) {
     updatePage(
       slug: $slug
       name: $name
       content: $content
-      ogImageId: $ogImageId
-      seo: $seo
+      metaTitle: $metaTitle
+      metaDescription: $metaDescription
+      ogMedia: $ogMedia
+      language: $language
     ) {
       slug
     }
@@ -21,20 +25,24 @@ export const UPDATE_PAGE = gql`
 `;
 
 export const GET_PAGE = gql`
-  query GetPage($slug: String!) {
-    getPage(slug: $slug) {
+  query GetPage($slug: String!, $language: LanguageInput!) {
+    getPage(slug: $slug, language: $language) {
       id
       slug
       name
       content
-      ogImageId {
+      metaTitle
+      metaDescription
+      translated {
+        name
+        content
+        metaTitle
+        metaDescription
+      }
+      ogMedia {
         id
         placeholder
         image
-      }
-      seo {
-        metaTitle
-        metaDescription
       }
       updatedAt
       updatedBy {

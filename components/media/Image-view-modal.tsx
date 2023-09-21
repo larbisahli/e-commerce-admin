@@ -82,13 +82,13 @@ const ImageViewModal = () => {
         : photo;
 
     return (
-      <div className="flex-2 mx-auto">
+      <div className="flex-2 mx-auto rounded">
         <ImageComponent
           src={photo?.image}
           customPlaceholder={photo?.placeholder}
           width={width}
           height={height}
-          className="rounded-sm shadow"
+          className="rounded"
           objectFit="cover"
         />
       </div>
@@ -242,13 +242,18 @@ const ImageViewModal = () => {
               { '!h-[400px] !w-[450px]': isFolder }
             )}
           >
-            <div className="h-fit min-h-[400px] w-full p-4">
-              <h3 className="cut-line-1">{name}</h3>
-              <div className="mt-8 flex flex-wrap">
+            <div className="h-fit min-h-[400px] w-full">
+              <div
+                className="border-b border-gray-200 bg-gray-100 p-4 text-lg font-semibold capitalize
+              text-gray-800 shadow"
+              >
+                {name}
+              </div>
+              <div className="mt-8 flex flex-wrap gap-3 p-4">
                 {renderImage()}
-                <div className="flex w-full flex-col">
+                <div className="flex w-full flex-1 flex-col">
                   <div className="flex-1">
-                    <div className="relative flex-1 p-3 pt-0">
+                    <div className="relative flex-1 border-l-2 border-gray-200 px-3 pt-0">
                       <div className="mb-2">
                         <span className="pr-1 font-medium">Name:</span>
                         <span className="">{name}</span>

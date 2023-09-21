@@ -6,6 +6,7 @@ import EditorComponent from './editor';
 interface EditorInputProps {
   control?: any;
   className?: string;
+  placeholder?: string;
   name: string;
   [key: string]: unknown;
 }
