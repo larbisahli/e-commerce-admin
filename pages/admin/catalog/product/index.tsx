@@ -16,6 +16,7 @@ import { ROUTES } from '@utils/routes';
 import isEmpty from 'lodash/isEmpty';
 import type { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
+import Head from 'next/head';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useState } from 'react';
@@ -64,7 +65,8 @@ export default function ProductsPage({ client }: SSRProps) {
       sortedBy: SortOrder.Desc,
       language: selectedLanguage
     },
-    fetchPolicy: 'cache-and-network'
+    fetchPolicy: 'cache-and-network',
+    skip: isEmpty(selectedLanguage)
   });
 
   const { products = [], productCount: { count } = { count: 0 } } = data ?? {};
@@ -90,6 +92,15 @@ export default function ProductsPage({ client }: SSRProps) {
 
   return (
     <>
+      <Head>
+        <title>Products | Dropgala</title>
+        <link
+          rel="icon"
+          type="image/svg"
+          sizes="32x32"
+          href="/svg/product-list.svg"
+        />
+      </Head>
       <PageMainAction
         href={`${ROUTES.PRODUCT}/create`}
         title={t('form:input-label-products')}

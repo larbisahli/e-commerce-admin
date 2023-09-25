@@ -13,14 +13,17 @@ import {
 import Pagination2 from '@components/ui/pagination2';
 import { PRODUCTS } from '@graphql/product';
 import { useErrorLogger } from '@hooks/useErrorLogger';
+import { useSettings } from '@hooks/useSettings';
 import {
   CROSS_SELL_PRODUCTS,
   PRODUCT_MODAL,
   RELATED_PRODUCTS,
   UPSELL_PRODUCTS
 } from '@ts-types/constants';
+import { TableQueryVariables } from '@ts-types/custom.types';
 import { OrderBy, SortOrder } from '@ts-types/enums';
-import { Product } from '@ts-types/generated';
+import { LanguageType, Product } from '@ts-types/generated';
+import { isEmpty } from 'lodash';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
@@ -30,12 +33,8 @@ interface TProduct {
   productCount: { count: number };
 }
 
-interface ProductVariable {
+interface ProductVariable extends TableQueryVariables {
   id: number;
-  page: number;
-  limit: number;
-  orderBy: OrderBy;
-  sortedBy: SortOrder;
 }
 
 const ProductModal = () => {
@@ -53,6 +52,8 @@ const ProductModal = () => {
 
   const { query } = useRouter();
 
+  const { selectedLanguage } = useSettings();
+
   const productId = parseInt(query.productId as string, 10);
 
   const { data, loading, error, fetchMore } = useQuery<
@@ -64,9 +65,11 @@ const ProductModal = () => {
       page,
       limit: limit.value,
       orderBy,
-      sortedBy: SortOrder.Desc
+      sortedBy: SortOrder.Desc,
+      language: selectedLanguage
     },
-    fetchPolicy: 'cache-and-network'
+    fetchPolicy: 'cache-and-network',
+    skip: isEmpty(selectedLanguage)
   });
 
   const { products = [], productCount: { count } = { count: 0 } } = data ?? {};
@@ -106,31 +109,29 @@ const ProductModal = () => {
   return (
     <Modal open={open} onClose={onClose}>
       <div className="flex h-[100vh] max-h-screen w-[100vw] flex-col overflow-y-auto bg-white md:h-fit md:w-[60vw] 2xl:w-[50vw]">
-        <div className="bg-green-600 p-4 text-lg font-semibold uppercase text-white">
+        <div
+          className="border-b border-gray-200 bg-gray-100 p-4 text-lg font-semibold capitalize
+           text-gray-800 shadow"
+        >
           Products
         </div>
-        {loading ? (
-          <Loader text={t('common:text-loading')} />
-        ) : (
-          <>
-            <ProductListMini
-              products={products}
-              selectedProducts={selectedProducts}
-              setSelectedProducts={setSelectedProducts}
+        <ProductListMini
+          products={products}
+          loading={loading}
+          selectedProducts={selectedProducts}
+          setSelectedProducts={setSelectedProducts}
+        />
+        <div className="m-3 mb-16 flex items-center justify-between p-5 md:mb-0">
+          <div className="flex-1">
+            <Pagination2
+              total={count}
+              current={page}
+              pageSize={limit.value}
+              onChange={handlePagination}
             />
-            <div className="m-3 mb-16 flex items-center justify-between p-5 md:mb-0">
-              <div className="flex-1">
-                <Pagination2
-                  total={count}
-                  current={page}
-                  pageSize={limit.value}
-                  onChange={handlePagination}
-                />
-              </div>
-              <Button onClick={onCloseSave}>Add Selected Products</Button>
-            </div>
-          </>
-        )}
+          </div>
+          <Button onClick={onCloseSave}>Add Selected Products</Button>
+        </div>
       </div>
     </Modal>
   );

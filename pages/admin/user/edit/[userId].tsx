@@ -1,13 +1,14 @@
 import { useQuery } from '@apollo/client';
+import { PageFormPlaceholder } from '@components/common/commonComponents';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
-import Loader from '@components/ui/loader/loader';
 import { USER } from '@graphql/user';
 import { useErrorLogger, useGetUser } from '@hooks/index';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { UserType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
+import { isEmpty } from 'lodash';
 import { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
@@ -17,7 +18,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const UserCreateUpdateForm = dynamic(
   () => import('@components/user/user-form'),
-  { ssr: true }
+  { ssr: true, loading: () => <PageFormPlaceholder /> }
 );
 
 interface TUser {
@@ -44,9 +45,10 @@ export default function EditUserPage({ client }: SSRProps) {
   useGetUser(client);
   useErrorLogger(error);
 
-  if (loading) {
-    return <Loader text={t('common:text-loading')} />;
+  if (isEmpty(user) || loading) {
+    return <PageFormPlaceholder />;
   }
+
   if (error) {
     return <ErrorMessage message={error.message} />;
   }
@@ -57,11 +59,6 @@ export default function EditUserPage({ client }: SSRProps) {
         <title>Edit User | Dropgala</title>
         <link rel="icon" type="image/svg" sizes="32x32" href="/svg/user.svg" />
       </Head>
-      <div className="flex border-b border-dashed border-border-base py-5 sm:py-8">
-        <h1 className="text-lg font-semibold text-heading">
-          {t('form:form-title-create-user')}
-        </h1>
-      </div>
       <UserCreateUpdateForm initialValues={user} />
     </>
   );

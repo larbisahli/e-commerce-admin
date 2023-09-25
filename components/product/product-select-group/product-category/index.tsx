@@ -8,7 +8,9 @@ import Label from '@components/ui/label';
 import Select from '@components/ui/select/select';
 import { CATEGORIES_FOR_SELECT_ALL } from '@graphql/category';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { Category, OrderBy } from '@ts-types/generated';
+import { useSettings } from '@hooks/useSettings';
+import { Category, LanguageType, OrderBy } from '@ts-types/generated';
+import { isEmpty } from 'lodash';
 import { useTranslation } from 'next-i18next';
 import React, { memo } from 'react';
 
@@ -24,6 +26,7 @@ interface OptionsVariable {
   page: number;
   limit: number;
   orderBy: OrderBy;
+  language: LanguageType;
 }
 
 const ProductCategory = ({ categories }: Props) => {
@@ -31,15 +34,19 @@ const ProductCategory = ({ categories }: Props) => {
 
   const dispatch = useFormReducer();
 
+  const { selectedLanguage } = useSettings();
+
   const { data, loading, error } = useQuery<TCategorySelect, OptionsVariable>(
     CATEGORIES_FOR_SELECT_ALL,
     {
       variables: {
         page: 1,
         limit: 999,
-        orderBy: OrderBy.CREATED_AT
+        orderBy: OrderBy.CREATED_AT,
+        language: selectedLanguage
       },
-      fetchPolicy: 'cache-and-network'
+      fetchPolicy: 'cache-and-network',
+      skip: isEmpty(selectedLanguage)
     }
   );
 

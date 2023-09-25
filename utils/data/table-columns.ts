@@ -54,7 +54,6 @@ export const COLUMNS = {
     { label: 'sku', key: 'sku' },
     { label: 'Image', key: 'thumbnail' },
     { label: 'Name', key: 'name' },
-    { label: 'Categories', key: 'categories' },
     { label: 'Price/Unit', key: 'salePrice' },
     { label: 'Quantity', key: 'quantity' },
     { label: 'Status', key: 'published' },

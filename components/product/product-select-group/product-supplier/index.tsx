@@ -7,7 +7,9 @@ import Label from '@components/ui/label';
 import Select from '@components/ui/select/select';
 import { SUPPLIERS_FOR_SELECT } from '@graphql/supplier';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { OrderBy, Product, Suppliers } from '@ts-types/generated';
+import { useSettings } from '@hooks/useSettings';
+import { LanguageType, OrderBy, Product, Suppliers } from '@ts-types/generated';
+import { isEmpty } from 'lodash';
 import { useTranslation } from 'next-i18next';
 import React, { memo } from 'react';
 
@@ -24,6 +26,7 @@ interface OptionsVariable {
   page: number;
   limit: number;
   orderBy: OrderBy;
+  language: LanguageType;
 }
 
 const ProductSupplier = ({ suppliers }: Props) => {
@@ -31,15 +34,19 @@ const ProductSupplier = ({ suppliers }: Props) => {
 
   const dispatch = useFormReducer();
 
+  const { selectedLanguage } = useSettings();
+
   const { data, loading, error } = useQuery<TSupplierSelect, OptionsVariable>(
     SUPPLIERS_FOR_SELECT,
     {
       variables: {
         page: 1,
         limit: 999,
-        orderBy: OrderBy.CREATED_AT
+        orderBy: OrderBy.CREATED_AT,
+        language: selectedLanguage
       },
-      fetchPolicy: 'cache-and-network'
+      fetchPolicy: 'cache-and-network',
+      skip: isEmpty(selectedLanguage)
     }
   );
 

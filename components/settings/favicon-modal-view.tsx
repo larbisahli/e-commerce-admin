@@ -90,14 +90,15 @@ const OrderStatusDeleteView = () => {
   const { closeModal } = useModalAction();
 
   const {
-    userInfo: { ali: alias }
+    userInfo: { store: { alias = '' } = {} }
   } = useGetUser();
-
-  console.log({ fav: favicons(alias) });
 
   return (
     <div className="z-50 flex h-[100vh] max-h-screen w-[100vw] flex-col overflow-y-auto bg-white md:h-fit md:w-[70vw] 2xl:w-[60vw]">
-      <div className="bg-blue-600 p-4 text-lg font-semibold capitalize text-white">
+      <div
+        className="border-b border-gray-200 bg-gray-100 p-4 text-lg font-semibold capitalize
+              text-gray-800 shadow"
+      >
         Store favicons
       </div>
       <div className="h-fit min-h-[400px] w-full p-4">

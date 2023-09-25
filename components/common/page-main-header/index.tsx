@@ -1,5 +1,4 @@
-import SortForm from '@components/common/sort-form';
-import { Add } from '@components/icons/add';
+// import SortForm from '@components/common/sort-form';
 import { ArrowDown } from '@components/icons/arrow-down';
 import { ExportIcon } from '@components/icons/export';
 import { FilterIcon } from '@components/icons/filter';
@@ -8,7 +7,6 @@ import { SettingsIcon } from '@components/icons/sidebar';
 import Button from '@components/ui/button';
 import Pagination from '@components/ui/pagination';
 import Select from '@components/ui/select/select';
-import SelectInput from '@components/ui/select-input';
 import { Nullable } from '@ts-types/custom.types';
 import cn from 'classnames';
 import { useTranslation } from 'next-i18next';

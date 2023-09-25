@@ -8,8 +8,9 @@ import { ATTRIBUTES_FOR_SELECT } from '@graphql/attribute';
 import { UPDATE_VARIABLE_PRODUCT_INFORMATION } from '@graphql/product';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetUser } from '@hooks/useGetUser';
+import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/notify';
-import type { Product, VariationType } from '@ts-types/generated';
+import type { LanguageType, Product, VariationType } from '@ts-types/generated';
 import { Attribute, OrderBy, SortOrder } from '@ts-types/generated';
 import { cartesian } from '@utils/cartesian';
 import differenceWith from 'lodash/differenceWith';
@@ -34,6 +35,7 @@ interface OptionsVariable {
   limit: number;
   orderBy: OrderBy;
   sortedBy: SortOrder;
+  language: LanguageType;
 }
 
 interface CartesianType {
@@ -102,6 +104,8 @@ function ProductVariableForm({
 
   const { variationOptions, variations, isUpdateMode } = state;
 
+  const { selectedLanguage } = useSettings();
+
   const {
     data,
     loading,
@@ -111,9 +115,11 @@ function ProductVariableForm({
       page: 1,
       limit: 999,
       orderBy: OrderBy.CREATED_AT,
-      sortedBy: SortOrder.Desc
+      sortedBy: SortOrder.Desc,
+      language: selectedLanguage
     },
-    fetchPolicy: 'cache-and-network'
+    fetchPolicy: 'cache-and-network',
+    skip: isEmpty(selectedLanguage)
   });
 
   const { userInfo } = useGetUser();

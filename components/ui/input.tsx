@@ -1,5 +1,7 @@
+import { QuestionMark } from '@components/icons/questionMark';
 import cn from 'classnames';
-import React, { InputHTMLAttributes } from 'react';
+import React, { InputHTMLAttributes, ReactElement } from 'react';
+import { Tooltip } from 'react-tooltip';
 
 export interface Props extends InputHTMLAttributes<HTMLInputElement> {
   className?: string;
@@ -13,6 +15,7 @@ export interface Props extends InputHTMLAttributes<HTMLInputElement> {
   type?: string;
   shadow?: boolean;
   variant?: 'normal' | 'solid' | 'outline';
+  renderTooltip?: ReactElement;
 }
 const classes = {
   root: 'px-4 h-12 flex items-center w-full rounded appearance-none transition duration-300 ease-in-out text-heading text-sm focus:outline-none focus:ring-0',
@@ -39,6 +42,7 @@ const Input = React.forwardRef<HTMLInputElement, Props>(
       type = 'text',
       inputClassName,
       id,
+      renderTooltip,
       ...rest
     },
     ref
@@ -56,24 +60,55 @@ const Input = React.forwardRef<HTMLInputElement, Props>(
       inputClassName
     );
 
+    const renderLabel = () => {
+      if (!label) {
+        return null;
+      }
+
+      return (
+        <label
+          htmlFor={name}
+          className={cn(
+            'mb-2 block text-sm font-semibold leading-none text-body-dark',
+            { 'text-gray-300': disabled }
+          )}
+        >
+          {label}
+          {isRequiredLabel && (
+            <span title="Required filed" className="m-[1px] text-red-500">
+              *
+            </span>
+          )}
+        </label>
+      );
+    };
+
+    const renderInputTooltip = () => {
+      if (!renderTooltip) {
+        return null;
+      }
+
+      return (
+        <div>
+          <Tooltip id={`${name}-input-question`} className="custom-tooltip">
+            {renderTooltip}
+          </Tooltip>
+          <div
+            data-tooltip-id={`${name}-input-question`}
+            className="mr-1 flex h-full cursor-pointer items-center pb-1"
+          >
+            <QuestionMark width="20" height="20" />
+          </div>
+        </div>
+      );
+    };
+
     return (
       <div className={className}>
-        {label && (
-          <label
-            htmlFor={name}
-            className={cn(
-              'mb-2 block text-sm font-semibold leading-none text-body-dark',
-              { 'text-gray-300': disabled }
-            )}
-          >
-            {label}
-            {isRequiredLabel && (
-              <span title="Required filed" className="m-[1px] text-red-500">
-                *
-              </span>
-            )}
-          </label>
-        )}
+        <div className="flex items-center justify-between">
+          {renderLabel()}
+          {renderInputTooltip()}
+        </div>
         <input
           id={id ?? name}
           name={name}

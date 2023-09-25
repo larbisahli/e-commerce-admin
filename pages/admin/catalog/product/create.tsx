@@ -5,7 +5,7 @@ import type { SSRProps } from '@ts-types/custom.types';
 import { ROUTES } from '@utils/routes';
 import type { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
-import { useTranslation } from 'next-i18next';
+import Head from 'next/head';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const CreateOrUpdateProductForm = dynamic(() => import('@components/product'), {
@@ -13,17 +13,18 @@ const CreateOrUpdateProductForm = dynamic(() => import('@components/product'), {
 });
 
 export default function CreateProductPage({ client }: SSRProps) {
-  const { t } = useTranslation();
-
   useGetUser(client);
-
   return (
     <>
-      <div className="flex border-b border-dashed border-border-base py-5 sm:py-8">
-        <h1 className="text-lg font-semibold text-heading">
-          {t('form:create-product')}
-        </h1>
-      </div>
+      <Head>
+        <title>New Product | Dropgala</title>
+        <link
+          rel="icon"
+          type="image/svg"
+          sizes="32x32"
+          href="/svg/product.svg"
+        />
+      </Head>
       <CreateOrUpdateProductForm />
     </>
   );

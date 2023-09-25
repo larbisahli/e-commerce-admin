@@ -21,11 +21,11 @@ const AdminFooter = () => {
         </p>
         <div className="flex items-center">
           <Link href={'/#'}>
-            <a className="text-green-800">Privacy Policy</a>
+            <a className="text-gray-700">Privacy Policy</a>
           </Link>
           <div className="mx-2 h-[20px] w-[1px] bg-gray-400"></div>
           <Link href={'/#'}>
-            <a className="text-green-800">Contact us</a>
+            <a className="text-gray-700">Contact us</a>
           </Link>
         </div>
       </div>

@@ -7,7 +7,6 @@ import { usePlaceholder } from '@hooks/usePlaceholder';
 import { siteSettings } from '@settings/site.settings';
 import type { Nullable } from '@ts-types/custom.types';
 import {
-  Category,
   CreatedUpdatedByAt,
   ImageType,
   Product,
@@ -104,32 +103,6 @@ const ProductList = ({ loading, products, selectedColumns }: IProps) => {
             return <TableRowPlaceholder />;
           }
           return !isEmpty(sku) ? sku : 'N/A';
-        }
-      },
-      {
-        title: t('table:table-item-categories'),
-        dataIndex: 'categories',
-        key: 'categories',
-        width: 180,
-        align: 'center',
-        ellipsis: true,
-        render: (categories: Category[], record: TableRowProps) => {
-          if (record?.loading) {
-            return <TableRowPlaceholder />;
-          }
-          const categories_values = categories
-            ?.map(({ name }: Category, index: number) => {
-              return index > 0 ? `, ${name}` : `${name}`;
-            })
-            ?.join('');
-          return (
-            <span
-              title={categories_values}
-              className="truncate whitespace-nowrap"
-            >
-              {!isEmpty(categories) ? categories_values : 'N/A'}
-            </span>
-          );
         }
       },
       {

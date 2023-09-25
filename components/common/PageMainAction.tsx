@@ -150,19 +150,3 @@ const PageMainAction = ({
 };
 
 export default memo(PageMainAction);
-
-{
-  /* <Tooltip id="actions-selectors" className="custom-tooltip">
-        <div className="flex flex-col items-center">
-          <span>Select language for translation</span>
-          <span>{`You can create '${title}' with different languages`}</span>
-        </div>
-      </Tooltip>
-      <div
-              data-tooltip-id="actions-selectors"
-              // data-tooltip-content={'Select your language for translation'}
-              className="h-full flex items-center pb-1 mr-1 cursor-pointer"
-            >
-              <QuestionMark width="20" height="20" />
-            </div> */
-}

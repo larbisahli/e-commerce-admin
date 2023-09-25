@@ -19,6 +19,7 @@ import { ChangeEvent, memo, useCallback, useEffect, useState } from 'react';
 import slugify from 'slugify';
 
 import { Actions, useFormReducer } from '../context/form.context';
+import { RenderTooltip } from './ToolTips';
 
 type Props = {
   initialValues: Product;
@@ -234,6 +235,7 @@ const ProductSeo = ({ state, initialValues }: Props) => {
             className="mb-5"
             onFocus={() => updateWhenEmpty('slug')}
             onBlur={checkForUpdateHandler}
+            renderTooltip={<RenderTooltip />}
           />
           <Input
             label={t('form:input-label-meta-title')}
@@ -246,6 +248,7 @@ const ProductSeo = ({ state, initialValues }: Props) => {
             className="mb-5"
             onFocus={() => updateWhenEmpty('metaTitle', false)}
             onBlur={checkForUpdateHandler}
+            renderTooltip={<RenderTooltip />}
           />
           <TextArea
             label={t('form:input-label-meta-keywords')}

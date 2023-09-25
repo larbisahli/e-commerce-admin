@@ -7,6 +7,7 @@ export const PRODUCTS = gql`
     $limit: Int!
     $orderBy: String!
     $sortedBy: String!
+    $language: LanguageInput!
   ) {
     productCount {
       count
@@ -17,6 +18,7 @@ export const PRODUCTS = gql`
       limit: $limit
       orderBy: $orderBy
       sortedBy: $sortedBy
+      language: $language
     ) {
       id
       sku
@@ -29,10 +31,6 @@ export const PRODUCTS = gql`
       }
       quantity
       published
-      categories {
-        id
-        name
-      }
       thumbnail {
         id
         image
@@ -54,8 +52,8 @@ export const PRODUCTS = gql`
 `;
 
 export const PRODUCT = gql`
-  query Product($id: Int!) {
-    product(id: $id) {
+  query Product($id: Int!, $language: LanguageInput!) {
+    product(id: $id, language: $language) {
       id
       name
       sku
@@ -157,8 +155,8 @@ export const PRODUCT = gql`
 `;
 
 export const LINKED_PRODUCTS = gql`
-  query RelatedProducts($id: Int!) {
-    relatedProducts(id: $id) {
+  query RelatedProducts($id: Int!, $language: LanguageInput!) {
+    relatedProducts(id: $id, language: $language) {
       id
       sku
       name
@@ -173,7 +171,7 @@ export const LINKED_PRODUCTS = gql`
         placeholder
       }
     }
-    upsellProducts(id: $id) {
+    upsellProducts(id: $id, language: $language) {
       id
       sku
       name
@@ -188,7 +186,7 @@ export const LINKED_PRODUCTS = gql`
         placeholder
       }
     }
-    crossSellProducts(id: $id) {
+    crossSellProducts(id: $id, language: $language) {
       id
       sku
       name
@@ -232,6 +230,7 @@ export const CREATE_PRODUCT = gql`
     $relatedProducts: [ProductInput]
     $upsellProducts: [ProductInput]
     $crossSellProducts: [ProductInput]
+    $language: LanguageInput!
   ) {
     createProduct(
       name: $name
@@ -258,6 +257,7 @@ export const CREATE_PRODUCT = gql`
       relatedProducts: $relatedProducts
       upsellProducts: $upsellProducts
       crossSellProducts: $crossSellProducts
+      language: $language
     ) {
       id
       name
@@ -268,10 +268,16 @@ export const CREATE_PRODUCT = gql`
 export const UPDATE_PRODUCT = gql`
   mutation UpdateProduct(
     $id: Int!
+    $language: LanguageInput!
     $additions: ProductInput!
     $deletions: ProductInput!
   ) {
-    updateProduct(id: $id, additions: $additions, deletions: $deletions) {
+    updateProduct(
+      id: $id
+      language: $language
+      additions: $additions
+      deletions: $deletions
+    ) {
       id
     }
   }
@@ -280,11 +286,13 @@ export const UPDATE_PRODUCT = gql`
 export const UPDATE_PRODUCT_THUMBNAIL = gql`
   mutation UpdateProductThumbnail(
     $id: Int!
+    $language: LanguageInput!
     $additions: ProductInput!
     $deletions: ProductInput!
   ) {
     updateProductThumbnail(
       id: $id
+      language: $language
       additions: $additions
       deletions: $deletions
     ) {
@@ -296,11 +304,13 @@ export const UPDATE_PRODUCT_THUMBNAIL = gql`
 export const UPDATE_PRODUCT_GALLERY = gql`
   mutation UpdateProductGallery(
     $id: Int!
+    $language: LanguageInput!
     $additions: ProductInput!
     $deletions: ProductInput!
   ) {
     updateProductGallery(
       id: $id
+      language: $language
       additions: $additions
       deletions: $deletions
     ) {
@@ -317,6 +327,7 @@ export const UPDATE_PRODUCT_CONTENT = gql`
     $note: String
     $published: Boolean!
     $disableOutOfStock: Boolean!
+    $language: LanguageInput!
   ) {
     updateProductContent(
       id: $id
@@ -325,6 +336,7 @@ export const UPDATE_PRODUCT_CONTENT = gql`
       description: $description
       published: $published
       disableOutOfStock: $disableOutOfStock
+      language: $language
     ) {
       id
       name
@@ -344,6 +356,7 @@ export const UPDATE_SIMPLE_PRODUCT_INFORMATION = gql`
     $buyingPrice: Float
     $quantity: Int!
     $sku: String
+    $language: LanguageInput!
   ) {
     updateSimpleProductInformation(
       id: $id
@@ -352,6 +365,7 @@ export const UPDATE_SIMPLE_PRODUCT_INFORMATION = gql`
       buyingPrice: $buyingPrice
       quantity: $quantity
       sku: $sku
+      language: $language
     ) {
       salePrice
       comparePrice
@@ -365,11 +379,13 @@ export const UPDATE_SIMPLE_PRODUCT_INFORMATION = gql`
 export const UPDATE_PRODUCT_SELECT_GROUP = gql`
   mutation UpdateProductSelectGroup(
     $id: Int!
+    $language: LanguageInput!
     $additions: ProductInput
     $deletions: ProductInput
   ) {
     updateProductSelectGroup(
       id: $id
+      language: $language
       additions: $additions
       deletions: $deletions
     ) {
@@ -394,8 +410,12 @@ export const UPDATE_PRODUCT_SELECT_GROUP = gql`
 `;
 
 export const UPDATE_PRODUCT_SEO = gql`
-  mutation UpdateProductSeo($id: Int!, $productSeo: ProductSeoInput!) {
-    updateProductSeo(id: $id, productSeo: $productSeo) {
+  mutation UpdateProductSeo(
+    $id: Int!
+    $language: LanguageInput!
+    $productSeo: ProductSeoInput!
+  ) {
+    updateProductSeo(id: $id, language: $language, productSeo: $productSeo) {
       id
       productSeo {
         id
@@ -416,10 +436,12 @@ export const UPDATE_PRODUCT_SEO = gql`
 export const UPDATE_PRODUCT_SHIPPING_INFO = gql`
   mutation UpdateProductShippingInfo(
     $id: Int!
+    $language: LanguageInput!
     $productShippingInfo: ProductShippingInfoInput!
   ) {
     updateProductShippingInfo(
       id: $id
+      language: $language
       productShippingInfo: $productShippingInfo
     ) {
       id
@@ -447,11 +469,13 @@ export const UPDATE_PRODUCT_SHIPPING_INFO = gql`
 export const UPDATE_LINKED_PRODUCTS = gql`
   mutation UpdateLinkedProducts(
     $id: Int!
+    $language: LanguageInput!
     $additions: ProductInput!
     $deletions: ProductInput!
   ) {
     updateLinkedProducts(
       id: $id
+      language: $language
       additions: $additions
       deletions: $deletions
     ) {
@@ -508,11 +532,13 @@ export const UPDATE_LINKED_PRODUCTS = gql`
 export const UPDATE_VARIABLE_PRODUCT_INFORMATION = gql`
   mutation UpdateVariableProductInformation(
     $id: Int!
+    $language: LanguageInput!
     $additions: ProductInput!
     $deletions: ProductInput!
   ) {
     updateVariableProductInformation(
       id: $id
+      language: $language
       additions: $additions
       deletions: $deletions
     ) {

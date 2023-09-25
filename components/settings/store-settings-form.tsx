@@ -1,5 +1,8 @@
+import 'react-phone-input-2/lib/style.css';
+
 import { useMutation } from '@apollo/client';
 import Card from '@components/common/card';
+import FormActions from '@components/common/FormActions';
 import { Eye } from '@components/icons/eye-icon';
 import * as socialIcons from '@components/icons/social';
 import ImageModal from '@components/image-modal';
@@ -20,10 +23,12 @@ import { notify } from '@lib/notify';
 import { FAVICON_VIEWER_MODAL } from '@ts-types/constants';
 import { SettingsType } from '@ts-types/generated';
 import { CURRENCY } from '@utils/currency';
+import { isValidPhoneNumber } from 'libphonenumber-js';
 import { isEmpty } from 'lodash';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
+import PhoneInput from 'react-phone-input-2';
 
 import { settingsValidationSchema } from './settings-validation-schema';
 
@@ -74,6 +79,9 @@ export default function StoreSettingsForm({ settings }: IProps) {
     register,
     handleSubmit,
     control,
+    setValue,
+    getValues,
+    watch,
     formState: { errors }
   } = useForm<FormValues>({
     shouldUnregister: true,
@@ -108,18 +116,21 @@ export default function StoreSettingsForm({ settings }: IProps) {
 
   const csrfToken = userInfo?.csrfToken;
 
-  const [updateSettings, { loading }] = useMutation(UPDATE_STORE_SETTINGS, {
-    context: {
-      headers: {
-        'x-csrf-token': csrfToken
-      }
-    },
-    onCompleted: (data: { updateSettings: SettingsType }) => {
-      if (!isEmpty(data)) {
-        notify(t('common:successfully-updated'), 'success');
+  const [updateSettings, { loading: updating }] = useMutation(
+    UPDATE_STORE_SETTINGS,
+    {
+      context: {
+        headers: {
+          'x-csrf-token': csrfToken
+        }
+      },
+      onCompleted: (data: { updateSettings: SettingsType }) => {
+        if (!isEmpty(data)) {
+          notify(t('common:successfully-updated'), 'success');
+        }
       }
     }
-  });
+  );
 
   useErrorLogger(error);
 
@@ -128,9 +139,12 @@ export default function StoreSettingsForm({ settings }: IProps) {
   const [ogImage, setOgImage] = useState([]);
 
   async function onSubmit(values: FormValues) {
+    const storeNumber = values?.storeNumber ?? getValues('storeNumber');
+
     updateSettings({
       variables: {
         ...values,
+        storeNumber,
         logo: logo?.map(({ id }) => ({ id })),
         favicon: favicon?.map(({ id }) => ({ id })),
         maxCheckoutQuantity: Number(values.maxCheckoutQuantity),
@@ -179,8 +193,20 @@ export default function StoreSettingsForm({ settings }: IProps) {
     setOgImage(settings?.seo?.ogImage);
   }, []);
 
+  const storeNumber = watch('storeNumber') ?? getValues('storeNumber');
+
+  console.log({ storeNumber, settings });
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      <FormActions
+        showSelectLanguage={false}
+        hideBackLink
+        showCancel={false}
+        loading={updating}
+        disabled={updating}
+        title={t('form:form-title-store-settings')}
+      />
       <div className="my-5 flex flex-wrap border-b border-dashed border-border-base pb-8 sm:my-8">
         <Description
           title={t('form:input-label-logo')}
@@ -250,13 +276,32 @@ export default function StoreSettingsForm({ settings }: IProps) {
             variant="outline"
             className="mb-5"
           />
-          <Input
-            label={t('form:input-label-store-contact-number')}
-            {...register('storeNumber')}
-            variant="outline"
-            className="mb-5"
-            error={t(errors.storeNumber?.message!)}
-          />
+          <div className="mb-4">
+            <Label>{t('form:input-label-store-contact-number')}</Label>
+            <PhoneInput
+              country="us"
+              inputProps={{
+                name: 'phone',
+                required: true,
+                autoFocus: false
+              }}
+              disableSearchIcon
+              enableSearch
+              inputClass="phone-number-class py-5"
+              value={`+${storeNumber}`}
+              isValid={(value, country: { dialCode: string }) => {
+                if (country?.dialCode != value) {
+                  return isValidPhoneNumber(`+${value}`);
+                }
+                return true;
+              }}
+              onChange={(phone) => {
+                setValue('storeNumber', phone);
+              }}
+            />
+            {/* @ts-ignore */}
+            <ValidationError message={t(errors.storeNumber?.message)} />
+          </div>
           <Input
             label={t('form:input-label-address-1')}
             {...register('addressLine1')}
@@ -376,6 +421,13 @@ export default function StoreSettingsForm({ settings }: IProps) {
             placeholder="Enter Tracking ID"
             className="mb-5"
           />
+          <div className="mb-5">
+            <Checkbox
+              {...register(`google.isEnabled` as const)}
+              label={t('form:input-label-activate-google-analytics')}
+            />
+          </div>
+          <Label>{t('form:input-label-tracking-options')}</Label>
           <div className="my-5 flex flex-wrap">
             <div className="min-w-[300px] flex-1">
               <Checkbox
@@ -413,12 +465,6 @@ export default function StoreSettingsForm({ settings }: IProps) {
                 label={'Track checkout'}
               />
             </div>
-          </div>
-          <div className="my-5">
-            <Checkbox
-              {...register(`google.isEnabled` as const)}
-              label={t('form:input-label-activate-google-analytics')}
-            />
           </div>
         </Card>
       </div>
@@ -482,12 +528,6 @@ export default function StoreSettingsForm({ settings }: IProps) {
             {t('form:button-label-add-social')}
           </Button>
         </Card>
-      </div>
-
-      <div className="mb-4 text-end">
-        <Button loading={loading} disabled={loading}>
-          {t('form:button-label-save-settings')}
-        </Button>
       </div>
     </form>
   );

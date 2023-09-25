@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client';
+import { PageFormPlaceholder } from '@components/common/commonComponents';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
-import Loader from '@components/ui/loader/loader';
 import { PRODUCT } from '@graphql/product';
 import { useGetUser } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
@@ -13,12 +13,14 @@ import { ROUTES } from '@utils/routes';
 import { isEmpty } from 'lodash';
 import type { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const CreateOrUpdateProductForm = dynamic(() => import('@components/product'), {
-  ssr: true
+  ssr: true,
+  loading: () => <PageFormPlaceholder />
 });
 
 interface TProduct {
@@ -50,8 +52,8 @@ export default function UpdateProductPage({ client }: SSRProps) {
 
   const { product = {} } = data ?? {};
 
-  if (loading) {
-    return <Loader text={t('common:text-loading')} />;
+  if (isEmpty(product) || loading) {
+    return <PageFormPlaceholder />;
   }
 
   if (error) {
@@ -60,11 +62,15 @@ export default function UpdateProductPage({ client }: SSRProps) {
 
   return (
     <>
-      <div className="flex border-b border-dashed border-border-base py-5 sm:py-8">
-        <h1 className="text-lg font-semibold text-heading">
-          {t('form:edit-product')}
-        </h1>
-      </div>
+      <Head>
+        <title>Edit Product | Dropgala</title>
+        <link
+          rel="icon"
+          type="image/svg"
+          sizes="32x32"
+          href="/svg/product.svg"
+        />
+      </Head>
       <CreateOrUpdateProductForm initialValues={product} />
     </>
   );

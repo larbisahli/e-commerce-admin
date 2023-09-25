@@ -1,10 +1,11 @@
 import { useMutation } from '@apollo/client';
 import Card from '@components/common/card';
-import { SaveIcon } from '@components/icons/save-icon';
-import Button from '@components/ui/button';
+import { LanguageDefaultDescInfo } from '@components/common/commonComponents';
+import FormActions from '@components/common/FormActions';
 import Description from '@components/ui/description';
 import { CREATE_PRODUCT } from '@graphql/product';
 import { useErrorLogger, useGetUser } from '@hooks/index';
+import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/index';
 import { Product } from '@ts-types/generated';
 import { ProductType } from '@ts-types/generated';
@@ -152,6 +153,8 @@ function ProductForm({ setUnsavedChanges, initialValues = {} }: IProps) {
   const [error, setError] = useState(null);
   useErrorLogger(error);
 
+  const { selectedLanguage } = useSettings();
+
   const { userInfo } = useGetUser();
   const csrfToken = userInfo?.csrfToken;
 
@@ -240,7 +243,12 @@ function ProductForm({ setUnsavedChanges, initialValues = {} }: IProps) {
         }
       }
 
-      createProduct({ variables }).catch((err) => {
+      createProduct({
+        variables: {
+          ...variables,
+          language: selectedLanguage
+        }
+      }).catch((err) => {
         setError(err);
         setUnsavedChanges(true);
       });
@@ -250,6 +258,23 @@ function ProductForm({ setUnsavedChanges, initialValues = {} }: IProps) {
 
   return (
     <form noValidate>
+      <FormActions
+        backLink={ROUTES.PRODUCT}
+        forceDefaultLang={isEmpty(initialValues)}
+        title={
+          isEmpty(initialValues)
+            ? t('form:form-title-new-product')
+            : t('form:form-title-edit-product')
+        }
+        loading={creating}
+        disabled={creating}
+        showSaveButton={isEmpty(initialValues)}
+        onSubmit={onSubmit}
+      />
+      <LanguageDefaultDescInfo
+        label="New Product"
+        isVisible={isEmpty(initialValues)}
+      />
       {/* Thumbnail */}
       <div className="my-5 flex flex-wrap border-b border-dashed border-border-base pb-8 sm:my-8">
         <Description
@@ -312,27 +337,6 @@ function ProductForm({ setUnsavedChanges, initialValues = {} }: IProps) {
           state={productShippingInfoState}
           initialValues={initialValues}
         />
-      </div>
-
-      <div className="mb-4 text-end">
-        {!isEmpty(initialValues) && (
-          <Button
-            variant="outline"
-            onClick={router.back}
-            className="me-4"
-            type="button"
-          >
-            {t('form:button-label-back')}
-          </Button>
-        )}
-        {isEmpty(initialValues) && (
-          <Button loading={creating} disabled={creating} onClick={onSubmit}>
-            <div className="mr-1">
-              <SaveIcon width="1.3rem" height="1.3rem" />
-            </div>
-            <div>{t('form:button-label-save')}</div>
-          </Button>
-        )}
       </div>
     </form>
   );

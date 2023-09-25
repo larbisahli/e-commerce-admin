@@ -2,6 +2,7 @@ import 'react-phone-input-2/lib/style.css';
 
 import { useMutation, useQuery } from '@apollo/client';
 import Card from '@components/common/card';
+import FormActions from '@components/common/FormActions';
 import { SaveIcon } from '@components/icons/save-icon';
 import ImageModal from '@components/image-modal';
 import Button from '@components/ui/button';
@@ -65,7 +66,7 @@ function SelectRoles({ control }: { control: Control<FormValues> }) {
       <SelectInput
         name="role"
         control={control}
-        getOptionLabel={(option: RoleType) => option.roleName}
+        getOptionLabel={(option: RoleType) => option.name}
         getOptionValue={(option: RoleType) => option.id}
         options={roles}
         isClearable={true}
@@ -170,6 +171,13 @@ const UserCreateUpdateForm = ({ initialValues }: IProps) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate>
+      <FormActions
+        backLink={ROUTES.USER}
+        showSelectLanguage={false}
+        title={t('form:form-title-create-user')}
+        loading={creating || updating}
+        disabled={creating || updating}
+      />
       <div className="my-5 flex flex-wrap border-b border-dashed border-border-base pb-8 sm:my-8">
         <Description
           title={t('form:input-label-image')}

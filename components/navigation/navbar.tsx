@@ -64,7 +64,7 @@ const Navbar = () => {
   }, [closeSideBar]);
 
   const {
-    userInfo: { ali: alias }
+    userInfo: { store: { alias = '' } = {} }
   } = useGetUser();
 
   const rev = 3439.89;

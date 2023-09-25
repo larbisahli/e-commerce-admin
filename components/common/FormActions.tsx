@@ -25,6 +25,8 @@ interface Props {
   children?: JSX.Element[] | JSX.Element;
   hideBackLink?: boolean;
   showCancel?: boolean;
+  onSubmit?: (e: any) => Promise<void>;
+  showSaveButton?: boolean;
 }
 
 const FormActions = ({
@@ -37,6 +39,8 @@ const FormActions = ({
   hideBackLink = false,
   showCancel = true,
   isCustom = false,
+  showSaveButton = true,
+  onSubmit,
   children
 }: Props) => {
   const router = useRouter();
@@ -111,12 +115,7 @@ const FormActions = ({
               <div className="text-lg">{t('form:button-label-cancel')}</div>
             </Button>
           )}
-          <Button loading={loading} disabled={disabled}>
-            <div className="mr-1">
-              <SaveIcon width="1.3rem" height="1.3rem" />
-            </div>
-            <div className="text-lg">{t('form:button-label-save')}</div>
-          </Button>
+          {saveButton()}
         </div>
       );
     }
@@ -132,13 +131,36 @@ const FormActions = ({
             <div className="text-lg">{t('form:button-label-cancel')}</div>
           </Button>
         )}
-        <Button loading={loading} disabled={disabled}>
-          <div className="mr-1">
-            <SaveIcon width="1.3rem" height="1.3rem" />
-          </div>
+        {saveButton()}
+      </div>
+    );
+  };
+
+  const saveButton = () => {
+    if (!showSaveButton) {
+      return null;
+    }
+    if (onSubmit instanceof Function) {
+      return (
+        <Button
+          onClick={onSubmit}
+          loading={loading}
+          disabled={disabled}
+          renderIcon={<SaveIcon width="1.3rem" height="1.3rem" />}
+        >
           <div className="text-lg">{t('form:button-label-save')}</div>
         </Button>
-      </div>
+      );
+    }
+
+    return (
+      <Button
+        loading={loading}
+        disabled={disabled}
+        renderIcon={<SaveIcon width="1.3rem" height="1.3rem" />}
+      >
+        <div className="text-lg">{t('form:button-label-save')}</div>
+      </Button>
     );
   };
 

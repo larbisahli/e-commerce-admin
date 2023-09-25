@@ -82,7 +82,8 @@ const ActionButtons = ({
             <button
               onClick={() => handleUserStatus(id, 'ban')}
               className="flex h-9 w-9 items-center justify-center rounded-sm border text-gray-500 transition duration-200 hover:text-red-600 hover:shadow-xl focus:outline-none"
-              title={t('text-ban-user')}
+              data-tooltip-id="actions-tooltip"
+              data-tooltip-content={t('text-ban-user')}
             >
               <BanUser width={20} />
             </button>
@@ -90,7 +91,8 @@ const ActionButtons = ({
             <button
               onClick={() => handleUserStatus(id, 'active')}
               className="flex h-9 w-9 items-center justify-center rounded-sm border text-green-500 transition duration-200 hover:text-green-400 hover:shadow-xl focus:outline-none"
-              title={t('text-activate-user')}
+              data-tooltip-id="actions-tooltip"
+              data-tooltip-content={t('text-activate-user')}
             >
               <CheckMarkCircle width={20} />
             </button>
@@ -112,7 +114,8 @@ const ActionButtons = ({
         <Link
           href={detailsUrl}
           className="ml-2 flex h-9 w-9 items-center justify-center rounded-sm border text-base text-gray-500 transition duration-200 hover:text-heading hover:shadow-xl"
-          title={t('text-view')}
+          data-tooltip-id="actions-tooltip"
+          data-tooltip-content={t('text-view')}
         >
           <Eye width={24} />
         </Link>
@@ -121,7 +124,8 @@ const ActionButtons = ({
         <button
           onClick={() => handleUserStatus(id, 'active')}
           className="flex h-9 w-9 items-center justify-center rounded-sm border text-gray-500 transition duration-200 hover:shadow-xl focus:outline-none"
-          title={'Activate theme'}
+          data-tooltip-id="actions-tooltip"
+          data-tooltip-content={'Activate theme'}
         >
           <CheckMarkCircle width={20} />
         </button>
@@ -129,7 +133,8 @@ const ActionButtons = ({
       {activated && (
         <div
           className="flex h-9 w-9 items-center justify-center rounded-sm border text-green-500 transition duration-200 hover:text-green-400 hover:shadow-xl focus:outline-none"
-          title={'Default'}
+          data-tooltip-id="actions-tooltip"
+          data-tooltip-content={'Default'}
         >
           <CheckMarkFill width={20} />
         </div>
