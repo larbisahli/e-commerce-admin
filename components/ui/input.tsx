@@ -90,7 +90,11 @@ const Input = React.forwardRef<HTMLInputElement, Props>(
 
       return (
         <div>
-          <Tooltip id={`${name}-input-question`} className="custom-tooltip">
+          <Tooltip
+            id={`${name}-input-question`}
+            className="form-tooltip"
+            classNameArrow="form-tooltip-arrow"
+          >
             {renderTooltip}
           </Tooltip>
           <div

@@ -95,8 +95,8 @@ export default function CreateOrUpdateAttributeForm({
         }
       },
       onCompleted: (data: { createAttribute: Attribute }) => {
-        if (!isEmpty(data)) {
-          const { id } = data.createAttribute;
+        const { id } = data.createAttribute;
+        if (id) {
           notify(t('common:successfully-created'), 'success');
           router.push(`${ROUTES.ATTRIBUTE}/edit/${id}`);
         }

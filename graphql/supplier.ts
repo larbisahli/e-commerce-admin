@@ -73,7 +73,7 @@ export const CREATE_SUPPLIER = gql`
   mutation CreateSupplier(
     $name: String!
     $company: String!
-    $phoneNumber: String!
+    $phoneNumber: String
     $addressLine1: String!
     $addressLine2: String
     $country: CountryInput
@@ -100,7 +100,7 @@ export const UPDATE_SUPPLIER = gql`
     $id: Int!
     $name: String!
     $company: String
-    $phoneNumber: String!
+    $phoneNumber: String
     $addressLine1: String!
     $addressLine2: String
     $country: CountryInput

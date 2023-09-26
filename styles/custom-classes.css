@@ -241,13 +241,15 @@
   background: linear-gradient(#699dea, #2940a8);
 }
 
-.product-tooltip {
-  color: #434343 !important;
-  background-color: rgb(238, 238, 238) !important;
+.form-tooltip {
+  color: #313131 !important;
+  background-color: #ffffff !important;
   border: 1px solid rgb(191, 191, 191) !important;
+  pointer-events: auto !important;
+  opacity: 1 !important;
 }
 
-.product-tooltip-arrow {
+.form-tooltip-arrow {
   border-right: 1px solid rgb(191, 191, 191) !important;
   border-bottom: 1px solid rgb(191, 191, 191) !important;
 }

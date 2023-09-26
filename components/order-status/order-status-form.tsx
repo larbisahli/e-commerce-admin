@@ -72,8 +72,8 @@ export default function CreateOrUpdateOrderStatusForm({
         }
       },
       onCompleted: (data: { createOrderStatus: OrderStatus }) => {
-        if (!isEmpty(data)) {
-          const { id } = data.createOrderStatus;
+        const { id } = data.createOrderStatus;
+        if (id) {
           notify(t('common:successfully-created'), 'success');
           router.push(`${ROUTES.ORDER_STATUS}/edit/${id}`);
         }

@@ -10,7 +10,7 @@ import { useTableColumn } from '@hooks/useTableColumn';
 import { verifyAuth } from '@middleware/utils';
 import type { SSRProps, TableQueryVariables } from '@ts-types/custom.types';
 import type { Product } from '@ts-types/generated';
-import { OrderBy, SortOrder } from '@ts-types/generated';
+import { OrderBy, ProductType, SortOrder } from '@ts-types/generated';
 import { COLUMNS } from '@utils/data/table-columns';
 import { ROUTES } from '@utils/routes';
 import isEmpty from 'lodash/isEmpty';
@@ -41,6 +41,11 @@ interface TProduct {
   products: Product[];
   productCount: { count: number };
 }
+
+const productTypesParams = [
+  { name: 'Simple Product', param: ProductType.Simple },
+  { name: 'Configurable Product', param: ProductType.Variable }
+];
 
 export default function ProductsPage({ client }: SSRProps) {
   const { t } = useTranslation();
@@ -105,6 +110,7 @@ export default function ProductsPage({ client }: SSRProps) {
         href={`${ROUTES.PRODUCT}/create`}
         title={t('form:input-label-products')}
         label={t('form:button-label-add-products')}
+        params={productTypesParams}
       />
       <PageMainHeader
         columns={COLUMNS['product']}

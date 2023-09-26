@@ -245,6 +245,9 @@ export const CATEGORIES_FOR_SELECT_ALL = gql`
     ) {
       id
       name
+      translated {
+        name
+      }
     }
   }
 `;

@@ -52,10 +52,23 @@ export const TAG = gql`
 `;
 
 export const TAGS_FOR_SELECT = gql`
-  query GetTagsSelect($page: Int!, $limit: Int!, $orderBy: String!) {
-    tagSelect(page: $page, limit: $limit, orderBy: $orderBy) {
+  query GetTagsSelect(
+    $page: Int!
+    $limit: Int!
+    $orderBy: String!
+    $language: LanguageInput!
+  ) {
+    tagSelect(
+      page: $page
+      limit: $limit
+      orderBy: $orderBy
+      language: $language
+    ) {
       id
       name
+      translated {
+        name
+      }
     }
   }
 `;

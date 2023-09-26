@@ -3,6 +3,7 @@ import {
   Actions,
   useFormReducer
 } from '@components/product/context/form.context';
+import { CategoryTooltipContent } from '@components/product/ToolTips';
 // import ValidationError from '@components/ui/form-validation-error';
 import Label from '@components/ui/label';
 import Select from '@components/ui/select/select';
@@ -12,7 +13,7 @@ import { useSettings } from '@hooks/useSettings';
 import { Category, LanguageType, OrderBy } from '@ts-types/generated';
 import { isEmpty } from 'lodash';
 import { useTranslation } from 'next-i18next';
-import React, { memo } from 'react';
+import React, { memo, useMemo } from 'react';
 
 interface TCategorySelect {
   categorySelectAll: Category[];
@@ -50,7 +51,7 @@ const ProductCategory = ({ categories }: Props) => {
     }
   );
 
-  const { categorySelectAll: options = [] } = data ?? {};
+  const { categorySelectAll = [] } = data ?? {};
 
   useErrorLogger(error);
 
@@ -63,9 +64,25 @@ const ProductCategory = ({ categories }: Props) => {
     });
   };
 
+  const options = useMemo(() => {
+    return categorySelectAll?.map(({ id, name, translated }) => {
+      return {
+        id,
+        name: name ?? translated?.name
+      };
+    });
+  }, [categorySelectAll]);
+
   return (
     <div className="mb-5">
-      <Label isRequiredLabel>{t('form:input-label-categories')}</Label>
+      <Label
+        isRequiredLabel
+        openTooltipOnClick
+        tooltipId="category"
+        renderTooltip={<CategoryTooltipContent />}
+      >
+        {t('form:input-label-categories')}
+      </Label>
       <Select
         options={options}
         value={categories}

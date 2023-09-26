@@ -1,6 +1,7 @@
 import { useQuery } from '@apollo/client';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
+import Loader from '@components/ui/loader/loader';
 import { MEDIA } from '@graphql/media';
 import { useErrorLogger, useGetUser } from '@hooks/index';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
@@ -14,7 +15,10 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-const MediaList = dynamic(() => import('@components/media'), { ssr: true });
+const MediaList = dynamic(() => import('@components/media'), {
+  ssr: true,
+  loading: () => <Loader text={'Loading'} />
+});
 
 interface TMedia {
   media: {

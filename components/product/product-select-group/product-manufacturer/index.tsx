@@ -3,6 +3,7 @@ import {
   Actions,
   useFormReducer
 } from '@components/product/context/form.context';
+import { ManufacturerTooltipContent } from '@components/product/ToolTips';
 // import ValidationError from '@components/ui/form-validation-error';
 import Label from '@components/ui/label';
 import Select from '@components/ui/select/select';
@@ -17,7 +18,7 @@ import {
 } from '@ts-types/generated';
 import { isEmpty } from 'lodash';
 import { useTranslation } from 'next-i18next';
-import React, { memo } from 'react';
+import React, { memo, useMemo } from 'react';
 
 interface TManufacturerSelect {
   manufacturersForSelect: ManufacturerType[];
@@ -25,7 +26,6 @@ interface TManufacturerSelect {
 
 interface Props {
   manufacturers: ManufacturerType[];
-  // setInitProductCategories: React.Dispatch<React.SetStateAction<ManufacturerType[]>>;
 }
 
 interface OptionsVariable {
@@ -56,7 +56,7 @@ const ProductManufacturer = ({ manufacturers }: Props) => {
     skip: isEmpty(selectedLanguage)
   });
 
-  const { manufacturersForSelect: options = [] } = data ?? {};
+  const { manufacturersForSelect = [] } = data ?? {};
 
   useErrorLogger(error);
 
@@ -69,9 +69,24 @@ const ProductManufacturer = ({ manufacturers }: Props) => {
     });
   };
 
+  const options = useMemo(() => {
+    return manufacturersForSelect?.map(({ id, name, translated }) => {
+      return {
+        id,
+        name: name ?? translated?.name
+      };
+    });
+  }, [manufacturersForSelect]);
+
   return (
     <div className="mb-5">
-      <Label>{t('form:input-label-manufacturers')}</Label>
+      <Label
+        openTooltipOnClick
+        tooltipId="manufacturer"
+        renderTooltip={<ManufacturerTooltipContent />}
+      >
+        {t('form:input-label-manufacturers')}
+      </Label>
       <Select
         options={options}
         value={manufacturers}

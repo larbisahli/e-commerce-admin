@@ -158,8 +158,8 @@ export default function CreateOrUpdateCategoriesForm({
       }
     },
     onCompleted: (data: { createCategory: Category }) => {
-      if (!isEmpty(data)) {
-        const { id } = data.createCategory;
+      const { id } = data.createCategory;
+      if (id) {
         notify(t('common:successfully-created'), 'success');
         router.push(`${ROUTES.CATEGORY}/edit/${id}`);
       }

@@ -1,8 +1,8 @@
 import { UploadIcon } from '@components/icons/upload-icon';
 import { useErrorLogger } from '@hooks/index';
-import { useAppDispatch } from '@hooks/useFiles';
 import { notify } from '@lib/notify';
 import { apiURL } from '@utils/utils';
+import cn from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
 import { useDropzone } from 'react-dropzone';
@@ -14,9 +14,15 @@ interface ImageType {
   success: boolean;
   size: number;
   error?: any;
+  disable?: boolean;
 }
 
-export default function Uploader({ setLoading, mediaId = null, refetch }: any) {
+export default function Uploader({
+  setLoading,
+  mediaId = null,
+  refetch,
+  disable = false
+}: any) {
   const { t } = useTranslation();
 
   const [error, setError] = useState(null);
@@ -85,8 +91,11 @@ export default function Uploader({ setLoading, mediaId = null, refetch }: any) {
     <section className="upload">
       <div
         {...getRootProps({
-          className:
-            'border-dashed border-2 border-border-base h-36 rounded flex flex-col justify-center items-center cursor-pointer focus:border-accent-400 focus:outline-none'
+          className: cn(
+            'border-dashed border-2 border-border-base h-36 rounded',
+            'flex flex-col justify-center items-center cursor-pointer focus:border-accent-400 focus:outline-none',
+            { 'pointer-events-none bg-gray-100 opacity-0 opa': disable }
+          )
         })}
       >
         <input {...getInputProps()} />

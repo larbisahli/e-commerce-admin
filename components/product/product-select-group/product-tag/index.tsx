@@ -3,6 +3,7 @@ import {
   Actions,
   useFormReducer
 } from '@components/product/context/form.context';
+import { TagTooltipContent } from '@components/product/ToolTips';
 import Label from '@components/ui/label';
 import Select from '@components/ui/select/select';
 import { TAGS_FOR_SELECT } from '@graphql/tag';
@@ -11,7 +12,7 @@ import { useSettings } from '@hooks/useSettings';
 import { LanguageType, OrderBy, Tag } from '@ts-types/generated';
 import { isEmpty } from 'lodash';
 import { useTranslation } from 'next-i18next';
-import React, { memo } from 'react';
+import React, { memo, useMemo } from 'react';
 
 interface Props {
   tags: Tag[];
@@ -49,7 +50,7 @@ const ProductTag = ({ tags }: Props) => {
     }
   );
 
-  const { tagSelect: options = [] } = data ?? {};
+  const { tagSelect = [] } = data ?? {};
 
   useErrorLogger(error);
 
@@ -62,9 +63,24 @@ const ProductTag = ({ tags }: Props) => {
     });
   };
 
+  const options = useMemo(() => {
+    return tagSelect?.map(({ id, name, translated }) => {
+      return {
+        id,
+        name: name ?? translated?.name
+      };
+    });
+  }, [tagSelect]);
+
   return (
     <div>
-      <Label>{t('sidebar-nav-item-tags')}</Label>
+      <Label
+        openTooltipOnClick
+        tooltipId="tag"
+        renderTooltip={<TagTooltipContent />}
+      >
+        {t('sidebar-nav-item-tags')}
+      </Label>
       <Select
         options={options}
         value={tags}

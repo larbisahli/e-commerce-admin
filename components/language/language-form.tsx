@@ -61,8 +61,6 @@ export default function LanguageForm({
   const router = useRouter();
   const { t } = useTranslation();
 
-  console.log({ initialValues });
-
   const [error, setError] = useState(null);
   const [currentLocale, setCurrentLocale] = useState<{ [key: string]: string }>(
     { actions: localeFiles['actions'] }

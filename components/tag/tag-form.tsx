@@ -61,8 +61,8 @@ export default function CreateOrUpdateTagForm({ initialValues }: IProps) {
       }
     },
     onCompleted: (data: { createTag: Tag }) => {
-      if (!isEmpty(data)) {
-        const { id } = data.createTag;
+      const { id } = data.createTag;
+      if (id) {
         notify(t('common:successfully-created'), 'success');
         router.push(`${ROUTES.TAG}/edit/${id}`);
       }

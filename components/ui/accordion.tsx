@@ -54,16 +54,18 @@ export const Accordion: React.FC<CollapseProps> = ({
                 <div
                   className="pl-3 pb-1 text-gray-500"
                   data-tooltip-id="update-tooltip"
-                  data-tooltip-content={
-                    'Changes have been made to this section that have not been saved.'
-                  }
                 >
                   <EditInfoIcon />
                   <Tooltip
                     id="update-tooltip"
-                    className="product-tooltip"
-                    classNameArrow="product-tooltip-arrow"
-                  />
+                    className="form-tooltip"
+                    classNameArrow="form-tooltip-arrow"
+                  >
+                    <div>
+                      Changes have been made to this section that have not been
+                      saved.
+                    </div>
+                  </Tooltip>
                 </div>
               )}
             </div>

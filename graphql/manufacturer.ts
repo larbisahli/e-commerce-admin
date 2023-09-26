@@ -80,6 +80,9 @@ export const MANUFACTURERS_FOR_SELECT = gql`
     ) {
       id
       name
+      translated {
+        name
+      }
     }
   }
 `;
@@ -99,7 +102,7 @@ export const CREATE_MANUFACTURER = gql`
       logo: $logo
       language: $language
     ) {
-      name
+      id
     }
   }
 `;
@@ -121,7 +124,7 @@ export const UPDATE_MANUFACTURER = gql`
       language: $language
       logo: $logo
     ) {
-      name
+      id
     }
   }
 `;

@@ -2,21 +2,33 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import { ApolloQueryResult } from '@apollo/client';
 import FormActions from '@components/common/FormActions';
-import Uploader from '@components/common/uploader';
 import { ArrowPrev } from '@components/icons/arrow-prev';
 import EmptyFolderSvg from '@components/icons/emoty-folder';
 import Button from '@components/ui/button';
-import { FormActionPlaceholder } from '@components/ui/placeholders/FormAction';
+import Loader from '@components/ui/loader/loader';
 import { MediaItemPlaceholder } from '@components/ui/placeholders/MediaItem';
 import { MediaType } from '@ts-types/generated';
 import cn from 'classnames';
 import isEmpty from 'lodash/isEmpty';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { useMemo, useState } from 'react';
 
 import Folder from './folder';
 import ImageViewModal from './Image-view-modal';
+
+const Uploader = dynamic(() => import('@components/common/uploader'), {
+  ssr: false,
+  loading: () => (
+    <div
+      className=" flex h-36 items-center rounded
+  border-2 border-dashed border-border-base"
+    >
+      <Loader text={'Loading'} />
+    </div>
+  )
+});
 
 type IProps = {
   media: {
@@ -79,26 +91,60 @@ const MediaList = ({ media, refetch, loading }: IProps) => {
 
   const { count = 0 } = media?.mediaTotalCount ?? {};
 
-  if (loading) {
-    return (
-      <div>
-        <FormActionPlaceholder />
-        <div className="mt-8 flex w-full justify-center">
-          <div className="grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
-            {Array.from({ length: 8 })?.map((_, idx) => (
-              <MediaItemPlaceholder key={idx} />
-            ))}
+  const isLoading = loading && isEmpty(media);
+
+  const renderLoader = () => {
+    if (isLoading) {
+      return (
+        <div>
+          <div className="mt-8 flex w-full justify-center">
+            <div className="grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
+              {Array.from({ length: 8 })?.map((_, idx) => (
+                <MediaItemPlaceholder key={idx} />
+              ))}
+            </div>
           </div>
         </div>
-      </div>
-    );
-  }
+      );
+    }
+    return null;
+  };
 
   const renderImageLoader = () => {
     if (!loadingImage) {
       return null;
     }
     return <MediaItemPlaceholder loader />;
+  };
+
+  const renderMediaContent = () => {
+    if (isLoading) {
+      return null;
+    }
+    return (
+      <div className="mb-6 mt-8 flex w-full justify-center">
+        <div
+          className={cn(
+            'grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6',
+            {
+              hidden: isMediaReady
+            }
+          )}
+        >
+          {renderImageLoader()}
+          {newFolderClicked && (
+            <Folder
+              folder={{}}
+              isCreateMode
+              refetch={refetch}
+              handleNewFolderButton={handleNewFolderButton}
+            />
+          )}
+          {children?.map((child) => <Folder key={child.id} folder={child} />)}
+        </div>
+        {renderEmptyMedia()}
+      </div>
+    );
   };
 
   return (
@@ -136,32 +182,16 @@ const MediaList = ({ media, refetch, loading }: IProps) => {
           </Button>
         </div>
       </FormActions>
-
       <div className="relative my-2 bg-white">
-        <Uploader setLoading={setLoading} mediaId={id} refetch={refetch} />
+        <Uploader
+          setLoading={setLoading}
+          mediaId={id}
+          refetch={refetch}
+          disable={isLoading}
+        />
       </div>
-      <div className="mb-6 mt-8 flex w-full justify-center">
-        <div
-          className={cn(
-            'grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6',
-            {
-              hidden: isMediaReady
-            }
-          )}
-        >
-          {renderImageLoader()}
-          {newFolderClicked && (
-            <Folder
-              folder={{}}
-              isCreateMode
-              refetch={refetch}
-              handleNewFolderButton={handleNewFolderButton}
-            />
-          )}
-          {children?.map((child) => <Folder key={child.id} folder={child} />)}
-        </div>
-        {renderEmptyMedia()}
-      </div>
+      {renderLoader()}
+      {renderMediaContent()}
     </>
   );
 };

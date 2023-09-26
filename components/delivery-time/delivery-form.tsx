@@ -105,8 +105,8 @@ export default function CreateOrUpdateDeliveryForm({ initialValues }: IProps) {
       }
     },
     onCompleted: (data: { createDeliveryTime: DeliveryTimeType }) => {
-      if (!isEmpty(data)) {
-        const { id } = data.createDeliveryTime;
+      const { id } = data.createDeliveryTime;
+      if (id) {
         notify(t('common:successfully-created'), 'success');
         router.push(`${ROUTES.DELIVERY_TIME}/edit/${id}`);
       }

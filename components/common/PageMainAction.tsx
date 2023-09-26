@@ -20,6 +20,10 @@ interface Props {
   hideBorder?: boolean;
   onClick?: (e: any) => void;
   RenderIcon?: () => any;
+  params?: {
+    name: string;
+    param: string;
+  }[];
 }
 
 const PageMainAction = ({
@@ -29,7 +33,8 @@ const PageMainAction = ({
   onClick,
   RenderIcon,
   hideBorder = false,
-  showSelectLanguage = true
+  showSelectLanguage = true,
+  params
 }: Props) => {
   const { t } = useTranslation();
 
@@ -111,7 +116,8 @@ const PageMainAction = ({
         <LinkButton
           href={href}
           onClick={onClick}
-          className="h-[40px] ms-4 md:ms-6"
+          className="h-[40px]"
+          params={params}
         >
           <div className="flex w-full items-center justify-center">
             <div className="hidden items-center justify-center md:flex">

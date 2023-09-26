@@ -7,9 +7,10 @@ import { TableRowPlaceholder } from '@components/ui/placeholders/Table';
 import ProfileCart from '@components/ui/profile-card';
 import { LANGUAGES, SET_DEFAULT_LANGUAGE } from '@graphql/language';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetUser } from '@hooks/useGetUser';
+import { useAppDispatch, useGetUser } from '@hooks/useGetUser';
 import { usePlaceholder } from '@hooks/usePlaceholder';
 import { notify } from '@lib/notify';
+import { fetchStoreSettings } from '@store/settings';
 import { CreatedUpdatedByAt, LanguageType } from '@ts-types/generated';
 import { useIsRTL } from '@utils/locals';
 import { ROUTES } from '@utils/routes';
@@ -47,6 +48,8 @@ const LanguageList = ({ loading, languages, selectedColumns }: IProps) => {
   const { userInfo } = useGetUser();
   const csrfToken = userInfo?.csrfToken;
 
+  const dispatch = useAppDispatch();
+
   const [setDefaultLanguage, { loading: settingDefault }] = useMutation(
     SET_DEFAULT_LANGUAGE,
     {
@@ -58,6 +61,7 @@ const LanguageList = ({ loading, languages, selectedColumns }: IProps) => {
       refetchQueries: [LANGUAGES, 'Languages'],
       onCompleted: (data: { setDefaultLanguage: LanguageType }) => {
         if (!isEmpty(data.setDefaultLanguage)) {
+          dispatch(fetchStoreSettings());
           notify(
             t('common:successfully-updated', {
               displayName: data.setDefaultLanguage?.name

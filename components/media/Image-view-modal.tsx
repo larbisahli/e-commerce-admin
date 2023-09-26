@@ -31,8 +31,6 @@ const ImageViewModal = () => {
   const { closeModal } = useModalAction();
   const { isOpen, view, id: parentId = null, meta } = useModalState();
 
-  console.log({ parentId });
-
   const { userInfo } = useGetUser();
   const csrfToken = userInfo?.csrfToken;
 

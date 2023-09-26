@@ -99,8 +99,8 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
         }
       },
       onCompleted: (data: { createHeroSlide: HeroBannerType }) => {
-        if (!isEmpty(data)) {
-          const { id } = data.createHeroSlide;
+        const { id } = data.createHeroSlide;
+        if (id) {
           notify(t('common:successfully-created'), 'success');
           router.push(`${ROUTES.HERO_BANNER}/edit/${id}`);
         }

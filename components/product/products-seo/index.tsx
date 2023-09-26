@@ -2,6 +2,7 @@ import { useMutation } from '@apollo/client';
 import Card from '@components/common/card';
 import { SaveIcon } from '@components/icons/save-icon';
 import ImageModal from '@components/image-modal';
+import { RenderTooltipContent } from '@components/product/ToolTips';
 import Accordion from '@components/ui/accordion';
 import Button from '@components/ui/button';
 import Description from '@components/ui/description';
@@ -19,7 +20,6 @@ import { ChangeEvent, memo, useCallback, useEffect, useState } from 'react';
 import slugify from 'slugify';
 
 import { Actions, useFormReducer } from '../context/form.context';
-import { RenderTooltip } from './ToolTips';
 
 type Props = {
   initialValues: Product;
@@ -235,7 +235,7 @@ const ProductSeo = ({ state, initialValues }: Props) => {
             className="mb-5"
             onFocus={() => updateWhenEmpty('slug')}
             onBlur={checkForUpdateHandler}
-            renderTooltip={<RenderTooltip />}
+            renderTooltip={<RenderTooltipContent />}
           />
           <Input
             label={t('form:input-label-meta-title')}
@@ -248,7 +248,7 @@ const ProductSeo = ({ state, initialValues }: Props) => {
             className="mb-5"
             onFocus={() => updateWhenEmpty('metaTitle', false)}
             onBlur={checkForUpdateHandler}
-            renderTooltip={<RenderTooltip />}
+            renderTooltip={<RenderTooltipContent />}
           />
           <TextArea
             label={t('form:input-label-meta-keywords')}

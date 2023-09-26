@@ -75,8 +75,8 @@ export default function CreateOrUpdateManufacturerForm({
         }
       },
       onCompleted: (data: { createManufacturer: ManufacturerType }) => {
-        if (!isEmpty(data)) {
-          const { id } = data.createManufacturer;
+        const { id } = data.createManufacturer;
+        if (id) {
           notify(t('common:successfully-created'), 'success');
           router.push(`${ROUTES.MANUFACTURER}/edit/${id}`);
         }

@@ -3,12 +3,13 @@ import {
   Actions,
   useFormReducer
 } from '@components/product/context/form.context';
+import { SuppliersTooltipContent } from '@components/product/ToolTips';
 import Label from '@components/ui/label';
 import Select from '@components/ui/select/select';
 import { SUPPLIERS_FOR_SELECT } from '@graphql/supplier';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useSettings } from '@hooks/useSettings';
-import { LanguageType, OrderBy, Product, Suppliers } from '@ts-types/generated';
+import { LanguageType, OrderBy, Suppliers } from '@ts-types/generated';
 import { isEmpty } from 'lodash';
 import { useTranslation } from 'next-i18next';
 import React, { memo } from 'react';
@@ -65,7 +66,13 @@ const ProductSupplier = ({ suppliers }: Props) => {
 
   return (
     <div className="mb-5">
-      <Label>{t('form:input-label-suppliers')}</Label>
+      <Label
+        openTooltipOnClick
+        tooltipId="supplier"
+        renderTooltip={<SuppliersTooltipContent />}
+      >
+        {t('form:input-label-suppliers')}
+      </Label>
       <Select
         options={options}
         value={suppliers}
