@@ -51,7 +51,6 @@ const Avatar: React.FC<AvatarProps> = ({
           src={state?.src}
           customPlaceholder={state?.customPlaceholder}
           onError={() => {
-            console.log('----------------->');
             setState({
               src: siteSettings.avatar.image,
               customPlaceholder: siteSettings.avatar.placeholder

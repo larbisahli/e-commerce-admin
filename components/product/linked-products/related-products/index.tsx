@@ -2,7 +2,9 @@ import {
   Actions,
   useFormReducer
 } from '@components/product/context/form.context';
+import { RenderTooltipRelated } from '@components/product/ToolTips';
 import Button from '@components/ui/button';
+import Label from '@components/ui/label';
 import {
   useModalAction,
   useModalState
@@ -49,9 +51,18 @@ const RelatedProducts = ({
 
   return (
     <>
-      <div className="flex flex-wrap items-end justify-between xl:flex-nowrap">
+      <div className="w-full">
+        <Label
+          tooltipId="related"
+          className="text-base font-medium"
+          spaceBetween={false}
+          renderTooltip={<RenderTooltipRelated />}
+        >
+          Related Products
+        </Label>
+      </div>
+      <div className="flex flex-wrap items-start justify-between xl:flex-nowrap">
         <div className="mb-3 xl:mb-0">
-          <span className="text-base font-medium">Related Products</span>
           <p className="max-w-full text-sm text-body xl:max-w-[75%]">
             Related products are shown to customers in addition to the item the
             customer is looking at.
@@ -72,6 +83,7 @@ const RelatedProducts = ({
       {!isEmpty(relatedProducts) && (
         <div className="mt-5">
           <ProductList
+            loading={false}
             products={relatedProducts}
             selectedColumns={[
               'thumbnail',

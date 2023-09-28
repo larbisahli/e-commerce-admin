@@ -72,6 +72,15 @@ const ProductTag = ({ tags }: Props) => {
     });
   }, [tagSelect]);
 
+  const tagValues = useMemo(() => {
+    return tags?.map(({ id, name, translated }) => {
+      return {
+        id,
+        name: name ?? translated?.name
+      };
+    });
+  }, [tags]);
+
   return (
     <div>
       <Label
@@ -83,7 +92,7 @@ const ProductTag = ({ tags }: Props) => {
       </Label>
       <Select
         options={options}
-        value={tags}
+        value={tagValues}
         name="tags"
         isMulti
         getOptionLabel={(option: any) => option.name}

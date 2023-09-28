@@ -242,16 +242,16 @@
 }
 
 .form-tooltip {
-  color: #313131 !important;
-  background-color: #ffffff !important;
-  border: 1px solid rgb(191, 191, 191) !important;
+  color: #e7e5e5 !important;
+  background-color: #141414 !important;
+  border: 1px solid #b7b7b7 !important;
   pointer-events: auto !important;
   opacity: 1 !important;
 }
 
 .form-tooltip-arrow {
-  border-right: 1px solid rgb(191, 191, 191) !important;
-  border-bottom: 1px solid rgb(191, 191, 191) !important;
+  border-right: 1px solid #b7b7b7 !important;
+  border-bottom: 1px solid #b7b7b7 !important;
 }
 
 .custom-tooltip {

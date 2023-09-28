@@ -88,15 +88,15 @@ const ProductList = ({ loading, products, selectedColumns }: IProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
-          return name;
+          return name ?? record?.translated?.name;
         }
       },
       {
         title: t('table:table-item-sku'),
         dataIndex: 'sku',
         key: 'sku',
-        align: alignLeft,
-        width: 80,
+        align: 'center',
+        width: 120,
         ellipsis: true,
         render: (sku: string, record: TableRowProps) => {
           if (record?.loading) {
@@ -109,7 +109,7 @@ const ProductList = ({ loading, products, selectedColumns }: IProps) => {
         title: t('table:table-item-unit'),
         dataIndex: 'salePrice',
         key: 'salePrice',
-        align: alignRight,
+        align: 'center',
         width: 100,
         render: (salePrice: number, record: TableRowProps) => {
           if (record?.loading) {
@@ -166,8 +166,8 @@ const ProductList = ({ loading, products, selectedColumns }: IProps) => {
         title: t('table:table-item-created-at'),
         dataIndex: 'createdAt',
         key: 'createdAt',
-        align: alignLeft,
-        width: 180,
+        align: 'center',
+        width: 200,
         render: (
           createdAt: CreatedUpdatedByAt['createdAt'],
           record: TableRowProps
@@ -185,7 +185,7 @@ const ProductList = ({ loading, products, selectedColumns }: IProps) => {
         title: t('table:table-item-created-by'),
         dataIndex: 'createdBy',
         key: 'createdBy',
-        align: alignLeft,
+        align: 'center',
         width: 150,
         ellipsis: true,
         render: (
@@ -206,7 +206,7 @@ const ProductList = ({ loading, products, selectedColumns }: IProps) => {
         title: t('table:table-item-updated-by'),
         dataIndex: 'updatedBy',
         key: 'updatedBy',
-        align: alignLeft,
+        align: 'center',
         width: 150,
         ellipsis: true,
         render: (
@@ -228,7 +228,7 @@ const ProductList = ({ loading, products, selectedColumns }: IProps) => {
         dataIndex: 'id',
         key: 'actions',
         align: 'center',
-        width: 120,
+        width: 150,
         render: (id: string, record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
@@ -243,7 +243,7 @@ const ProductList = ({ loading, products, selectedColumns }: IProps) => {
         }
       }
     ];
-  }, [alignLeft, alignRight, t]);
+  }, [alignLeft, t]);
 
   const tableColumns = useMemo(() => {
     return columns?.filter(({ key }) => {

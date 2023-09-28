@@ -1,5 +1,7 @@
+import { QuestionMark } from '@components/icons/questionMark';
 import cn from 'classnames';
-import React, { TextareaHTMLAttributes } from 'react';
+import React, { ReactElement, TextareaHTMLAttributes } from 'react';
+import { Tooltip } from 'react-tooltip';
 
 export interface Props extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   className?: string;
@@ -11,6 +13,7 @@ export interface Props extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   note?: string;
   shadow?: boolean;
   variant?: 'normal' | 'solid' | 'outline';
+  renderTooltip?: ReactElement;
 }
 
 const classes = {
@@ -34,6 +37,7 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, Props>((props, ref) => {
     shadow = false,
     note,
     inputClassName,
+    renderTooltip,
     ...rest
   } = props;
 
@@ -50,18 +54,53 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, Props>((props, ref) => {
     inputClassName
   );
 
+  const renderLabel = () => {
+    if (!label) {
+      return null;
+    }
+
+    return (
+      <label className="block text-sm font-semibold leading-none text-body-dark">
+        {label}
+        {isRequiredLabel && (
+          <span title="Requited filed" className="m-[1px] text-blue-500">
+            *
+          </span>
+        )}
+      </label>
+    );
+  };
+
+  const renderInputTooltip = () => {
+    if (!renderTooltip) {
+      return null;
+    }
+
+    return (
+      <div>
+        <Tooltip
+          id={`${name}-textarea-question`}
+          className="form-tooltip"
+          classNameArrow="form-tooltip-arrow"
+        >
+          {renderTooltip}
+        </Tooltip>
+        <div
+          data-tooltip-id={`${name}-textarea-question`}
+          className="mr-1 flex h-full cursor-pointer items-center pb-1"
+        >
+          <QuestionMark width="20" height="20" />
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className={className}>
-      {label && (
-        <label className="mb-3 block text-sm font-semibold leading-none text-body-dark">
-          {label}
-          {isRequiredLabel && (
-            <span title="Requited filed" className="m-[1px] text-red-500">
-              *
-            </span>
-          )}
-        </label>
-      )}
+      <div className="mb-2 flex items-center justify-between">
+        {renderLabel()}
+        {renderInputTooltip()}
+      </div>
       <textarea
         id={name}
         name={name}

@@ -60,6 +60,7 @@ export const Accordion: React.FC<CollapseProps> = ({
                     id="update-tooltip"
                     className="form-tooltip"
                     classNameArrow="form-tooltip-arrow"
+                    place="right"
                   >
                     <div>
                       Changes have been made to this section that have not been

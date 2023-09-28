@@ -78,6 +78,15 @@ const ProductManufacturer = ({ manufacturers }: Props) => {
     });
   }, [manufacturersForSelect]);
 
+  const manufacturerValues = useMemo(() => {
+    return manufacturers?.map(({ id, name, translated }) => {
+      return {
+        id,
+        name: name ?? translated?.name
+      };
+    });
+  }, [manufacturers]);
+
   return (
     <div className="mb-5">
       <Label
@@ -89,7 +98,7 @@ const ProductManufacturer = ({ manufacturers }: Props) => {
       </Label>
       <Select
         options={options}
-        value={manufacturers}
+        value={manufacturerValues}
         name="manufacturers"
         isMulti
         getOptionLabel={(option: any) => option.name}

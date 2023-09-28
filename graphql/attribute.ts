@@ -88,6 +88,7 @@ export const ATTRIBUTES_FOR_SELECT = gql`
     ) {
       id
       name
+      type
       translated {
         name
       }

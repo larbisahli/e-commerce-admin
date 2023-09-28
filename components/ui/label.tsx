@@ -9,6 +9,7 @@ export interface Props extends LabelHTMLAttributes<HTMLLabelElement> {
   renderTooltip?: ReactElement;
   openTooltipOnClick?: boolean;
   tooltipId?: string;
+  spaceBetween?: boolean;
 }
 
 const Label: React.FC<Props> = ({
@@ -18,20 +19,21 @@ const Label: React.FC<Props> = ({
   renderTooltip,
   openTooltipOnClick = false,
   tooltipId = '',
+  spaceBetween = true,
   ...rest
 }) => {
   const renderLabel = () => {
     return (
       <label
         className={cn(
-          'mb-2 block text-sm font-semibold leading-none text-gray-600',
+          'block text-sm font-semibold leading-none text-gray-600',
           className
         )}
         {...rest}
       >
         {children}
         {isRequiredLabel && (
-          <span title="Required filed" className="m-[1px] text-red-500">
+          <span title="Required filed" className="m-[1px] text-blue-500">
             *
           </span>
         )}
@@ -45,7 +47,7 @@ const Label: React.FC<Props> = ({
     }
 
     return (
-      <div>
+      <div className="ml-3">
         <Tooltip
           id={`${tooltipId}-input-question`}
           className="form-tooltip"
@@ -65,7 +67,11 @@ const Label: React.FC<Props> = ({
   };
 
   return (
-    <div className="flex items-center justify-between">
+    <div
+      className={cn('mb-2 flex items-center', {
+        'justify-between': spaceBetween
+      })}
+    >
       {renderLabel()}
       {renderInputTooltip()}
     </div>

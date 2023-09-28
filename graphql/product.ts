@@ -36,6 +36,9 @@ export const PRODUCTS = gql`
         image
         placeholder
       }
+      translated {
+        name
+      }
       createdAt
       createdBy {
         id
@@ -56,18 +59,23 @@ export const PRODUCT = gql`
     product(id: $id, language: $language) {
       id
       name
+      description
+      note
       sku
       salePrice
       comparePrice
       buyingPrice
       quantity
-      description
       type {
         id
       }
       published
       disableOutOfStock
-      note
+      translated {
+        name
+        description
+        note
+      }
       thumbnail {
         id
         image
@@ -81,6 +89,9 @@ export const PRODUCT = gql`
       categories {
         id
         name
+        translated {
+          name
+        }
       }
       suppliers {
         id
@@ -89,10 +100,16 @@ export const PRODUCT = gql`
       tags {
         id
         name
+        translated {
+          name
+        }
       }
       manufacturers {
         id
         name
+        translated {
+          name
+        }
       }
       variationOptions {
         id
@@ -139,7 +156,6 @@ export const PRODUCT = gql`
       }
 
       productSeo {
-        id
         slug
         metaTitle
         metaKeywords
@@ -148,6 +164,11 @@ export const PRODUCT = gql`
           id
           image
           placeholder
+        }
+        translated {
+          metaTitle
+          metaKeywords
+          metaDescription
         }
       }
     }
@@ -160,6 +181,9 @@ export const LINKED_PRODUCTS = gql`
       id
       sku
       name
+      translated {
+        name
+      }
       type {
         id
       }
@@ -175,6 +199,9 @@ export const LINKED_PRODUCTS = gql`
       id
       sku
       name
+      translated {
+        name
+      }
       type {
         id
       }
@@ -190,6 +217,9 @@ export const LINKED_PRODUCTS = gql`
       id
       sku
       name
+      translated {
+        name
+      }
       type {
         id
       }
@@ -286,13 +316,11 @@ export const UPDATE_PRODUCT = gql`
 export const UPDATE_PRODUCT_THUMBNAIL = gql`
   mutation UpdateProductThumbnail(
     $id: Int!
-    $language: LanguageInput!
     $additions: ProductInput!
     $deletions: ProductInput!
   ) {
     updateProductThumbnail(
       id: $id
-      language: $language
       additions: $additions
       deletions: $deletions
     ) {
@@ -327,6 +355,7 @@ export const UPDATE_PRODUCT_CONTENT = gql`
     $note: String
     $published: Boolean!
     $disableOutOfStock: Boolean!
+    $productSeo: ProductSeoInput!
     $language: LanguageInput!
   ) {
     updateProductContent(
@@ -336,12 +365,13 @@ export const UPDATE_PRODUCT_CONTENT = gql`
       description: $description
       published: $published
       disableOutOfStock: $disableOutOfStock
+      productSeo: $productSeo
       language: $language
     ) {
       id
       name
-      note
       description
+      note
       published
       disableOutOfStock
     }
@@ -412,13 +442,22 @@ export const UPDATE_PRODUCT_SELECT_GROUP = gql`
 export const UPDATE_PRODUCT_SEO = gql`
   mutation UpdateProductSeo(
     $id: Int!
+    $name: String
+    $description: String
+    $note: String
     $language: LanguageInput!
     $productSeo: ProductSeoInput!
   ) {
-    updateProductSeo(id: $id, language: $language, productSeo: $productSeo) {
+    updateProductSeo(
+      id: $id
+      name: $name
+      description: $description
+      note: $note
+      language: $language
+      productSeo: $productSeo
+    ) {
       id
       productSeo {
-        id
         slug
         metaTitle
         metaKeywords

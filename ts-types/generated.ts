@@ -353,12 +353,16 @@ export interface Product extends CreatedUpdatedByAt {
   minPrice?: Scalars['Float'];
   quantity?: Scalars['Int'];
   inStock?: Nullable<Scalars['Boolean']>;
-  shortDescription?: Nullable<Scalars['String']>;
-  description?: Scalars['String'];
+  description?: Nullable<Scalars['String']>;
   type?: { id: ProductType; name?: string };
   published?: Scalars['Boolean'];
   status?: ProductStatus;
   disableOutOfStock?: Scalars['Boolean'];
+  translated?: {
+    name?: Scalars['String'];
+    description?: Nullable<Scalars['String']>;
+    note?: Nullable<Scalars['String']>;
+  };
   note?: Nullable<Scalars['String']>;
   thumbnail?: ImageType[];
   gallery?: ImageType[];
@@ -396,6 +400,11 @@ export interface ProductSeo {
   metaKeywords: string;
   metaDescription: string;
   metaImage: ImageType[];
+  translated?: {
+    metaTitle: string;
+    metaKeywords: string;
+    metaDescription: string;
+  };
 }
 
 export interface VariationType {

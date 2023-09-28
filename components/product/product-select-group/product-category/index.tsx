@@ -73,6 +73,15 @@ const ProductCategory = ({ categories }: Props) => {
     });
   }, [categorySelectAll]);
 
+  const categoryValues = useMemo(() => {
+    return categories?.map(({ id, name, translated }) => {
+      return {
+        id,
+        name: name ?? translated?.name
+      };
+    });
+  }, [categories]);
+
   return (
     <div className="mb-5">
       <Label
@@ -85,7 +94,7 @@ const ProductCategory = ({ categories }: Props) => {
       </Label>
       <Select
         options={options}
-        value={categories}
+        value={categoryValues}
         name="categories"
         isMulti
         getOptionLabel={(option: any) => option.name}

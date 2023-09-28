@@ -9,7 +9,9 @@ import { LINKED_PRODUCTS, UPDATE_LINKED_PRODUCTS } from '@graphql/product';
 import { useDifferenceWith } from '@hooks/useDifferenceWith';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetUser } from '@hooks/useGetUser';
+import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/notify';
+import { LanguageProps } from '@ts-types/custom.types';
 import type { Product } from '@ts-types/generated';
 import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
@@ -33,7 +35,7 @@ interface TProduct {
   isUpdateMode: boolean;
 }
 
-interface productVariable {
+interface productVariable extends LanguageProps {
   id: number;
 }
 
@@ -49,6 +51,8 @@ const LinkedProducts = ({ state, initialValues }: Props) => {
 
   const productId = parseInt(query.productId as string, 10);
 
+  const { selectedLanguage } = useSettings();
+
   const [error, setError] = useState(null);
 
   const {
@@ -57,9 +61,9 @@ const LinkedProducts = ({ state, initialValues }: Props) => {
     error: queryError,
     refetch
   } = useQuery<TProduct, productVariable>(LINKED_PRODUCTS, {
-    variables: { id: productId },
+    variables: { id: productId, language: selectedLanguage },
     fetchPolicy: 'cache-and-network',
-    skip: isEmpty(initialValues)
+    skip: isEmpty(initialValues) && isEmpty(selectedLanguage)
   });
 
   const { userInfo } = useGetUser();

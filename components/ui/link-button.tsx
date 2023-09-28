@@ -124,7 +124,7 @@ const RenderParamDropDown = ({
       </button>
       <div
         className={cn(
-          'absolute right-0 left-0 top-full border bg-white transition-all',
+          'absolute right-0 left-0 top-full border bg-white shadow-md transition-all',
           { hidden: !openParamDropdown }
         )}
       >
@@ -141,8 +141,8 @@ const RenderParamDropDown = ({
               >
                 <a
                   onClick={handleLinkClick}
-                  className="w-full cursor-pointer border-b p-3 text-left
-            text-sm text-gray-600 hover:bg-gray-200"
+                  className="w-full cursor-pointer border-b p-3 text-left text-sm
+            text-gray-600 hover:bg-gray-200"
                 >
                   {name}
                 </a>

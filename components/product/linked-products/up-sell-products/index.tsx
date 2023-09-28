@@ -2,7 +2,12 @@ import {
   Actions,
   useFormReducer
 } from '@components/product/context/form.context';
+import {
+  CategoryTooltipContent,
+  RenderTooltipUpsell
+} from '@components/product/ToolTips';
 import Button from '@components/ui/button';
+import Label from '@components/ui/label';
 import {
   useModalAction,
   useModalState
@@ -49,9 +54,18 @@ const UpSellProducts = ({
 
   return (
     <>
-      <div className="flex flex-wrap items-end justify-between xl:flex-nowrap">
+      <div className="w-full">
+        <Label
+          tooltipId="up-sell"
+          className="text-base font-medium"
+          spaceBetween={false}
+          renderTooltip={<RenderTooltipUpsell />}
+        >
+          Up-Sell Products
+        </Label>
+      </div>
+      <div className="flex flex-wrap items-start justify-between xl:flex-nowrap">
         <div className="mb-3 xl:mb-0">
-          <span className="text-base font-medium">Up-Sell Products</span>
           <p className="max-w-full text-sm text-body xl:max-w-[75%]">
             An up-sell item is offered to the customer as a pricier or
             higher-quality alternative to the product the customer is looking
@@ -73,6 +87,7 @@ const UpSellProducts = ({
       {!isEmpty(upsellProducts) && (
         <div className="mt-5">
           <ProductList
+            loading={false}
             products={upsellProducts}
             selectedColumns={[
               'thumbnail',

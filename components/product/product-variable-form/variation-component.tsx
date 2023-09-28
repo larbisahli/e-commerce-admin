@@ -1,6 +1,7 @@
 import Label from '@components/ui/label';
 import Loader from '@components/ui/loader/loader';
 import Title from '@components/ui/title';
+import { AttributeTypes } from '@ts-types/enums';
 import type { VariationType } from '@ts-types/generated';
 import { Attribute } from '@ts-types/generated';
 import dynamic from 'next/dynamic';
@@ -65,13 +66,39 @@ const VariationComponent = ({
 
   const AttributeId = variant?.attribute.id;
 
+  const _attributes = useMemo(() => {
+    return attributes?.map(({ id, type, name, translated, values }) => {
+      return {
+        id,
+        type,
+        name: name ?? translated?.name,
+        values: values?.map((value) => {
+          if (type === AttributeTypes.COLOR) {
+            return {
+              id: value?.id,
+              name: value?.name ?? value?.translated?.name,
+              value: value?.name ?? value?.translated?.name
+            };
+          }
+          return {
+            id: value?.id,
+            name: value?.name ?? value?.translated?.name,
+            value: value?.value ?? value?.translated?.value
+          };
+        })
+      };
+    });
+  }, [attributes]);
+
   const values = useMemo(() => {
     if (loading && !AttributeId) {
       return [];
     }
-    return attributes?.find((attribute) => attribute.id === AttributeId)
+    return _attributes?.find((attribute) => attribute.id === AttributeId)
       ?.values;
-  }, [loading, AttributeId, attributes]);
+  }, [loading, AttributeId, _attributes]);
+
+  const { attribute = {}, selectedValues = [] } = variant ?? {};
 
   return (
     <div className="border-b border-dashed border-border-200 p-5 last:border-0 md:p-8">
@@ -93,13 +120,13 @@ const VariationComponent = ({
         <div className="mt-5">
           <Label isRequiredLabel>{t('form:input-label-attribute-name')}</Label>
           <Select
-            value={variant?.attribute}
+            value={attribute}
             getOptionLabel={(option: any) => option.name}
             getOptionValue={(option: any) => option.id}
             isLoading={loading}
             closeMenuOnSelect
             hideSelectedOptions
-            options={attributes}
+            options={_attributes}
             onChange={changeAttribute}
             onBlur={updateHandler}
           />
@@ -108,7 +135,7 @@ const VariationComponent = ({
         <div className="col-span-2 mt-5">
           <Label isRequiredLabel>{t('form:input-label-attribute-value')}</Label>
           <Select
-            value={variant?.selectedValues}
+            value={selectedValues}
             getOptionLabel={(option: any) => option.value}
             getOptionValue={(option: any) => option.id}
             isMulti

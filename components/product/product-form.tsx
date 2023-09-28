@@ -164,10 +164,11 @@ function ProductForm({ setUnsavedChanges, initialValues = {} }: IProps) {
         'x-csrf-token': csrfToken
       }
     },
-    onCompleted: (data: { createAttribute: Product }) => {
-      if (!isEmpty(data)) {
+    onCompleted: (data: { createProduct: Product }) => {
+      const { id } = data.createProduct;
+      if (id) {
         notify(t('common:successfully-created'), 'success');
-        router.push(ROUTES.PRODUCT);
+        router.push(`${ROUTES.PRODUCT}/edit/${id}`);
       }
     }
   });
@@ -312,6 +313,7 @@ function ProductForm({ setUnsavedChanges, initialValues = {} }: IProps) {
       {/* Content */}
       <ProductContent
         state={productContentState}
+        productSeo={productSeo}
         initialValues={initialValues}
       />
       {/* Variation Type & Simple Type product form */}
@@ -325,7 +327,11 @@ function ProductForm({ setUnsavedChanges, initialValues = {} }: IProps) {
         initialValues={initialValues}
       />
       {/* SEO */}
-      <ProductSeo state={ProductSeoState} initialValues={initialValues} />
+      <ProductSeo
+        state={ProductSeoState}
+        productContent={productContentState}
+        initialValues={initialValues}
+      />
       {/* Related Products, Up-Sells, and Cross-Sells  */}
       <LinkedProducts
         state={linkedProductsState}

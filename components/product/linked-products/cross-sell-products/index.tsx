@@ -2,7 +2,9 @@ import {
   Actions,
   useFormReducer
 } from '@components/product/context/form.context';
+import { RenderTooltipCrossSell } from '@components/product/ToolTips';
 import Button from '@components/ui/button';
+import Label from '@components/ui/label';
 import {
   useModalAction,
   useModalState
@@ -49,9 +51,18 @@ const CrossSellProducts = ({
 
   return (
     <>
-      <div className="flex flex-wrap items-end justify-between xl:flex-nowrap">
+      <div className="w-full">
+        <Label
+          tooltipId="cross-sell"
+          className="text-base font-medium"
+          spaceBetween={false}
+          renderTooltip={<RenderTooltipCrossSell />}
+        >
+          Cross-Sell Products
+        </Label>
+      </div>
+      <div className="flex flex-wrap items-start justify-between xl:flex-nowrap">
         <div className="mb-3 xl:mb-0">
-          <span className="text-base font-medium">Cross-Sell Products</span>
           <p className="max-w-full text-sm text-body xl:max-w-[75%]">{`These "impulse-buy" products appear next to the shopping cart as cross-sells to the items already in the shopping cart.`}</p>
         </div>
         <div className="ml-0 xl:ml-2">
@@ -70,6 +81,7 @@ const CrossSellProducts = ({
         <div className="mt-5">
           <ProductList
             products={crossSellProducts}
+            loading={false}
             selectedColumns={[
               'thumbnail',
               'name',

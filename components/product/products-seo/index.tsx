@@ -2,7 +2,12 @@ import { useMutation } from '@apollo/client';
 import Card from '@components/common/card';
 import { SaveIcon } from '@components/icons/save-icon';
 import ImageModal from '@components/image-modal';
-import { RenderTooltipContent } from '@components/product/ToolTips';
+import {
+  RenderTooltipMetaDescription,
+  RenderTooltipMetaKeywords,
+  RenderTooltipMetaTitle,
+  RenderTooltipSlug
+} from '@components/product/ToolTips';
 import Accordion from '@components/ui/accordion';
 import Button from '@components/ui/button';
 import Description from '@components/ui/description';
@@ -11,8 +16,10 @@ import TextArea from '@components/ui/text-area';
 import { UPDATE_PRODUCT_SEO } from '@graphql/product';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetUser } from '@hooks/useGetUser';
+import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/notify';
 import { Product } from '@ts-types/generated';
+import { translationFallback } from '@utils/utils';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
 import { useTranslation } from 'next-i18next';
@@ -30,9 +37,18 @@ type Props = {
     productSeo: Product['productSeo'];
     isUpdateMode: boolean;
   };
+  productContent: {
+    id: number;
+    name: Product['name'];
+    note: Product['note'];
+    description: Product['description'];
+    status: Product['status'];
+    disableOutOfStock: Product['disableOutOfStock'];
+    isUpdateMode: boolean;
+  };
 };
 
-const ProductSeo = ({ state, initialValues }: Props) => {
+const ProductSeo = ({ state, productContent, initialValues }: Props) => {
   const { t } = useTranslation();
 
   const [initProductSeo, setInitProductSeo] = useState<Product['productSeo']>(
@@ -49,7 +65,6 @@ const ProductSeo = ({ state, initialValues }: Props) => {
     name: productName,
     thumbnail,
     productSeo: {
-      id,
       slug,
       metaImage,
       metaTitle,
@@ -59,6 +74,8 @@ const ProductSeo = ({ state, initialValues }: Props) => {
     productSeo,
     isUpdateMode
   } = state;
+
+  const { selectedLanguage } = useSettings();
 
   const dispatch = useFormReducer();
 
@@ -186,8 +203,11 @@ const ProductSeo = ({ state, initialValues }: Props) => {
     updateProductSeo({
       variables: {
         id: productId,
+        name: productContent?.name,
+        description: productContent?.description,
+        note: productContent?.note,
+        language: selectedLanguage,
         productSeo: {
-          id,
           slug,
           metaImage: metaImage?.map(({ id }) => ({ id })),
           metaTitle,
@@ -216,6 +236,8 @@ const ProductSeo = ({ state, initialValues }: Props) => {
     return null;
   };
 
+  const descriptionLength = metaDescription?.length ?? 0;
+
   return (
     <Accordion isUpdated={isUpdated} Title={() => t('form:form-title-seo')}>
       <div className="my-5 flex flex-wrap sm:my-8">
@@ -235,7 +257,7 @@ const ProductSeo = ({ state, initialValues }: Props) => {
             className="mb-5"
             onFocus={() => updateWhenEmpty('slug')}
             onBlur={checkForUpdateHandler}
-            renderTooltip={<RenderTooltipContent />}
+            renderTooltip={<RenderTooltipSlug />}
           />
           <Input
             label={t('form:input-label-meta-title')}
@@ -243,23 +265,31 @@ const ProductSeo = ({ state, initialValues }: Props) => {
             name="metaTitle"
             value={metaTitle}
             onChange={handleChange}
-            placeholder="Title..."
             variant="outline"
             className="mb-5"
             onFocus={() => updateWhenEmpty('metaTitle', false)}
             onBlur={checkForUpdateHandler}
-            renderTooltip={<RenderTooltipContent />}
+            renderTooltip={<RenderTooltipMetaTitle />}
+            placeholder={translationFallback(
+              initialValues?.productSeo,
+              'metaTitle',
+              'Enter meta title'
+            )}
           />
           <TextArea
             label={t('form:input-label-meta-keywords')}
-            isRequiredLabel
             name="metaKeywords"
             value={metaKeywords}
             onChange={handleChange}
             variant="outline"
             className="mb-5"
-            placeholder="Products, keywords, ..."
             onBlur={checkForUpdateHandler}
+            renderTooltip={<RenderTooltipMetaKeywords />}
+            placeholder={translationFallback(
+              initialValues?.productSeo,
+              'metaKeywords',
+              'Accessories, keywords...'
+            )}
           />
           <TextArea
             label={t('form:item-meta-description')}
@@ -270,6 +300,12 @@ const ProductSeo = ({ state, initialValues }: Props) => {
             // error={t(errors.productSeo?.metaDescription?.message!)}
             variant="outline"
             onBlur={checkForUpdateHandler}
+            renderTooltip={<RenderTooltipMetaDescription />}
+            placeholder={translationFallback(
+              initialValues?.productSeo,
+              'metaDescription',
+              'Enter meta description'
+            )}
           />
           <div
             style={{ fontSize: '.75rem' }}
@@ -278,13 +314,11 @@ const ProductSeo = ({ state, initialValues }: Props) => {
             <p className="mr-2 text-body">
               Meta Description should optimally be between 150-160 characters
             </p>
-            {metaDescription?.length < 160 ? (
-              <span className="text-green-600">{`(${
-                metaDescription?.length ?? 0
-              }/160 characters max)`}</span>
+            {descriptionLength < 160 ? (
+              <span className="text-green-600">{`(${descriptionLength}/160 characters max)`}</span>
             ) : (
               <span className="text-red-600">
-                {`(${metaDescription?.length ?? 0}/160 characters max)`}
+                {`(${descriptionLength}/160 characters max)`}
               </span>
             )}
           </div>

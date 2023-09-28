@@ -13,9 +13,11 @@ import Radio from '@components/ui/radio';
 import TextArea from '@components/ui/text-area';
 import { UPDATE_PRODUCT_CONTENT } from '@graphql/product';
 import { useErrorLogger, useGetUser } from '@hooks/index';
+import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/notify';
 import { Nullable } from '@ts-types/custom.types';
 import { Product, ProductStatus } from '@ts-types/generated';
+import { translationFallback } from '@utils/utils';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
 import dynamic from 'next/dynamic';
@@ -23,9 +25,11 @@ import { useTranslation } from 'next-i18next';
 import { ChangeEvent, memo, useCallback, useEffect, useState } from 'react';
 
 import { Actions, useFormReducer } from '../context/form.context';
+import { RenderTooltipHiddenNote } from '../ToolTips';
 
 interface Props {
   initialValues: Nullable<Product>;
+  productSeo: Product['productSeo'];
   state: {
     id: number;
     name: Product['name'];
@@ -42,7 +46,7 @@ const Editor = dynamic(() => import('@components/ui/editor'), {
   ssr: false
 });
 
-const ProductContent = ({ state, initialValues }: Props) => {
+const ProductContent = ({ state, initialValues, productSeo }: Props) => {
   const { t } = useTranslation();
 
   const [isUpdated, setIsUpdated] = useState(false);
@@ -50,6 +54,8 @@ const ProductContent = ({ state, initialValues }: Props) => {
   const [initProductContent, setInitProductContent] = useState<Product>(
     () => initialValues
   );
+
+  const { selectedLanguage } = useSettings();
 
   const [error, setError] = useState(null);
   useErrorLogger(error);
@@ -163,7 +169,13 @@ const ProductContent = ({ state, initialValues }: Props) => {
         description,
         published: status === 'publish',
         note,
-        disableOutOfStock
+        disableOutOfStock,
+        productSeo: {
+          metaTitle: productSeo?.metaTitle,
+          metaKeywords: productSeo?.metaKeywords,
+          metaDescription: productSeo?.metaDescription
+        },
+        language: selectedLanguage
       }
     }).catch((err) => {
       setError(err);
@@ -210,9 +222,13 @@ const ProductContent = ({ state, initialValues }: Props) => {
             onChange={handleChange}
             onBlur={checkForUpdateHandler}
             // error={t(errors.name?.message!)}
-            placeholder="Title..."
             variant="outline"
             className="mb-5"
+            placeholder={translationFallback(
+              initialValues,
+              'name',
+              'Enter product name'
+            )}
           />
 
           <Label isRequiredLabel>{t('form:input-label-product-details')}</Label>
@@ -224,6 +240,7 @@ const ProductContent = ({ state, initialValues }: Props) => {
             className="mb-5"
             block={!isEmpty(initialValues.description) && !id}
             defaultValue=""
+            placeholder={'Enter product details'}
           />
           {/* <ValidationError message={t(errors.description?.message)} /> */}
           <TextArea
@@ -232,9 +249,14 @@ const ProductContent = ({ state, initialValues }: Props) => {
             value={note}
             onChange={handleChange}
             onBlur={checkForUpdateHandler}
-            placeholder="Hidden note"
+            renderTooltip={<RenderTooltipHiddenNote />}
             // error={t(errors.note?.message!)}
             variant="outline"
+            placeholder={translationFallback(
+              initialValues,
+              'note',
+              'Your hidden note'
+            )}
           />
           <p className="mb-5 text-xs text-gray-500">
             {t('form:hidden-info-note')}

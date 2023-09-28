@@ -55,7 +55,7 @@ const ProductTypeComponent = ({ state, initialValues }: Props) => {
         });
       }
     }
-  }, [productTypeParam, initialValues, dispatch]);
+  }, []);
 
   return (
     <div
@@ -73,7 +73,7 @@ const ProductTypeComponent = ({ state, initialValues }: Props) => {
       />
       <Card className="w-full sm:w-8/12 md:w-2/3">
         <Label
-          tooltipId="manufacturer"
+          tooltipId="product-type"
           renderTooltip={<ProductTypeTooltipContent />}
         >
           {t('form:form-title-product-type')}

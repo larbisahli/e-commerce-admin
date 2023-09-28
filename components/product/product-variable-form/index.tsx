@@ -317,6 +317,7 @@ function ProductVariableForm({
     updateVariableProductInformation({
       variables: {
         id: productId,
+        language: selectedLanguage,
         additions: {
           variationOptions: additions?.map((value) => {
             return {
@@ -405,7 +406,7 @@ function ProductVariableForm({
           {/* Preview generation section start */}
           {!!variationOptions?.length && (
             <div className="mt-5 border-t border-dashed border-border-200 pt-5 md:mt-8 md:pt-8">
-              <Title className="mb-0 px-5 text-center text-lg uppercase md:px-8">
+              <Title className="mb-5 px-5 text-center text-lg uppercase md:px-8">
                 {variationOptions?.length}{' '}
                 {variationOptions?.length > 1
                   ? t('form:variations')
