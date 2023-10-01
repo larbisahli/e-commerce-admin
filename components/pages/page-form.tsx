@@ -99,7 +99,7 @@ export default function AboutUsForm({ initialValues }: IProps) {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormActions
-        forceDefaultLang={isEmpty(initialValues)}
+        forceSystemLang={isEmpty(initialValues)}
         title={name ?? initialValues?.translated?.name}
         loading={updating}
         disabled={updating}

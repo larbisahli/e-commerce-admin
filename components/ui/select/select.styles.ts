@@ -24,7 +24,7 @@ export const selectStyles = {
     alignItems: 'center',
     minHeight: 45,
     backgroundColor: state.isDisabled ? '#eee' : '#ffffff',
-    borderRadius: 3,
+    borderRadius: 2,
     border: '1px solid #D1D5DB',
     borderColor: state.isFocused ? 'rgb(var(--color-accent-500))' : '#D1D5DB',
     boxShadow:
@@ -52,7 +52,7 @@ export const selectStyles = {
   }),
   menu: (provided: any) => ({
     ...provided,
-    borderRadius: 3,
+    borderRadius: 2,
     border: '1px solid #E5E7EB',
     boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)'
   }),
@@ -69,7 +69,7 @@ export const selectStyles = {
   multiValue: (provided: any, _: any) => ({
     ...provided,
     backgroundColor: 'rgb(var(--color-accent-400))',
-    borderRadius: 4,
+    borderRadius: 2,
     overflow: 'hidden',
     boxShadow: '0 0px 3px 0 rgba(0, 0, 0, 0.1), 0 0px 2px 0 rgba(0, 0, 0, 0.06)'
   }),
@@ -164,7 +164,7 @@ export const simpleSelectStyles = {
   multiValue: (provided: any, _: any) => ({
     ...provided,
     backgroundColor: 'rgb(var(--color-accent-400))',
-    borderRadius: 4,
+    borderRadius: 2,
     overflow: 'hidden',
     boxShadow: '0 0px 3px 0 rgba(0, 0, 0, 0.1), 0 0px 2px 0 rgba(0, 0, 0, 0.06)'
   }),

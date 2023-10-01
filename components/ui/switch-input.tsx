@@ -1,4 +1,5 @@
 import { Switch } from '@headlessui/react';
+import cn from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { Controller } from 'react-hook-form';
 
@@ -15,9 +16,6 @@ const SwitchInput = ({ control, label, name, errors }: Props) => {
   const { t } = useTranslation();
   return (
     <div className="flex items-center">
-      <div className="mr-2 block text-sm font-semibold leading-none text-body-dark">
-        {label}
-      </div>
       <Controller
         name={name}
         control={control}
@@ -25,19 +23,23 @@ const SwitchInput = ({ control, label, name, errors }: Props) => {
           <Switch
             checked={value}
             onChange={onChange}
-            className={`${
-              value ? 'bg-green-600' : 'bg-gray-200'
-            } relative inline-flex h-6 w-11 items-center rounded-full`}
+            className={cn(
+              'relative inline-flex h-4 w-7 items-center rounded-full border',
+              value ? 'bg-blue-500' : 'bg-gray-300'
+            )}
           >
             <span className="sr-only">Enable {label}</span>
             <span
               className={`${
-                value ? 'translate-x-6' : 'translate-x-1'
-              } inline-block h-4 w-4 transform rounded-full bg-light`}
+                value ? 'translate-x-3' : 'translate-x-0'
+              } inline-block h-3 w-3 transform rounded-full border bg-light`}
             />
           </Switch>
         )}
       />
+      <div className="ml-2 block text-sm font-medium leading-none text-gray-600">
+        {label}
+      </div>
       <ValidationError message={t(errors?.[name]?.message)} />
     </div>
   );

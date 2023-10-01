@@ -143,13 +143,9 @@ export const PRODUCT = gql`
         weightUnit {
           unit
         }
-        volume
-        volumeUnit {
-          unit
-        }
         dimensionWidth
         dimensionHeight
-        dimensionDepth
+        dimensionLength
         dimensionUnit {
           unit
         }
@@ -176,7 +172,7 @@ export const PRODUCT = gql`
 `;
 
 export const LINKED_PRODUCTS = gql`
-  query RelatedProducts($id: Int!, $language: LanguageInput!) {
+  query RelatedProducts($id: Int, $language: LanguageInput!) {
     relatedProducts(id: $id, language: $language) {
       id
       sku
@@ -490,13 +486,9 @@ export const UPDATE_PRODUCT_SHIPPING_INFO = gql`
         weightUnit {
           unit
         }
-        volume
-        volumeUnit {
-          unit
-        }
         dimensionWidth
         dimensionHeight
-        dimensionDepth
+        dimensionLength
         dimensionUnit {
           unit
         }

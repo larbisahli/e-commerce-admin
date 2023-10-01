@@ -1,6 +1,6 @@
 import * as yup from 'yup';
 export const settingsValidationSchema = yup.object().shape({
-  currency: yup.object().nullable().required('form:error-currency-required'),
+  currencies: yup.array().nullable().required('form:error-currency-required'),
   minimumOrderAmount: yup
     .number()
     .transform((value) => (isNaN(value) ? undefined : value))

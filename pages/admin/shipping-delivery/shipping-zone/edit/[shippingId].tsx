@@ -1,14 +1,16 @@
 import { useQuery } from '@apollo/client';
+import { PageFormPlaceholder } from '@components/common/commonComponents';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
-import Loader from '@components/ui/loader/loader';
 import { SHIPPING_ZONE } from '@graphql/shipping-zone';
 import { useGetUser } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
+import { useSettings } from '@hooks/useSettings';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
-import type { SSRProps } from '@ts-types/custom.types';
+import type { LanguageProps, SSRProps } from '@ts-types/custom.types';
 import { ShippingZoneType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
+import { isEmpty } from 'lodash';
 import type { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
@@ -18,10 +20,10 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const CreateOrUpdateShippingForm = dynamic(
   () => import('@components/shipping-zone/shipping-form'),
-  { ssr: true }
+  { ssr: true, loading: () => <PageFormPlaceholder /> }
 );
 
-interface ShippingVariable {
+interface ShippingVariable extends LanguageProps {
   id: number;
 }
 
@@ -31,19 +33,22 @@ export default function UpdateShippingPage({ client }: SSRProps) {
 
   const shippingId = parseInt(query.shippingId as string, 10);
 
+  const { systemLanguage } = useSettings();
+
   const { data, loading, error } = useQuery<ShippingZoneType, ShippingVariable>(
     SHIPPING_ZONE,
     {
-      variables: { id: shippingId },
-      fetchPolicy: 'cache-and-network'
+      variables: { id: shippingId, language: systemLanguage },
+      fetchPolicy: 'cache-and-network',
+      skip: isEmpty(systemLanguage)
     }
   );
 
   useGetUser(client);
   useErrorLogger(error);
 
-  if (loading) {
-    return <Loader text={t('common:text-loading')} />;
+  if (isEmpty(data?.shippingZone) || loading) {
+    return <PageFormPlaceholder />;
   }
 
   if (error) {
@@ -61,11 +66,6 @@ export default function UpdateShippingPage({ client }: SSRProps) {
           href="/svg/shippingZone.svg"
         />
       </Head>
-      <div className="flex border-b border-dashed border-border-base py-5 sm:py-8">
-        <h1 className="text-lg font-semibold text-heading">
-          {t('form:form-title-update-shipping')}
-        </h1>
-      </div>
       <CreateOrUpdateShippingForm initialValues={data} />
     </>
   );

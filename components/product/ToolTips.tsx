@@ -80,10 +80,20 @@ export const RenderTooltipSlug = () => {
 export const RenderTooltipMetaTitle = () => {
   return (
     <div className="flex flex-col items-center">
-      <div className="mt-3 max-w-[300px] text-xs leading-snug">
+      <div className="max-w-[300px] text-xs leading-snug text-white">
         The meta title is the most important SEO element and should be unique
         for each page. You should limit yourself in length to a maximum of 56
         characters. Your keyword should ideally be placed at the very front.
+      </div>
+    </div>
+  );
+};
+
+export const RenderTooltipMeasureAndPackaging = () => {
+  return (
+    <div className="flex flex-col items-center">
+      <div className="max-w-[300px] text-xs leading-snug text-white">
+        Product Measurements will be used to calculate your shipping cost.
       </div>
     </div>
   );

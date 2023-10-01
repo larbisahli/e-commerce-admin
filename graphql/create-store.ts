@@ -12,7 +12,7 @@ export const CREATE_STORE = gql`
     $currency: CurrencyInput!
     $acceptCondition: Boolean!
     $phoneNumber: String
-    $token: String
+    $token: String!
   ) {
     createStore(
       firstName: $firstName

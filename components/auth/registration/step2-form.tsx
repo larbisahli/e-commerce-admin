@@ -15,6 +15,8 @@ import { CURRENCY } from '@utils/currency';
 import { useTranslation } from 'next-i18next';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 
+import { RenderTooltipCurrency } from './ToolTips';
+
 const Step2Form = ({ control, register, errors, alias }) => {
   const { t } = useTranslation();
   const [executeCheckQuery, setExecuteCheckQuery] = useState(false);
@@ -42,6 +44,7 @@ const Step2Form = ({ control, register, errors, alias }) => {
         error={t(errors?.alias?.message!)}
         onKeyDown={() => setExecuteCheckQuery(false)}
         onKeyUp={() => setExecuteCheckQuery(true)}
+        isRequiredLabel
       />
       <div className="mb-4 flex items-center pt-1 text-xs text-gray-500 ">
         <span className="pr-1">
@@ -57,10 +60,13 @@ const Step2Form = ({ control, register, errors, alias }) => {
           variant="outline"
           className="mb-4 mr-2 w-full"
           error={t(errors?.storeName?.message!)}
+          isRequiredLabel
         />
       </div>
       <div className="mb-5">
-        <Label>{t('form:input-label-currency')}</Label>
+        <Label isRequiredLabel renderTooltip={<RenderTooltipCurrency />}>
+          {t('form:input-label-currency')}
+        </Label>
         <SelectInput
           name="currency"
           control={control}

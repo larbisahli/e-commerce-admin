@@ -174,7 +174,7 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormActions
         backLink={ROUTES.HERO_BANNER}
-        forceDefaultLang={isEmpty(initialValues)}
+        forceSystemLang={isEmpty(initialValues)}
         title={
           isEmpty(initialValues)
             ? t('form:form-title-new-banner')

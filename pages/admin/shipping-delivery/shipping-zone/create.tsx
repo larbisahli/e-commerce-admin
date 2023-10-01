@@ -1,3 +1,4 @@
+import { PageFormPlaceholder } from '@components/common/commonComponents';
 import AppLayout from '@components/layouts/app';
 import { useGetUser } from '@hooks/index';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
@@ -6,22 +7,19 @@ import { ROUTES } from '@utils/routes';
 import type { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
-import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const CreateOrUpdateShippingForm = dynamic(
   () => import('@components/shipping-zone/shipping-form'),
-  { ssr: true }
+  { ssr: true, loading: () => <PageFormPlaceholder /> }
 );
 
 export default function CreateShippingPage({ client }: SSRProps) {
-  const { t } = useTranslation();
   useGetUser(client);
-
   return (
     <>
       <Head>
-        <title>Create Shipping zone | Dropgala</title>
+        <title>New Shipping zone | Dropgala</title>
         <link
           rel="icon"
           type="image/svg"
@@ -29,11 +27,6 @@ export default function CreateShippingPage({ client }: SSRProps) {
           href="/svg/shippingZone.svg"
         />
       </Head>
-      <div className="flex border-b border-dashed border-border-base py-5 sm:py-8">
-        <h1 className="text-lg font-semibold text-heading">
-          {t('form:form-title-create-shipping-zone')}
-        </h1>
-      </div>
       <CreateOrUpdateShippingForm />
     </>
   );

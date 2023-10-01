@@ -13,5 +13,10 @@ export const useSettings = () => {
     [settings?.languages]
   );
 
-  return { ...settings, defaultLanguage };
+  const systemLanguage = useMemo(
+    () => settings?.languages?.find((lang) => lang.isSystem),
+    [settings?.languages]
+  );
+
+  return { ...settings, defaultLanguage, systemLanguage };
 };

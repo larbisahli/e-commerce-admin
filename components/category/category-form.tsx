@@ -241,18 +241,18 @@ export default function CreateOrUpdateCategoriesForm({
     if (!includeInMenu) {
       setValue('position', 0);
     }
-  }, [includeInMenu]);
+  }, [includeInMenu, setValue]);
 
   useEffect(() => {
     if (!isEmpty(thumbnail) && isEmpty(metaImage)) {
       setValue('metaImage', thumbnail);
     }
-  }, [thumbnail, metaImage]);
+  }, [thumbnail, metaImage, setValue]);
 
   useEffect(() => {
     const value = generateSlug(urlKey);
     setValue('urlKey', value);
-  }, [urlKey]);
+  }, [setValue, urlKey]);
 
   const updateWhenEmpty = (field: string, isSlug = true) => {
     // @ts-ignore
@@ -266,7 +266,7 @@ export default function CreateOrUpdateCategoriesForm({
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormActions
         backLink={ROUTES.CATEGORY}
-        forceDefaultLang={isEmpty(initialValues)}
+        forceSystemLang={isEmpty(initialValues)}
         title={
           isEmpty(initialValues)
             ? t('form:form-title-new-category')

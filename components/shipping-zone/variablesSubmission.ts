@@ -16,8 +16,8 @@ export const updateVariable = (
         shippingZone?.rateType?.type === RateType.WEIGHT
           ? rate?.weightUnit
           : null,
-      minValue: Number(rate?.minValue),
-      maxValue: rate?.noMax ? null : Number(rate?.maxValue),
+      min: Number(rate?.min),
+      max: rate?.noMax ? null : Number(rate?.max),
       noMax: rate?.noMax,
       price: Number(rate?.price)
     };

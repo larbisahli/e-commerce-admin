@@ -169,7 +169,7 @@ export default function CreateOrUpdateDeliveryForm({ initialValues }: IProps) {
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormActions
         backLink={ROUTES.DELIVERY_TIME}
-        forceDefaultLang={isEmpty(initialValues)}
+        forceSystemLang={isEmpty(initialValues)}
         title={
           isEmpty(initialValues)
             ? t('form:form-title-new-manufacturer')

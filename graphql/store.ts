@@ -6,7 +6,7 @@ export const STORE_CONFIG = gql`
       storeName
       storeEmail
       storeNumber
-      currency {
+      systemCurrency {
         symbol
         code
         name
@@ -16,6 +16,7 @@ export const STORE_CONFIG = gql`
         name
         localeId
         isDefault
+        isSystem
       }
     }
   }

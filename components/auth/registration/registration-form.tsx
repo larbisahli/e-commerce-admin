@@ -65,6 +65,19 @@ const registrationFormSchema = yup.object().shape({
     .oneOf([true], 'You must accept the terms and conditions')
 });
 
+const defaultValues = {
+  acceptCondition: false,
+  currency: {
+    symbol: '$',
+    name: 'US Dollar',
+    symbol_native: '$',
+    decimal_digits: 2,
+    rounding: 0,
+    code: 'USD',
+    name_plural: 'US dollars'
+  }
+};
+
 const RegistrationForm = () => {
   const _reCaptchaRef = useRef<any>();
   const router = useRouter();
@@ -90,9 +103,7 @@ const RegistrationForm = () => {
     formState: { errors },
     reset
   } = useForm<FormValues>({
-    defaultValues: {
-      acceptCondition: false
-    },
+    defaultValues,
     resolver: yupResolver(registrationFormSchema)
   });
 
@@ -144,7 +155,8 @@ const RegistrationForm = () => {
         symbol_native: values?.currency.symbol_native,
         decimal_digits: values?.currency.decimal_digits,
         rounding: values?.currency.rounding,
-        name_plural: values?.currency.name_plural
+        name_plural: values?.currency.name_plural,
+        is_default: true
       },
       token
     };
@@ -161,18 +173,12 @@ const RegistrationForm = () => {
       handleStep();
       return;
     }
-
     _reCaptchaRef.current.execute();
   }
 
   const handleStep = () => {
     const values = getValues();
     if (step === 1) {
-      console.log({
-        alias: values.alias,
-        storeName: values.storeName,
-        currency: values.currency
-      });
       if (isEmpty(values.alias)) {
         setErrorMessage('Store slug is required');
         return;
@@ -217,8 +223,6 @@ const RegistrationForm = () => {
       setValue('country', countries?.find(({ iso2: iso }) => iso == iso2));
     }
   }, [countries, iso2, setValue]);
-
-  console.log({ errors, countries });
 
   const alias = watch('alias');
   const country = watch('country');

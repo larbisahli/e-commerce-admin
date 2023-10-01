@@ -17,7 +17,7 @@ import { useInView } from 'react-intersection-observer';
 interface Props {
   loading?: boolean;
   disabled?: boolean;
-  forceDefaultLang?: boolean;
+  forceSystemLang?: boolean;
   backLink?: string;
   title?: string;
   showSelectLanguage?: boolean;
@@ -34,7 +34,7 @@ const FormActions = ({
   title,
   disabled,
   backLink,
-  forceDefaultLang = false,
+  forceSystemLang = false,
   showSelectLanguage = true,
   hideBackLink = false,
   showCancel = true,
@@ -60,7 +60,7 @@ const FormActions = ({
   });
 
   const {
-    defaultLanguage,
+    systemLanguage,
     languages = [],
     isLoading,
     selectedLanguage
@@ -73,10 +73,10 @@ const FormActions = ({
   };
 
   useEffect(() => {
-    if (forceDefaultLang) {
-      dispatch(setCurrentLanguage({ language: defaultLanguage }));
+    if (forceSystemLang) {
+      dispatch(setCurrentLanguage({ language: systemLanguage }));
     }
-  }, [defaultLanguage, dispatch, forceDefaultLang]);
+  }, [systemLanguage, dispatch, forceSystemLang]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -100,7 +100,7 @@ const FormActions = ({
               getOptionLabel={(option: any) => option.name}
               getOptionValue={(option: any) => option.id}
               onChange={onLanguageChange}
-              isDisabled={forceDefaultLang}
+              isDisabled={forceSystemLang}
               isLoading={isLoading}
               className="w-full"
             />
@@ -242,7 +242,7 @@ const FormActions = ({
       <div
         className={cn(
           'border-y border-t-0 border-gray-300 opacity-100 transition-all duration-100 ease-linear',
-          'nlg:ps-20 nxl:ps-20 fixed left-0 right-0 top-[75px] z-40 bg-gray-100 pr-8 md:ps-20 lg:ps-64 xl:ps-64',
+          'nlg:ps-20 nxl:ps-20 fixed left-0 right-0 top-[75px] z-30 bg-gray-100 pr-8 md:ps-20 lg:ps-64 xl:ps-64',
           {
             '!ps-0 md:!ps-20': displayMiniSidebar,
             'invisible !opacity-0': inView

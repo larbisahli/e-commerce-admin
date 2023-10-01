@@ -3,6 +3,8 @@ import ImageModal from '@components/image-modal';
 import Accordion from '@components/ui/accordion';
 import Checkbox from '@components/ui/checkbox';
 import Input from '@components/ui/input';
+import Label from '@components/ui/label';
+import Select from '@components/ui/select/select';
 import Title from '@components/ui/title';
 import { useSettings } from '@hooks/useSettings';
 import type { ImageType, VariationOptionsType } from '@ts-types/generated';
@@ -11,6 +13,11 @@ import { useTranslation } from 'next-i18next';
 import React, { memo, useEffect, useMemo } from 'react';
 
 import { Actions, useFormReducer } from '../context/form.context';
+import { RenderTooltipMeasureAndPackaging } from '../ToolTips';
+
+const weightUnits = [{ unit: 'kg' }, { unit: 'g' }];
+
+const dimensionUnits = [{ unit: 'cm' }, { unit: 'mm' }];
 
 interface CartesianProductProps {
   updateHandler: () => void;
@@ -27,7 +34,24 @@ const CartesianProductComponent = ({
 }: CartesianProductProps) => {
   const { t } = useTranslation();
 
-  const { currency } = useSettings();
+  const { systemCurrency } = useSettings();
+
+  const {
+    id,
+    title,
+    salePrice,
+    comparePrice,
+    buyingPrice,
+    quantity,
+    sku,
+    thumbnail,
+    weight,
+    weightUnit,
+    dimensionWidth,
+    dimensionHeight,
+    dimensionLength,
+    dimensionUnit
+  } = variationOption;
 
   const dispatch = useFormReducer();
 
@@ -48,7 +72,12 @@ const CartesianProductComponent = ({
     dispatch({
       type: Actions.CHANGE_VARIATION_OPTION,
       payload: {
-        value: target.type === 'number' ? Number(value) : value,
+        value:
+          target.type === 'number'
+            ? Number(value) < 0
+              ? 0
+              : Number(value)
+            : value,
         field: name,
         options
       }
@@ -66,17 +95,6 @@ const CartesianProductComponent = ({
     });
   };
 
-  const {
-    id,
-    title,
-    salePrice,
-    comparePrice,
-    buyingPrice,
-    quantity,
-    sku,
-    thumbnail
-  } = variationOption;
-
   const isUpdated = useMemo(() => {
     return !isEmpty(updatedVariationOptions?.find((v) => v.id === id));
   }, [id, updatedVariationOptions]);
@@ -86,6 +104,17 @@ const CartesianProductComponent = ({
       updateHandler();
     }
   }, [thumbnail, updateHandler]);
+
+  const onSelectChange = (value, field) => {
+    dispatch({
+      type: Actions.CHANGE_VARIATION_OPTION,
+      payload: {
+        field,
+        value,
+        options
+      }
+    });
+  };
 
   return (
     <Accordion
@@ -104,7 +133,9 @@ const CartesianProductComponent = ({
       >
         <div className="grid grid-cols-3 gap-3">
           <Input
-            label={`${t('form:input-label-sale-price')} (${currency?.symbol})`}
+            label={`${t(
+              'form:input-label-sale-price'
+            )} (${systemCurrency?.symbol})`}
             isRequiredLabel
             type="number"
             id={`salePrice-${index}`}
@@ -120,7 +151,7 @@ const CartesianProductComponent = ({
           <Input
             label={`${t(
               'form:input-label-compare-price'
-            )} (${currency?.symbol})`}
+            )} (${systemCurrency?.symbol})`}
             name="comparePrice"
             min={0}
             onChange={HandleInputChange}
@@ -134,7 +165,7 @@ const CartesianProductComponent = ({
           <Input
             label={`${t(
               'form:input-label-buying-price'
-            )} (${currency?.symbol})`}
+            )} (${systemCurrency?.symbol})`}
             type="number"
             name="buyingPrice"
             min={0}
@@ -170,7 +201,135 @@ const CartesianProductComponent = ({
             className="mb-2 ml-1"
           />
         </div>
-
+        {/* --------------------- */}
+        <div className="mt-5">
+          <Label
+            tooltipId="measures-packaging"
+            spaceBetween={false}
+            renderTooltip={<RenderTooltipMeasureAndPackaging />}
+          >
+            {`${t('form:form-title-measures-packaging')} (${t(
+              'form:form-title-optional'
+            )})`}{' '}
+          </Label>
+          <div className="flex flex-wrap items-center">
+            <div className="flex items-center">
+              {/* Width */}
+              <div className="mr-2 mb-5 flex items-center">
+                <div>
+                  <Label>{t('form:input-label-weight')}</Label>
+                  <div className="mr-2 flex items-center justify-center rounded-sm border bg-gray-100">
+                    <Input
+                      name="weight"
+                      value={weight}
+                      onChange={HandleInputChange}
+                      type="number"
+                      variant="custom"
+                      className="w-28"
+                      min={0}
+                      placeholder="e.g. 0.4..."
+                      inputClassName="rounded-none rounded-l-sm border-r"
+                    />
+                    <div className="h-full w-8 text-center text-gray-600">
+                      {weightUnit?.unit}
+                    </div>
+                  </div>
+                </div>
+                <div className="w-22">
+                  <Label>{t('form:input-label-dimensions-units')}</Label>
+                  <Select
+                    options={weightUnits}
+                    value={weightUnit}
+                    name="weightUnit"
+                    getOptionLabel={(option: any) => option.unit}
+                    getOptionValue={(option: any) =>
+                      option.unit?.charAt(0)?.toUpperCase() +
+                      option.unit?.slice(1)
+                    }
+                    onChange={(value) => onSelectChange(value, 'weightUnit')}
+                    className="w-full"
+                  />
+                </div>
+              </div>
+            </div>
+            {/* Dimensions */}
+            <div className="mb-5 flex flex-wrap items-center">
+              <div className="my-2">
+                <Label>{t('form:input-label-dimensions-width')}</Label>
+                <div className="mr-2 flex items-center justify-center rounded-sm border bg-gray-100">
+                  <Input
+                    name="dimensionWidth"
+                    value={dimensionWidth}
+                    onChange={HandleInputChange}
+                    type="number"
+                    variant="custom"
+                    className="w-28"
+                    min={0}
+                    placeholder="e.g. 500..."
+                    inputClassName="rounded-none rounded-l-sm border-r"
+                  />
+                  <div className="h-full w-8 text-center text-gray-600">
+                    {dimensionUnit?.unit}
+                  </div>
+                </div>
+              </div>
+              <div className="my-2">
+                <Label>{t('form:input-label-dimensions-height')}</Label>
+                <div className="mr-2 flex items-center justify-center rounded-sm border bg-gray-100">
+                  <Input
+                    name="dimensionHeight"
+                    value={dimensionHeight}
+                    onChange={HandleInputChange}
+                    type="number"
+                    variant="custom"
+                    className="w-28"
+                    min={0}
+                    placeholder="e.g. 200..."
+                    inputClassName="rounded-none rounded-l-sm border-r"
+                  />
+                  <div className="h-full w-8 text-center text-gray-600">
+                    {dimensionUnit?.unit}
+                  </div>
+                </div>
+              </div>
+              <div className="my-2">
+                <Label>{t('form:input-label-dimensions-length')}</Label>
+                <div className="mr-2 flex items-center justify-center rounded-sm border bg-gray-100">
+                  <Input
+                    name="dimensionLength"
+                    value={dimensionLength}
+                    onChange={HandleInputChange}
+                    type="number"
+                    variant="custom"
+                    className="w-28"
+                    min={0}
+                    placeholder="e.g. 100..."
+                    inputClassName="rounded-none rounded-l-sm border-r"
+                  />
+                  <div className="h-full w-8 text-center text-gray-600">
+                    {dimensionUnit?.unit}
+                  </div>
+                </div>
+              </div>
+              <div className="my-2 w-24">
+                <Label>{t('form:input-label-dimensions-units')}</Label>
+                <Select
+                  options={dimensionUnits}
+                  value={dimensionUnit}
+                  name="dimensionUnit"
+                  getOptionLabel={(option: any) => option.unit}
+                  getOptionValue={(option: any) =>
+                    option.unit?.charAt(0)?.toUpperCase() +
+                    option.unit?.slice(1)
+                  }
+                  onChange={(value) => onSelectChange(value, 'dimensionUnit')}
+                  className="w-full"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* --------------------- */}
         <ImageModal
           isThumbnail
           onSelect={handleSelectedImage}

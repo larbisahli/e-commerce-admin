@@ -261,7 +261,7 @@ function ProductForm({ setUnsavedChanges, initialValues = {} }: IProps) {
     <form noValidate>
       <FormActions
         backLink={ROUTES.PRODUCT}
-        forceDefaultLang={isEmpty(initialValues)}
+        forceSystemLang={isEmpty(initialValues)}
         title={
           isEmpty(initialValues)
             ? t('form:form-title-new-product')
@@ -340,6 +340,7 @@ function ProductForm({ setUnsavedChanges, initialValues = {} }: IProps) {
       {/* Shipping Info */}
       <div className="mb-12">
         <ProductShippingInfoForm
+          productType={type?.id}
           state={productShippingInfoState}
           initialValues={initialValues}
         />

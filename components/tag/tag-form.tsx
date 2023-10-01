@@ -108,7 +108,7 @@ export default function CreateOrUpdateTagForm({ initialValues }: IProps) {
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormActions
           backLink={ROUTES.TAG}
-          forceDefaultLang={isEmpty(initialValues)}
+          forceSystemLang={isEmpty(initialValues)}
           title={
             isEmpty(initialValues)
               ? t('form:form-title-new-tag')

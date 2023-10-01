@@ -161,23 +161,6 @@ const ShippingList = ({ loading, shippingZones, selectedColumns }: IProps) => {
         }
       },
       {
-        title: t('table:table-item-delivery-time'),
-        dataIndex: 'deliveryTime',
-        key: 'deliveryTime',
-        align: 'center',
-        width: 100,
-        render: (deliveryTime: DeliveryTimeType, record: TableRowProps) => {
-          if (record?.loading) {
-            return <TableRowPlaceholder />;
-          }
-          return (
-            <div className="!text-sm font-medium capitalize text-gray-500">
-              {deliveryTime?.name}
-            </div>
-          );
-        }
-      },
-      {
         title: t('table:table-item-created-at'),
         dataIndex: 'createdAt',
         key: 'createdAt',

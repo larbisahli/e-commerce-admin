@@ -136,7 +136,13 @@ export const VariationReducer = {
                   isDisable: false,
                   quantity: 1,
                   salePrice: 0,
-                  sku: ''
+                  sku: '',
+                  weight: null,
+                  weightUnit: { unit: 'kg' },
+                  dimensionWidth: null,
+                  dimensionHeight: null,
+                  dimensionLength: null,
+                  dimensionUnit: { unit: 'mm' }
                 };
               }
               return undefined;

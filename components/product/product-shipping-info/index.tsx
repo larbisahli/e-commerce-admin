@@ -12,7 +12,7 @@ import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetUser } from '@hooks/useGetUser';
 import { notify } from '@lib/notify';
 import { Nullable } from '@ts-types/custom.types';
-import { Product } from '@ts-types/generated';
+import { Product, ProductType } from '@ts-types/generated';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
 import { useTranslation } from 'next-i18next';
@@ -28,6 +28,7 @@ import { Actions, useFormReducer } from '../context/form.context';
 
 type Props = {
   initialValues: Nullable<Product>;
+  productType: ProductType;
   state: {
     id: number;
     productShippingInfo: Product['productShippingInfo'];
@@ -37,11 +38,9 @@ type Props = {
 
 const weightUnits = [{ unit: 'kg' }, { unit: 'g' }];
 
-const volumeUnits = [{ unit: 'l' }, { unit: 'ml' }];
+const dimensionUnits = [{ unit: 'cm' }, { unit: 'mm' }];
 
-const dimensionUnits = [{ unit: 'l' }, { unit: 'ml' }];
-
-function ProductShippingInfoForm({ state, initialValues }: Props) {
+function ProductShippingInfoForm({ state, productType, initialValues }: Props) {
   const { t } = useTranslation();
 
   const [initProductShippingInfo, setInitProductShippingInfo] = useState<
@@ -78,11 +77,9 @@ function ProductShippingInfoForm({ state, initialValues }: Props) {
     productShippingInfo: {
       weight,
       weightUnit,
-      volume,
-      volumeUnit,
       dimensionWidth,
       dimensionHeight,
-      dimensionDepth,
+      dimensionLength,
       dimensionUnit
     },
     isUpdateMode
@@ -99,21 +96,17 @@ function ProductShippingInfoForm({ state, initialValues }: Props) {
     const initialProductShippingInfo = {
       weight: productShippingInfo.weight,
       weightUnit: productShippingInfo.weightUnit,
-      volume: productShippingInfo.volume,
-      volumeUnit: productShippingInfo.volumeUnit,
       dimensionWidth: productShippingInfo.dimensionWidth,
       dimensionHeight: productShippingInfo.dimensionHeight,
-      dimensionDepth: productShippingInfo.dimensionDepth,
+      dimensionLength: productShippingInfo.dimensionLength,
       dimensionUnit: productShippingInfo.dimensionUnit
     };
     const currentProductShippingInfo = {
       weight,
       weightUnit,
-      volume,
-      volumeUnit,
       dimensionWidth,
       dimensionHeight,
-      dimensionDepth,
+      dimensionLength,
       dimensionUnit
     };
 
@@ -121,14 +114,12 @@ function ProductShippingInfoForm({ state, initialValues }: Props) {
       !isEqual(initialProductShippingInfo, currentProductShippingInfo)
     );
   }, [
-    dimensionDepth,
+    dimensionLength,
     dimensionHeight,
     dimensionUnit,
     dimensionWidth,
     initProductShippingInfo,
     isUpdateMode,
-    volume,
-    volumeUnit,
     weight,
     weightUnit
   ]);
@@ -147,11 +138,9 @@ function ProductShippingInfoForm({ state, initialValues }: Props) {
         productShippingInfo: {
           weight,
           weightUnit,
-          volume,
-          volumeUnit,
           dimensionWidth,
           dimensionHeight,
-          dimensionDepth,
+          dimensionLength,
           dimensionUnit
         }
       }
@@ -200,10 +189,14 @@ function ProductShippingInfoForm({ state, initialValues }: Props) {
     });
   };
 
+  if (productType === ProductType.Variable) {
+    return null;
+  }
+
   return (
     <Accordion
       isUpdated={isUpdated}
-      Title={() => t('form:form-title-product-shipping-info')}
+      Title={() => t('form:form-title-measures-packaging')}
     >
       <div className="my-5 flex flex-wrap sm:my-8">
         <Description
@@ -215,140 +208,112 @@ function ProductShippingInfoForm({ state, initialValues }: Props) {
           className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
         />
 
-        <Card className="w-full sm:w-8/12 md:w-2/3">
-          {/* Width */}
-          <Label>{t('form:input-label-weight')}</Label>
-          <div className="mb-5 flex items-center">
-            <Input
-              name="weight"
-              value={weight}
-              onChange={handleChange}
-              onBlur={checkForUpdateHandler}
-              type="number"
-              variant="outline"
-              className="mr-2"
-            />
-            <div className="w-36">
-              <Select
-                options={weightUnits}
-                value={weightUnit}
-                name="weightUnit"
-                getOptionLabel={(option: any) => option.unit}
-                getOptionValue={(option: any) =>
-                  option.unit?.charAt(0)?.toUpperCase() + option.unit?.slice(1)
-                }
-                onBlur={checkForUpdateHandler}
-                onChange={(value) => onSelectChange(value, 'weightUnit')}
-                className="w-full"
-              />
+        <Card className="flex w-full flex-wrap items-center sm:w-8/12 md:w-2/3">
+          <div className="flex items-center">
+            {/* Width */}
+            <div className="mr-2 mb-5 flex items-center">
+              <div>
+                <Label>{t('form:input-label-weight')}</Label>
+                <div className="mr-2 flex items-center justify-center rounded-sm border bg-gray-100">
+                  <Input
+                    name="weight"
+                    value={weight}
+                    onChange={handleChange}
+                    onBlur={checkForUpdateHandler}
+                    type="number"
+                    variant="custom"
+                    className="w-28"
+                    min={0}
+                    placeholder="e.g. 0.4..."
+                    inputClassName="rounded-none rounded-l-sm border-r"
+                  />
+                  <div className="h-full w-8 text-center text-gray-600">
+                    {weightUnit?.unit}
+                  </div>
+                </div>
+              </div>
+              <div className="w-22">
+                <Label>{t('form:input-label-dimensions-units')}</Label>
+                <Select
+                  options={weightUnits}
+                  value={weightUnit}
+                  name="weightUnit"
+                  getOptionLabel={(option: any) => option.unit}
+                  getOptionValue={(option: any) =>
+                    option.unit?.charAt(0)?.toUpperCase() +
+                    option.unit?.slice(1)
+                  }
+                  onBlur={checkForUpdateHandler}
+                  onChange={(value) => onSelectChange(value, 'weightUnit')}
+                  className="w-full"
+                />
+              </div>
             </div>
           </div>
-          {/* <ValidationError
-            message={t(errors.productShippingInfo?.weight?.message!)}
-          /> */}
-          {/* Volume */}
-          <Label>{t('form:input-label-volume')}</Label>
-          <div className="mb-5 flex items-center">
-            <Input
-              name="volume"
-              value={volume}
-              onChange={handleChange}
-              onBlur={checkForUpdateHandler}
-              type="number"
-              variant="outline"
-              className="mr-2"
-            />
-            <div className="w-36">
-              <Select
-                options={volumeUnits}
-                value={volumeUnit}
-                name="volumeUnit"
-                getOptionLabel={(option: any) => option.unit}
-                getOptionValue={(option: any) =>
-                  option.unit?.charAt(0)?.toUpperCase() + option.unit?.slice(1)
-                }
-                onBlur={checkForUpdateHandler}
-                onChange={(value) => onSelectChange(value, 'volumeUnit')}
-                className="w-full"
-              />
-            </div>
-          </div>
-          {/* <ValidationError
-            message={t(errors.productShippingInfo?.volume?.message!)}
-          /> */}
           {/* Dimensions */}
-          <Label className="mb-3">{t('form:input-label-dimensions')}</Label>
           <div className="mb-5 flex flex-wrap items-center">
-            <div>
-              <Label
-                style={{
-                  color: '#929191',
-                  fontSize: '0.8rem',
-                  marginTop: '0.75rem'
-                }}
-              >
-                {t('form:input-label-dimensions-width')}
-              </Label>
-              <Input
-                name="dimensionWidth"
-                value={dimensionWidth}
-                onChange={handleChange}
-                onBlur={checkForUpdateHandler}
-                type="number"
-                variant="outline"
-                className="mr-2 w-24"
-              />
+            <div className="my-2">
+              <Label>{t('form:input-label-dimensions-width')}</Label>
+              <div className="mr-2 flex items-center justify-center rounded-sm border bg-gray-100">
+                <Input
+                  name="dimensionWidth"
+                  value={dimensionWidth}
+                  onChange={handleChange}
+                  onBlur={checkForUpdateHandler}
+                  type="number"
+                  variant="custom"
+                  className="w-28"
+                  min={0}
+                  placeholder="e.g. 500..."
+                  inputClassName="rounded-none rounded-l-sm border-r"
+                />
+                <div className="h-full w-8 text-center text-gray-600">
+                  {dimensionUnit?.unit}
+                </div>
+              </div>
             </div>
-            <div>
-              <Label
-                style={{
-                  color: '#929191',
-                  fontSize: '0.8rem',
-                  marginTop: '0.75rem'
-                }}
-              >
-                {t('form:input-label-dimensions-height')}
-              </Label>
-              <Input
-                name="dimensionHeight"
-                value={dimensionHeight}
-                onChange={handleChange}
-                onBlur={checkForUpdateHandler}
-                type="number"
-                variant="outline"
-                className="mr-2 w-24"
-              />
+            <div className="my-2">
+              <Label>{t('form:input-label-dimensions-height')}</Label>
+              <div className="mr-2 flex items-center justify-center rounded-sm border bg-gray-100">
+                <Input
+                  name="dimensionHeight"
+                  value={dimensionHeight}
+                  onChange={handleChange}
+                  onBlur={checkForUpdateHandler}
+                  type="number"
+                  variant="custom"
+                  min={0}
+                  className="w-28"
+                  placeholder="e.g. 200..."
+                  inputClassName="rounded-none rounded-l-sm border-r"
+                />
+                <div className="h-full w-8 text-center text-gray-600">
+                  {dimensionUnit?.unit}
+                </div>
+              </div>
             </div>
-            <div>
-              <Label
-                style={{
-                  color: '#929191',
-                  fontSize: '0.8rem',
-                  marginTop: '0.75rem'
-                }}
-              >
-                {t('form:input-label-dimensions-depth')}
-              </Label>
-              <Input
-                name="dimensionDepth"
-                value={dimensionDepth}
-                onChange={handleChange}
-                onBlur={checkForUpdateHandler}
-                type="number"
-                variant="outline"
-                className="mr-2 w-24"
-              />
+            <div className="my-2">
+              <Label>{t('form:input-label-dimensions-length')}</Label>
+              <div className="mr-2 flex items-center justify-center rounded-sm border bg-gray-100">
+                <Input
+                  name="dimensionLength"
+                  value={dimensionLength}
+                  onChange={handleChange}
+                  onBlur={checkForUpdateHandler}
+                  type="number"
+                  variant="custom"
+                  className="w-28"
+                  placeholder="e.g. 100..."
+                  min={0}
+                  inputClassName="rounded-none rounded-l-sm border-r"
+                />
+                <div className="h-full w-8 text-center text-gray-600">
+                  {dimensionUnit?.unit}
+                </div>
+              </div>
             </div>
-            <div className="w-36">
-              <Label
-                style={{
-                  color: '#929191',
-                  fontSize: '0.8rem',
-                  marginTop: '0.75rem'
-                }}
-              >
-                {t('form:input-label-dimensions-units')}
-              </Label>
+            <div className="my-2 w-24">
+              <Label>{t('form:input-label-dimensions-units')}</Label>
               <Select
                 options={dimensionUnits}
                 value={dimensionUnit}
@@ -362,13 +327,6 @@ function ProductShippingInfoForm({ state, initialValues }: Props) {
                 className="w-full"
               />
             </div>
-            {/* <ValidationError
-              message={
-                t(errors.productShippingInfo?.dimensionDepth?.message!) ||
-                t(errors.productShippingInfo?.dimensionHeight?.message!) ||
-                t(errors.productShippingInfo?.dimensionWidth?.message!)
-              }
-            /> */}
           </div>
           {renderSaveButton()}
         </Card>

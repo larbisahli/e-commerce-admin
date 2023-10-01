@@ -28,14 +28,14 @@ const AppLayout: React.FC = ({ children }: Props) => {
     dispatch(fetchStoreSettings());
   }, [dispatch]);
 
-  const defaultLanguage = useMemo(
-    () => languages?.find((lang) => lang.isDefault),
+  const systemLanguage = useMemo(
+    () => languages?.find((lang) => lang.isSystem),
     [languages]
   );
 
   useEffect(() => {
-    dispatch(setCurrentLanguage({ language: defaultLanguage }));
-  }, [defaultLanguage, dispatch]);
+    dispatch(setCurrentLanguage({ language: systemLanguage }));
+  }, [systemLanguage, dispatch]);
 
   return (
     <main className="flex h-fit min-h-screen flex-col bg-gray-100 transition-colors duration-150">

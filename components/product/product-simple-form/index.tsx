@@ -46,7 +46,7 @@ function ProductSimpleForm({
   const [error, setError] = useState(null);
   useErrorLogger(error);
 
-  const { currency } = useSettings();
+  const { systemCurrency } = useSettings();
   const dispatch = useFormReducer();
 
   const { userInfo } = useGetUser();
@@ -134,7 +134,9 @@ function ProductSimpleForm({
 
       <Card className="w-full sm:w-8/12 md:w-2/3">
         <Input
-          label={`${t('form:input-label-sale-price')} (${currency.symbol})`}
+          label={`${t('form:input-label-sale-price')} (${
+            systemCurrency.symbol
+          })`}
           isRequiredLabel
           name="salePrice"
           value={salePrice}
@@ -146,7 +148,9 @@ function ProductSimpleForm({
           className="mb-5"
         />
         <Input
-          label={`${t('form:input-label-compare-price')} (${currency?.symbol})`}
+          label={`${t(
+            'form:input-label-compare-price'
+          )} (${systemCurrency?.symbol})`}
           name="comparePrice"
           value={comparePrice}
           onChange={handleChange}
@@ -157,7 +161,9 @@ function ProductSimpleForm({
           className="mb-5"
         />
         <Input
-          label={`${t('form:input-label-buying-price')} (${currency?.symbol})`}
+          label={`${t(
+            'form:input-label-buying-price'
+          )} (${systemCurrency?.symbol})`}
           name="buyingPrice"
           value={buyingPrice}
           onChange={handleChange}

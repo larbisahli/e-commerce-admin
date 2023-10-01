@@ -14,7 +14,7 @@ export interface Props extends InputHTMLAttributes<HTMLInputElement> {
   disabled?: boolean;
   type?: string;
   shadow?: boolean;
-  variant?: 'normal' | 'solid' | 'outline';
+  variant?: 'normal' | 'solid' | 'outline' | 'custom';
   renderTooltip?: ReactElement;
 }
 const classes = {

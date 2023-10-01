@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@apollo/client';
 import Card from '@components/common/card';
-import { SaveIcon } from '@components/icons/save-icon';
+import FormActions from '@components/common/FormActions';
 import ImageModal from '@components/image-modal';
 import Button from '@components/ui/button';
 import Checkbox from '@components/ui/checkbox';
@@ -16,8 +16,9 @@ import {
   useGetUser,
   useWarnIfUnsavedChanges
 } from '@hooks/index';
+import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/notify';
-import { Nullable } from '@ts-types/custom.types';
+import { LanguageProps, Nullable } from '@ts-types/custom.types';
 import { OrderBy, RateType } from '@ts-types/enums';
 import { DeliveryTimeType, ShippingZoneType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
@@ -57,7 +58,7 @@ interface TDelivery {
   deliveryTimeSelect: DeliveryTimeType[];
 }
 
-interface DeliveryVariable {
+interface DeliveryVariable extends LanguageProps {
   page: number;
   limit: number;
   orderBy: OrderBy;
@@ -66,8 +67,6 @@ interface DeliveryVariable {
 export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
   const router = useRouter();
   const { t } = useTranslation();
-
-  console.log({ initialValues });
 
   const [error, setError] = useState(null);
   const [unsavedChanges, setUnsavedChanges] = useState(true);
@@ -107,9 +106,7 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
                 : { id: 0, name: 'Price', type: RateType.PRICE }
           },
           shippingRates: clone(initialValues?.shippingRates)
-            ?.sort((a, b) =>
-              a.minValue > b.minValue ? 1 : b.minValue > a.minValue ? -1 : 0
-            )
+            ?.sort((a, b) => (a.min > b.min ? 1 : b.min > a.min ? -1 : 0))
             ?.map((rate, index) => {
               return {
                 ...rate,
@@ -119,6 +116,8 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
         }
   });
 
+  const { systemLanguage } = useSettings();
+
   const {
     data,
     loading,
@@ -127,9 +126,11 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
     variables: {
       page: 1,
       limit: 999,
-      orderBy: OrderBy.CREATED_AT
+      orderBy: OrderBy.CREATED_AT,
+      language: systemLanguage
     },
-    fetchPolicy: 'cache-and-network'
+    fetchPolicy: 'cache-and-network',
+    skip: isEmpty(systemLanguage)
   });
 
   const { deliveryTimeSelect = [] } = data ?? {};
@@ -191,14 +192,15 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
       rateType: shippingZone?.rateType?.type,
       deliveryTime: { id: shippingZone?.deliveryTime?.id },
       shippingRates: shippingRates?.map((rate) => {
+        console.log({ rate });
         return {
-          id: rate?.id,
+          id: isEmpty(rate?.id) ? null : rate?.id,
           weightUnit:
             shippingZone?.rateType?.type === RateType.WEIGHT
               ? rate?.weightUnit
               : null,
-          minValue: Number(rate?.minValue),
-          maxValue: rate?.noMax ? null : Number(rate?.maxValue),
+          min: Number(rate?.min),
+          max: rate?.noMax ? null : Number(rate?.max),
           noMax: rate?.noMax,
           price: Number(rate?.price)
         };
@@ -243,6 +245,12 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
   const freeShipping = watch('shippingZone.freeShipping');
 
   useEffect(() => {
+    if (freeShipping) {
+      remove();
+    }
+  }, [freeShipping, remove]);
+
+  useEffect(() => {
     const exist = zones?.find((c) => c.iso2 === 'XX');
 
     // Sometimes we get undefined when using watch('zones')
@@ -255,19 +263,19 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
         upToDateZones.filter((c) => c.iso2 !== 'XX')
       );
     }
-  }, [zones]);
+  }, [getValues, setValue, zones]);
 
-  // TODO: Fix when MaxValue is null and MinValue is 0
+  // TODO: Fix when MaxValue is null and min is 0
   const handleRateAppend = () => {
     const hasFields = !isEmpty(shippingRates);
 
     const MaxMaxValueField = hasFields
       ? shippingRates?.reduce((acc, val) => {
-          return Number(acc.maxValue) >= Number(val.maxValue)
-            ? { maxValue: Number(acc.maxValue) }
-            : { maxValue: Number(val.maxValue) };
+          return Number(acc.max) >= Number(val.max)
+            ? { max: Number(acc.max) }
+            : { max: Number(val.max) };
         })
-      : { maxValue: 0 };
+      : { max: 0 };
 
     const MaxPriceValueField = hasFields
       ? shippingRates?.reduce((acc, val) => {
@@ -283,10 +291,10 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
       append({
         id: null,
         weightUnit: { unit: 'g' },
-        minValue: hasFields
-          ? Number((Number(MaxMaxValueField.maxValue) + 0.1).toFixed(1))
+        min: hasFields
+          ? Number((Number(MaxMaxValueField.max) + 0.1).toFixed(1))
           : 0,
-        maxValue: null,
+        max: null,
         noMax: hasFields,
         price: hasFields
           ? Number((Number(MaxPriceValueField.price) + 0.1).toFixed(1))
@@ -307,6 +315,17 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      <FormActions
+        backLink={ROUTES.SHIPPING_ZONE}
+        showSelectLanguage={false}
+        title={
+          isEmpty(initialValues)
+            ? t('form:form-title-new-shipping-zone')
+            : t('form:form-title-edit-shipping')
+        }
+        loading={creating || updating}
+        disabled={creating || updating}
+      />
       <div className="my-5 flex flex-wrap border-b border-dashed border-border-base pb-8 sm:my-8">
         <Description
           title={t('form:input-label-logo')}
@@ -487,26 +506,6 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
           </Card>
         </div>
       )}
-
-      <div className="mb-4 flex justify-end">
-        {initialValues && (
-          <Button
-            variant="outline"
-            onClick={router.back}
-            className="me-4"
-            type="button"
-          >
-            {t('form:button-label-back')}
-          </Button>
-        )}
-
-        <Button loading={creating || updating} disabled={creating || updating}>
-          <div className="mr-1">
-            <SaveIcon width="1.3rem" height="1.3rem" />
-          </div>
-          <div>{t('form:button-label-save')}</div>
-        </Button>
-      </div>
     </form>
   );
 }

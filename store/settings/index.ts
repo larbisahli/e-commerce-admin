@@ -30,7 +30,7 @@ export const fetchStoreSettings = createAsyncThunk(
 const initialState: SettingsState = {
   languages: [],
   storeEmail: '',
-  currency: {
+  systemCurrency: {
     symbol: '$',
     name: 'US Dollar',
     symbol_native: '$',
@@ -71,7 +71,7 @@ export const settingsSlice = createSlice({
         console.log('Store Setting fulfilled :>', { payload });
 
         state.isLoading = false;
-        state.currency = payload.currency;
+        state.systemCurrency = payload.systemCurrency;
         state.storeEmail = payload.storeEmail;
         state.languages = payload.languages;
       }

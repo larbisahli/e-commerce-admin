@@ -62,7 +62,7 @@ const Thumbs = ({ isThumbnail, photos, handleImageRemoval }) => {
           >
             <button
               onClick={(e) => handleImageRemoval(e, id)}
-              className="absolute right-0 z-30 flex h-5 w-5 items-center justify-center bg-red-600 text-white"
+              className="absolute right-0 z-10 flex h-5 w-5 items-center justify-center bg-red-600 text-white"
             >
               <CloseIcon width={15} height={15} />
             </button>

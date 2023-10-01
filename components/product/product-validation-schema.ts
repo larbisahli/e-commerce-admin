@@ -32,9 +32,8 @@ export const productValidationSchema = yup.object().shape({
   }),
   productShippingInfo: yup.object().shape({
     weight: yup.number().typeError('form:error-amount-must-number'),
-    volume: yup.number().typeError('form:error-amount-must-number'),
     dimensionWidth: yup.number().typeError('form:error-amount-must-number'),
     dimensionHeight: yup.number().typeError('form:error-amount-must-number'),
-    dimensionDepth: yup.number().typeError('form:error-amount-must-number')
+    dimensionLength: yup.number().typeError('form:error-amount-must-number')
   })
 });

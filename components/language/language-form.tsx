@@ -28,7 +28,7 @@ import { useForm } from 'react-hook-form';
 import { tagValidationSchema } from './tag-validation-schema';
 
 type FormValues = {
-  locale: { displayName: string; langCultureName: string };
+  locale: { displayName: string; langCultureName: string; code_2: string };
   direction: { label: 'LTR' | 'RTL' };
   status: 'enabled' | 'disabled';
   active: boolean;
@@ -80,7 +80,13 @@ export default function LanguageForm({
 
   const locales = useMemo(() => {
     return CountryLanguage.getCountries()
-      ?.map(({ code_2 }) => CountryLanguage.getCountryMsLocales(code_2))
+      ?.map(
+        ({ code_2 }) =>
+          CountryLanguage.getCountryMsLocales(code_2)?.map((v) => ({
+            ...v,
+            code_2
+          }))
+      )
       ?.filter(Boolean)
       ?.flat()
       ?.sort(compare);
@@ -97,6 +103,7 @@ export default function LanguageForm({
     defaultValues: !isEmpty(initialValues)
       ? {
           ...initialValues,
+          status: initialValues?.active ? 'enabled' : 'disabled',
           locale: locales?.find(
             (locale) =>
               locale.langCultureName?.toLowerCase() === initialValues.localeId
@@ -154,6 +161,7 @@ export default function LanguageForm({
     const variables = {
       name: values.locale.displayName,
       localeId: values.locale.langCultureName?.toLowerCase(),
+      iso2: values.locale?.code_2,
       direction: values.direction?.label,
       active: values.status === 'enabled',
       translation: values.translation
@@ -191,7 +199,7 @@ export default function LanguageForm({
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormActions
         backLink={ROUTES.LANGUAGES}
-        forceDefaultLang={isEmpty(initialValues)}
+        forceSystemLang={isEmpty(initialValues)}
         title={
           isEmpty(initialValues)
             ? t('form:label-new-language')

@@ -38,10 +38,10 @@ const RateComponent = ({
   const hasNoMax = watch(`shippingRates.${index}.noMax`);
   const rateType = watch('shippingZone.rateType');
 
-  const { currency } = useSettings();
+  const { systemCurrency } = useSettings();
 
   const currencySymbol =
-    rateType.type === RateType.PRICE ? `(${currency?.symbol})` : '';
+    rateType.type === RateType.PRICE ? `(${systemCurrency?.symbol})` : '';
 
   return (
     <div className="relative mt-4 rounded-md border border-solid border-border-200 last:border-0">
@@ -88,7 +88,7 @@ const RateComponent = ({
             min={0}
             step={0.1}
             variant="outline"
-            {...register(`shippingRates.${index}.minValue` as const)}
+            {...register(`shippingRates.${index}.min` as const)}
           />
           <Input
             className="mr-2 sm:col-span-2"
@@ -100,11 +100,11 @@ const RateComponent = ({
             step={0.1}
             disabled={hasNoMax}
             variant="outline"
-            {...register(`shippingRates.${index}.maxValue` as const)}
+            {...register(`shippingRates.${index}.max` as const)}
           />
           <Input
             className="sm:col-span-2"
-            label={`${t('form:input-label-price')} ${currencySymbol}`}
+            label={`${t('form:input-label-price')} (${systemCurrency?.symbol})`}
             type="number"
             min={0}
             step={0.1}

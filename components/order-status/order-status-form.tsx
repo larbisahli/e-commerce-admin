@@ -130,7 +130,7 @@ export default function CreateOrUpdateOrderStatusForm({
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormActions
         backLink={ROUTES.ORDER_STATUS}
-        forceDefaultLang={isEmpty(initialValues)}
+        forceSystemLang={isEmpty(initialValues)}
         title={
           isEmpty(initialValues)
             ? t('form:form-title-new-order-status')

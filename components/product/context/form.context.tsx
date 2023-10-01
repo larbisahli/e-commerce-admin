@@ -34,14 +34,12 @@ export const initialState: ProductFormType = {
   variations: [],
   variationOptions: [],
   productShippingInfo: {
-    weight: 0,
+    weight: null,
     weightUnit: { unit: 'kg' },
-    volume: 0,
-    volumeUnit: { unit: 'l' },
-    dimensionWidth: 0,
-    dimensionHeight: 0,
-    dimensionDepth: 0,
-    dimensionUnit: { unit: 'l' }
+    dimensionWidth: null,
+    dimensionHeight: null,
+    dimensionLength: null,
+    dimensionUnit: { unit: 'mm' }
   },
   productSeo: {
     slug: '',

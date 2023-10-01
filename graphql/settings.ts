@@ -19,7 +19,13 @@ export const STORE_SETTINGS = gql`
       storeNumber
       addressLine1
       addressLine2
-      currency {
+      currencies {
+        symbol
+        code
+        name
+        is_default
+      }
+      systemCurrency {
         symbol
         code
         name
@@ -79,7 +85,7 @@ export const UPDATE_STORE_SETTINGS = gql`
     $storeNumber: String
     $addressLine1: String
     $addressLine2: String
-    $currency: CurrencyInput
+    $currencies: [CurrencyInput]!
     $canonicalUrl: String
     $socials: [SocialInput]
     $maxCheckoutQuantity: Int
@@ -96,7 +102,7 @@ export const UPDATE_STORE_SETTINGS = gql`
       storeNumber: $storeNumber
       addressLine1: $addressLine1
       addressLine2: $addressLine2
-      currency: $currency
+      currencies: $currencies
       canonicalUrl: $canonicalUrl
       socials: $socials
       maxCheckoutQuantity: $maxCheckoutQuantity

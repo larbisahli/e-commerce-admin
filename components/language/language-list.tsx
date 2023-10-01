@@ -120,34 +120,6 @@ const LanguageList = ({ loading, languages, selectedColumns }: IProps) => {
         }
       },
       {
-        title: t('table:table-item-status'),
-        dataIndex: 'isDefault',
-        key: 'isDefault',
-        align: 'center',
-        width: 230,
-        ellipsis: true,
-        render: (isDefault: boolean, record: TableRowProps) => {
-          if (record?.loading) {
-            return <TableRowPlaceholder />;
-          }
-          return (
-            <div className="flex flex-wrap items-center justify-center gap-1">
-              {isDefault && (
-                <Badge
-                  text={'Default'}
-                  textColor={'text-white'}
-                  color={'bg-accent'}
-                />
-              )}
-              <Badge
-                text={record?.active ? 'Publish' : 'Draft'}
-                color={record?.active ? 'bg-green-600' : 'bg-yellow-500'}
-              />
-            </div>
-          );
-        }
-      },
-      {
         title: t('table:table-item-locale-identifier'),
         dataIndex: 'localeId',
         key: 'localeId',
@@ -163,6 +135,42 @@ const LanguageList = ({ loading, languages, selectedColumns }: IProps) => {
               <span className="w-full font-medium text-gray-600">
                 {localeId}
               </span>
+            </div>
+          );
+        }
+      },
+      {
+        title: t('table:table-item-status'),
+        dataIndex: 'isDefault',
+        key: 'isDefault',
+        align: 'center',
+        width: 330,
+        ellipsis: true,
+        render: (isDefault: boolean, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
+          return (
+            <div className="flex flex-wrap items-center justify-center gap-1">
+              {record?.isSystem && (
+                <Badge
+                  text={'System'}
+                  textColor={'text-gray-600'}
+                  color={'bg-gray-100'}
+                />
+              )}
+              {isDefault && (
+                <Badge
+                  text={'Default'}
+                  textColor={'text-gray-600'}
+                  color={'bg-gray-100'}
+                />
+              )}
+              <Badge
+                text={record?.active ? 'Publish' : 'Draft'}
+                textColor={'text-gray-600'}
+                color={'bg-gray-100'}
+              />
             </div>
           );
         }
@@ -238,7 +246,9 @@ const LanguageList = ({ loading, languages, selectedColumns }: IProps) => {
               metadata={{ localeId: record.localeId }}
               copy={`${ROUTES.LANGUAGES}/fork/${id}`}
               editUrl={`${ROUTES.LANGUAGES}/edit/${id}`}
-              deleteModalView={record.isDefault ? null : 'DELETE_LANGUAGE'}
+              deleteModalView={
+                record.isDefault || record?.isSystem ? null : 'DELETE_LANGUAGE'
+              }
             />
           );
         }

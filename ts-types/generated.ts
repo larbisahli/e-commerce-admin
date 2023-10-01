@@ -185,11 +185,9 @@ export interface ProductShippingInfo {
   productId?: Scalars['Int'];
   weight?: Scalars['Int'];
   weightUnit?: { unit: Scalars['String'] };
-  volume?: Scalars['Int'];
-  volumeUnit?: { unit: Scalars['String'] };
   dimensionWidth?: Scalars['Int'];
   dimensionHeight?: Scalars['Int'];
-  dimensionDepth?: Scalars['Int'];
+  dimensionLength?: Scalars['Int'];
   dimensionUnit?: { unit: Scalars['String'] };
 }
 
@@ -227,8 +225,10 @@ export interface LanguageType extends CreatedUpdatedByAt {
   remoteFilePath: Scalars['String'];
   name: Scalars['String'];
   localeId: Scalars['String'];
+  iso2: Scalars['String'];
   direction: Scalars['String'];
   isDefault: Scalars['Boolean'];
+  isSystem: Scalars['Boolean'];
   active: Scalars['Boolean'];
   translation: Scalars['JSON'];
 }
@@ -299,8 +299,8 @@ export interface DeliveryTimeType extends CreatedUpdatedByAt {
 export interface ShippingRateType {
   id?: Scalars['Int'];
   weightUnit?: { unit: Scalars['String'] };
-  minValue?: Scalars['Int'];
-  maxValue?: Nullable<Scalars['Int']>;
+  min?: Scalars['Int'];
+  max?: Nullable<Scalars['Int']>;
   noMax?: Scalars['Boolean'];
   price?: Scalars['Int'];
   index?: Scalars['Int'];
@@ -426,6 +426,12 @@ export interface VariationOptionsType {
   buyingPrice: Scalars['Float'];
   quantity: Scalars['Int'];
   sku: Scalars['String'];
+  weight?: Scalars['Int'];
+  weightUnit?: { unit: Scalars['String'] };
+  dimensionWidth?: Scalars['Int'];
+  dimensionHeight?: Scalars['Int'];
+  dimensionLength?: Scalars['Int'];
+  dimensionUnit?: { unit: Scalars['String'] };
 }
 
 // Attachment
@@ -521,7 +527,7 @@ export interface SettingsType {
   published?: boolean;
   tier?: string;
   languages?: LanguageType[];
-  currency?: {
+  currencies?: {
     symbol: string;
     name: string;
     symbol_native: string;
@@ -529,6 +535,26 @@ export interface SettingsType {
     rounding: number;
     code: string;
     name_plural: string;
+    is_default?: boolean;
+  }[];
+  systemCurrency?: {
+    symbol: string;
+    name: string;
+    symbol_native: string;
+    decimal_digits: number;
+    rounding: number;
+    code: string;
+    name_plural: string;
+  };
+  defaultCurrency?: {
+    symbol: string;
+    name: string;
+    symbol_native: string;
+    decimal_digits: number;
+    rounding: number;
+    code: string;
+    name_plural: string;
+    is_default: boolean;
   };
   canonicalUrl?: string;
   socials?: {
@@ -568,6 +594,8 @@ export interface SettingsType {
     appId: string;
     pageId: string;
   };
+  isMaintenance: boolean;
+  maintenancePassword: number;
 }
 
 export interface PageType {

@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const SHIPPING_ZONE = gql`
-  query ShippingZone($id: Int!) {
-    shippingZone(id: $id) {
+  query ShippingZone($id: Int!, $language: LanguageInput!) {
+    shippingZone(id: $id, language: $language) {
       id
       logo {
         id
@@ -30,8 +30,8 @@ export const SHIPPING_ZONE = gql`
       weightUnit {
         unit
       }
-      minValue
-      maxValue
+      min
+      max
       noMax
       price
     }
@@ -64,10 +64,6 @@ export const SHIPPING_ZONES = gql`
       active
       freeShipping
       rateType
-      deliveryTime {
-        id
-        name
-      }
       createdAt
       updatedAt
       createdBy {

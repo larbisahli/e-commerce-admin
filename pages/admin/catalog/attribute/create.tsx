@@ -1,3 +1,4 @@
+import { PageFormPlaceholder } from '@components/common/commonComponents';
 import AppLayout from '@components/layouts/app';
 import { useGetUser } from '@hooks/index';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
@@ -10,7 +11,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const CreateOrUpdateAttributeForm = dynamic(
   () => import('@components/attribute/attribute-form'),
-  { ssr: true }
+  { ssr: true, loading: () => <PageFormPlaceholder /> }
 );
 
 export default function CreateAttributePage({ client }: SSRProps) {

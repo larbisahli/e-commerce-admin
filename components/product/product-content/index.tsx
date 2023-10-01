@@ -10,6 +10,7 @@ import Input from '@components/ui/input';
 import Label from '@components/ui/label';
 import Loader from '@components/ui/loader/loader';
 import Radio from '@components/ui/radio';
+import SwitchInput from '@components/ui/switch-input';
 import TextArea from '@components/ui/text-area';
 import { UPDATE_PRODUCT_CONTENT } from '@graphql/product';
 import { useErrorLogger, useGetUser } from '@hooks/index';
@@ -290,6 +291,24 @@ const ProductContent = ({ state, initialValues, productSeo }: Props) => {
               onMouseLeaveTopLevel={checkForUpdateHandler}
               checked={disableOutOfStock}
               label={t('form:input-label-disable-out-of-stock')}
+            />
+          </div>
+          <div className="my-5">
+            <Checkbox
+              name="freeShipping"
+              onChange={handleChange}
+              onMouseLeaveTopLevel={checkForUpdateHandler}
+              checked={disableOutOfStock}
+              label={t('form:input-label-free-shipping')}
+            />
+          </div>
+          <div className="my-5">
+            <Checkbox
+              name="displayProductMeasurements"
+              onChange={handleChange}
+              onMouseLeaveTopLevel={checkForUpdateHandler}
+              checked={disableOutOfStock}
+              label={t('form:input-label-display-product-measurements')}
             />
           </div>
           {renderSaveButton()}

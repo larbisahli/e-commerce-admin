@@ -118,6 +118,7 @@ export type CurrencyType = {
   rounding: number;
   code: string;
   name_plural: string;
+  is_default: boolean;
 };
 
 export interface TableQueryVariables {

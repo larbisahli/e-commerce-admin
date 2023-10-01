@@ -244,7 +244,7 @@ export default function CreateOrUpdateAttributeForm({
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormActions
           backLink={ROUTES.ATTRIBUTE}
-          forceDefaultLang={isEmpty(initialValues)}
+          forceSystemLang={isEmpty(initialValues)}
           title={
             isEmpty(initialValues)
               ? t('form:form-title-new-attribute')

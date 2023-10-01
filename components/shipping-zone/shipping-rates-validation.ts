@@ -10,13 +10,14 @@ export default function shippingRatesValidation(
 
   // ==== CHECKS ====
   shippingRates?.every((field, index) => {
-    if (!field?.maxValue && !field?.noMax && noMaxValidation) {
+    if (!field?.max && !field?.noMax && noMaxValidation) {
       notify(`Please set Max value (Rate #${index + 1})`, 'error');
       checkFailed = true;
       return false; // break
     } else if (
-      (Number(field?.minValue) > Number(field?.maxValue) || field?.noMax) &&
-      noMaxValidation
+      ((Number(field?.min) > Number(field?.max) || field?.noMax) &&
+        noMaxValidation) ||
+      (Number(field?.min) > Number(field?.max) && !field?.noMax)
     ) {
       notify(
         `Max value should be greater than Min value (Rate #${index + 1})`,
@@ -36,7 +37,7 @@ export default function shippingRatesValidation(
     }
 
     const diffMinMax = Number(
-      (Number(field?.minValue) - Number(prevFailed?.maxValue)).toFixed(1)
+      (Number(field?.min) - Number(prevFailed?.max)).toFixed(1)
     );
     if (!isNaN(diffMinMax) && 0 > diffMinMax) {
       notify(

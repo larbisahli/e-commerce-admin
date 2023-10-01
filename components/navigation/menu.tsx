@@ -42,7 +42,7 @@ function NavMenu() {
     <Menu as="div" className="relative inline-block text-left">
       <Menu.Button
         className={cx(
-          'flex items-center rounded-sm border bg-white text-gray-700 shadow-lg focus:outline-none',
+          'z-[1000] flex items-center rounded-sm border bg-white text-gray-700 shadow-lg focus:outline-none',
           'border-hover'
         )}
       >
@@ -64,7 +64,8 @@ function NavMenu() {
         leaveTo="transform opacity-0 scale-95"
       >
         <Menu.Items
-          as="ul"
+          as="div"
+          style={{ zIndex: 60 }}
           className="shadow-700 absolute right-0 mt-1 w-48 origin-top-right rounded-sm border bg-white py-4 shadow focus:outline-none"
         >
           {firstName && (
@@ -91,7 +92,7 @@ function NavMenu() {
                     target={target}
                     href={href}
                     className={cn(
-                      'block px-4 py-2 text-sm capitalize transition duration-200 hover:text-accent',
+                      'block w-full px-4 py-2 text-sm capitalize transition duration-200 hover:text-accent',
                       active ? 'text-accent' : 'text-heading'
                     )}
                   >

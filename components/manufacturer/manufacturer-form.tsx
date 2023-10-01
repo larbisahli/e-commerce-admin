@@ -138,7 +138,7 @@ export default function CreateOrUpdateManufacturerForm({
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormActions
           backLink={ROUTES.MANUFACTURER}
-          forceDefaultLang={isEmpty(initialValues)}
+          forceSystemLang={isEmpty(initialValues)}
           title={
             isEmpty(initialValues)
               ? t('form:form-title-new-delivery-time')

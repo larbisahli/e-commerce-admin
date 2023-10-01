@@ -4,6 +4,8 @@ import { useMutation } from '@apollo/client';
 import Card from '@components/common/card';
 import FormActions from '@components/common/FormActions';
 import { Eye } from '@components/icons/eye-icon';
+import { LockSvg } from '@components/icons/lock';
+import { ResetIcon } from '@components/icons/reset';
 import * as socialIcons from '@components/icons/social';
 import ImageModal from '@components/image-modal';
 import Button from '@components/ui/button';
@@ -14,6 +16,7 @@ import Input from '@components/ui/input';
 import Label from '@components/ui/label';
 import { useModalAction } from '@components/ui/modal/modal.context';
 import SelectInput from '@components/ui/select-input';
+import SwitchInput from '@components/ui/switch-input';
 import TextArea from '@components/ui/text-area';
 import { UPDATE_STORE_SETTINGS } from '@graphql/settings';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -23,6 +26,7 @@ import { notify } from '@lib/notify';
 import { FAVICON_VIEWER_MODAL } from '@ts-types/constants';
 import { SettingsType } from '@ts-types/generated';
 import { CURRENCY } from '@utils/currency';
+import cn from 'classnames';
 import { isValidPhoneNumber } from 'libphonenumber-js';
 import { isEmpty } from 'lodash';
 import { useTranslation } from 'next-i18next';
@@ -31,8 +35,20 @@ import { useFieldArray, useForm } from 'react-hook-form';
 import PhoneInput from 'react-phone-input-2';
 
 import { settingsValidationSchema } from './settings-validation-schema';
+import {
+  RenderTooltipCurrencies,
+  RenderTooltipGoogleTrackId
+} from './ToolTips';
 
 type FormValues = SettingsType;
+
+const paymentMethods = [
+  {
+    id: 1,
+    name: 'Cash on Delivery',
+    code: 'cash_on_delivery'
+  }
+];
 
 const socialIcon = [
   {
@@ -90,6 +106,11 @@ export default function StoreSettingsForm({ settings }: IProps) {
       ...settings,
       logo: settings?.logo,
       favicon: settings?.favicon,
+      defaultCurrency: settings?.currencies?.find(
+        (currency) => currency.is_default
+      ),
+      isMaintenance: false,
+      maintenancePassword: 12345,
       socials: !isEmpty(settings?.socials)
         ? settings?.socials.map((social: any) => ({
             icon: updatedIcons?.find(
@@ -144,6 +165,14 @@ export default function StoreSettingsForm({ settings }: IProps) {
     updateSettings({
       variables: {
         ...values,
+        currencies: values?.currencies?.map((currency) => {
+          return {
+            ...currency,
+            is_default:
+              currency?.code ===
+              (values?.defaultCurrency?.code ?? settings?.systemCurrency?.code)
+          };
+        }),
         storeNumber,
         logo: logo?.map(({ id }) => ({ id })),
         favicon: favicon?.map(({ id }) => ({ id })),
@@ -194,8 +223,31 @@ export default function StoreSettingsForm({ settings }: IProps) {
   }, []);
 
   const storeNumber = watch('storeNumber') ?? getValues('storeNumber');
+  const selectedCurrencies = watch('currencies') ?? getValues('currencies');
+  const isMaintenance = watch('isMaintenance') ?? getValues('isMaintenance');
+  const maintenancePassword =
+    watch('maintenancePassword') ?? getValues('maintenancePassword');
 
-  console.log({ storeNumber, settings });
+  useEffect(() => {
+    // Adding system currency back in case it was removed from currencies
+    if (
+      isEmpty(
+        selectedCurrencies?.find(
+          (c) => c.code === settings?.systemCurrency?.code
+        )
+      )
+    ) {
+      const systemCurrency = CURRENCY?.find(
+        (c) => c.code === settings?.systemCurrency?.code
+      );
+      notify('Can not remove the system currency', 'error');
+      setValue('currencies', [...selectedCurrencies, systemCurrency]);
+    }
+  }, [selectedCurrencies, setValue, settings?.systemCurrency?.code]);
+
+  const generateMaintenancePassword = () => {
+    return Math.floor(Math.random() * 90000) + 10000;
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -316,18 +368,6 @@ export default function StoreSettingsForm({ settings }: IProps) {
             variant="outline"
             className="mb-5"
           />
-          <div className="mb-5">
-            <Label>{t('form:input-label-currency')}</Label>
-            <SelectInput
-              name="currency"
-              control={control}
-              getOptionLabel={(option: any) => option?.name}
-              getOptionValue={(option: any) => option?.code}
-              options={CURRENCY}
-            />
-            <ValidationError message={t(errors.currency?.message)} />
-          </div>
-
           <Input
             label={`${t('form:input-label-max-checkout-quantity')}`}
             {...register('maxCheckoutQuantity')}
@@ -345,6 +385,62 @@ export default function StoreSettingsForm({ settings }: IProps) {
             variant="outline"
             className="mb-5"
           />
+        </Card>
+      </div>
+      <div className="my-5 flex flex-wrap border-b border-dashed border-border-base pb-8 sm:my-8">
+        <Description
+          title={t('form:form-title-payment-currency')}
+          details={t('form:form-title-payment-currency-info')}
+          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
+        />
+        <Card className="w-full sm:w-8/12 md:w-2/3">
+          <div className="mb-5">
+            <Label>{t('form:input-label-payment-methods')}</Label>
+            <SelectInput
+              name="paymentMethods"
+              control={control}
+              isMulti
+              getOptionLabel={(option: any) => option?.name}
+              getOptionValue={(option: any) => option?.code}
+              options={paymentMethods}
+            />
+          </div>
+          <div className="mb-5">
+            <Label
+              tooltipId="currencies"
+              spaceBetween={false}
+              renderTooltip={<RenderTooltipCurrencies />}
+            >
+              {t('form:input-label-currencies')}
+            </Label>
+            <SelectInput
+              name="currencies"
+              control={control}
+              isMulti
+              getOptionLabel={(option: any) => option?.name}
+              getOptionValue={(option: any) => option?.code}
+              options={CURRENCY}
+            />
+            <ValidationError message={t(errors.currencies?.message)} />
+            <div className="flex items-center text-xs text-gray-600">
+              <div className="mr-1">
+                {t('form:input-label-system-currency')}:
+              </div>
+              <div>{`(${settings?.systemCurrency?.name})`}</div>
+            </div>
+          </div>
+          <div className="flex-4 mb-5 min-w-[200px]">
+            <Label isRequiredLabel>
+              {t('form:input-label-default-currency')}
+            </Label>
+            <SelectInput
+              name="defaultCurrency"
+              control={control}
+              getOptionLabel={(option: any) => option?.name}
+              getOptionValue={(option: any) => option?.code}
+              options={selectedCurrencies}
+            />
+          </div>
         </Card>
       </div>
       {/* SEO */}
@@ -420,6 +516,7 @@ export default function StoreSettingsForm({ settings }: IProps) {
             variant="outline"
             placeholder="Enter Tracking ID"
             className="mb-5"
+            renderTooltip={<RenderTooltipGoogleTrackId />}
           />
           <div className="mb-5">
             <Checkbox
@@ -430,40 +527,64 @@ export default function StoreSettingsForm({ settings }: IProps) {
           <Label>{t('form:input-label-tracking-options')}</Label>
           <div className="my-5 flex flex-wrap">
             <div className="min-w-[300px] flex-1">
-              <Checkbox
-                {...register(`google.isTrackVisitors` as const)}
-                label={'Track Visitors'}
-              />
-              <Checkbox
-                {...register(`google.isTrackOrders` as const)}
-                label={t('form:input-label-track-orders')}
-              />
-              <Checkbox
-                {...register(`google.isTrackUserLogin` as const)}
-                label={'Track user login'}
-              />
-              <Checkbox
-                {...register(`google.isTrackUserRegister` as const)}
-                label={'Track user register'}
-              />
-              <Checkbox
-                {...register(`google.isTrackCheckoutOptions` as const)}
-                label={'Track checkout options'}
-              />
+              <div className="mb-1">
+                <SwitchInput
+                  name="google.isTrackVisitors"
+                  label={'Track Visitors'}
+                  control={control}
+                />
+              </div>
+              <div className="mb-1">
+                <SwitchInput
+                  name="google.isTrackOrders"
+                  label={t('form:input-label-track-orders')}
+                  control={control}
+                />
+              </div>
+              <div className="mb-1">
+                <SwitchInput
+                  name="google.isTrackUserLogin"
+                  label={'Track user login'}
+                  control={control}
+                />
+              </div>
+              <div className="mb-1">
+                <SwitchInput
+                  name="google.isTrackUserRegister"
+                  label={'Track user register'}
+                  control={control}
+                />
+              </div>
+              <div className="mb-1">
+                <SwitchInput
+                  name="google.isTrackCheckoutOptions"
+                  label={'Track checkout options'}
+                  control={control}
+                />
+              </div>
             </div>
             <div className="min-w-[300px] flex-1">
-              <Checkbox
-                {...register(`google.isTrackProductAddToCart` as const)}
-                label={'Track product add to cart'}
-              />
-              <Checkbox
-                {...register(`google.isTrackProductRemoveToCart` as const)}
-                label={'Track product remove from cart'}
-              />
-              <Checkbox
-                {...register(`google.isTrackCheckout` as const)}
-                label={'Track checkout'}
-              />
+              <div className="mb-1">
+                <SwitchInput
+                  name="google.isTrackProductAddToCart"
+                  label={'Track product add to cart'}
+                  control={control}
+                />
+              </div>
+              <div className="mb-1">
+                <SwitchInput
+                  name="google.isTrackProductRemoveToCart"
+                  label={'Track product remove from cart'}
+                  control={control}
+                />
+              </div>
+              <div className="mb-1">
+                <SwitchInput
+                  name="google.isTrackCheckout"
+                  label={'Track checkout'}
+                  control={control}
+                />
+              </div>
             </div>
           </div>
         </Card>
@@ -527,6 +648,61 @@ export default function StoreSettingsForm({ settings }: IProps) {
           >
             {t('form:button-label-add-social')}
           </Button>
+        </Card>
+      </div>
+
+      <div className="my-5 flex flex-wrap border-b border-dashed border-gray-300 pb-8 sm:my-8">
+        <Description
+          title={t('form:shop-settings-status')}
+          details={t('form:shop-settings-helper-text')}
+          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
+        />
+        <Card className="w-full sm:w-8/12 md:w-2/3">
+          <div className="flex-4 mb-5 min-w-[200px]">
+            <Label className="text-lg">
+              {t('form:input-label-maintenance-mode')}
+            </Label>
+            <div className="text-sm text-gray-600">
+              <p>
+                In maintenance mode the store will be invisible to visitors.
+                However, you will be able to access it, using a generated
+                password. This way you can safely work on the store data, while
+                blocking visitors at a maintenance mode screen.
+              </p>
+            </div>
+          </div>
+          <div className="mb-9">
+            <SwitchInput
+              name="isMaintenance"
+              label={t('form:input-label-maintenance')}
+              control={control}
+            />
+          </div>
+          <Label>{t('form:input-label-password')}</Label>
+          <div
+            className={cn('my-1 flex w-fit rounded-sm border bg-gray-100', {
+              'pointer-events-none opacity-50': !isMaintenance
+            })}
+          >
+            <div className="flex items-center px-4 py-2">
+              <div className="text-gray-400">
+                <LockSvg />
+              </div>
+              <div className="p-1 pb-0 font-medium text-gray-500">
+                {maintenancePassword}
+              </div>
+            </div>
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                const pass = generateMaintenancePassword();
+                setValue('maintenancePassword', pass);
+              }}
+              className="flex items-center justify-center border-l border-gray-300 px-5 py-2 text-gray-800"
+            >
+              <ResetIcon />
+            </button>
+          </div>
         </Card>
       </div>
     </form>
