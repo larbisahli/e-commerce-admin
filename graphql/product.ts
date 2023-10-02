@@ -71,6 +71,8 @@ export const PRODUCT = gql`
       }
       published
       disableOutOfStock
+      freeShipping
+      displayProductMeasurements
       translated {
         name
         description
@@ -241,6 +243,8 @@ export const CREATE_PRODUCT = gql`
     $type: ProductTypeInput!
     $published: Boolean!
     $disableOutOfStock: Boolean!
+    $freeShipping: Boolean!
+    $displayProductMeasurements: Boolean!
     $note: String
     $sku: String
     $thumbnail: [ImageInput!]!
@@ -268,6 +272,8 @@ export const CREATE_PRODUCT = gql`
       type: $type
       published: $published
       disableOutOfStock: $disableOutOfStock
+      freeShipping: $freeShipping
+      displayProductMeasurements: $displayProductMeasurements
       note: $note
       sku: $sku
       thumbnail: $thumbnail
@@ -351,6 +357,8 @@ export const UPDATE_PRODUCT_CONTENT = gql`
     $note: String
     $published: Boolean!
     $disableOutOfStock: Boolean!
+    $freeShipping: Boolean!
+    $displayProductMeasurements: Boolean!
     $productSeo: ProductSeoInput!
     $language: LanguageInput!
   ) {
@@ -361,6 +369,8 @@ export const UPDATE_PRODUCT_CONTENT = gql`
       description: $description
       published: $published
       disableOutOfStock: $disableOutOfStock
+      freeShipping: $freeShipping
+      displayProductMeasurements: $displayProductMeasurements
       productSeo: $productSeo
       language: $language
     ) {
@@ -370,6 +380,8 @@ export const UPDATE_PRODUCT_CONTENT = gql`
       note
       published
       disableOutOfStock
+      freeShipping
+      displayProductMeasurements
     }
   }
 `;

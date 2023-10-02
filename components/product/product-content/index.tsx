@@ -10,7 +10,6 @@ import Input from '@components/ui/input';
 import Label from '@components/ui/label';
 import Loader from '@components/ui/loader/loader';
 import Radio from '@components/ui/radio';
-import SwitchInput from '@components/ui/switch-input';
 import TextArea from '@components/ui/text-area';
 import { UPDATE_PRODUCT_CONTENT } from '@graphql/product';
 import { useErrorLogger, useGetUser } from '@hooks/index';
@@ -38,6 +37,8 @@ interface Props {
     description: Product['description'];
     status: Product['status'];
     disableOutOfStock: Product['disableOutOfStock'];
+    freeShipping: Product['freeShipping'];
+    displayProductMeasurements: Product['displayProductMeasurements'];
     isUpdateMode: boolean;
   };
 }
@@ -88,6 +89,8 @@ const ProductContent = ({ state, initialValues, productSeo }: Props) => {
     description,
     status,
     disableOutOfStock,
+    freeShipping,
+    displayProductMeasurements,
     isUpdateMode
   } = state;
 
@@ -101,21 +104,29 @@ const ProductContent = ({ state, initialValues, productSeo }: Props) => {
       description: initProductContent.description,
       published: initProductContent.published,
       note: initProductContent.note,
-      disableOutOfStock: initProductContent.disableOutOfStock
+      disableOutOfStock: initProductContent.disableOutOfStock,
+      freeShipping: initProductContent.freeShipping,
+      displayProductMeasurements: initProductContent.displayProductMeasurements
     };
     const currentProductContent = {
       name,
       description,
       published: status === 'publish',
       note,
-      disableOutOfStock
+      disableOutOfStock,
+      freeShipping,
+      displayProductMeasurements
     };
     setIsUpdated(!isEqual(initialProductContent, currentProductContent));
   }, [
     description,
     disableOutOfStock,
+    displayProductMeasurements,
+    freeShipping,
     initProductContent.description,
     initProductContent.disableOutOfStock,
+    initProductContent.displayProductMeasurements,
+    initProductContent.freeShipping,
     initProductContent.name,
     initProductContent.note,
     initProductContent.published,
@@ -171,6 +182,8 @@ const ProductContent = ({ state, initialValues, productSeo }: Props) => {
         published: status === 'publish',
         note,
         disableOutOfStock,
+        freeShipping,
+        displayProductMeasurements,
         productSeo: {
           metaTitle: productSeo?.metaTitle,
           metaKeywords: productSeo?.metaKeywords,
@@ -262,7 +275,7 @@ const ProductContent = ({ state, initialValues, productSeo }: Props) => {
           <p className="mb-5 text-xs text-gray-500">
             {t('form:hidden-info-note')}
           </p>
-          <div>
+          <div className="mb-5">
             <Label>{t('form:input-label-status')}</Label>
             <Radio
               name="status"
@@ -284,7 +297,7 @@ const ProductContent = ({ state, initialValues, productSeo }: Props) => {
               value={ProductStatus.Draft}
             />
           </div>
-          <div className="my-5">
+          <div className="my-2">
             <Checkbox
               name="disableOutOfStock"
               onChange={handleChange}
@@ -293,21 +306,21 @@ const ProductContent = ({ state, initialValues, productSeo }: Props) => {
               label={t('form:input-label-disable-out-of-stock')}
             />
           </div>
-          <div className="my-5">
+          <div className="my-2">
             <Checkbox
               name="freeShipping"
               onChange={handleChange}
               onMouseLeaveTopLevel={checkForUpdateHandler}
-              checked={disableOutOfStock}
+              checked={freeShipping}
               label={t('form:input-label-free-shipping')}
             />
           </div>
-          <div className="my-5">
+          <div className="my-2">
             <Checkbox
               name="displayProductMeasurements"
               onChange={handleChange}
               onMouseLeaveTopLevel={checkForUpdateHandler}
-              checked={disableOutOfStock}
+              checked={displayProductMeasurements}
               label={t('form:input-label-display-product-measurements')}
             />
           </div>

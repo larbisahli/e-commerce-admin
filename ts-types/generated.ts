@@ -136,19 +136,19 @@ export interface Category extends CreatedUpdatedByAt {
   includeInMenu?: Scalars['Boolean'];
   position?: Scalars['Int'];
   parent?: Nullable<CategoryRefLevel2>;
-  urlKey: Scalars['String'];
-  metaRobots: { value: Scalars['String'] };
-  breadcrumbsPriority: number;
-  metaImage: ImageType[];
-  metaTitle: Scalars['String'];
-  metaKeywords: Scalars['String'];
-  metaDescription: Scalars['String'];
+  urlKey?: Scalars['String'];
+  metaRobots?: { value: Scalars['String'] };
+  breadcrumbsPriority?: number;
+  metaImage?: ImageType[];
+  metaTitle?: Scalars['String'];
+  metaKeywords?: Scalars['String'];
+  metaDescription?: Scalars['String'];
   translated?: {
     name?: Scalars['String'];
     description?: Nullable<Scalars['String']>;
-    metaTitle: Scalars['String'];
-    metaKeywords: Scalars['String'];
-    metaDescription: Scalars['String'];
+    metaTitle?: Scalars['String'];
+    metaKeywords?: Scalars['String'];
+    metaDescription?: Scalars['String'];
   };
 }
 
@@ -358,6 +358,8 @@ export interface Product extends CreatedUpdatedByAt {
   published?: Scalars['Boolean'];
   status?: ProductStatus;
   disableOutOfStock?: Scalars['Boolean'];
+  freeShipping?: Scalars['Boolean'];
+  displayProductMeasurements?: Scalars['Boolean'];
   translated?: {
     name?: Scalars['String'];
     description?: Nullable<Scalars['String']>;

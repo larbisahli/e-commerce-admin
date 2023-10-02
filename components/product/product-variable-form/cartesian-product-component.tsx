@@ -1,7 +1,6 @@
 // import Checkbox from '@components/ui/checkbox';
 import ImageModal from '@components/image-modal';
 import Accordion from '@components/ui/accordion';
-import Checkbox from '@components/ui/checkbox';
 import Input from '@components/ui/input';
 import Label from '@components/ui/label';
 import Select from '@components/ui/select/select';
@@ -338,7 +337,7 @@ const CartesianProductComponent = ({
           label="form:label-add-variant-thumbnail"
         />
 
-        <div className="mb-5 mt-5">
+        {/* <div className="mb-5 mt-5">
           <Checkbox
             name="isDisable"
             id={`${index}-isDisable`}
@@ -347,7 +346,7 @@ const CartesianProductComponent = ({
             // error={t(errors.variationOptions?.[index]?.isDisable?.message)}
             label={t('form:input-label-out-of-stock')}
           />
-        </div>
+        </div> */}
       </div>
     </Accordion>
   );

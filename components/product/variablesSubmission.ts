@@ -16,7 +16,7 @@ const creationVariable = (values: Product): Product => {
       metaImage: values.productSeo.metaImage?.map(({ id }) => ({ id }))
     },
     categories: values?.categories?.map(({ id }) => ({ id })),
-    manufacturer: values?.manufacturer,
+    manufacturers: values?.manufacturers?.map(({ id }) => ({ id })),
     tags: values?.tags?.map(({ id }) => ({ id })),
     suppliers: values?.suppliers?.map(({ id }) => ({ id })),
     thumbnail: values.thumbnail?.map(({ id }) => ({ id })),
@@ -27,19 +27,15 @@ const creationVariable = (values: Product): Product => {
         selectedValues: v.selectedValues?.map(({ id }) => ({ id }))
       };
     }),
-    variationOptions: values?.variationOptions?.map((vo) => {
-      return {
-        title: vo.title,
-        options: vo.options,
-        thumbnail: vo.thumbnail?.map(({ id }) => ({ id })),
-        salePrice: vo.salePrice,
-        comparePrice: vo.comparePrice,
-        buyingPrice: vo.buyingPrice,
-        quantity: vo.quantity,
-        sku: vo.sku,
-        active: !vo.isDisable
-      };
-    }),
+    variationOptions: values?.variationOptions?.map(
+      ({ thumbnail, isDisable, ...rest }) => {
+        return {
+          ...rest,
+          thumbnail: thumbnail?.map(({ id }) => ({ id })),
+          active: !isDisable
+        };
+      }
+    ),
     relatedProducts: values?.relatedProducts?.map(({ id }) => ({ id })) ?? [],
     upsellProducts: values?.upsellProducts?.map(({ id }) => ({ id })) ?? [],
     crossSellProducts:

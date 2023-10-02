@@ -88,9 +88,6 @@ function ProductSimpleForm({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // if (name.length === 0) {
-    //   return notify('Product name should not be empty', 'error');
-    // }
     updateProductInformation({
       variables: {
         id: productId,
@@ -192,7 +189,7 @@ function ProductSimpleForm({
           value={sku}
           onChange={handleChange}
           onBlur={checkForUpdateHandler}
-          placeholder="LEV-JN-BL-WM"
+          placeholder="LV-10001"
           // error={t(errors.sku?.message!)}
           variant="outline"
           className="mb-5"

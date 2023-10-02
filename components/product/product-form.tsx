@@ -49,6 +49,8 @@ function ProductForm({ setUnsavedChanges, initialValues = {} }: IProps) {
     description,
     status,
     disableOutOfStock,
+    freeShipping,
+    displayProductMeasurements,
     quantity,
     sku,
     thumbnail,
@@ -130,9 +132,21 @@ function ProductForm({ setUnsavedChanges, initialValues = {} }: IProps) {
       description,
       status,
       disableOutOfStock,
+      freeShipping,
+      displayProductMeasurements,
       id
     }),
-    [id, name, note, description, status, disableOutOfStock, isUpdateMode]
+    [
+      id,
+      name,
+      note,
+      description,
+      status,
+      disableOutOfStock,
+      freeShipping,
+      displayProductMeasurements,
+      isUpdateMode
+    ]
   );
   const linkedProductsState = useMemo(
     () => ({
