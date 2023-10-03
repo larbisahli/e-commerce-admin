@@ -20,6 +20,7 @@ import {
 import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/index';
 import type { HeroBannerType, ImageType } from '@ts-types/generated';
+import { SaveOptions } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import { translationFallback } from '@utils/utils';
 import cloneDeep from 'lodash/cloneDeep';
@@ -61,6 +62,8 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
   const [error, setError] = useState(null);
   const [unsavedChanges, setUnsavedChanges] = useState(true);
 
+  const [saveMode, setSaveMode] = useState<SaveOptions>(SaveOptions.Default);
+
   const { selectedLanguage } = useSettings();
 
   const {
@@ -100,10 +103,24 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
       },
       onCompleted: (data: { createHeroSlide: HeroBannerType }) => {
         const { id } = data.createHeroSlide;
-        if (id) {
+        if (!id) {
+          return;
+        }
+        if (saveMode === SaveOptions.Default) {
           notify(t('common:successfully-created'), 'success');
           router.push(`${ROUTES.HERO_BANNER}/edit/${id}`);
+        } else if (saveMode === SaveOptions.SaveClose) {
+          notify(t('common:successfully-created'), 'success');
+          router.push(ROUTES.HERO_BANNER);
+        } else if (saveMode === SaveOptions.SaveNew) {
+          notify(t('common:successfully-created'), 'success');
+          router.push(`${ROUTES.HERO_BANNER}/create`);
+        } else if (saveMode === SaveOptions.SaveDuplicate) {
+          notify(t('common:successfully-created'), 'success');
+          router.push(`${ROUTES.HERO_BANNER}/fork/${id}`);
         }
+
+        setSaveMode(SaveOptions.Default);
       }
     });
   const [updateHeroSlider, { loading: updating, reset: resetUpdateMutation }] =
@@ -182,6 +199,21 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
         }
         loading={creating || updating}
         disabled={creating || updating}
+        onSubmit={onSubmit}
+        saveOptions={[
+          {
+            onClick: () => setSaveMode(SaveOptions.SaveNew),
+            name: t('common:button-label-save-new')
+          },
+          {
+            onClick: () => setSaveMode(SaveOptions.SaveDuplicate),
+            name: t('common:button-label-save-duplicate')
+          },
+          {
+            onClick: () => setSaveMode(SaveOptions.SaveClose),
+            name: t('common:button-label-save-close')
+          }
+        ]}
       />
       <LanguageDefaultDescInfo
         label="New hero banner"

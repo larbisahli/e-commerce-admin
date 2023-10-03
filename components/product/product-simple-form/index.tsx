@@ -1,21 +1,37 @@
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import Card from '@components/common/card';
 import { SaveIcon } from '@components/icons/save-icon';
 import Button from '@components/ui/button';
 import Description from '@components/ui/description';
 import Input from '@components/ui/input';
+import Label from '@components/ui/label';
+import Select from '@components/ui/select/select';
+import { ATTRIBUTES_FOR_SELECT } from '@graphql/attribute';
 import { UPDATE_SIMPLE_PRODUCT_INFORMATION } from '@graphql/product';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetUser } from '@hooks/useGetUser';
 import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/notify';
-import { Product } from '@ts-types/generated';
+import { OrderBy, SortOrder } from '@ts-types/enums';
+import { Attribute, LanguageType, Product } from '@ts-types/generated';
 import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import React, { ChangeEvent, memo, useState } from 'react';
 
 import { Actions, useFormReducer } from '../context/form.context';
+
+interface TAttributeSelect {
+  attributes: Attribute[];
+}
+
+interface OptionsVariable {
+  page: number;
+  limit: number;
+  orderBy: OrderBy;
+  sortedBy: SortOrder;
+  language: LanguageType;
+}
 
 type IProps = {
   initProductInformation: Product;
@@ -49,8 +65,26 @@ function ProductSimpleForm({
   const { systemCurrency } = useSettings();
   const dispatch = useFormReducer();
 
+  const { selectedLanguage } = useSettings();
+
   const { userInfo } = useGetUser();
   const csrfToken = userInfo?.csrfToken;
+
+  const {
+    data,
+    loading: attributeLoading,
+    error: queryError
+  } = useQuery<TAttributeSelect, OptionsVariable>(ATTRIBUTES_FOR_SELECT, {
+    variables: {
+      page: 1,
+      limit: 999,
+      orderBy: OrderBy.CREATED_AT,
+      sortedBy: SortOrder.Desc,
+      language: selectedLanguage
+    },
+    fetchPolicy: 'cache-and-network',
+    skip: isEmpty(selectedLanguage)
+  });
 
   const [updateProductInformation, { loading }] = useMutation(
     UPDATE_SIMPLE_PRODUCT_INFORMATION,
@@ -118,6 +152,19 @@ function ProductSimpleForm({
     return null;
   };
 
+  const appendVariant = (e: any) => {
+    e.preventDefault();
+    return;
+    // dispatch({
+    //   type: Actions.APPEND_VARIATION,
+    //   payload: {
+    //     value: { id: nanoid(), attribute: attributes[0], selectedValues: [] }
+    //   }
+    // });
+  };
+
+  const { attributes = [] } = data ?? {};
+
   return (
     <div className="my-5 flex flex-wrap pb-8 sm:my-8">
       <Description
@@ -182,7 +229,6 @@ function ProductSimpleForm({
           variant="outline"
           className="mb-5"
         />
-
         <Input
           label={t('form:input-label-sku')}
           name="sku"
@@ -194,6 +240,71 @@ function ProductSimpleForm({
           variant="outline"
           className="mb-5"
         />
+        <div className="mt-8">
+          {/* ---------<Attribute>---------- */}
+
+          <div className="border-b border-dashed border-border-200 last:border-0">
+            <div className="flex items-center justify-end">
+              <button
+                // onClick={remove}
+                type="button"
+                className="text-sm text-red-500 transition-colors
+            duration-200 hover:text-red-700 focus:outline-none"
+              >
+                {t('form:button-label-remove')}
+              </button>
+            </div>
+
+            <div className="grid grid-cols-fit gap-5">
+              <div className="mt-5">
+                <Label isRequiredLabel>
+                  {t('form:input-label-attribute-name')}
+                </Label>
+                <Select
+                  value={{}}
+                  getOptionLabel={(option: any) => option.name}
+                  getOptionValue={(option: any) => option.id}
+                  isLoading={loading}
+                  closeMenuOnSelect
+                  hideSelectedOptions
+                  options={[]}
+                  // onChange={changeAttribute}
+                  // onBlur={updateHandler}
+                />
+              </div>
+
+              <div className="col-span-2 mt-5">
+                <Label isRequiredLabel>
+                  {t('form:input-label-attribute-value')}
+                </Label>
+                <Select
+                  value={{}}
+                  getOptionLabel={(option: any) => option.value}
+                  getOptionValue={(option: any) => option.id}
+                  isLoading={loading}
+                  closeMenuOnSelect
+                  hideSelectedOptions
+                  options={[]}
+                  // onChange={changeValues}
+                  // onBlur={updateHandler}
+                />
+              </div>
+            </div>
+          </div>
+          {/* ------------- */}
+          <div className="mt-12 pb-5">
+            <Button
+              // disabled={variations.length === attributes?.length}
+              onClick={appendVariant}
+              type="button"
+              variant="outline"
+              loading={attributeLoading}
+            >
+              {t('form:button-label-add-attribute')}
+            </Button>
+          </div>
+        </div>
+
         {renderSaveButton()}
       </Card>
     </div>

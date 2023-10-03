@@ -39,6 +39,13 @@ export enum ProductType {
   Variable = 'variable'
 }
 
+export enum SaveOptions {
+  Default = 'default',
+  SaveNew = 'save-new',
+  SaveDuplicate = 'save-duplicate',
+  SaveClose = 'save-close'
+}
+
 export declare enum WithdrawStatus {
   Approved = 'APPROVED',
   Pending = 'PENDING',

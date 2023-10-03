@@ -1,3 +1,4 @@
+import { ArrowDown } from '@components/icons/arrow-down';
 import { ArrowPrev } from '@components/icons/arrow-prev';
 import { SaveIcon } from '@components/icons/save-icon';
 import Button from '@components/ui/button';
@@ -25,6 +26,10 @@ interface Props {
   children?: JSX.Element[] | JSX.Element;
   hideBackLink?: boolean;
   showCancel?: boolean;
+  saveOptions?: {
+    onClick: (e: any) => void;
+    name: string;
+  }[];
   onSubmit?: (e: any) => Promise<void>;
   showSaveButton?: boolean;
 }
@@ -40,6 +45,7 @@ const FormActions = ({
   showCancel = true,
   isCustom = false,
   showSaveButton = true,
+  saveOptions = [],
   onSubmit,
   children
 }: Props) => {
@@ -142,14 +148,22 @@ const FormActions = ({
     }
     if (onSubmit instanceof Function) {
       return (
-        <Button
-          onClick={onSubmit}
-          loading={loading}
-          disabled={disabled}
-          renderIcon={<SaveIcon width="1.3rem" height="1.3rem" />}
-        >
-          <div className="text-lg">{t('form:button-label-save')}</div>
-        </Button>
+        <div className={cn('relative flex justify-end ms-4 md:ms-6')}>
+          <Button
+            onClick={onSubmit}
+            loading={loading}
+            disabled={disabled}
+            renderIcon={<SaveIcon width="1.3rem" height="1.3rem" />}
+          >
+            <div className="text-lg">{t('form:button-label-save')}</div>
+          </Button>
+          {!isEmpty(saveOptions) && (
+            <RenderSaveOptionsDropDown
+              onSubmit={onSubmit}
+              saveOptions={saveOptions}
+            />
+          )}
+        </div>
       );
     }
 
@@ -257,6 +271,67 @@ const FormActions = ({
         </div>
       </div>
     </>
+  );
+};
+
+const RenderSaveOptionsDropDown = ({ onSubmit, saveOptions }) => {
+  const [openParamDropdown, setOpenParamDropdown] = useState(false);
+
+  const handleClickOutside = (e) => {
+    e.preventDefault();
+    setOpenParamDropdown(false);
+  };
+
+  const handleButtonClick = (e) => {
+    e.preventDefault();
+    setOpenParamDropdown((prev) => !prev);
+  };
+
+  return (
+    <div
+      className={cn(
+        'cursor-pointer bg-accent',
+        'border border-transparent text-light hover:bg-accent-hover',
+        'border !border-l border-r-0 border-b-0 border-t-0 border-white'
+      )}
+    >
+      <button
+        onClick={handleButtonClick}
+        className="flex h-full items-center justify-center px-2"
+      >
+        <div
+          className={cn('transition-all', {
+            '!rotate-180 ': openParamDropdown
+          })}
+        >
+          <ArrowDown width="22px" height="22px" />
+        </div>
+      </button>
+      <div
+        className={cn(
+          'absolute right-0 left-0 top-full border bg-white shadow-md transition-all',
+          { hidden: !openParamDropdown }
+        )}
+      >
+        <div className="flex flex-col">
+          {saveOptions?.map(({ name, onClick }) => {
+            return (
+              <button
+                onClick={(e) => {
+                  onClick(e);
+                  onSubmit(e);
+                  handleClickOutside(e);
+                }}
+                key={name}
+                className="w-full cursor-pointer border-b p-3 text-left text-[13px] font-medium text-gray-600 hover:bg-gray-200"
+              >
+                {name}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    </div>
   );
 };
 

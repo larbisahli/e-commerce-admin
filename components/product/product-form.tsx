@@ -8,7 +8,7 @@ import { useErrorLogger, useGetUser } from '@hooks/index';
 import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/index';
 import { Product } from '@ts-types/generated';
-import { ProductType } from '@ts-types/generated';
+import { ProductType, SaveOptions } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
@@ -38,6 +38,8 @@ function ProductForm({ setUnsavedChanges, initialValues = {} }: IProps) {
 
   const state = useFormState();
   const dispatch = useFormReducer();
+
+  const [saveMode, setSaveMode] = useState<SaveOptions>(SaveOptions.Default);
 
   const {
     id,
@@ -165,12 +167,12 @@ function ProductForm({ setUnsavedChanges, initialValues = {} }: IProps) {
   const [lockedSubmission, setLockedSubmission] = useState(false);
 
   const [error, setError] = useState(null);
-  useErrorLogger(error);
-
   const { selectedLanguage } = useSettings();
 
   const { userInfo } = useGetUser();
   const csrfToken = userInfo?.csrfToken;
+
+  useErrorLogger(error);
 
   const [createProduct, { loading: creating }] = useMutation(CREATE_PRODUCT, {
     context: {
@@ -180,10 +182,24 @@ function ProductForm({ setUnsavedChanges, initialValues = {} }: IProps) {
     },
     onCompleted: (data: { createProduct: Product }) => {
       const { id } = data.createProduct;
-      if (id) {
+      if (!id) {
+        return;
+      }
+      if (saveMode === SaveOptions.Default) {
         notify(t('common:successfully-created'), 'success');
         router.push(`${ROUTES.PRODUCT}/edit/${id}`);
+      } else if (saveMode === SaveOptions.SaveClose) {
+        notify(t('common:successfully-created'), 'success');
+        router.push(ROUTES.PRODUCT);
+      } else if (saveMode === SaveOptions.SaveNew) {
+        notify(t('common:successfully-created'), 'success');
+        router.push(`${ROUTES.PRODUCT}/create`);
+      } else if (saveMode === SaveOptions.SaveDuplicate) {
+        notify(t('common:successfully-created'), 'success');
+        router.push(`${ROUTES.PRODUCT}/fork/${id}`);
       }
+
+      setSaveMode(SaveOptions.Default);
     }
   });
 
@@ -220,18 +236,22 @@ function ProductForm({ setUnsavedChanges, initialValues = {} }: IProps) {
       ) {
         notify('Compare price must be larger than Sale price', 'error');
         setLockedSubmission(false);
+        setSaveMode(SaveOptions.Default);
         return;
       } else if (isEmpty(name)) {
         notify('Product name should not be empty', 'error');
         setLockedSubmission(false);
+        setSaveMode(SaveOptions.Default);
         return;
       } else if (isEmpty(slug)) {
         notify('Product slug should not be empty', 'error');
         setLockedSubmission(false);
+        setSaveMode(SaveOptions.Default);
         return;
       } else if (isEmpty(thumbnail)) {
         notify('Product thumbnail must not be empty', 'error');
         setLockedSubmission(false);
+        setSaveMode(SaveOptions.Default);
         return;
       } else if (
         productType === ProductType.Variable &&
@@ -265,6 +285,7 @@ function ProductForm({ setUnsavedChanges, initialValues = {} }: IProps) {
         }
       }).catch((err) => {
         setError(err);
+        setSaveMode(SaveOptions.Default);
         setUnsavedChanges(true);
       });
     }
@@ -285,6 +306,20 @@ function ProductForm({ setUnsavedChanges, initialValues = {} }: IProps) {
         disabled={creating}
         showSaveButton={isEmpty(initialValues)}
         onSubmit={onSubmit}
+        saveOptions={[
+          {
+            onClick: () => setSaveMode(SaveOptions.SaveNew),
+            name: t('common:button-label-save-new')
+          },
+          {
+            onClick: () => setSaveMode(SaveOptions.SaveDuplicate),
+            name: t('common:button-label-save-duplicate')
+          },
+          {
+            onClick: () => setSaveMode(SaveOptions.SaveClose),
+            name: t('common:button-label-save-close')
+          }
+        ]}
       />
       <LanguageDefaultDescInfo
         label="New Product"

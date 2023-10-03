@@ -20,7 +20,7 @@ import { useGetUser } from '@hooks/useGetUser';
 import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/index';
 import { LanguageProps } from '@ts-types/custom.types';
-import { Category, OrderBy } from '@ts-types/generated';
+import { Category, OrderBy, SaveOptions } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import { translationFallback } from '@utils/utils';
 import isEmpty from 'lodash/isEmpty';
@@ -124,6 +124,8 @@ export default function CreateOrUpdateCategoriesForm({
   const router = useRouter();
   const { t } = useTranslation();
 
+  const [saveMode, setSaveMode] = useState<SaveOptions>(SaveOptions.Default);
+
   const [error, setError] = useState(null);
   const [unsavedChanges, setUnsavedChanges] = useState(true);
 
@@ -159,10 +161,24 @@ export default function CreateOrUpdateCategoriesForm({
     },
     onCompleted: (data: { createCategory: Category }) => {
       const { id } = data.createCategory;
-      if (id) {
+      if (!id) {
+        return;
+      }
+      if (saveMode === SaveOptions.Default) {
         notify(t('common:successfully-created'), 'success');
         router.push(`${ROUTES.CATEGORY}/edit/${id}`);
+      } else if (saveMode === SaveOptions.SaveClose) {
+        notify(t('common:successfully-created'), 'success');
+        router.push(ROUTES.CATEGORY);
+      } else if (saveMode === SaveOptions.SaveNew) {
+        notify(t('common:successfully-created'), 'success');
+        router.push(`${ROUTES.CATEGORY}/create`);
+      } else if (saveMode === SaveOptions.SaveDuplicate) {
+        notify(t('common:successfully-created'), 'success');
+        router.push(`${ROUTES.CATEGORY}/fork/${id}`);
       }
+
+      setSaveMode(SaveOptions.Default);
     }
   });
 
@@ -274,6 +290,21 @@ export default function CreateOrUpdateCategoriesForm({
         }
         loading={creating || updating}
         disabled={creating || updating}
+        onSubmit={onSubmit}
+        saveOptions={[
+          {
+            onClick: () => setSaveMode(SaveOptions.SaveNew),
+            name: t('common:button-label-save-new')
+          },
+          {
+            onClick: () => setSaveMode(SaveOptions.SaveDuplicate),
+            name: t('common:button-label-save-duplicate')
+          },
+          {
+            onClick: () => setSaveMode(SaveOptions.SaveClose),
+            name: t('common:button-label-save-close')
+          }
+        ]}
       />
       <LanguageDefaultDescInfo
         label="New Category"

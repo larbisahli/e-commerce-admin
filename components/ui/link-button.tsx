@@ -6,7 +6,6 @@ import useOnClickOutside from '@utils/use-click-outside';
 import cn from 'classnames';
 import { isEmpty } from 'lodash';
 import NextLink, { LinkProps as NextLinkProps } from 'next/link';
-import { useRouter } from 'next/router';
 import { useRef, useState } from 'react';
 
 const classes = {
@@ -141,7 +140,7 @@ const RenderParamDropDown = ({
               >
                 <a
                   onClick={handleLinkClick}
-                  className="w-full cursor-pointer border-b p-3 text-left text-sm
+                  className="w-full cursor-pointer border-b p-3 text-left text-sm font-medium
             text-gray-600 hover:bg-gray-200"
                 >
                   {name}
