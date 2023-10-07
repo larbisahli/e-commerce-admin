@@ -9,9 +9,13 @@ import ProductForm from './product-form';
 
 type IProps = {
   initialValues?: Product | any;
+  isFork?: boolean;
 };
 
-function CreateOrUpdateProductForm({ initialValues = {} }: IProps) {
+function CreateOrUpdateProductForm({
+  initialValues = {},
+  isFork = false
+}: IProps) {
   const { t } = useTranslation();
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -36,6 +40,7 @@ function CreateOrUpdateProductForm({ initialValues = {} }: IProps) {
         <ProductForm
           setUnsavedChanges={setUnsavedChanges}
           initialValues={initialValues}
+          isFork={isFork}
         />
       </FormProvider>
     </>

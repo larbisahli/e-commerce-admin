@@ -8,8 +8,11 @@ import { LockSvg } from '@components/icons/lock';
 import { ResetIcon } from '@components/icons/reset';
 import * as socialIcons from '@components/icons/social';
 import ImageModal from '@components/image-modal';
+import Accordion from '@components/ui/accordion';
 import Button from '@components/ui/button';
 import Checkbox from '@components/ui/checkbox';
+import ColorPicker from '@components/ui/color-picker/color-picker';
+import DisplayColorCode from '@components/ui/color-picker/display-color-code';
 import Description from '@components/ui/description';
 import ValidationError from '@components/ui/form-validation-error';
 import Input from '@components/ui/input';
@@ -22,6 +25,7 @@ import { UPDATE_STORE_SETTINGS } from '@graphql/settings';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetUser } from '@hooks/useGetUser';
+import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/notify';
 import { FAVICON_VIEWER_MODAL } from '@ts-types/constants';
 import { SettingsType } from '@ts-types/generated';
@@ -37,7 +41,8 @@ import PhoneInput from 'react-phone-input-2';
 import { settingsValidationSchema } from './settings-validation-schema';
 import {
   RenderTooltipCurrencies,
-  RenderTooltipGoogleTrackId
+  RenderTooltipGoogleTrackId,
+  RenderTooltipTaxRate
 } from './ToolTips';
 
 type FormValues = SettingsType;
@@ -69,6 +74,23 @@ const socialIcon = [
   }
 ];
 
+const webmanifestDisplays = [
+  { name: 'fullscreen' },
+  { name: 'standalone' },
+  { name: 'minimal-ui' },
+  { name: 'browser' }
+];
+const webmanifestOrientations = [
+  { name: 'any' },
+  { name: 'natural' },
+  { name: 'landscape' },
+  { name: 'landscape-primary' },
+  { name: 'landscape-secondary' },
+  { name: 'portrait' },
+  { name: 'portrait-primary' },
+  { name: 'portrait-secondary' }
+];
+
 export const updatedIcons = socialIcon.map((item: any) => {
   const TagName = socialIcons[item.value];
   item.label = (
@@ -91,6 +113,8 @@ export default function StoreSettingsForm({ settings }: IProps) {
 
   const [error, setError] = useState(null);
 
+  const { systemCurrency } = useSettings();
+
   const {
     register,
     handleSubmit,
@@ -109,7 +133,7 @@ export default function StoreSettingsForm({ settings }: IProps) {
       defaultCurrency: settings?.currencies?.find(
         (currency) => currency.is_default
       ),
-      isMaintenance: false,
+      maintenanceMode: false,
       maintenancePassword: 12345,
       socials: !isEmpty(settings?.socials)
         ? settings?.socials.map((social: any) => ({
@@ -118,7 +142,11 @@ export default function StoreSettingsForm({ settings }: IProps) {
             ),
             url: social?.url
           }))
-        : []
+        : [],
+      webmanifest: {
+        theme_color: '#ffff',
+        background_color: '#ffff'
+      }
     }
   });
 
@@ -224,7 +252,8 @@ export default function StoreSettingsForm({ settings }: IProps) {
 
   const storeNumber = watch('storeNumber') ?? getValues('storeNumber');
   const selectedCurrencies = watch('currencies') ?? getValues('currencies');
-  const isMaintenance = watch('isMaintenance') ?? getValues('isMaintenance');
+  const maintenanceMode =
+    watch('maintenanceMode') ?? getValues('maintenanceMode');
   const maintenancePassword =
     watch('maintenancePassword') ?? getValues('maintenancePassword');
 
@@ -291,6 +320,7 @@ export default function StoreSettingsForm({ settings }: IProps) {
             modalId="favicon"
             label="form:label-add-store-favicon"
           />
+
           <div className="flex justify-end">
             <Button
               onClick={(e) => {
@@ -303,6 +333,102 @@ export default function StoreSettingsForm({ settings }: IProps) {
               <span className="mx-1 text-sm">View favicons</span>
             </Button>
           </div>
+          <Accordion
+            btnClassName="mt-5 bg-gray-100"
+            Title={() => (
+              <div className="pt-1 text-gray-600">
+                PWA web-manifest configuration
+              </div>
+            )}
+          >
+            <div className="mb-5 py-5 last:mb-8 last:border-0 md:py-8 md:last:pb-0">
+              <Input
+                label={t('form:input-label-name')}
+                {...register('webmanifest.name')}
+                variant="outline"
+                className="mb-5"
+              />
+              <Input
+                label={t('form:input-label-short-name')}
+                {...register('webmanifest.short_name')}
+                variant="outline"
+                className="mb-5"
+              />
+              <Input
+                label={t('form:input-label-description')}
+                {...register('webmanifest.description')}
+                variant="outline"
+                className="mb-5"
+              />
+              <Input
+                label={t('form:input-label-language')}
+                {...register('webmanifest.language')}
+                disabled
+                variant="outline"
+                className="mb-5"
+              />
+              <div className="flex items-center">
+                <ColorPicker
+                  label={t('form:input-label-color')}
+                  {...register('webmanifest.theme_color')}
+                  className="m-5 ml-0"
+                >
+                  <DisplayColorCode
+                    control={control}
+                    name="webmanifest.theme_color"
+                  />
+                </ColorPicker>
+                <ColorPicker
+                  label={t('form:input-label-background-color')}
+                  {...register('webmanifest.background_color')}
+                  className="m-5 ml-0"
+                >
+                  <DisplayColorCode
+                    control={control}
+                    name="webmanifest.background_color"
+                  />
+                </ColorPicker>
+              </div>
+              <Input
+                label={t('form:input-label-start-url')}
+                {...register('webmanifest.start_url')}
+                variant="outline"
+                className="mb-5"
+              />
+              <div className="mb-5">
+                <Label>{t('form:input-label-orientation')}</Label>
+                <SelectInput
+                  name="webmanifest.orientation"
+                  control={control}
+                  getOptionLabel={(option: any) => option.name}
+                  getOptionValue={(option: any) => option.name}
+                  options={webmanifestOrientations}
+                />
+              </div>
+              <div className="mb-5">
+                <Label>{t('form:input-label-display')}</Label>
+                <SelectInput
+                  name="webmanifest.display"
+                  control={control}
+                  getOptionLabel={(option: any) => option.name}
+                  getOptionValue={(option: any) => option.name}
+                  options={webmanifestDisplays}
+                />
+              </div>
+              <Input
+                label={t('form:input-iarc-rating-id')}
+                {...register('webmanifest.iarc_rating_id')}
+                variant="outline"
+                className="mb-5"
+              />
+              <Input
+                label={t('form:input-label-start-url')}
+                {...register('webmanifest.scope')}
+                variant="outline"
+                className="mb-5"
+              />
+            </div>
+          </Accordion>
         </Card>
       </div>
 
@@ -383,6 +509,7 @@ export default function StoreSettingsForm({ settings }: IProps) {
             type="number"
             error={t(errors.maxCheckoutQuantity?.message!)}
             variant="outline"
+            renderLabel={<>{systemCurrency?.symbol}</>}
             className="mb-5"
           />
         </Card>
@@ -439,6 +566,28 @@ export default function StoreSettingsForm({ settings }: IProps) {
               getOptionLabel={(option: any) => option?.name}
               getOptionValue={(option: any) => option?.code}
               options={selectedCurrencies}
+            />
+          </div>
+          <div className="mb-5">
+            <Label
+              tooltipId="taxRate"
+              spaceBetween={false}
+              openTooltipOnClick
+              renderTooltip={<RenderTooltipTaxRate />}
+              isRequiredLabel
+            >
+              {t('form:input-label-tax-rate')}
+            </Label>
+            <SelectInput
+              name="taxRate"
+              control={control}
+              getOptionLabel={(option: any) => option?.name}
+              getOptionValue={(option: any) => option?.name}
+              options={[
+                { name: 'Standard rate' },
+                { name: 'Reduced rate' },
+                { name: 'Super-reduced rate' }
+              ]}
             />
           </div>
         </Card>
@@ -673,7 +822,7 @@ export default function StoreSettingsForm({ settings }: IProps) {
           </div>
           <div className="mb-9">
             <SwitchInput
-              name="isMaintenance"
+              name="maintenanceMode"
               label={t('form:input-label-maintenance')}
               control={control}
             />
@@ -681,7 +830,7 @@ export default function StoreSettingsForm({ settings }: IProps) {
           <Label>{t('form:input-label-password')}</Label>
           <div
             className={cn('my-1 flex w-fit rounded-sm border bg-gray-100', {
-              'pointer-events-none opacity-50': !isMaintenance
+              'pointer-events-none opacity-50': !maintenanceMode
             })}
           >
             <div className="flex items-center px-4 py-2">

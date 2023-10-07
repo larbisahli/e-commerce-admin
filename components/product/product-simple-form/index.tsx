@@ -4,8 +4,6 @@ import { SaveIcon } from '@components/icons/save-icon';
 import Button from '@components/ui/button';
 import Description from '@components/ui/description';
 import Input from '@components/ui/input';
-import Label from '@components/ui/label';
-import Select from '@components/ui/select/select';
 import { ATTRIBUTES_FOR_SELECT } from '@graphql/attribute';
 import { UPDATE_SIMPLE_PRODUCT_INFORMATION } from '@graphql/product';
 import { useErrorLogger } from '@hooks/useErrorLogger';
@@ -15,11 +13,13 @@ import { notify } from '@lib/notify';
 import { OrderBy, SortOrder } from '@ts-types/enums';
 import { Attribute, LanguageType, Product } from '@ts-types/generated';
 import isEmpty from 'lodash/isEmpty';
+import { nanoid } from 'nanoid';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import React, { ChangeEvent, memo, useState } from 'react';
 
 import { Actions, useFormReducer } from '../context/form.context';
+import AttributesOptionComponent from './attributes';
 
 interface TAttributeSelect {
   attributes: Attribute[];
@@ -44,6 +44,7 @@ type IProps = {
     buyingPrice: Product['buyingPrice'];
     quantity: Product['quantity'];
     sku: Product['sku'];
+    attributes: Product['attributes'];
   };
 };
 
@@ -60,7 +61,6 @@ function ProductSimpleForm({
   const productId = parseInt(query.productId as string, 10);
 
   const [error, setError] = useState(null);
-  useErrorLogger(error);
 
   const { systemCurrency } = useSettings();
   const dispatch = useFormReducer();
@@ -103,7 +103,11 @@ function ProductSimpleForm({
     }
   );
 
-  const { salePrice, comparePrice, buyingPrice, quantity, sku } = state;
+  useErrorLogger(error);
+  useErrorLogger(queryError);
+
+  const { salePrice, comparePrice, buyingPrice, quantity, sku, attributes } =
+    state;
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value, type } = e.target;
@@ -129,7 +133,17 @@ function ProductSimpleForm({
         comparePrice,
         buyingPrice,
         quantity,
-        sku
+        sku,
+        attributes: attributes?.map(({ id, attribute, value }) => {
+          return {
+            id:
+              typeof id === 'string' || (id as any) instanceof String
+                ? null
+                : id, // if null create otherwise update
+            attribute: { id: attribute?.id },
+            value: { id: value?.id }
+          };
+        })
       }
     }).catch((err) => {
       setError(err);
@@ -154,16 +168,15 @@ function ProductSimpleForm({
 
   const appendVariant = (e: any) => {
     e.preventDefault();
-    return;
-    // dispatch({
-    //   type: Actions.APPEND_VARIATION,
-    //   payload: {
-    //     value: { id: nanoid(), attribute: attributes[0], selectedValues: [] }
-    //   }
-    // });
+    dispatch({
+      type: Actions.APPEND_ATTRIBUTE,
+      payload: {
+        value: { id: nanoid(), attribute: null, value: null }
+      }
+    });
   };
 
-  const { attributes = [] } = data ?? {};
+  const { attributes: requestAttributes = [] } = data ?? {};
 
   return (
     <div className="my-5 flex flex-wrap pb-8 sm:my-8">
@@ -178,9 +191,7 @@ function ProductSimpleForm({
 
       <Card className="w-full sm:w-8/12 md:w-2/3">
         <Input
-          label={`${t('form:input-label-sale-price')} (${
-            systemCurrency.symbol
-          })`}
+          label={t('form:input-label-sale-price')}
           isRequiredLabel
           name="salePrice"
           value={salePrice}
@@ -188,13 +199,12 @@ function ProductSimpleForm({
           onBlur={checkForUpdateHandler}
           type="number"
           // error={t(errors.salePrice?.message!)}
+          renderLabel={<>{systemCurrency?.symbol}</>}
           variant="outline"
           className="mb-5"
         />
         <Input
-          label={`${t(
-            'form:input-label-compare-price'
-          )} (${systemCurrency?.symbol})`}
+          label={t('form:input-label-compare-price')}
           name="comparePrice"
           value={comparePrice}
           onChange={handleChange}
@@ -203,17 +213,17 @@ function ProductSimpleForm({
           // error={t(errors.comparePrice?.message!)}
           variant="outline"
           className="mb-5"
+          renderLabel={<>{systemCurrency?.symbol}</>}
         />
         <Input
-          label={`${t(
-            'form:input-label-buying-price'
-          )} (${systemCurrency?.symbol})`}
+          label={t('form:input-label-buying-price')}
           name="buyingPrice"
           value={buyingPrice}
           onChange={handleChange}
           onBlur={checkForUpdateHandler}
           type="number"
           // error={t(errors.buyingPrice?.message!)}
+          renderLabel={<>{systemCurrency?.symbol}</>}
           variant="outline"
           className="mb-5"
         />
@@ -242,59 +252,21 @@ function ProductSimpleForm({
         />
         <div className="mt-8">
           {/* ---------<Attribute>---------- */}
-
-          <div className="border-b border-dashed border-border-200 last:border-0">
-            <div className="flex items-center justify-end">
-              <button
-                // onClick={remove}
-                type="button"
-                className="text-sm text-red-500 transition-colors
-            duration-200 hover:text-red-700 focus:outline-none"
-              >
-                {t('form:button-label-remove')}
-              </button>
-            </div>
-
-            <div className="grid grid-cols-fit gap-5">
-              <div className="mt-5">
-                <Label isRequiredLabel>
-                  {t('form:input-label-attribute-name')}
-                </Label>
-                <Select
-                  value={{}}
-                  getOptionLabel={(option: any) => option.name}
-                  getOptionValue={(option: any) => option.id}
-                  isLoading={loading}
-                  closeMenuOnSelect
-                  hideSelectedOptions
-                  options={[]}
-                  // onChange={changeAttribute}
-                  // onBlur={updateHandler}
-                />
-              </div>
-
-              <div className="col-span-2 mt-5">
-                <Label isRequiredLabel>
-                  {t('form:input-label-attribute-value')}
-                </Label>
-                <Select
-                  value={{}}
-                  getOptionLabel={(option: any) => option.value}
-                  getOptionValue={(option: any) => option.id}
-                  isLoading={loading}
-                  closeMenuOnSelect
-                  hideSelectedOptions
-                  options={[]}
-                  // onChange={changeValues}
-                  // onBlur={updateHandler}
-                />
-              </div>
-            </div>
-          </div>
+          {attributes?.map((attribute) => {
+            return (
+              <AttributesOptionComponent
+                key={attribute?.id}
+                checkForUpdateHandler={checkForUpdateHandler}
+                productAttribute={attribute}
+                attributes={requestAttributes}
+                loading={attributeLoading}
+              />
+            );
+          })}
           {/* ------------- */}
           <div className="mt-12 pb-5">
             <Button
-              // disabled={variations.length === attributes?.length}
+              disabled={attributes.length === requestAttributes?.length}
               onClick={appendVariant}
               type="button"
               variant="outline"

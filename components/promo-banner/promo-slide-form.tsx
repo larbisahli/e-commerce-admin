@@ -28,7 +28,11 @@ import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
 import React from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
-import Slider from 'react-slick';
+
+const Slider = dynamic(() => import('react-slick'), {
+  loading: () => <Loader height="40px" />,
+  ssr: false
+});
 
 const Editor = dynamic(() => import('@components/ui/editor'), {
   loading: () => <Loader height="150px" text="Editor..." />,

@@ -14,7 +14,7 @@ export const MediaItemPlaceholder = ({
         className="animated-background flex h-40 w-48 items-center justify-center
        rounded-sm border"
       >
-        {loader && <Loader text={t('common:text-loading')} />}
+        {loader && <Loader special text={t('common:text-loading')} />}
       </div>
       <div className="animated-background mt-2 flex h-4 w-24 rounded-sm"></div>
     </div>

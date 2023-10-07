@@ -113,6 +113,14 @@ export const COLUMNS = {
     { label: 'Last Updated By', key: 'updatedBy' },
     { label: 'Actions', key: 'actions' }
   ],
+  tax: [
+    { label: 'Name', key: 'name' },
+    { label: 'Tax rate', key: 'rate' },
+    { label: 'Default', key: 'isDefault' },
+    { label: 'Placed By', key: 'createdBy' },
+    { label: 'Updated By', key: 'updatedBy' },
+    { label: 'Actions', key: 'actions' }
+  ],
   manufacturer: [
     { label: 'Logo', key: 'logo' },
     { label: 'Name', key: 'name' },

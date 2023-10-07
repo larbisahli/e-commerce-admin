@@ -188,7 +188,6 @@ export default function SettingsForm({ settings }: IProps) {
           details={logoInformation}
           className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
         />
-
         <Card className="w-full sm:w-8/12 md:w-2/3">
           <ImageModal
             onSelect={(photo) => setFavicon(photo)}

@@ -148,12 +148,6 @@ export const siteSettings = {
         ]
       },
       {
-        id: 'yNqHtb',
-        href: ROUTES.TAG,
-        label: 'sidebar-nav-item-tags',
-        icon: 'TagIcon'
-      },
-      {
         id: 'Qk3MiG',
         href: ROUTES.COUPON,
         label: 'sidebar-nav-item-coupons',

@@ -1,5 +1,6 @@
 import PageMainAction from '@components/common/PageMainAction';
-import { UsersIcon } from '@components/icons/sidebar';
+import { TagIcon, UsersIcon } from '@components/icons/sidebar';
+import { TaxIcon } from '@components/icons/sidebar/tax';
 import AppLayout from '@components/layouts/app';
 import { useGetUser } from '@hooks/index';
 import { verifyAuth } from '@middleware/utils';
@@ -25,7 +26,7 @@ const settingRoutes = [
   {
     label: 'common:sidebar-nav-item-tax',
     url: ROUTES.TAX,
-    renderIcon: () => <UsersIcon />
+    renderIcon: () => <TaxIcon />
   },
   {
     label: 'common:sidebar-nav-item-checkout-settings',
@@ -36,6 +37,11 @@ const settingRoutes = [
     label: 'common:sidebar-nav-item-payments',
     url: ROUTES.PAYMENT,
     renderIcon: () => <UsersIcon />
+  },
+  {
+    label: 'common:sidebar-nav-item-tags',
+    url: ROUTES.TAG,
+    renderIcon: () => <TagIcon />
   },
   {
     label: 'common:sidebar-nav-item-email-templates',
@@ -68,7 +74,12 @@ export default function Settings({ client }: SSRProps) {
     <>
       <Head>
         <title>Settings | Dropgala</title>
-        <link rel="icon" type="image/svg" sizes="32x32" href="/svg/user.svg" />
+        <link
+          rel="icon"
+          type="image/svg"
+          sizes="32x32"
+          href="/svg/settings.svg"
+        />
       </Head>
       <PageMainAction
         showSelectLanguage={false}

@@ -51,6 +51,7 @@ export default function UserRole({ client }: SSRProps) {
         href={`${ROUTES.USER_ROLE}/create`}
         title={t('form:input-label-roles')}
         label={t('form:input-label-roles')}
+        showSelectLanguage={false}
       />
       <RoleList roles={roles} />
     </>

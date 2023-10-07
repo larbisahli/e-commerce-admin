@@ -2,50 +2,57 @@ import { useQuery } from '@apollo/client';
 import { PageFormPlaceholder } from '@components/common/commonComponents';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
-import { COUPON } from '@graphql/coupons';
+import { HERO_SLIDE } from '@graphql/hero-banner';
 import { useErrorLogger, useGetUser } from '@hooks/index';
+import { useSettings } from '@hooks/useSettings';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
-import { SSRProps } from '@ts-types/custom.types';
-import { Coupon } from '@ts-types/generated';
+import { LanguageProps, SSRProps } from '@ts-types/custom.types';
+import { HeroBannerType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
-import isEmpty from 'lodash/isEmpty';
+import { isEmpty } from 'lodash';
 import type { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-const CouponCreateOrUpdateForm = dynamic(
-  () => import('@components/coupon/coupon-form'),
+const CreateOrUpdateSlideForm = dynamic(
+  () => import('@components/hero-banner/hero-slide-form'),
   { ssr: true, loading: () => <PageFormPlaceholder /> }
 );
 
-interface TCoupon {
-  coupon: Coupon;
+interface THeroSlider {
+  heroSlide: HeroBannerType;
 }
-
-interface OptionsVariable {
+interface OptionsVariable extends LanguageProps {
   id: number;
 }
 
-export default function UpdateCouponPage({ client }: SSRProps) {
+export default function UpdateHeroSliderPage({ client }: SSRProps) {
   const { query } = useRouter();
 
-  const couponId = parseInt(query.couponId as string, 10);
+  const sliderId = parseInt(query.sliderId as string, 10);
 
-  const { data, loading, error } = useQuery<TCoupon, OptionsVariable>(COUPON, {
-    variables: { id: couponId },
-    fetchPolicy: 'cache-and-network'
-  });
+  const { selectedLanguage } = useSettings();
 
-  const { coupon = [] } = data ?? {};
+  const { data, loading, error } = useQuery<THeroSlider, OptionsVariable>(
+    HERO_SLIDE,
+    {
+      variables: { id: sliderId, language: selectedLanguage },
+      fetchPolicy: 'cache-and-network',
+      skip: isEmpty(selectedLanguage)
+    }
+  );
+
+  const { heroSlide = [] } = data ?? {};
 
   useGetUser(client);
   useErrorLogger(error);
 
-  if (isEmpty(coupon) || loading) {
+  if (isEmpty(heroSlide) || loading) {
     return <PageFormPlaceholder />;
   }
+
   if (error) {
     return <ErrorMessage message={error.message} />;
   }
@@ -53,19 +60,20 @@ export default function UpdateCouponPage({ client }: SSRProps) {
   return (
     <>
       <Head>
-        <title>Edit Coupon | Dropgala</title>
+        <title>Edit hero slider | Dropgala</title>
         <link
           rel="icon"
           type="image/svg"
           sizes="32x32"
-          href="/svg/coupon.svg"
+          href="/svg/slider.svg"
         />
       </Head>
-      <CouponCreateOrUpdateForm initialValues={coupon} />
+      <CreateOrUpdateSlideForm initialValues={heroSlide} />
     </>
   );
 }
-UpdateCouponPage.Layout = AppLayout;
+
+UpdateHeroSliderPage.Layout = AppLayout;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { locale } = context;
@@ -84,7 +92,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   return {
     props: {
-      ...(await serverSideTranslations(locale, ['form', 'common', 'error'])),
+      ...(await serverSideTranslations(locale, [
+        'form',
+        'common',
+        'table',
+        'error'
+      ])),
       client: { ...(client ?? {}), csrfToken, csrfError }
     }
   };

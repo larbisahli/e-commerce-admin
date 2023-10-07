@@ -40,9 +40,6 @@ const RateComponent = ({
 
   const { systemCurrency } = useSettings();
 
-  const currencySymbol =
-    rateType.type === RateType.PRICE ? `(${systemCurrency?.symbol})` : '';
-
   return (
     <div className="relative mt-4 rounded-md border border-solid border-border-200 last:border-0">
       <div className="flex items-center justify-between border-b py-2 px-4">
@@ -80,11 +77,14 @@ const RateComponent = ({
           )}
           <Input
             className="mr-2 sm:col-span-2"
-            label={`${t('form:input-label-min')} ${
-              rateType.type
-            } ${currencySymbol}`}
+            label={t('form:input-label-min')}
             type="number"
             // disabled={true}
+            renderLabel={
+              rateType.type === RateType.PRICE ? (
+                <>{systemCurrency?.symbol}</>
+              ) : null
+            }
             min={0}
             step={0.1}
             variant="outline"
@@ -92,9 +92,12 @@ const RateComponent = ({
           />
           <Input
             className="mr-2 sm:col-span-2"
-            label={`${t('form:input-label-max')} ${
-              rateType.type
-            } ${currencySymbol}`}
+            label={t('form:input-label-max')}
+            renderLabel={
+              rateType.type === RateType.PRICE ? (
+                <>{systemCurrency?.symbol}</>
+              ) : null
+            }
             type="number"
             min={0}
             step={0.1}
@@ -104,9 +107,14 @@ const RateComponent = ({
           />
           <Input
             className="sm:col-span-2"
-            label={`${t('form:input-label-price')} (${systemCurrency?.symbol})`}
+            label={t('form:input-label-price')}
             type="number"
             min={0}
+            renderLabel={
+              rateType.type === RateType.PRICE ? (
+                <>{systemCurrency?.symbol}</>
+              ) : null
+            }
             step={0.1}
             variant="outline"
             {...register(`shippingRates.${index}.price` as const)}

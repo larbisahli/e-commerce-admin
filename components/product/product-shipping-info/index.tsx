@@ -221,15 +221,12 @@ function ProductShippingInfoForm({ state, productType, initialValues }: Props) {
                     onChange={handleChange}
                     onBlur={checkForUpdateHandler}
                     type="number"
-                    variant="custom"
-                    className="w-28"
+                    variant="outline"
+                    className="w-40"
                     min={0}
                     placeholder="e.g. 0.4..."
-                    inputClassName="rounded-none rounded-l-sm border-r"
+                    renderLabel={<>{weightUnit?.unit}</>}
                   />
-                  <div className="h-full w-8 text-center text-gray-600">
-                    {weightUnit?.unit}
-                  </div>
                 </div>
               </div>
               <div className="w-22">
@@ -261,15 +258,12 @@ function ProductShippingInfoForm({ state, productType, initialValues }: Props) {
                   onChange={handleChange}
                   onBlur={checkForUpdateHandler}
                   type="number"
-                  variant="custom"
-                  className="w-28"
+                  variant="outline"
+                  className="w-40"
                   min={0}
                   placeholder="e.g. 500..."
-                  inputClassName="rounded-none rounded-l-sm border-r"
+                  renderLabel={<>{dimensionUnit?.unit}</>}
                 />
-                <div className="h-full w-8 text-center text-gray-600">
-                  {dimensionUnit?.unit}
-                </div>
               </div>
             </div>
             <div className="my-2">
@@ -281,15 +275,12 @@ function ProductShippingInfoForm({ state, productType, initialValues }: Props) {
                   onChange={handleChange}
                   onBlur={checkForUpdateHandler}
                   type="number"
-                  variant="custom"
+                  variant="outline"
                   min={0}
-                  className="w-28"
+                  className="w-40"
                   placeholder="e.g. 200..."
-                  inputClassName="rounded-none rounded-l-sm border-r"
+                  renderLabel={<>{dimensionUnit?.unit}</>}
                 />
-                <div className="h-full w-8 text-center text-gray-600">
-                  {dimensionUnit?.unit}
-                </div>
               </div>
             </div>
             <div className="my-2">
@@ -301,15 +292,12 @@ function ProductShippingInfoForm({ state, productType, initialValues }: Props) {
                   onChange={handleChange}
                   onBlur={checkForUpdateHandler}
                   type="number"
-                  variant="custom"
-                  className="w-28"
+                  variant="outline"
+                  className="w-40"
                   placeholder="e.g. 100..."
                   min={0}
-                  inputClassName="rounded-none rounded-l-sm border-r"
+                  renderLabel={<>{dimensionUnit?.unit}</>}
                 />
-                <div className="h-full w-8 text-center text-gray-600">
-                  {dimensionUnit?.unit}
-                </div>
               </div>
             </div>
             <div className="my-2 w-24">

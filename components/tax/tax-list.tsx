@@ -1,23 +1,16 @@
 import ActionButtons from '@components/common/action-buttons';
-import ImageComponent from '@components/ImageComponent';
 import Badge from '@components/ui/badge/badge';
 import Loader from '@components/ui/loader/loader';
 import { TableRowPlaceholder } from '@components/ui/placeholders/Table';
 import ProfileCart from '@components/ui/profile-card';
 import { usePlaceholder } from '@hooks/usePlaceholder';
-import { siteSettings } from '@settings/site.settings';
-import {
-  CreatedUpdatedByAt,
-  DeliveryTimeType,
-  ImageType,
-  ShippingZoneType
-} from '@ts-types/generated';
+import { CreatedUpdatedByAt, TaxType } from '@ts-types/generated';
 import { useIsRTL } from '@utils/locals';
 import { ROUTES } from '@utils/routes';
 import dayjs from 'dayjs';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 
 const Table = dynamic(
   () => import('@components/ui/table').then((mod) => mod.Table),
@@ -25,16 +18,16 @@ const Table = dynamic(
 );
 
 export type IProps = {
-  shippingZones: ShippingZoneType[] | undefined;
+  taxes: TaxType[];
   selectedColumns: string[];
   loading: boolean;
 };
 
-interface TableRowProps extends ShippingZoneType {
+interface TableRowProps extends TaxType {
   loading: boolean;
 }
 
-const ShippingList = ({ loading, shippingZones, selectedColumns }: IProps) => {
+const TaxList = ({ loading, taxes, selectedColumns }: IProps) => {
   const { t } = useTranslation();
   const { alignLeft } = useIsRTL();
 
@@ -43,121 +36,53 @@ const ShippingList = ({ loading, shippingZones, selectedColumns }: IProps) => {
   const columns = useMemo(() => {
     return [
       {
-        title: t('table:table-item-id'),
-        dataIndex: 'id',
-        key: 'id',
-        align: alignLeft,
-        width: 50,
-        ellipsis: true
-      },
-      {
-        title: t('table:table-item-logo'),
-        dataIndex: 'logo',
-        key: 'logo',
-        align: alignLeft,
-        width: 85,
-        render: (logo: ImageType, record: TableRowProps) => {
-          if (record?.loading) {
-            return <TableRowPlaceholder />;
-          }
-
-          const { image, placeholder } = logo[0] ?? {};
-          return (
-            <div className="h-[65px] w-[65px] min-w-0 overflow-hidden rounded-sm border shadow">
-              <ImageComponent
-                src={image ?? siteSettings.product.image}
-                customPlaceholder={
-                  placeholder ?? siteSettings.product.placeholder
-                }
-                width={100}
-                height={100}
-                // objectFit="container"
-              />
-            </div>
-          );
-        }
-      },
-      {
         title: t('table:table-item-name'),
         dataIndex: 'name',
         key: 'name',
-        align: alignLeft,
+        align: 'center',
         width: 150,
-        ellipsis: true,
         render: (name: string, record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
-          return (
-            <span className="font-semibold capitalize text-accent">{name}</span>
-          );
+          return name;
         }
       },
       {
-        title: t('table:table-item-rate-type'),
-        dataIndex: 'rateType',
-        key: 'rateType',
-        align: 'center',
-        width: 90,
-        render: (rateType: string, record: TableRowProps) => {
+        title: t('table:table-item-tax-rate'),
+        dataIndex: 'rate',
+        key: 'rate',
+        align: alignLeft,
+        width: 250,
+        ellipsis: true,
+        render: (taxRate: string, record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
-          if (!rateType)
-            return (
-              <div
-                title="Not available"
-                className="!text-sm font-medium capitalize text-gray-500"
-              >
-                N/A
-              </div>
-            );
-          return (
-            <Badge
-              className="!text-sm font-semibold capitalize"
-              text={record?.shippingZone?.freeShipping ? 'No Rate' : rateType}
-              color={'bg-gray-100'}
-              textColor={'text-gray-500'}
-            />
-          );
+          return taxRate;
         }
       },
       {
         title: t('table:table-item-status'),
-        dataIndex: 'active',
-        key: 'active',
+        dataIndex: 'isDefault',
+        key: 'isDefault',
         align: 'center',
-        width: 90,
-        render: (active: boolean, record: TableRowProps) => {
+        width: 120,
+        ellipsis: true,
+        render: (isDefault: number, record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
-          return (
-            <Badge
-              className="!text-sm !text-gray-600"
-              text={active ? 'Visible' : 'Hidden'}
-              color={active ? 'bg-green-200' : 'bg-red-200'}
-            />
-          );
-        }
-      },
-      {
-        title: t('table:table-item-free'),
-        dataIndex: 'freeShipping',
-        key: 'freeShipping',
-        align: 'center',
-        width: 90,
-        render: (freeShipping: boolean, record: TableRowProps) => {
-          if (record?.loading) {
-            return <TableRowPlaceholder />;
+          if (isDefault) {
+            return (
+              <Badge
+                className="!text-sm !text-gray-600"
+                text={'Default'}
+                color={'bg-green-200'}
+              />
+            );
           }
-          return (
-            <Badge
-              className="!text-sm !text-gray-600"
-              text={freeShipping ? 'Yes' : 'No'}
-              color={freeShipping ? 'bg-green-200' : 'bg-red-200'}
-            />
-          );
+          return null;
         }
       },
       {
@@ -165,7 +90,7 @@ const ShippingList = ({ loading, shippingZones, selectedColumns }: IProps) => {
         dataIndex: 'createdAt',
         key: 'createdAt',
         align: alignLeft,
-        width: 200,
+        width: 180,
         render: (
           createdAt: CreatedUpdatedByAt['createdAt'],
           record: TableRowProps
@@ -217,6 +142,7 @@ const ShippingList = ({ loading, shippingZones, selectedColumns }: IProps) => {
         dataIndex: 'id',
         key: 'actions',
         align: 'center',
+        width: 150,
         render: (id: string, record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
@@ -224,12 +150,11 @@ const ShippingList = ({ loading, shippingZones, selectedColumns }: IProps) => {
           return (
             <ActionButtons
               id={id}
-              editUrl={`${ROUTES.SHIPPING_ZONE}/edit/${id}`}
-              deleteModalView="DELETE_SHIPPING"
+              editUrl={`${ROUTES.TAX}/edit/${id}`}
+              deleteModalView="DELETE_TAX"
             />
           );
-        },
-        width: 200
+        }
       }
     ];
   }, [alignLeft, t]);
@@ -247,12 +172,12 @@ const ShippingList = ({ loading, shippingZones, selectedColumns }: IProps) => {
       //@ts-ignore
       columns={tableColumns}
       emptyText={t('table:empty-table-data')}
-      data={loading ? tablePlaceholderRow : shippingZones}
+      data={loading ? tablePlaceholderRow : taxes}
       rowKey="id"
-      scroll={{ x: 900 }}
-      className="card mb-8 overflow-hidden"
+      scroll={{ x: 800 }}
+      className="card mb-6 overflow-hidden"
     />
   );
 };
 
-export default ShippingList;
+export default TaxList;

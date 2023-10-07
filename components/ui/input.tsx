@@ -15,10 +15,11 @@ export interface Props extends InputHTMLAttributes<HTMLInputElement> {
   type?: string;
   shadow?: boolean;
   variant?: 'normal' | 'solid' | 'outline' | 'custom';
+  renderLabel?: ReactElement;
   renderTooltip?: ReactElement;
 }
 const classes = {
-  root: 'px-4 h-12 flex items-center w-full rounded appearance-none transition duration-300 ease-in-out text-heading text-sm focus:outline-none focus:ring-0',
+  root: 'px-4 h-12 flex items-center w-full rounded appearance-none transition  duration-300 ease-in-out text-heading text-sm focus:outline-none focus:ring-0',
   normal:
     'bg-gray-100 border border-border-base focus:shadow focus:bg-light focus:border-accent',
   solid:
@@ -42,6 +43,7 @@ const Input = React.forwardRef<HTMLInputElement, Props>(
       type = 'text',
       inputClassName,
       id,
+      renderLabel = null,
       renderTooltip,
       ...rest
     },
@@ -60,7 +62,7 @@ const Input = React.forwardRef<HTMLInputElement, Props>(
       inputClassName
     );
 
-    const renderLabel = () => {
+    const renderTitle = () => {
       if (!label) {
         return null;
       }
@@ -108,9 +110,9 @@ const Input = React.forwardRef<HTMLInputElement, Props>(
     };
 
     return (
-      <div className={className}>
+      <div className={cn('relative', className)}>
         <div className="flex items-center justify-between">
-          {renderLabel()}
+          {renderTitle()}
           {renderInputTooltip()}
         </div>
         <input
@@ -118,7 +120,9 @@ const Input = React.forwardRef<HTMLInputElement, Props>(
           name={name}
           type={type}
           ref={ref}
-          className={cn(rootClassName, { 'text-gray-300': disabled })}
+          className={cn(rootClassName, renderLabel && 'pr-11', {
+            'text-gray-300': disabled
+          })}
           autoComplete="off"
           autoCorrect="off"
           autoCapitalize="off"
@@ -127,6 +131,11 @@ const Input = React.forwardRef<HTMLInputElement, Props>(
           disabled={disabled}
           {...rest}
         />
+        {renderLabel && (
+          <div className="absolute right-0 bottom-0 flex h-12 w-10 items-center justify-center rounded-r border border-border-base bg-gray-100">
+            <span className="text-gray-600">{renderLabel}</span>
+          </div>
+        )}
         {note && <p className="mt-2 text-xs text-body">{note}</p>}
         {error && (
           <p className="my-2 text-start text-xs text-red-500">{error}</p>

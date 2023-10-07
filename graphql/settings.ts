@@ -85,7 +85,7 @@ export const UPDATE_STORE_SETTINGS = gql`
     $storeNumber: String
     $addressLine1: String
     $addressLine2: String
-    $currencies: [CurrencyInput]!
+    $currencies: [CurrencyInput!]!
     $canonicalUrl: String
     $socials: [SocialInput]
     $maxCheckoutQuantity: Int

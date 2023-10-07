@@ -24,6 +24,7 @@ type Props = {
     quantity: Product['quantity'];
     sku: Product['sku'];
     isUpdateMode: boolean;
+    attributes: Product['attributes'];
   };
 };
 
@@ -47,6 +48,7 @@ const ProductTypeFormComponent = ({ state, initialValues }: Props) => {
     variationOptions,
     variations,
     salePrice,
+    attributes,
     comparePrice,
     buyingPrice,
     quantity,
@@ -122,7 +124,14 @@ const ProductTypeFormComponent = ({ state, initialValues }: Props) => {
         <ProductSimpleForm
           isUpdated={isUpdated}
           checkForUpdateHandler={checkForUpdateHandler}
-          state={{ salePrice, comparePrice, buyingPrice, quantity, sku }}
+          state={{
+            salePrice,
+            comparePrice,
+            buyingPrice,
+            quantity,
+            sku,
+            attributes
+          }}
           setInitProductInformation={setInitProductInformation}
           initProductInformation={initProductInformation}
         />

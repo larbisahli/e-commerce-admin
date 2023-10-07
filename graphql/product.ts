@@ -113,6 +113,17 @@ export const PRODUCT = gql`
           name
         }
       }
+      attributes {
+        id
+        attribute {
+          id
+          name
+        }
+        value {
+          id
+          value
+        }
+      }
       variationOptions {
         id
         title
@@ -253,6 +264,7 @@ export const CREATE_PRODUCT = gql`
     $suppliers: [SupplierInput]
     $tags: [TagInput]
     $manufacturers: [ManufacturerInput]
+    $attributes: [AttributeVariationInput]
     $variationOptions: [VariationOptionInput]
     $variations: [VariationInput]
     $productShippingInfo: ProductShippingInfoInput
@@ -282,6 +294,7 @@ export const CREATE_PRODUCT = gql`
       suppliers: $suppliers
       tags: $tags
       manufacturers: $manufacturers
+      attributes: $attributes
       variationOptions: $variationOptions
       variations: $variations
       productShippingInfo: $productShippingInfo
@@ -395,6 +408,7 @@ export const UPDATE_SIMPLE_PRODUCT_INFORMATION = gql`
     $quantity: Int!
     $sku: String
     $language: LanguageInput!
+    $attributes: AttributeVariationUpdateInput
   ) {
     updateSimpleProductInformation(
       id: $id
@@ -404,6 +418,7 @@ export const UPDATE_SIMPLE_PRODUCT_INFORMATION = gql`
       quantity: $quantity
       sku: $sku
       language: $language
+      attributes: $attributes
     ) {
       salePrice
       comparePrice

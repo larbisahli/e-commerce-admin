@@ -1,4 +1,3 @@
-import { PageFormPlaceholder } from '@components/common/commonComponents';
 import AppLayout from '@components/layouts/app';
 import { useGetUser } from '@hooks/index';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
@@ -9,29 +8,25 @@ import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-const CouponCreateOrUpdateForm = dynamic(
-  () => import('@components/coupon/coupon-form'),
-  { ssr: true, loading: () => <PageFormPlaceholder /> }
+const CreateOrUpdateTaxForm = dynamic(
+  () => import('@components/tax/tax-form'),
+  { ssr: true }
 );
 
-export default function CreateCouponPage({ client }: SSRProps) {
+export default function CreateSlidePage({ client }: SSRProps) {
   useGetUser(client);
   return (
     <>
       <Head>
-        <title>Create Coupon | Dropgala</title>
-        <link
-          rel="icon"
-          type="image/svg"
-          sizes="32x32"
-          href="/svg/coupon.svg"
-        />
+        <title>New Tax Rate | Dropgala</title>
+        <link rel="icon" type="image/svg" sizes="32x32" href="/svg/tax.svg" />
       </Head>
-      <CouponCreateOrUpdateForm />
+      <CreateOrUpdateTaxForm />
     </>
   );
 }
-CreateCouponPage.Layout = AppLayout;
+
+CreateSlidePage.Layout = AppLayout;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { locale } = context;
@@ -50,7 +45,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   return {
     props: {
-      ...(await serverSideTranslations(locale, ['form', 'common', 'error'])),
+      ...(await serverSideTranslations(locale!, [
+        'form',
+        'common',
+        'table',
+        'error'
+      ])),
       client: { ...(client ?? {}), csrfToken, csrfError }
     }
   };

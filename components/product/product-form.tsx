@@ -30,9 +30,14 @@ import { creationVariable } from './variablesSubmission';
 type IProps = {
   initialValues: Product | any;
   setUnsavedChanges: any;
+  isFork?: boolean;
 };
 
-function ProductForm({ setUnsavedChanges, initialValues = {} }: IProps) {
+function ProductForm({
+  setUnsavedChanges,
+  initialValues = {},
+  isFork
+}: IProps) {
   const { t } = useTranslation();
   const router = useRouter();
 
@@ -61,6 +66,7 @@ function ProductForm({ setUnsavedChanges, initialValues = {} }: IProps) {
     categories,
     suppliers,
     manufacturers,
+    attributes,
     tags,
     productSeo,
     variationOptions,
@@ -89,6 +95,7 @@ function ProductForm({ setUnsavedChanges, initialValues = {} }: IProps) {
       salePrice,
       comparePrice,
       buyingPrice,
+      attributes,
       quantity,
       sku
     }),
@@ -99,6 +106,7 @@ function ProductForm({ setUnsavedChanges, initialValues = {} }: IProps) {
       salePrice,
       comparePrice,
       buyingPrice,
+      attributes,
       quantity,
       sku,
       isUpdateMode
@@ -202,6 +210,8 @@ function ProductForm({ setUnsavedChanges, initialValues = {} }: IProps) {
       setSaveMode(SaveOptions.Default);
     }
   });
+
+  console.log({ isFork });
 
   const onSubmit = async (e) => {
     e.preventDefault();

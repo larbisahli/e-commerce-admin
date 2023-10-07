@@ -1,3 +1,6 @@
+import { ROUTES } from '@utils/routes';
+import Link from 'next/link';
+
 export const RenderTooltipGoogleTrackId = () => {
   return (
     <div className="flex flex-col items-center">
@@ -20,6 +23,28 @@ export const RenderTooltipCurrencies = () => {
         All the selected currencies will be converted from the system currency
         (USD)
       </div>
+    </div>
+  );
+};
+
+export const RenderTooltipTaxRate = () => {
+  return (
+    <div>
+      <div className="flex flex-col items-center">
+        <div className="text-md m-1 max-w-[300px] leading-snug text-white">
+          Adjust the applicable VAT rate. A default VAT rate and up to two
+          reduced rates are predefined for most countries.
+        </div>
+        <div className="text-md m-1 max-w-[300px] leading-snug text-white">
+          You can check and alter the actual VAT rates or add additional rates
+          and country assignments in
+        </div>
+      </div>
+      <Link href={ROUTES.TAX}>
+        <a className="font-medium text-blue-400 underline" target="_blank">
+          {'Settings ->'}
+        </a>
+      </Link>
     </div>
   );
 };

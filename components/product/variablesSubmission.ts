@@ -15,6 +15,13 @@ const creationVariable = (values: Product): Product => {
       ...values.productSeo,
       metaImage: values.productSeo.metaImage?.map(({ id }) => ({ id }))
     },
+    attributes: values?.attributes?.map(({ attribute, value }) => {
+      return {
+        id: null,
+        attribute: { id: attribute?.id },
+        value: { id: value?.id }
+      };
+    }),
     categories: values?.categories?.map(({ id }) => ({ id })),
     manufacturers: values?.manufacturers?.map(({ id }) => ({ id })),
     tags: values?.tags?.map(({ id }) => ({ id })),

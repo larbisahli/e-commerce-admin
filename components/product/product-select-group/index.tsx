@@ -182,7 +182,7 @@ const ProductSelectGroup = ({ state, initialValues }: Props) => {
           <ProductCategory categories={categories} />
           <ProductManufacturer manufacturers={manufacturers} />
           <ProductSupplier suppliers={suppliers} />
-          <ProductTag tags={tags} setInitProductTags={setInitProductTags} />
+          <ProductTag tags={tags} />
           {renderSaveButton()}
         </Card>
       </div>

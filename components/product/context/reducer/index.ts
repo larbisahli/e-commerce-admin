@@ -1,4 +1,5 @@
 import {
+  AttributeValue,
   Category,
   ManufacturerType,
   ProductStatus,
@@ -14,6 +15,10 @@ import { Actions, ActionType, ProductFormType } from '../form.types';
 import { VariationReducer } from './variation.reducer';
 
 const {
+  APPEND_ATTRIBUTE,
+  CHANGE_ATTRIBUTE,
+  REMOVE_ATTRIBUTE,
+  CHANGE_ATTRIBUTE_VALUE,
   APPEND_VARIATION,
   REMOVE_VARIATION,
   CHANGE_VARIATION,
@@ -75,6 +80,39 @@ export function formReducer(
       return {
         ...state,
         suppliers: payload.values as Suppliers[]
+      };
+    case APPEND_ATTRIBUTE:
+      return {
+        ...state,
+        attributes: [...(state?.attributes ?? []), payload.value]
+      };
+    case REMOVE_ATTRIBUTE:
+      return {
+        ...state,
+        attributes: state.attributes?.filter(
+          (attribute) => attribute.id !== payload.id
+        )
+      };
+    case CHANGE_ATTRIBUTE:
+      return {
+        ...state,
+        attributes: state.attributes?.map((attribute) => {
+          if (attribute.id === payload.id) {
+            attribute.attribute = payload.value;
+            attribute.value = null;
+          }
+          return attribute;
+        })
+      };
+    case CHANGE_ATTRIBUTE_VALUE:
+      return {
+        ...state,
+        attributes: state.attributes?.map((attribute) => {
+          if (attribute.id === payload.id) {
+            attribute.value = payload.value;
+          }
+          return attribute;
+        })
       };
     case PRODUCT_SHIPPING_INFO:
       return {

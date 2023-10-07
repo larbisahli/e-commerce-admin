@@ -12,6 +12,7 @@ import {
   DELETE_SLIDER,
   DELETE_SUPPLIER,
   DELETE_TAG,
+  DELETE_TAX,
   DELETE_USER,
   FAVICON_VIEWER_MODAL
 } from '@ts-types/constants';
@@ -55,6 +56,8 @@ const SliderDeleteView = dynamic(
   () => import('@components/hero-banner/slider-delete-view')
 );
 
+const TaxDeleteView = dynamic(() => import('@components/tax/tax-delete-view'));
+
 const ManufacturerDeleteView = dynamic(
   () => import('@components/manufacturer/manufacturer-delete-view')
 );
@@ -92,6 +95,7 @@ const ManagedModal = () => {
       {view === DELETE_USER && <UserDeleteView />}
       {view === DELETE_SUPPLIER && <SupplierDeleteView />}
       {view === DELETE_SLIDER && <SliderDeleteView />}
+      {view === DELETE_TAX && <TaxDeleteView />}
       {view === DELETE_MANUFACTURER && <ManufacturerDeleteView />}
       {view === DELETE_DELIVERY_TIME && <DeliveryTimeDeleteView />}
       {view === FAVICON_VIEWER_MODAL && <FaviconModalView />}

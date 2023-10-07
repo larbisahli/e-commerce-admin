@@ -128,8 +128,9 @@ const HeroBannerList = ({
           }
           return (
             <Badge
+              className="!text-sm !text-gray-600"
               text={published ? 'Publish' : 'Draft'}
-              color={published ? 'bg-green-600' : 'bg-yellow-500'}
+              color={published ? 'bg-green-200' : 'bg-yellow-200'}
             />
           );
         }

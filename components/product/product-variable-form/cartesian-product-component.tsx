@@ -132,9 +132,7 @@ const CartesianProductComponent = ({
       >
         <div className="grid grid-cols-3 gap-3">
           <Input
-            label={`${t(
-              'form:input-label-sale-price'
-            )} (${systemCurrency?.symbol})`}
+            label={t('form:input-label-sale-price')}
             isRequiredLabel
             type="number"
             id={`salePrice-${index}`}
@@ -142,29 +140,27 @@ const CartesianProductComponent = ({
             onChange={HandleInputChange}
             onBlur={updateHandler}
             min={0}
+            renderLabel={<>{systemCurrency?.symbol}</>}
             value={salePrice}
             // error={t(errors.variation_options?.[index]?.sale_price?.message)}
             variant="outline"
             className="mb-2 ml-1"
           />
           <Input
-            label={`${t(
-              'form:input-label-compare-price'
-            )} (${systemCurrency?.symbol})`}
+            label={t('form:input-label-compare-price')}
             name="comparePrice"
             min={0}
             onChange={HandleInputChange}
             onBlur={updateHandler}
             value={comparePrice}
             type="number"
+            renderLabel={<>{systemCurrency?.symbol}</>}
             // error={t(errors.variation_options?.[index]?.compare_price?.message)}
             variant="outline"
             className="mb-2 ml-1"
           />
           <Input
-            label={`${t(
-              'form:input-label-buying-price'
-            )} (${systemCurrency?.symbol})`}
+            label={t('form:input-label-buying-price')}
             type="number"
             name="buyingPrice"
             min={0}
@@ -223,15 +219,12 @@ const CartesianProductComponent = ({
                       value={weight}
                       onChange={HandleInputChange}
                       type="number"
-                      variant="custom"
-                      className="w-28"
+                      variant="outline"
+                      className="w-40"
                       min={0}
                       placeholder="e.g. 0.4..."
-                      inputClassName="rounded-none rounded-l-sm border-r"
+                      renderLabel={<>{weightUnit?.unit}</>}
                     />
-                    <div className="h-full w-8 text-center text-gray-600">
-                      {weightUnit?.unit}
-                    </div>
                   </div>
                 </div>
                 <div className="w-22">
@@ -262,14 +255,11 @@ const CartesianProductComponent = ({
                     onChange={HandleInputChange}
                     type="number"
                     variant="custom"
-                    className="w-28"
+                    className="w-40"
                     min={0}
                     placeholder="e.g. 500..."
-                    inputClassName="rounded-none rounded-l-sm border-r"
+                    renderLabel={<>{dimensionUnit?.unit}</>}
                   />
-                  <div className="h-full w-8 text-center text-gray-600">
-                    {dimensionUnit?.unit}
-                  </div>
                 </div>
               </div>
               <div className="my-2">
@@ -281,14 +271,11 @@ const CartesianProductComponent = ({
                     onChange={HandleInputChange}
                     type="number"
                     variant="custom"
-                    className="w-28"
+                    className="w-40"
                     min={0}
                     placeholder="e.g. 200..."
-                    inputClassName="rounded-none rounded-l-sm border-r"
+                    renderLabel={<>{dimensionUnit?.unit}</>}
                   />
-                  <div className="h-full w-8 text-center text-gray-600">
-                    {dimensionUnit?.unit}
-                  </div>
                 </div>
               </div>
               <div className="my-2">
@@ -300,14 +287,11 @@ const CartesianProductComponent = ({
                     onChange={HandleInputChange}
                     type="number"
                     variant="custom"
-                    className="w-28"
+                    className="w-40"
                     min={0}
                     placeholder="e.g. 100..."
-                    inputClassName="rounded-none rounded-l-sm border-r"
+                    renderLabel={<>{dimensionUnit?.unit}</>}
                   />
-                  <div className="h-full w-8 text-center text-gray-600">
-                    {dimensionUnit?.unit}
-                  </div>
                 </div>
               </div>
               <div className="my-2 w-24">

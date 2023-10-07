@@ -48,7 +48,7 @@ export const Accordion: React.FC<CollapseProps> = ({
             )}
             onClick={onChange}
           >
-            <div className="flex items-end">
+            <div className="flex items-end ">
               <Title />
               {isUpdated && (
                 <div

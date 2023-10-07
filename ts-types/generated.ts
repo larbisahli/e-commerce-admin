@@ -379,6 +379,7 @@ export interface Product extends CreatedUpdatedByAt {
   manufacturers?: Array<ManufacturerType>;
   suppliers?: Nullable<Array<Suppliers>>;
   tags?: Nullable<Array<Nullable<Tag>>>;
+  attributes?: AttributeVariationType[];
   productShippingInfo?: ProductShippingInfo;
   variationOptions?: VariationOptionsType[];
   variations?: VariationType[];
@@ -420,6 +421,12 @@ export interface VariationType {
   id?: Scalars['ID'];
   attribute: Attribute;
   selectedValues: Array<Nullable<AttributeValue>>;
+}
+
+export interface AttributeVariationType {
+  id?: Scalars['ID'];
+  attribute: Attribute;
+  value: AttributeValue;
 }
 
 export interface VariationOptionsType {
@@ -510,6 +517,19 @@ export interface HeroBannerType extends CreatedUpdatedByAt {
   status?: 'draft' | 'publish';
 }
 
+export interface TaxType extends CreatedUpdatedByAt {
+  id?: Scalars['Int'];
+  name?: Scalars['String'];
+  rate?: Scalars['Int'];
+  isDefault?: Scalars['Boolean'];
+  countries?: {
+    id?: Scalars['Int'];
+    name?: Scalars['String'];
+    iso2?: Scalars['String'];
+    rate?: Scalars['Int'];
+  }[];
+}
+
 export interface PromoBannerType extends CreatedUpdatedByAt {
   id?: Scalars['Int'];
   animationSpeed: { value: number; name: string };
@@ -536,6 +556,7 @@ export interface SettingsType {
   published?: boolean;
   tier?: string;
   languages?: LanguageType[];
+  webmanifest?: WebmanifestType;
   currencies?: {
     symbol: string;
     name: string;
@@ -603,8 +624,22 @@ export interface SettingsType {
     appId: string;
     pageId: string;
   };
-  isMaintenance: boolean;
+  maintenanceMode: boolean;
   maintenancePassword: number;
+}
+
+export interface WebmanifestType {
+  name?: string;
+  short_name?: string;
+  description?: string;
+  language?: string;
+  theme_color?: string;
+  background_color?: string;
+  start_url?: string;
+  orientation?: string;
+  display?: string;
+  iarc_rating_id?: string;
+  scope?: string;
 }
 
 export interface PageType {

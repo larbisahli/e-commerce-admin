@@ -108,6 +108,7 @@ export default function ShippingZonesPage({ client }: SSRProps) {
         href={`${ROUTES.SHIPPING_ZONE}/create`}
         title={t('form:button-label-add-shipping-zone')}
         label={t('form:input-label-shipping-zones')}
+        showSelectLanguage={false}
       />
       <PageMainHeader
         columns={COLUMNS['shipping-zone']}

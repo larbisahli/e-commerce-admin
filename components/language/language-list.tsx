@@ -156,7 +156,7 @@ const LanguageList = ({ loading, languages, selectedColumns }: IProps) => {
                 <Badge
                   text={'System'}
                   textColor={'text-gray-600'}
-                  color={'bg-gray-100'}
+                  color={'bg-blue-100'}
                 />
               )}
               {isDefault && (
@@ -169,7 +169,7 @@ const LanguageList = ({ loading, languages, selectedColumns }: IProps) => {
               <Badge
                 text={record?.active ? 'Publish' : 'Draft'}
                 textColor={'text-gray-600'}
-                color={'bg-gray-100'}
+                color={record?.active ? 'bg-green-200' : 'bg-yellow-200'}
               />
             </div>
           );

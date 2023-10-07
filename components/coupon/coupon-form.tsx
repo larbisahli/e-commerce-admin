@@ -1,7 +1,6 @@
 import { useMutation } from '@apollo/client';
 import Card from '@components/common/card';
-import { SaveIcon } from '@components/icons/save-icon';
-import Button from '@components/ui/button';
+import FormActions from '@components/common/FormActions';
 import { DatePicker } from '@components/ui/date-picker';
 import Description from '@components/ui/description';
 import ValidationError from '@components/ui/form-validation-error';
@@ -182,6 +181,17 @@ export default function CreateOrUpdateCouponForm({ initialValues }: IProps) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      <FormActions
+        backLink={ROUTES.SHIPPING_ZONE}
+        showSelectLanguage={false}
+        title={
+          isEmpty(initialValues)
+            ? t('form:form-title-new-coupon')
+            : t('form:form-title-edit-coupon')
+        }
+        loading={creating || updating}
+        disabled={creating || updating}
+      />
       <div className="my-5 flex flex-wrap sm:my-8">
         <Description
           title={t('form:input-label-description')}
@@ -204,12 +214,11 @@ export default function CreateOrUpdateCouponForm({ initialValues }: IProps) {
             inputClassName="uppercase"
           />
           <Input
-            label={`${t(
-              'form:order-amount-limit'
-            )} (${systemCurrency?.symbol})`}
+            label={t('form:order-amount-limit')}
             {...register('orderAmountLimit')}
             type={'number'}
             min={0}
+            renderLabel={<>{systemCurrency?.symbol}</>}
             error={t(errors.orderAmountLimit?.message!)}
             variant="outline"
             className="mb-5"
@@ -219,17 +228,20 @@ export default function CreateOrUpdateCouponForm({ initialValues }: IProps) {
 
           {couponType?.value !== CouponType.FreeShipping && (
             <Input
-              label={`${t('form:input-label-discount-value')} (${
-                couponType?.value === CouponType.Percentage
-                  ? '%'
-                  : systemCurrency?.symbol
-              })`}
+              label={t('form:input-label-discount-value')}
               {...register('discountValue')}
               type="number"
               error={t(errors.discountValue?.message!)}
               variant="outline"
               className="mb-5"
               min={0}
+              renderLabel={
+                couponType?.value === CouponType.Percentage ? (
+                  <>%</>
+                ) : (
+                  <>{systemCurrency?.symbol}</>
+                )
+              }
               max={couponType?.value === CouponType.Percentage ? 100 : null}
             />
           )}
@@ -291,25 +303,6 @@ export default function CreateOrUpdateCouponForm({ initialValues }: IProps) {
             </div>
           </div>
         </Card>
-      </div>
-      <div className="mb-4 flex items-center justify-end">
-        {initialValues && (
-          <Button
-            variant="outline"
-            onClick={router.back}
-            className="me-4"
-            type="button"
-          >
-            {t('form:button-label-back')}
-          </Button>
-        )}
-
-        <Button loading={creating || updating} disabled={creating || updating}>
-          <div className="mr-1">
-            <SaveIcon width="1.3rem" height="1.3rem" />
-          </div>
-          <div>{t('form:button-label-save')}</div>
-        </Button>
       </div>
     </form>
   );

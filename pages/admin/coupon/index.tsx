@@ -2,6 +2,7 @@ import { useQuery } from '@apollo/client';
 import CouponList from '@components/coupon/coupon-list';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
+import Loader from '@components/ui/loader/loader';
 import { COUPONS } from '@graphql/coupons';
 import { useErrorLogger, useGetUser } from '@hooks/index';
 import { useTableColumn } from '@hooks/useTableColumn';
@@ -104,6 +105,7 @@ export default function Coupons({ client }: SSRProps) {
         href={`${ROUTES.COUPON}/create`}
         title={t('form:input-label-coupons')}
         label={t('form:button-label-add-coupon')}
+        showSelectLanguage={false}
       />
       <PageMainHeader
         columns={COLUMNS['coupon']}
