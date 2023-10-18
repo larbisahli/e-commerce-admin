@@ -17,7 +17,7 @@ const Table = dynamic(
 );
 
 export type IProps = {
-  tags: Tag[] | undefined | null;
+  rows: Tag[] | undefined | null;
   selectedColumns: string[];
   loading: boolean;
 };
@@ -26,7 +26,7 @@ interface TableRowProps extends Tag {
   loading: boolean;
 }
 
-const TagList = ({ tags, selectedColumns, loading }: IProps) => {
+const TagList = ({ rows, selectedColumns, loading }: IProps) => {
   const { t } = useTranslation();
 
   const { alignLeft } = useIsRTL();
@@ -155,7 +155,7 @@ const TagList = ({ tags, selectedColumns, loading }: IProps) => {
       //@ts-ignore
       columns={tableColumns}
       emptyText={t('table:empty-table-data')}
-      data={loading ? tablePlaceholderRow : tags}
+      data={loading ? tablePlaceholderRow : rows}
       rowKey="id"
       scroll={{ x: 800 }}
       className="card mb-6 overflow-hidden"

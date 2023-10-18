@@ -2,8 +2,6 @@ import { useQuery } from '@apollo/client';
 import AppLayout from '@components/layouts/app';
 import TagList from '@components/tag/tag-list';
 import ErrorMessage from '@components/ui/error-message';
-import Loader from '@components/ui/loader/loader';
-import TablePlaceholder from '@components/ui/placeholders/Table';
 import { TAGS } from '@graphql/tag';
 import { useErrorLogger, useGetUser } from '@hooks/index';
 import { useSettings } from '@hooks/useSettings';
@@ -13,7 +11,6 @@ import { SSRProps, TableQueryVariables } from '@ts-types/custom.types';
 import { OrderBy, SortOrder, Tag } from '@ts-types/generated';
 import { COLUMNS } from '@utils/data/table-columns';
 import { ROUTES } from '@utils/routes';
-import cn from 'classnames';
 import isEmpty from 'lodash/isEmpty';
 import type { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
@@ -39,8 +36,10 @@ const PageMainAction = dynamic(
 );
 
 interface TTags {
-  tags: Tag[];
-  tagCount: { count: number };
+  tags: {
+    rows: Tag[];
+    count: number;
+  };
 }
 
 export default function Tags({ client }: SSRProps) {
@@ -69,7 +68,7 @@ export default function Tags({ client }: SSRProps) {
     skip: isEmpty(selectedLanguage)
   });
 
-  const { tags = [], tagCount: { count } = { count: 0 } } = data ?? {};
+  const { tags: { rows = [], count } = {} } = data ?? {};
 
   useGetUser(client);
   useErrorLogger(error);
@@ -116,7 +115,7 @@ export default function Tags({ client }: SSRProps) {
       />
       <TagList
         loading={loading}
-        tags={tags}
+        rows={rows}
         selectedColumns={selectedTableColumns}
       />
     </>

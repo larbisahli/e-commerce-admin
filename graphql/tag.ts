@@ -8,9 +8,6 @@ export const TAGS = gql`
     $sortedBy: String!
     $language: LanguageInput!
   ) {
-    tagCount {
-      count
-    }
     tags(
       page: $page
       limit: $limit
@@ -18,23 +15,26 @@ export const TAGS = gql`
       sortedBy: $sortedBy
       language: $language
     ) {
-      id
-      name
-      translated {
+      rows {
+        id
         name
+        translated {
+          name
+        }
+        createdAt
+        updatedAt
+        createdBy {
+          id
+          firstName
+          lastName
+        }
+        updatedBy {
+          id
+          firstName
+          lastName
+        }
       }
-      createdAt
-      updatedAt
-      createdBy {
-        id
-        firstName
-        lastName
-      }
-      updatedBy {
-        id
-        firstName
-        lastName
-      }
+      count
     }
   }
 `;
