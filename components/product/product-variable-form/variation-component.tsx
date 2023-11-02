@@ -6,7 +6,7 @@ import type { VariationType } from '@ts-types/generated';
 import { Attribute } from '@ts-types/generated';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
-import React, { useMemo } from 'react';
+import React, { memo, useMemo } from 'react';
 
 import { useFormReducer } from '../context/form.context';
 import { Actions } from '../context/form.types';
@@ -15,8 +15,8 @@ const Select = dynamic(() => import('@components/ui/select/select'), {
   loading: () => <Loader height="100px" showText={false} />,
   ssr: false
 });
-
 interface VCProps {
+  attributeValuesChanges: any[]
   updateHandler: () => void;
   variant: VariationType;
   attributes: Attribute[];
@@ -100,6 +100,8 @@ const VariationComponent = ({
 
   const { attribute = {}, selectedValues = [] } = variant ?? {};
 
+  console.log('VariationComponent :>>', {index})
+
   return (
     <div className="border-b border-dashed border-border-200 p-5 last:border-0 md:p-8">
       <div className="flex items-center justify-between">
@@ -152,4 +154,4 @@ const VariationComponent = ({
   );
 };
 
-export default VariationComponent;
+export default memo(VariationComponent);

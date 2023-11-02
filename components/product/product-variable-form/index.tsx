@@ -219,18 +219,15 @@ function ProductVariableForm({
   };
 
   const updateHandler = useCallback(() => {
+    if(!isUpdateMode) return
     const { additions, deletions } = getUpdatedVariationOptions({
       variationOptions,
       initVariationOptions
     });
     checkForUpdateHandler({ additions, deletions });
     setUpdatedVariationOptions(additions);
-  }, [
-    checkForUpdateHandler,
-    getUpdatedVariationOptions,
-    initVariationOptions,
-    variationOptions
-  ]);
+    // No dependencies
+  }, []);
 
   useEffect(() => {
     if (!isEmpty(initVariableProductInformation)) {
@@ -360,6 +357,8 @@ function ProductVariableForm({
     return null;
   };
 
+  console.log('ProductVariableForm-index:>>', {variationOptions, attributeValuesChanges})
+
   return (
     <div className="my-5 flex flex-wrap pb-8 sm:my-8">
       <Description
@@ -381,6 +380,8 @@ function ProductVariableForm({
                 <VariationComponent
                   key={variant.id}
                   {...{
+                    // we use "attributeValuesChanges" to trigger re-render only because memo do a shallow compare
+                    attributeValuesChanges,
                     updateHandler,
                     variant,
                     attributes,

@@ -256,7 +256,7 @@ const FormActions = ({
       <div
         className={cn(
           'border-y border-t-0 border-gray-300 opacity-100 transition-all duration-100 ease-linear',
-          'nlg:ps-20 nxl:ps-20 fixed left-0 right-0 top-[75px] z-30 bg-gray-100 pr-8 md:ps-20 lg:ps-64 xl:ps-64',
+          'nlg:ps-20 nxl:ps-20 fixed left-0 right-0 top-[75px] z-40 bg-gray-100 pr-8 md:ps-20 lg:ps-64 xl:ps-64',
           {
             '!ps-0 md:!ps-20': displayMiniSidebar,
             'invisible !opacity-0': inView

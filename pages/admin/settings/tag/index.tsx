@@ -36,10 +36,8 @@ const PageMainAction = dynamic(
 );
 
 interface TTags {
-  tags: {
-    rows: Tag[];
-    count: number;
-  };
+  tags: Tag[];
+  tagCount: { count: number };
 }
 
 export default function Tags({ client }: SSRProps) {
@@ -68,7 +66,7 @@ export default function Tags({ client }: SSRProps) {
     skip: isEmpty(selectedLanguage)
   });
 
-  const { tags: { rows = [], count } = {} } = data ?? {};
+  const { tags = [], tagCount: { count } = { count: 0 } } = data ?? {};
 
   useGetUser(client);
   useErrorLogger(error);
@@ -115,7 +113,7 @@ export default function Tags({ client }: SSRProps) {
       />
       <TagList
         loading={loading}
-        rows={rows}
+        tags={tags}
         selectedColumns={selectedTableColumns}
       />
     </>

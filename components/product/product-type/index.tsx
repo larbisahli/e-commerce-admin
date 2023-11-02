@@ -32,7 +32,6 @@ const ProductTypeComponent = ({ state, initialValues }: Props) => {
   const { type } = state;
 
   const onChange = (value: Product['type']) => {
-    console.log({ value });
     dispatch({
       type: Actions.CONTENT,
       payload: {
