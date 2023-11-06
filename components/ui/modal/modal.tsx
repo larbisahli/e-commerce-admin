@@ -1,8 +1,14 @@
 import { CloseIcon } from '@components/icons/close-icon';
 import { Dialog, Transition } from '@headlessui/react';
+import cn from 'classnames';
 import { Fragment, useEffect, useRef } from 'react';
 
-export default function Modal({ open, onClose, children }: any) {
+export default function Modal({
+  open,
+  onClose,
+  children,
+  align = 'center'
+}: any) {
   const cancelButtonRef = useRef(null);
 
   useEffect(() => {
@@ -39,23 +45,42 @@ export default function Modal({ open, onClose, children }: any) {
 
           {/* This element is to trick the browser into centering the modal contents. */}
           <span
-            className="inline-block h-screen align-middle"
+            className={cn(
+              align === 'right' &&
+                'align-right absolute right-0 inline-block h-screen',
+              align === 'center' && 'inline-block h-screen align-middle'
+            )}
             aria-hidden="true"
           >
             &#8203;
           </span>
           <Transition.Child
             as={Fragment}
-            enter="ease-out duration-300"
-            enterFrom="opacity-0 scale-95"
-            enterTo="opacity-100 scale-100"
+            enter={
+              align === 'center'
+                ? 'ease-out duration-300'
+                : 'duration-100 translate-x-full'
+            }
+            enterFrom={
+              align === 'center'
+                ? 'opacity-0 scale-95'
+                : 'opacity-0 translate-x-0'
+            }
+            enterTo={
+              align === 'center'
+                ? 'opacity-100 scale-100'
+                : 'opacity-100 translate-x-full'
+            }
             leave="ease-in duration-200"
             leaveFrom="opacity-100 scale-100"
             leaveTo="opacity-0 scale-95"
           >
             <div
-              className="min-w-content relative inline-block max-w-full overflow-hidden
-            text-start align-middle transition-all md:rounded-sm"
+              className={cn(
+                'min-w-content inline-block max-w-full overflow-hidden bg-white text-start transition-all md:rounded-sm',
+                align === 'center' && 'relative align-middle',
+                align === 'right' && 'absolute top-0 bottom-0 right-0 '
+              )}
             >
               <button
                 onClick={onClose}
@@ -67,7 +92,15 @@ export default function Modal({ open, onClose, children }: any) {
               >
                 <CloseIcon className="h-7 w-7" />
               </button>
-              {children}
+              <div
+                className={cn(
+                  'h-[100vh] overflow-y-auto',
+                  align === 'center' && 'md:h-fit',
+                  align === 'right' && ''
+                )}
+              >
+                {children}
+              </div>
             </div>
           </Transition.Child>
         </div>

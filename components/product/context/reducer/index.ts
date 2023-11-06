@@ -1,5 +1,4 @@
 import {
-  AttributeValue,
   Category,
   ManufacturerType,
   ProductStatus,
@@ -99,7 +98,7 @@ export function formReducer(
         attributes: state.attributes?.map((attribute) => {
           if (attribute.id === payload.id) {
             attribute.attribute = payload.value;
-            attribute.value = null;
+            attribute.selectedValue = attribute?.attribute?.values[0];
           }
           return attribute;
         })
@@ -109,7 +108,7 @@ export function formReducer(
         ...state,
         attributes: state.attributes?.map((attribute) => {
           if (attribute.id === payload.id) {
-            attribute.value = payload.value;
+            attribute.selectedValue = payload.value;
           }
           return attribute;
         })

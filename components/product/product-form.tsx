@@ -211,8 +211,6 @@ function ProductForm({
     }
   });
 
-  console.log({ isFork });
-
   const onSubmit = async (e) => {
     e.preventDefault();
 
@@ -230,6 +228,8 @@ function ProductForm({
 
     if (isEmpty(initialValues)) {
       const variables = creationVariable(values);
+
+      console.log({ values, variables });
 
       // Validations
       const name = variables.name;
@@ -340,9 +340,9 @@ function ProductForm({
         <Description
           title={t('form:featured-image-title')}
           details={t('form:featured-image-help-text')}
-          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
+          className="w-full px-0 pb-5 sm:w-1/4 sm:py-8 sm:pe-4 md:w-1/4 md:pe-5"
         />
-        <Card className="w-full sm:w-8/12 md:w-2/3">
+        <Card className="w-full sm:w-3/4 md:w-3/4">
           <ProductThumbnail
             state={productThumbnailState}
             initialValues={initialValues}
@@ -354,9 +354,9 @@ function ProductForm({
         <Description
           title={t('form:gallery-title')}
           details={t('form:gallery-help-text')}
-          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
+          className="w-full px-0 pb-5 sm:w-1/4 sm:py-8 sm:pe-4 md:w-1/4 md:pe-5"
         />
-        <Card className="w-full sm:w-8/12 md:w-2/3">
+        <Card className="sm:w-w-3/4 w-full md:w-3/4">
           <ProductGallery
             state={productGalleryState}
             initialValues={initialValues}

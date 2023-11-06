@@ -205,10 +205,10 @@ function ProductShippingInfoForm({ state, productType, initialValues }: Props) {
               ? t('form:item-description-edit')
               : t('form:item-description-add')
           } ${t('form:form-description-simple-product-info')}`}
-          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
+          className="w-full px-0 pb-5 sm:w-1/4 sm:py-8 sm:pe-4 md:w-1/4 md:pe-5"
         />
 
-        <Card className="flex w-full flex-wrap items-center sm:w-8/12 md:w-2/3">
+        <Card className="flex w-full flex-wrap items-center sm:w-3/4 md:w-3/4">
           <div className="flex items-center">
             {/* Width */}
             <div className="mr-2 mb-5 flex items-center">

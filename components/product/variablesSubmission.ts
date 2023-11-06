@@ -15,34 +15,38 @@ const creationVariable = (values: Product): Product => {
       ...values.productSeo,
       metaImage: values.productSeo.metaImage?.map(({ id }) => ({ id }))
     },
-    attributes: values?.attributes?.map(({ attribute, value }) => {
-      return {
-        id: null,
-        attribute: { id: attribute?.id },
-        value: { id: value?.id }
-      };
-    }),
+    attributes: isVariable
+      ? []
+      : values?.attributes?.map(({ attribute, selectedValue }) => {
+          return {
+            id: null,
+            attribute: { id: attribute?.id },
+            selectedValue: { id: selectedValue?.id }
+          };
+        }),
     categories: values?.categories?.map(({ id }) => ({ id })),
     manufacturers: values?.manufacturers?.map(({ id }) => ({ id })),
     tags: values?.tags?.map(({ id }) => ({ id })),
     suppliers: values?.suppliers?.map(({ id }) => ({ id })),
     thumbnail: values.thumbnail?.map(({ id }) => ({ id })),
     gallery: values.gallery?.map(({ id }) => ({ id })),
-    variations: values?.variations?.map((v) => {
-      return {
-        attribute: { id: v.attribute.id },
-        selectedValues: v.selectedValues?.map(({ id }) => ({ id }))
-      };
-    }),
-    variationOptions: values?.variationOptions?.map(
-      ({ thumbnail, isDisable, ...rest }) => {
-        return {
-          ...rest,
-          thumbnail: thumbnail?.map(({ id }) => ({ id })),
-          active: !isDisable
-        };
-      }
-    ),
+    variations: isVariable
+      ? values?.variations?.map((v) => {
+          return {
+            attribute: { id: v.attribute.id },
+            selectedValues: v.selectedValues?.map(({ id }) => ({ id }))
+          };
+        })
+      : [],
+    variationOptions: isVariable
+      ? values?.variationOptions?.map(({ thumbnail, isDisable, ...rest }) => {
+          return {
+            ...rest,
+            thumbnail: thumbnail?.map(({ id }) => ({ id })),
+            active: !isDisable
+          };
+        })
+      : [],
     relatedProducts: values?.relatedProducts?.map(({ id }) => ({ id })) ?? [],
     upsellProducts: values?.upsellProducts?.map(({ id }) => ({ id })) ?? [],
     crossSellProducts:

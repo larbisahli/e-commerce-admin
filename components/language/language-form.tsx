@@ -217,10 +217,10 @@ export default function LanguageForm({
               ? t('form:item-description-edit')
               : t('form:item-description-add')
           } ${t('form:tag-description-helper-text')}`}
-          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5 "
+          className="w-full px-0 pb-5 sm:w-1/4 sm:py-8 sm:pe-4 md:w-1/4 md:pe-5 "
         />
 
-        <Card className="w-full sm:w-8/12 md:w-2/3">
+        <Card className="w-full sm:w-3/4 md:w-3/4">
           <div className="mb-5">
             <Label isRequiredLabel>{t('form:input-label-language')}</Label>
             <SelectInput
@@ -265,7 +265,7 @@ export default function LanguageForm({
         </Card>
       </div>
       <div className="my-5 flex flex-wrap sm:my-8">
-        <div className="w-full px-0 pb-5 sm:w-4/12 sm:pe-4 md:w-1/3 md:pe-5">
+        <div className="w-full px-0 pb-5 sm:w-1/4 sm:pe-4 md:w-1/4 md:pe-5">
           <Scrollbar
             autoHide="never"
             className="card os-theme-thin-light h-64 w-full px-5 py-4 sm:h-96"
@@ -294,7 +294,7 @@ export default function LanguageForm({
             </div>
           </Scrollbar>
         </div>
-        <Card className="w-full sm:w-8/12 md:w-2/3">
+        <Card className="w-full sm:w-3/4 md:w-3/4">
           {Object.keys(localeFiles)?.map((locale) => {
             return Object.keys(localeFiles[locale])?.map((field) => {
               return (

@@ -1,13 +1,13 @@
-import { useMutation } from '@apollo/client';
 import Alert from '@components/ui/alert';
 import Button from '@components/ui/button';
 import Input from '@components/ui/input';
 import PasswordInput from '@components/ui/password-input';
-import { USER_LOGIN } from '@graphql/login';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetUser } from '@hooks/useGetUser';
 import { ROUTES } from '@utils/routes';
+import { apiURL } from '@utils/utils';
+import { isEmpty } from 'lodash';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
@@ -57,32 +57,39 @@ const LoginForm = () => {
 
   const csrfToken = userInfo?.csrfToken;
 
-  const [userLogin] = useMutation(USER_LOGIN, {
-    context: {
-      headers: {
-        'x-csrf-token': csrfToken
-      }
-    },
-    onCompleted: (data: { login: FormValues }) => {
-      setLoading(false);
-      if (data?.login?.success) {
-        router.push(ROUTES.DASHBOARD);
-      }
-    }
-  });
-
   useErrorLogger(error);
 
   function onReCaptchaChange(token) {
     const variables = getValues();
 
     setLoading(true);
-    userLogin({ variables: { ...variables, token } }).catch((error) => {
-      const err = error?.graphQLErrors[0];
-      setLoading(false);
-      setError(err?.message);
-      _reCaptchaRef.current.reset();
-    });
+    setError(null);
+    fetch(`${apiURL}/login`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-csrf-token': csrfToken
+      },
+      body: JSON.stringify({ ...variables, token })
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log({ data });
+        setLoading(false);
+        if (data?.success) {
+          router.push(ROUTES.DASHBOARD);
+        } else if (data?.message) {
+          setError(data);
+          _reCaptchaRef.current.reset();
+        }
+      })
+      .catch((err) => {
+        console.log({ err, message: err?.message });
+        setLoading(false);
+        setError(err);
+        _reCaptchaRef.current.reset();
+      });
   }
 
   async function onSubmit() {
@@ -122,15 +129,15 @@ const LoginForm = () => {
         />
         <Button
           className="mt-8 w-full rounded-sm"
-          loading={loading && !error}
+          loading={loading && !isEmpty(error)}
           disabled={loading}
         >
           {t('form:button-label-login')}
         </Button>
 
-        {error ? (
+        {!isEmpty(error) ? (
           <Alert
-            message={t(error)}
+            message={t(error?.message)}
             variant="error"
             closeable={true}
             className="mt-5"

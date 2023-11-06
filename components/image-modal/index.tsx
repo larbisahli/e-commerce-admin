@@ -13,6 +13,7 @@ import {
   useModalAction,
   useModalState
 } from '@components/ui/modal/modal.context';
+import PageLoader from '@components/ui/page-loader/page-loader';
 import Thumbs from '@components/ui/thumbs';
 import { useFiles } from '@hooks/useFiles';
 import { IMAGE_MODAL } from '@ts-types/constants';
@@ -127,12 +128,9 @@ const ImageModal = ({
         handleImageRemoval={handleImageRemoval}
       />
       {/* MODEL */}
-      <Modal open={isOpen && isCurrentModal} onClose={closeModal}>
+      <Modal open={isOpen && isCurrentModal} onClose={closeModal} align="right">
         {view === IMAGE_MODAL && (
-          <div
-            className="flex h-[100vh] max-h-screen w-[100vw] flex-col overflow-y-auto rounded-sm
-            bg-white md:h-fit md:w-[70vw] 2xl:w-[60vw]"
-          >
+          <div className="flex flex-col">
             <div className="border-b border-gray-200 bg-gray-100 p-4 text-lg font-semibold capitalize text-gray-800 shadow">
               Choose media
             </div>
@@ -195,17 +193,19 @@ const ImageModal = ({
                 )}
               </div>
               <div className="relative my-5 flex flex-1 flex-col justify-between border-t">
-                <div className="absolute top-1/3 left-1/2 z-10 -translate-x-1/2 -translate-y-1/2 transform">
-                  {loading && (
-                    <Loader height="20vh" text={t('common:text-loading')} />
-                  )}
-                </div>
-                <div className={cn('h-full w-full')}>
-                  <ul
-                    className="my-4 grid min-h-[400px] w-full grid-cols-3 flex-wrap
-                  gap-5 overflow-y-auto sm:grid-cols-4
-                  md:max-h-[600px] md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5 2xl:grid-cols-6"
+                {loading && (
+                  <div
+                    style={{ background: 'rgba(0,0,0,.2)' }}
+                    className="absolute top-1 left-0 right-0 bottom-0 z-[120]"
                   >
+                    <div className="absolute top-1/3 left-1/2 z-10 -translate-x-1/2 -translate-y-1/2 transform">
+                      <PageLoader text={t('common:text-loading')} />
+                    </div>
+                  </div>
+                )}
+
+                <div className={cn('h-full w-full')}>
+                  <ul className="my-4 grid w-full grid-cols-3 flex-wrap gap-5 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5 2xl:grid-cols-6">
                     {loadingImage && (
                       <li className="relative mt-2 h-40 w-36 rounded-sm bg-blue-100 me-2">
                         <div className="relative h-40 w-36 min-w-0 overflow-hidden rounded-sm">

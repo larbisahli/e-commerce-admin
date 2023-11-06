@@ -16,7 +16,7 @@ const Select = dynamic(() => import('@components/ui/select/select'), {
   ssr: false
 });
 interface VCProps {
-  attributeValuesChanges: any[]
+  attributeValuesChanges: any[];
   updateHandler: () => void;
   variant: VariationType;
   attributes: Attribute[];
@@ -100,7 +100,7 @@ const VariationComponent = ({
 
   const { attribute = {}, selectedValues = [] } = variant ?? {};
 
-  console.log('VariationComponent :>>', {index})
+  console.log('VariationComponent :>>', { index });
 
   return (
     <div className="border-b border-dashed border-border-200 p-5 last:border-0 md:p-8">

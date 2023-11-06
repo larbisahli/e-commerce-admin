@@ -1,4 +1,3 @@
-import { useLazyQuery } from '@apollo/client';
 import { ArrowSync } from '@components/icons/arrow-sync';
 import InfoSvg from '@components/icons/info';
 import EditSvg from '@components/icons/pen';
@@ -8,10 +7,10 @@ import ValidationError from '@components/ui/form-validation-error';
 import Input from '@components/ui/input';
 import Label from '@components/ui/label';
 import SelectInput from '@components/ui/select-input';
-import { ALIAS_NAME_CHECK } from '@graphql/create-store';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetUser } from '@hooks/useGetUser';
 import { CURRENCY } from '@utils/currency';
+import { apiURL } from '@utils/utils';
 import { useTranslation } from 'next-i18next';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 
@@ -41,6 +40,7 @@ const Step2Form = ({ control, register, errors, alias }) => {
         type="text"
         variant="outline"
         label="Store slug"
+        value={aliasValidation}
         error={t(errors?.alias?.message!)}
         onKeyDown={() => setExecuteCheckQuery(false)}
         onKeyUp={() => setExecuteCheckQuery(true)}
@@ -87,30 +87,37 @@ const AliasViewer = ({ alias, executeCheckQuery }) => {
 
   const csrfToken = userInfo?.csrfToken;
 
-  const [aliasCheck, { data, loading, error }] = useLazyQuery(
-    ALIAS_NAME_CHECK,
-    {
-      context: {
-        headers: {
-          'x-csrf-token': csrfToken
-        }
-      },
-      fetchPolicy: 'no-cache'
-    }
-  );
+  const [aliasCheck, setAliasCheck] = useState({ exists: false });
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  const aliasCheckQueryResults = data?.aliasCheck as {
-    exists: boolean;
-  };
-
-  const exists = aliasCheckQueryResults?.exists;
+  const exists = aliasCheck?.exists;
 
   useErrorLogger(error);
 
   useEffect(() => {
     if (executeCheckQuery && timeout.current === null && alias) {
       timeout.current = setTimeout(() => {
-        aliasCheck({ variables: { name: alias } });
+        console.log({ timeout });
+        setLoading(true);
+        fetch(`${apiURL}/store/alias`, {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-csrf-token': csrfToken
+          },
+          body: JSON.stringify({ name: alias })
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            setAliasCheck(data);
+            setLoading(false);
+          })
+          .catch((err) => {
+            setError(err);
+            setLoading(false);
+          });
         clearTimeout(timeout.current);
         timeout.current = null;
       }, 900);
@@ -118,7 +125,7 @@ const AliasViewer = ({ alias, executeCheckQuery }) => {
       clearTimeout(timeout.current);
       timeout.current = null;
     }
-  }, [executeCheckQuery, alias, aliasCheck]);
+  }, [executeCheckQuery, alias, csrfToken]);
 
   return alias ? (
     <div className="mb-3 flex w-fit min-w-full items-center justify-center p-3">

@@ -115,7 +115,7 @@ const CartesianProductComponent = ({
     });
   };
 
-  console.log('CartesianProductComponent :>>', index)
+  console.log('CartesianProductComponent :>>', index);
 
   return (
     <Accordion

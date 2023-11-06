@@ -270,14 +270,14 @@ export default function Dashboard() {
 
 const GettingStartedSection = () => {
   return (
-    <div className="mb-8 flex flex-wrap">
-      <div className="mb-2 flex flex-1 flex-col">
+    <div className="mb-8 flex flex-col flex-wrap lg:flex-row">
+      <div className="mb-2 flex flex-1 flex-col lg:mr-2">
         <div className="mb-2 flex flex-1 items-end text-lg font-medium">
           Getting started
         </div>
-        <div className="flex min-w-[400px] items-end">
+        <div className="flex w-full min-w-[400px] items-end bg-red-500">
           {/* Email verification section */}
-          <div className="flex w-fit items-start rounded border bg-white p-5 pr-12 pl-3 shadow-sm">
+          <div className="flex w-full items-start rounded border bg-white p-5 pr-12 pl-3 shadow-sm">
             <div className="mr-2 text-yellow-600">
               <AlertIcon />
             </div>
@@ -292,10 +292,10 @@ const GettingStartedSection = () => {
           </div>
         </div>
       </div>
-      <div className="flex flex-1 justify-end">
+      <div className="flex flex-1 justify-end lg:ml-2">
         {/* Feedback verification section */}
         <div
-          className="flex w-[400px] flex-col items-center justify-center
+          className="flex w-full flex-col items-center justify-center
                  rounded border border-gray-200 bg-white px-8 py-8 shadow-sm"
         >
           <h2 className="mb-2 font-semibold text-gray-800">

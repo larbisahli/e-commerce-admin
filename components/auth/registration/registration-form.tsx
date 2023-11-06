@@ -1,16 +1,15 @@
 import 'react-phone-input-2/lib/style.css';
 
-import { useMutation } from '@apollo/client';
 import { CheckMarkCircle } from '@components/icons/checkmark-circle';
 import Alert from '@components/ui/alert';
 import Button from '@components/ui/button';
-import { CREATE_STORE } from '@graphql/create-store';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetUser } from '@hooks/useGetUser';
 import { CurrencyType } from '@ts-types/custom.types';
 import { CountryType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
+import { apiURL } from '@utils/utils';
 import cn from 'classnames';
 import { isEmpty } from 'lodash';
 import Image from 'next/image';
@@ -84,9 +83,11 @@ const RegistrationForm = () => {
   const { t } = useTranslation();
 
   const [iso2, setIso2] = useState('us');
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [step, setStep] = useState(0);
+  const [error, setError] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [countries, setCountries] = useState([]);
   const [passwordStrength, setPasswordStrength] = useState<{
     score: number;
@@ -110,24 +111,6 @@ const RegistrationForm = () => {
   const { userInfo } = useGetUser();
 
   const csrfToken = userInfo?.csrfToken;
-
-  const [createStore, { loading, error }] = useMutation(CREATE_STORE, {
-    context: {
-      headers: {
-        'x-csrf-token': csrfToken
-      }
-    },
-    onCompleted: (data: { createStore: FormValues }) => {
-      if (data?.createStore?.storeName) {
-        setSuccessMessage('form:success-register');
-        setStep((step) => step + 1);
-        reset();
-        setTimeout(() => {
-          router.push(ROUTES.LOGIN);
-        }, 5000);
-      }
-    }
-  });
 
   useErrorLogger(error, false);
 
@@ -161,11 +144,38 @@ const RegistrationForm = () => {
       token
     };
 
-    setErrorMessage(null);
-    createStore({ variables }).catch((error) => {
-      const err = error?.graphQLErrors[0];
-      setErrorMessage(err?.message ?? 'Something happened');
-    });
+    setError(null);
+    setLoading(true);
+    fetch(`${apiURL}/store/register`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-csrf-token': csrfToken
+      },
+      body: JSON.stringify({ ...variables })
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log({ data });
+        if (data?.storeName) {
+          setSuccessMessage('form:success-register');
+          setStep((step) => step + 1);
+          reset();
+          setTimeout(() => {
+            router.push(ROUTES.LOGIN);
+          }, 5000);
+        } else if (data.message) {
+          setError(data);
+          setErrorMessage(data?.message ?? 'Something happened');
+        }
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError(err);
+        setErrorMessage(err?.message ?? 'Something happened');
+        setLoading(false);
+      });
   }
 
   async function onSubmit() {

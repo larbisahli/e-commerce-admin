@@ -61,7 +61,9 @@ const ProductList = ({ loading, products, selectedColumns }: IProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
-          const { image, placeholder } = thumbnail[0] ?? {};
+          const { image = null, placeholder = null } = isEmpty(thumbnail)
+            ? {}
+            : thumbnail[0];
           return (
             <div className="h-[65px] w-[65px] min-w-0 overflow-hidden rounded-sm border shadow">
               <ImageComponent
@@ -260,7 +262,7 @@ const ProductList = ({ loading, products, selectedColumns }: IProps) => {
       emptyText={t('table:empty-table-data')}
       data={loading ? tablePlaceholderRow : products}
       rowKey="id"
-      scroll={{ x: 800 }}
+      scroll={{ x: 800, y: 500 }}
       className="card mb-6 overflow-hidden"
     />
   );

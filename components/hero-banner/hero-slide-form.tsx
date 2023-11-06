@@ -223,10 +223,10 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
         <Description
           title={t('form:input-label-image')}
           details={t('form:hero-slider-image-helper-text')}
-          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
+          className="w-full px-0 pb-5 sm:w-3/4 sm:py-8 sm:pe-4 md:w-3/4 md:pe-5"
         />
 
-        <Card className="w-full sm:w-8/12 md:w-2/3">
+        <Card className="w-full sm:w-3/4 md:w-3/4">
           <ImageModal
             onSelect={(photo) => setValue('thumbnail', photo)}
             selected={thumbnail}
@@ -259,10 +259,10 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
               ? t('form:item-description-edit')
               : t('form:item-description-add')
           } ${t('form:hero-slider-description-helper-text')}`}
-          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
+          className="w-full px-0 pb-5 sm:w-3/4 sm:py-8 sm:pe-4 md:w-3/4 md:pe-5"
         />
 
-        <Card className="w-full sm:w-8/12 md:w-2/3">
+        <Card className="w-full sm:w-3/4 md:w-3/4">
           <Input
             label={t('form:input-label-title')}
             {...register('title')}
@@ -362,10 +362,10 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
               ? t('form:item-description-edit')
               : t('form:item-description-add')
           } ${t('form:hero-slider-style-helper-text')}`}
-          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
+          className="w-full px-0 pb-5 sm:w-3/4 sm:py-8 sm:pe-4 md:w-3/4 md:pe-5"
         />
 
-        <Card className="w-full sm:w-8/12 md:w-2/3">
+        <Card className="w-full sm:w-3/4 md:w-3/4">
           <ColorPicker
             label={t('form:input-text-color')}
             {...register(`styles.textColor`)}

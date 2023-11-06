@@ -475,6 +475,11 @@
   @apply border-0;
 }
 
+.rc-table .rc-table-header,
+.rc-table .rc-table-body {
+  border: none;
+}
+
 .rc-table tr th,
 .rc-table tr td {
   @apply border-0 border-b border-border-200 font-body;

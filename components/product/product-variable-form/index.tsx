@@ -219,7 +219,7 @@ function ProductVariableForm({
   };
 
   const updateHandler = useCallback(() => {
-    if(!isUpdateMode) return
+    if (!isUpdateMode) return;
     const { additions, deletions } = getUpdatedVariationOptions({
       variationOptions,
       initVariationOptions
@@ -357,7 +357,10 @@ function ProductVariableForm({
     return null;
   };
 
-  console.log('ProductVariableForm-index:>>', {variationOptions, attributeValuesChanges})
+  console.log('ProductVariableForm-index:>>', {
+    variationOptions,
+    attributeValuesChanges
+  });
 
   return (
     <div className="my-5 flex flex-wrap pb-8 sm:my-8">
@@ -367,9 +370,9 @@ function ProductVariableForm({
             ? t('form:item-description-update')
             : t('form:item-description-choose')
         } ${t('form:form-description-variation-product-info')}`}
-        className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
+        className="w-full px-0 pb-5 sm:w-1/4 sm:py-8 sm:pe-4 md:w-1/4 md:pe-5"
       />
-      <Card className="w-full p-0 sm:w-8/12 md:w-2/3 md:p-0">
+      <Card className="w-full p-0 sm:w-3/4 md:w-3/4 md:p-0">
         <div className="border-t border-dashed border-border-200">
           <Title className="mb-0 mt-8 px-5 text-center text-lg uppercase md:px-8">
             {t('form:form-title-options')}

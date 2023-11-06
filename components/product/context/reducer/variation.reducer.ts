@@ -54,7 +54,7 @@ export const VariationReducer = {
     return {
       ...state,
       variationOptions: state.variationOptions?.map((option) => {
-        console.log('===>',{option})
+        console.log('===>', { option });
         if (
           isEqual(
             payload?.options?.sort((a, b) => a - b),

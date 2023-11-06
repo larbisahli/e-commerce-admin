@@ -3,13 +3,15 @@ import Checkbox from '@components/ui/checkbox';
 import Loader from '@components/ui/loader/loader';
 import { TableRowPlaceholder } from '@components/ui/placeholders/Table';
 import { usePlaceholder } from '@hooks/usePlaceholder';
+import useScreenSize from '@hooks/useScreenSize';
 import { siteSettings } from '@settings/site.settings';
 import type { Nullable } from '@ts-types/custom.types';
 import type { ImageType, Product } from '@ts-types/generated';
 import { useIsRTL } from '@utils/locals';
+import { isEmpty } from 'lodash';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 
 const Table = dynamic(
   () => import('@components/ui/table').then((mod) => mod.Table),
@@ -37,6 +39,8 @@ const ProductListMini = ({
   const { alignLeft } = useIsRTL();
 
   const { tablePlaceholderRow } = usePlaceholder(4);
+
+  const screenSize = useScreenSize();
 
   let tableColumns = useMemo(() => {
     return [
@@ -80,7 +84,9 @@ const ProductListMini = ({
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
-          const { image, placeholder } = thumbnail[0] ?? {};
+          const { image = null, placeholder = null } = isEmpty(thumbnail)
+            ? {}
+            : thumbnail[0];
           return (
             <div className="h-[45px] w-[45px] min-w-0 overflow-hidden rounded-sm border shadow">
               <ImageComponent
@@ -147,8 +153,8 @@ const ProductListMini = ({
       emptyText={t('table:empty-table-data')}
       data={loading ? tablePlaceholderRow : products}
       rowKey="id"
-      scroll={{ x: 400 }}
-      className="card mb-6 overflow-hidden"
+      scroll={{ x: 400, y: screenSize.height - 260 }}
+      className="card mb-6"
     />
   );
 };

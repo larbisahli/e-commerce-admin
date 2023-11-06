@@ -379,7 +379,7 @@ export interface Product extends CreatedUpdatedByAt {
   manufacturers?: Array<ManufacturerType>;
   suppliers?: Nullable<Array<Suppliers>>;
   tags?: Nullable<Array<Nullable<Tag>>>;
-  attributes?: AttributeVariationType[];
+  attributes?: VariationType[];
   productShippingInfo?: ProductShippingInfo;
   variationOptions?: VariationOptionsType[];
   variations?: VariationType[];
@@ -420,7 +420,9 @@ export interface ProductSeo {
 export interface VariationType {
   id?: Scalars['ID'];
   attribute: Attribute;
-  selectedValues: Array<Nullable<AttributeValue>>;
+  selectedValues?: Array<Nullable<AttributeValue>>;
+  selectedValue?: Nullable<AttributeValue>;
+  values?: AttributeValue;
 }
 
 export interface AttributeVariationType {

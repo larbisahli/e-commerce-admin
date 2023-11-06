@@ -1,10 +1,7 @@
 import Label from '@components/ui/label';
 import Loader from '@components/ui/loader/loader';
 import { AttributeTypes } from '@ts-types/enums';
-import type {
-  AttributeValue,
-  AttributeVariationType
-} from '@ts-types/generated';
+import type { AttributeValue, VariationType } from '@ts-types/generated';
 import { Attribute } from '@ts-types/generated';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
@@ -20,8 +17,9 @@ const Select = dynamic(() => import('@components/ui/select/select'), {
 
 interface VCProps {
   checkForUpdateHandler: () => void;
-  productAttribute: AttributeVariationType;
+  productAttribute: VariationType;
   attributes: Attribute[];
+  selectedAttributes: VariationType[];
   loading: boolean;
 }
 
@@ -29,13 +27,14 @@ const AttributesOptionComponent = ({
   checkForUpdateHandler,
   productAttribute,
   attributes,
+  selectedAttributes,
   loading
 }: VCProps) => {
   const { t } = useTranslation();
 
   const dispatch = useFormReducer();
 
-  const { id, attribute, value } = productAttribute;
+  const { id, attribute, selectedValue } = productAttribute;
 
   const remove = () => {
     dispatch({
@@ -68,7 +67,7 @@ const AttributesOptionComponent = ({
   };
 
   const _attributes = useMemo(() => {
-    return attributes?.map(({ id, type, name, translated, values }) => {
+    const att = attributes?.map(({ id, type, name, translated, values }) => {
       return {
         id,
         type,
@@ -89,17 +88,21 @@ const AttributesOptionComponent = ({
         })
       };
     });
-  }, [attributes]);
+
+    return att?.filter((at) => {
+      return !selectedAttributes?.find((st) => st.attribute?.id === at.id);
+    });
+  }, [attributes, selectedAttributes]);
 
   const values = useMemo(() => {
     if (loading && !id) {
       return [];
     }
-    return _attributes?.find((att) => att.id === attribute?.id)?.values;
-  }, [loading, id, _attributes, attribute?.id]);
+    return attributes?.find((att) => att.id === attribute?.id)?.values;
+  }, [loading, id, attributes, attribute?.id]);
 
   return (
-    <div className="my-5 border-b border-dashed border-border-200 last:border-0">
+    <div className="border-b border-dashed border-border-200 py-5 last:border-0">
       <div className="flex items-center justify-end">
         <button
           onClick={remove}
@@ -129,7 +132,7 @@ const AttributesOptionComponent = ({
         <div className="col-span-2 mt-3">
           <Label isRequiredLabel>{t('form:input-label-attribute-value')}</Label>
           <Select
-            value={value}
+            value={selectedValue}
             getOptionLabel={(option: any) => option.value}
             getOptionValue={(option: any) => option.id}
             isLoading={loading}

@@ -72,7 +72,12 @@ const ProductModal = () => {
     skip: isEmpty(selectedLanguage)
   });
 
-  const { products = [], productCount: { count } = { count: 0 } } = data ?? {};
+  const { products: s = [], productCount: { count } = { count: 0 } } =
+    data ?? {};
+
+  const products = Array.from({ length: 40 })?.map((o, index) => ({
+    id: index
+  }));
 
   useErrorLogger(error);
 
@@ -107,7 +112,7 @@ const ProductModal = () => {
   };
 
   return (
-    <Modal open={open} onClose={onClose}>
+    <Modal open={open} onClose={onClose} align="right">
       <div className="flex h-[100vh] max-h-screen w-[100vw] flex-col overflow-y-auto bg-white md:h-fit md:w-[60vw] 2xl:w-[50vw]">
         <div
           className="border-b border-gray-200 bg-gray-100 p-4 text-lg font-semibold capitalize
@@ -121,7 +126,7 @@ const ProductModal = () => {
           selectedProducts={selectedProducts}
           setSelectedProducts={setSelectedProducts}
         />
-        <div className="m-3 mb-16 flex items-center justify-between p-5 md:mb-0">
+        <div className="m-3 mb-16 flex h-fit items-center justify-between p-5 md:mb-0">
           <div className="flex-1">
             <Pagination2
               total={count}

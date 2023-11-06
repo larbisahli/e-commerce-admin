@@ -231,27 +231,21 @@ const ImageViewModal = () => {
   return (
     <div className="w-full">
       {/* MODEL */}
-      <Modal open={isOpen} onClose={closeModal}>
+      <Modal open={isOpen} onClose={closeModal} align="right">
         {view === MEDIA_ITEM_MODAL && (
-          <div
-            className={cn(
-              'flex max-h-screen flex-col overflow-y-auto bg-white md:h-fit',
-              'h-[100vh] w-[100vw] md:w-[70vw] 2xl:w-[60vw]',
-              { '!h-[400px] !w-[450px]': isFolder }
-            )}
-          >
-            <div className="h-fit min-h-[400px] w-full">
-              <div
-                className="border-b border-gray-200 bg-gray-100 p-4 text-lg font-semibold capitalize
+          <div className="flex h-full w-full flex-col">
+            <div
+              className="border-b border-gray-200 bg-gray-100 p-4 text-lg font-semibold capitalize
               text-gray-800 shadow"
-              >
-                {name}
-              </div>
-              <div className="mt-8 flex flex-wrap gap-3 p-4">
-                {renderImage()}
-                <div className="flex w-full flex-1 flex-col">
-                  <div className="flex-1">
-                    <div className="relative flex-1 border-l-2 border-gray-200 px-3 pt-0">
+            >
+              {name}
+            </div>
+            <div className="mt-8 flex h-full flex-col gap-3 p-4">
+              {renderImage()}
+              <div className="flex h-full w-full flex-1 flex-col">
+                <div className="flex h-full flex-col">
+                  <div className="relative flex-1">
+                    <div className="border-l-2 border-gray-200 px-3 pt-0">
                       <div className="mb-2">
                         <span className="pr-1 font-medium">Name:</span>
                         <span className="">{name}</span>
@@ -263,7 +257,7 @@ const ImageViewModal = () => {
                       {renderImageDimensions()}
                     </div>
                   </div>
-                  {renderActionButtons()}
+                  <div className="flex-0">{renderActionButtons()}</div>
                 </div>
               </div>
             </div>

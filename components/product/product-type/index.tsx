@@ -68,9 +68,9 @@ const ProductTypeComponent = ({ state, initialValues }: Props) => {
             ? t('form:item-description-edit')
             : t('form:item-description-add')
         } ${t('form:product-type-help-text')}`}
-        className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
+        className="w-full px-0 pb-5 sm:w-1/4 sm:py-8 sm:pe-4 md:w-1/4 md:pe-5"
       />
-      <Card className="w-full sm:w-8/12 md:w-2/3">
+      <Card className="w-full sm:w-3/4 md:w-3/4">
         <Label
           tooltipId="product-type"
           renderTooltip={<ProductTypeTooltipContent />}
