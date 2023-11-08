@@ -267,7 +267,7 @@ function ProductSimpleForm({
           {/* ------------- */}
           <div className="mt-12 pb-5">
             <Button
-              disabled={attributes.length === requestAttributes?.length}
+              disabled={attributes?.length === requestAttributes?.length}
               onClick={appendVariant}
               type="button"
               variant="outline"

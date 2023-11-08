@@ -198,7 +198,9 @@ export default function CreateOrUpdateCategoriesForm({
   useErrorLogger(error);
 
   const onSubmit = async (values: FormValues) => {
+    console.log({ values });
     if (isEmpty(values.thumbnail)) {
+      console.log('------------>', isEmpty(values.thumbnail));
       notify(t('form:category-image-required'), 'warning');
       return;
     }
@@ -290,7 +292,7 @@ export default function CreateOrUpdateCategoriesForm({
         }
         loading={creating || updating}
         disabled={creating || updating}
-        onSubmit={onSubmit}
+        onSubmit={handleSubmit(onSubmit)}
         saveOptions={[
           {
             onClick: () => setSaveMode(SaveOptions.SaveNew),

@@ -275,7 +275,7 @@ const GettingStartedSection = () => {
         <div className="mb-2 flex flex-1 items-end text-lg font-medium">
           Getting started
         </div>
-        <div className="flex w-full min-w-[400px] items-end bg-red-500">
+        <div className="flex w-full min-w-[400px] items-end">
           {/* Email verification section */}
           <div className="flex w-full items-start rounded border bg-white p-5 pr-12 pl-3 shadow-sm">
             <div className="mr-2 text-yellow-600">

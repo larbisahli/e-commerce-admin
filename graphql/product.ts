@@ -119,7 +119,7 @@ export const PRODUCT = gql`
           id
           name
         }
-        value {
+        selectedValue {
           id
           value
         }
@@ -151,7 +151,6 @@ export const PRODUCT = gql`
         }
       }
       productShippingInfo {
-        id
         weight
         weightUnit {
           unit
