@@ -153,10 +153,12 @@ function ProductShippingInfoForm({ state, productType, initialValues }: Props) {
     if (isUpdated) {
       return (
         <div className="mt-12 flex justify-end border-t pt-4">
-          <Button loading={loading} disabled={loading} onClick={handleSubmit}>
-            <div className="mr-1">
-              <SaveIcon width="1.3rem" height="1.3rem" />
-            </div>
+          <Button
+            loading={loading}
+            disabled={loading}
+            onClick={handleSubmit}
+            renderIcon={<SaveIcon width="1.3rem" height="1.3rem" />}
+          >
             <div>{t('form:button-label-save')}</div>
           </Button>
         </div>
@@ -208,112 +210,115 @@ function ProductShippingInfoForm({ state, productType, initialValues }: Props) {
           className="w-full px-0 pb-5 sm:w-1/4 sm:py-8 sm:pe-4 md:w-1/4 md:pe-5"
         />
 
-        <Card className="flex w-full flex-wrap items-center sm:w-3/4 md:w-3/4">
-          <div className="flex items-center">
-            {/* Width */}
-            <div className="mr-2 mb-5 flex items-center">
-              <div>
-                <Label>{t('form:input-label-weight')}</Label>
+        <Card className="sm:w-3/4 md:w-3/4">
+          <div className="flex w-full flex-wrap items-center ">
+            <div className="flex items-center">
+              {/* Width */}
+              <div className="mr-2 mb-5 flex items-center">
+                <div>
+                  <Label>{t('form:input-label-weight')}</Label>
+                  <div className="mr-2 flex items-center justify-center rounded-sm border bg-gray-100">
+                    <Input
+                      name="weight"
+                      value={weight}
+                      onChange={handleChange}
+                      onBlur={checkForUpdateHandler}
+                      type="number"
+                      variant="outline"
+                      className="w-40"
+                      min={0}
+                      placeholder="e.g. 0.4..."
+                      renderLabel={<>{weightUnit?.unit}</>}
+                    />
+                  </div>
+                </div>
+                <div className="w-22">
+                  <Label>{t('form:input-label-dimensions-units')}</Label>
+                  <Select
+                    options={weightUnits}
+                    value={weightUnit}
+                    name="weightUnit"
+                    getOptionLabel={(option: any) => option.unit}
+                    getOptionValue={(option: any) =>
+                      option.unit?.charAt(0)?.toUpperCase() +
+                      option.unit?.slice(1)
+                    }
+                    onBlur={checkForUpdateHandler}
+                    onChange={(value) => onSelectChange(value, 'weightUnit')}
+                    className="w-full"
+                  />
+                </div>
+              </div>
+            </div>
+            {/* Dimensions */}
+            <div className="mb-5 flex flex-wrap items-center">
+              <div className="my-2">
+                <Label>{t('form:input-label-dimensions-width')}</Label>
                 <div className="mr-2 flex items-center justify-center rounded-sm border bg-gray-100">
                   <Input
-                    name="weight"
-                    value={weight}
+                    name="dimensionWidth"
+                    value={dimensionWidth}
                     onChange={handleChange}
                     onBlur={checkForUpdateHandler}
                     type="number"
                     variant="outline"
                     className="w-40"
                     min={0}
-                    placeholder="e.g. 0.4..."
-                    renderLabel={<>{weightUnit?.unit}</>}
+                    placeholder="e.g. 500..."
+                    renderLabel={<>{dimensionUnit?.unit}</>}
                   />
                 </div>
               </div>
-              <div className="w-22">
+              <div className="my-2">
+                <Label>{t('form:input-label-dimensions-height')}</Label>
+                <div className="mr-2 flex items-center justify-center rounded-sm border bg-gray-100">
+                  <Input
+                    name="dimensionHeight"
+                    value={dimensionHeight}
+                    onChange={handleChange}
+                    onBlur={checkForUpdateHandler}
+                    type="number"
+                    variant="outline"
+                    min={0}
+                    className="w-40"
+                    placeholder="e.g. 200..."
+                    renderLabel={<>{dimensionUnit?.unit}</>}
+                  />
+                </div>
+              </div>
+              <div className="my-2">
+                <Label>{t('form:input-label-dimensions-length')}</Label>
+                <div className="mr-2 flex items-center justify-center rounded-sm border bg-gray-100">
+                  <Input
+                    name="dimensionLength"
+                    value={dimensionLength}
+                    onChange={handleChange}
+                    onBlur={checkForUpdateHandler}
+                    type="number"
+                    variant="outline"
+                    className="w-40"
+                    placeholder="e.g. 100..."
+                    min={0}
+                    renderLabel={<>{dimensionUnit?.unit}</>}
+                  />
+                </div>
+              </div>
+              <div className="my-2 w-24">
                 <Label>{t('form:input-label-dimensions-units')}</Label>
                 <Select
-                  options={weightUnits}
-                  value={weightUnit}
-                  name="weightUnit"
+                  options={dimensionUnits}
+                  value={dimensionUnit}
+                  name="dimensionUnit"
                   getOptionLabel={(option: any) => option.unit}
                   getOptionValue={(option: any) =>
                     option.unit?.charAt(0)?.toUpperCase() +
                     option.unit?.slice(1)
                   }
                   onBlur={checkForUpdateHandler}
-                  onChange={(value) => onSelectChange(value, 'weightUnit')}
+                  onChange={(value) => onSelectChange(value, 'dimensionUnit')}
                   className="w-full"
                 />
               </div>
-            </div>
-          </div>
-          {/* Dimensions */}
-          <div className="mb-5 flex flex-wrap items-center">
-            <div className="my-2">
-              <Label>{t('form:input-label-dimensions-width')}</Label>
-              <div className="mr-2 flex items-center justify-center rounded-sm border bg-gray-100">
-                <Input
-                  name="dimensionWidth"
-                  value={dimensionWidth}
-                  onChange={handleChange}
-                  onBlur={checkForUpdateHandler}
-                  type="number"
-                  variant="outline"
-                  className="w-40"
-                  min={0}
-                  placeholder="e.g. 500..."
-                  renderLabel={<>{dimensionUnit?.unit}</>}
-                />
-              </div>
-            </div>
-            <div className="my-2">
-              <Label>{t('form:input-label-dimensions-height')}</Label>
-              <div className="mr-2 flex items-center justify-center rounded-sm border bg-gray-100">
-                <Input
-                  name="dimensionHeight"
-                  value={dimensionHeight}
-                  onChange={handleChange}
-                  onBlur={checkForUpdateHandler}
-                  type="number"
-                  variant="outline"
-                  min={0}
-                  className="w-40"
-                  placeholder="e.g. 200..."
-                  renderLabel={<>{dimensionUnit?.unit}</>}
-                />
-              </div>
-            </div>
-            <div className="my-2">
-              <Label>{t('form:input-label-dimensions-length')}</Label>
-              <div className="mr-2 flex items-center justify-center rounded-sm border bg-gray-100">
-                <Input
-                  name="dimensionLength"
-                  value={dimensionLength}
-                  onChange={handleChange}
-                  onBlur={checkForUpdateHandler}
-                  type="number"
-                  variant="outline"
-                  className="w-40"
-                  placeholder="e.g. 100..."
-                  min={0}
-                  renderLabel={<>{dimensionUnit?.unit}</>}
-                />
-              </div>
-            </div>
-            <div className="my-2 w-24">
-              <Label>{t('form:input-label-dimensions-units')}</Label>
-              <Select
-                options={dimensionUnits}
-                value={dimensionUnit}
-                name="dimensionUnit"
-                getOptionLabel={(option: any) => option.unit}
-                getOptionValue={(option: any) =>
-                  option.unit?.charAt(0)?.toUpperCase() + option.unit?.slice(1)
-                }
-                onBlur={checkForUpdateHandler}
-                onChange={(value) => onSelectChange(value, 'dimensionUnit')}
-                className="w-full"
-              />
             </div>
           </div>
           {renderSaveButton()}

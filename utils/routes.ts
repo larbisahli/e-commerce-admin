@@ -57,7 +57,6 @@ export const ROUTES = {
   MARKETPLACE_THEME_PAGE: '/admin/marketplace/theme',
   MANUFACTURER: '/admin/catalog/manufacturer',
   SUPPLIER: '/admin/catalog/supplier',
-  SYSTEM_STORES: '/admin/store/system-store',
   LANGUAGES: '/admin/store/languages',
   STORE_EXTENSIONS: '/admin/store/extensions',
   MARKETING_NEWSLETTER: '/admin/marketing/newsletter'

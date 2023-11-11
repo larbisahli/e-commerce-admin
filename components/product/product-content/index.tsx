@@ -200,10 +200,12 @@ const ProductContent = ({ state, initialValues, productSeo }: Props) => {
     if (isUpdated) {
       return (
         <div className="mt-8 flex justify-end border-t pt-4">
-          <Button loading={loading} disabled={loading} onClick={handleSubmit}>
-            <div className="mr-1">
-              <SaveIcon width="1.3rem" height="1.3rem" />
-            </div>
+          <Button
+            loading={loading}
+            disabled={loading}
+            onClick={handleSubmit}
+            renderIcon={<SaveIcon width="1.3rem" height="1.3rem" />}
+          >
             <div>{t('form:button-label-save')}</div>
           </Button>
         </div>

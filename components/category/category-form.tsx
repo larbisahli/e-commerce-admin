@@ -106,6 +106,7 @@ const defaultValues = {
 
 type IProps = {
   initialValues?: Category | any;
+  isFork?: boolean;
 };
 
 const metaRobotOptions = [
@@ -119,7 +120,8 @@ const metaRobotOptions = [
 ];
 
 export default function CreateOrUpdateCategoriesForm({
-  initialValues
+  initialValues,
+  isFork = false
 }: IProps) {
   const router = useRouter();
   const { t } = useTranslation();
@@ -200,7 +202,6 @@ export default function CreateOrUpdateCategoriesForm({
   const onSubmit = async (values: FormValues) => {
     console.log({ values });
     if (isEmpty(values.thumbnail)) {
-      console.log('------------>', isEmpty(values.thumbnail));
       notify(t('form:category-image-required'), 'warning');
       return;
     }
@@ -223,7 +224,7 @@ export default function CreateOrUpdateCategoriesForm({
     };
 
     setUnsavedChanges(false);
-    if (isEmpty(initialValues)) {
+    if (isEmpty(initialValues) || isFork) {
       createCategory({ variables }).catch((err) => {
         setError(err);
       });

@@ -73,7 +73,6 @@ export default function SettingsForm({ settings }: IProps) {
     control,
     formState: { errors }
   } = useForm<FormValues>({
-    shouldUnregister: true,
     resolver: yupResolver(settingsValidationSchema),
     defaultValues: {
       ...settings,
@@ -169,10 +168,10 @@ export default function SettingsForm({ settings }: IProps) {
         <Description
           title={t('form:input-label-logo')}
           details={logoInformation}
-          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
+          className="w-full px-0 pb-5 sm:w-1/4 sm:py-8 sm:pe-4 md:w-1/4 md:pe-5"
         />
 
-        <Card className="w-full sm:w-8/12 md:w-2/3">
+        <Card className="w-full sm:w-3/4 md:w-3/4">
           <ImageModal
             onSelect={(photo) => setLogo(photo)}
             selected={logo}
@@ -186,9 +185,9 @@ export default function SettingsForm({ settings }: IProps) {
         <Description
           title={t('form:input-label-favicon')}
           details={logoInformation}
-          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
+          className="w-full px-0 pb-5 sm:w-1/4 sm:py-8 sm:pe-4 md:w-1/4 md:pe-5"
         />
-        <Card className="w-full sm:w-8/12 md:w-2/3">
+        <Card className="w-full sm:w-3/4 md:w-3/4">
           <ImageModal
             onSelect={(photo) => setFavicon(photo)}
             selected={favicon}
@@ -203,10 +202,10 @@ export default function SettingsForm({ settings }: IProps) {
         <Description
           title={t('form:form-title-information')}
           details={t('form:site-info-help-text')}
-          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
+          className="w-full px-0 pb-5 sm:w-1/4 sm:py-8 sm:pe-4 md:w-1/4 md:pe-5"
         />
 
-        <Card className="w-full sm:w-8/12 md:w-2/3">
+        <Card className="w-full sm:w-3/4 md:w-3/4">
           <Input
             label={t('form:input-label-store-name')}
             {...register('storeName')}
@@ -254,10 +253,10 @@ export default function SettingsForm({ settings }: IProps) {
         <Description
           title="SEO"
           details={t('form:tax-form-seo-info-help-text')}
-          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pr-4 md:w-1/3 md:pr-5"
+          className="w-full px-0 pb-5 sm:w-1/4 sm:py-8 sm:pr-4 md:w-1/4 md:pr-5"
         />
 
-        <Card className="w-full sm:w-8/12 md:w-2/3">
+        <Card className="w-full sm:w-3/4 md:w-3/4">
           <Input
             label={t('form:input-label-meta-title')}
             {...register('seo.metaTitle')}
@@ -312,10 +311,10 @@ export default function SettingsForm({ settings }: IProps) {
         <Description
           title={t('form:shop-settings')}
           details={t('form:shop-settings-helper-text')}
-          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
+          className="w-full px-0 pb-5 sm:w-1/4 sm:py-8 sm:pe-4 md:w-1/4 md:pe-5"
         />
 
-        <Card className="w-full sm:w-8/12 md:w-2/3">
+        <Card className="w-full sm:w-3/4 md:w-3/4">
           {/* Social and Icon picker */}
           <div>
             {socialFields.map((item, index: number) => (

@@ -159,7 +159,8 @@ const ProductList = ({ loading, products, selectedColumns }: IProps) => {
           return (
             <Badge
               text={published ? 'Publish' : 'Draft'}
-              color={published ? 'bg-green-600' : 'bg-yellow-500'}
+              textColor={'text-gray-600'}
+              color={published ? 'bg-green-200' : 'bg-yellow-200'}
             />
           );
         }

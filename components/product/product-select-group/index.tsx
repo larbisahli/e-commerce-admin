@@ -7,6 +7,7 @@ import Description from '@components/ui/description';
 import { UPDATE_PRODUCT_SELECT_GROUP } from '@graphql/product';
 import { useDifferenceWith } from '@hooks/useDifferenceWith';
 import { useGetUser } from '@hooks/useGetUser';
+import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/notify';
 import {
   Category,
@@ -95,6 +96,8 @@ const ProductSelectGroup = ({ state, initialValues }: Props) => {
     deletedManufacturer
   ]);
 
+  const { selectedLanguage } = useSettings();
+
   const { userInfo } = useGetUser();
   const csrfToken = userInfo?.csrfToken;
 
@@ -135,6 +138,7 @@ const ProductSelectGroup = ({ state, initialValues }: Props) => {
     updateProductSelectGroup({
       variables: {
         id: productId,
+        language: selectedLanguage,
         additions: {
           categories: additionalCategories,
           tags: additionalTags,
@@ -159,10 +163,12 @@ const ProductSelectGroup = ({ state, initialValues }: Props) => {
     if (isUpdated) {
       return (
         <div className="mt-12 flex justify-end border-t pt-4">
-          <Button loading={loading} disabled={loading} onClick={handleSubmit}>
-            <div className="mr-1">
-              <SaveIcon width="1.3rem" height="1.3rem" />
-            </div>
+          <Button
+            loading={loading}
+            disabled={loading}
+            onClick={handleSubmit}
+            renderIcon={<SaveIcon width="1.3rem" height="1.3rem" />}
+          >
             <div>{t('form:button-label-save')}</div>
           </Button>
         </div>

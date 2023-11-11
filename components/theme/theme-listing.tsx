@@ -25,7 +25,7 @@ const ThemeListing = ({ themes }: IProps) => {
               key={idx}
               className="card m-3 h-[370px] w-[250px] cursor-pointer border hover:shadow-lg"
             >
-              <div>
+              <div className="p-2 pb-0">
                 <ImageComponent
                   alt={'alt'}
                   src={image.image}

@@ -34,20 +34,22 @@ const MyThemeList = ({ themes }: IProps) => {
         dataIndex: 'thumbnail',
         key: 'thumbnail',
         align: 'center',
-        width: 85,
+        width: 90,
         render: (thumbnail_: ImageType[]) => {
           const { image, placeholder } = thumbnail[0] ?? {};
           return (
-            <div className="h-[100px] w-[100px] min-w-0 overflow-hidden rounded-sm border shadow">
-              <ImageComponent
-                src={image ?? siteSettings.product.image}
-                customPlaceholder={
-                  placeholder ?? siteSettings.product.placeholder
-                }
-                width={100}
-                height={100}
-                objectFit="cover"
-              />
+            <div className="flex w-full min-w-0 justify-center overflow-hidden">
+              <div className="h-[100px] w-[100px] rounded-sm border shadow">
+                <ImageComponent
+                  src={image ?? siteSettings.product.image}
+                  customPlaceholder={
+                    placeholder ?? siteSettings.product.placeholder
+                  }
+                  width={100}
+                  height={100}
+                  objectFit="cover"
+                />
+              </div>
             </div>
           );
         }

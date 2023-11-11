@@ -50,8 +50,11 @@ const UserList = ({ loading, users, selectedColumns }: IProps) => {
         dataIndex: 'id',
         key: 'id',
         align: alignLeft,
-        width: 80,
-        ellipsis: true
+        width: 100,
+        ellipsis: true,
+        render: (id: string) => {
+          return id?.split('-')[0];
+        }
       },
       {
         title: t('table:table-item-avatar'),
@@ -135,15 +138,12 @@ const UserList = ({ loading, users, selectedColumns }: IProps) => {
                     ? t('table:table-item-admin')
                     : t('table:table-item-staff')
                 }
-                color={'bg-gray-100'}
+                color={'bg-gray-200'}
               />
               <Badge
-                className={cn('border !text-sm', {
-                  'text-red-900': !record.active,
-                  'text-green-800': record.active
-                })}
+                className={cn('border !text-sm !text-gray-600')}
                 text={record.active ? 'Active' : 'Inactive'}
-                color={record.active ? 'bg-green-300' : 'bg-red-300'}
+                color={record.active ? 'bg-green-200' : 'bg-red-200'}
               />
             </div>
           );

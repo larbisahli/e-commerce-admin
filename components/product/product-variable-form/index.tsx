@@ -345,10 +345,8 @@ function ProductVariableForm({
             loading={updateLoading}
             disabled={updateLoading}
             onClick={handleSubmit}
+            renderIcon={<SaveIcon width="1.3rem" height="1.3rem" />}
           >
-            <div className="mr-1">
-              <SaveIcon width="1.3rem" height="1.3rem" />
-            </div>
             <div>{t('form:button-label-save')}</div>
           </Button>
         </div>

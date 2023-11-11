@@ -76,10 +76,12 @@ const ProductGallery = ({ state, initialValues }: Props) => {
     if (!isEmpty(additions) || !isEmpty(deletions)) {
       return (
         <div className="mt-3 flex justify-end border-t pt-4">
-          <Button onClick={onUpdate} loading={loading} disabled={loading}>
-            <div className="mr-1">
-              <SaveIcon width="1.3rem" height="1.3rem" />
-            </div>
+          <Button
+            onClick={onUpdate}
+            loading={loading}
+            disabled={loading}
+            renderIcon={<SaveIcon width="1.3rem" height="1.3rem" />}
+          >
             <div>{t('form:button-label-save')}</div>
           </Button>
         </div>

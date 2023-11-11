@@ -12,11 +12,12 @@ import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/notify';
 import { OrderBy, SortOrder } from '@ts-types/enums';
 import { Attribute, LanguageType, Product } from '@ts-types/generated';
+import { differenceWith, isEqual } from 'lodash';
 import isEmpty from 'lodash/isEmpty';
 import { nanoid } from 'nanoid';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
-import React, { ChangeEvent, memo, useState } from 'react';
+import React, { ChangeEvent, memo, useCallback, useState } from 'react';
 
 import { Actions, useFormReducer } from '../context/form.context';
 import AttributesOptionComponent from './attributes';
@@ -39,6 +40,7 @@ type IProps = {
   checkForUpdateHandler: () => void;
   isUpdated: boolean;
   state: {
+    isUpdateMode: boolean;
     salePrice: Product['salePrice'];
     comparePrice: Product['comparePrice'];
     buyingPrice: Product['buyingPrice'];
@@ -95,6 +97,7 @@ function ProductSimpleForm({
         }
       },
       onCompleted: (data: { updateSimpleProductInformation: Product }) => {
+        console.log({ data });
         if (!isEmpty(data?.updateSimpleProductInformation)) {
           setInitProductInformation(data?.updateSimpleProductInformation);
           notify(t('common:successfully-updated'), 'success');
@@ -106,8 +109,15 @@ function ProductSimpleForm({
   useErrorLogger(error);
   useErrorLogger(queryError);
 
-  const { salePrice, comparePrice, buyingPrice, quantity, sku, attributes } =
-    state;
+  const {
+    salePrice,
+    comparePrice,
+    buyingPrice,
+    quantity,
+    sku,
+    attributes,
+    isUpdateMode
+  } = state;
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value, type } = e.target;
@@ -124,8 +134,85 @@ function ProductSimpleForm({
     });
   };
 
+  const getUpdatedAttributes = useCallback(() => {
+    if (!isUpdateMode) return { additions: [], deletions: [] };
+
+    const attributeAdditions = attributes
+      ?.map((v) => {
+        const initAttribute = initProductInformation?.attributes?.find(
+          (vv) => vv?.attribute?.id === v?.attribute?.id
+        );
+        if (!isEmpty(initAttribute)) {
+          const additionSelectedValues = differenceWith(
+            [{ id: v?.selectedValue.id }],
+            [{ id: initAttribute?.selectedValue.id }],
+            isEqual
+          );
+          console.log({ additionSelectedValues });
+
+          return isEmpty(additionSelectedValues)
+            ? undefined
+            : {
+                attribute: { id: v.attribute.id },
+                selectedValue: additionSelectedValues?.map((av) => {
+                  return { id: av.id };
+                })[0]
+              };
+        } else {
+          return {
+            attribute: { id: v.attribute.id },
+            selectedValue: { id: v.selectedValue.id }
+          };
+        }
+      })
+      ?.filter((e) => e !== undefined);
+
+    const attributeDeletions = initProductInformation?.attributes
+      ?.map((v) => {
+        const valueAttribute = attributes?.find(
+          (vv) => vv?.attribute?.id === v?.attribute?.id
+        );
+        console.log(
+          valueAttribute,
+          [{ id: v?.selectedValue.id }],
+          [{ id: valueAttribute?.selectedValue.id }]
+        );
+        if (!isEmpty(valueAttribute)) {
+          const deletedSelectedValues = differenceWith(
+            [{ id: v?.selectedValue.id }],
+            [{ id: valueAttribute?.selectedValue.id }],
+            isEqual
+          );
+
+          console.log({ deletedSelectedValues });
+
+          return isEmpty(deletedSelectedValues)
+            ? undefined
+            : {
+                attribute: { id: v.attribute.id },
+                selectedValue: deletedSelectedValues?.map((av) => {
+                  return { id: av.id };
+                })[0]
+              };
+        } else {
+          return {
+            attribute: { id: v.attribute.id }
+          };
+        }
+      })
+      ?.filter((e) => e !== undefined);
+
+    return {
+      additions: attributeAdditions,
+      deletions: attributeDeletions
+    };
+  }, [initProductInformation?.attributes, isUpdateMode, attributes]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    const { additions, deletions } = getUpdatedAttributes();
+
     updateProductInformation({
       variables: {
         id: productId,
@@ -134,16 +221,8 @@ function ProductSimpleForm({
         buyingPrice,
         quantity,
         sku,
-        attributes: attributes?.map(({ id, attribute, value }) => {
-          return {
-            id:
-              typeof id === 'string' || (id as any) instanceof String
-                ? null
-                : id, // if null create otherwise update
-            attribute: { id: attribute?.id },
-            value: { id: value?.id }
-          };
-        })
+        attributes: { additions, deletions },
+        language: selectedLanguage
       }
     }).catch((err) => {
       setError(err);
@@ -154,10 +233,12 @@ function ProductSimpleForm({
     if (isUpdated) {
       return (
         <div className="mt-8 flex justify-end border-t pt-4">
-          <Button loading={loading} disabled={loading} onClick={handleSubmit}>
-            <div className="mr-1">
-              <SaveIcon width="1.3rem" height="1.3rem" />
-            </div>
+          <Button
+            loading={loading}
+            disabled={loading}
+            onClick={handleSubmit}
+            renderIcon={<SaveIcon width="1.3rem" height="1.3rem" />}
+          >
             <div>{t('form:button-label-save')}</div>
           </Button>
         </div>

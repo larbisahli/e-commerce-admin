@@ -346,13 +346,11 @@ export const UPDATE_PRODUCT_THUMBNAIL = gql`
 export const UPDATE_PRODUCT_GALLERY = gql`
   mutation UpdateProductGallery(
     $id: Int!
-    $language: LanguageInput!
     $additions: ProductInput!
     $deletions: ProductInput!
   ) {
     updateProductGallery(
       id: $id
-      language: $language
       additions: $additions
       deletions: $deletions
     ) {
@@ -406,8 +404,8 @@ export const UPDATE_SIMPLE_PRODUCT_INFORMATION = gql`
     $buyingPrice: Float
     $quantity: Int!
     $sku: String
-    $language: LanguageInput!
     $attributes: AttributeVariationUpdateInput
+    $language: LanguageInput!
   ) {
     updateSimpleProductInformation(
       id: $id
@@ -416,14 +414,25 @@ export const UPDATE_SIMPLE_PRODUCT_INFORMATION = gql`
       buyingPrice: $buyingPrice
       quantity: $quantity
       sku: $sku
-      language: $language
       attributes: $attributes
+      language: $language
     ) {
       salePrice
       comparePrice
       buyingPrice
       quantity
       sku
+      attributes {
+        id
+        attribute {
+          id
+          name
+        }
+        selectedValue {
+          id
+          value
+        }
+      }
     }
   }
 `;
@@ -497,12 +506,10 @@ export const UPDATE_PRODUCT_SEO = gql`
 export const UPDATE_PRODUCT_SHIPPING_INFO = gql`
   mutation UpdateProductShippingInfo(
     $id: Int!
-    $language: LanguageInput!
     $productShippingInfo: ProductShippingInfoInput!
   ) {
     updateProductShippingInfo(
       id: $id
-      language: $language
       productShippingInfo: $productShippingInfo
     ) {
       id

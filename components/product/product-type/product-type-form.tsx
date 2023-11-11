@@ -39,6 +39,7 @@ const ProductTypeFormComponent = ({ state, initialValues }: Props) => {
       comparePrice: initialValues.comparePrice,
       buyingPrice: initialValues.buyingPrice,
       quantity: initialValues.quantity,
+      attributes: initialValues.attributes,
       sku: initialValues.sku
     })
   );
@@ -71,11 +72,37 @@ const ProductTypeFormComponent = ({ state, initialValues }: Props) => {
         comparePrice,
         buyingPrice,
         quantity,
+        attributes,
         sku
       };
 
       setIsUpdated(
-        !isEqual(initProductInformation, currentSimpleProductInformation)
+        !isEqual(
+          {
+            ...initProductInformation,
+            attributes: initProductInformation.attributes?.map((at) => {
+              return {
+                attribute: { id: at.attribute?.id },
+                selectedValue: {
+                  id: at.selectedValue?.id
+                }
+              };
+            })
+          },
+          {
+            ...currentSimpleProductInformation,
+            attributes: currentSimpleProductInformation.attributes?.map(
+              (at) => {
+                return {
+                  attribute: { id: at.attribute?.id },
+                  selectedValue: {
+                    id: at.selectedValue?.id
+                  }
+                };
+              }
+            )
+          }
+        )
       );
     },
     [
@@ -85,6 +112,7 @@ const ProductTypeFormComponent = ({ state, initialValues }: Props) => {
       isUpdateMode,
       productType,
       quantity,
+      attributes,
       salePrice,
       sku
     ]
@@ -125,6 +153,7 @@ const ProductTypeFormComponent = ({ state, initialValues }: Props) => {
           isUpdated={isUpdated}
           checkForUpdateHandler={checkForUpdateHandler}
           state={{
+            isUpdateMode,
             salePrice,
             comparePrice,
             buyingPrice,

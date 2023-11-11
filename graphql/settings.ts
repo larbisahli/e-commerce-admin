@@ -30,6 +30,11 @@ export const STORE_SETTINGS = gql`
         code
         name
       }
+      defaultCurrency {
+        symbol
+        code
+        name
+      }
       canonicalUrl
       socials {
         url
@@ -40,6 +45,8 @@ export const STORE_SETTINGS = gql`
       }
       maxCheckoutQuantity
       maxCheckoutAmount
+      maintenanceMode
+      maintenancePassword
       seo {
         metaTitle
         metaDescription
@@ -72,6 +79,26 @@ export const STORE_SETTINGS = gql`
         AppId
         pageId
       }
+      webmanifest {
+        name
+        short_name
+        description
+        theme_color
+        background_color
+        start_url
+        orientation {
+          name
+        }
+        display {
+          name
+        }
+        iarc_rating_id
+        scope
+      }
+      tax {
+        id
+        name
+      }
     }
   }
 `;
@@ -86,6 +113,7 @@ export const UPDATE_STORE_SETTINGS = gql`
     $addressLine1: String
     $addressLine2: String
     $currencies: [CurrencyInput!]!
+    $defaultCurrency: CurrencyInput!
     $canonicalUrl: String
     $socials: [SocialInput]
     $maxCheckoutQuantity: Int
@@ -93,6 +121,10 @@ export const UPDATE_STORE_SETTINGS = gql`
     $seo: StoreSettingsSeoInput
     $google: GoogleSettingsInput
     $facebook: FacebookSettingsInput
+    $webmanifest: WebmanifestInput
+    $maintenanceMode: Boolean
+    $maintenancePassword: Int
+    $tax: TaxInput
   ) {
     updateStoreSettings(
       favicon: $favicon
@@ -103,6 +135,7 @@ export const UPDATE_STORE_SETTINGS = gql`
       addressLine1: $addressLine1
       addressLine2: $addressLine2
       currencies: $currencies
+      defaultCurrency: $defaultCurrency
       canonicalUrl: $canonicalUrl
       socials: $socials
       maxCheckoutQuantity: $maxCheckoutQuantity
@@ -110,6 +143,10 @@ export const UPDATE_STORE_SETTINGS = gql`
       seo: $seo
       google: $google
       facebook: $facebook
+      webmanifest: $webmanifest
+      maintenanceMode: $maintenanceMode
+      maintenancePassword: $maintenancePassword
+      tax: $tax
     ) {
       id
     }

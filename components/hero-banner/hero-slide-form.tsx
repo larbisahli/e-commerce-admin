@@ -53,9 +53,13 @@ const defaultValues = {
 
 type IProps = {
   initialValues?: HeroBannerType | any;
+  isFork?: boolean;
 };
 
-export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
+export default function CreateOrUpdateSlideForm({
+  initialValues,
+  isFork = false
+}: IProps) {
   const router = useRouter();
   const { t } = useTranslation();
 
@@ -119,7 +123,6 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
           notify(t('common:successfully-created'), 'success');
           router.push(`${ROUTES.HERO_BANNER}/fork/${id}`);
         }
-
         setSaveMode(SaveOptions.Default);
       }
     });
@@ -130,10 +133,25 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
           'x-csrf-token': csrfToken
         }
       },
-      onCompleted: (data: { updateCategory: HeroBannerType }) => {
-        if (!isEmpty(data)) {
-          notify(t('common:successfully-updated'), 'success');
+      onCompleted: (data: { updateHeroSlide: HeroBannerType }) => {
+        const { id } = data.updateHeroSlide;
+        if (!id) {
+          return;
         }
+        if (saveMode === SaveOptions.Default) {
+          notify(t('common:successfully-created'), 'success');
+          router.push(`${ROUTES.HERO_BANNER}/edit/${id}`);
+        } else if (saveMode === SaveOptions.SaveClose) {
+          notify(t('common:successfully-created'), 'success');
+          router.push(ROUTES.HERO_BANNER);
+        } else if (saveMode === SaveOptions.SaveNew) {
+          notify(t('common:successfully-created'), 'success');
+          router.push(`${ROUTES.HERO_BANNER}/create`);
+        } else if (saveMode === SaveOptions.SaveDuplicate) {
+          notify(t('common:successfully-created'), 'success');
+          router.push(`${ROUTES.HERO_BANNER}/fork/${id}`);
+        }
+        setSaveMode(SaveOptions.Default);
       }
     });
 
@@ -167,7 +185,7 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
     };
 
     setUnsavedChanges(false);
-    if (isEmpty(initialValues)) {
+    if (isEmpty(initialValues) || isFork) {
       createHeroSlider({ variables }).catch((err) => {
         setError(err);
         resetCreateMutation();
@@ -199,7 +217,7 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
         }
         loading={creating || updating}
         disabled={creating || updating}
-        onSubmit={onSubmit}
+        onSubmit={handleSubmit(onSubmit)}
         saveOptions={[
           {
             onClick: () => setSaveMode(SaveOptions.SaveNew),
@@ -223,7 +241,7 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
         <Description
           title={t('form:input-label-image')}
           details={t('form:hero-slider-image-helper-text')}
-          className="w-full px-0 pb-5 sm:w-3/4 sm:py-8 sm:pe-4 md:w-3/4 md:pe-5"
+          className="w-full px-0 pb-5 sm:w-1/4 sm:py-8 sm:pe-4 md:w-1/4 md:pe-5"
         />
 
         <Card className="w-full sm:w-3/4 md:w-3/4">
@@ -259,7 +277,7 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
               ? t('form:item-description-edit')
               : t('form:item-description-add')
           } ${t('form:hero-slider-description-helper-text')}`}
-          className="w-full px-0 pb-5 sm:w-3/4 sm:py-8 sm:pe-4 md:w-3/4 md:pe-5"
+          className="w-full px-0 pb-5 sm:w-1/4 sm:py-8 sm:pe-4 md:w-1/4 md:pe-5"
         />
 
         <Card className="w-full sm:w-3/4 md:w-3/4">
@@ -362,7 +380,7 @@ export default function CreateOrUpdateSlideForm({ initialValues }: IProps) {
               ? t('form:item-description-edit')
               : t('form:item-description-add')
           } ${t('form:hero-slider-style-helper-text')}`}
-          className="w-full px-0 pb-5 sm:w-3/4 sm:py-8 sm:pe-4 md:w-3/4 md:pe-5"
+          className="w-full px-0 pb-5 sm:w-1/4 sm:py-8 sm:pe-4 md:w-1/4 md:pe-5"
         />
 
         <Card className="w-full sm:w-3/4 md:w-3/4">

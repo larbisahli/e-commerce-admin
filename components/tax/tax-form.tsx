@@ -170,7 +170,7 @@ export default function CreateOrUpdateTaxForm({ initialValues }: IProps) {
       />
       <FormActions
         backLink={ROUTES.TAX}
-        forceSystemLang={isEmpty(initialValues)}
+        showSelectLanguage={false}
         title={
           isEmpty(initialValues)
             ? t('form:form-title-new-tax')
@@ -178,10 +178,6 @@ export default function CreateOrUpdateTaxForm({ initialValues }: IProps) {
         }
         loading={creating || updating}
         disabled={creating || updating}
-      />
-      <LanguageDefaultDescInfo
-        label="New Tax"
-        isVisible={isEmpty(initialValues)}
       />
       <div className="my-5 flex flex-wrap sm:my-8">
         <Description

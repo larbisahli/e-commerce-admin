@@ -211,13 +211,6 @@ export const siteSettings = {
         subLinks: [
           {
             id: '9YcWhG',
-            href: ROUTES.SYSTEM_STORES,
-            label: 'sidebar-nav-item-all-stores',
-            padding: '35px',
-            isSubLink: true
-          },
-          {
-            id: '9YcWhG',
             href: ROUTES.LANGUAGES,
             label: 'sidebar-nav-item-languages',
             padding: '35px',

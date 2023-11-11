@@ -626,6 +626,7 @@ export interface SettingsType {
     appId: string;
     pageId: string;
   };
+  tax: TaxType;
   maintenanceMode: boolean;
   maintenancePassword: number;
 }
@@ -634,12 +635,11 @@ export interface WebmanifestType {
   name?: string;
   short_name?: string;
   description?: string;
-  language?: string;
   theme_color?: string;
   background_color?: string;
   start_url?: string;
-  orientation?: string;
-  display?: string;
+  orientation?: { name: string };
+  display?: { name: string };
   iarc_rating_id?: string;
   scope?: string;
 }

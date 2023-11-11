@@ -132,7 +132,7 @@ const Input = React.forwardRef<HTMLInputElement, Props>(
           {...rest}
         />
         {renderLabel && (
-          <div className="absolute right-0 bottom-0 flex h-12 w-10 items-center justify-center rounded-r border border-border-base bg-gray-100">
+          <div className="absolute right-0 bottom-0 flex h-12 w-12 items-center justify-center rounded-r border border-border-base bg-gray-100">
             <span className="text-gray-600">{renderLabel}</span>
           </div>
         )}

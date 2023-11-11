@@ -68,8 +68,6 @@ export const settingsSlice = createSlice({
       fetchStoreSettings.fulfilled,
       (state: SettingsState, { payload }) => {
         // state.entities[payload.id] = payload
-        console.log('Store Setting fulfilled :>', { payload });
-
         state.isLoading = false;
         state.systemCurrency = payload.systemCurrency;
         state.storeEmail = payload.storeEmail;

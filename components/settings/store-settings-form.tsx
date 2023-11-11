@@ -1,6 +1,6 @@
 import 'react-phone-input-2/lib/style.css';
 
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import Card from '@components/common/card';
 import FormActions from '@components/common/FormActions';
 import { Eye } from '@components/icons/eye-icon';
@@ -8,11 +8,9 @@ import { LockSvg } from '@components/icons/lock';
 import { ResetIcon } from '@components/icons/reset';
 import * as socialIcons from '@components/icons/social';
 import ImageModal from '@components/image-modal';
-import Accordion from '@components/ui/accordion';
 import Button from '@components/ui/button';
 import Checkbox from '@components/ui/checkbox';
 import ColorPicker from '@components/ui/color-picker/color-picker';
-import DisplayColorCode from '@components/ui/color-picker/display-color-code';
 import Description from '@components/ui/description';
 import ValidationError from '@components/ui/form-validation-error';
 import Input from '@components/ui/input';
@@ -22,13 +20,15 @@ import SelectInput from '@components/ui/select-input';
 import SwitchInput from '@components/ui/switch-input';
 import TextArea from '@components/ui/text-area';
 import { UPDATE_STORE_SETTINGS } from '@graphql/settings';
+import { TAX_FOR_SELECT } from '@graphql/tax';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetUser } from '@hooks/useGetUser';
 import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/notify';
 import { FAVICON_VIEWER_MODAL } from '@ts-types/constants';
-import { SettingsType } from '@ts-types/generated';
+import { OrderBy } from '@ts-types/enums';
+import { SettingsType, TaxType } from '@ts-types/generated';
 import { CURRENCY } from '@utils/currency';
 import cn from 'classnames';
 import { isValidPhoneNumber } from 'libphonenumber-js';
@@ -45,7 +45,21 @@ import {
   RenderTooltipTaxRate
 } from './ToolTips';
 
+const generateMaintenancePassword = () => {
+  return Math.floor(Math.random() * 90000) + 10000;
+};
+
 type FormValues = SettingsType;
+
+interface TTaxSelect {
+  taxSelect: TaxType[];
+}
+
+interface OptionsVariable {
+  page: number;
+  limit: number;
+  orderBy: OrderBy;
+}
 
 const paymentMethods = [
   {
@@ -128,13 +142,11 @@ export default function StoreSettingsForm({ settings }: IProps) {
     resolver: yupResolver(settingsValidationSchema),
     defaultValues: {
       ...settings,
-      logo: settings?.logo,
-      favicon: settings?.favicon,
+      maintenancePassword:
+        settings?.maintenancePassword ?? generateMaintenancePassword(),
       defaultCurrency: settings?.currencies?.find(
         (currency) => currency.is_default
       ),
-      maintenanceMode: false,
-      maintenancePassword: 12345,
       socials: !isEmpty(settings?.socials)
         ? settings?.socials.map((social: any) => ({
             icon: updatedIcons?.find(
@@ -142,11 +154,7 @@ export default function StoreSettingsForm({ settings }: IProps) {
             ),
             url: social?.url
           }))
-        : [],
-      webmanifest: {
-        theme_color: '#ffff',
-        background_color: '#ffff'
-      }
+        : []
     }
   });
 
@@ -181,6 +189,22 @@ export default function StoreSettingsForm({ settings }: IProps) {
     }
   );
 
+  const {
+    data: settingsTax,
+    loading: settingsTaxLoading,
+    error: settingsTaxError
+  } = useQuery<TTaxSelect, OptionsVariable>(TAX_FOR_SELECT, {
+    variables: {
+      page: 1,
+      limit: 999,
+      orderBy: OrderBy.CREATED_AT
+    },
+    fetchPolicy: 'cache-and-network'
+  });
+
+  const { taxSelect = [] } = settingsTax ?? {};
+
+  useErrorLogger(settingsTaxError);
   useErrorLogger(error);
 
   const [logo, setLogo] = useState([]);
@@ -189,6 +213,8 @@ export default function StoreSettingsForm({ settings }: IProps) {
 
   async function onSubmit(values: FormValues) {
     const storeNumber = values?.storeNumber ?? getValues('storeNumber');
+    const maintenancePassword =
+      values?.maintenancePassword ?? getValues('maintenancePassword');
 
     updateSettings({
       variables: {
@@ -206,6 +232,7 @@ export default function StoreSettingsForm({ settings }: IProps) {
         favicon: favicon?.map(({ id }) => ({ id })),
         maxCheckoutQuantity: Number(values.maxCheckoutQuantity),
         maxCheckoutAmount: Number(values.maxCheckoutAmount),
+        maintenancePassword,
         socials: values?.socials
           ? values?.socials?.map((social: any) => ({
               icon: {
@@ -217,7 +244,8 @@ export default function StoreSettingsForm({ settings }: IProps) {
         seo: {
           ...values.seo,
           ogImage: ogImage?.map(({ id }) => ({ id }))
-        }
+        },
+        tax: { id: values?.tax?.id }
       }
     }).catch((err) => {
       setError(err);
@@ -252,6 +280,8 @@ export default function StoreSettingsForm({ settings }: IProps) {
 
   const storeNumber = watch('storeNumber') ?? getValues('storeNumber');
   const selectedCurrencies = watch('currencies') ?? getValues('currencies');
+  const webThemeColor = watch('webmanifest.theme_color');
+  const WebBackgroundColor = watch('webmanifest.background_color');
   const maintenanceMode =
     watch('maintenanceMode') ?? getValues('maintenanceMode');
   const maintenancePassword =
@@ -274,10 +304,6 @@ export default function StoreSettingsForm({ settings }: IProps) {
     }
   }, [selectedCurrencies, setValue, settings?.systemCurrency?.code]);
 
-  const generateMaintenancePassword = () => {
-    return Math.floor(Math.random() * 90000) + 10000;
-  };
-
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormActions
@@ -292,10 +318,10 @@ export default function StoreSettingsForm({ settings }: IProps) {
         <Description
           title={t('form:input-label-logo')}
           details={logoInformation}
-          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
+          className="w-full px-0 pb-5 sm:w-1/4 sm:py-8 sm:pe-4 md:w-1/4 md:pe-5"
         />
 
-        <Card className="w-full sm:w-8/12 md:w-2/3">
+        <Card className="w-full sm:w-3/4 md:w-3/4">
           <ImageModal
             onSelect={(photo) => setLogo(photo)}
             selected={logo}
@@ -309,10 +335,10 @@ export default function StoreSettingsForm({ settings }: IProps) {
         <Description
           title={t('form:input-label-favicon')}
           details={faviconInformation}
-          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
+          className="w-full px-0 pb-5 sm:w-1/4 sm:py-8 sm:pe-4 md:w-1/4 md:pe-5"
         />
 
-        <Card className="w-full sm:w-8/12 md:w-2/3">
+        <Card className="w-full sm:w-3/4 md:w-3/4">
           <ImageModal
             onSelect={(photo) => setFavicon(photo)}
             selected={favicon}
@@ -333,102 +359,6 @@ export default function StoreSettingsForm({ settings }: IProps) {
               <span className="mx-1 text-sm">View favicons</span>
             </Button>
           </div>
-          <Accordion
-            btnClassName="mt-5 bg-gray-100"
-            Title={() => (
-              <div className="pt-1 text-gray-600">
-                PWA web-manifest configuration
-              </div>
-            )}
-          >
-            <div className="mb-5 py-5 last:mb-8 last:border-0 md:py-8 md:last:pb-0">
-              <Input
-                label={t('form:input-label-name')}
-                {...register('webmanifest.name')}
-                variant="outline"
-                className="mb-5"
-              />
-              <Input
-                label={t('form:input-label-short-name')}
-                {...register('webmanifest.short_name')}
-                variant="outline"
-                className="mb-5"
-              />
-              <Input
-                label={t('form:input-label-description')}
-                {...register('webmanifest.description')}
-                variant="outline"
-                className="mb-5"
-              />
-              <Input
-                label={t('form:input-label-language')}
-                {...register('webmanifest.language')}
-                disabled
-                variant="outline"
-                className="mb-5"
-              />
-              <div className="flex items-center">
-                <ColorPicker
-                  label={t('form:input-label-color')}
-                  {...register('webmanifest.theme_color')}
-                  className="m-5 ml-0"
-                >
-                  <DisplayColorCode
-                    control={control}
-                    name="webmanifest.theme_color"
-                  />
-                </ColorPicker>
-                <ColorPicker
-                  label={t('form:input-label-background-color')}
-                  {...register('webmanifest.background_color')}
-                  className="m-5 ml-0"
-                >
-                  <DisplayColorCode
-                    control={control}
-                    name="webmanifest.background_color"
-                  />
-                </ColorPicker>
-              </div>
-              <Input
-                label={t('form:input-label-start-url')}
-                {...register('webmanifest.start_url')}
-                variant="outline"
-                className="mb-5"
-              />
-              <div className="mb-5">
-                <Label>{t('form:input-label-orientation')}</Label>
-                <SelectInput
-                  name="webmanifest.orientation"
-                  control={control}
-                  getOptionLabel={(option: any) => option.name}
-                  getOptionValue={(option: any) => option.name}
-                  options={webmanifestOrientations}
-                />
-              </div>
-              <div className="mb-5">
-                <Label>{t('form:input-label-display')}</Label>
-                <SelectInput
-                  name="webmanifest.display"
-                  control={control}
-                  getOptionLabel={(option: any) => option.name}
-                  getOptionValue={(option: any) => option.name}
-                  options={webmanifestDisplays}
-                />
-              </div>
-              <Input
-                label={t('form:input-iarc-rating-id')}
-                {...register('webmanifest.iarc_rating_id')}
-                variant="outline"
-                className="mb-5"
-              />
-              <Input
-                label={t('form:input-label-start-url')}
-                {...register('webmanifest.scope')}
-                variant="outline"
-                className="mb-5"
-              />
-            </div>
-          </Accordion>
         </Card>
       </div>
 
@@ -436,10 +366,10 @@ export default function StoreSettingsForm({ settings }: IProps) {
         <Description
           title={t('form:form-title-information')}
           details={t('form:site-info-help-text')}
-          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
+          className="w-full px-0 pb-5 sm:w-1/4 sm:py-8 sm:pe-4 md:w-1/4 md:pe-5"
         />
 
-        <Card className="w-full sm:w-8/12 md:w-2/3">
+        <Card className="w-full sm:w-3/4 md:w-3/4">
           <Input
             label={t('form:input-label-store-name')}
             {...register('storeName')}
@@ -518,9 +448,9 @@ export default function StoreSettingsForm({ settings }: IProps) {
         <Description
           title={t('form:form-title-payment-currency')}
           details={t('form:form-title-payment-currency-info')}
-          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
+          className="w-full px-0 pb-5 sm:w-1/4 sm:py-8 sm:pe-4 md:w-1/4 md:pe-5"
         />
-        <Card className="w-full sm:w-8/12 md:w-2/3">
+        <Card className="w-full sm:w-3/4 md:w-3/4">
           <div className="mb-5">
             <Label>{t('form:input-label-payment-methods')}</Label>
             <SelectInput
@@ -570,7 +500,7 @@ export default function StoreSettingsForm({ settings }: IProps) {
           </div>
           <div className="mb-5">
             <Label
-              tooltipId="taxRate"
+              tooltipId="tax"
               spaceBetween={false}
               openTooltipOnClick
               renderTooltip={<RenderTooltipTaxRate />}
@@ -579,15 +509,12 @@ export default function StoreSettingsForm({ settings }: IProps) {
               {t('form:input-label-tax-rate')}
             </Label>
             <SelectInput
-              name="taxRate"
+              name="tax"
               control={control}
               getOptionLabel={(option: any) => option?.name}
-              getOptionValue={(option: any) => option?.name}
-              options={[
-                { name: 'Standard rate' },
-                { name: 'Reduced rate' },
-                { name: 'Super-reduced rate' }
-              ]}
+              getOptionValue={(option: any) => option?.id}
+              loading={settingsTaxLoading}
+              options={taxSelect}
             />
           </div>
         </Card>
@@ -597,10 +524,10 @@ export default function StoreSettingsForm({ settings }: IProps) {
         <Description
           title="SEO"
           details={t('form:tax-form-seo-info-help-text')}
-          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pr-4 md:w-1/3 md:pr-5"
+          className="w-full px-0 pb-5 sm:w-1/4 sm:py-8 sm:pr-4 md:w-1/4 md:pr-5"
         />
 
-        <Card className="w-full sm:w-8/12 md:w-2/3">
+        <Card className="w-full sm:w-3/4 md:w-3/4">
           <Input
             label={t('form:input-label-meta-title')}
             {...register('seo.metaTitle')}
@@ -655,10 +582,10 @@ export default function StoreSettingsForm({ settings }: IProps) {
         <Description
           title={t('form:input-label-google-analytics')}
           details={t('form:tax-form-analytics-info-help-text')}
-          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pr-4 md:w-1/3 md:pr-5"
+          className="w-full px-0 pb-5 sm:w-1/4 sm:py-8 sm:pr-4 md:w-1/4 md:pr-5"
         />
 
-        <Card className="w-full sm:w-8/12 md:w-2/3">
+        <Card className="w-full sm:w-3/4 md:w-3/4">
           <Input
             label={t('form:input-label-tracking-id')}
             {...register('google.trackingId')}
@@ -675,7 +602,7 @@ export default function StoreSettingsForm({ settings }: IProps) {
           </div>
           <Label>{t('form:input-label-tracking-options')}</Label>
           <div className="my-5 flex flex-wrap">
-            <div className="min-w-[300px] flex-1">
+            <div className="min-w-[250px] flex-1">
               <div className="mb-1">
                 <SwitchInput
                   name="google.isTrackVisitors"
@@ -712,7 +639,7 @@ export default function StoreSettingsForm({ settings }: IProps) {
                 />
               </div>
             </div>
-            <div className="min-w-[300px] flex-1">
+            <div className="min-w-[250px] flex-1">
               <div className="mb-1">
                 <SwitchInput
                   name="google.isTrackProductAddToCart"
@@ -741,12 +668,12 @@ export default function StoreSettingsForm({ settings }: IProps) {
 
       <div className="my-5 flex flex-wrap border-b border-dashed border-gray-300 pb-8 sm:my-8">
         <Description
-          title={t('form:shop-settings')}
+          title={t('form:social-settings')}
           details={t('form:shop-settings-helper-text')}
-          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
+          className="w-full px-0 pb-5 sm:w-1/4 sm:py-8 sm:pe-4 md:w-1/4 md:pe-5"
         />
 
-        <Card className="w-full sm:w-8/12 md:w-2/3">
+        <Card className="w-full sm:w-3/4 md:w-3/4">
           {/* Social and Icon picker */}
           <div>
             {socialFields.map((item, index: number) => (
@@ -761,6 +688,8 @@ export default function StoreSettingsForm({ settings }: IProps) {
                     </Label>
                     <SelectInput
                       name={`socials.${index}.icon` as const}
+                      // getOptionLabel={(option: { label: string }) => option.label}
+                      // getOptionValue={(option: { id: string }) => option.id}
                       control={control}
                       options={updatedIcons}
                       isClearable={true}
@@ -800,13 +729,98 @@ export default function StoreSettingsForm({ settings }: IProps) {
         </Card>
       </div>
 
+      <div className="my-5 flex flex-wrap border-b border-dashed border-gray-300 pb-8">
+        <Description
+          title={t('form:pwa-settings')}
+          details={t('form:pwa-settings-helper-text')}
+          className="w-full px-0 pb-5 sm:w-1/4 sm:py-8 sm:pe-4 md:w-1/4 md:pe-5"
+        />
+
+        <Card className="w-full sm:w-3/4 md:w-3/4">
+          <div className="mb-5 last:mb-8 last:border-0 md:last:pb-0">
+            <Input
+              label={t('form:input-label-name')}
+              {...register('webmanifest.name')}
+              variant="outline"
+              className="mb-5"
+            />
+            <Input
+              label={t('form:input-label-short-name')}
+              {...register('webmanifest.short_name')}
+              variant="outline"
+              className="mb-5"
+            />
+            <Input
+              label={t('form:input-label-description')}
+              {...register('webmanifest.description')}
+              variant="outline"
+              className="mb-5"
+            />
+            <Input
+              label={t('form:input-label-start-url')}
+              {...register('webmanifest.start_url')}
+              variant="outline"
+              className="mb-5"
+            />
+            <div className="mb-5">
+              <Label>{t('form:input-label-orientation')}</Label>
+              <SelectInput
+                name="webmanifest.orientation"
+                control={control}
+                getOptionLabel={(option: any) => option.name}
+                getOptionValue={(option: any) => option.name}
+                options={webmanifestOrientations}
+              />
+            </div>
+            <div className="mb-5">
+              <Label>{t('form:input-label-display')}</Label>
+              <SelectInput
+                name="webmanifest.display"
+                control={control}
+                getOptionLabel={(option: any) => option.name}
+                getOptionValue={(option: any) => option.name}
+                options={webmanifestDisplays}
+              />
+            </div>
+            <Input
+              label={t('form:input-iarc-rating-id')}
+              {...register('webmanifest.iarc_rating_id')}
+              variant="outline"
+              className="mb-5"
+            />
+            <Input
+              label={t('form:input-label-start-url')}
+              {...register('webmanifest.scope')}
+              variant="outline"
+              className="mb-5"
+            />
+            <div className="flex items-center">
+              <ColorPicker
+                label={t('form:input-label-color')}
+                {...register('webmanifest.theme_color')}
+                className="m-5 ml-0"
+              >
+                <DisplayColorCode color={webThemeColor} />
+              </ColorPicker>
+              <ColorPicker
+                label={t('form:input-label-background-color')}
+                {...register('webmanifest.background_color')}
+                className="m-5 ml-0"
+              >
+                <DisplayColorCode color={WebBackgroundColor} />
+              </ColorPicker>
+            </div>
+          </div>
+        </Card>
+      </div>
+
       <div className="my-5 flex flex-wrap border-b border-dashed border-gray-300 pb-8 sm:my-8">
         <Description
           title={t('form:shop-settings-status')}
           details={t('form:shop-settings-helper-text')}
-          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
+          className="w-full px-0 pb-5 sm:w-1/4 sm:py-8 sm:pe-4 md:w-1/4 md:pe-5"
         />
-        <Card className="w-full sm:w-8/12 md:w-2/3">
+        <Card className="w-full sm:w-3/4 md:w-3/4">
           <div className="flex-4 mb-5 min-w-[200px]">
             <Label className="text-lg">
               {t('form:input-label-maintenance-mode')}
@@ -857,3 +871,18 @@ export default function StoreSettingsForm({ settings }: IProps) {
     </form>
   );
 }
+
+const DisplayColorCode = ({ color }: { color: string }) => {
+  return (
+    <>
+      {color !== null && (
+        <span
+          className="rounded border border-border-200 bg-gray-100 px-2 py-1
+                         text-sm text-heading ms-3"
+        >
+          {color}
+        </span>
+      )}
+    </>
+  );
+};
