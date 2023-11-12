@@ -63,7 +63,15 @@ export default function Blog({ post, authorDetails, prev, next }) {
     <>
       <Navigation />
       <div className="container mx-auto pt-32">
-        {!frontMatter.draft ? (
+      <div className="mt-24 text-center">
+            <PageTitle>
+              Under Construction{' '}
+              <span role="img" aria-label="roadwork sign">
+                🚧
+              </span>
+            </PageTitle>
+          </div>
+        {/* {!frontMatter.draft ? (
           <MDXLayoutRenderer
             layout={frontMatter.layout || DEFAULT_LAYOUT}
             toc={toc}
@@ -82,7 +90,7 @@ export default function Blog({ post, authorDetails, prev, next }) {
               </span>
             </PageTitle>
           </div>
-        )}
+        )} */}
       </div>
       <Footer />
     </>
