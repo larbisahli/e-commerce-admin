@@ -3,10 +3,10 @@
   "short_name": "Dropgala",
   "description": "Dropgala is an online platform that provides accessible and user-friendly services for creating and managing online stores.",
   "lang": "en-US",
-  "start_url": "/login",
+  "start_url": "/admin/login",
   "orientation": "portrait",
   "display": "standalone",
-  "scope": "/login",
+  "scope": "/admin/login",
   "icons": [
     {
       "src": "/favicon/icons/icon_ios_120x120.png",

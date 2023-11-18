@@ -20,11 +20,11 @@ const Footer = () => {
             Support
           </a>
         </Link>
-        <Link href="/blog">
+        {/* <Link href="/blog">
           <a className="mx-3 text-lg text-gray-600 hover:text-blue-500">
             Blogs
           </a>
-        </Link>
+        </Link> */}
         <Link href="/#subscription">
           <a className="mx-3 text-lg text-gray-600 hover:text-blue-500">
             Sign up
