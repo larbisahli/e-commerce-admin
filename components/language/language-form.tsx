@@ -13,7 +13,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useGetUser } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useAppDispatch } from '@hooks/useGetUser';
-import CountryLanguage from '@ladjs/country-language';
+// import CountryLanguage from '@ladjs/country-language';
 import { notify } from '@lib/notify';
 import { fetchStoreSettings } from '@store/settings';
 import { LanguageType } from '@ts-types/generated';
@@ -131,7 +131,7 @@ export default function LanguageForm({
     },
     onCompleted: (data: { updateLanguage: LanguageType }) => {
       if (!isEmpty(data?.updateLanguage)) {
-        // Update store languages
+        // Updalocalete store languages
         dispatch(fetchStoreSettings());
         notify(t('common:successfully-updated'), 'success');
         router.push(ROUTES.LANGUAGES);

@@ -243,7 +243,6 @@ export default function CreateOrUpdateSlideForm({
           details={t('form:hero-slider-image-helper-text')}
           className="w-full px-0 pb-5 sm:w-1/4 sm:py-8 sm:pe-4 md:w-1/4 md:pe-5"
         />
-
         <Card className="w-full sm:w-3/4 md:w-3/4">
           <ImageModal
             onSelect={(photo) => setValue('thumbnail', photo)}

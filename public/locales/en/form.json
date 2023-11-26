@@ -477,7 +477,7 @@
   "form-title-edit-banner": "Edit Banner",
   "input-label-title": "Title",
   "input-label-destination-url": "Destination URL",
-  "hero-slider-image-helper-text": "Upload your hero slider image here",
+  "hero-slider-image-helper-text": "Upload your hero slider image here should be 500x1400",
   "hero-slider-description-helper-text": "Add your slider details and necessary information from here",
   "button-label-add-slider": "Add Slider",
   "button-label-update-slider": "Update Slider",

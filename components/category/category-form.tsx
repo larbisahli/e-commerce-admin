@@ -368,7 +368,7 @@ export default function CreateOrUpdateCategoriesForm({
             className="mb-5"
           />
           <div className="my-5">
-            {isEmpty(initialValues) && <SelectCategories control={control} />}
+            {isEmpty(initialValues) || isFork && <SelectCategories control={control} />}
           </div>
           <Input
             label={`${t('form:input-label-menu-position')}`}
