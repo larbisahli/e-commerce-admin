@@ -62,6 +62,7 @@ export default function CreateOrUpdateSlideForm({
 }: IProps) {
   const router = useRouter();
   const { t } = useTranslation();
+  const createMode = isEmpty(initialValues);
 
   const [error, setError] = useState(null);
   const [unsavedChanges, setUnsavedChanges] = useState(true);
@@ -77,7 +78,7 @@ export default function CreateOrUpdateSlideForm({
     setValue,
     formState: { errors }
   } = useForm<FormValues>({
-    defaultValues: !isEmpty(initialValues)
+    defaultValues: !createMode
       ? cloneDeep({
           ...initialValues,
           align: translationFallback(initialValues, 'align', 'left'),
@@ -185,7 +186,7 @@ export default function CreateOrUpdateSlideForm({
     };
 
     setUnsavedChanges(false);
-    if (isEmpty(initialValues) || isFork) {
+    if (createMode || isFork) {
       createHeroSlider({ variables }).catch((err) => {
         setError(err);
         resetCreateMutation();
@@ -209,34 +210,33 @@ export default function CreateOrUpdateSlideForm({
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormActions
         backLink={ROUTES.HERO_BANNER}
-        forceSystemLang={isEmpty(initialValues)}
+        forceSystemLang={createMode}
         title={
-          isEmpty(initialValues)
+          createMode
             ? t('form:form-title-new-banner')
             : t('form:form-title-edit-banner')
         }
         loading={creating || updating}
         disabled={creating || updating}
         onSubmit={handleSubmit(onSubmit)}
-        saveOptions={[
-          {
-            onClick: () => setSaveMode(SaveOptions.SaveNew),
-            name: t('common:button-label-save-new')
-          },
-          {
-            onClick: () => setSaveMode(SaveOptions.SaveDuplicate),
-            name: t('common:button-label-save-duplicate')
-          },
-          {
-            onClick: () => setSaveMode(SaveOptions.SaveClose),
-            name: t('common:button-label-save-close')
-          }
-        ]}
+        saveOptions={
+          (createMode || isFork) && [
+            {
+              onClick: () => setSaveMode(SaveOptions.SaveNew),
+              name: t('common:button-label-save-new')
+            },
+            {
+              onClick: () => setSaveMode(SaveOptions.SaveDuplicate),
+              name: t('common:button-label-save-duplicate')
+            },
+            {
+              onClick: () => setSaveMode(SaveOptions.SaveClose),
+              name: t('common:button-label-save-close')
+            }
+          ]
+        }
       />
-      <LanguageDefaultDescInfo
-        label="New hero banner"
-        isVisible={isEmpty(initialValues)}
-      />
+      <LanguageDefaultDescInfo label="New hero banner" isVisible={createMode} />
       <div className="my-5 flex flex-wrap border-b border-dashed border-border-base pb-8 sm:my-8">
         <Description
           title={t('form:input-label-image')}

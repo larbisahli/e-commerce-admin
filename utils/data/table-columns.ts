@@ -52,6 +52,7 @@ export const COLUMNS = {
   ],
   product: [
     { label: 'sku', key: 'sku' },
+    { label: 'type', key: 'type' },
     { label: 'Image', key: 'thumbnail' },
     { label: 'Name', key: 'name' },
     { label: 'Price/Unit', key: 'salePrice' },
@@ -147,7 +148,7 @@ export const COLUMNS = {
   ],
   language: [
     { label: 'Language', key: 'name' },
-    { label: 'locale ID', key: 'localeId' },
+    { label: 'local ID', key: 'localeId' },
     { label: 'Status', key: 'isDefault' },
     { label: 'Creation Date', key: 'createdAt' },
     { label: 'Placed By', key: 'createdBy' },

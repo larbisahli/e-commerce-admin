@@ -227,7 +227,7 @@ function ProductVariableForm({
     checkForUpdateHandler({ additions, deletions });
     setUpdatedVariationOptions(additions);
     // No dependencies
-  }, []);
+  }, [variationOptions]);
 
   useEffect(() => {
     if (!isEmpty(initVariableProductInformation)) {
@@ -354,11 +354,6 @@ function ProductVariableForm({
     }
     return null;
   };
-
-  console.log('ProductVariableForm-index:>>', {
-    variationOptions,
-    attributeValuesChanges
-  });
 
   return (
     <div className="my-5 flex flex-wrap pb-8 sm:my-8">

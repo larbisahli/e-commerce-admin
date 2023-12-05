@@ -3,8 +3,8 @@ import { gql } from '@apollo/client';
 export const UPDATE_PROMO_SLIDE = gql`
   mutation UpdatePromoSlide(
     $id: Int
-    $animationSpeed: String
-    $delaySpeed: String
+    $animationSpeed: Int
+    $delaySpeed: Int
     $backgroundColor: String
     $direction: String
     $published: Boolean!

@@ -43,7 +43,15 @@ interface OptionsVariable extends LanguageProps {
   orderBy: OrderBy;
 }
 
-function SelectCategories({ control }: { control: Control<FormValues> }) {
+function SelectCategories({
+  control,
+  setValue,
+  parent
+}: {
+  control: Control<FormValues>;
+  parent: { id: number };
+  setValue: any;
+}) {
   const { t } = useTranslation();
   const { query } = useRouter();
   const { categoryId } = query;
@@ -69,6 +77,10 @@ function SelectCategories({ control }: { control: Control<FormValues> }) {
 
   useErrorLogger(error);
 
+  useEffect(() => {
+    setValue('parent', categories?.find((v) => v?.id === parent?.id) ?? parent);
+  }, [categories]);
+
   return (
     <div>
       <Label>{t('form:input-label-parent-category')}</Label>
@@ -92,6 +104,7 @@ const defaultValues = {
   description: null,
   parent: null,
   includeInMenu: true,
+  includeInHomePage: true,
   position: 1,
   thumbnail: [],
   icon: null,
@@ -125,6 +138,7 @@ export default function CreateOrUpdateCategoriesForm({
 }: IProps) {
   const router = useRouter();
   const { t } = useTranslation();
+  const createMode = isEmpty(initialValues);
 
   const [saveMode, setSaveMode] = useState<SaveOptions>(SaveOptions.Default);
 
@@ -146,7 +160,7 @@ export default function CreateOrUpdateCategoriesForm({
     watch,
     formState: { errors }
   } = useForm<FormValues>({
-    defaultValues: isEmpty(initialValues)
+    defaultValues: createMode
       ? defaultValues
       : {
           ...initialValues,
@@ -210,6 +224,7 @@ export default function CreateOrUpdateCategoriesForm({
       name: values.name,
       description: values.description,
       includeInMenu: values.includeInMenu,
+      includeInHomePage: values.includeInHomePage,
       position: Number(values.position),
       thumbnail: values.thumbnail?.map(({ id }) => ({ id })),
       parentId: isEmpty(values?.parent) ? null : values?.parent?.id,
@@ -224,7 +239,7 @@ export default function CreateOrUpdateCategoriesForm({
     };
 
     setUnsavedChanges(false);
-    if (isEmpty(initialValues) || isFork) {
+    if (createMode || isFork) {
       createCategory({ variables }).catch((err) => {
         setError(err);
       });
@@ -251,6 +266,7 @@ export default function CreateOrUpdateCategoriesForm({
 
   const thumbnail = watch('thumbnail');
   const includeInMenu = watch('includeInMenu');
+  const includeInHomePage = watch('includeInHomePage');
   const name = watch('name');
   const metaDescription = watch('metaDescription') ?? '';
   const metaImage = watch('metaImage');
@@ -285,34 +301,33 @@ export default function CreateOrUpdateCategoriesForm({
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormActions
         backLink={ROUTES.CATEGORY}
-        forceSystemLang={isEmpty(initialValues)}
+        forceSystemLang={createMode}
         title={
-          isEmpty(initialValues)
+          createMode
             ? t('form:form-title-new-category')
             : t('form:form-title-edit-category')
         }
         loading={creating || updating}
         disabled={creating || updating}
         onSubmit={handleSubmit(onSubmit)}
-        saveOptions={[
-          {
-            onClick: () => setSaveMode(SaveOptions.SaveNew),
-            name: t('common:button-label-save-new')
-          },
-          {
-            onClick: () => setSaveMode(SaveOptions.SaveDuplicate),
-            name: t('common:button-label-save-duplicate')
-          },
-          {
-            onClick: () => setSaveMode(SaveOptions.SaveClose),
-            name: t('common:button-label-save-close')
-          }
-        ]}
+        saveOptions={
+          (createMode || isFork) && [
+            {
+              onClick: () => setSaveMode(SaveOptions.SaveNew),
+              name: t('common:button-label-save-new')
+            },
+            {
+              onClick: () => setSaveMode(SaveOptions.SaveDuplicate),
+              name: t('common:button-label-save-duplicate')
+            },
+            {
+              onClick: () => setSaveMode(SaveOptions.SaveClose),
+              name: t('common:button-label-save-close')
+            }
+          ]
+        }
       />
-      <LanguageDefaultDescInfo
-        label="New Category"
-        isVisible={isEmpty(initialValues)}
-      />
+      <LanguageDefaultDescInfo label="New Category" isVisible={createMode} />
       <div className="my-5 flex flex-wrap border-b border-dashed border-border-base pb-8 sm:my-8">
         <Description
           title={t('form:input-label-image')}
@@ -368,14 +383,20 @@ export default function CreateOrUpdateCategoriesForm({
             className="mb-5"
           />
           <div className="my-5">
-            {isEmpty(initialValues) || isFork && <SelectCategories control={control} />}
+            {(createMode || isFork) && (
+              <SelectCategories
+                control={control}
+                setValue={setValue}
+                parent={initialValues?.parent}
+              />
+            )}
           </div>
           <Input
-            label={`${t('form:input-label-menu-position')}`}
+            label={`${t('form:input-label-position')}`}
             type="number"
             min={0}
             {...register('position')}
-            disabled={!includeInMenu}
+            disabled={!includeInMenu && !includeInHomePage}
             error={t(errors.position?.message!)}
             variant="outline"
             className="mb-5"
@@ -384,6 +405,14 @@ export default function CreateOrUpdateCategoriesForm({
             <SwitchInput
               name="includeInMenu"
               label="Include in menu"
+              control={control}
+              errors={errors}
+            />
+          </div>
+          <div className="mb-4">
+            <SwitchInput
+              name="includeInHomePage"
+              label="Include in HomePage"
               control={control}
               errors={errors}
             />

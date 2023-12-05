@@ -13,10 +13,10 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useGetUser } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useAppDispatch } from '@hooks/useGetUser';
-// import CountryLanguage from '@ladjs/country-language';
 import { notify } from '@lib/notify';
 import { fetchStoreSettings } from '@store/settings';
 import { LanguageType } from '@ts-types/generated';
+import { locales } from '@utils/locales';
 import { ROUTES } from '@utils/routes';
 import cn from 'classnames';
 import isEmpty from 'lodash/isEmpty';
@@ -28,7 +28,7 @@ import { useForm } from 'react-hook-form';
 import { tagValidationSchema } from './tag-validation-schema';
 
 type FormValues = {
-  locale: { displayName: string; langCultureName: string; code_2: string };
+  locale: { name: string; localeId: string };
   direction: { label: 'LTR' | 'RTL' };
   status: 'enabled' | 'disabled';
   active: boolean;
@@ -37,9 +37,8 @@ type FormValues = {
 
 const defaultValues = {
   locale: {
-    langCultureName: 'en-US',
-    displayName: 'English - United States',
-    cultureCode: '0x0409'
+    localeId: 'en-us',
+    name: 'English (US)'
   },
   direction: { label: 'LTR' },
   active: true,
@@ -60,6 +59,7 @@ export default function LanguageForm({
 }: IProps) {
   const router = useRouter();
   const { t } = useTranslation();
+  const createMode = isEmpty(initialValues);
 
   const [error, setError] = useState(null);
   const [currentLocale, setCurrentLocale] = useState<{ [key: string]: string }>(
@@ -78,18 +78,8 @@ export default function LanguageForm({
     return 0;
   }
 
-  const locales = useMemo(() => {
-    return CountryLanguage.getCountries()
-      ?.map(
-        ({ code_2 }) =>
-          CountryLanguage.getCountryMsLocales(code_2)?.map((v) => ({
-            ...v,
-            code_2
-          }))
-      )
-      ?.filter(Boolean)
-      ?.flat()
-      ?.sort(compare);
+  const locales_ = useMemo(() => {
+    return locales?.sort(compare);
   }, []);
 
   const {
@@ -100,13 +90,13 @@ export default function LanguageForm({
     formState: { errors }
   } = useForm<FormValues>({
     //@ts-ignore
-    defaultValues: !isEmpty(initialValues)
+    defaultValues: !createMode
       ? {
           ...initialValues,
           status: initialValues?.active ? 'enabled' : 'disabled',
           locale: locales?.find(
             (locale) =>
-              locale.langCultureName?.toLowerCase() === initialValues.localeId
+              locale.localeId?.toLowerCase() === initialValues.localeId
           ),
           direction: { label: initialValues.direction },
           translation: {
@@ -159,15 +149,14 @@ export default function LanguageForm({
 
   const onSubmit = async (values: FormValues) => {
     const variables = {
-      name: values.locale.displayName,
-      localeId: values.locale.langCultureName?.toLowerCase(),
-      iso2: values.locale?.code_2,
+      name: values.locale.name,
+      localeId: values.locale.localeId,
       direction: values.direction?.label,
       active: values.status === 'enabled',
       translation: values.translation
     };
 
-    if (isEmpty(initialValues) || isFork) {
+    if (createMode || isFork) {
       createLanguage({ variables }).catch((err) => {
         setError(err);
       });
@@ -199,9 +188,9 @@ export default function LanguageForm({
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormActions
         backLink={ROUTES.LANGUAGES}
-        forceSystemLang={isEmpty(initialValues)}
+        forceSystemLang={createMode}
         title={
-          isEmpty(initialValues)
+          createMode
             ? t('form:label-new-language')
             : t('form:label-edit-language')
         }
@@ -226,13 +215,11 @@ export default function LanguageForm({
             <SelectInput
               name="locale"
               control={control}
-              getOptionLabel={(option: { displayName: string }) =>
-                option?.displayName
+              getOptionLabel={(option: { name: string }) => option?.name}
+              getOptionValue={(option: { localeId: string }) =>
+                option?.localeId
               }
-              getOptionValue={(option: { langCultureName: string }) =>
-                option?.langCultureName
-              }
-              options={locales}
+              options={locales_}
             />
             <ValidationError message={t(errors?.locale?.message)} />
           </div>

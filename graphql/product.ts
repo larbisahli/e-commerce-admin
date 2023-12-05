@@ -139,6 +139,16 @@ export const PRODUCT = gql`
         buyingPrice
         quantity
         sku
+        weight
+        weightUnit {
+          unit
+        }
+        dimensionWidth
+        dimensionHeight
+        dimensionLength
+        dimensionUnit {
+          unit
+        }
       }
       variations {
         attribute {
@@ -533,13 +543,11 @@ export const UPDATE_PRODUCT_SHIPPING_INFO = gql`
 export const UPDATE_LINKED_PRODUCTS = gql`
   mutation UpdateLinkedProducts(
     $id: Int!
-    $language: LanguageInput!
     $additions: ProductInput!
     $deletions: ProductInput!
   ) {
     updateLinkedProducts(
       id: $id
-      language: $language
       additions: $additions
       deletions: $deletions
     ) {
@@ -622,6 +630,16 @@ export const UPDATE_VARIABLE_PRODUCT_INFORMATION = gql`
         buyingPrice
         quantity
         sku
+        weight
+        weightUnit {
+          unit
+        }
+        dimensionWidth
+        dimensionHeight
+        dimensionLength
+        dimensionUnit {
+          unit
+        }
       }
       variations {
         attribute {

@@ -40,6 +40,7 @@ export enum Actions {
 
 export interface ProductFormType extends Product {
   isUpdateMode: boolean;
+  isFork: boolean;
 }
 
 export interface ActionType {
@@ -62,7 +63,7 @@ interface VariationPayload {
   )[];
   field?: string;
   options?: number[];
-  init?: Product;
+  init?: ProductFormType;
 }
 
 export interface VariationReducerType {

@@ -141,6 +141,7 @@ export interface Category extends CreatedUpdatedByAt {
   level?: Scalars['Int'];
   hasChildren?: Scalars['Boolean'];
   includeInMenu?: Scalars['Boolean'];
+  includeInHomePage?: Scalars['Boolean'];
   position?: Scalars['Int'];
   parent?: Nullable<CategoryRefLevel2>;
   urlKey?: Scalars['String'];
@@ -232,7 +233,6 @@ export interface LanguageType extends CreatedUpdatedByAt {
   remoteFilePath: Scalars['String'];
   name: Scalars['String'];
   localeId: Scalars['String'];
-  iso2: Scalars['String'];
   direction: Scalars['String'];
   isDefault: Scalars['Boolean'];
   isSystem: Scalars['Boolean'];

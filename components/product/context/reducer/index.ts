@@ -7,7 +7,6 @@ import {
   Tag
 } from '@ts-types/generated';
 import cloneDeep from 'lodash/cloneDeep';
-import isEmpty from 'lodash/isEmpty';
 import { nanoid } from 'nanoid';
 
 import { Actions, ActionType, ProductFormType } from '../form.types';
@@ -171,25 +170,24 @@ export function formReducer(
       };
     case INITIAL_VALUES: {
       const { init } = payload;
-      if (isEmpty(init)) {
-        return state;
+      if (init?.isUpdateMode || init?.isFork) {
+        return cloneDeep({
+          ...state,
+          ...init,
+          status: init?.published ? ProductStatus.Publish : ProductStatus.Draft,
+          type:
+            init?.type.id === ProductType.Simple
+              ? { name: 'Simple Product', id: ProductType.Simple }
+              : { name: 'Variable Product', id: ProductType.Variable },
+          variations: init.variations?.map((variation) => {
+            return {
+              id: nanoid(),
+              ...variation
+            };
+          })
+        });
       }
-      return cloneDeep({
-        ...state,
-        ...init,
-        status: init?.published ? ProductStatus.Publish : ProductStatus.Draft,
-        type:
-          init?.type.id === ProductType.Simple
-            ? { name: 'Simple Product', id: ProductType.Simple }
-            : { name: 'Variable Product', id: ProductType.Variable },
-        variations: init.variations?.map((variation) => {
-          return {
-            id: nanoid(),
-            ...variation
-          };
-        }),
-        isUpdateMode: true
-      });
+      return state;
     }
     default:
       return state;

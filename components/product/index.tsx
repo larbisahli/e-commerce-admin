@@ -17,14 +17,11 @@ function CreateOrUpdateProductForm({
   isFork = false
 }: IProps) {
   const { t } = useTranslation();
-
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [unsavedChanges, setUnsavedChanges] = useState(true);
-
   useWarnIfUnsavedChanges(unsavedChanges, () => {
     return confirm(t('common:UNSAVED_CHANGES'));
   });
-
   return (
     <>
       {errorMessage ? (

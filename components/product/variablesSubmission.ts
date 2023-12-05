@@ -12,7 +12,10 @@ const creationVariable = (values: Product): Product => {
     buyingPrice: isVariable ? 0 : values.buyingPrice,
     sku: isVariable ? null : values.sku,
     productSeo: {
-      ...values.productSeo,
+      slug: values.productSeo?.slug,
+      metaTitle: values.productSeo?.metaTitle,
+      metaDescription: values.productSeo?.metaDescription,
+      metaKeywords: values.productSeo?.metaKeywords,
       metaImage: values.productSeo.metaImage?.map(({ id }) => ({ id }))
     },
     attributes: isVariable

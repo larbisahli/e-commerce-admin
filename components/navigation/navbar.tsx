@@ -115,7 +115,7 @@ const Navbar = () => {
           <Link
             target="_blank"
             className="flex h-10 w-10 items-center justify-center rounded-sm border bg-white text-gray-700 shadow hover:border-blue-300 hover:text-accent"
-            href={`https://${alias}.dropgala.com`}
+            href={`https://${alias}.dropgala.shop`}
           >
             <ShopIcon />
           </Link>

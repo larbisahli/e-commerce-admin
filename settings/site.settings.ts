@@ -14,7 +14,7 @@ export const siteSettings = {
   defaultLanguage: 'en',
   author: {
     name: 'DropGala',
-    websiteUrl: 'https://business.dropgala.com',
+    websiteUrl: 'https://dropgala.com',
     address: ''
   },
   headerLinks: [],

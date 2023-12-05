@@ -115,8 +115,6 @@ const CartesianProductComponent = ({
     });
   };
 
-  console.log('CartesianProductComponent :>>', index);
-
   return (
     <Accordion
       isUpdated={isUpdated}

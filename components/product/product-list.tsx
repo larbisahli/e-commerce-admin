@@ -85,7 +85,6 @@ const ProductList = ({ loading, products, selectedColumns }: IProps) => {
         key: 'name',
         align: alignLeft,
         width: 200,
-        ellipsis: true,
         render: (name: string, record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
@@ -94,11 +93,27 @@ const ProductList = ({ loading, products, selectedColumns }: IProps) => {
         }
       },
       {
+        title: t('table:table-item-type'),
+        dataIndex: 'type',
+        key: 'type',
+        align: alignLeft,
+        width: 150,
+        render: (type: { id: string }, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
+          if (type?.id === ProductType.Simple) {
+            return <span className="text-sm">Simple Product</span>;
+          }
+          return <span className="text-sm">Configurable Product</span>;
+        }
+      },
+      {
         title: t('table:table-item-sku'),
         dataIndex: 'sku',
         key: 'sku',
         align: 'center',
-        width: 120,
+        width: 100,
         ellipsis: true,
         render: (sku: string, record: TableRowProps) => {
           if (record?.loading) {
@@ -112,7 +127,7 @@ const ProductList = ({ loading, products, selectedColumns }: IProps) => {
         dataIndex: 'salePrice',
         key: 'salePrice',
         align: 'center',
-        width: 100,
+        width: 150,
         render: (salePrice: number, record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
@@ -263,7 +278,7 @@ const ProductList = ({ loading, products, selectedColumns }: IProps) => {
       emptyText={t('table:empty-table-data')}
       data={loading ? tablePlaceholderRow : products}
       rowKey="id"
-      scroll={{ x: 800, y: 500 }}
+      scroll={{ x: 800 }}
       className="card mb-6 overflow-hidden"
     />
   );

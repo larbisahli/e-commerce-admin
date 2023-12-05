@@ -117,6 +117,11 @@ const ProductContent = ({ state, initialValues, productSeo }: Props) => {
       freeShipping,
       displayProductMeasurements
     };
+    console.log({
+      initialProductContent,
+      currentProductContent,
+      initProductContent
+    });
     setIsUpdated(!isEqual(initialProductContent, currentProductContent));
   }, [
     description,

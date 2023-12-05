@@ -28,15 +28,18 @@ const InputForLocal = React.forwardRef<HTMLInputElement, Props>(
     ref
   ) => {
     return (
-      <div className={cn('rounded border p-3', className)}>
+      <div className={cn('relative rounded border pb-3', className)}>
         {label && (
           <label
             htmlFor={name}
-            className={cn('block text-base leading-none text-gray-700', {
-              'text-gray-300': disabled
-            })}
+            className={cn(
+              'absolute right-0 left-0 top-[-8px] block w-full text-base leading-none text-gray-700',
+              {
+                'text-gray-300': disabled
+              }
+            )}
           >
-            {label}
+            <span className="z-10 mx-3 bg-white px-1">{label}</span>
           </label>
         )}
         <input
@@ -44,7 +47,7 @@ const InputForLocal = React.forwardRef<HTMLInputElement, Props>(
           name={name}
           type={type}
           ref={ref}
-          className="w-full py-1 text-lg font-medium text-gray-600 outline-none"
+          className="w-full px-3 pb-1 pt-5 text-lg font-medium text-gray-600 outline-none"
           autoComplete="off"
           autoCorrect="off"
           autoCapitalize="off"

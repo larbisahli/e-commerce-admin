@@ -40,6 +40,9 @@ function ProductForm({
 }: IProps) {
   const { t } = useTranslation();
   const router = useRouter();
+  const createMode = isEmpty(initialValues);
+
+  console.log({ createMode });
 
   const state = useFormState();
   const dispatch = useFormReducer();
@@ -81,7 +84,7 @@ function ProductForm({
   useEffect(() => {
     dispatch({
       type: Actions.INITIAL_VALUES,
-      payload: { init: initialValues }
+      payload: { init: { ...initialValues, isUpdateMode: !createMode, isFork } }
     });
   }, []);
 
@@ -226,10 +229,8 @@ function ProductForm({
     setLockedSubmission(true);
     setUnsavedChanges(false);
 
-    if (isEmpty(initialValues)) {
+    if (createMode || isFork) {
       const variables = creationVariable(values);
-
-      console.log({ values, variables });
 
       // Validations
       const name = variables.name;
@@ -306,35 +307,34 @@ function ProductForm({
     <form noValidate>
       <FormActions
         backLink={ROUTES.PRODUCT}
-        forceSystemLang={isEmpty(initialValues)}
+        forceSystemLang={createMode || isFork}
         title={
-          isEmpty(initialValues)
+          createMode || isFork
             ? t('form:form-title-new-product')
             : t('form:form-title-edit-product')
         }
         loading={creating}
         disabled={creating}
-        showSaveButton={isEmpty(initialValues)}
+        showSaveButton={createMode || isFork}
         onSubmit={onSubmit}
-        saveOptions={[
-          {
-            onClick: () => setSaveMode(SaveOptions.SaveNew),
-            name: t('common:button-label-save-new')
-          },
-          {
-            onClick: () => setSaveMode(SaveOptions.SaveDuplicate),
-            name: t('common:button-label-save-duplicate')
-          },
-          {
-            onClick: () => setSaveMode(SaveOptions.SaveClose),
-            name: t('common:button-label-save-close')
-          }
-        ]}
+        saveOptions={
+          (createMode || isFork) && [
+            {
+              onClick: () => setSaveMode(SaveOptions.SaveNew),
+              name: t('common:button-label-save-new')
+            },
+            {
+              onClick: () => setSaveMode(SaveOptions.SaveDuplicate),
+              name: t('common:button-label-save-duplicate')
+            },
+            {
+              onClick: () => setSaveMode(SaveOptions.SaveClose),
+              name: t('common:button-label-save-close')
+            }
+          ]
+        }
       />
-      <LanguageDefaultDescInfo
-        label="New Product"
-        isVisible={isEmpty(initialValues)}
-      />
+      <LanguageDefaultDescInfo label="New Product" isVisible={createMode} />
       {/* Thumbnail */}
       <div className="my-5 flex flex-wrap border-b border-dashed border-border-base pb-8 sm:my-8">
         <Description

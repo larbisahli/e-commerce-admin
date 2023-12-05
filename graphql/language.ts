@@ -68,7 +68,6 @@ export const UPDATE_LANGUAGE = gql`
     $name: String!
     $localeId: String!
     $active: Boolean!
-    $iso2: String!
     $direction: String!
     $translation: JSONObject!
   ) {
@@ -77,7 +76,6 @@ export const UPDATE_LANGUAGE = gql`
       name: $name
       localeId: $localeId
       active: $active
-      iso2: $iso2
       direction: $direction
       translation: $translation
     ) {
@@ -92,14 +90,12 @@ export const CREATE_LANGUAGE = gql`
     $name: String!
     $localeId: String!
     $active: Boolean!
-    $iso2: String!
     $direction: String!
     $translation: JSONObject!
   ) {
     createLanguage(
       name: $name
       localeId: $localeId
-      iso2: $iso2
       active: $active
       direction: $direction
       translation: $translation

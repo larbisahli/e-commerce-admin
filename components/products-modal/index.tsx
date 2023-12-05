@@ -72,12 +72,7 @@ const ProductModal = () => {
     skip: isEmpty(selectedLanguage)
   });
 
-  const { products: s = [], productCount: { count } = { count: 0 } } =
-    data ?? {};
-
-  const products = Array.from({ length: 40 })?.map((o, index) => ({
-    id: index
-  }));
+  const { products = [], productCount: { count } = { count: 0 } } = data ?? {};
 
   useErrorLogger(error);
 
