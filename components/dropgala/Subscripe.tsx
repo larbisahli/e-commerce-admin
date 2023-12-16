@@ -8,7 +8,7 @@ const Subscribe = () => {
   }, []);
 
   return (
-    <section id="subscription" className="w-full">
+    <section className="w-full">
       <div className="mx-auto w-fit">
         <div className="w-full">
           <MailchimpSubscribe

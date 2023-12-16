@@ -64,7 +64,7 @@ const Navigation = () => {
             </a>
           </Link> */}
             <Link href="#subscription">
-              <a className="hover:text-underline inline-block rounded-full border-blue-300 bg-blue-600 py-2 px-5 text-center font-medium text-white no-underline">
+              <a className="hover:text-underline inline-block rounded-sm border-blue-300 bg-blue-600 py-2 px-5 text-center font-medium text-white no-underline">
                 Join Our Waitlist!
               </a>
             </Link>

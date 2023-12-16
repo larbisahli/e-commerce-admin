@@ -88,7 +88,7 @@ const HomePage = ({ posts }) => {
               </a>
           </Link> */}
             <Link href="#subscription">
-              <a className="hover:text-underline inline-block rounded-xl border-blue-300 bg-blue-600 py-3 px-8 text-center text-lg font-medium text-white no-underline">
+              <a className="hover:text-underline inline-block rounded-sm border-blue-300 bg-blue-600 py-3 px-8 text-center text-lg font-medium text-white no-underline">
                 Join Our Waitlist!
               </a>
             </Link>
@@ -117,7 +117,7 @@ const HomePage = ({ posts }) => {
         </section> */}
 
         {/* ------------------ Join us section ------------------ */}
-        <section className="container my-22 mx-auto flex flex-col-reverse flex-wrap items-center justify-between px-2 md:flex-row">
+        <section id="subscription" className="container my-22 mx-auto flex flex-col-reverse flex-wrap items-center justify-between px-2 md:flex-row">
           {/* <!--Left Col--> */}
           <div className="flex w-full flex-col items-center justify-center overflow-y-hidden">
             <h2 className="slide-in-bottom-h1 my-4 text-center text-xl font-bold leading-tight text-gray-800 md:text-3xl">
