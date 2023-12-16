@@ -1,254 +1,377 @@
 export const locales = [
   {
     name: 'Afrikaans',
-    localeId: 'af-za'
+    localeId: 'af-za',
+    direction: 'LTR',
+    iso2: 'af'
   },
   {
     name: 'العربية',
-    localeId: 'ar'
+    localeId: 'ar',
+    direction: 'RTL',
+    iso2: 'ar'
   },
   {
     name: 'Arabic (U.A.E.)',
-    localeId: 'ar-ae'
+    localeId: 'ar-ae',
+    direction: 'RTL',
+    iso2: 'ar'
   },
   {
     name: 'Arabic (Bahrain)',
-    localeId: 'ar-bh'
+    localeId: 'ar-bh',
+    direction: 'RTL',
+    iso2: 'ar'
   },
   {
     name: 'Arabic (Kuwait)',
-    localeId: 'ar-kw'
+    localeId: 'ar-kw',
+    direction: 'RTL',
+    iso2: 'ar'
   },
   {
     name: 'Arabic (Morocco)',
-    localeId: 'ar-ma'
+    localeId: 'ar-ma',
+    direction: 'RTL',
+    iso2: 'ar'
   },
   {
     name: 'Arabic (Oman)',
-    localeId: 'ar-om'
+    localeId: 'ar-om',
+    direction: 'RTL',
+    iso2: 'ar'
   },
   {
     name: 'Arabic (Qatar)',
-    localeId: 'ar-qa'
+    localeId: 'ar-qa',
+    direction: 'RTL',
+    iso2: 'ar'
   },
   {
     name: 'Arabic (Saudi Arabia)',
-    localeId: 'ar-sa'
+    localeId: 'ar-sa',
+    direction: 'RTL',
+    iso2: 'ar'
   },
   {
     name: 'Български',
-    localeId: 'bg-bg'
+    localeId: 'bg-bg',
+    direction: 'LTR',
+    iso2: 'bg'
   },
   {
     name: 'Català',
-    localeId: 'ca-ad'
+    localeId: 'ca-ad',
+    direction: 'LTR',
+    iso2: 'ca'
   },
   {
     name: 'Čeština',
-    localeId: 'cs-cz'
+    localeId: 'cs-cz',
+    direction: 'LTR',
+    iso2: 'cs'
   },
   {
     name: 'Cymraeg',
-    localeId: 'cy-gb'
+    localeId: 'cy-gb',
+    direction: 'LTR',
+    iso2: 'cy'
   },
   {
     name: 'Dansk',
-    localeId: 'da-dk'
+    localeId: 'da-dk',
+    direction: 'LTR',
+    iso2: 'da'
   },
   {
     name: 'Deutsch (Österreich)',
-    localeId: 'de-at'
+    localeId: 'de-at',
+    direction: 'LTR',
+    iso2: 'de'
   },
   {
     name: 'Deutsch (Schweiz)',
-    localeId: 'de-ch'
+    localeId: 'de-ch',
+    direction: 'LTR',
+    iso2: 'de'
   },
   {
     name: 'Deutsch (Deutschland)',
-    localeId: 'de-de'
+    localeId: 'de-de',
+    direction: 'LTR',
+    iso2: 'de'
   },
   {
     name: 'Ελληνικά',
-    localeId: 'el-gr'
+    localeId: 'el-gr',
+    direction: 'LTR',
+    iso2: 'el'
   },
   {
     name: 'English (UK)',
-    localeId: 'en-gb'
+    localeId: 'en-gb',
+    direction: 'LTR',
+    iso2: 'en'
   },
   {
     name: 'English (US)',
-    localeId: 'en-us'
+    localeId: 'en-us',
+    direction: 'LTR',
+    iso2: 'en'
   },
   {
     name: 'Español (Chile)',
-    localeId: 'es-cl'
+    localeId: 'es-cl',
+    direction: 'LTR',
+    iso2: 'es'
   },
   {
     name: 'Español (España)',
-    localeId: 'es-es'
+    localeId: 'es-es',
+    direction: 'LTR',
+    iso2: 'es'
   },
   {
     name: 'Español (México)',
-    localeId: 'es-mx'
+    localeId: 'es-mx',
+    direction: 'LTR',
+    iso2: 'es'
   },
   {
     name: 'Eesti keel',
-    localeId: 'et-ee'
+    localeId: 'et-ee',
+    direction: 'LTR',
+    iso2: 'et'
   },
   {
     name: 'Euskara',
-    localeId: 'eu'
+    localeId: 'eu',
+    direction: 'LTR',
+    iso2: 'eu'
   },
   {
     name: 'فارسی',
-    localeId: 'fa-ir'
+    localeId: 'fa-ir',
+    direction: 'RTL',
+    iso2: 'fa'
   },
   {
     name: 'Suomi',
-    localeId: 'fi-fi'
+    localeId: 'fi-fi',
+    direction: 'LTR',
+    iso2: 'fi'
   },
   {
     name: 'Français (Canada)',
-    localeId: 'fr-ca'
+    localeId: 'fr-ca',
+    direction: 'LTR',
+    iso2: 'fe'
   },
   {
     name: 'Français (France)',
-    localeId: 'fr-fr'
+    localeId: 'fr-fr',
+    direction: 'LTR',
+    iso2: 'fe'
   },
   {
     name: 'Galego (Spain)',
-    localeId: 'gl-es'
+    localeId: 'gl-es',
+    direction: 'LTR',
+    iso2: 'gl'
   },
   {
     name: 'עברית',
-    localeId: 'he-il'
+    localeId: 'he-il',
+    direction: 'RTL',
+    iso2: 'he'
   },
   {
     name: 'हिंदी',
-    localeId: 'hi-in'
+    localeId: 'hi-in',
+    direction: 'LTR',
+    iso2: 'hi'
   },
   {
     name: 'Hrvatski',
-    localeId: 'hr-hr'
+    localeId: 'hr-hr',
+    direction: 'LTR',
+    iso2: 'hr'
   },
   {
     name: 'Magyar',
-    localeId: 'hu-hu'
+    localeId: 'hu-hu',
+    direction: 'LTR',
+    iso2: 'hu'
   },
   {
     name: 'Bahasa Indonesia',
-    localeId: 'id-id'
+    localeId: 'id-id',
+    direction: 'LTR',
+    iso2: 'id'
   },
   {
     name: 'Íslenska',
-    localeId: 'is-is'
+    localeId: 'is-is',
+    direction: 'LTR',
+    iso2: 'is'
   },
   {
     name: 'Italiano',
-    localeId: 'it-it'
+    localeId: 'it-it',
+    direction: 'LTR',
+    iso2: 'it'
   },
   {
     name: '日本語',
-    localeId: 'ja-jp'
+    localeId: 'ja-jp',
+    direction: 'LTR',
+    iso2: 'ja'
   },
   {
     name: 'ភាសាខ្មែរ',
-    localeId: 'km-kh'
+    localeId: 'km-kh',
+    direction: 'LTR',
+    iso2: 'km'
   },
   {
     name: '한국어',
-    localeId: 'ko-kr'
+    localeId: 'ko-kr',
+    direction: 'LTR',
+    iso2: 'ko'
   },
   {
     name: 'Latina',
-    localeId: 'la'
+    localeId: 'la',
+    direction: 'LTR',
+    iso2: 'la'
   },
   {
     name: 'Lietuvių kalba',
-    localeId: 'lt-lt'
+    localeId: 'lt-lt',
+    direction: 'LTR',
+    iso2: 'lt'
   },
   {
     name: 'Latviešu',
-    localeId: 'lv-lv'
+    localeId: 'lv-lv',
+    direction: 'LTR',
+    iso2: 'lv'
   },
   {
     name: 'Монгол',
-    localeId: 'mn-mn'
+    localeId: 'mn-mn',
+    direction: 'LTR',
+    iso2: 'mn'
   },
   {
     name: 'Norsk bokmål',
-    localeId: 'nb-no'
+    localeId: 'nb-no',
+    direction: 'LTR',
+    iso2: 'nb'
   },
   {
     name: 'Nederlands',
-    localeId: 'nl-nl'
+    localeId: 'nl-nl',
+    direction: 'LTR',
+    iso2: 'nl'
   },
   {
     name: 'Norsk nynorsk',
-    localeId: 'nn-no'
+    localeId: 'nn-no',
+    direction: 'LTR',
+    iso2: 'nn'
   },
   {
     name: 'Polski',
-    localeId: 'pl-pl'
+    localeId: 'pl-pl',
+    direction: 'LTR',
+    iso2: 'pl'
   },
   {
     name: 'Português (Brasil)',
-    localeId: 'pt-br'
+    localeId: 'pt-br',
+    direction: 'LTR',
+    iso2: 'pt'
   },
   {
     name: 'Português (Portugal)',
-    localeId: 'pt-pt'
+    localeId: 'pt-pt',
+    direction: 'LTR',
+    iso2: 'pt'
   },
   {
     name: 'Română',
-    localeId: 'ro-ro'
+    localeId: 'ro-ro',
+    direction: 'LTR',
+    iso2: 'ro'
   },
   {
     name: 'Русский',
-    localeId: 'ru-ru'
+    localeId: 'ru-ru',
+    direction: 'LTR',
+    iso2: 'ru'
   },
   {
     name: 'Slovenčina',
-    localeId: 'sk-sk'
+    localeId: 'sk-sk',
+    direction: 'LTR',
+    iso2: 'sk'
   },
   {
     name: 'Slovenščina',
-    localeId: 'sl-si'
+    localeId: 'sl-si',
+    direction: 'LTR',
+    iso2: 'sl'
   },
   {
     name: 'Српски / Srpski',
-    localeId: 'sr-rs'
+    localeId: 'sr-rs',
+    direction: 'LTR',
+    iso2: 'sr'
   },
   {
     name: 'Svenska',
-    localeId: 'sv-se'
+    localeId: 'sv-se',
+    direction: 'LTR',
+    iso2: 'sv'
   },
   {
     name: 'ไทย',
-    localeId: 'th-th'
+    localeId: 'th-th',
+    direction: 'LTR',
+    iso2: 'th'
   },
   {
     name: 'Türkçe',
-    localeId: 'tr-tr'
+    localeId: 'tr-tr',
+    direction: 'LTR',
+    iso2: 'tr'
   },
   {
     name: 'Українська',
-    localeId: 'uk-ua'
+    localeId: 'uk-ua',
+    direction: 'LTR',
+    iso2: 'uk'
   },
   {
     name: 'Tiếng Việt',
-    localeId: 'vi-vn'
+    localeId: 'vi-vn',
+    direction: 'LTR',
+    iso2: 'vi'
   },
   {
     name: '中文 (中国大陆)',
-    localeId: 'zh-cn'
+    localeId: 'zh-cn',
+    direction: 'LTR',
+    iso2: 'zh'
   },
   {
     name: '中文 (台灣)',
-    localeId: 'zh-tw'
+    localeId: 'zh-tw',
+    direction: 'LTR',
+    iso2: 'zh'
   }
 ];
-
 export const codes = [
   'af-za',
   'ar',

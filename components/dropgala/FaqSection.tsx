@@ -12,9 +12,9 @@ const FaqSection = () => {
     });
   };
   return (
-    <section className="container mx-auto mt-32 flex w-full flex-col rounded bg-gray-100 p-5 sm:px-11">
+    <section className="container mx-auto mt-32 flex w-full flex-col rounded bg-[#f1f4f9] p-5 sm:px-11">
       <div className="my-7 flex flex-col items-center justify-center">
-        <h2 className="slide-in-bottom-h1 text-center text-2xl font-bold leading-tight text-gray-800 md:text-left">
+        <h2 className="slide-in-bottom-h1 text-left text-2xl font-bold leading-tight text-gray-800 md:text-left">
           Frequently asked questions
         </h2>
         <p className="self-center text-sm text-gray-600">
@@ -22,12 +22,12 @@ const FaqSection = () => {
         </p>
       </div>
       {/* 1 */}
-      <button
+      {/* <button
         className="my-3 rounded bg-white p-4 shadow"
         onClick={() => handleFaq(1)}
       >
         <div className="flex items-center justify-between">
-          <span className="slide-in-bottom-h1 text-center font-medium leading-tight text-gray-900 md:text-left">
+          <span className="slide-in-bottom-h1 text-left font-medium leading-tight text-gray-900 md:text-left">
             Is there a trial period?
           </span>
           <ArrowDown width={20} height={20} />
@@ -41,14 +41,14 @@ const FaqSection = () => {
             You have a 14-day free trial period without adding card information.
           </p>
         </div>
-      </button>
+      </button> */}
       {/* 2 */}
       <button
         className="my-3 rounded bg-white p-4 shadow"
         onClick={() => handleFaq(2)}
       >
         <div className="flex items-center justify-between">
-          <span className="slide-in-bottom-h1 text-center font-medium leading-tight text-gray-900 md:text-left">
+          <span className="slide-in-bottom-h1 text-left font-medium leading-tight text-gray-900 md:text-left">
             Can I use Dropgala for dropshipping?
           </span>
           <ArrowDown width={20} height={20} />
@@ -72,7 +72,7 @@ const FaqSection = () => {
         onClick={() => handleFaq(3)}
       >
         <div className="flex items-center justify-between">
-          <span className="slide-in-bottom-h1 text-center font-medium leading-tight text-gray-900 md:text-left">
+          <span className="slide-in-bottom-h1 text-left font-medium leading-tight text-gray-900 md:text-left">
             I created my online store last week but have not received any orders
             yet. Why??
           </span>
@@ -97,7 +97,7 @@ const FaqSection = () => {
         onClick={() => handleFaq(4)}
       >
         <div className="flex items-center justify-between">
-          <span className="slide-in-bottom-h1 text-center font-medium leading-tight text-gray-900 md:text-left">
+          <span className="slide-in-bottom-h1 text-left font-medium leading-tight text-gray-900 md:text-left">
             Is my store secure?
           </span>
           <ArrowDown width={20} height={20} />
@@ -119,7 +119,7 @@ const FaqSection = () => {
         onClick={() => handleFaq(5)}
       >
         <div className="flex items-center justify-between">
-          <span className="slide-in-bottom-h1 text-center font-medium leading-tight text-gray-900 md:text-left">
+          <span className="slide-in-bottom-h1 text-left font-medium leading-tight text-gray-900 md:text-left">
             I have my own domain name, can I use it?
           </span>
           <ArrowDown width={20} height={20} />
@@ -141,7 +141,7 @@ const FaqSection = () => {
         onClick={() => handleFaq(6)}
       >
         <div className="flex items-center justify-between">
-          <span className="slide-in-bottom-h1 text-center font-medium leading-tight text-gray-900 md:text-left">
+          <span className="slide-in-bottom-h1 text-left font-medium leading-tight text-gray-900 md:text-left">
             Do you take sales charges?
           </span>
           <ArrowDown width={20} height={20} />
@@ -163,7 +163,7 @@ const FaqSection = () => {
         onClick={() => handleFaq(7)}
       >
         <div className="flex items-center justify-between">
-          <span className="slide-in-bottom-h1 text-center font-medium leading-tight text-gray-900 md:text-left">
+          <span className="slide-in-bottom-h1 text-left font-medium leading-tight text-gray-900 md:text-left">
             Does Dropgala take care of storage and shipping of my products?
           </span>
           <ArrowDown width={20} height={20} />

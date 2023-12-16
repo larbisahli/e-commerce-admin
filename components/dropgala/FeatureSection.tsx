@@ -1,7 +1,11 @@
+import AdminLineIcon from '@components/icons/admin-line';
 import AnalyticsIcon from '@components/icons/analytics';
 import CurrencyConvertIcon from '@components/icons/currency-convert';
 import ExpressCheckoutIcon from '@components/icons/express-checkout';
+import LanguagesIcon from '@components/icons/languages';
 import PluginIcon from '@components/icons/plugin';
+import PwaIcon from '@components/icons/pwa';
+import ThemeIcon from '@components/icons/pwa copy';
 import SheetsIcon from '@components/icons/sheets';
 import ShipIcon from '@components/icons/ship';
 import ThumbUpIcon from '@components/icons/thumb-up';
@@ -15,30 +19,43 @@ const FeatureSection = () => {
     >
       <div className="flex flex-col items-center">
         <h2 className="slide-in-bottom-h1 my-5 text-center text-3xl font-bold leading-tight text-gray-800 md:text-left">
-          Features
+          Tools
         </h2>
-        <p>
-          Tons of free tools, features, and services to set you up for success
-        </p>
+        <p>All the tools and features you need to succeed</p>
       </div>
       <div className="mt-8 grid grid-cols-1 gap-5 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
         {/*  */}
-        <div className="h-[280px] rounded-lg border bg-white shadow">
+        <div className="min-h-[280px] rounded-lg border bg-white shadow">
           <div className=" flex flex-col items-center justify-center p-4">
             <div className="py-3 text-gray-700">
               <ShipIcon />
             </div>
-            <div className="pt-1 font-medium">Seamless COD Management</div>
+            <div className="pt-1 font-medium">Pain-free COD Management</div>
             <div className="pt-5 text-center text-gray-700">
               <p>
-                Manage your Cash on Delivery orders in one place, from leads
-                management to order confirmation and shipping.
+                Manage your leads, order confirmations, and shippings, all in
+                one place.
               </p>
             </div>
           </div>
         </div>
         {/*  */}
-        <div className="h-[280px] rounded-lg border bg-white shadow">
+        <div className="min-h-[270px] rounded-lg border bg-white shadow">
+          <div className=" flex flex-col items-center justify-center p-4">
+            <div className="py-3 text-gray-700">
+              <LanguagesIcon />
+            </div>
+            <div className="pt-1 font-medium">Multilingual support</div>
+            <div className="pt-5 text-center text-gray-700">
+              <p>
+                Translate your products and content into multiple languages to
+                reach a global audience worldwide.
+              </p>
+            </div>
+          </div>
+        </div>
+        {/*  */}
+        <div className="min-h-[270px] rounded-lg border bg-white shadow">
           <div className=" flex flex-col items-center justify-center p-4">
             <div className="py-3 text-gray-800">
               <SheetsIcon />
@@ -46,47 +63,77 @@ const FeatureSection = () => {
             <div className="pt-1 font-medium">Google Sheet Integration</div>
             <div className="pt-5 text-center text-gray-700">
               <p>
-                Supercharge your business operations with our seamless Google
-                Sheet integration for enhanced scalability and accelerated
-                processes.
+                Keep track of everything with Google Sheet integration to
+                accelerate your handling of business operations.
               </p>
             </div>
           </div>
         </div>
         {/*  */}
-        <div className="h-[280px] rounded-lg border bg-white shadow">
+        <div className="min-h-[270px] rounded-lg border bg-white shadow">
           <div className=" flex flex-col items-center justify-center p-4">
             <div className="py-3 text-gray-500">
               <CurrencyConvertIcon />
             </div>
-            <div className="pt-1 font-medium">Multi Currency Converter</div>
+            <div className="pt-1 font-medium">Multi-Currency Conversion</div>
             <div className="pt-5 text-center text-gray-700">
               <p>
-                Offer seamless customer experiences with automatic currency
-                conversion based on their location. Customize your store's
-                currency to cater to each customer effortlessly.
+                Enhance your customers’ experience with our automatic currency
+                conversion that shows your price in the currency of your
+                customers.
               </p>
             </div>
           </div>
         </div>
         {/*  */}
-        <div className="h-[280px] rounded-lg border bg-white shadow">
+        <div className="min-h-[270px] rounded-lg border bg-white shadow">
           <div className=" flex flex-col items-center justify-center p-4">
             <div className="py-3 text-gray-800">
               <ExpressCheckoutIcon />
             </div>
-            <div className="pt-1 font-medium">Express checkout form</div>
+            <div className="pt-1 font-medium">Express Checkout Form</div>
             <div className="pt-5 text-center text-gray-700">
               <p>
-                Boost conversions with a streamlined shopping experience—let
-                visitors order products directly on the same page, eliminating
-                extra steps.
+                Eliminate extra steps and see your customers order directly from
+                the same page.
               </p>
             </div>
           </div>
         </div>
         {/*  */}
-        <div className="h-[280px] rounded-lg border bg-white shadow">
+        <div className="min-h-[270px] rounded-lg border bg-white shadow">
+          <div className=" flex flex-col items-center justify-center p-4">
+            <div className="py-3 text-gray-800">
+              <PwaIcon />
+            </div>
+            <div className="pt-1 font-medium">
+              Progressive Web App Integration
+            </div>
+            <div className="pt-5 text-center text-gray-700">
+              <p>
+                Install your store directly, skip app stores. Enjoy a
+                mobile-app-like experience with a user-friendly interface.
+              </p>
+            </div>
+          </div>
+        </div>
+        {/*  */}
+        <div className="min-h-[270px] rounded-lg border bg-white shadow">
+          <div className=" flex flex-col items-center justify-center p-4">
+            <div className="py-3 text-gray-800">
+              <ThemeIcon />
+            </div>
+            <div className="pt-1 font-medium">Multiple Storefront Themes</div>
+            <div className="pt-5 text-center text-gray-700">
+              <p>
+                Select a theme for your store and tailor it to suit your
+                business requirements with customizable options.
+              </p>
+            </div>
+          </div>
+        </div>
+        {/*  */}
+        <div className="min-h-[270px] rounded-lg border bg-white shadow">
           <div className=" flex flex-col items-center justify-center p-4">
             <div className="py-3 text-gray-700">
               <UpSellIcon />
@@ -94,16 +141,14 @@ const FeatureSection = () => {
             <div className="pt-1 font-medium">One Click UpSell</div>
             <div className="pt-5 text-center text-gray-700">
               <p>
-                Effortlessly increase sales with post-purchase upsell,
-                cross-sell, and related products. Delight customers with
-                attractive offers, driving additional revenue and enhancing
-                their shopping experience.
+                Up-sell and cross-sell with a single click to drive more revenue
+                and enhance your customers’ shopping experience.
               </p>
             </div>
           </div>
         </div>
         {/*  */}
-        <div className="h-[280px] rounded-lg border bg-white shadow">
+        <div className="min-h-[270px] rounded-lg border bg-white shadow">
           <div className=" flex flex-col items-center justify-center p-4">
             <div className="py-3 text-gray-700">
               <AnalyticsIcon />
@@ -111,15 +156,14 @@ const FeatureSection = () => {
             <div className="pt-1 font-medium">SEO Support</div>
             <div className="pt-5 text-center text-gray-700">
               <p>
-                Boost your product page rankings in search results. Unlock free
-                access to powerful tools that drive organic traffic and elevate
-                your store's visibility.
+                Boost your rankings and analyze your traffic with powerful tools
+                to quickly scale your ecommerce business.
               </p>
             </div>
           </div>
         </div>
         {/*  */}
-        <div className="h-[270px] rounded-lg border bg-white shadow">
+        <div className="min-h-[270px] rounded-lg border bg-white shadow">
           <div className=" flex flex-col items-center justify-center p-4">
             <div className="py-3 text-gray-700">
               <PluginIcon />
@@ -127,14 +171,14 @@ const FeatureSection = () => {
             <div className="pt-1 font-medium">Pixels Integration</div>
             <div className="pt-5 text-center text-gray-700">
               <p>
-                Attract high-quality leads to your store effortlessly with our
-                seamless pixel integration across popular advertising platforms.
+                Effortless pixel integration across all popular advertising
+                platforms to attract more quality leads to your store.
               </p>
             </div>
           </div>
         </div>
         {/*  */}
-        <div className="h-[270px] rounded-lg border bg-white shadow">
+        <div className="min-h-[270px] rounded-lg border bg-white shadow">
           <div className=" flex flex-col items-center justify-center p-4">
             <div className="py-3 text-gray-700">
               <ThumbUpIcon />
@@ -142,8 +186,23 @@ const FeatureSection = () => {
             <div className="pt-1 font-medium">Products Reviews</div>
             <div className="pt-5 text-center text-gray-700">
               <p>
-                {`Increase your store's conversion by up to 50% by adding real
-              reviews from your happy past customers.`}
+                Showcase your happy customers’ reviews to increase your
+                conversion by up to 50%.
+              </p>
+            </div>
+          </div>
+        </div>
+        {/*  */}
+        <div className="min-h-[270px] rounded-lg border bg-white shadow">
+          <div className=" flex flex-col items-center justify-center p-4">
+            <div className="py-3 text-gray-800">
+              <AdminLineIcon />
+            </div>
+            <div className="pt-1 font-medium">Multi-User Support</div>
+            <div className="pt-5 text-center text-gray-700">
+              <p>
+                Expand your admin dashboard by effortlessly adding staff members
+                and managing their roles and permissions.
               </p>
             </div>
           </div>

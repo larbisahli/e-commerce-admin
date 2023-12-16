@@ -4,7 +4,7 @@ import Link from 'next/link';
 const Footer = () => {
   return (
     <div className="fade-in container mx-auto mt-16 w-full border-t border-dotted border-gray-300 pt-8 pb-6 text-center text-sm md:text-left">
-      <div className="flex items-center justify-center">
+      <div className="flex flex-wrap items-center justify-center">
         <Link href="/about-us">
           <a className="mx-3 text-lg text-gray-600 hover:text-blue-500">
             About us

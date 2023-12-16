@@ -257,3 +257,7 @@
 .custom-tooltip {
   font-size: 13px !important;
 }
+.hero-container {
+  background: url(/hero-background.svg);
+  background-size: contain;
+}

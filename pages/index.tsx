@@ -5,6 +5,7 @@ import HeroSection from '@components/dropgala/HeroSection';
 import LatestBlogsCarousel from '@components/dropgala/LatestBlogsCarousel';
 import Navigation from '@components/dropgala/Navigation';
 import PricingSection from '@components/dropgala/PricingSection';
+import Subscribe from '@components/dropgala/Subscripe';
 import { ArrowNext } from '@components/icons/arrow-next';
 import { getAllFilesFrontMatter } from '@lib/mdx';
 import Head from 'next/head';
@@ -34,7 +35,6 @@ const HomePage = ({ posts }) => {
       <main className="pt-20">
         {/* HERO SECTION */}
         <HeroSection />
-
         {/* ------------------ e-commerce tools section ------------------ */}
         <section className="container my-14 mx-auto flex flex-col-reverse flex-wrap items-center justify-between px-6 md:flex-row">
           {/* <!--Right Col--> */}
@@ -52,11 +52,11 @@ const HomePage = ({ posts }) => {
           {/* <!--Left Col--> */}
           <div className="flex w-full flex-col items-center justify-center overflow-y-hidden lg:items-start xl:w-2/5">
             <h2 className="slide-in-bottom-h1 my-4 text-center text-xl font-bold leading-tight text-gray-800 md:text-left md:text-3xl">
-              All the e-commerce tools you need in one place.
+              Begin your Journey of Ecommerce Success
             </h2>
             <p className="slide-in-bottom-subtitle pb-8 text-center text-base leading-normal text-gray-700 md:text-left">
-              Get all the design, fulfillment, payment, and analytics tools you
-              need to manage your business seamlessly
+              DropGala gives you all the tools, features, and services you need
+              to achieve your ecommerce success.
             </p>
             <Link href={'#features'}>
               <a className="w-[115px] rounded border border-gray-300 px-3 py-2">
@@ -116,15 +116,12 @@ const HomePage = ({ posts }) => {
           )}
         </section> */}
 
-        {/* ------------- FAQ ----------------- */}
-        <FaqSection />
-
         {/* ------------------ Join us section ------------------ */}
-        <section className="container my-22 mx-auto flex flex-col-reverse flex-wrap items-center justify-between px-6 md:flex-row">
+        <section className="container my-22 mx-auto flex flex-col-reverse flex-wrap items-center justify-between px-2 md:flex-row">
           {/* <!--Left Col--> */}
           <div className="flex w-full flex-col items-center justify-center overflow-y-hidden">
             <h2 className="slide-in-bottom-h1 my-4 text-center text-xl font-bold leading-tight text-gray-800 md:text-3xl">
-              Join us
+              Join Us
             </h2>
             <p className="slide-in-bottom-subtitle max-w-5xl pb-4 text-center leading-normal text-gray-800">
               {`Join us on this exciting journey and unlock the potential of your
@@ -138,14 +135,12 @@ const HomePage = ({ posts }) => {
                 Create your store for free!
               </a>
           </Link> */}
-            <Link href="#subscription">
-              <a className="hover:text-underline inline-block rounded-full border-blue-300 bg-blue-600 py-3 px-8 text-center text-lg font-medium text-white no-underline">
-                Join Our Waitlist!
-              </a>
-            </Link>
+            <Subscribe />
           </div>
         </section>
-        {/* <!--Footer--> */}
+        {/* ------------- FAQ ----------------- */}
+        <FaqSection />
+        {/* ------------- Footer ---------------- */}
         <Footer />
       </main>
     </div>
