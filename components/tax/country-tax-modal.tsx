@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/no-noninteractive-element-to-interactive-role */
 import 'rc-pagination/assets/index.css';
 
 import Button from '@components/ui/button';
@@ -9,35 +8,102 @@ import {
   useModalAction,
   useModalState
 } from '@components/ui/modal/modal.context';
-import SelectInput from '@components/ui/select-input';
+import Select from '@components/ui/select/select';
+import { notify } from '@lib/notify';
 import { PRODUCT_MODAL, TAX_MODAL } from '@ts-types/constants';
 import { isEmpty } from 'lodash';
 import { useTranslation } from 'next-i18next';
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 
-const CountryTaxModal = ({ countries, control, register }) => {
+const CountryTaxModal = ({ state, setState, countries }) => {
   const { t } = useTranslation();
+
+  const [rate, setRate] = useState({
+    name: null,
+    iso2: null,
+    rate: 0
+  });
 
   const { closeModal } = useModalAction();
   const { isOpen, id, meta } = useModalState();
-  console.log({ isOpen, id, meta });
-
-  const [selectedProducts, setSelectedProducts] = useState<{ id: string }[]>(
-    []
-  );
-
-  useEffect(() => {
-    setSelectedProducts(meta?.selectedProducts ?? []);
-  }, [meta]);
 
   const open = id === TAX_MODAL && isOpen;
 
+  useEffect(() => {
+    if (!isEmpty(meta)) {
+      const updateRate = state?.countries?.find((c) => c.iso2 === meta?.iso2);
+      setRate(updateRate);
+    }
+  }, [meta, state?.countries]);
+
   const onCloseSave = () => {
-    closeModal(PRODUCT_MODAL, id, { selectedProducts });
+    if (!rate.iso2) {
+      closeModal(PRODUCT_MODAL, id);
+      return;
+    }
+    if (isEmpty(meta)) {
+      const exists = state.countries?.find((v) => v?.iso2 === rate?.iso2);
+      if (exists) {
+        notify(`"${rate?.name}" already selected!`, 'warning');
+        return;
+      }
+      setState((prev) => {
+        return {
+          ...prev,
+          countries: [
+            ...prev.countries,
+            {
+              ...rate,
+              appliesTo: {
+                zipCode: null,
+                zipCodeRange: null,
+                entireCountry: true,
+                state: null
+              }
+            }
+          ]
+        };
+      });
+    } else {
+      setState((prev) => {
+        return {
+          ...prev,
+          countries: prev.countries?.map((v) => {
+            if (v.iso2 === meta?.iso2) {
+              return rate;
+            }
+            return v;
+          })
+        };
+      });
+    }
+    setRate({
+      name: null,
+      iso2: null,
+      rate: 0
+    });
+    closeModal(PRODUCT_MODAL, id, {});
   };
 
   const onClose = () => {
+    setRate({
+      name: null,
+      iso2: null,
+      rate: 0
+    });
     closeModal(PRODUCT_MODAL, id);
+  };
+
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { value } = e.target;
+    setRate((prev) => {
+      return {
+        ...prev,
+        rate: Number(value)
+      };
+    });
   };
 
   return (
@@ -55,11 +121,19 @@ const CountryTaxModal = ({ countries, control, register }) => {
         <div className="flex flex-1 flex-col p-5 pb-14">
           <div className="mb-5">
             <Label>{t('form:input-label-country')}</Label>
-            <SelectInput
+            <Select
+              value={rate}
               name="country"
-              control={control}
               getOptionLabel={(option: any) => option.name}
-              getOptionValue={(option: any) => option.id}
+              getOptionValue={(option: any) => option.iso2}
+              onChange={(country: any) => {
+                setRate((prev) => {
+                  return {
+                    ...prev,
+                    ...(country ?? {})
+                  };
+                });
+              }}
               options={countries}
               isLoading={isEmpty(countries)}
             />
@@ -68,17 +142,19 @@ const CountryTaxModal = ({ countries, control, register }) => {
             <Input
               label={`${t('form:input-label-tax-rate')} (%)`}
               isRequiredLabel
+              name="rate"
               type="number"
+              value={rate.rate}
               min={0}
               max={100}
-              {...register('rate')}
+              onChange={handleChange}
               variant="outline"
             />
           </div>
         </div>
         <div className="m-3 mb-16 flex items-end justify-end p-5 md:mb-0">
           <div>
-            <Button onClick={onCloseSave}>Cancel</Button>
+            <Button onClick={onClose}>Cancel</Button>
             <Button className="ml-4" onClick={onCloseSave}>
               Save
             </Button>

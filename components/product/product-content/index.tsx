@@ -38,6 +38,7 @@ interface Props {
     status: Product['status'];
     disableOutOfStock: Product['disableOutOfStock'];
     freeShipping: Product['freeShipping'];
+    includeInHomepage: Product['includeInHomepage'];
     displayProductMeasurements: Product['displayProductMeasurements'];
     isUpdateMode: boolean;
   };
@@ -90,6 +91,7 @@ const ProductContent = ({ state, initialValues, productSeo }: Props) => {
     status,
     disableOutOfStock,
     freeShipping,
+    includeInHomepage,
     displayProductMeasurements,
     isUpdateMode
   } = state;
@@ -106,6 +108,7 @@ const ProductContent = ({ state, initialValues, productSeo }: Props) => {
       note: initProductContent.note,
       disableOutOfStock: initProductContent.disableOutOfStock,
       freeShipping: initProductContent.freeShipping,
+      includeInHomepage: initProductContent.includeInHomepage,
       displayProductMeasurements: initProductContent.displayProductMeasurements
     };
     const currentProductContent = {
@@ -115,6 +118,7 @@ const ProductContent = ({ state, initialValues, productSeo }: Props) => {
       note,
       disableOutOfStock,
       freeShipping,
+      includeInHomepage,
       displayProductMeasurements
     };
     console.log({
@@ -128,13 +132,8 @@ const ProductContent = ({ state, initialValues, productSeo }: Props) => {
     disableOutOfStock,
     displayProductMeasurements,
     freeShipping,
-    initProductContent.description,
-    initProductContent.disableOutOfStock,
-    initProductContent.displayProductMeasurements,
-    initProductContent.freeShipping,
-    initProductContent.name,
-    initProductContent.note,
-    initProductContent.published,
+    includeInHomepage,
+    initProductContent,
     isUpdateMode,
     name,
     note,
@@ -189,6 +188,7 @@ const ProductContent = ({ state, initialValues, productSeo }: Props) => {
         disableOutOfStock,
         freeShipping,
         displayProductMeasurements,
+        includeInHomepage,
         productSeo: {
           metaTitle: productSeo?.metaTitle,
           metaKeywords: productSeo?.metaKeywords,
@@ -329,6 +329,15 @@ const ProductContent = ({ state, initialValues, productSeo }: Props) => {
               onMouseLeaveTopLevel={checkForUpdateHandler}
               checked={displayProductMeasurements}
               label={t('form:input-label-display-product-measurements')}
+            />
+          </div>
+          <div className="my-2">
+            <Checkbox
+              name="includeInHomepage"
+              onChange={handleChange}
+              onMouseLeaveTopLevel={checkForUpdateHandler}
+              checked={includeInHomepage}
+              label={t('form:input-label-display-to-homepage')}
             />
           </div>
           {renderSaveButton()}

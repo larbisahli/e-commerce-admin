@@ -61,6 +61,7 @@ function ProductForm({
     disableOutOfStock,
     freeShipping,
     displayProductMeasurements,
+    includeInHomepage,
     quantity,
     sku,
     thumbnail,
@@ -89,91 +90,53 @@ function ProductForm({
   }, []);
 
   // Stopping unnecessary rerenders
-  const productTypeState = useMemo(
-    () => ({
-      isUpdateMode,
-      type,
-      variationOptions,
-      variations,
-      salePrice,
-      comparePrice,
-      buyingPrice,
-      attributes,
-      quantity,
-      sku
-    }),
-    [
-      type,
-      variationOptions,
-      variations,
-      salePrice,
-      comparePrice,
-      buyingPrice,
-      attributes,
-      quantity,
-      sku,
-      isUpdateMode
-    ]
-  );
-  const ProductSeoState = useMemo(
-    () => ({
-      isUpdateMode,
-      id,
-      name,
-      thumbnail,
-      productSeo
-    }),
-    [id, name, thumbnail, productSeo, isUpdateMode]
-  );
-  const productThumbnailState = useMemo(
-    () => ({ thumbnail, isUpdateMode }),
-    [thumbnail, isUpdateMode]
-  );
-  const productGalleryState = useMemo(
-    () => ({ gallery, isUpdateMode }),
-    [gallery, isUpdateMode]
-  );
-  const ProductSelectGroupState = useMemo(
-    () => ({ categories, suppliers, tags, manufacturers, isUpdateMode }),
-    [categories, suppliers, tags, manufacturers, isUpdateMode]
-  );
-  const productContentState = useMemo(
-    () => ({
-      isUpdateMode,
-      name,
-      note,
-      description,
-      status,
-      disableOutOfStock,
-      freeShipping,
-      displayProductMeasurements,
-      id
-    }),
-    [
-      id,
-      name,
-      note,
-      description,
-      status,
-      disableOutOfStock,
-      freeShipping,
-      displayProductMeasurements,
-      isUpdateMode
-    ]
-  );
-  const linkedProductsState = useMemo(
-    () => ({
-      isUpdateMode,
-      upsellProducts,
-      relatedProducts,
-      crossSellProducts
-    }),
-    [upsellProducts, relatedProducts, crossSellProducts, isUpdateMode]
-  );
-  const productShippingInfoState = useMemo(
-    () => ({ id, isUpdateMode, productShippingInfo }),
-    [id, productShippingInfo, isUpdateMode]
-  );
+  const productTypeState = {
+    isUpdateMode,
+    type,
+    variationOptions,
+    variations,
+    salePrice,
+    comparePrice,
+    buyingPrice,
+    attributes,
+    quantity,
+    sku
+  };
+  const ProductSeoState = {
+    isUpdateMode,
+    id,
+    name,
+    thumbnail,
+    productSeo
+  };
+  const productThumbnailState = { thumbnail, isUpdateMode };
+  const productGalleryState = { gallery, isUpdateMode };
+  const ProductSelectGroupState = {
+    categories,
+    suppliers,
+    tags,
+    manufacturers,
+    isUpdateMode
+  };
+  const productContentState = {
+    isUpdateMode,
+    name,
+    note,
+    description,
+    status,
+    disableOutOfStock,
+    freeShipping,
+    displayProductMeasurements,
+    includeInHomepage,
+    id
+  };
+  const linkedProductsState = {
+    isUpdateMode,
+    upsellProducts,
+    relatedProducts,
+    crossSellProducts
+  };
+  const productShippingInfoState = { id, isUpdateMode, productShippingInfo };
 
   const [lockedSubmission, setLockedSubmission] = useState(false);
 

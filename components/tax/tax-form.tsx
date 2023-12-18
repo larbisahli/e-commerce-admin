@@ -1,8 +1,5 @@
-/* eslint-disable jsx-a11y/interactive-supports-focus */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 import { useMutation } from '@apollo/client';
 import Card from '@components/common/card';
-import { LanguageDefaultDescInfo } from '@components/common/commonComponents';
 import FormActions from '@components/common/FormActions';
 import Button from '@components/ui/button';
 import Checkbox from '@components/ui/checkbox';
@@ -23,24 +20,16 @@ import type { TaxType } from '@ts-types/generated';
 import { SaveOptions } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import { translationFallback } from '@utils/utils';
-import cloneDeep from 'lodash/cloneDeep';
 import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import React from 'react';
-import { useForm } from 'react-hook-form';
 
 import CountryTaxModal from './country-tax-modal';
 import TaxCountryList from './tax-country-list';
 
 type FormValues = TaxType;
-
-const defaultValues = {
-  name: null,
-  rate: 0,
-  isDefault: false
-};
 
 type IProps = {
   initialValues?: TaxType | any;
@@ -56,29 +45,20 @@ export default function CreateOrUpdateTaxForm({ initialValues }: IProps) {
 
   const [saveMode, setSaveMode] = useState<SaveOptions>(SaveOptions.Default);
 
-  const { selectedLanguage } = useSettings();
-
-  const {
-    control,
-    register,
-    handleSubmit,
-    formState: { errors }
-  } = useForm<FormValues>({
-    defaultValues: !isEmpty(initialValues)
-      ? cloneDeep({
-          ...initialValues
-        })
-      : (defaultValues as TaxType)
+  const [state, setState] = useState({
+    name: null,
+    rate: 0,
+    countries: []
   });
+
+  console.log({ state });
 
   const { openModal } = useModalAction();
 
   const { userInfo } = useGetUser();
   const csrfToken = userInfo?.csrfToken;
 
-  const taxedCountries = [];
-
-  const [createHeroSlider, { loading: creating, reset: resetCreateMutation }] =
+  const [createTaxRate, { loading: creating, reset: resetCreateMutation }] =
     useMutation(CREATE_HERO_SLIDE, {
       context: {
         headers: {
@@ -107,7 +87,7 @@ export default function CreateOrUpdateTaxForm({ initialValues }: IProps) {
         setSaveMode(SaveOptions.Default);
       }
     });
-  const [updateHeroSlider, { loading: updating, reset: resetUpdateMutation }] =
+  const [updateTaxRate, { loading: updating, reset: resetUpdateMutation }] =
     useMutation(UPDATE_HERO_SLIDE, {
       context: {
         headers: {
@@ -123,8 +103,13 @@ export default function CreateOrUpdateTaxForm({ initialValues }: IProps) {
 
   useErrorLogger(error);
 
-  const onSubmit = async (values: FormValues) => {
-    const variables = { ...values, language: selectedLanguage };
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    const variables = { ...state };
+
+    console.log({ variables });
+
+    return;
 
     setUnsavedChanges(false);
     if (isEmpty(initialValues)) {
@@ -158,14 +143,29 @@ export default function CreateOrUpdateTaxForm({ initialValues }: IProps) {
 
   const handleClick = (e) => {
     e.preventDefault();
-    openModal(TAX_MODAL, TAX_MODAL, { test: 1 });
+    openModal(TAX_MODAL, TAX_MODAL, {});
+  };
+
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value, type } = e.target;
+    const inputValue =
+      type === 'checkbox' ? (e.target as HTMLInputElement)?.checked : value;
+
+    setState((prev) => {
+      return {
+        ...prev,
+        [name]: inputValue
+      };
+    });
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={onSubmit}>
       <CountryTaxModal
-        control={control}
-        register={register}
+        state={state}
+        setState={setState}
         countries={countries}
       />
       <FormActions
@@ -194,7 +194,9 @@ export default function CreateOrUpdateTaxForm({ initialValues }: IProps) {
           <Input
             label={t('form:input-label-name')}
             isRequiredLabel
-            {...register('name')}
+            name="name"
+            value={state.name}
+            onChange={handleChange}
             variant="outline"
             className="mb-5"
             placeholder={translationFallback(
@@ -207,17 +209,19 @@ export default function CreateOrUpdateTaxForm({ initialValues }: IProps) {
           <Input
             label={`${t('form:input-label-tax-rate')} (%)`}
             isRequiredLabel
+            name="rate"
+            value={state.rate}
             type="number"
             min={0}
             max={100}
-            {...register('rate')}
-            error={t(errors.rate?.message!)}
+            onChange={handleChange}
             variant="outline"
             className="mb-5"
           />
           <div>
             <Checkbox
-              {...register('isDefault')}
+              name="isDefault"
+              onChange={handleChange}
               label={t('form:input-label-use-as-default')}
               className="mb-2"
             />
@@ -242,9 +246,12 @@ export default function CreateOrUpdateTaxForm({ initialValues }: IProps) {
             <Button onClick={handleClick}>Add country</Button>
           </div>
 
-          {isEmpty(taxedCountries) && (
+          {!isEmpty(state.countries) && (
             <div className="mt-5">
-              <TaxCountryList taxes={taxedCountries} />
+              <TaxCountryList
+                taxedCountries={state.countries}
+                setState={setState}
+              />
             </div>
           )}
         </Card>

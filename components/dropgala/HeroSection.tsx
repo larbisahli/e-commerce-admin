@@ -1,9 +1,10 @@
 import Image from 'next/image';
+import Link from 'next/link';
 
 const HeroSection = () => {
   return (
-    <section className="hero-container">
-      <div className="container mx-auto flex flex-col flex-wrap items-center justify-between px-6 pt-12 md:flex-row md:pt-12">
+    <section className="hero-container mt-0 lg:mt-20">
+      <div className="container mx-auto flex flex-col flex-wrap items-center justify-between px-2 pt-12 md:flex-row md:pt-12 lg:px-4">
         {/* <!--Left Col--> */}
         <div className="flex w-full flex-col justify-center overflow-y-hidden lg:items-start xl:w-2/5">
           <h1 className="slide-in-bottom-h1 mb-5 text-center text-3xl font-bold leading-tight text-blue-500 md:text-4xl xl:text-left">
@@ -31,6 +32,11 @@ const HeroSection = () => {
               you need to grow and scale your ecommerce business.
             </p>
           </div>
+          <Link href="#subscription">
+            <a className="hover:text-underline inline-block rounded-sm border-blue-300 bg-blue-600 py-3 px-8 text-center text-lg font-medium text-white no-underline">
+              Join Our Waitlist!
+            </a>
+          </Link>
         </div>
 
         {/* <!--Right Col--> */}

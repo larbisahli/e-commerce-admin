@@ -26,6 +26,7 @@ export const initialState: ProductFormType = {
   disableOutOfStock: true,
   freeShipping: false,
   displayProductMeasurements: false,
+  includeInHomepage: true,
   note: '',
   thumbnail: [],
   gallery: [],
@@ -55,7 +56,8 @@ export const initialState: ProductFormType = {
   upsellProducts: [],
   crossSellProducts: [],
   // extend for update
-  isUpdateMode: false
+  isUpdateMode: false,
+  isFork: false
 };
 
 const FormContext = createContext<ProductFormType>(initialState);

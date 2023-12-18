@@ -15,13 +15,15 @@ const FeatureSection = () => {
   return (
     <section
       id="features"
-      className="container mx-auto mt-32 w-full rounded p-5 px-11"
+      className="container mx-auto mt-0 w-full rounded p-4 lg:mt-32 lg:px-0"
     >
       <div className="flex flex-col items-center">
         <h2 className="slide-in-bottom-h1 my-5 text-center text-3xl font-bold leading-tight text-gray-800 md:text-left">
           Tools
         </h2>
-        <p>All the tools and features you need to succeed</p>
+        <p className="text-center">
+          All the tools and features you need to succeed
+        </p>
       </div>
       <div className="mt-8 grid grid-cols-1 gap-5 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
         {/*  */}
@@ -30,7 +32,9 @@ const FeatureSection = () => {
             <div className="py-3 text-gray-700">
               <ShipIcon />
             </div>
-            <div className="pt-1 font-medium">Pain-free COD Management</div>
+            <div className="pt-1 text-center font-medium">
+              Pain-free COD Management
+            </div>
             <div className="pt-5 text-center text-gray-700">
               <p>
                 Manage your leads, order confirmations, and shippings, all in
@@ -45,7 +49,9 @@ const FeatureSection = () => {
             <div className="py-3 text-gray-700">
               <LanguagesIcon />
             </div>
-            <div className="pt-1 font-medium">Multilingual support</div>
+            <div className="pt-1 text-center font-medium">
+              Multilingual support
+            </div>
             <div className="pt-5 text-center text-gray-700">
               <p>
                 Translate your products and content into multiple languages to
@@ -60,7 +66,9 @@ const FeatureSection = () => {
             <div className="py-3 text-gray-800">
               <SheetsIcon />
             </div>
-            <div className="pt-1 font-medium">Google Sheet Integration</div>
+            <div className="pt-1 text-center font-medium">
+              Google Sheet Integration
+            </div>
             <div className="pt-5 text-center text-gray-700">
               <p>
                 Keep track of everything with Google Sheet integration to
@@ -75,7 +83,9 @@ const FeatureSection = () => {
             <div className="py-3 text-gray-500">
               <CurrencyConvertIcon />
             </div>
-            <div className="pt-1 font-medium">Multi-Currency Conversion</div>
+            <div className="pt-1 text-center font-medium">
+              Multi-Currency Conversion
+            </div>
             <div className="pt-5 text-center text-gray-700">
               <p>
                 Enhance your customers’ experience with our automatic currency
@@ -91,7 +101,9 @@ const FeatureSection = () => {
             <div className="py-3 text-gray-800">
               <ExpressCheckoutIcon />
             </div>
-            <div className="pt-1 font-medium">Express Checkout Form</div>
+            <div className="pt-1 text-center font-medium">
+              Express Checkout Form
+            </div>
             <div className="pt-5 text-center text-gray-700">
               <p>
                 Eliminate extra steps and see your customers order directly from
@@ -106,7 +118,7 @@ const FeatureSection = () => {
             <div className="py-3 text-gray-800">
               <PwaIcon />
             </div>
-            <div className="pt-1 font-medium">
+            <div className="pt-1 text-center font-medium">
               Progressive Web App Integration
             </div>
             <div className="pt-5 text-center text-gray-700">
@@ -123,7 +135,9 @@ const FeatureSection = () => {
             <div className="py-3 text-gray-800">
               <ThemeIcon />
             </div>
-            <div className="pt-1 font-medium">Multiple Storefront Themes</div>
+            <div className="pt-1 text-center font-medium">
+              Multiple Storefront Themes
+            </div>
             <div className="pt-5 text-center text-gray-700">
               <p>
                 Select a theme for your store and tailor it to suit your
@@ -138,7 +152,7 @@ const FeatureSection = () => {
             <div className="py-3 text-gray-700">
               <UpSellIcon />
             </div>
-            <div className="pt-1 font-medium">One Click UpSell</div>
+            <div className="pt-1 text-center font-medium">One Click UpSell</div>
             <div className="pt-5 text-center text-gray-700">
               <p>
                 Up-sell and cross-sell with a single click to drive more revenue
@@ -153,7 +167,7 @@ const FeatureSection = () => {
             <div className="py-3 text-gray-700">
               <AnalyticsIcon />
             </div>
-            <div className="pt-1 font-medium">SEO Support</div>
+            <div className="pt-1 text-center font-medium">SEO Support</div>
             <div className="pt-5 text-center text-gray-700">
               <p>
                 Boost your rankings and analyze your traffic with powerful tools
@@ -168,7 +182,9 @@ const FeatureSection = () => {
             <div className="py-3 text-gray-700">
               <PluginIcon />
             </div>
-            <div className="pt-1 font-medium">Pixels Integration</div>
+            <div className="pt-1 text-center font-medium">
+              Pixels Integration
+            </div>
             <div className="pt-5 text-center text-gray-700">
               <p>
                 Effortless pixel integration across all popular advertising
@@ -183,7 +199,7 @@ const FeatureSection = () => {
             <div className="py-3 text-gray-700">
               <ThumbUpIcon />
             </div>
-            <div className="pt-1 font-medium">Products Reviews</div>
+            <div className="pt-1 text-center font-medium">Products Reviews</div>
             <div className="pt-5 text-center text-gray-700">
               <p>
                 Showcase your happy customers’ reviews to increase your
@@ -198,7 +214,9 @@ const FeatureSection = () => {
             <div className="py-3 text-gray-800">
               <AdminLineIcon />
             </div>
-            <div className="pt-1 font-medium">Multi-User Support</div>
+            <div className="pt-1 text-center font-medium">
+              Multi-User Support
+            </div>
             <div className="pt-5 text-center text-gray-700">
               <p>
                 Expand your admin dashboard by effortlessly adding staff members

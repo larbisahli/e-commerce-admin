@@ -12,12 +12,15 @@ const FaqSection = () => {
     });
   };
   return (
-    <section className="container mx-auto mt-32 flex w-full flex-col rounded bg-[#f1f4f9] p-5 sm:px-11">
+    <section
+      id="faq"
+      className="container mx-auto mt-12 flex w-full flex-col rounded-none bg-[#f1f4f9] p-4 sm:px-11 lg:mt-32 lg:rounded"
+    >
       <div className="my-7 flex flex-col items-center justify-center">
-        <h2 className="slide-in-bottom-h1 text-left text-2xl font-bold leading-tight text-gray-800 md:text-left">
+        <h2 className="slide-in-bottom-h1 text-center text-2xl font-bold leading-tight text-gray-800 md:text-left">
           Frequently asked questions
         </h2>
-        <p className="self-center text-sm text-gray-600">
+        <p className="mt-3 text-center text-sm text-gray-600">
           Find answers to the most frequently asked questions
         </p>
       </div>
@@ -51,7 +54,13 @@ const FaqSection = () => {
           <span className="slide-in-bottom-h1 text-left font-medium leading-tight text-gray-900 md:text-left">
             Can I use Dropgala for dropshipping?
           </span>
-          <ArrowDown width={20} height={20} />
+          <div
+            className={cn('w-[20px] transition-all', {
+              'rotate-180': openFAQ === 2
+            })}
+          >
+            <ArrowDown width={20} height={20} />
+          </div>
         </div>
         <div
           className={cn('hidden max-w-4xl pt-5 text-left text-gray-800', {
@@ -76,7 +85,13 @@ const FaqSection = () => {
             I created my online store last week but have not received any orders
             yet. Why??
           </span>
-          <ArrowDown width={20} height={20} />
+          <div
+            className={cn('w-[20px] transition-all', {
+              'rotate-180': openFAQ === 3
+            })}
+          >
+            <ArrowDown width={20} height={20} />
+          </div>
         </div>
         <div
           className={cn('hidden max-w-4xl pt-5 text-left text-gray-800', {
@@ -100,7 +115,13 @@ const FaqSection = () => {
           <span className="slide-in-bottom-h1 text-left font-medium leading-tight text-gray-900 md:text-left">
             Is my store secure?
           </span>
-          <ArrowDown width={20} height={20} />
+          <div
+            className={cn('w-[20px] transition-all', {
+              'rotate-180': openFAQ === 4
+            })}
+          >
+            <ArrowDown width={20} height={20} />
+          </div>
         </div>
         <div
           className={cn('hidden max-w-4xl pt-5 text-left text-gray-800', {
@@ -122,7 +143,13 @@ const FaqSection = () => {
           <span className="slide-in-bottom-h1 text-left font-medium leading-tight text-gray-900 md:text-left">
             I have my own domain name, can I use it?
           </span>
-          <ArrowDown width={20} height={20} />
+          <div
+            className={cn('w-[20px] transition-all', {
+              'rotate-180': openFAQ === 5
+            })}
+          >
+            <ArrowDown width={20} height={20} />
+          </div>
         </div>
         <div
           className={cn('hidden max-w-4xl pt-5 text-left text-gray-800', {
@@ -144,7 +171,13 @@ const FaqSection = () => {
           <span className="slide-in-bottom-h1 text-left font-medium leading-tight text-gray-900 md:text-left">
             Do you take sales charges?
           </span>
-          <ArrowDown width={20} height={20} />
+          <div
+            className={cn('w-[20px] transition-all', {
+              'rotate-180': openFAQ === 6
+            })}
+          >
+            <ArrowDown width={20} height={20} />
+          </div>
         </div>
         <div
           className={cn('hidden max-w-4xl pt-5 text-left text-gray-800', {
@@ -166,7 +199,13 @@ const FaqSection = () => {
           <span className="slide-in-bottom-h1 text-left font-medium leading-tight text-gray-900 md:text-left">
             Does Dropgala take care of storage and shipping of my products?
           </span>
-          <ArrowDown width={20} height={20} />
+          <div
+            className={cn('w-[20px] transition-all', {
+              'rotate-180': openFAQ === 7
+            })}
+          >
+            <ArrowDown width={20} height={20} />
+          </div>
         </div>
         <div
           className={cn('hidden max-w-4xl pt-5 text-left text-gray-800', {

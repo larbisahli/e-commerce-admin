@@ -367,6 +367,7 @@ export interface Product extends CreatedUpdatedByAt {
   disableOutOfStock?: Scalars['Boolean'];
   freeShipping?: Scalars['Boolean'];
   displayProductMeasurements?: Scalars['Boolean'];
+  includeInHomepage?: Scalars['Boolean'];
   translated?: {
     name?: Scalars['String'];
     description?: Nullable<Scalars['String']>;
@@ -519,17 +520,25 @@ export interface HeroBannerType extends CreatedUpdatedByAt {
   status?: 'draft' | 'publish';
 }
 
+export interface TaxCountryType {
+  id?: Scalars['Int'];
+  name?: Scalars['String'];
+  iso2?: Scalars['String'];
+  rate?: Scalars['Int'];
+  appliesTo?: {
+    zipCode: string;
+    zipCodeRange: string;
+    entireCountry: boolean;
+    state: string;
+  };
+}
+
 export interface TaxType extends CreatedUpdatedByAt {
   id?: Scalars['Int'];
   name?: Scalars['String'];
   rate?: Scalars['Int'];
   isDefault?: Scalars['Boolean'];
-  countries?: {
-    id?: Scalars['Int'];
-    name?: Scalars['String'];
-    iso2?: Scalars['String'];
-    rate?: Scalars['Int'];
-  }[];
+  countries?: TaxCountryType[];
 }
 
 export interface PromoBannerType extends CreatedUpdatedByAt {
