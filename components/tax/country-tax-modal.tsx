@@ -37,7 +37,7 @@ const CountryTaxModal = ({ state, setState, countries }) => {
   }, [meta, state?.countries]);
 
   const onCloseSave = () => {
-    if (!rate.iso2) {
+    if (!rate?.iso2) {
       closeModal(PRODUCT_MODAL, id);
       return;
     }
@@ -124,6 +124,7 @@ const CountryTaxModal = ({ state, setState, countries }) => {
             <Select
               value={rate}
               name="country"
+              placeholder='Select'
               getOptionLabel={(option: any) => option.name}
               getOptionValue={(option: any) => option.iso2}
               onChange={(country: any) => {
@@ -144,7 +145,7 @@ const CountryTaxModal = ({ state, setState, countries }) => {
               isRequiredLabel
               name="rate"
               type="number"
-              value={rate.rate}
+              value={rate?.rate}
               min={0}
               max={100}
               onChange={handleChange}

@@ -404,38 +404,38 @@ export const siteSettings = {
       //     }
       //   ]
       // },
-      {
-        id: '1239XCO',
-        href: ROUTES.COMING_SOON,
-        label: 'sidebar-nav-item-blogs',
-        icon: 'BlogIcon',
-        subLinks: [
-          {
-            id: '12WaIACaCI',
-            href: ROUTES.COMING_SOON,
-            label: 'sidebar-nav-item-posts',
-            padding: '35px',
-            isSubLink: true,
-            disabled: true
-          },
-          {
-            id: 'WaIRCaXCI',
-            href: ROUTES.COMING_SOON,
-            label: 'sidebar-nav-item-categories',
-            padding: '35px',
-            isSubLink: true,
-            disabled: true
-          },
-          {
-            id: 'WaIECaCI',
-            href: ROUTES.COMING_SOON,
-            label: 'sidebar-nav-item-comments',
-            padding: '35px',
-            isSubLink: true,
-            disabled: true
-          }
-        ]
-      },
+      // {
+      //   id: '1239XCO',
+      //   href: ROUTES.COMING_SOON,
+      //   label: 'sidebar-nav-item-blogs',
+      //   icon: 'BlogIcon',
+      //   subLinks: [
+      //     {
+      //       id: '12WaIACaCI',
+      //       href: ROUTES.COMING_SOON,
+      //       label: 'sidebar-nav-item-posts',
+      //       padding: '35px',
+      //       isSubLink: true,
+      //       disabled: true
+      //     },
+      //     {
+      //       id: 'WaIRCaXCI',
+      //       href: ROUTES.COMING_SOON,
+      //       label: 'sidebar-nav-item-categories',
+      //       padding: '35px',
+      //       isSubLink: true,
+      //       disabled: true
+      //     },
+      //     {
+      //       id: 'WaIECaCI',
+      //       href: ROUTES.COMING_SOON,
+      //       label: 'sidebar-nav-item-comments',
+      //       padding: '35px',
+      //       isSubLink: true,
+      //       disabled: true
+      //     }
+      //   ]
+      // },
       {
         id: 'JU99uXy',
         href: '#',

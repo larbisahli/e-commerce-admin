@@ -521,7 +521,6 @@ export interface HeroBannerType extends CreatedUpdatedByAt {
 }
 
 export interface TaxCountryType {
-  id?: Scalars['Int'];
   name?: Scalars['String'];
   iso2?: Scalars['String'];
   rate?: Scalars['Int'];

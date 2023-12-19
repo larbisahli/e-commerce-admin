@@ -45,44 +45,21 @@ const TaxList = ({ loading, taxes, selectedColumns }: IProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
-          return name;
+          return <span className='font-heading text-gray-900'>{name}</span>;
         }
       },
       {
         title: t('table:table-item-tax-rate'),
         dataIndex: 'rate',
         key: 'rate',
-        align: alignLeft,
-        width: 250,
+        align: 'center',
+        width: 80,
         ellipsis: true,
         render: (taxRate: string, record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
-          return taxRate;
-        }
-      },
-      {
-        title: t('table:table-item-status'),
-        dataIndex: 'isDefault',
-        key: 'isDefault',
-        align: 'center',
-        width: 120,
-        ellipsis: true,
-        render: (isDefault: number, record: TableRowProps) => {
-          if (record?.loading) {
-            return <TableRowPlaceholder />;
-          }
-          if (isDefault) {
-            return (
-              <Badge
-                className="!text-sm !text-gray-600"
-                text={'Default'}
-                color={'bg-green-200'}
-              />
-            );
-          }
-          return null;
+          return <span className='font-medium'>{taxRate}%</span>
         }
       },
       {
@@ -90,7 +67,7 @@ const TaxList = ({ loading, taxes, selectedColumns }: IProps) => {
         dataIndex: 'createdAt',
         key: 'createdAt',
         align: alignLeft,
-        width: 180,
+        width: 150,
         render: (
           createdAt: CreatedUpdatedByAt['createdAt'],
           record: TableRowProps

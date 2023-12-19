@@ -4,7 +4,7 @@ import {
   useModalAction,
   useModalState
 } from '@components/ui/modal/modal.context';
-import { DELETE_HERO_SLIDE } from '@graphql/hero-banner';
+import { DELETE_TAX } from '@graphql/tax';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetUser } from '@hooks/useGetUser';
 import { notify } from '@lib/notify';
@@ -19,15 +19,14 @@ const SliderDeleteView = () => {
   const { userInfo } = useGetUser();
   const csrfToken = userInfo?.csrfToken;
 
-  const [deleteSlide, { loading }] = useMutation(DELETE_HERO_SLIDE, {
+  const [deleteTax, { loading }] = useMutation(DELETE_TAX, {
     context: {
       headers: {
         'x-csrf-token': csrfToken
       }
     },
     refetchQueries: [
-      // HERO_CAROUSEL_LIST,
-      'HeroCarouselList' // Query name
+      'Taxes' // Query name
     ]
   });
 
@@ -37,10 +36,10 @@ const SliderDeleteView = () => {
   useErrorLogger(error);
 
   async function handleDelete() {
-    deleteSlide({ variables: { id } })
+    deleteTax({ variables: { id } })
       .then(({ data }) => {
         const {
-          deleteHeroSlide: { id }
+          deleteTax: { id }
         } = data;
         if (id) {
           notify(t('common:successfully-deleted'), 'success');

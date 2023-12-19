@@ -1,28 +1,24 @@
 import { gql } from '@apollo/client';
 
-export const TAGS = gql`
-  query Tags(
+export const TAXES = gql`
+  query Taxes(
     $page: Int!
     $limit: Int!
     $orderBy: String!
     $sortedBy: String!
-    $language: LanguageInput!
   ) {
-    tagCount {
+    taxCount {
       count
     }
-    tags(
+    taxes(
       page: $page
       limit: $limit
       orderBy: $orderBy
       sortedBy: $sortedBy
-      language: $language
     ) {
       id
       name
-      translated {
-        name
-      }
+      rate
       createdAt
       updatedAt
       createdBy {
@@ -39,13 +35,25 @@ export const TAGS = gql`
   }
 `;
 
-export const TAG = gql`
-  query Tag($id: Int!, $language: LanguageInput!) {
-    tag(id: $id, language: $language) {
+export const TAX = gql`
+  query Tax($id: Int!) {
+    tax(id: $id) {
       id
       name
-      translated {
+      rate
+      countries {
+        iso2
         name
+        rate
+        appliesTo {
+          zipCode
+          zipCodeRange {
+            from
+            to
+          }
+          entireCountry
+          state
+        }
       }
     }
   }
@@ -60,25 +68,43 @@ export const TAX_FOR_SELECT = gql`
   }
 `;
 
-export const CREATE_TAG = gql`
-  mutation CreateTag($name: String!, $language: LanguageInput!) {
-    createTag(name: $name, language: $language) {
+export const CREATE_TAX = gql`
+  mutation CreateTax(
+    $name: String!
+    $rate: Int!
+    $countries: [TaxedCountriesInput]
+    ) {
+    createTax(
+      name: $name,
+      rate: $rate
+      countries: $countries
+      ) {
       id
     }
   }
 `;
 
-export const UPDATE_TAG = gql`
-  mutation UpdateTag($id: Int!, $name: String!, $language: LanguageInput!) {
-    updateTag(id: $id, name: $name, language: $language) {
+export const UPDATE_TAX = gql`
+  mutation UpdateTax(
+    $id: Int!,
+    $name: String!
+    $rate: Int!
+    $countries: [TaxedCountriesInput]
+    ) {
+    updateTax(
+      id: $id,
+      name: $name,
+      rate: $rate
+      countries: $countries
+      ) {
       id
     }
   }
 `;
 
-export const DELETE_TAG = gql`
-  mutation DeleteTag($id: Int!) {
-    deleteTag(id: $id) {
+export const DELETE_TAX = gql`
+  mutation DeleteTax($id: Int!) {
+    deleteTax(id: $id) {
       id
     }
   }

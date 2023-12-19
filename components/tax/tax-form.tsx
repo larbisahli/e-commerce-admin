@@ -7,17 +7,15 @@ import Description from '@components/ui/description';
 import Input from '@components/ui/input';
 import Label from '@components/ui/label';
 import { useModalAction } from '@components/ui/modal/modal.context';
-import { CREATE_HERO_SLIDE, UPDATE_HERO_SLIDE } from '@graphql/hero-banner';
+import { CREATE_TAX, UPDATE_TAX } from '@graphql/tax';
 import {
   useErrorLogger,
   useGetUser,
   useWarnIfUnsavedChanges
 } from '@hooks/index';
-import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/index';
 import { TAX_MODAL } from '@ts-types/constants';
 import type { TaxType } from '@ts-types/generated';
-import { SaveOptions } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import { translationFallback } from '@utils/utils';
 import isEmpty from 'lodash/isEmpty';
@@ -28,8 +26,6 @@ import React from 'react';
 
 import CountryTaxModal from './country-tax-modal';
 import TaxCountryList from './tax-country-list';
-
-type FormValues = TaxType;
 
 type IProps = {
   initialValues?: TaxType | any;
@@ -43,52 +39,39 @@ export default function CreateOrUpdateTaxForm({ initialValues }: IProps) {
   const [unsavedChanges, setUnsavedChanges] = useState(true);
   const [countries, setCountries] = useState([]);
 
-  const [saveMode, setSaveMode] = useState<SaveOptions>(SaveOptions.Default);
-
   const [state, setState] = useState({
     name: null,
     rate: 0,
     countries: []
   });
 
-  console.log({ state });
-
   const { openModal } = useModalAction();
 
   const { userInfo } = useGetUser();
   const csrfToken = userInfo?.csrfToken;
 
-  const [createTaxRate, { loading: creating, reset: resetCreateMutation }] =
-    useMutation(CREATE_HERO_SLIDE, {
+  useEffect(()=>{
+    if(!isEmpty(initialValues)){
+      setState(initialValues)
+    }
+  }, [initialValues])
+
+  const [createTaxRate, { loading: creating }] =
+    useMutation(CREATE_TAX, {
       context: {
         headers: {
           'x-csrf-token': csrfToken
         }
       },
       onCompleted: (data: { createTax: TaxType }) => {
-        const { id } = data.createTax;
-        if (!id) {
-          return;
+        if (!isEmpty(data.createTax)) {
+          notify(t('common:successfully-created'), 'success');
+          router.push(ROUTES.TAX);
         }
-        if (saveMode === SaveOptions.Default) {
-          notify(t('common:successfully-created'), 'success');
-          router.push(`${ROUTES.HERO_BANNER}/edit/${id}`);
-        } else if (saveMode === SaveOptions.SaveClose) {
-          notify(t('common:successfully-created'), 'success');
-          router.push(ROUTES.HERO_BANNER);
-        } else if (saveMode === SaveOptions.SaveNew) {
-          notify(t('common:successfully-created'), 'success');
-          router.push(`${ROUTES.HERO_BANNER}/create`);
-        } else if (saveMode === SaveOptions.SaveDuplicate) {
-          notify(t('common:successfully-created'), 'success');
-          router.push(`${ROUTES.HERO_BANNER}/fork/${id}`);
-        }
-
-        setSaveMode(SaveOptions.Default);
       }
     });
-  const [updateTaxRate, { loading: updating, reset: resetUpdateMutation }] =
-    useMutation(UPDATE_HERO_SLIDE, {
+  const [updateTaxRate, { loading: updating}] =
+    useMutation(UPDATE_TAX, {
       context: {
         headers: {
           'x-csrf-token': csrfToken
@@ -97,6 +80,7 @@ export default function CreateOrUpdateTaxForm({ initialValues }: IProps) {
       onCompleted: (data: { UpdateTax: TaxType }) => {
         if (!isEmpty(data)) {
           notify(t('common:successfully-updated'), 'success');
+          router.push(ROUTES.TAX);
         }
       }
     });
@@ -105,25 +89,30 @@ export default function CreateOrUpdateTaxForm({ initialValues }: IProps) {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    const variables = { ...state };
-
-    console.log({ variables });
-
-    return;
+    const variables = {
+      ...state,
+      rate: Number(state?.rate ?? 0),
+      countries: state?.countries?.map((country)=>{
+        return {
+          iso2: country.iso2,
+          name: country.name,
+          rate: country.rate,
+          appliesTo: country.appliesTo
+        }
+      })
+     };
 
     setUnsavedChanges(false);
     if (isEmpty(initialValues)) {
-      createHeroSlider({ variables }).catch((err) => {
+      createTaxRate({ variables }).catch((err) => {
         setError(err);
-        resetCreateMutation();
       });
     } else {
       const { id = null } = initialValues as TaxType;
-      updateHeroSlider({
+      updateTaxRate({
         variables: { id, ...variables }
       }).catch((err) => {
         setError(err);
-        resetUpdateMutation();
       });
     }
   };
@@ -205,7 +194,6 @@ export default function CreateOrUpdateTaxForm({ initialValues }: IProps) {
               'Enter a title'
             )}
           />
-
           <Input
             label={`${t('form:input-label-tax-rate')} (%)`}
             isRequiredLabel
@@ -218,14 +206,6 @@ export default function CreateOrUpdateTaxForm({ initialValues }: IProps) {
             variant="outline"
             className="mb-5"
           />
-          <div>
-            <Checkbox
-              name="isDefault"
-              onChange={handleChange}
-              label={t('form:input-label-use-as-default')}
-              className="mb-2"
-            />
-          </div>
         </Card>
       </div>
       <div className="my-5 flex flex-wrap sm:my-8">

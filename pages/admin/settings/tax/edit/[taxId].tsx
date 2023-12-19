@@ -2,12 +2,12 @@ import { useQuery } from '@apollo/client';
 import { PageFormPlaceholder } from '@components/common/commonComponents';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
-import { HERO_SLIDE } from '@graphql/hero-banner';
+import { TAX } from '@graphql/tax';
 import { useErrorLogger, useGetUser } from '@hooks/index';
 import { useSettings } from '@hooks/useSettings';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
-import { LanguageProps, SSRProps } from '@ts-types/custom.types';
-import { HeroBannerType } from '@ts-types/generated';
+import { SSRProps } from '@ts-types/custom.types';
+import { TaxType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import { isEmpty } from 'lodash';
 import type { GetServerSideProps } from 'next';
@@ -16,40 +16,40 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-const CreateOrUpdateSlideForm = dynamic(
-  () => import('@components/hero-banner/hero-slide-form'),
-  { ssr: true, loading: () => <PageFormPlaceholder /> }
+const CreateOrUpdateTaxForm = dynamic(
+  () => import('@components/tax/tax-form'),
+  { ssr: true }
 );
 
 interface THeroSlider {
-  heroSlide: HeroBannerType;
+  tax: TaxType;
 }
-interface OptionsVariable extends LanguageProps {
+interface OptionsVariable {
   id: number;
 }
 
-export default function UpdateHeroSliderPage({ client }: SSRProps) {
+export default function UpdateTaxPage({ client }: SSRProps) {
   const { query } = useRouter();
 
-  const sliderId = parseInt(query.sliderId as string, 10);
+  const taxId = parseInt(query.taxId as string, 10);
 
   const { selectedLanguage } = useSettings();
 
   const { data, loading, error } = useQuery<THeroSlider, OptionsVariable>(
-    HERO_SLIDE,
+    TAX,
     {
-      variables: { id: sliderId, language: selectedLanguage },
+      variables: { id: taxId },
       fetchPolicy: 'cache-and-network',
       skip: isEmpty(selectedLanguage)
     }
   );
 
-  const { heroSlide = [] } = data ?? {};
+  const { tax = {}} = data ?? {};
 
   useGetUser(client);
   useErrorLogger(error);
 
-  if (isEmpty(heroSlide) || loading) {
+  if (isEmpty(tax) || loading) {
     return <PageFormPlaceholder />;
   }
 
@@ -60,20 +60,20 @@ export default function UpdateHeroSliderPage({ client }: SSRProps) {
   return (
     <>
       <Head>
-        <title>Edit hero slider | Dropgala</title>
+        <title>Edit Tax | Dropgala</title>
         <link
           rel="icon"
           type="image/svg"
           sizes="32x32"
-          href="/svg/slider.svg"
+          href="/svg/tax.svg"
         />
       </Head>
-      <CreateOrUpdateSlideForm initialValues={heroSlide} />
+      <CreateOrUpdateTaxForm initialValues={tax} />
     </>
   );
 }
 
-UpdateHeroSliderPage.Layout = AppLayout;
+UpdateTaxPage.Layout = AppLayout;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { locale } = context;

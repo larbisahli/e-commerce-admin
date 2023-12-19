@@ -107,6 +107,7 @@ const TaxCountryList = ({ taxedCountries, setState }: IProps) => {
       columns={columns}
       emptyText={t('table:empty-table-data')}
       data={taxedCountries}
+      scroll={{ x: 600 }}
       rowKey="id"
       className="card mb-6 overflow-hidden"
     />

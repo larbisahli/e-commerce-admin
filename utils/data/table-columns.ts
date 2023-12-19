@@ -118,6 +118,7 @@ export const COLUMNS = {
     { label: 'Name', key: 'name' },
     { label: 'Tax rate', key: 'rate' },
     { label: 'Default', key: 'isDefault' },
+    { label: 'Creation Date', key: 'createdAt' },
     { label: 'Placed By', key: 'createdBy' },
     { label: 'Updated By', key: 'updatedBy' },
     { label: 'Actions', key: 'actions' }

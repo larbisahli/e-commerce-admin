@@ -2,7 +2,9 @@ import AdminLineIcon from '@components/icons/admin-line';
 import AnalyticsIcon from '@components/icons/analytics';
 import CurrencyConvertIcon from '@components/icons/currency-convert';
 import ExpressCheckoutIcon from '@components/icons/express-checkout';
+import GoogleAnalyticsIcon from '@components/icons/google-analytics';
 import LanguagesIcon from '@components/icons/languages';
+import MediaIcon from '@components/icons/media';
 import PluginIcon from '@components/icons/plugin';
 import PwaIcon from '@components/icons/pwa';
 import ThemeIcon from '@components/icons/pwa copy';
@@ -149,6 +151,22 @@ const FeatureSection = () => {
         {/*  */}
         <div className="min-h-[270px] rounded-lg border bg-white shadow">
           <div className=" flex flex-col items-center justify-center p-4">
+            <div className="py-3 text-gray-800">
+              <MediaIcon />
+            </div>
+            <div className="pt-1 text-center font-medium">
+             Managing Media
+            </div>
+            <div className="pt-5 text-center text-gray-700">
+              <p>
+              Organize your product media by creating a folder hierarchy for professional picture management, allowing easy reuse across your store.
+              </p>
+            </div>
+          </div>
+        </div>
+        {/*  */}
+        <div className="min-h-[270px] rounded-lg border bg-white shadow">
+          <div className=" flex flex-col items-center justify-center p-4">
             <div className="py-3 text-gray-700">
               <UpSellIcon />
             </div>
@@ -172,6 +190,20 @@ const FeatureSection = () => {
               <p>
                 Boost your rankings and analyze your traffic with powerful tools
                 to quickly scale your ecommerce business.
+              </p>
+            </div>
+          </div>
+        </div>
+        {/*  */}
+        <div className="min-h-[270px] rounded-lg border bg-white shadow">
+          <div className=" flex flex-col items-center justify-center p-4">
+            <div className="py-3 text-gray-700">
+              <GoogleAnalyticsIcon />
+            </div>
+            <div className="pt-1 text-center font-medium">Integrate Advanced Google Analytics</div>
+            <div className="pt-5 text-center text-gray-700">
+              <p>
+              By incorporating Google Analytics into your store, you can monitor visitor interactions, orders, checkout, products, and beyond.
               </p>
             </div>
           </div>

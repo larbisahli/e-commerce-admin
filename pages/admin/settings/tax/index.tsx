@@ -2,13 +2,14 @@ import { useQuery } from '@apollo/client';
 import AppLayout from '@components/layouts/app';
 import TaxList from '@components/tax/tax-list';
 import ErrorMessage from '@components/ui/error-message';
-import { HERO_BANNER_LIST } from '@graphql/hero-banner';
+import { TAXES } from '@graphql/tax';
 import { useErrorLogger, useGetUser } from '@hooks/index';
 import { useSettings } from '@hooks/useSettings';
 import { useTableColumn } from '@hooks/useTableColumn';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { LanguageProps, SSRProps } from '@ts-types/custom.types';
-import { HeroBannerType } from '@ts-types/generated';
+import { OrderBy, SortOrder } from '@ts-types/enums';
+import { HeroBannerType, TaxType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import isEmpty from 'lodash/isEmpty';
 import type { GetServerSideProps } from 'next';
@@ -16,6 +17,7 @@ import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useState } from 'react';
 
 const PageMainAction = dynamic(
   () => import('@components/common/PageMainAction'),
@@ -26,36 +28,37 @@ const PageMainAction = dynamic(
 );
 
 interface THeroBanner {
-  taxes: HeroBannerType[];
+  taxes: TaxType[];
   taxCount: { count: number };
 }
 
-interface OptionsVariable extends LanguageProps {
+interface OptionsVariable {
   page: number;
   limit: number;
+  orderBy: OrderBy;
+  sortedBy: SortOrder;
 }
 
 export default function HeroBanner({ client }: SSRProps) {
   const { t } = useTranslation();
 
+  const [orderBy, setOrder] = useState(OrderBy.CREATED_AT);
   const { selectedTableColumns } = useTableColumn('tax');
 
-  const { selectedLanguage } = useSettings();
-
   const { data, loading, error } = useQuery<THeroBanner, OptionsVariable>(
-    HERO_BANNER_LIST,
+    TAXES,
     {
       variables: {
         page: 1,
         limit: 999,
-        language: selectedLanguage
+        orderBy,
+        sortedBy: SortOrder.Desc,
       },
       fetchPolicy: 'cache-and-network',
-      skip: isEmpty(selectedLanguage)
     }
   );
 
-  const { taxes = [], taxCount: { count } = { count: 0 } } = data ?? {};
+  const { taxes = [], taxCount: { count } = {count:0} } = data ?? {};
 
   useGetUser(client);
   useErrorLogger(error);
@@ -71,6 +74,8 @@ export default function HeroBanner({ client }: SSRProps) {
         <link rel="icon" type="image/svg" sizes="32x32" href="/svg/tax.svg" />
       </Head>
       <PageMainAction
+        showSelectLanguage={false}
+        hideBorder
         href={`${ROUTES.TAX}/create`}
         title={t('form:input-label-Tax')}
         label={t('form:input-label-Tax')}
