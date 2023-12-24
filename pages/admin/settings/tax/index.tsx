@@ -52,13 +52,13 @@ export default function HeroBanner({ client }: SSRProps) {
         page: 1,
         limit: 999,
         orderBy,
-        sortedBy: SortOrder.Desc,
+        sortedBy: SortOrder.Desc
       },
-      fetchPolicy: 'cache-and-network',
+      fetchPolicy: 'cache-and-network'
     }
   );
 
-  const { taxes = [], taxCount: { count } = {count:0} } = data ?? {};
+  const { taxes = [], taxCount: { count } = { count: 0 } } = data ?? {};
 
   useGetUser(client);
   useErrorLogger(error);

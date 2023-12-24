@@ -1,5 +1,6 @@
 import AdminLineIcon from '@components/icons/admin-line';
 import AnalyticsIcon from '@components/icons/analytics';
+import AbandonedCartIcon from '@components/icons/cart';
 import CurrencyConvertIcon from '@components/icons/currency-convert';
 import ExpressCheckoutIcon from '@components/icons/express-checkout';
 import GoogleAnalyticsIcon from '@components/icons/google-analytics';
@@ -154,12 +155,12 @@ const FeatureSection = () => {
             <div className="py-3 text-gray-800">
               <MediaIcon />
             </div>
-            <div className="pt-1 text-center font-medium">
-             Managing Media
-            </div>
+            <div className="pt-1 text-center font-medium">Managing Media</div>
             <div className="pt-5 text-center text-gray-700">
               <p>
-              Organize your product media by creating a folder hierarchy for professional picture management, allowing easy reuse across your store.
+                Organize your product media by creating a folder hierarchy for
+                professional picture management, allowing easy reuse across your
+                store.
               </p>
             </div>
           </div>
@@ -175,6 +176,22 @@ const FeatureSection = () => {
               <p>
                 Up-sell and cross-sell with a single click to drive more revenue
                 and enhance your customers’ shopping experience.
+              </p>
+            </div>
+          </div>
+        </div>
+        {/*  */}
+        <div className="min-h-[270px] rounded-lg border bg-white shadow">
+          <div className=" flex flex-col items-center justify-center p-4">
+            <div className="py-3 text-gray-700">
+              <AbandonedCartIcon />
+            </div>
+            <div className="pt-1 text-center font-medium">Abandoned Carts</div>
+            <div className="pt-5 text-center text-gray-700">
+              <p>
+                Recover lost sales by reaching out to customers who've abandoned
+                their carts. Remind them what's in their cart and take them back
+                to the checkout page.
               </p>
             </div>
           </div>
@@ -200,10 +217,14 @@ const FeatureSection = () => {
             <div className="py-3 text-gray-700">
               <GoogleAnalyticsIcon />
             </div>
-            <div className="pt-1 text-center font-medium">Integrate Advanced Google Analytics</div>
+            <div className="pt-1 text-center font-medium">
+              Integrate Advanced Google Analytics
+            </div>
             <div className="pt-5 text-center text-gray-700">
               <p>
-              By incorporating Google Analytics into your store, you can monitor visitor interactions, orders, checkout, products, and beyond.
+                By incorporating Google Analytics into your store, you can
+                monitor visitor interactions, orders, checkout, products, and
+                beyond.
               </p>
             </div>
           </div>

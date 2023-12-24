@@ -35,16 +35,13 @@ export default function UpdateTaxPage({ client }: SSRProps) {
 
   const { selectedLanguage } = useSettings();
 
-  const { data, loading, error } = useQuery<THeroSlider, OptionsVariable>(
-    TAX,
-    {
-      variables: { id: taxId },
-      fetchPolicy: 'cache-and-network',
-      skip: isEmpty(selectedLanguage)
-    }
-  );
+  const { data, loading, error } = useQuery<THeroSlider, OptionsVariable>(TAX, {
+    variables: { id: taxId },
+    fetchPolicy: 'cache-and-network',
+    skip: isEmpty(selectedLanguage)
+  });
 
-  const { tax = {}} = data ?? {};
+  const { tax = {} } = data ?? {};
 
   useGetUser(client);
   useErrorLogger(error);
@@ -61,12 +58,7 @@ export default function UpdateTaxPage({ client }: SSRProps) {
     <>
       <Head>
         <title>Edit Tax | Dropgala</title>
-        <link
-          rel="icon"
-          type="image/svg"
-          sizes="32x32"
-          href="/svg/tax.svg"
-        />
+        <link rel="icon" type="image/svg" sizes="32x32" href="/svg/tax.svg" />
       </Head>
       <CreateOrUpdateTaxForm initialValues={tax} />
     </>

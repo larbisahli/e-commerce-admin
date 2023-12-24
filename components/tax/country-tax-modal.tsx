@@ -124,7 +124,7 @@ const CountryTaxModal = ({ state, setState, countries }) => {
             <Select
               value={rate}
               name="country"
-              placeholder='Select'
+              placeholder="Select"
               getOptionLabel={(option: any) => option.name}
               getOptionValue={(option: any) => option.iso2}
               onChange={(country: any) => {

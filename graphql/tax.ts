@@ -10,12 +10,7 @@ export const TAXES = gql`
     taxCount {
       count
     }
-    taxes(
-      page: $page
-      limit: $limit
-      orderBy: $orderBy
-      sortedBy: $sortedBy
-    ) {
+    taxes(page: $page, limit: $limit, orderBy: $orderBy, sortedBy: $sortedBy) {
       id
       name
       rate
@@ -73,12 +68,8 @@ export const CREATE_TAX = gql`
     $name: String!
     $rate: Int!
     $countries: [TaxedCountriesInput]
-    ) {
-    createTax(
-      name: $name,
-      rate: $rate
-      countries: $countries
-      ) {
+  ) {
+    createTax(name: $name, rate: $rate, countries: $countries) {
       id
     }
   }
@@ -86,17 +77,12 @@ export const CREATE_TAX = gql`
 
 export const UPDATE_TAX = gql`
   mutation UpdateTax(
-    $id: Int!,
+    $id: Int!
     $name: String!
     $rate: Int!
     $countries: [TaxedCountriesInput]
-    ) {
-    updateTax(
-      id: $id,
-      name: $name,
-      rate: $rate
-      countries: $countries
-      ) {
+  ) {
+    updateTax(id: $id, name: $name, rate: $rate, countries: $countries) {
       id
     }
   }

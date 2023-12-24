@@ -50,40 +50,38 @@ export default function CreateOrUpdateTaxForm({ initialValues }: IProps) {
   const { userInfo } = useGetUser();
   const csrfToken = userInfo?.csrfToken;
 
-  useEffect(()=>{
-    if(!isEmpty(initialValues)){
-      setState(initialValues)
+  useEffect(() => {
+    if (!isEmpty(initialValues)) {
+      setState(initialValues);
     }
-  }, [initialValues])
+  }, [initialValues]);
 
-  const [createTaxRate, { loading: creating }] =
-    useMutation(CREATE_TAX, {
-      context: {
-        headers: {
-          'x-csrf-token': csrfToken
-        }
-      },
-      onCompleted: (data: { createTax: TaxType }) => {
-        if (!isEmpty(data.createTax)) {
-          notify(t('common:successfully-created'), 'success');
-          router.push(ROUTES.TAX);
-        }
+  const [createTaxRate, { loading: creating }] = useMutation(CREATE_TAX, {
+    context: {
+      headers: {
+        'x-csrf-token': csrfToken
       }
-    });
-  const [updateTaxRate, { loading: updating}] =
-    useMutation(UPDATE_TAX, {
-      context: {
-        headers: {
-          'x-csrf-token': csrfToken
-        }
-      },
-      onCompleted: (data: { UpdateTax: TaxType }) => {
-        if (!isEmpty(data)) {
-          notify(t('common:successfully-updated'), 'success');
-          router.push(ROUTES.TAX);
-        }
+    },
+    onCompleted: (data: { createTax: TaxType }) => {
+      if (!isEmpty(data.createTax)) {
+        notify(t('common:successfully-created'), 'success');
+        router.push(ROUTES.TAX);
       }
-    });
+    }
+  });
+  const [updateTaxRate, { loading: updating }] = useMutation(UPDATE_TAX, {
+    context: {
+      headers: {
+        'x-csrf-token': csrfToken
+      }
+    },
+    onCompleted: (data: { UpdateTax: TaxType }) => {
+      if (!isEmpty(data)) {
+        notify(t('common:successfully-updated'), 'success');
+        router.push(ROUTES.TAX);
+      }
+    }
+  });
 
   useErrorLogger(error);
 
@@ -92,15 +90,15 @@ export default function CreateOrUpdateTaxForm({ initialValues }: IProps) {
     const variables = {
       ...state,
       rate: Number(state?.rate ?? 0),
-      countries: state?.countries?.map((country)=>{
+      countries: state?.countries?.map((country) => {
         return {
           iso2: country.iso2,
           name: country.name,
           rate: country.rate,
           appliesTo: country.appliesTo
-        }
+        };
       })
-     };
+    };
 
     setUnsavedChanges(false);
     if (isEmpty(initialValues)) {

@@ -45,7 +45,7 @@ const TaxList = ({ loading, taxes, selectedColumns }: IProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
-          return <span className='font-heading text-gray-900'>{name}</span>;
+          return <span className="font-heading text-gray-900">{name}</span>;
         }
       },
       {
@@ -59,7 +59,7 @@ const TaxList = ({ loading, taxes, selectedColumns }: IProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
-          return <span className='font-medium'>{taxRate}%</span>
+          return <span className="font-medium">{taxRate}%</span>;
         }
       },
       {
