@@ -53,13 +53,13 @@ const OrderStatusList = ({
         ellipsis: true
       },
       {
-        title: t('table:table-item-title'),
-        dataIndex: 'name',
-        key: 'name',
+        title: t('table:table-item-label'),
+        dataIndex: 'label',
+        key: 'label',
         align: alignLeft,
         ellipsis: true,
-        width: 150,
-        render: (name: string, record: TableRowProps) => {
+        width: 200,
+        render: (label: string, record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
@@ -69,13 +69,13 @@ const OrderStatusList = ({
                        py-[5px] px-[10px] font-semibold capitalize shadow-md"
               style={{ color: record?.color }}
             >
-              {name ?? record?.translated?.name}
+              {label ?? record?.translated?.label}
             </span>
           );
         }
       },
       {
-        title: t('table:table-item-status'),
+        title: t('table:table-item-privacy'),
         dataIndex: 'privacy',
         key: 'privacy',
         align: alignLeft,

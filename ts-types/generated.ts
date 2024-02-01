@@ -251,11 +251,12 @@ export interface StoreViewType extends CreatedUpdatedByAt {
 
 export interface OrderStatus extends CreatedUpdatedByAt {
   id?: Nullable<Scalars['Int']>;
-  name?: Nullable<Scalars['String']>;
+  label?: Nullable<Scalars['String']>;
   color?: Nullable<Scalars['String']>;
+  status?: { value: string } | string;
   privacy?: PrivacyType;
   translated?: {
-    name: string;
+    label: string;
   };
 }
 

@@ -8,6 +8,7 @@ import Description from '@components/ui/description';
 import Input from '@components/ui/input';
 import Label from '@components/ui/label';
 import Radio from '@components/ui/radio';
+import SelectInput from '@components/ui/select-input';
 import {
   CREATE_ORDER_STATUS,
   UPDATE_ORDER_STATUS
@@ -28,14 +29,32 @@ import { useForm } from 'react-hook-form';
 
 import { orderStatusValidationSchema } from './order-status-validation-schema';
 
+const statuses = [
+  { value: 'processing', label: 'Processing' },
+  { value: 'canceled', label: 'Canceled' },
+  { value: 'closed', label: 'Closed' },
+  { value: 'complete', label: 'Complete' },
+  { value: 'fraud', label: 'Fraud' },
+  { value: 'held', label: 'Held' },
+  { value: 'pending', label: 'Pending' },
+  { value: 'payment_review', label: 'Payment Review' },
+  { value: 'pending_payment', label: 'Pending Payment' },
+  { value: 'payment_canceled', label: 'Payment Canceled' },
+  { value: 'paypal_canceled_reversal', label: 'Paypal Canceled Reversal' },
+  { value: 'paypal_reversed', label: 'Paypal Reversed' },
+  { value: 'pending_paypal', label: 'Pending Paypal' }
+];
+
 type FormValues = {
-  name: string;
+  label: string;
   color: string;
+  status: { value: string };
   privacy: PrivacyType;
 };
 const defaultValues = {
-  name: '',
+  label: '',
   privacy: PrivacyType.Private,
+  status: { value: 'processing', label: 'Processing' },
   color: '#9cd864'
 };
 export default function CreateOrUpdateOrderStatusForm({
@@ -57,7 +76,11 @@ export default function CreateOrUpdateOrderStatusForm({
   } = useForm<FormValues>({
     shouldUnregister: true,
     resolver: yupResolver(orderStatusValidationSchema),
-    defaultValues: initialValues ?? defaultValues
+    defaultValues:
+      {
+        ...initialValues,
+        status: statuses?.find((s) => s.value === initialValues?.status)
+      } ?? defaultValues
   });
 
   const { userInfo } = useGetUser();
@@ -103,7 +126,8 @@ export default function CreateOrUpdateOrderStatusForm({
     if (isEmpty(initialValues)) {
       createOrderStatus({
         variables: {
-          name: values.name,
+          label: values.label,
+          status: values.status.value,
           color: values.color,
           privacy: values.privacy,
           language: selectedLanguage
@@ -115,7 +139,8 @@ export default function CreateOrUpdateOrderStatusForm({
       updateOrderStatus({
         variables: {
           id: initialValues.id,
-          name: values.name,
+          label: values.label,
+          status: values.status.value,
           color: values.color,
           privacy: values.privacy,
           language: selectedLanguage
@@ -155,15 +180,25 @@ export default function CreateOrUpdateOrderStatusForm({
         />
 
         <Card className="w-full sm:w-8/12 md:w-2/3">
+          <div className="my-5">
+            <Label isRequiredLabel>{t('form:input-label-status')}</Label>
+            <SelectInput
+              name="status"
+              control={control}
+              getOptionLabel={(option: any) => option.label}
+              getOptionValue={(option: any) => option.value}
+              options={statuses}
+            />
+          </div>
           <Input
-            label={t('form:input-label-name')}
+            label={t('form:input-label')}
             isRequiredLabel
-            {...register('name')}
-            error={t(errors.name?.message!)}
+            {...register('label')}
+            error={t(errors.label?.message!)}
             placeholder={translationFallback(
               initialValues,
-              'name',
-              'Enter status name'
+              'label',
+              'Enter status label'
             )}
             variant="outline"
             className="mb-5"
@@ -188,7 +223,7 @@ export default function CreateOrUpdateOrderStatusForm({
             label={t('form:input-label-color')}
             {...register('color')}
             error={t(errors.color?.message!)}
-            className="mt-5"
+            className="mt-5 pb-10"
           >
             <DisplayColorCode control={control} />
           </ColorPicker>

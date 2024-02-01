@@ -1,10 +1,24 @@
 // TODO: Add translation
 export const COLUMNS = {
   'order-status': [
-    { label: 'Name', key: 'name' },
-    { label: 'Status', key: 'privacy' },
+    { label: 'Label', key: 'label' },
+    { label: 'Privacy', key: 'privacy' },
     { label: 'Creation Date', key: 'createdAt' },
     { label: 'Placed By', key: 'createdBy' },
+    { label: 'Last Updated By', key: 'updatedBy' },
+    { label: 'Actions', key: 'actions' }
+  ],
+  order: [
+    { label: 'Order ID', key: 'orderNumber' },
+    { label: 'Customer Name', key: 'customer' },
+    { label: 'Address', key: 'customer' },
+    { label: 'Payment Method', key: 'payment' },
+    { label: 'Grant Total', key: 'paymentCode' },
+    { label: 'Quantity', key: 'totalQuantity' },
+    { label: 'Order Status', key: 'orderStatus' },
+    { label: 'Payment Status', key: 'paymentStatus' }, // customer_is_guest
+    { label: 'Delivery Status', key: 'deliveryStatus' },
+    { label: 'Purchase Date', key: 'createdAt' },
     { label: 'Last Updated By', key: 'updatedBy' },
     { label: 'Actions', key: 'actions' }
   ],

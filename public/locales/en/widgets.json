@@ -1,7 +1,9 @@
 {
-  "sticker-card-title-rev": "Total Revenue",
+  "sticker-card-title-rev": "Revenue",
   "sticker-card-subtitle-rev": "(Last 30 Days)",
   "sticker-card-title-order": "Total Order",
+  "sticker-card-title-avg-order": "Avg Order Value",
+  "sticker-card-title-orders-paid": "Orders Paid",
   "sticker-card-subtitle-order": "(Last 30 Days)",
   "sticker-card-title-customer": "New Customer",
   "sticker-card-subtitle-customer": "(Last 30 Days)",

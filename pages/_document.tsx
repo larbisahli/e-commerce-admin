@@ -5,6 +5,7 @@ import Document, {
   Main,
   NextScript
 } from 'next/document';
+import Script from 'next/script';
 import { i18n } from 'next-i18next';
 
 export default class CustomDocument extends Document {
@@ -25,6 +26,7 @@ export default class CustomDocument extends Document {
             href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700&family=Mulish:wght@400;500;600;700&display=swap"
             rel="stylesheet"
           ></link>
+          {/* <Script src={`https://www.google.com/recaptcha/enterprise.js?render=${process.env.RECAPTCHA_SITE_KEY}`} /> */}
         </Head>
         <body dir={dir}>
           <Main />

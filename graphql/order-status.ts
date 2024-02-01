@@ -19,10 +19,10 @@ export const ORDER_STATUSES = gql`
       language: $language
     ) {
       id
-      name
+      label
       color
       translated {
-        name
+        label
       }
       privacy
       createdAt
@@ -45,10 +45,11 @@ export const ORDER_STATUS = gql`
   query GetOrderStatus($id: Int!, $language: LanguageInput!) {
     orderStatus(id: $id, language: $language) {
       id
-      name
+      label
       translated {
-        name
+        label
       }
+      status
       color
       privacy
     }
@@ -57,13 +58,15 @@ export const ORDER_STATUS = gql`
 
 export const CREATE_ORDER_STATUS = gql`
   mutation CreateOrderStatus(
-    $name: String!
+    $label: String!
+    $status: String!
     $color: String!
     $privacy: String!
     $language: LanguageInput!
   ) {
     createOrderStatus(
-      name: $name
+      label: $label
+      status: $status
       color: $color
       privacy: $privacy
       language: $language
@@ -76,14 +79,16 @@ export const CREATE_ORDER_STATUS = gql`
 export const UPDATE_ORDER_STATUS = gql`
   mutation UpdateOrderStatus(
     $id: Int!
-    $name: String!
+    $label: String!
+    $status: String!
     $color: String!
     $privacy: String!
     $language: LanguageInput!
   ) {
     updateOrderStatus(
       id: $id
-      name: $name
+      label: $label
+      status: $status
       color: $color
       privacy: $privacy
       language: $language

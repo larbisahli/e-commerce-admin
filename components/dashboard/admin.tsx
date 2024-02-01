@@ -37,8 +37,9 @@ export default function Dashboard() {
   //   }
   // );
 
-  const todays_revenue = '$20';
-  const total_revenue = '3,000 USD';
+  const totalOrdersPaid = '1,234';
+  const totalRevenue = '3,000 USD';
+  const totalOrders = '50 USD';
 
   // const {
   //   data: orderData,
@@ -173,81 +174,85 @@ export default function Dashboard() {
       <div className="mb-6 grid w-full grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
         <div className="w-full ">
           <StickerCard
-            titleTransKey="sticker-card-title-rev"
+            titleTransKey="Total Sales"
             subtitleTransKey="sticker-card-subtitle-rev"
-            icon={<DollarIcon className="h-7 w-7" color="#047857" />}
-            iconBgStyle={{ backgroundColor: '#A7F3D0' }}
-            price={total_revenue ?? '$90'}
+            indicator="up"
+            indicatorText="44%"
+            note=""
+            price={totalRevenue}
           />
         </div>
         <div className="w-full ">
           <StickerCard
-            titleTransKey="sticker-card-title-today-rev"
-            icon={<CoinIcon />}
-            price={todays_revenue}
+            titleTransKey="sticker-card-title-avg-order"
+            subtitleTransKey="sticker-card-subtitle-order"
+            indicator="down"
+            indicatorText="3%"
+            price={totalOrders}
           />
         </div>
         <div className="w-full ">
           <StickerCard
-            titleTransKey="sticker-card-title-order"
-            subcheckouttitleTransKey="sticker-card-subtitle-order"
-            icon={<CartIconBig />}
-            price={data?.totalOrders ?? '$29'}
+            titleTransKey="sticker-card-title-orders-paid"
+            subtitleTransKey="sticker-card-subtitle-order"
+            indicator="up"
+            indicatorText="23%"
+            price={totalOrdersPaid}
           />
         </div>
         <div className="w-full">
           <StickerCard
-            titleTransKey="Unique Customers"
-            icon={<UserIcon />}
-            iconBgStyle={{ backgroundColor: '#124ED8' }}
-            price={data?.totalShops ?? 343}
+            titleTransKey="Total Orders"
+            subtitleTransKey="sticker-card-subtitle-order"
+            indicator="down"
+            indicatorText="3%"
+            price={343}
           />
         </div>
       </div>
 
       <div className="mb-6 flex w-full flex-wrap">
-        <ColumnChart
-          widgetTitle="Sales History"
-          colors={['#03D3B5', '#124ED8', '#FFA500']}
-          series={salesByYear}
-          categories={[
-            t('common:january'),
-            t('common:february'),
-            t('common:march'),
-            t('common:april'),
-            t('common:may'),
-            t('common:june'),
-            t('common:july'),
-            t('common:august'),
-            t('common:september'),
-            t('common:october'),
-            t('common:november'),
-            t('common:december')
-          ]}
-        />
+        <div className="mb-6 w-full sm:px-3 sm:pl-0 xl:mb-0 xl:w-1/2">
+          <ColumnChart
+            widgetTitle="Sales History"
+            colors={['#03D3B5', '#124ED8', '#FFA500']}
+            series={salesByYear}
+            categories={[
+              t('common:january'),
+              t('common:february'),
+              t('common:march'),
+              t('common:april'),
+              t('common:may'),
+              t('common:june'),
+              t('common:july'),
+              t('common:august'),
+              t('common:september'),
+              t('common:october'),
+              t('common:november'),
+              t('common:december')
+            ]}
+          />
+        </div>
+
+        <div className="mb-6 w-full sm:px-3 sm:pl-0 xl:mb-0 xl:w-1/2">
+          <ColumnChart
+            widgetTitle="January Order History"
+            colors={['#03D3B5']}
+            series={januarySalesByYear}
+            categories={januarySalesByYear?.orders?.map((_, idx) => idx + 1)}
+          />
+        </div>
       </div>
 
       <div className="mb-6 flex w-full flex-wrap">
-        <ColumnChart
-          widgetTitle="January Order History"
-          colors={['#03D3B5']}
-          series={januarySalesByYear}
-          categories={januarySalesByYear?.orders?.map((_, idx) => idx + 1)}
-        />
-      </div>
-
-      <div className="mb-6 flex w-full flex-wrap">
-        <div className="mb-6 w-full sm:w-1/2 sm:px-3 sm:pl-0 xl:mb-0 xl:w-1/2">
+        <div className="mb-6 w-full sm:px-3 sm:pl-0 xl:mb-0 xl:w-1/2">
           <RecentOrders
             orders={orderData}
             title={t('table:recent-order-table-title')}
           />
         </div>
-        <div className="mb-6 w-full sm:w-1/2 sm:px-3 sm:pl-0 xl:mb-0 xl:w-1/2">
-          <RecentOrders
-            orders={orderData}
-            title={t('table:recent-order-table-title')}
-          />
+        <div className="mb-6 w-full sm:px-3 sm:pl-0 xl:mb-0 xl:w-1/2">
+          <RecentOrders orders={orderData} title={'Top Selling Products'} />
         </div>
 
         {/* <div className="w-full sm:w-1/2 xl:w-1/2 sm:px-3 sm:pr-0 mb-6 xl:mb-0">

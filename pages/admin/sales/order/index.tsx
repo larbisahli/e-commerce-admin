@@ -1,84 +1,161 @@
-import Card from '@components/common/card';
-import Search from '@components/common/search';
-import SortForm from '@components/common/sort-form';
+import { useQuery } from '@apollo/client';
 import AppLayout from '@components/layouts/app';
-import OrderList from '@components/order/order-list';
+import ShippingList from '@components/shipping-zone/shipping-list';
 import ErrorMessage from '@components/ui/error-message';
-import Loader from '@components/ui/loader/loader';
-// import { useOrdersQuery } from "@data/order/use-orders.query";
-import { SortOrder } from '@ts-types/generated';
+import { SHIPPING_ZONES } from '@graphql/shipping-zone';
+import { useGetUser } from '@hooks/index';
+import { useErrorLogger } from '@hooks/useErrorLogger';
+import { useTableColumn } from '@hooks/useTableColumn';
+import { verifyAuth } from '@middleware/utils';
+import type { SSRProps } from '@ts-types/custom.types';
+import type { ShippingZoneType } from '@ts-types/generated';
+import { OrderBy, SortOrder } from '@ts-types/generated';
+import { COLUMNS } from '@utils/data/table-columns';
+import { ROUTES } from '@utils/routes';
+import isEmpty from 'lodash/isEmpty';
+import type { GetServerSideProps } from 'next';
+import dynamic from 'next/dynamic';
+import Head from 'next/head';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useState } from 'react';
 
-export default function Orders() {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [page, setPage] = useState(1);
+const PageMainHeader = dynamic(
+  () => import('@components/common/page-main-header'),
+  {
+    ssr: true,
+    loading: () => <div className="animated-background h-[80px] w-full"></div>
+  }
+);
+
+const PageMainAction = dynamic(
+  () => import('@components/common/PageMainAction'),
+  {
+    ssr: true,
+    loading: () => <div className="animated-background h-[80px] w-full"></div>
+  }
+);
+
+interface TShipping {
+  shippingZones: ShippingZoneType[];
+  shippingZoneCount: { count: number };
+}
+
+interface ShippingVariable {
+  page: number;
+  limit: number;
+  orderBy: OrderBy;
+  sortedBy: SortOrder;
+}
+
+export default function ShippingZonesPage({ client }: SSRProps) {
   const { t } = useTranslation();
-  const [orderBy, setOrder] = useState('created_at');
-  const [sortedBy, setColumn] = useState<SortOrder>(SortOrder.Desc);
 
-  // const {
-  //   data,
-  //   isLoading: loading,
-  //   error,
-  // } = useOrdersQuery({
-  //   limit: 20,
-  //   page,
-  //   text: searchTerm,
-  // });
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState({ id: 1, value: 10, label: 10 });
+  const [orderBy, setOrder] = useState(OrderBy.CREATED_AT);
 
-  const data = [];
-  const loading = false;
-  const error = null;
+  const { selectedTableColumns, handleColumnChange } =
+    useTableColumn('shipping-zone');
 
-  if (loading) return <Loader text={t('common:text-loading')} />;
-  if (error) return <ErrorMessage message={error.message} />;
-  function handleSearch({ searchText }: { searchText: string }) {
-    setSearchTerm(searchText);
-    setPage(1);
-  }
-  function handlePagination(current: any) {
+  const { data, loading, error, fetchMore } = useQuery<
+    TShipping,
+    ShippingVariable
+  >(SHIPPING_ZONES, {
+    variables: {
+      page,
+      limit: limit.value,
+      orderBy,
+      sortedBy: SortOrder.Desc
+    },
+    fetchPolicy: 'cache-and-network'
+  });
+
+  const { shippingZones = [], shippingZoneCount: { count } = { count: 0 } } =
+    data ?? {};
+
+  useGetUser(client);
+  useErrorLogger(error);
+
+  const handlePagination = (current: number) => {
     setPage(current);
+    fetchMore({
+      variables: {
+        page: current,
+        limit: limit.value,
+        orderBy,
+        sortedBy: SortOrder.Desc
+      }
+    });
+  };
+
+  if (!isEmpty(error)) {
+    return <ErrorMessage message={error.message} />;
   }
+
   return (
     <>
-      <Card className="mb-8 flex flex-col items-center justify-between md:flex-row">
-        <div className="mb-4 md:mb-0 md:w-1/4">
-          <h1 className="pb-3 text-lg font-semibold text-heading">
-            {t('form:input-label-orders')}
-          </h1>
-        </div>
-
-        <div className="flex w-full flex-col items-center ms-auto md:w-3/4 md:flex-row">
-          <Search onSearch={handleSearch} />
-          <SortForm
-            showLabel={false}
-            className="mt-5 w-full flex-shrink-0 md:mt-0 md:w-1/2 md:ms-5"
-            onSortChange={({ value }: { value: SortOrder }) => {
-              setColumn(value);
-            }}
-            onOrderChange={({ value }: { value: string }) => {
-              setOrder(value);
-            }}
-            options={[
-              { value: 'total', label: 'Total' },
-              { value: 'created_at', label: 'Created At' },
-              { value: 'updated_at', label: 'Updated At' }
-            ]}
-          />
-        </div>
-      </Card>
-
-      <OrderList orders={data?.orders} onPagination={handlePagination} />
+      <Head>
+        <title>Orders | Dropgala</title>
+        <link
+          rel="icon"
+          type="image/svg"
+          sizes="32x32"
+          href="/svg/shippingZone.svg"
+        />
+      </Head>
+      <PageMainAction
+        href={`${ROUTES.ORDERS}/create`}
+        title={t('form:button-label-add-shipping-zone')}
+        label={t('form:input-label-shipping-zones')}
+        showSelectLanguage={false}
+      />
+      <PageMainHeader
+        columns={COLUMNS['shipping-zone']}
+        selectedColumns={selectedTableColumns}
+        handleColumnChange={handleColumnChange}
+        onLimitChange={(value) => {
+          setLimit(value);
+        }}
+        limit={limit}
+        onPagination={handlePagination}
+        total={count}
+        currentPage={page}
+        perPage={limit.value}
+      />
+      <ShippingList
+        loading={loading}
+        shippingZones={shippingZones}
+        selectedColumns={selectedTableColumns}
+      />
+      {/* <OrderList orders={data?.orders} onPagination={handlePagination} /> */}
     </>
   );
 }
+ShippingZonesPage.Layout = AppLayout;
 
-Orders.Layout = AppLayout;
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { locale } = context;
+  const { client } = await verifyAuth(context);
 
-export const getStaticProps = async ({ locale }: any) => ({
-  props: {
-    ...(await serverSideTranslations(locale, ['table', 'common', 'form']))
+  if (!client) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: ROUTES.LOGIN
+      }
+    };
   }
-});
+
+  return {
+    props: {
+      ...(await serverSideTranslations(locale!, [
+        'table',
+        'common',
+        'form',
+        'error'
+      ])),
+      client
+    }
+  };
+};
