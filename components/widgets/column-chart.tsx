@@ -1,5 +1,7 @@
 import { ArrowDown } from '@components/icons/arrow-down';
 import { ArrowUp } from '@components/icons/arrow-up';
+import { IosArrowDown } from '@components/icons/ios-arrow-down';
+import { IosArrowUp } from '@components/icons/ios-arrow-up';
 import Chart from '@components/ui/chart';
 import cn from 'classnames';
 
@@ -12,7 +14,8 @@ const BarChart = ({
   text,
   position,
   percentage,
-  categories
+  categories,
+  tooltip = {}
 }: any) => {
   const options = {
     options: {
@@ -21,9 +24,10 @@ const BarChart = ({
           show: false
         }
       },
+      tooltip: tooltip,
       plotOptions: {
         bar: {
-          columnWidth: '65%',
+          columnWidth: '75%',
           endingShape: 'flat'
         }
       },
@@ -31,6 +35,7 @@ const BarChart = ({
         enabled: false
       },
       stroke: {
+        curve: 'smooth',
         show: false,
         width: 2
       },
@@ -72,20 +77,7 @@ const BarChart = ({
         }
       }
     },
-    series: [
-      {
-        name: 'Sales',
-        data: series.sales
-      },
-      {
-        name: 'Revenue',
-        data: series.revenue
-      },
-      {
-        name: 'Orders',
-        data: series.orders
-      }
-    ]
+    series: series
   };
 
   return (
@@ -94,26 +86,34 @@ const BarChart = ({
         <h3 className="text-sm text-heading">{widgetTitle}</h3>
 
         <div className="flex flex-col">
-          <span className="text-lg font-semibold text-green-500">
+          <span className="text-lg font-semibold text-green-600">
             {prefix}
             {totalValue}
           </span>
 
           <div className="flex items-center">
             {position === 'up' && (
-              <span className="text-green-500">
-                <ArrowUp />
+              <span className="text-green-600">
+                <IosArrowUp
+                  width="12px"
+                  height="12px"
+                  className="inline-block"
+                />
               </span>
             )}
             {position === 'down' && (
-              <span className="text-red-400">
-                <ArrowDown />
+              <span className="text-red-600">
+                <IosArrowDown
+                  width="12px"
+                  height="12px"
+                  className="inline-block"
+                />
               </span>
             )}
             <span className="text-sm text-heading ms-1">
               <span
                 className={cn(
-                  position === 'down' ? 'text-red-400' : 'text-green-500'
+                  position === 'down' ? 'text-red-600' : 'text-green-600'
                 )}
               >
                 {percentage}

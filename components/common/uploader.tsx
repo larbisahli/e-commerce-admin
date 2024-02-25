@@ -58,22 +58,24 @@ export default function Uploader({
               credentials: 'include',
               method: 'POST',
               body: formData
-            }).then(async (res) => {
-              const image = (await res.json()) as ImageType;
+            })
+              .then(async (res) => {
+                const image = (await res.json()) as ImageType;
 
-              if (image.success) {
-                setLoading(false);
-                refetch();
-              }
+                if (image.success) {
+                  setLoading(false);
+                  refetch();
+                }
 
-              // @ts-ignore
-              if (image?.error?.message) {
                 // @ts-ignore
-                notify(image?.error?.message, 'error');
-                setError(image?.error);
-              }
-              console.log(`<:FINISHED UPLOAD:>`, image);
-            });
+                if (image?.error?.message) {
+                  // @ts-ignore
+                  notify(image?.error?.message, 'error');
+                  setError(image?.error);
+                }
+                console.log(`<:FINISHED UPLOAD:>`, image);
+              })
+              .catch(console.log);
           } else {
             notify('Image type is not supported!', 'error');
             setLoading(false);

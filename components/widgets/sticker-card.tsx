@@ -29,6 +29,7 @@ const StickerCard = ({
       }
     },
     stroke: {
+      curve: 'smooth',
       show: true,
       width: 2
     },
@@ -120,7 +121,7 @@ const StickerCard = ({
             </span>
           )}
         </div>
-        <div className="h-full w-full">
+        <div className="pointer-events-none h-full w-full">
           <Chart
             options={options}
             colors={['#2E93fA', '#66DA26', '#546E7A', '#E91E63', '#FF9800']}
