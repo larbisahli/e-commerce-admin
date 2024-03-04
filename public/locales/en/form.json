@@ -461,6 +461,7 @@
   "input-label-delivery-times": "Delivery Times",
   "input-label-delivery-time": "Delivery Time",
   "button-label-add-shipping-zone": "Add Shipping Zone",
+  "button-label-add-order": "Add Order",
   "error-product-name-required": "Product Name Required",
   "error-short-description-required": "Short Description Required",
   "error-product-description-required": "Product Description Required",

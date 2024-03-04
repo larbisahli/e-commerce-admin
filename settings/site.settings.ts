@@ -46,30 +46,30 @@ export const siteSettings = {
             padding: '35px',
             isSubLink: true
           },
-          {
-            id: '2tWw2Tg',
-            href: ROUTES.COMING_SOON,
-            label: 'sidebar-nav-item-invoices',
-            padding: '35px',
-            isSubLink: true,
-            disabled: true
-          },
-          {
-            id: '3tWw2Tg',
-            href: ROUTES.COMING_SOON,
-            label: 'sidebar-nav-item-shipments',
-            padding: '35px',
-            isSubLink: true,
-            disabled: true
-          },
-          {
-            id: '4tWw2Tg',
-            href: ROUTES.COMING_SOON,
-            label: 'sidebar-nav-item-transactions',
-            padding: '35px',
-            isSubLink: true,
-            disabled: true
-          }
+          // {
+          //   id: '2tWw2Tg',
+          //   href: ROUTES.COMING_SOON,
+          //   label: 'sidebar-nav-item-invoices',
+          //   padding: '35px',
+          //   isSubLink: true,
+          //   disabled: true
+          // },
+          // {
+          //   id: '3tWw2Tg',
+          //   href: ROUTES.COMING_SOON,
+          //   label: 'sidebar-nav-item-shipments',
+          //   padding: '35px',
+          //   isSubLink: true,
+          //   disabled: true
+          // },
+          // {
+          //   id: '4tWw2Tg',
+          //   href: ROUTES.COMING_SOON,
+          //   label: 'sidebar-nav-item-transactions',
+          //   padding: '35px',
+          //   isSubLink: true,
+          //   disabled: true
+          // }
         ]
       },
       {

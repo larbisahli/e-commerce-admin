@@ -56,7 +56,7 @@ export default function ShippingZonesPage({ client }: SSRProps) {
   const [orderBy, setOrder] = useState(OrderBy.CREATED_AT);
 
   const { selectedTableColumns, handleColumnChange } =
-    useTableColumn('shipping-zone');
+    useTableColumn('order');
 
   const { data, loading, error, fetchMore } = useQuery<
     TShipping,
@@ -101,17 +101,17 @@ export default function ShippingZonesPage({ client }: SSRProps) {
           rel="icon"
           type="image/svg"
           sizes="32x32"
-          href="/svg/shippingZone.svg"
+          href="/svg/order.svg"
         />
       </Head>
       <PageMainAction
         href={`${ROUTES.ORDERS}/create`}
-        title={t('form:button-label-add-shipping-zone')}
-        label={t('form:input-label-shipping-zones')}
+        title={t('form:button-label-add-order')}
+        label={t('form:input-label-orders')}
         showSelectLanguage={false}
       />
       <PageMainHeader
-        columns={COLUMNS['shipping-zone']}
+        columns={COLUMNS['order']}
         selectedColumns={selectedTableColumns}
         handleColumnChange={handleColumnChange}
         onLimitChange={(value) => {
