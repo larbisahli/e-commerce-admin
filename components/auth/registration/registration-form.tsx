@@ -298,9 +298,9 @@ const RegistrationForm = () => {
       <div className="mb-9 flex flex-col items-center justify-center">
         <div className="relative m-2 mx-12 mt-5 flex w-full justify-center">
           <Link href={'/'}>
-            <a className="pt-2 text-center leading-normal text-blue-600">
+            <div className="pt-2 text-center leading-normal text-blue-600">
               <Image src={'/logo.svg'} alt="logo" width={120} height={30} />
-            </a>
+            </div>
           </Link>
           {renderStepChecker()}
         </div>
@@ -398,9 +398,9 @@ const RegistrationForm = () => {
         {step !== 3 && (
           <div className="mt-9 p-5 text-center">
             <Link href={ROUTES.LOGIN}>
-              <a className="text-sm font-normal text-blue-600">
+              <div className="text-sm font-normal text-blue-600">
                 {t('already-have-account')}
-              </a>
+              </div>
             </Link>
           </div>
         )}

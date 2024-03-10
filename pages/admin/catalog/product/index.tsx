@@ -109,7 +109,7 @@ export default function ProductsPage({ client }: SSRProps) {
       <PageMainAction
         href={`${ROUTES.PRODUCT}/create`}
         title={t('form:input-label-products')}
-        label={t('form:button-label-add-products')}
+        label={t('form:button-label-add-product')}
         params={productTypesParams}
       />
       <PageMainHeader

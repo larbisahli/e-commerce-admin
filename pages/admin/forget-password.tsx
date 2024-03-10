@@ -20,9 +20,9 @@ const ForgetPasswordPage = ({ client }: SSRProps) => {
         <div className="h-full flex-1 border border-gray-100">
           <div className="m-2 mx-12 mt-5">
             <Link href={'/'}>
-              <a className="pt-2 text-center leading-normal text-blue-600">
+              <div className="pt-2 text-center leading-normal text-blue-600">
                 <Image src={'/logo.svg'} alt="logo" width={120} height={30} />
-              </a>
+              </div>
             </Link>
           </div>
           <div className="mx-auto max-w-[570px] bg-white p-5 sm:p-8">

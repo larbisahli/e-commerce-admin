@@ -90,12 +90,12 @@ export default function Settings({ client }: SSRProps) {
       <section className="mx-auto mt-20 grid max-w-[900px] grid-cols-1  gap-5 rounded-md border bg-white p-5 shadow-sm sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3">
         {settingRoutes?.map(({ label, url, renderIcon }) => (
           <Link key={label} href={url}>
-            <a className="m-2 flex cursor-pointer items-center text-gray-500 hover:text-blue-500">
+            <div className="m-2 flex cursor-pointer items-center text-gray-500 hover:text-blue-500">
               <div className="mr-3 flex h-12 w-12 items-center justify-center rounded-full border bg-gray-100">
                 {renderIcon()}
               </div>
               <span className="font-medium">{t(label)}</span>
-            </a>
+            </div>
           </Link>
         ))}
       </section>

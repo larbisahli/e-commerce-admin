@@ -10,10 +10,8 @@ const Link: React.FC<
   }
 > = ({ href, target = '_self', children, ...props }) => {
   return (
-    <NextLink href={href}>
-      <a target={target} {...props}>
-        {children}
-      </a>
+    <NextLink href={href} target={target} {...props}>
+      <div>{children}</div>
     </NextLink>
   );
 };

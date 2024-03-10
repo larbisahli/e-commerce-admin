@@ -104,8 +104,8 @@ export default function ShippingZonesPage({ client }: SSRProps) {
       </Head>
       <PageMainAction
         href={`${ROUTES.DELIVERY_TIME}/create`}
-        title={t('form:button-label-add-delivery-time')}
-        label={t('form:input-label-delivery-times')}
+        title={t('form:input-label-delivery-times')}
+        label={t('form:button-label-add-delivery-time')}
       />
       <PageMainHeader
         columns={COLUMNS['delivery-time']}

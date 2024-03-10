@@ -166,7 +166,7 @@
   display: flex;
   align-items: center;
   position: relative;
-  height: 110px;
+  height: 140px;
 }
 
 .mailchimp > div > input {
@@ -178,12 +178,13 @@
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
   min-width: 100px;
-  max-width: 500px;
+  max-width: 100%;
 }
 
 .mailchimp > div > div {
   position: absolute;
-  bottom: 0;
+  bottom: 5px;
+  font-size: 14px;
 }
 
 .mailchimp > div > button {

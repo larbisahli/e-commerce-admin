@@ -14,7 +14,7 @@ const FaqSection = () => {
   return (
     <section
       id="faq"
-      className="container mx-auto mt-12 flex w-full flex-col rounded-none bg-[#f1f4f9] p-4 sm:px-11 lg:mt-32 lg:rounded"
+      className="container mx-auto mt-12 flex w-full flex-col rounded-none bg-[#f1f4f9] p-4 sm:px-11 lg:mt-20 lg:rounded"
     >
       <div className="my-7 flex flex-col items-center justify-center">
         <h2 className="slide-in-bottom-h1 text-center text-2xl font-bold leading-tight text-gray-800 md:text-left">

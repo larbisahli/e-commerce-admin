@@ -369,6 +369,7 @@ export interface Product extends CreatedUpdatedByAt {
   freeShipping?: Scalars['Boolean'];
   displayProductMeasurements?: Scalars['Boolean'];
   includeInHomepage?: Scalars['Boolean'];
+  trackInventory?: Scalars['Boolean'];
   translated?: {
     name?: Scalars['String'];
     description?: Nullable<Scalars['String']>;

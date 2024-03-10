@@ -41,9 +41,9 @@ export const RenderTooltipTaxRate = () => {
         </div>
       </div>
       <Link href={ROUTES.TAX}>
-        <a className="font-medium text-blue-400 underline" target="_blank">
+        <div className="font-medium text-blue-400 underline" target="_blank">
           {'Settings ->'}
-        </a>
+        </div>
       </Link>
     </div>
   );

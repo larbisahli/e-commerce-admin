@@ -50,9 +50,9 @@ const RegisterCheckbox = React.forwardRef<HTMLInputElement, Props>(
           >
             <span>I agree to Dropgala</span>
             <Link href={'/conditions'}>
-              <a className="px-1 text-accent" target="_blank">
+              <div className="px-1 text-accent" target="_blank">
                 terms and conditions
-              </a>
+              </div>
             </Link>
             <span>of use</span>
           </label>

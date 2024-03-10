@@ -1,3 +1,5 @@
+import cn from 'classnames';
+
 type Props = {
   className?: string;
   title?: string;
@@ -12,11 +14,15 @@ const Description: React.FC<Props> = ({
   ...props
 }) => {
   return (
-    <div className={className} {...props}>
-      {title && (
-        <h4 className="mb-2 text-base font-semibold text-body-dark">{title}</h4>
-      )}
-      {details && <p className="text-sm text-body">{details}</p>}
+    <div className={cn('sm:!py-0 sm:shadow-sm', className)} {...props}>
+      <div className="sm:rounded-[4px] sm:border sm:border-solid sm:bg-white">
+        {title && (
+          <h4 className="text-base font-semibold text-body-dark sm:mb-2 sm:border-b sm:p-3">
+            {title}
+          </h4>
+        )}
+        {details && <p className="text-sm text-body sm:p-3">{details}</p>}
+      </div>
     </div>
   );
 };

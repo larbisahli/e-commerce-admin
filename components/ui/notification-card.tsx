@@ -10,7 +10,7 @@ const NotificationCard: React.FC<NotificationCardType> = ({
   time
 }) => {
   return (
-    <a
+    <div
       href="#"
       className="flex items-start border-b border-border-200 bg-light px-4 pt-4 pb-3 hover:bg-gray-50"
     >
@@ -24,7 +24,7 @@ const NotificationCard: React.FC<NotificationCardType> = ({
         <p className="mb-1 text-sm text-body">{text}</p>
         <span className="text-sm text-muted">{time}</span>
       </div>
-    </a>
+    </div>
   );
 };
 

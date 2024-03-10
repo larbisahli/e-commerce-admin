@@ -8,8 +8,21 @@ const Subscribe = () => {
   }, []);
 
   return (
-    <section className="w-full">
-      <div className="mx-auto w-fit">
+    <section
+      id="subscription"
+      style={{ background: 'linear-gradient(93.64deg, #f5fbff, #f5f7ff)' }}
+      className="mt-14 w-full py-10"
+    >
+      <div className="flex w-full flex-col items-center justify-center overflow-y-hidden">
+        <h2 className="slide-in-bottom-h1 my-4 text-center text-xl font-bold leading-tight text-gray-800 md:text-3xl">
+          Begin your Journey of Ecommerce Success
+        </h2>
+        <p className="text-center">
+          Sign up for our Waitlist and move one step closer to achieving your
+          dream!
+        </p>
+      </div>
+      <div className="mx-auto w-fit sm:w-[500px]">
         <div className="w-full">
           <MailchimpSubscribe
             url={process.env.NEXT_PUBLIC_MAILCHIMP_URL}

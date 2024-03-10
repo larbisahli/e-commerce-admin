@@ -45,7 +45,7 @@ export const siteSettings = {
             label: 'sidebar-nav-item-order-status',
             padding: '35px',
             isSubLink: true
-          },
+          }
           // {
           //   id: '2tWw2Tg',
           //   href: ROUTES.COMING_SOON,

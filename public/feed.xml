@@ -7,97 +7,47 @@
       <language>en-us</language>
       <managingEditor>larbi.sahli@dropgala.com (Dropgala)</managingEditor>
       <webMaster>larbi.sahli@dropgala.com (Dropgala)</webMaster>
-      <lastBuildDate>Wed, 12 Jul 2023 00:00:00 GMT</lastBuildDate>
+      <lastBuildDate>Sun, 10 Mar 2024 00:00:00 GMT</lastBuildDate>
       <atom:link href="https://dropgala.com/feed.xml" rel="self" type="application/rss+xml"/>
       
   <item>
-    <guid>https://dropgala.com/blog/ecommerce-business-blueprint</guid>
-    <title>How To Start an Ecommerce Business</title>
-    <link>https://dropgala.com/blog/ecommerce-business-blueprint</link>
-    <description>How to derive the OLS Estimator with matrix notation and a tour of math typesetting using markdown with the help of KaTeX.</description>
-    <pubDate>Wed, 12 Jul 2023 00:00:00 GMT</pubDate>
+    <guid>https://dropgala.com/blog/effective-strategies-for-handling-e-commerce-shipping</guid>
+    <title>Effective Strategies for Handling E-commerce Shipping</title>
+    <link>https://dropgala.com/blog/effective-strategies-for-handling-e-commerce-shipping</link>
+    <description>The article discusses the management of e-commerce shipping, focusing on key aspects such as the definition of delivery, the importance of notifications in the delivery process, shipping labels, shipping rates and methods, calculating shipping costs, packaging, customs declaration and forms, and e-commerce shipping best practices.</description>
+    <pubDate>Sun, 10 Mar 2024 00:00:00 GMT</pubDate>
     <author>larbi.sahli@dropgala.com (Dropgala)</author>
-    <category>Ecommerce</category><category>Business</category>
+    <category>ecommerce</category><category>ecommerce-shipping</category>
   </item>
 
   <item>
-    <guid>https://dropgala.com/blog/in-conversation-with-descartes</guid>
-    <title>In Conversation With Descartes</title>
-    <link>https://dropgala.com/blog/in-conversation-with-descartes</link>
-    <description>A conversation with descartes concerning his ideas</description>
-    <pubDate>Sat, 07 Aug 2021 15:32:14 GMT</pubDate>
+    <guid>https://dropgala.com/blog/how-to-start-a-business-in-10-steps</guid>
+    <title>How to start a business in 10 steps</title>
+    <link>https://dropgala.com/blog/how-to-start-a-business-in-10-steps</link>
+    <description>This article outlines ten essential steps to initiate a successful online business, emphasizing the importance of a clear plan, an exceptional product, and a robust marketing strategy. From defining the project idea to receiving the first orders, the guide aims to assist aspiring entrepreneurs in achieving success in their online ventures.</description>
+    <pubDate>Sun, 10 Mar 2024 00:00:00 GMT</pubDate>
     <author>larbi.sahli@dropgala.com (Dropgala)</author>
-    <category>philosophy</category><category>early moder</category><category>interview series</category>
+    <category>ecommerce</category><category>business</category>
   </item>
 
   <item>
-    <guid>https://dropgala.com/blog/nested-route/introducing-multi-part-posts-with-nested-routing</guid>
-    <title>Introducing Multi-part Posts with Nested Routing</title>
-    <link>https://dropgala.com/blog/nested-route/introducing-multi-part-posts-with-nested-routing</link>
-    <description>The blog template supports posts in nested sub-folders. This can be used to group posts of similar content e.g. a multi-part course. This post is itself an example of a nested route!</description>
-    <pubDate>Sun, 02 May 2021 00:00:00 GMT</pubDate>
+    <guid>https://dropgala.com/blog/e-commerce-business-models</guid>
+    <title>E-commerce business models</title>
+    <link>https://dropgala.com/blog/e-commerce-business-models</link>
+    <description>The article explores various e-commerce models, emphasizing the importance of considering factors like long-term sustainability and success probability.</description>
+    <pubDate>Sat, 09 Mar 2024 00:00:00 GMT</pubDate>
     <author>larbi.sahli@dropgala.com (Dropgala)</author>
-    <category>multi-author</category><category>next-js</category><category>feature</category>
+    <category>ecommerce</category><category>ecommerce-models</category><category>business</category>
   </item>
 
   <item>
-    <guid>https://dropgala.com/blog/introducing-tailwind-nextjs-starter-blog</guid>
-    <title>Introducing Tailwind Nextjs Starter Blog</title>
-    <link>https://dropgala.com/blog/introducing-tailwind-nextjs-starter-blog</link>
-    <description>Looking for a performant, out of the box template, with all the best in web technology to support your blogging needs? Checkout the Tailwind Nextjs Starter Blog template.</description>
-    <pubDate>Tue, 12 Jan 2021 00:00:00 GMT</pubDate>
+    <guid>https://dropgala.com/blog/discover-your-winning-product-by-putting-it-to-the-test</guid>
+    <title>Discover your winning product by putting it to the test.</title>
+    <link>https://dropgala.com/blog/discover-your-winning-product-by-putting-it-to-the-test</link>
+    <description>Creating a successful business hinges on the challenge of finding an excellent product that meets market needs consistently. The success of a merchant is intrinsically linked to the quality of the product they offer. </description>
+    <pubDate>Fri, 10 Mar 2023 00:00:00 GMT</pubDate>
     <author>larbi.sahli@dropgala.com (Dropgala)</author>
-    <category>next-js</category><category>tailwind</category><category>guide</category>
-  </item>
-
-  <item>
-    <guid>https://dropgala.com/blog/guide-to-using-images-in-nextjs</guid>
-    <title>Images in Next.js</title>
-    <link>https://dropgala.com/blog/guide-to-using-images-in-nextjs</link>
-    <description>In this article we introduce adding images in the tailwind starter blog and the benefits and limitations of the next/image component.</description>
-    <pubDate>Wed, 11 Nov 2020 00:00:00 GMT</pubDate>
-    <author>larbi.sahli@dropgala.com (Dropgala)</author>
-    <category>next js</category><category>guide</category>
-  </item>
-
-  <item>
-    <guid>https://dropgala.com/blog/github-markdown-guide</guid>
-    <title>Markdown Guide</title>
-    <link>https://dropgala.com/blog/github-markdown-guide</link>
-    <description>Markdown cheatsheet for all your blogging needs - headers, lists, images, tables and more! An illustrated guide based on Github Flavored Markdown.</description>
-    <pubDate>Fri, 11 Oct 2019 00:00:00 GMT</pubDate>
-    <author>larbi.sahli@dropgala.com (Dropgala)</author>
-    <category>github</category><category>guide</category>
-  </item>
-
-  <item>
-    <guid>https://dropgala.com/blog/the-time-machine</guid>
-    <title>The Time Machine</title>
-    <link>https://dropgala.com/blog/the-time-machine</link>
-    <description>The Time Traveller (for so it will be convenient to speak of him) was expounding a recondite matter to us. His pale grey eyes shone and twinkled, and his usually pale face was flushed and animated...</description>
-    <pubDate>Wed, 15 Aug 2018 00:00:00 GMT</pubDate>
-    <author>larbi.sahli@dropgala.com (Dropgala)</author>
-    <category>writings</category><category>book</category><category>reflection</category>
-  </item>
-
-  <item>
-    <guid>https://dropgala.com/blog/pictures-of-canada</guid>
-    <title>O Canada</title>
-    <link>https://dropgala.com/blog/pictures-of-canada</link>
-    <description>The scenic lands of Canada featuring maple leaves, snow-capped mountains, turquoise lakes and Toronto. Take in the sights in this photo gallery exhibition and see how easy it is to replicate with some MDX magic and tailwind classes.</description>
-    <pubDate>Sat, 15 Jul 2017 00:00:00 GMT</pubDate>
-    <author>larbi.sahli@dropgala.com (Dropgala)</author>
-    <category>holiday</category><category>canada</category><category>images</category>
-  </item>
-
-  <item>
-    <guid>https://dropgala.com/blog/code-sample</guid>
-    <title>Sample .md file</title>
-    <link>https://dropgala.com/blog/code-sample</link>
-    <description>Example of a markdown file with code blocks and syntax highlighting</description>
-    <pubDate>Tue, 08 Mar 2016 00:00:00 GMT</pubDate>
-    <author>larbi.sahli@dropgala.com (Dropgala)</author>
-    <category>markdown</category><category>code</category><category>features</category>
+    <category>ecommerce</category><category>business</category>
   </item>
 
     </channel>

@@ -11,9 +11,9 @@ const PageTabs = ({ tabs }: Props) => {
     <div className="mb-5 bg-white p-2 shadow">
       {tabs?.map(({ label, href }, idx) => (
         <Link href={href} key={idx}>
-          <a className="max-w-[150px] rounded-md px-12 py-2 capitalize">
+          <div className="max-w-[150px] rounded-md px-12 py-2 capitalize">
             {label}
-          </a>
+          </div>
         </Link>
       ))}
     </div>

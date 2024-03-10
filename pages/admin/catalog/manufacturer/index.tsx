@@ -102,7 +102,7 @@ export default function ManufacturerPage({ client }: SSRProps) {
       </Head>
       <PageMainAction
         href={`${ROUTES.MANUFACTURER}/create`}
-        title={t('common:sidebar-nav-item-manufacturer')}
+        title={t('common:sidebar-nav-item-manufacturers')}
         label={t('form:button-label-add-manufacturer')}
       />
       <PageMainHeader

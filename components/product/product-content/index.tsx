@@ -25,7 +25,10 @@ import { useTranslation } from 'next-i18next';
 import { ChangeEvent, memo, useCallback, useEffect, useState } from 'react';
 
 import { Actions, useFormReducer } from '../context/form.context';
-import { RenderTooltipHiddenNote } from '../ToolTips';
+import {
+  RenderTooltipHiddenNote,
+  RenderTooltipTrackInventory
+} from '../ToolTips';
 
 interface Props {
   initialValues: Nullable<Product>;
@@ -39,6 +42,7 @@ interface Props {
     disableOutOfStock: Product['disableOutOfStock'];
     freeShipping: Product['freeShipping'];
     includeInHomepage: Product['includeInHomepage'];
+    trackInventory: Product['trackInventory'];
     displayProductMeasurements: Product['displayProductMeasurements'];
     isUpdateMode: boolean;
   };
@@ -92,6 +96,7 @@ const ProductContent = ({ state, initialValues, productSeo }: Props) => {
     disableOutOfStock,
     freeShipping,
     includeInHomepage,
+    trackInventory,
     displayProductMeasurements,
     isUpdateMode
   } = state;
@@ -315,6 +320,25 @@ const ProductContent = ({ state, initialValues, productSeo }: Props) => {
           </div>
           <div className="my-2">
             <Checkbox
+              name="includeInHomepage"
+              onChange={handleChange}
+              onMouseLeaveTopLevel={checkForUpdateHandler}
+              checked={includeInHomepage}
+              label={t('form:input-label-display-to-homepage')}
+            />
+          </div>
+          <div className="my-2">
+            <Checkbox
+              name="trackInventory"
+              onChange={handleChange}
+              onMouseLeaveTopLevel={checkForUpdateHandler}
+              renderTooltip={<RenderTooltipTrackInventory />}
+              checked={trackInventory}
+              label={t('form:input-label-track-inventory')}
+            />
+          </div>
+          <div className="my-2">
+            <Checkbox
               name="freeShipping"
               onChange={handleChange}
               onMouseLeaveTopLevel={checkForUpdateHandler}
@@ -329,15 +353,6 @@ const ProductContent = ({ state, initialValues, productSeo }: Props) => {
               onMouseLeaveTopLevel={checkForUpdateHandler}
               checked={displayProductMeasurements}
               label={t('form:input-label-display-product-measurements')}
-            />
-          </div>
-          <div className="my-2">
-            <Checkbox
-              name="includeInHomepage"
-              onChange={handleChange}
-              onMouseLeaveTopLevel={checkForUpdateHandler}
-              checked={includeInHomepage}
-              label={t('form:input-label-display-to-homepage')}
             />
           </div>
           {renderSaveButton()}

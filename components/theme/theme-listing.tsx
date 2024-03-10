@@ -21,7 +21,7 @@ const ThemeListing = ({ themes }: IProps) => {
       <div className="mb-6 flex flex-wrap items-center justify-start overflow-hidden">
         {themes?.map((theme, idx) => (
           <Link key={idx} href={`${ROUTES.MARKETPLACE_THEME_PAGE}/${theme.id}`}>
-            <a
+            <div
               key={idx}
               className="card m-3 h-[370px] w-[250px] cursor-pointer border hover:shadow-lg"
             >
@@ -61,7 +61,7 @@ const ThemeListing = ({ themes }: IProps) => {
                   )}
                 </div>
               </div>
-            </a>
+            </div>
           </Link>
         ))}
       </div>

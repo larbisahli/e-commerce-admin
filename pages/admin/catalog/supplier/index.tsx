@@ -105,8 +105,8 @@ export default function SuppliersPage({ client }: SSRProps) {
       <PageMainAction
         showSelectLanguage={false}
         href={`${ROUTES.SUPPLIER}/create`}
-        title={t('form:button-label-add-supplier')}
-        label={t('common:sidebar-nav-item-suppliers')}
+        title={t('common:sidebar-nav-item-suppliers')}
+        label={t('form:button-label-add-supplier')}
       />
       <PageMainHeader
         columns={COLUMNS['supplier']}

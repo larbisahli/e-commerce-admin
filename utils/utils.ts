@@ -3,6 +3,8 @@ import { Console } from 'console';
 import { isEmpty } from 'lodash';
 import React from 'react';
 
+export const POSTS_PER_PAGE = 8;
+
 export const PRODUCTION_ENV = process.env.NODE_ENV === 'production';
 
 // Utils
@@ -62,11 +64,11 @@ export const replace = (array, index: number, replacerIndex: number) => {
 
 export const mediaURL = PRODUCTION_ENV
   ? process.env.MEDIA_URL
-  : 'http://127.0.0.1:5000/media';
+  : 'http://127.0.0.1:5002/media';
 
 export const apiURL = PRODUCTION_ENV
   ? process.env.API_URL
-  : 'http://127.0.0.1:5000';
+  : 'http://127.0.0.1:5002';
 
 // export const mediaURL = 'http://192.168.1.102:5001/media';
 

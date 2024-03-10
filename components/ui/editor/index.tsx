@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
-import { Controller } from 'react-hook-form';
 
 import EditorComponent from './editor';
+// import EditorComponent from './editorjs';
 
 interface EditorInputProps {
   control?: any;
@@ -12,20 +12,12 @@ interface EditorInputProps {
 }
 
 // https://lexical.dev/
+// https://github.com/zenoamaro/react-quill
 // https://blog.logrocket.com/best-text-editors-react/
+// https://github.com/ianstormtaylor/slate good
 
 const Editor = ({ className, ...rest }: EditorInputProps) => {
   return <EditorComponent {...rest} className={className} />;
-  // return (
-  //   <Controller
-  //     name={name}
-  //     control={control}
-  //     {...rest}
-  //     render={({ field }) => (
-  //       <EditorComponent {...field} className={className} />
-  //     )}
-  //   />
-  // );
 };
 
 export default memo(Editor);

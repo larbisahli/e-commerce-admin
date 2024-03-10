@@ -61,10 +61,8 @@ const LinkButton: React.FC<NextLinkProps & ButtonProps> = ({
 
   return (
     <div className={cn('relative flex justify-end ms-4 md:ms-6')}>
-      <NextLink href={href}>
-        <a {...props} className={cn(rootClassName, className)}>
-          {children}
-        </a>
+      <NextLink href={href} {...props}>
+        <div className={cn(rootClassName, className)}>{children}</div>
       </NextLink>
       {!isEmpty(params) && (
         <RenderParamDropDown
@@ -138,13 +136,13 @@ const RenderParamDropDown = ({
                 onClick={handleLinkClick}
                 key={param}
               >
-                <a
+                <div
                   onClick={handleLinkClick}
                   className="w-full cursor-pointer border-b p-3 text-left text-sm font-medium
             text-gray-600 hover:bg-gray-200"
                 >
                   {name}
-                </a>
+                </div>
               </NextLink>
             );
           })}

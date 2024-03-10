@@ -33,9 +33,9 @@ export default class ErrorBoundary extends React.Component {
               </h1>
               <div className="py-2">
                 <Link href={ROUTES.DASHBOARD}>
-                  <a className="md rounded border bg-indigo-600 py-4 px-8 text-center text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-700 focus:ring-opacity-50 sm:w-full lg:w-auto">
+                  <div className="md rounded border bg-indigo-600 py-4 px-8 text-center text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-700 focus:ring-opacity-50 sm:w-full lg:w-auto">
                     Take me there!
-                  </a>
+                  </div>
                 </Link>
               </div>
             </div>

@@ -182,7 +182,7 @@ const ProductSelectGroup = ({ state, initialValues }: Props) => {
       <div className="my-5 flex flex-wrap sm:my-8">
         <Description
           details={t('form:type-product-group-help-text')}
-          className="w-full px-0 pb-5 sm:w-1/4 sm:py-8 md:w-1/4"
+          className="w-full px-0 pb-5 sm:w-1/4 sm:py-8 sm:pe-4 md:w-1/4 md:pe-5"
         />
         <Card className="w-full sm:w-3/4 md:w-3/4">
           <ProductCategory categories={categories} />

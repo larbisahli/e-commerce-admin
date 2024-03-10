@@ -213,7 +213,7 @@ const CartesianProductComponent = ({
               <div className="mr-2 mb-5 flex items-center">
                 <div>
                   <Label>{t('form:input-label-weight')}</Label>
-                  <div className="mr-2 flex items-center justify-center rounded-sm border bg-gray-100">
+                  <div className="mr-2 flex items-center justify-center rounded-sm bg-gray-100">
                     <Input
                       name="weight"
                       value={weight}

@@ -146,7 +146,7 @@ export default function Folder({
   const renderFolder = () => {
     return (
       <Link href={`${ROUTES.MEDIA}/${folder?.id}`}>
-        <a
+        <div
           title={folder?.name}
           className="relative flex h-fit w-48 cursor-pointer flex-col items-center p-5 hover:bg-blue-100"
         >
@@ -165,7 +165,7 @@ export default function Folder({
             </div>
           </div>
           {renderTitle()}
-        </a>
+        </div>
       </Link>
     );
   };

@@ -6,9 +6,9 @@ export const CategoryTooltipContent = () => {
     <div className="flex flex-col">
       <div className="max-w-[300px] leading-snug">Select categories</div>
       <Link href={ROUTES.CATEGORY}>
-        <a className="font-medium text-blue-600 underline" target="_blank">
+        <div className="font-medium text-blue-600 underline" target="_blank">
           See More
-        </a>
+        </div>
       </Link>
     </div>
   );
@@ -19,9 +19,9 @@ export const ManufacturerTooltipContent = () => {
     <div className="flex flex-col">
       <div className="max-w-[300px] leading-snug">Select Manufacturer</div>
       <Link href={ROUTES.MANUFACTURER}>
-        <a className="font-medium text-blue-600 underline" target="_blank">
+        <div className="font-medium text-blue-600 underline" target="_blank">
           See More
-        </a>
+        </div>
       </Link>
     </div>
   );
@@ -35,9 +35,9 @@ export const SuppliersTooltipContent = () => {
         Supplier is only used internally
       </div>
       <Link href={ROUTES.SUPPLIER}>
-        <a className="font-medium text-blue-600 underline" target="_blank">
+        <div className="font-medium text-blue-600 underline" target="_blank">
           See More
-        </a>
+        </div>
       </Link>
     </div>
   );
@@ -48,9 +48,9 @@ export const TagTooltipContent = () => {
     <div className="flex flex-col">
       <div className="max-w-[300px] leading-snug">Select Tags</div>
       <Link href={ROUTES.CATEGORY}>
-        <a className="font-medium text-blue-600 underline" target="_blank">
+        <div className="font-medium text-blue-600 underline" target="_blank">
           See More
-        </a>
+        </div>
       </Link>
     </div>
   );
@@ -123,6 +123,18 @@ export const RenderTooltipHiddenNote = () => {
   return (
     <div className="flex flex-col items-center">
       <span>Add your notes here and it's only visible to you</span>
+    </div>
+  );
+};
+
+export const RenderTooltipTrackInventory = () => {
+  return (
+    <div className="flex flex-col items-center">
+      <div className="max-w-[300px] text-xs leading-snug">
+        Inventory tracking can help you avoid selling products that have run out
+        of stock, or let you know when you need to order or produce more
+        products.
+      </div>
     </div>
   );
 };

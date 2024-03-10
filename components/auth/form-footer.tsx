@@ -12,15 +12,11 @@ const FormFooter = ({ isSignUp = false }) => {
       <div className="mt-5 flex h-12 items-center justify-center text-gray-500">
         {isSignUp ? (
           <Link href={ROUTES.LOGIN}>
-            <a>
-              <p>Login</p>
-            </a>
+            <p>Login</p>
           </Link>
         ) : (
           <Link href={ROUTES.SIGNUP}>
-            <a>
-              <p>Sign up</p>
-            </a>
+            <p>Sign up</p>
           </Link>
         )}
         <span
@@ -28,45 +24,39 @@ const FormFooter = ({ isSignUp = false }) => {
           className="mx-2 bg-gray-300"
         ></span>
         <Link href={ROUTES.CONTACT_PAGE}>
-          <a>
-            <p>Contact Us</p>
-          </a>
+          <p>Contact Us</p>
         </Link>
         <span
           style={{ width: '1px', height: '20px' }}
           className="mx-2 bg-gray-300"
         ></span>
         <Link href={'/policy'}>
-          <a>
-            <p>Policy</p>
-          </a>
+          <p>Policy</p>
         </Link>
         <span
           style={{ width: '1px', height: '20px' }}
           className="mx-2 bg-gray-300"
         ></span>
         <Link href={'/about-us'} passHref>
-          <a>
-            <p>About us</p>
-          </a>
+          <p>About us</p>
         </Link>
       </div>
       <div className="flex flex-col items-center justify-center text-gray-500">
         <div className="my-3 flex items-center justify-center text-gray-400">
           <Link href="/">
-            <a className="mx-3">
+            <div className="mx-3">
               <FacebookIcon width="1.1rem" height="1.1rem" />
-            </a>
+            </div>
           </Link>
           <Link href="/">
-            <a className="mx-3">
+            <div className="mx-3">
               <InstagramIcon width="1.1rem" height="1.1rem" />
-            </a>
+            </div>
           </Link>
           <Link href="/">
-            <a className="mx-3">
+            <div className="mx-3">
               <YouTubeIcon width="1.1rem" height="1.1rem" />
-            </a>
+            </div>
           </Link>
         </div>
         <p className="m-3 text-center italic text-gray-700">

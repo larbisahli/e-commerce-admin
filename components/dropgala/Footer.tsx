@@ -3,40 +3,42 @@ import Link from 'next/link';
 
 const Footer = () => {
   return (
-    <div className="fade-in container mx-auto mt-16 w-full border-t border-dotted border-gray-300 pt-8 pb-6 text-center text-sm md:text-left">
+    <div className="fade-in container mx-auto w-full border-t border-dotted border-gray-300 pt-8 pb-6 text-center text-sm md:text-left">
       <div className="flex flex-wrap items-center justify-center">
         <Link href="/#faq">
-          <a className="mx-3 text-lg text-gray-600 hover:text-blue-500">FAQ</a>
+          <div className="mx-3 text-base text-gray-500 hover:text-blue-500">
+            FAQ
+          </div>
         </Link>
         <Link href="/about-us">
-          <a className="mx-3 text-lg text-gray-600 hover:text-blue-500">
+          <div className="mx-3 text-base text-gray-500 hover:text-blue-500">
             About us
-          </a>
+          </div>
         </Link>
         <Link href="/policy">
-          <a className="mx-3 text-lg text-gray-600 hover:text-blue-500">
+          <div className="mx-3 text-base text-gray-500 hover:text-blue-500">
             Policy
-          </a>
+          </div>
         </Link>
         <Link href="/support">
-          <a className="mx-3 text-lg text-gray-600 hover:text-blue-500">
+          <div className="mx-3 text-base text-gray-500 hover:text-blue-500">
             Support
-          </a>
+          </div>
         </Link>
-        {/* <Link href="/blog">
-          <a className="mx-3 text-lg text-gray-600 hover:text-blue-500">
+        <Link href="/blog">
+          <div className="mx-3 text-base text-gray-500 hover:text-blue-500">
             Blogs
-          </a>
-        </Link> */}
+          </div>
+        </Link>
         <Link href="/#subscription">
-          <a className="mx-3 text-lg text-gray-600 hover:text-blue-500">
+          <div className="mx-3 text-base text-gray-500 hover:text-blue-500">
             Sign up
-          </a>
+          </div>
         </Link>
         <Link href={ROUTES.LOGIN}>
-          <a className="mx-3 text-lg text-gray-600 hover:text-blue-500">
+          <div className="mx-3 text-base text-gray-500 hover:text-blue-500">
             Login
-          </a>
+          </div>
         </Link>
       </div>
       <div className="mb-12 mt-4 flex items-center justify-center">

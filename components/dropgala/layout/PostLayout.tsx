@@ -1,12 +1,12 @@
-import Image from '@components/dropgala/common/Image';
 import Link from '@components/dropgala/common/Link';
 import Tag from '@components/dropgala/common/Tag';
 import { BlogSEO } from '@components/dropgala/SEO';
 import siteMetadata from '@data/siteMetadata';
+import Image from 'next/legacy/image';
 
 function PageTitle({ children }) {
   return (
-    <h1 className="md:leading-14 text-3xl font-extrabold leading-9 tracking-tight text-gray-900 sm:text-4xl sm:leading-10 md:text-5xl">
+    <h1 className="md:leading-14 mx-auto max-w-[1000px] text-center text-3xl font-extrabold leading-9 tracking-tight text-gray-900 sm:text-4xl sm:leading-10 md:text-5xl">
       {children}
     </h1>
   );
@@ -30,9 +30,7 @@ export default function PostLayout({
   prev,
   children
 }) {
-  const { slug, fileName, date, title, images, tags, readingTime } =
-    frontMatter;
-
+  const { slug, date, title, tags, readingTime, thumbnail } = frontMatter;
   return (
     <SectionContainer>
       <BlogSEO
@@ -81,10 +79,10 @@ export default function PostLayout({
                       {author.avatar && (
                         <Image
                           src={author.avatar}
-                          width="38px"
-                          height="38px"
+                          width={45}
+                          height={45}
                           alt="avatar"
-                          className="h-10 w-10 rounded-full"
+                          className="h-10 w-10 rounded-full object-cover"
                         />
                       )}
                       <dl className="whitespace-nowrap text-sm font-medium leading-5">
@@ -107,18 +105,29 @@ export default function PostLayout({
               </dd>
             </dl>
             <div className="divide-y divide-gray-200 dark:divide-gray-700 xl:col-span-3 xl:row-span-2 xl:pb-0">
-              <div className="prose max-w-none px-2 pt-10 pb-8">{children}</div>
+              {/* <div className="flex mt-2 flex-col">
+                {<Image
+                  alt={title}
+                  src={thumbnail}
+                  className="object-cover rounded"
+                  width={1500}
+                  height={700}
+                />}
+              </div> */}
+              <div className="prose max-w-none border-none px-2 pb-8">
+                {children}
+              </div>
             </div>
             <footer>
               <div className="divide-gray-200 text-sm font-medium leading-5 xl:col-start-1 xl:row-start-2 xl:divide-y">
                 {tags && (
                   <div className="py-4 xl:py-8">
-                    <h2 className="text-xs uppercase tracking-wide text-gray-500">
+                    <h2 className="text-xs  uppercase tracking-wide text-gray-500">
                       Tags
                     </h2>
                     <div className="flex flex-wrap">
                       {tags.map((tag) => (
-                        <Tag key={tag} text={tag} />
+                        <Tag selected={null} key={tag} text={tag} />
                       ))}
                     </div>
                   </div>
@@ -127,20 +136,20 @@ export default function PostLayout({
                   <div className="flex justify-between py-4 xl:block xl:space-y-8 xl:py-8">
                     {prev && (
                       <div>
-                        <h2 className="text-xs uppercase tracking-wide text-gray-500">
+                        <h2 className="text-start text-xs uppercase tracking-wide text-gray-500">
                           Previous Article
                         </h2>
-                        <div className="text-blue-500 hover:text-blue-600">
+                        <div className="text-xs text-blue-500 hover:text-blue-600 sm:text-sm">
                           <Link href={`/blog/${prev.slug}`}>{prev.title}</Link>
                         </div>
                       </div>
                     )}
                     {next && (
                       <div>
-                        <h2 className="text-xs uppercase tracking-wide text-gray-500">
+                        <h2 className="text-end text-xs uppercase tracking-wide text-gray-500 sm:text-start">
                           Next Article
                         </h2>
-                        <div className="text-blue-500 hover:text-blue-600">
+                        <div className="text-end text-xs text-blue-500 hover:text-blue-600 sm:text-start sm:text-sm">
                           <Link href={`/blog/${next.slug}`}>{next.title}</Link>
                         </div>
                       </div>
@@ -148,12 +157,12 @@ export default function PostLayout({
                   </div>
                 )}
               </div>
-              <div className="pt-4 xl:pt-8">
+              <div className="mt-4 w-fit xl:mt-1">
                 <Link
                   href="/blog"
                   className="text-blue-500 hover:text-blue-600"
                 >
-                  <span className="text-2xl">&larr;</span>
+                  <span className="px-1 text-lg">&larr;</span>
                   <span>Back to the blog</span>
                 </Link>
               </div>

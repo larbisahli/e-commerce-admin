@@ -379,18 +379,15 @@ const GettingStartedSection = () => {
               Share your first impression to help us improve the overall
               dropgala experience.
             </p>
-            <Link href={ROUTES.DASHBOARD}>
-              <a
-                target="_blank"
-                className="mt-3 flex items-center rounded-sm border border-gray-300 px-4 py-1 text-gray-500"
-              >
+            <Link href={ROUTES.DASHBOARD} target="_blank">
+              <div className="mt-3 flex items-center rounded-sm border border-gray-300 px-4 py-1 text-gray-500">
                 <span className="pr-2 font-medium text-gray-600">
                   Give feedback
                 </span>
                 <div className="mb-1">
                   <ExternalLinkIcon width={18} height={18} />
                 </div>
-              </a>
+              </div>
             </Link>
           </div>
         </div>

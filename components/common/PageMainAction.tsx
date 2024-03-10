@@ -140,7 +140,7 @@ const PageMainAction = ({
 
   return (
     <>
-      <h1 className="mb-4 text-2xl font-bold text-gray-700">{title}</h1>
+      <h1 className="mb-4 text-xl font-bold text-gray-700">{title}</h1>
       <div
         ref={ref}
         className={cn(

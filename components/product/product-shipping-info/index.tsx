@@ -217,7 +217,7 @@ function ProductShippingInfoForm({ state, productType, initialValues }: Props) {
               <div className="mr-2 mb-5 flex items-center">
                 <div>
                   <Label>{t('form:input-label-weight')}</Label>
-                  <div className="mr-2 flex items-center justify-center rounded-sm border bg-gray-100">
+                  <div className="mr-2 flex items-center justify-center rounded-sm bg-gray-100">
                     <Input
                       name="weight"
                       value={weight}
@@ -254,7 +254,7 @@ function ProductShippingInfoForm({ state, productType, initialValues }: Props) {
             <div className="mb-5 flex flex-wrap items-center">
               <div className="my-2">
                 <Label>{t('form:input-label-dimensions-width')}</Label>
-                <div className="mr-2 flex items-center justify-center rounded-sm border bg-gray-100">
+                <div className="mr-2 flex items-center justify-center rounded-sm bg-gray-100">
                   <Input
                     name="dimensionWidth"
                     value={dimensionWidth}
@@ -271,7 +271,7 @@ function ProductShippingInfoForm({ state, productType, initialValues }: Props) {
               </div>
               <div className="my-2">
                 <Label>{t('form:input-label-dimensions-height')}</Label>
-                <div className="mr-2 flex items-center justify-center rounded-sm border bg-gray-100">
+                <div className="mr-2 flex items-center justify-center rounded-sm bg-gray-100">
                   <Input
                     name="dimensionHeight"
                     value={dimensionHeight}
@@ -288,7 +288,7 @@ function ProductShippingInfoForm({ state, productType, initialValues }: Props) {
               </div>
               <div className="my-2">
                 <Label>{t('form:input-label-dimensions-length')}</Label>
-                <div className="mr-2 flex items-center justify-center rounded-sm border bg-gray-100">
+                <div className="rounded-sm0 mr-2 flex items-center justify-center bg-gray-100">
                   <Input
                     name="dimensionLength"
                     value={dimensionLength}

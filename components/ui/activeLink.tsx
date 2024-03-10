@@ -54,14 +54,14 @@ const ActiveLink: React.FC<NextLinkProps & Props> = ({
 
   return (
     <NextLink href={href} passHref>
-      <a
+      <div
         title={title}
         onClick={onClick}
         role={isFunction ? 'button' : null}
         className={class_name}
       >
         {children}
-      </a>
+      </div>
     </NextLink>
   );
 };

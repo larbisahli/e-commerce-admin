@@ -55,8 +55,7 @@ export default function ShippingZonesPage({ client }: SSRProps) {
   const [limit, setLimit] = useState({ id: 1, value: 10, label: 10 });
   const [orderBy, setOrder] = useState(OrderBy.CREATED_AT);
 
-  const { selectedTableColumns, handleColumnChange } =
-    useTableColumn('order');
+  const { selectedTableColumns, handleColumnChange } = useTableColumn('order');
 
   const { data, loading, error, fetchMore } = useQuery<
     TShipping,
@@ -97,17 +96,12 @@ export default function ShippingZonesPage({ client }: SSRProps) {
     <>
       <Head>
         <title>Orders | Dropgala</title>
-        <link
-          rel="icon"
-          type="image/svg"
-          sizes="32x32"
-          href="/svg/order.svg"
-        />
+        <link rel="icon" type="image/svg" sizes="32x32" href="/svg/order.svg" />
       </Head>
       <PageMainAction
         href={`${ROUTES.ORDERS}/create`}
-        title={t('form:button-label-add-order')}
-        label={t('form:input-label-orders')}
+        title={t('form:input-label-orders')}
+        label={t('form:button-label-add-order')}
         showSelectLanguage={false}
       />
       <PageMainHeader

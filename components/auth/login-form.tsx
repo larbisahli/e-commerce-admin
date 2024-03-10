@@ -147,9 +147,9 @@ const LoginForm = () => {
         <div className=" p-5 text-center">
           <span className="mr-1 text-gray-600">{t('dont-have-account')}</span>
           <Link href={ROUTES.SIGNUP}>
-            <a className="font-normal text-blue-500">
+            <div className="font-normal text-blue-500">
               {t('create-an-account')}
-            </a>
+            </div>
           </Link>
         </div>
       </form>

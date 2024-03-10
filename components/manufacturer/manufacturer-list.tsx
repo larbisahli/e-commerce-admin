@@ -101,13 +101,13 @@ const ManufacturerList = ({
           if (record?.link) {
             return (
               <Link href={record?.link}>
-                <a
+                <div
                   target="_blank"
                   title={record?.link}
                   className="font-semibold capitalize text-blue-400"
                 >
                   {name ?? record?.translated?.name}
-                </a>
+                </div>
               </Link>
             );
           }

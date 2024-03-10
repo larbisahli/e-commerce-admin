@@ -33,9 +33,9 @@ const HeroSection = () => {
             </p>
           </div>
           <Link href="#subscription">
-            <a className="hover:text-underline inline-block rounded-sm border-blue-300 bg-blue-600 py-3 px-8 text-center text-lg font-medium text-white no-underline">
+            <div className="hover:text-underline inline-block rounded-sm border-blue-300 bg-blue-600 py-3 px-8 text-center text-lg font-medium text-white no-underline">
               Join Our Waitlist!
-            </a>
+            </div>
           </Link>
         </div>
 

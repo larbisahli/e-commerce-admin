@@ -29,8 +29,8 @@ const Navigation = () => {
   }, []);
 
   return (
-    <nav
-      className={cn('fixed z-50 w-full px-6 py-3 transition-all', {
+    <header
+      className={cn('fixed z-50 w-full bg-white px-6 py-3 transition-all', {
         'bg-white shadow': show
       })}
     >
@@ -38,19 +38,25 @@ const Navigation = () => {
         <div className="flex w-full content-end justify-between">
           <div className="flex items-center">
             <Link href="/">
-              <a className="pt-2 text-center leading-normal text-blue-600">
+              <div className="pt-2 text-center leading-normal text-blue-600">
                 <Image src={'/logo.svg'} alt="logo" width={120} height={30} />
-              </a>
+              </div>
             </Link>
-            <Link href="/#features">
-              <a className="hidden px-8 text-gray-800 md:block">Features</a>
-            </Link>
-            {/* <Link href="/#pricing">
+            <div className="flex h-full items-center justify-end px-8">
+              <Link href="/#features">
+                <div className="hidden px-4 text-gray-800 hover:text-blue-500 md:block">
+                  Features
+                </div>
+              </Link>
+              {/* <Link href="/#pricing">
               <a className="hidden text-gray-800 md:block">Pricing</a>
             </Link> */}
-            {/* <Link href="/blog">
-              <a className="px-8 text-gray-800 md:block hidden">Blogs</a>
-            </Link> */}
+              <Link href="/blog">
+                <div className="hidden px-4 text-gray-800 hover:text-blue-500 md:block">
+                  Blogs
+                </div>
+              </Link>
+            </div>
           </div>
           <div className="flex items-center justify-center font-medium">
             {/* <Link href="https://dropgala.com/login">
@@ -64,14 +70,14 @@ const Navigation = () => {
             </a>
           </Link> */}
             <Link href="#subscription">
-              <a className="hover:text-underline inline-block rounded-sm border-blue-300 bg-blue-600 py-2 px-5 text-center font-medium text-white no-underline">
+              <div className="hover:text-underline inline-block rounded-sm border-blue-300 bg-blue-600 py-2 px-5 text-center font-medium text-white no-underline">
                 Join Our Waitlist!
-              </a>
+              </div>
             </Link>
           </div>
         </div>
       </div>
-    </nav>
+    </header>
   );
 };
 

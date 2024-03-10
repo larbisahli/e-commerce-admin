@@ -104,7 +104,7 @@ export default function Categories({ client }: SSRProps) {
       <PageMainAction
         href={`${ROUTES.CATEGORY}/create`}
         title={t('form:input-label-categories')}
-        label={t('form:button-label-add-categories')}
+        label={t('form:button-label-add-category')}
       />
       <PageMainHeader
         columns={COLUMNS['category']}

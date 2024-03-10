@@ -5,8 +5,8 @@
       <link>https://dropgala.com/blog</link>
       <description>Check the latest news of E commerce, marketing, Tech....</description>
       <language>en-us</language>
-      <managingEditor>larbisahli1905@gmail.com (Dropgala)</managingEditor>
-      <webMaster>larbisahli1905@gmail.com (Dropgala)</webMaster>
+      <managingEditor>larbi.sahli@dropgala.com (Dropgala)</managingEditor>
+      <webMaster>larbi.sahli@dropgala.com (Dropgala)</webMaster>
       <lastBuildDate>Tue, 12 Jan 2021 00:00:00 GMT</lastBuildDate>
       <atom:link href="https://dropgala.com/tags/guide/feed.xml" rel="self" type="application/rss+xml"/>
       
@@ -16,7 +16,7 @@
     <link>https://dropgala.com/blog/introducing-tailwind-nextjs-starter-blog</link>
     <description>Looking for a performant, out of the box template, with all the best in web technology to support your blogging needs? Checkout the Tailwind Nextjs Starter Blog template.</description>
     <pubDate>Tue, 12 Jan 2021 00:00:00 GMT</pubDate>
-    <author>larbisahli1905@gmail.com (Dropgala)</author>
+    <author>larbi.sahli@dropgala.com (Dropgala)</author>
     <category>next-js</category><category>tailwind</category><category>guide</category>
   </item>
 
@@ -26,7 +26,7 @@
     <link>https://dropgala.com/blog/guide-to-using-images-in-nextjs</link>
     <description>In this article we introduce adding images in the tailwind starter blog and the benefits and limitations of the next/image component.</description>
     <pubDate>Wed, 11 Nov 2020 00:00:00 GMT</pubDate>
-    <author>larbisahli1905@gmail.com (Dropgala)</author>
+    <author>larbi.sahli@dropgala.com (Dropgala)</author>
     <category>next js</category><category>guide</category>
   </item>
 
@@ -36,7 +36,7 @@
     <link>https://dropgala.com/blog/github-markdown-guide</link>
     <description>Markdown cheatsheet for all your blogging needs - headers, lists, images, tables and more! An illustrated guide based on Github Flavored Markdown.</description>
     <pubDate>Fri, 11 Oct 2019 00:00:00 GMT</pubDate>
-    <author>larbisahli1905@gmail.com (Dropgala)</author>
+    <author>larbi.sahli@dropgala.com (Dropgala)</author>
     <category>github</category><category>guide</category>
   </item>
 

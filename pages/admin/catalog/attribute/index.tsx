@@ -103,7 +103,7 @@ export default function AttributePage({ client }: SSRProps) {
       <PageMainAction
         href={`${ROUTES.ATTRIBUTE}/create`}
         title={t('common:sidebar-nav-item-attributes')}
-        label={t('form:button-label-add-attributes')}
+        label={t('form:button-label-add-attribute')}
       />
       <PageMainHeader
         columns={COLUMNS['attribute']}

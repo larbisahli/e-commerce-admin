@@ -27,9 +27,9 @@ const PricingSection = () => {
               </div>
               <div className="pt-5">
                 <Link href="#subscription">
-                  <a className="hover:text-underline inline-block w-full rounded-[10px] border border-black py-2 px-8 text-center font-medium text-black no-underline hover:bg-gray-900 hover:text-white">
+                  <div className="hover:text-underline inline-block w-full rounded-[10px] border border-black py-2 px-8 text-center font-medium text-black no-underline hover:bg-gray-900 hover:text-white">
                     Get Started
-                  </a>
+                  </div>
                 </Link>
               </div>
               <div className="my-3 pt-5 text-center text-gray-700">
@@ -71,9 +71,9 @@ const PricingSection = () => {
               </div>
               <div className="pt-5">
                 <Link href="#subscription">
-                  <a className="hover:text-underline inline-block  w-full rounded-[10px] bg-black py-2 px-8 text-center font-medium text-white no-underline hover:bg-gray-900">
+                  <div className="hover:text-underline inline-block  w-full rounded-[10px] bg-black py-2 px-8 text-center font-medium text-white no-underline hover:bg-gray-900">
                     Get Started
-                  </a>
+                  </div>
                 </Link>
               </div>
               <div className="my-3 pt-5 text-center text-gray-700">
@@ -234,9 +234,9 @@ const PricingSection = () => {
               </div>
               <div className="pt-5">
                 <Link href="#subscription">
-                  <a className="hover:text-underline inline-block w-full rounded-[10px] border border-black py-2 px-8 text-center font-medium text-black no-underline hover:bg-gray-900 hover:text-white">
+                  <div className="hover:text-underline inline-block w-full rounded-[10px] border border-black py-2 px-8 text-center font-medium text-black no-underline hover:bg-gray-900 hover:text-white">
                     Get Started
-                  </a>
+                  </div>
                 </Link>
               </div>
               <div className="my-3 pt-5 text-center text-gray-700">

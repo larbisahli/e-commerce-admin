@@ -1,3 +1,4 @@
+import { ClockIcon } from '@components/icons/clock.icon';
 import siteMetadata from '@data/siteMetadata';
 import cn from 'classnames';
 
@@ -15,33 +16,43 @@ const formatDate = (date) => {
   return now;
 };
 
-const Card = ({ title, description, imgSrc, href, date, tags, classNames }) => (
-  <div
-    className={cn('mx-auto p-4 md:w-1/2', classNames)}
-    style={{ width: '350px', minWidth: '300px', height: '420px' }}
-  >
-    <div className="h-full rounded-md border-2 border-gray-200 border-opacity-60 bg-white">
+const Card = ({
+  imgWidth,
+  imgHeight,
+  title,
+  description,
+  imgSrc,
+  href,
+  date,
+  tags,
+  classNames
+}) => (
+  <div className={cn('mx-auto w-[300px]', classNames)}>
+    <div className="h-full rounded-md border border-gray-200 border-opacity-60 bg-white">
       {href ? (
         <Link href={href} aria-label={`Link to ${title}`}>
           <Image
             alt={title}
             src={imgSrc}
-            className="object-cover object-center md:h-36 lg:h-48"
-            width={350}
-            height={200}
+            className="rounded-t-md object-cover object-center md:h-40 lg:h-48"
+            width={imgWidth ?? 350}
+            height={imgHeight ?? 200}
           />
         </Link>
       ) : (
         <Image
           alt={title}
           src={imgSrc}
-          className="object-cover object-center md:h-36 lg:h-48"
-          width={350}
-          height={200}
+          className="rounded-t-md object-cover object-center md:h-36 lg:h-48"
+          width={imgWidth ?? 350}
+          height={imgHeight ?? 200}
         />
       )}
-      <div style={{ height: '190px' }} className="relative p-2">
-        <h2 className="max-2-lines mb-2 text-xl font-bold leading-8 tracking-tight">
+      <div className="flex flex-col p-3 pb-2">
+        <h2
+          title={title}
+          className="cut-line-2 mb-2 h-[56px] text-xl font-bold leading-7 tracking-tight"
+        >
           {href ? (
             <Link href={href} aria-label={`Link to ${title}`}>
               {title}
@@ -50,28 +61,28 @@ const Card = ({ title, description, imgSrc, href, date, tags, classNames }) => (
             title
           )}
         </h2>
-        <p className="cut-line-3 max-3-lines prose mb-2 max-w-none text-base text-gray-500">
+        <p className="cut-line-3 max-3-lines prose mb-2 min-h-[60px] max-w-none text-sm leading-5 text-gray-500">
           {description}
         </p>
-        <div
-          style={{ width: '290px' }}
-          className="absolute bottom-0 flex items-center justify-between"
-        >
+        <div className="flex h-full items-end justify-between">
           <div>
             {href && (
               <Link
                 href={href}
-                className="text-base font-medium leading-6 text-blue-500 hover:text-blue-600"
+                className="flex items-center justify-center text-sm font-medium leading-6 text-blue-600 hover:text-blue-500"
                 aria-label={`Link to ${title}`}
               >
                 <span>Learn more</span>
-                <span className="text-2xl">&rarr;</span>
+                <span className="text-l mx-1">&rarr;</span>
               </Link>
             )}
           </div>
-          <div className="">
+          <div className="flex flex-1 items-center justify-end text-gray-400">
+            <div className="mx-1">
+              <ClockIcon width={15} height={15} />
+            </div>
             <dl>
-              <dd className="text-sm font-medium leading-6 text-gray-500">
+              <dd className="text-xs leading-6 text-gray-400">
                 <time dateTime={date}>{formatDate(date)}</time>
               </dd>
             </dl>

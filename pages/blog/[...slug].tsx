@@ -1,3 +1,4 @@
+import BlogSubscription from '@components/dropgala/BlogSubscription';
 import Footer from '@components/dropgala/Footer';
 import { MDXLayoutRenderer } from '@components/dropgala/MDXComponents';
 import Navigation from '@components/dropgala/Navigation';
@@ -20,7 +21,7 @@ export async function getStaticPaths() {
         slug: formatSlug(p).split('/')
       }
     })),
-    fallback: false
+    fallback: 'blocking'
   };
 }
 
@@ -63,15 +64,15 @@ export default function Blog({ post, authorDetails, prev, next }) {
     <>
       <Navigation />
       <div className="container mx-auto pt-32">
-        <div className="mt-24 text-center">
+        {/* <div className="mt-24 text-center">
           <PageTitle>
             Under Construction{' '}
             <span role="img" aria-label="roadwork sign">
               🚧
             </span>
           </PageTitle>
-        </div>
-        {/* {!frontMatter.draft ? (
+        </div> */}
+        {!frontMatter.draft ? (
           <MDXLayoutRenderer
             layout={frontMatter.layout || DEFAULT_LAYOUT}
             toc={toc}
@@ -90,8 +91,12 @@ export default function Blog({ post, authorDetails, prev, next }) {
               </span>
             </PageTitle>
           </div>
-        )} */}
+        )}
       </div>
+
+      <section>
+        <BlogSubscription></BlogSubscription>
+      </section>
       <Footer />
     </>
   );

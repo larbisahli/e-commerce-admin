@@ -18,7 +18,7 @@ const FeatureSection = () => {
   return (
     <section
       id="features"
-      className="container mx-auto mt-0 w-full rounded p-4 lg:mt-32 lg:px-0"
+      className="container mx-auto mt-0 w-full rounded p-4 lg:mt-24 lg:px-0"
     >
       <div className="flex flex-col items-center">
         <h2 className="slide-in-bottom-h1 my-5 text-center text-3xl font-bold leading-tight text-gray-800 md:text-left">

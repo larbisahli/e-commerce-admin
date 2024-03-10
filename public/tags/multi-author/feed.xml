@@ -5,8 +5,8 @@
       <link>https://dropgala.com/blog</link>
       <description>Check the latest news of E commerce, marketing, Tech....</description>
       <language>en-us</language>
-      <managingEditor>larbisahli1905@gmail.com (Dropgala)</managingEditor>
-      <webMaster>larbisahli1905@gmail.com (Dropgala)</webMaster>
+      <managingEditor>larbi.sahli@dropgala.com (Dropgala)</managingEditor>
+      <webMaster>larbi.sahli@dropgala.com (Dropgala)</webMaster>
       <lastBuildDate>Sun, 02 May 2021 00:00:00 GMT</lastBuildDate>
       <atom:link href="https://dropgala.com/tags/multi-author/feed.xml" rel="self" type="application/rss+xml"/>
       
@@ -16,7 +16,7 @@
     <link>https://dropgala.com/blog/nested-route/introducing-multi-part-posts-with-nested-routing</link>
     <description>The blog template supports posts in nested sub-folders. This can be used to group posts of similar content e.g. a multi-part course. This post is itself an example of a nested route!</description>
     <pubDate>Sun, 02 May 2021 00:00:00 GMT</pubDate>
-    <author>larbisahli1905@gmail.com (Dropgala)</author>
+    <author>larbi.sahli@dropgala.com (Dropgala)</author>
     <category>multi-author</category><category>next-js</category><category>feature</category>
   </item>
 
