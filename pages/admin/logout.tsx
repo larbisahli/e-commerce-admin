@@ -9,11 +9,8 @@ function SignOut() {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { req, res } = context;
-
   const cookies = new Cookies(req, res);
-
   cookies.set(CookieNames.USER_TOKEN_NAME, '', { maxAge: Date.now() });
-
   return {
     redirect: {
       permanent: false,

@@ -71,6 +71,7 @@ const HeroBannerList = ({
                     ? thumbnail[0]?.image
                     : siteSettings.product.image
                 }
+                alt="image"
                 customPlaceholder={
                   !isEmpty(thumbnail)
                     ? thumbnail[0]?.placeholder

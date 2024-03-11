@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import type { Nullable, Scalars } from './custom.types';
+import type { CurrencyType, Nullable, Scalars } from './custom.types';
 import { AttributeTypes, RateType } from './enums';
 
 export enum SortOrder {
@@ -669,6 +669,44 @@ export interface PageType {
     metaTitle: string;
     metaDescription: string;
   };
+}
+
+export interface FinalPrice {
+  // currency?: { code: string }
+  value: number;
+}
+
+export interface Summary {
+  grandTotalInclTax: FinalPrice;
+  grandTotalExclTax: FinalPrice;
+  subtotalInclTax: FinalPrice;
+  subtotalExclTax: FinalPrice;
+  totalDiscount: FinalPrice;
+  totalShippingInclTax: FinalPrice;
+  totalShippingExclTax: FinalPrice;
+}
+
+export interface OrderType {
+  orderNumber?: string;
+  couponId?: string;
+  customerId?: string;
+  orderStatusId?: Nullable<string>;
+  currency?: Nullable<CurrencyType>;
+  paymentId?: string;
+  orderGeo?: {
+    ip?: string;
+    city?: string;
+    state?: string;
+  };
+  grandTotalExclTax: Summary['grandTotalExclTax'];
+  grandTotalInclTax: Summary['grandTotalInclTax'];
+  subtotalInclTax: Summary['subtotalInclTax'];
+  subtotalExclTax: Summary['subtotalExclTax'];
+  totalDiscount: Summary['totalDiscount'];
+  totalQuantity?: number;
+  orderApprovedAt?: Scalars['Date'];
+  orderDeliveredCarrierDate?: Scalars['Date'];
+  orderDeliveredCustomerDate?: Scalars['Date'];
 }
 
 // export declare type Address = {

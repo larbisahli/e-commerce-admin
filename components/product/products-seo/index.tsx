@@ -44,6 +44,7 @@ type Props = {
     description: Product['description'];
     status: Product['status'];
     disableOutOfStock: Product['disableOutOfStock'];
+    trackInventory: Product['trackInventory'];
     isUpdateMode: boolean;
   };
 };

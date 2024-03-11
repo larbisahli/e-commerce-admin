@@ -16,14 +16,11 @@ const CommonSEO = ({ title, description, ogType, ogImage, twImage }) => {
       <meta property="og:type" content={ogType} />
       <meta property="og:site_name" content={siteMetadata.title} />
       <meta property="og:description" content={description} />
+      <meta property="og:image:type" content="image/png" />
+      <meta property="og:image:width" content="400" />
+      <meta property="og:image:height" content="300" />
       <meta property="og:title" content={title} />
-      {ogImage.constructor.name === 'Array' ? (
-        ogImage.map(({ url }) => (
-          <meta property="og:image" content={url} key={url} />
-        ))
-      ) : (
-        <meta property="og:image" content={ogImage} key={ogImage} />
-      )}
+      <meta property="og:image" content={ogImage} key={ogImage} />
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:site" content={siteMetadata.twitter} />
       <meta name="twitter:title" content={title} />
@@ -79,24 +76,18 @@ export const BlogSEO = ({
   date,
   lastmod,
   url,
-  images = []
+  thumbnail
 }) => {
   const router = useRouter();
   const publishedAt = new Date(date).toISOString();
   const modifiedAt = new Date(lastmod || date).toISOString();
-  let imagesArr =
-    images.length === 0
-      ? [siteMetadata.socialBanner]
-      : typeof images === 'string'
-      ? [images]
-      : images;
 
-  const featuredImages = imagesArr.map((img) => {
-    return {
+  const featuredImages = [
+    {
       '@type': 'ImageObject',
-      url: `${siteMetadata.siteUrl}${img}`
-    };
-  });
+      url: `${siteMetadata.siteUrl}${thumbnail}`
+    }
+  ];
 
   let authorList;
   if (authorDetails) {
@@ -144,7 +135,7 @@ export const BlogSEO = ({
         title={title}
         description={summary}
         ogType="article"
-        ogImage={featuredImages}
+        ogImage={twImageUrl}
         twImage={twImageUrl}
       />
       <Head>
@@ -154,10 +145,7 @@ export const BlogSEO = ({
         {lastmod && (
           <meta property="article:modified_time" content={modifiedAt} />
         )}
-        <link
-          rel="canonical"
-          href={`${siteMetadata.siteUrl}${router.asPath}`}
-        />
+        <link rel="canonical" href={url} />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

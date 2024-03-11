@@ -10,6 +10,7 @@ import { siteSettings } from '@settings/site.settings';
 import {
   CreatedUpdatedByAt,
   ImageType,
+  OrderType,
   ShippingZoneType
 } from '@ts-types/generated';
 import { useIsRTL } from '@utils/locals';
@@ -27,7 +28,7 @@ const Table = dynamic(
 );
 
 export type IProps = {
-  shippingZones: ShippingZoneType[] | undefined;
+  orders: OrderType[] | undefined;
   selectedColumns: string[];
   loading: boolean;
 };
@@ -36,7 +37,7 @@ interface TableRowProps extends ShippingZoneType {
   loading: boolean;
 }
 
-const ShippingList = ({ loading, shippingZones, selectedColumns }: IProps) => {
+const OrderList = ({ loading, orders, selectedColumns }: IProps) => {
   const { t } = useTranslation();
   const { alignLeft } = useIsRTL();
   const rowExpandable = (record: any) => record.children?.length;
@@ -45,46 +46,19 @@ const ShippingList = ({ loading, shippingZones, selectedColumns }: IProps) => {
   const columns = useMemo(() => {
     return [
       {
-        title: t('table:table-item-id'),
-        dataIndex: 'id',
-        key: 'id',
+        title: t('table:table-order-number'),
+        dataIndex: 'orderNumber',
+        key: 'orderNumber',
         align: alignLeft,
-        width: 50,
+        width: 150,
         ellipsis: true
       },
       {
-        title: t('table:table-item-logo'),
-        dataIndex: 'logo',
-        key: 'logo',
+        title: t('table:table-customer-name'),
+        dataIndex: 'customer',
+        key: 'customer',
         align: alignLeft,
-        width: 85,
-        render: (logo: ImageType, record: TableRowProps) => {
-          if (record?.loading) {
-            return <TableRowPlaceholder />;
-          }
-
-          const { image, placeholder } = logo[0] ?? {};
-          return (
-            <div className="h-[65px] w-[65px] min-w-0 overflow-hidden rounded-sm border shadow">
-              <ImageComponent
-                src={image ?? siteSettings.product.image}
-                customPlaceholder={
-                  placeholder ?? siteSettings.product.placeholder
-                }
-                width={100}
-                height={100}
-                // objectFit="container"
-              />
-            </div>
-          );
-        }
-      },
-      {
-        title: t('table:table-item-name'),
-        dataIndex: 'name',
-        key: 'name',
-        align: alignLeft,
-        width: 150,
+        width: 200,
         ellipsis: true,
         render: (name: string, record: TableRowProps) => {
           if (record?.loading) {
@@ -96,11 +70,11 @@ const ShippingList = ({ loading, shippingZones, selectedColumns }: IProps) => {
         }
       },
       {
-        title: t('table:table-item-rate-type'),
-        dataIndex: 'rateType',
-        key: 'rateType',
+        title: t('table:table-customer-address'),
+        dataIndex: 'customer',
+        key: 'customer',
         align: 'center',
-        width: 90,
+        width: 230,
         render: (rateType: string, record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
@@ -125,30 +99,11 @@ const ShippingList = ({ loading, shippingZones, selectedColumns }: IProps) => {
         }
       },
       {
-        title: t('table:table-item-status'),
-        dataIndex: 'active',
-        key: 'active',
+        title: t('table:table-quantity'),
+        dataIndex: 'quantity',
+        key: 'quantity',
         align: 'center',
-        width: 90,
-        render: (active: boolean, record: TableRowProps) => {
-          if (record?.loading) {
-            return <TableRowPlaceholder />;
-          }
-          return (
-            <Badge
-              className="!text-sm !text-gray-600"
-              text={active ? 'Visible' : 'Hidden'}
-              color={active ? 'bg-green-200' : 'bg-red-200'}
-            />
-          );
-        }
-      },
-      {
-        title: t('table:table-item-free'),
-        dataIndex: 'freeShipping',
-        key: 'freeShipping',
-        align: 'center',
-        width: 90,
+        width: 100,
         render: (freeShipping: boolean, record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
@@ -163,38 +118,117 @@ const ShippingList = ({ loading, shippingZones, selectedColumns }: IProps) => {
         }
       },
       {
-        title: t('table:table-item-created-at'),
-        dataIndex: 'createdAt',
-        key: 'createdAt',
-        align: alignLeft,
-        width: 200,
-        render: (
-          createdAt: CreatedUpdatedByAt['createdAt'],
-          record: TableRowProps
-        ) => {
+        title: t('table:table-payment-method'),
+        dataIndex: 'payment',
+        key: 'payment',
+        align: 'center',
+        width: 150,
+        render: (active: boolean, record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
-          return `${dayjs(createdAt).format('MMM D, YYYY')} at ${dayjs(
-            createdAt
-          ).format('h:mm A')}`;
+          return (
+            <Badge
+              className="!text-sm !text-gray-600"
+              text={active ? 'Visible' : 'Hidden'}
+              color={active ? 'bg-green-200' : 'bg-red-200'}
+            />
+          );
         }
       },
       {
-        title: t('table:table-item-created-by'),
-        dataIndex: 'createdBy',
-        key: 'createdBy',
-        align: alignLeft,
+        title: t('table:table-grant-total'),
+        dataIndex: 'paymentCode',
+        key: 'paymentCode',
+        align: 'center',
         width: 150,
-        ellipsis: true,
-        render: (
-          createdBy: CreatedUpdatedByAt['createdBy'],
-          record: TableRowProps
-        ) => {
+        render: (freeShipping: boolean, record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
-          return <ProfileCart user={createdBy} createdAt={record?.createdAt} />;
+          return (
+            <Badge
+              className="!text-sm !text-gray-600"
+              text={freeShipping ? 'Yes' : 'No'}
+              color={freeShipping ? 'bg-green-200' : 'bg-red-200'}
+            />
+          );
+        }
+      },
+      {
+        title: t('table:table-order-status'),
+        dataIndex: 'orderStatus',
+        key: 'orderStatus',
+        align: 'center',
+        width: 150,
+        render: (freeShipping: boolean, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
+          return (
+            <Badge
+              className="!text-sm !text-gray-600"
+              text={freeShipping ? 'Yes' : 'No'}
+              color={freeShipping ? 'bg-green-200' : 'bg-red-200'}
+            />
+          );
+        }
+      },
+      {
+        title: t('table:table-payment-status'),
+        dataIndex: 'paymentStatus',
+        key: 'paymentStatus',
+        align: 'center',
+        width: 150,
+        render: (freeShipping: boolean, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
+          return (
+            <Badge
+              className="!text-sm !text-gray-600"
+              text={freeShipping ? 'Yes' : 'No'}
+              color={freeShipping ? 'bg-green-200' : 'bg-red-200'}
+            />
+          );
+        }
+      },
+      {
+        title: t('table:table-delivery-status'),
+        dataIndex: 'deliveryStatus',
+        key: 'paymentCode',
+        align: 'center',
+        width: 150,
+        render: (freeShipping: boolean, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
+          return (
+            <Badge
+              className="!text-sm !text-gray-600"
+              text={freeShipping ? 'Yes' : 'No'}
+              color={freeShipping ? 'bg-green-200' : 'bg-red-200'}
+            />
+          );
+        }
+      },
+      {
+        title: t('table:table-purchase-date'),
+        dataIndex: 'createdAt',
+        key: 'createdAt',
+        align: 'center',
+        width: 150,
+        render: (freeShipping: boolean, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
+          return (
+            <Badge
+              className="!text-sm !text-gray-600"
+              text={freeShipping ? 'Yes' : 'No'}
+              color={freeShipping ? 'bg-green-200' : 'bg-red-200'}
+            />
+          );
         }
       },
       {
@@ -268,7 +302,7 @@ const ShippingList = ({ loading, shippingZones, selectedColumns }: IProps) => {
       //@ts-ignore
       columns={tableColumns}
       emptyText={t('table:empty-table-data')}
-      data={loading ? tablePlaceholderRow : shippingZones}
+      data={loading ? tablePlaceholderRow : orders}
       rowKey="id"
       scroll={{ x: 900 }}
       className="card mb-8 overflow-hidden"
@@ -280,4 +314,4 @@ const ShippingList = ({ loading, shippingZones, selectedColumns }: IProps) => {
   );
 };
 
-export default ShippingList;
+export default OrderList;

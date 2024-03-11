@@ -87,7 +87,7 @@ export const siteSettings = {
           },
           {
             id: 'W13ECaCI',
-            href: ROUTES.COMING_SOON,
+            href: ROUTES.CUSTOMER_GROUP,
             label: 'sidebar-nav-item-customer-groups',
             padding: '35px',
             isSubLink: true,

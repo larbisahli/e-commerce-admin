@@ -9,6 +9,7 @@ export const ROUTES = {
   PRODUCT: '/admin/catalog/product',
   COUPON: '/admin/coupon',
   CUSTOMER: '/admin/customer',
+  CUSTOMER_GROUP: '/admin/customer/group',
   SHIPPING_ZONE: '/admin/shipping-delivery/shipping-zone',
   DELIVERY_TIME: '/admin/shipping-delivery/delivery-time',
   SETTINGS: '/admin/settings',

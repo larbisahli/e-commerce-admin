@@ -206,6 +206,15 @@ export default function CreateOrUpdateSlideForm({
     return confirm(t('common:UNSAVED_CHANGES'));
   });
 
+  const ImageInformation = (
+    <span>
+      {t('form:hero-slider-image-helper-text')} &nbsp;
+      <span className="font-bold">
+        {'500x1400'} {t('common:pixel')}
+      </span>
+    </span>
+  );
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormActions
@@ -240,7 +249,7 @@ export default function CreateOrUpdateSlideForm({
       <div className="my-5 flex flex-wrap border-b border-dashed border-border-base pb-8 sm:my-8">
         <Description
           title={t('form:input-label-image')}
-          details={t('form:hero-slider-image-helper-text')}
+          details={ImageInformation}
           className="w-full px-0 pb-5 sm:w-1/4 sm:py-8 sm:pe-4 md:w-1/4 md:pe-5"
         />
         <Card className="w-full sm:w-3/4 md:w-3/4">

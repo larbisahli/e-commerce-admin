@@ -4,24 +4,6 @@ const DefaultSeo = () => {
   return (
     <NextDefaultSeo
       title={'Dropgala'}
-      titleTemplate={'E-Commerce'}
-      description={''}
-      canonical={'dropgala.com'}
-      openGraph={{
-        title: '',
-        description: '',
-        type: 'website',
-        locale: 'en_US',
-        site_name: '',
-        images: [
-          {
-            url: '',
-            width: 800,
-            height: 600,
-            alt: ''
-          }
-        ]
-      }}
       twitter={{
         handle: '',
         site: '',

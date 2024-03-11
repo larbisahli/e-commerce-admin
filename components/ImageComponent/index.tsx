@@ -1,6 +1,7 @@
 import { useGetDataUrl } from '@hooks/useGetDataUrl';
 import { mediaURL } from '@utils/utils';
-import Image, { ImageProps } from 'next/image';
+import classNames from 'classnames';
+import Image, { ImageProps } from 'next/legacy/image';
 import React, { memo } from 'react';
 
 interface Props extends ImageProps {
@@ -17,7 +18,7 @@ const ImageComponent = ({ src, customPlaceholder, ...props }: Props) => {
       placeholder="blur"
       alt={props.alt}
       src={`${mediaURL}/${src}`}
-      className="pointer-events-none"
+      className={classNames('pointer-events-none', props.className)}
       {...props}
     />
   );

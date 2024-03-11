@@ -69,19 +69,6 @@ function App({ Component, pageProps }: AppProps) {
         />
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#020024" />
-
-        <meta property="og:image" content="https://dropgala.com/scandi.webp" />
-        <meta
-          property="og:image:secure_url"
-          content="https://dropgala.com/scandi.webp"
-        />
-        <meta property="og:image:type" content="image/webp" />
-        <meta property="og:image:width" content="400" />
-        <meta property="og:image:height" content="300" />
-        <meta
-          property="og:image:alt"
-          content="Start your online store and kickstart your e-commerce business today"
-        />
       </Head>
       <ToastContainer
         position="top-right"

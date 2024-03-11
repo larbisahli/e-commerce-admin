@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client';
 import AppLayout from '@components/layouts/app';
-import ShippingList from '@components/shipping-zone/shipping-list';
+import OrderList from '@components/order/order-list';
 import ErrorMessage from '@components/ui/error-message';
 import { SHIPPING_ZONES } from '@graphql/shipping-zone';
 import { useGetUser } from '@hooks/index';
@@ -8,8 +8,7 @@ import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useTableColumn } from '@hooks/useTableColumn';
 import { verifyAuth } from '@middleware/utils';
 import type { SSRProps } from '@ts-types/custom.types';
-import type { ShippingZoneType } from '@ts-types/generated';
-import { OrderBy, SortOrder } from '@ts-types/generated';
+import { OrderBy, OrderType, SortOrder } from '@ts-types/generated';
 import { COLUMNS } from '@utils/data/table-columns';
 import { ROUTES } from '@utils/routes';
 import isEmpty from 'lodash/isEmpty';
@@ -37,8 +36,8 @@ const PageMainAction = dynamic(
 );
 
 interface TShipping {
-  shippingZones: ShippingZoneType[];
-  shippingZoneCount: { count: number };
+  orders: OrderType[];
+  orderCount: { count: number };
 }
 
 interface ShippingVariable {
@@ -70,8 +69,7 @@ export default function ShippingZonesPage({ client }: SSRProps) {
     fetchPolicy: 'cache-and-network'
   });
 
-  const { shippingZones = [], shippingZoneCount: { count } = { count: 0 } } =
-    data ?? {};
+  const { orders = [], orderCount: { count } = { count: 0 } } = data ?? {};
 
   useGetUser(client);
   useErrorLogger(error);
@@ -117,9 +115,9 @@ export default function ShippingZonesPage({ client }: SSRProps) {
         currentPage={page}
         perPage={limit.value}
       />
-      <ShippingList
+      <OrderList
         loading={loading}
-        shippingZones={shippingZones}
+        orders={orders}
         selectedColumns={selectedTableColumns}
       />
       {/* <OrderList orders={data?.orders} onPagination={handlePagination} /> */}

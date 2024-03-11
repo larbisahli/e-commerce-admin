@@ -71,6 +71,7 @@ export const PRODUCT = gql`
       }
       published
       disableOutOfStock
+      trackInventory
       freeShipping
       displayProductMeasurements
       includeInHomepage
@@ -264,6 +265,7 @@ export const CREATE_PRODUCT = gql`
     $type: ProductTypeInput!
     $published: Boolean!
     $disableOutOfStock: Boolean!
+    $trackInventory: Boolean!
     $freeShipping: Boolean!
     $displayProductMeasurements: Boolean!
     $includeInHomepage: Boolean!
@@ -295,6 +297,7 @@ export const CREATE_PRODUCT = gql`
       type: $type
       published: $published
       disableOutOfStock: $disableOutOfStock
+      trackInventory: $trackInventory
       freeShipping: $freeShipping
       displayProductMeasurements: $displayProductMeasurements
       includeInHomepage: $includeInHomepage
@@ -380,6 +383,7 @@ export const UPDATE_PRODUCT_CONTENT = gql`
     $note: String
     $published: Boolean!
     $disableOutOfStock: Boolean!
+    $trackInventory: Boolean!
     $freeShipping: Boolean!
     $displayProductMeasurements: Boolean!
     $includeInHomepage: Boolean!
@@ -393,6 +397,7 @@ export const UPDATE_PRODUCT_CONTENT = gql`
       description: $description
       published: $published
       disableOutOfStock: $disableOutOfStock
+      trackInventory: $trackInventory
       freeShipping: $freeShipping
       displayProductMeasurements: $displayProductMeasurements
       includeInHomepage: $includeInHomepage
@@ -405,6 +410,7 @@ export const UPDATE_PRODUCT_CONTENT = gql`
       note
       published
       disableOutOfStock
+      trackInventory
       freeShipping
       displayProductMeasurements
       includeInHomepage

@@ -112,6 +112,7 @@ const ProductContent = ({ state, initialValues, productSeo }: Props) => {
       published: initProductContent.published,
       note: initProductContent.note,
       disableOutOfStock: initProductContent.disableOutOfStock,
+      trackInventory: initProductContent.trackInventory,
       freeShipping: initProductContent.freeShipping,
       includeInHomepage: initProductContent.includeInHomepage,
       displayProductMeasurements: initProductContent.displayProductMeasurements
@@ -122,6 +123,7 @@ const ProductContent = ({ state, initialValues, productSeo }: Props) => {
       published: status === 'publish',
       note,
       disableOutOfStock,
+      trackInventory,
       freeShipping,
       includeInHomepage,
       displayProductMeasurements
@@ -138,6 +140,7 @@ const ProductContent = ({ state, initialValues, productSeo }: Props) => {
     displayProductMeasurements,
     freeShipping,
     includeInHomepage,
+    trackInventory,
     initProductContent,
     isUpdateMode,
     name,
@@ -191,6 +194,7 @@ const ProductContent = ({ state, initialValues, productSeo }: Props) => {
         published: status === 'publish',
         note,
         disableOutOfStock,
+        trackInventory,
         freeShipping,
         displayProductMeasurements,
         includeInHomepage,

@@ -12,9 +12,25 @@ const HomePage = () => {
         <title>About us | Dropgala</title>
         <meta
           name="description"
-          content="Dropgala is an online platform that provides accessible and user-friendly services for creating and managing online stores."
+          content="Dropgala is an all-in-one e-commerce platform designed to meet the needs of merchants and entrepreneurs."
         />
-        <link rel="canonical" href="https://dropgala.com" />
+        <link rel="canonical" href="https://www.dropgala.com/about-us" />
+        <meta name="twitter:image" content="/image/logo-color.png" />
+        <meta
+          property="og:image"
+          content="https://dropgala.com/image/logo-color.png"
+        />
+        <meta
+          property="og:image:secure_url"
+          content="https://dropgala.com/image/logo-color.png"
+        />
+        <meta property="og:image:type" content="image/png" />
+        <meta property="og:image:width" content="400" />
+        <meta property="og:image:height" content="300" />
+        <meta
+          property="og:image:alt"
+          content="Dropgala is an all-in-one e-commerce platform designed to meet the needs of merchants and entrepreneurs."
+        />
       </Head>
       {/* NAVIGATION */}
       <Navigation />

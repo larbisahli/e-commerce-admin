@@ -57,9 +57,6 @@ function PageTitle({ children }) {
 
 export default function Blog({ post, authorDetails, prev, next }) {
   const { mdxSource, toc, frontMatter } = post;
-
-  console.log({ post });
-
   return (
     <>
       <Navigation />

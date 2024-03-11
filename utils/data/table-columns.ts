@@ -10,8 +10,8 @@ export const COLUMNS = {
   ],
   order: [
     { label: 'Order ID', key: 'orderNumber' },
-    { label: 'Customer Name', key: 'customer' },
-    { label: 'Address', key: 'customer' },
+    { label: 'Customer fullName', key: 'customer' },
+    { label: 'Customer Address', key: 'customer' },
     { label: 'Payment Method', key: 'payment' },
     { label: 'Grant Total', key: 'paymentCode' },
     { label: 'Quantity', key: 'totalQuantity' },

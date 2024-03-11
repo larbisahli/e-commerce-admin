@@ -2,7 +2,6 @@ import { useMutation, useQuery } from '@apollo/client';
 import Card from '@components/common/card';
 import FormActions from '@components/common/FormActions';
 import ImageModal from '@components/image-modal';
-import Button from '@components/ui/button';
 import Checkbox from '@components/ui/checkbox';
 import Description from '@components/ui/description';
 import Input from '@components/ui/input';
@@ -27,11 +26,9 @@ import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
-import { useFieldArray, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 
-import RateComponent from './rate-component';
-import shippingRatesValidation from './shipping-rates-validation';
-import { shippingValidationSchema } from './shipping-validation-schema';
+import { shippingValidationSchema } from './order-validation-schema';
 import { updateVariable } from './variablesSubmission';
 
 const defaultValues = {
@@ -177,10 +174,6 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
   useErrorLogger(deliveryTimeError);
 
   const onSubmit = async (values: ShippingZoneType) => {
-    const checkFailed = shippingRatesValidation(values.shippingRates, false);
-
-    if (checkFailed) return;
-
     const { shippingRates, shippingZone, zones } = values;
 
     const variables = {
@@ -234,21 +227,8 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
     return confirm(t('common:UNSAVED_CHANGES'));
   });
 
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: 'shippingRates',
-    keyName: 'key'
-  });
-
-  const shippingRates = watch('shippingRates');
   const zones = watch('zones');
   const freeShipping = watch('shippingZone.freeShipping');
-
-  useEffect(() => {
-    if (freeShipping) {
-      remove();
-    }
-  }, [freeShipping, remove]);
 
   useEffect(() => {
     const exist = zones?.find((c) => c.iso2 === 'XX');
@@ -264,45 +244,6 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
       );
     }
   }, [getValues, setValue, zones]);
-
-  // TODO: Fix when MaxValue is null and min is 0
-  const handleRateAppend = () => {
-    const hasFields = !isEmpty(shippingRates);
-
-    const MaxMaxValueField = hasFields
-      ? shippingRates?.reduce((acc, val) => {
-          return Number(acc.max) >= Number(val.max)
-            ? { max: Number(acc.max) }
-            : { max: Number(val.max) };
-        })
-      : { max: 0 };
-
-    const MaxPriceValueField = hasFields
-      ? shippingRates?.reduce((acc, val) => {
-          return Number(acc.price) > Number(val.price)
-            ? { price: Number(acc.price), index: acc.index }
-            : { price: Number(val.price), index: val.index };
-        })
-      : { price: 0, index: 0 };
-
-    const checkFailed = shippingRatesValidation(shippingRates);
-
-    if (!checkFailed) {
-      append({
-        id: null,
-        weightUnit: { unit: 'g' },
-        min: hasFields
-          ? Number((Number(MaxMaxValueField.max) + 0.1).toFixed(1))
-          : 0,
-        max: null,
-        noMax: hasFields,
-        price: hasFields
-          ? Number((Number(MaxPriceValueField.price) + 0.1).toFixed(1))
-          : 0,
-        index: shippingRates?.length
-      });
-    }
-  };
 
   const logo = watch('shippingZone.logo');
 
@@ -479,31 +420,7 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
             }
             className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
           />
-          <Card className="w-full sm:w-8/12 md:w-2/3">
-            <div>
-              <Label>{t('form:input-label-rates')}</Label>
-              {fields.map((item) => {
-                return (
-                  <RateComponent
-                    register={register}
-                    control={control}
-                    item={item}
-                    key={item.key}
-                    fields={fields}
-                    remove={remove}
-                    watch={watch}
-                  />
-                );
-              })}
-              <Button
-                type="button"
-                onClick={handleRateAppend}
-                className="mt-3 w-full sm:w-auto"
-              >
-                {t('form:button-label-add-rate')}
-              </Button>
-            </div>
-          </Card>
+          <Card className="w-full sm:w-8/12 md:w-2/3"></Card>
         </div>
       )}
     </form>
