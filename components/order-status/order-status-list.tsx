@@ -185,7 +185,7 @@ const OrderStatusList = ({
       data={loading ? tablePlaceholderRow : orderStatuses}
       rowKey="id"
       scroll={{ x: 600 }}
-      className="card mb-6 overflow-hidden"
+      className="mb-6 overflow-hidden border"
     />
   );
 };

@@ -42,7 +42,7 @@ const Footer = () => {
         </Link>
       </div>
       <div className="mb-12 mt-4 flex items-center justify-center">
-        <span className="text-xl font-bold text-gray-400">dropgala</span>
+        <span className="text-xl font-bold text-gray-500">dropgala</span>
       </div>
       <p className="text-gray-500 no-underline hover:no-underline">
         &copy; Dropgala 2023 All rights reserved.

@@ -6,7 +6,7 @@ export const Tag = ({ text, selected }) => {
     <Link href={`/blog/tags/${text}`}>
       <div
         className={cn(
-          'm-1 rounded-sm border bg-gray-100 px-3 py-1 text-xs text-gray-500 shadow hover:border-blue-500 hover:bg-blue-400 hover:text-white',
+          'm-1 rounded-sm border bg-gray-100 px-3 py-1 text-xs text-gray-600 shadow hover:border-blue-500 hover:bg-blue-400 hover:text-white',
           { 'border-blue-500 bg-blue-400 !text-white': selected === text }
         )}
       >

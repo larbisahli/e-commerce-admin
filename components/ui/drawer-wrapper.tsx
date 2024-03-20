@@ -19,24 +19,19 @@ const DrawerWrapper: React.FunctionComponent<DrawerWrapperProps> = ({
   className
 }) => {
   return (
-    <div
-      className={cn(
-        'relative flex h-full flex-col bg-sidenav-secondary',
-        className
-      )}
-    >
+    <div className={cn('relative flex h-full flex-col bg-white', className)}>
       <div
         style={{ width: '280px' }}
-        className="flex h-16 w-full items-center justify-between border-b border-sidenav-divider border-opacity-75 px-5 md:py-5"
+        className="flex h-16 w-full items-center justify-between border-b border-gray-200 border-opacity-75 px-5 md:py-3"
       >
         {label && (
-          <span className="text-lg font-medium text-light">{label}</span>
+          <span className="text-lg font-medium text-gray-900">{label}</span>
         )}
         <button
           onClick={onClose}
           className="flex h-8 w-8 items-center justify-center
-          text-sidenav-color-secondary transition-all duration-200
-          hover:text-light focus:outline-none"
+          text-gray-900 transition-all duration-200
+          hover:text-red-500 focus:outline-none"
         >
           <CloseIcon className="h-5 w-5" />
         </button>

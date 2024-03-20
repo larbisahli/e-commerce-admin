@@ -152,7 +152,7 @@ const TaxList = ({ loading, taxes, selectedColumns }: IProps) => {
       data={loading ? tablePlaceholderRow : taxes}
       rowKey="id"
       scroll={{ x: 800 }}
-      className="card mb-6 overflow-hidden"
+      className="mb-6 overflow-hidden border"
     />
   );
 };

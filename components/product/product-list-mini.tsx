@@ -154,7 +154,7 @@ const ProductListMini = ({
       data={loading ? tablePlaceholderRow : products}
       rowKey="id"
       scroll={{ x: 400, y: screenSize.height - 260 }}
-      className="card mb-6"
+      className="mb-6 border"
     />
   );
 };

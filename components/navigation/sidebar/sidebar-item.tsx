@@ -64,7 +64,6 @@ const SidebarItem = ({
   label,
   includes,
   line,
-  showTriangle,
   subLinks,
   padding,
   isSublevel,
@@ -94,10 +93,10 @@ const SidebarItem = ({
       {hadSubLinks ? (
         <div
           className={cn(
-            'flex w-full cursor-pointer items-center justify-between overflow-hidden border-l-2 border-solid border-transparent p-2 pl-6 text-start text-base text-sidenav-color hover:border-solid hover:border-white hover:!bg-sidenav-active-hover-color hover:text-white focus:text-accent',
+            'flex w-full cursor-pointer items-center justify-between overflow-hidden border-l-2 border-solid border-transparent p-2 pl-6 text-start text-base text-gray-800 hover:border-solid hover:border-blue-500 hover:!bg-gray-100 hover:text-gray-700',
             {
-              'nav-sub-links-bg': !!padding,
-              'border-solid border-blue-300 !bg-sidenav-active-hover-color !text-white':
+              'bg-gray-100': !!padding,
+              'border-solid border-gray-300 !bg-gray-100 !text-gray-700':
                 sublevelOpen
             },
             {
@@ -119,16 +118,12 @@ const SidebarItem = ({
         <ActiveLink
           href={href}
           onClick={closeSublevelSidebar}
-          activeClassName={
-            hadSubLinks
-              ? ''
-              : cn('relative !bg-blue-600 hover:!bg-blue-500 !text-white', {
-                  'sidebar-triangle': showTriangle
-                })
-          }
+          activeClassName={cn(
+            !hadSubLinks && '!bg-blue-600 hover:!bg-blue-500 !text-white'
+          )}
           className={cn(
-            'flex w-full items-center overflow-hidden border-l-2 border-solid border-transparent p-2 pl-6 text-start text-base text-sidenav-color hover:border-l-2 hover:border-solid hover:border-white hover:bg-sidenav-active-hover-color hover:text-white focus:text-white',
-            { 'nav-sub-links-bg': !!padding && !isSublevel },
+            'flex w-full items-center overflow-hidden border-l-2 border-solid border-transparent p-2 pl-6 text-start text-base text-gray-800 hover:border-l-2 hover:border-solid hover:border-blue-500 hover:bg-gray-100 hover:text-gray-700',
+            { 'bg-gray-100': !!padding && !isSublevel },
             {
               'pointer-events-none opacity-70': disabled
             }
@@ -185,7 +180,7 @@ const SidebarItem = ({
       )}
       {line && (
         <div className="my-3 flex justify-center">
-          <div className="h-[1px] w-[90%] bg-sidenav-divider"></div>
+          <div className="h-[1px] w-[90%] bg-gray-200"></div>
         </div>
       )}
     </React.Fragment>
@@ -215,7 +210,9 @@ const SidebarLabel = ({
     <React.Fragment>
       <div className="flex items-center" style={{ paddingLeft: padding }}>
         {icon && TagName && <TagName className="h-5 w-5 me-4" />}
-        <span onClick={handleCloseSidebar}>{label}</span>
+        <span className="text-[15px]" onClick={handleCloseSidebar}>
+          {label}
+        </span>
       </div>
       {hadSubLinks && (
         <div className="mr-2">

@@ -22,7 +22,7 @@ const SidebarMini: React.FC = () => {
   return (
     <aside
       className={cx(
-        'fixed bottom-0 z-50 hidden h-full w-22 overflow-y-auto bg-sidenav pt-4 start-0 md:block lg:hidden',
+        'start fixed bottom-0 z-50 hidden h-full w-22 overflow-y-auto border-r bg-white pt-4 md:block lg:hidden',
         {
           'md:!block': displayMiniSidebar
         }
@@ -33,19 +33,19 @@ const SidebarMini: React.FC = () => {
           <motion.button
             whileTap={{ scale: 0.88 }}
             onClick={() => toggleSidebar({ field: 'displayMiniSidebar' })}
-            className="relative flex h-[25px] w-[12px] items-center justify-center rounded p-5"
+            className="relative flex h-[25px] w-[12px] items-center justify-center rounded p-5 pt-3"
           >
             <div className={cx('menu-icon-container')}>
               <span
-                style={{ backgroundColor: '#b3b3b3' }}
+                style={{ backgroundColor: '#333' }}
                 className={cx('span', 'span--close')}
               ></span>
               <span
-                style={{ backgroundColor: '#b3b3b3' }}
+                style={{ backgroundColor: '#333' }}
                 className={cx('span', 'span--close')}
               ></span>
               <span
-                style={{ backgroundColor: '#b3b3b3' }}
+                style={{ backgroundColor: '#333' }}
                 className={cx('span', 'span--close')}
               ></span>
             </div>

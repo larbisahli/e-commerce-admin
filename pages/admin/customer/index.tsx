@@ -1,4 +1,5 @@
 import { useQuery } from '@apollo/client';
+import CustomerList from '@components/customers/customer-list';
 import AppLayout from '@components/layouts/app';
 import OrderList from '@components/order/order-list';
 import ErrorMessage from '@components/ui/error-message';
@@ -108,7 +109,7 @@ export default function ShippingZonesPage({ client }: SSRProps) {
         showSelectLanguage={false}
       />
       <PageMainHeader
-        columns={COLUMNS['order']}
+        columns={COLUMNS['customer']}
         selectedColumns={selectedTableColumns}
         handleColumnChange={handleColumnChange}
         onLimitChange={(value) => {
@@ -120,9 +121,9 @@ export default function ShippingZonesPage({ client }: SSRProps) {
         currentPage={page}
         perPage={limit.value}
       />
-      <OrderList
+      <CustomerList
         loading={loading}
-        orders={orders}
+        customers={customers}
         selectedColumns={selectedTableColumns}
       />
       {/* <OrderList orders={data?.orders} onPagination={handlePagination} /> */}

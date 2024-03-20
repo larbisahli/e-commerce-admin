@@ -7,14 +7,14 @@ import type { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-const AdminDashboard = dynamic(() => import('@components/dashboard/admin'));
+const Dashboard = dynamic(() => import('@components/dashboard'));
 
-export default function Dashboard({ client }: SSRProps) {
+export default function HomeDashboard({ client }: SSRProps) {
   useGetUser(client);
-  return <AdminDashboard />;
+  return <Dashboard />;
 }
 
-Dashboard.Layout = AppLayout;
+HomeDashboard.Layout = AppLayout;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { locale } = context;

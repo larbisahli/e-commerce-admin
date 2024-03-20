@@ -109,7 +109,7 @@ const TaxCountryList = ({ taxedCountries, setState }: IProps) => {
       data={taxedCountries}
       scroll={{ x: 600 }}
       rowKey="id"
-      className="card mb-6 overflow-hidden"
+      className="mb-6 overflow-hidden border"
     />
   );
 };

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import MailchimpSubscribe from 'react-mailchimp-subscribe';
 
-const BlogSubscription = () => {
+const BlogSubscription = ({ isH1 = true }) => {
   useEffect(() => {
     const btn = document.getElementById('mailchimp');
     btn.childNodes[0].lastChild.textContent = 'Subscribe';
@@ -13,10 +13,17 @@ const BlogSubscription = () => {
       className="w-full pb-16 pt-44"
     >
       <div className="flex justify-center ">
-        <h1 className="mb-6 max-w-[95%] text-center text-xl font-bold leading-[1.5] sm:max-w-[80%] md:text-3xl xl:text-4xl">
-          Dropgala stands as the singular, comprehensive solution essential for
-          constructing your online business.
-        </h1>
+        {isH1 ? (
+          <h1 className="mb-6 max-w-[95%] text-center text-xl font-bold leading-[1.5] sm:max-w-[80%] md:text-3xl xl:text-4xl">
+            Dropgala stands as the singular, comprehensive solution essential
+            for constructing your online business.
+          </h1>
+        ) : (
+          <h2 className="mb-6 max-w-[95%] text-center text-xl font-bold leading-[1.5] sm:max-w-[80%] md:text-3xl xl:text-4xl">
+            Dropgala stands as the singular, comprehensive solution essential
+            for constructing your online business.
+          </h2>
+        )}
       </div>
       <div className="flex justify-center ">
         <p className="px-3 text-center text-sm text-gray-600 sm:text-lg">

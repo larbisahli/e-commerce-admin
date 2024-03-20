@@ -101,25 +101,26 @@ export default function NavNotification() {
 
   return (
     <Menu as="div" className="relative inline-block text-left">
-      {/* {hasNotification && (
-        <div className={cx('notification-bubble')}>
-          <span className="text-sm">7</span>
-        </div>
-      )} */}
       <Menu.Button
         className={cx(
           'border-hover flex items-center rounded-sm border focus:outline-none',
-          { 'border-green-500': hasNotification }
+          { 'border-red-500': hasNotification }
         )}
       >
         <div
           className={cn(
             'flex h-10 w-10 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-white text-gray-500',
-            { 'border-green-400': hasNotification }
+            { 'border-red-400': hasNotification }
           )}
         >
           {hasNotification && (
-            <span className="text-md font-medium text-green-800">7</span>
+            <span
+              className={cn('text-md font-medium', {
+                'text-red-600': hasNotification
+              })}
+            >
+              7
+            </span>
           )}
           {!hasNotification && <Bell width={25} height={25} />}
         </div>

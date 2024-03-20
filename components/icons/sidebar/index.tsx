@@ -1,5 +1,7 @@
+export { AddIcon } from '@components/icons/sidebar/addIcon';
 export { AffiliateIcon } from '@components/icons/sidebar/affiliate';
 export { AllProductsIcon } from '@components/icons/sidebar/all-products';
+export { AnalyticsIcon } from '@components/icons/sidebar/analytics';
 export { AppsIcon } from '@components/icons/sidebar/apps';
 export { AttributeIcon } from '@components/icons/sidebar/attribute';
 export { AttributeValueIcon } from '@components/icons/sidebar/attribute-value';
@@ -22,6 +24,7 @@ export { SettingsIcon } from '@components/icons/sidebar/settings';
 export { ShippingsIcon } from '@components/icons/sidebar/shippings';
 export { ShopIcon } from '@components/icons/sidebar/shop';
 export { SliderIcon } from '@components/icons/sidebar/slider';
+export { StaffIcon } from '@components/icons/sidebar/staff';
 export { SuppliersIcon } from '@components/icons/sidebar/suppliers';
 export { SupportIcon } from '@components/icons/sidebar/support';
 export { TagIcon } from '@components/icons/sidebar/tags';

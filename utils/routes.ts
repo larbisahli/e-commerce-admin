@@ -60,5 +60,6 @@ export const ROUTES = {
   SUPPLIER: '/admin/catalog/supplier',
   LANGUAGES: '/admin/store/languages',
   STORE_EXTENSIONS: '/admin/store/extensions',
-  MARKETING_NEWSLETTER: '/admin/marketing/newsletter'
+  MARKETING_NEWSLETTER: '/admin/marketing/newsletter',
+  ANALYTICS: '/admin/analytics'
 };

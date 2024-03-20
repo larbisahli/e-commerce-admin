@@ -116,7 +116,7 @@ const RoleResourceTable = ({ setRoles, roles }: IProps) => {
 
   return (
     <>
-      <div className="card mb-6 overflow-hidden">
+      <div className="mb-6 overflow-hidden border">
         <Table
           // @ts-ignore
           columns={columns}

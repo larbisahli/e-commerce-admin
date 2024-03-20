@@ -38,7 +38,7 @@ const AppLayout: React.FC = ({ children }: Props) => {
   }, [systemLanguage, dispatch]);
 
   return (
-    <main className="flex h-fit min-h-screen flex-col bg-gray-100 transition-colors duration-150">
+    <main className="flex h-fit min-h-screen flex-col bg-white transition-colors duration-150">
       <MobileNavigation />
       <SublevelNavigation />
       <div className="flex flex-1 pt-5 pb-16">

@@ -231,7 +231,7 @@ const FormActions = ({
       return (
         <div
           className="flex w-full flex-wrap items-center justify-center
-       p-3 px-0 md:justify-between"
+       px-0 md:justify-between"
         >
           {renderBackButton()}
           {renderActions()}
@@ -255,8 +255,8 @@ const FormActions = ({
       </div>
       <div
         className={cn(
-          'border-y border-t-0 border-gray-300 opacity-100 transition-all duration-100 ease-linear',
-          'nlg:ps-20 nxl:ps-20 fixed left-0 right-0 top-[75px] bg-gray-100 pr-8 md:ps-20 lg:ps-64 xl:ps-64',
+          'border-y border-gray-200 !bg-white opacity-100 transition-all duration-100 ease-linear',
+          'nlg:ps-20 nxl:ps-20 fixed left-0 right-0 top-[58px] bg-gray-100 pr-8 md:ps-20 lg:ps-64 xl:ps-64',
           {
             '!ps-0 md:!ps-20': displayMiniSidebar,
             'invisible !opacity-0': inView

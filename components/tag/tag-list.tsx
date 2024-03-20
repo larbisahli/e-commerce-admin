@@ -158,7 +158,7 @@ const TagList = ({ tags, selectedColumns, loading }: IProps) => {
       data={loading ? tablePlaceholderRow : tags}
       rowKey="id"
       scroll={{ x: 800 }}
-      className="card mb-6 overflow-hidden"
+      className="mb-6 overflow-hidden border"
     />
   );
 };

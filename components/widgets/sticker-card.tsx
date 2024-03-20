@@ -1,25 +1,23 @@
+import { ArrowNext } from '@components/icons/arrow-next';
 import { IosArrowDown } from '@components/icons/ios-arrow-down';
 import { IosArrowUp } from '@components/icons/ios-arrow-up';
 import Chart from '@components/ui/chart';
+import Link from 'next/link';
 import { useTranslation } from 'next-i18next';
 import React from 'react';
 
 const StickerCard = ({
   titleTransKey,
-  subtitleTransKey,
+  href,
+  hrefText,
   price,
   indicator,
   indicatorText,
-  note
+  note,
+  data,
+  tooltip
 }: any) => {
   const { t } = useTranslation('widgets');
-
-  let januarySalesByYear: {} = {
-    orders: Array.from(
-      { length: 31 },
-      (_) => Math.floor(Math.random() * 140) + 1
-    )
-  };
 
   const options = {
     chart: {
@@ -28,14 +26,30 @@ const StickerCard = ({
         show: false
       }
     },
+    tooltip,
     stroke: {
       curve: 'smooth',
       show: true,
       width: 2
     },
+    markers: {
+      size: 0,
+      opacity: 1,
+      colors: 'red',
+      strokeColor: '#fff',
+      strokeWidth: 4,
+      hover: {
+        size: 7
+      }
+    },
     grid: {
       borderColor: '#F7F7F7',
       xaxis: {
+        lines: {
+          show: false
+        }
+      },
+      yaxis: {
         lines: {
           show: false
         }
@@ -51,10 +65,7 @@ const StickerCard = ({
       axisTicks: {
         show: false
       },
-      categories: Array.from(
-        { length: 31 },
-        (_) => Math.floor(Math.random() * 140) + 1
-      )
+      categories: data?.categories ?? []
     },
     yaxis: {
       axisBorder: {
@@ -69,31 +80,26 @@ const StickerCard = ({
     }
   };
 
-  const series = [
-    {
-      name: 'series-1',
-      data: Array.from(
-        { length: 31 },
-        (_) => Math.floor(Math.random() * 140) + 1
-      )
-    }
-  ];
-
   return (
-    <div className="h-full w-full rounded-sm border bg-white p-4 shadow-sm">
-      <div className="flex h-full w-full justify-between ">
+    <div className="h-full w-full rounded-sm">
+      <div className="flex h-full w-full flex-col justify-between">
         <div className="flex h-full w-full flex-col justify-between">
           <div className="mb-auto w-full pb-3">
             <div className="flex w-full flex-col">
-              <span className="mb-1 font-medium text-heading">
+              <span className="mb-1 text-xl font-semibold text-heading">
                 {t(titleTransKey)}
               </span>
-              <span className="text-xs font-medium text-body">
-                {t(subtitleTransKey)}
-              </span>
+              <Link href={href} className="w-fit">
+                <div className="text flex cursor-pointer items-center text-sm text-gray-700 hover:text-blue-600 hover:underline">
+                  <div>{t(hrefText)}</div>
+                  <div className="m-1">
+                    {<ArrowNext width={13} height={13} />}
+                  </div>
+                </div>
+              </Link>
             </div>
           </div>
-          <span className="mb-2 text-2xl font-semibold text-heading">
+          <span className="mb-2 text-3xl font-semibold text-heading">
             {price}
           </span>
           {indicator === 'up' && (
@@ -121,15 +127,11 @@ const StickerCard = ({
             </span>
           )}
         </div>
-        <div className="pointer-events-none h-full w-full">
-          <Chart
-            options={options}
-            colors={['#2E93fA', '#66DA26', '#546E7A', '#E91E63', '#FF9800']}
-            series={series}
-            type="line"
-            // categories={series?.data?.map((_, idx) => idx + 1)}
-          />
-        </div>
+        {data?.categories?.length > 1 && (
+          <div className="h-full w-full">
+            <Chart options={options} series={data?.series ?? []} type="line" />
+          </div>
+        )}
       </div>
     </div>
   );

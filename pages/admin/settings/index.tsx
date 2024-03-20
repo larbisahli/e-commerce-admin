@@ -1,4 +1,9 @@
 import PageMainAction from '@components/common/PageMainAction';
+import { AccountSettingsIcon } from '@components/icons/account-settings-icon';
+import CheckoutIcon from '@components/icons/checkout-icon';
+import { LoginHistoryIcon } from '@components/icons/login-history-icon';
+import { NotificationBellIcon } from '@components/icons/notification-icon';
+import { PaymentIcon } from '@components/icons/payment-icon';
 import { TagIcon, UsersIcon } from '@components/icons/sidebar';
 import { TaxIcon } from '@components/icons/sidebar/tax';
 import AppLayout from '@components/layouts/app';
@@ -16,52 +21,52 @@ const settingRoutes = [
   {
     label: 'common:sidebar-nav-item-account-settings',
     url: ROUTES.ACCOUNT_SETTINGS,
-    renderIcon: () => <UsersIcon />
+    renderIcon: () => <AccountSettingsIcon width={25} height={25} />
   },
   {
     label: 'common:sidebar-nav-item-notifications',
     url: ROUTES.NOTIFICATION,
-    renderIcon: () => <UsersIcon />
+    renderIcon: () => <NotificationBellIcon width={25} height={25} />
   },
   {
     label: 'common:sidebar-nav-item-tax',
     url: ROUTES.TAX,
-    renderIcon: () => <TaxIcon />
+    renderIcon: () => <TaxIcon width={25} height={25} />
   },
   {
     label: 'common:sidebar-nav-item-checkout-settings',
     url: ROUTES.CHECKOUT_SETTINGS,
-    renderIcon: () => <UsersIcon />
+    renderIcon: () => <CheckoutIcon width={25} height={25} />
   },
   {
     label: 'common:sidebar-nav-item-payments',
     url: ROUTES.PAYMENT,
-    renderIcon: () => <UsersIcon />
+    renderIcon: () => <PaymentIcon width={25} height={25} />
   },
   {
     label: 'common:sidebar-nav-item-tags',
     url: ROUTES.TAG,
-    renderIcon: () => <TagIcon />
+    renderIcon: () => <TagIcon width={25} height={25} />
   },
-  {
-    label: 'common:sidebar-nav-item-email-templates',
-    url: ROUTES.EMAIL_TEMPLATE,
-    renderIcon: () => <UsersIcon />
-  },
-  {
-    label: 'common:sidebar-nav-item-newsletters',
-    url: ROUTES.NEWSLETTER,
-    renderIcon: () => <UsersIcon />
-  },
-  {
-    label: 'common:sidebar-nav-item-multi-currency',
-    url: ROUTES.MULTI_CURRENCY,
-    renderIcon: () => <UsersIcon />
-  },
+  // {
+  //   label: 'common:sidebar-nav-item-email-templates',
+  //   url: ROUTES.EMAIL_TEMPLATE,
+  //   renderIcon: () => <UsersIcon />
+  // },
+  // {
+  //   label: 'common:sidebar-nav-item-newsletters',
+  //   url: ROUTES.NEWSLETTER,
+  //   renderIcon: () => <UsersIcon />
+  // },
+  // {
+  //   label: 'common:sidebar-nav-item-multi-currency',
+  //   url: ROUTES.MULTI_CURRENCY,
+  //   renderIcon: () => <UsersIcon />
+  // },
   {
     label: 'common:sidebar-nav-item-recent-login-history',
     url: ROUTES.RECENT_LOGIN_HISTORY,
-    renderIcon: () => <UsersIcon />
+    renderIcon: () => <LoginHistoryIcon width={25} height={25} />
   }
 ];
 

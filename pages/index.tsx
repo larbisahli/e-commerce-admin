@@ -52,8 +52,8 @@ const HomePage = ({ posts }) => {
           {/* <!--Right Col--> */}
           <div className="w-fit max-w-[500px] overflow-y-hidden py-6 xl:w-3/5">
             <Image
-              alt=""
-              src="/store-setup.png"
+              alt="store-site"
+              src="/landing.webp"
               className="slide-in-bottom mx-auto lg:mr-0"
               width={530}
               height={300}

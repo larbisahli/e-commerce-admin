@@ -24,7 +24,7 @@ const BarChart = ({
           show: false
         }
       },
-      tooltip: tooltip,
+      tooltip,
       plotOptions: {
         bar: {
           columnWidth: '75%',
@@ -81,9 +81,9 @@ const BarChart = ({
   };
 
   return (
-    <div className="h-full w-full rounded bg-light shadow-sm">
-      <div className="flex items-center justify-between p-8">
-        <h3 className="text-sm text-heading">{widgetTitle}</h3>
+    <div className="h-full w-full rounded-sm border bg-light">
+      <div className="flex items-center justify-between p-4">
+        <h3 className="text-lg font-semibold text-heading">{widgetTitle}</h3>
 
         <div className="flex flex-col">
           <span className="text-lg font-semibold text-green-600">

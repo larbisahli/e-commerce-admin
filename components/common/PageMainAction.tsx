@@ -94,7 +94,7 @@ const PageMainAction = ({
         <div
           className={cn(
             'mb-5 flex items-center pl-4 opacity-100 transition-all duration-100 ease-linear md:pl-8 ',
-            'fixed left-0 right-0 top-[75px] justify-end border-y border-t-0 border-gray-300 p-3 px-0',
+            'fixed left-0 right-0 top-[58px] justify-end border-y border-t-0 border-gray-300 p-3 px-0',
             'nlg:ps-20 nxl:ps-20 z-30 bg-gray-100 pr-8 md:ps-20 lg:ps-64 xl:ps-64',
             {
               '!ps-0 md:!ps-20': displayMiniSidebar,

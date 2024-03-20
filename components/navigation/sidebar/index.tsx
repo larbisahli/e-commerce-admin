@@ -31,7 +31,7 @@ const Sidebar: React.FC<Props> = ({ absolute = false }) => {
   return (
     <aside
       className={cx(
-        'fixed bottom-0 z-50 h-full w-64 overflow-y-auto bg-sidenav start-0 xl:w-64',
+        'fixed bottom-0 z-50 h-full w-64 overflow-y-auto border-r bg-white start-0 xl:w-64',
         {
           hidden: !absolute,
           'lg:block': !absolute,
@@ -41,7 +41,7 @@ const Sidebar: React.FC<Props> = ({ absolute = false }) => {
       )}
     >
       <Scrollbar className="flex h-full w-full flex-col">
-        <div className="flex items-center py-3 pl-6">
+        <div className="flex items-center py-2 pl-6">
           <div className="relative">
             <motion.button
               whileTap={{ scale: 0.88 }}
@@ -50,21 +50,21 @@ const Sidebar: React.FC<Props> = ({ absolute = false }) => {
             >
               <div className={cx('menu-icon-container')}>
                 <span
-                  style={{ backgroundColor: '#b3b3b3' }}
+                  style={{ backgroundColor: '#333' }}
                   className={cx('span', 'span--close')}
                 ></span>
                 <span
-                  style={{ backgroundColor: '#b3b3b3' }}
+                  style={{ backgroundColor: '#333' }}
                   className={cx('span', 'span--close')}
                 ></span>
                 <span
-                  style={{ backgroundColor: '#b3b3b3' }}
+                  style={{ backgroundColor: '#333' }}
                   className={cx('span', 'span--close')}
                 ></span>
               </div>
             </motion.button>
           </div>
-          <div className="cut-line-1 px-2  pt-1 text-lg font-medium capitalize text-white">
+          <div className="cut-line-1 px-2  pt-1 text-lg font-medium capitalize text-black">
             {storeName}
           </div>
         </div>

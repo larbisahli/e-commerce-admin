@@ -10,22 +10,22 @@ const AdminFooter = () => {
   return (
     <div
       className={cx(
-        'mt-16 h-full w-full border border-t-gray-300 bg-gray-200 pb-4',
+        'mt-16 h-full w-full border border-t-gray-200',
         'nlg:ps-20 nxl:ps-20 xl:ps-76 md:ps-20 lg:ps-72',
         { 'md:!ps-20': displayMiniSidebar }
       )}
     >
       <div className="flex flex-wrap items-center justify-between p-5">
         <p className="text-gray-500">
-          Copyright © {new Date().getFullYear()} dropgala. ALL RIGHTS RESERVED.
+          Copyright © {new Date().getFullYear()} dropgala. All rights reserved.
         </p>
         <div className="flex items-center">
           <Link href={'/#'}>
-            <div className="text-gray-700">Privacy Policy</div>
+            <div className="text-gray-500">Privacy Policy</div>
           </Link>
           <div className="mx-2 h-[20px] w-[1px] bg-gray-400"></div>
           <Link href={'/#'}>
-            <div className="text-gray-700">Contact us</div>
+            <div className="text-gray-500">Contact us</div>
           </Link>
         </div>
       </div>

@@ -290,7 +290,7 @@ const CouponList = ({ loading, coupons, selectedColumns }: IProps) => {
       data={loading ? tablePlaceholderRow : coupons}
       rowKey="id"
       scroll={{ x: 800 }}
-      className="card mb-6 overflow-hidden"
+      className="mb-6 overflow-hidden border"
     />
   );
 };

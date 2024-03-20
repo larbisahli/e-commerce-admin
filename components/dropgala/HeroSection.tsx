@@ -41,11 +41,10 @@ const HeroSection = () => {
 
         {/* <!--Right Col--> */}
         <div className="w-fit max-w-[800px] overflow-y-hidden py-6 xl:w-3/5">
-          {/* <img src=""/> */}
           <Image
-            alt=""
-            src="/landing.webp"
-            className="slide-in-bottom mx-auto w-5/6 lg:mr-0"
+            alt="admin-site"
+            src="/image/dropgala-admin.png"
+            className="slide-in-bottom mx-auto w-5/6 rounded-md border shadow lg:mr-0"
             width={800}
             height={500}
           />

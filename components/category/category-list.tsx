@@ -41,8 +41,23 @@ const CategoryList = ({ loading, categories, selectedColumns }: IProps) => {
         dataIndex: 'id',
         key: 'id',
         align: alignLeft,
-        width: 50,
-        ellipsis: true
+        width: 120,
+        ellipsis: true,
+        render: (id, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
+          return (
+            <span
+              className={cn({
+                'pl-4': record?.level === 2,
+                'pl-8': record?.level === 3
+              })}
+            >
+              {id}
+            </span>
+          );
+        }
       },
       {
         title: t('table:table-item-title'),
@@ -59,7 +74,7 @@ const CategoryList = ({ loading, categories, selectedColumns }: IProps) => {
             <span
               className={cn('font-semibold capitalize text-gray-800', {
                 'pl-3': record?.level === 2,
-                'pl-6': record?.level === 3,
+                'pl-8': record?.level === 3,
                 'font-medium text-gray-600': record?.level !== 1
               })}
             >
@@ -79,7 +94,16 @@ const CategoryList = ({ loading, categories, selectedColumns }: IProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
-          return <span>{includeInMenu ? 'Yes' : 'No'}</span>;
+          return (
+            <span
+              className={cn({
+                'pl-4': record?.level === 2,
+                'pl-8': record?.level === 3
+              })}
+            >
+              {includeInMenu ? 'Yes' : 'No'}
+            </span>
+          );
         }
       },
       {
@@ -92,7 +116,16 @@ const CategoryList = ({ loading, categories, selectedColumns }: IProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
-          return level;
+          return (
+            <span
+              className={cn({
+                'pl-4': record?.level === 2,
+                'pl-8': record?.level === 3
+              })}
+            >
+              {level}
+            </span>
+          );
         }
       },
       {
@@ -100,12 +133,21 @@ const CategoryList = ({ loading, categories, selectedColumns }: IProps) => {
         dataIndex: 'position',
         key: 'position',
         align: 'center',
-        width: 80,
+        width: 100,
         render: (position: number, record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
-          return position;
+          return (
+            <span
+              className={cn({
+                'pl-4': record?.level === 2,
+                'pl-8': record?.level === 3
+              })}
+            >
+              {position}
+            </span>
+          );
         }
       },
       {
@@ -199,7 +241,7 @@ const CategoryList = ({ loading, categories, selectedColumns }: IProps) => {
         expandedRowRender: () => <></>,
         rowExpandable: (record: Category) => !isEmpty(record?.children)
       }}
-      className="card mb-6 overflow-hidden"
+      className="mb-6 overflow-hidden border"
     />
   );
 };

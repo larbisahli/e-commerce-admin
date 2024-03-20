@@ -126,6 +126,8 @@ const ImageModal = ({
         isThumbnail={isThumbnail}
         photos={selected}
         handleImageRemoval={handleImageRemoval}
+        setSelectedImages={setSelectedImages}
+        onSelect={onSelect}
       />
       {/* MODEL */}
       <Modal open={isOpen && isCurrentModal} onClose={closeModal} align="right">

@@ -90,8 +90,7 @@ export const siteSettings = {
             href: ROUTES.CUSTOMER_GROUP,
             label: 'sidebar-nav-item-customer-groups',
             padding: '35px',
-            isSubLink: true,
-            disabled: true
+            isSubLink: true
           }
         ],
         line: true
@@ -136,15 +135,15 @@ export const siteSettings = {
             label: 'sidebar-nav-item-manufacturers',
             padding: '35px',
             isSubLink: true
-          },
-          {
-            id: 'D2IXKt',
-            href: ROUTES.COMING_SOON,
-            label: 'sidebar-nav-item-reviews',
-            padding: '35px',
-            isSubLink: true,
-            disabled: true
           }
+          // {
+          //   id: 'D2IXKt',
+          //   href: ROUTES.COMING_SOON,
+          //   label: 'sidebar-nav-item-reviews',
+          //   padding: '35px',
+          //   isSubLink: true,
+          //   disabled: true
+          // }
         ]
       },
       {
@@ -290,45 +289,51 @@ export const siteSettings = {
           }
         ]
       },
+      // {
+      //   id: 'WD0IqEI',
+      //   href: '#',
+      //   label: 'sidebar-nav-item-marketplace',
+      //   icon: 'MarketPlaceSvg',
+      //   subLinks: [
+      //     {
+      //       id: 'RVS2Rg5VS',
+      //       href: ROUTES.MARKETPLACE_THEME,
+      //       label: 'sidebar-nav-item-themes',
+      //       padding: '35px',
+      //       isSubLink: true
+      //     },
+      //     {
+      //       id: 'j6OZZXzo',
+      //       href: ROUTES.MARKETPLACE_APP,
+      //       label: 'sidebar-nav-item-apps',
+      //       padding: '35px',
+      //       isSubLink: true,
+      //       disabled: true
+      //     }
+      //   ]
+      // },
       {
-        id: 'WD0IqEI',
-        href: '#',
-        label: 'sidebar-nav-item-marketplace',
-        icon: 'MarketPlaceSvg',
-        subLinks: [
-          {
-            id: 'RVS2Rg5VS',
-            href: ROUTES.MARKETPLACE_THEME,
-            label: 'sidebar-nav-item-themes',
-            padding: '35px',
-            isSubLink: true
-          },
-          {
-            id: 'j6OZZXzo',
-            href: ROUTES.MARKETPLACE_APP,
-            label: 'sidebar-nav-item-apps',
-            padding: '35px',
-            isSubLink: true,
-            disabled: true
-          }
-        ]
+        id: 'WD0912IqEI',
+        href: ROUTES.ANALYTICS,
+        label: 'sidebar-nav-item-analytics',
+        icon: 'AnalyticsIcon'
       },
-      {
-        id: 'JU3uxd123Sd',
-        href: 'store',
-        label: 'sidebar-nav-item-marketing',
-        icon: 'MarketingIcon',
-        subLinks: [
-          {
-            id: '9YcWhG123SD',
-            href: ROUTES.MARKETING_NEWSLETTER,
-            label: 'sidebar-nav-item-newsletter-recipients',
-            padding: '35px',
-            isSubLink: true,
-            disabled: true
-          }
-        ]
-      },
+      // {
+      //   id: 'JU3uxd123Sd',
+      //   href: 'store',
+      //   label: 'sidebar-nav-item-marketing',
+      //   icon: 'MarketingIcon',
+      //   subLinks: [
+      //     {
+      //       id: '9YcWhG123SD',
+      //       href: ROUTES.MARKETING_NEWSLETTER,
+      //       label: 'sidebar-nav-item-newsletter-recipients',
+      //       padding: '35px',
+      //       isSubLink: true,
+      //       disabled: true
+      //     }
+      //   ]
+      // },
       // {
       //   id: 'j6OQzo123X',
       //   href: ROUTES.COMING_SOON,
@@ -440,7 +445,7 @@ export const siteSettings = {
         id: 'JU99uXy',
         href: '#',
         label: 'sidebar-nav-item-users',
-        icon: 'UsersIcon',
+        icon: 'StaffIcon',
         subLinks: [
           {
             id: '00WaIACaCI',

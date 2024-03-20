@@ -1,10 +1,10 @@
-import { ShopIcon } from '@components/icons/sidebar';
+import { AddIcon, MyShopIcon } from '@components/icons/sidebar';
 import styles from '@components/navigation/scss/index.module.scss';
-import SearchBar from '@components/search-bar';
 import Link from '@components/ui/link';
 import { useGetUser } from '@hooks/useGetUser';
 import { useMediaQuery } from '@hooks/useMediaQuery';
 import { useUI } from '@hooks/useUI';
+import { ROUTES } from '@utils/routes';
 import classNames from 'classnames/bind';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'next-i18next';
@@ -72,8 +72,8 @@ const Navbar = () => {
   return (
     <header
       className={cx(
-        'border-b-400 fixed top-0 right-0 left-0 z-40 w-full border bg-white',
-        { 'shadow-md': show }
+        'border-b-400 fixed top-0 right-0 left-0 z-40 h-[58px] w-full border-b bg-gray-50',
+        { 'sshadow-md': show }
       )}
     >
       <nav
@@ -96,7 +96,7 @@ const Navbar = () => {
             <span className={menuSpanClass}></span>
           </div>
         </motion.button>
-        <div className="flex justify-center px-8">
+        {/* <div className="flex justify-center px-8">
           <div className="flex flex-col items-center justify-center rounded border p-2 px-3 shadow-sm">
             <span className="text-xs font-medium text-gray-600">
               {t('common:sticker-card-title-today-rev')}
@@ -105,19 +105,26 @@ const Navbar = () => {
               ${rev?.toCommas()}
             </span>
           </div>
-        </div>
-        <div className="flex flex-1 justify-center px-8">
+        </div> */}
+        {/* <div className="flex flex-1 justify-center px-8">
           <div className="max-w-[600px] flex-1">
             <SearchBar />
           </div>
-        </div>
-        <div className="flex items-center space-s-5">
+        </div> */}
+        <div className="flex flex-1 items-center justify-end space-s-5">
+          <Link
+            className="flex h-10 w-10 items-center justify-center rounded-sm border bg-white text-gray-600 hover:border-blue-300 hover:text-accent"
+            href={`${ROUTES.PRODUCT}/create`}
+          >
+            <AddIcon width={20} height={20} />
+          </Link>
           <Link
             target="_blank"
-            className="flex h-10 w-10 items-center justify-center rounded-sm border bg-white text-gray-700 shadow hover:border-blue-300 hover:text-accent"
+            title="Create"
+            className="flex h-10 w-10 items-center justify-center rounded-sm border bg-white text-gray-600 hover:border-blue-300 hover:text-accent"
             href={`https://${alias}.dropgala.shop`}
           >
-            <ShopIcon />
+            <MyShopIcon width={20} height={20} />
           </Link>
           <NavNotification />
           <NavMenu />

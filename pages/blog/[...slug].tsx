@@ -90,9 +90,8 @@ export default function Blog({ post, authorDetails, prev, next }) {
           </div>
         )}
       </div>
-
       <section>
-        <BlogSubscription></BlogSubscription>
+        <BlogSubscription isH1={false} />
       </section>
       <Footer />
     </>

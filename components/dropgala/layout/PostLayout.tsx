@@ -92,7 +92,7 @@ export default function PostLayout({
                           {
                             <Link
                               href={author.linkedin}
-                              className="text-blue-500 hover:text-blue-600"
+                              className="text-blue-600 hover:text-blue-500"
                             >
                               {author.occupation}
                             </Link>
@@ -139,7 +139,7 @@ export default function PostLayout({
                         <h2 className="text-start text-xs uppercase tracking-wide text-gray-500">
                           Previous Article
                         </h2>
-                        <div className="text-xs text-blue-500 hover:text-blue-600 sm:text-sm">
+                        <div className="text-xs text-blue-600 hover:text-blue-500 sm:text-sm">
                           <Link href={`/blog/${prev.slug}`}>{prev.title}</Link>
                         </div>
                       </div>
@@ -149,7 +149,7 @@ export default function PostLayout({
                         <h2 className="text-end text-xs uppercase tracking-wide text-gray-500 sm:text-start">
                           Next Article
                         </h2>
-                        <div className="text-end text-xs text-blue-500 hover:text-blue-600 sm:text-start sm:text-sm">
+                        <div className="text-end text-xs text-blue-600 hover:text-blue-500 sm:text-start sm:text-sm">
                           <Link href={`/blog/${next.slug}`}>{next.title}</Link>
                         </div>
                       </div>
@@ -160,7 +160,7 @@ export default function PostLayout({
               <div className="mt-4 w-fit xl:mt-1">
                 <Link
                   href="/blog"
-                  className="text-blue-500 hover:text-blue-600"
+                  className="text-blue-600 hover:text-blue-500"
                 >
                   <span className="px-1 text-lg">&larr;</span>
                   <span>Back to the blog</span>

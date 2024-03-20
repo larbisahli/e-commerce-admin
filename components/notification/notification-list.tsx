@@ -89,7 +89,7 @@ const NotificationList = ({ notifications }: IProps) => {
       data={notifications}
       rowKey="id"
       scroll={{ x: 800 }}
-      className="card mb-6 overflow-hidden"
+      className="mb-6 overflow-hidden border"
     />
   );
 };

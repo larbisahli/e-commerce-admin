@@ -19,6 +19,11 @@ const authorizedLinks = [
     target: '_self'
   },
   {
+    href: ROUTES.SUPPORT,
+    labelTransKey: 'authorized-nav-item-help-center',
+    target: '_self'
+  },
+  {
     href: ROUTES.LOGOUT,
     labelTransKey: 'authorized-nav-item-logout',
     target: '_self'
@@ -33,6 +38,7 @@ function NavMenu() {
       profile = [],
       firstName = '',
       lastName = '',
+      email,
       store: { alias = '' } = {}
     }
   } = useGetUser();
@@ -42,12 +48,12 @@ function NavMenu() {
     <Menu as="div" className="relative inline-block text-left">
       <Menu.Button
         className={cx(
-          'z-[1000] flex items-center rounded-sm border bg-white text-gray-700 shadow-lg focus:outline-none',
+          'z-[1000] flex items-center rounded-sm bg-white text-gray-700 focus:outline-none',
           'border-hover'
         )}
       >
         <Avatar
-          className="!rounded-sm shadow-lg"
+          className="!rounded-sm"
           src={image}
           firstName={firstName}
           customPlaceholder={placeholder}
@@ -66,12 +72,27 @@ function NavMenu() {
         <Menu.Items
           as="div"
           style={{ zIndex: 60 }}
-          className="shadow-700 absolute right-0 mt-1 w-48 origin-top-right rounded-sm border bg-white py-4 shadow focus:outline-none"
+          className="shadow-700 absolute right-0 mt-1 w-48 origin-top-right overflow-hidden rounded-sm border bg-white py-4 shadow focus:outline-none"
         >
-          {firstName && (
-            <div className="px-4 text-sm capitalize text-gray-600">{`${firstName} ${lastName}`}</div>
-          )}
-          <div className="flex items-center px-4 text-xs text-gray-600">
+          <div className="flex flex-col items-center justify-center border-b pb-3">
+            <Avatar
+              className="mb-2 !rounded-full"
+              src={image}
+              firstName={firstName}
+              customPlaceholder={placeholder}
+              width="w-14"
+              height="h-14"
+            />
+            {firstName && (
+              <div className="px-4 text-sm font-medium capitalize text-gray-800">{`${firstName} ${lastName}`}</div>
+            )}
+            {email && (
+              <div className="cut-line-1 px-4 text-xs text-gray-500">
+                {email}
+              </div>
+            )}
+          </div>
+          <div className="flex items-center p-2  text-xs text-gray-600">
             <span>Your store:</span>
             <Link
               target="_blank"
@@ -83,7 +104,7 @@ function NavMenu() {
               {alias}
             </Link>
           </div>
-          <div className="my-2 h-[1px] w-full bg-gray-300"></div>
+          <div className="mb-2 h-[1px] w-full bg-gray-300"></div>
           {authorizedLinks.map(({ href, labelTransKey, target }, idx) => (
             <Menu.Item key={idx}>
               {({ active }) => (
@@ -92,7 +113,7 @@ function NavMenu() {
                     target={target}
                     href={href}
                     className={cn(
-                      'block w-full px-4 py-2 text-sm capitalize transition duration-200 hover:text-accent',
+                      'block w-full px-4 py-2 text-sm capitalize transition duration-200 hover:bg-gray-200 hover:text-accent',
                       active ? 'text-accent' : 'text-heading'
                     )}
                   >

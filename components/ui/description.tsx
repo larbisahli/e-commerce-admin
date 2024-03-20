@@ -14,7 +14,10 @@ const Description: React.FC<Props> = ({
   ...props
 }) => {
   return (
-    <div className={cn('sm:!py-0 sm:shadow-sm', className)} {...props}>
+    <div
+      className={cn('shadow-sm sm:!py-0 sm:shadow-none', className)}
+      {...props}
+    >
       <div className="sm:rounded-[4px] sm:border sm:border-solid sm:bg-white">
         {title && (
           <h4 className="text-base font-semibold text-body-dark sm:mb-2 sm:border-b sm:p-3">

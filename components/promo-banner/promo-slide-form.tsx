@@ -362,7 +362,6 @@ const PromoSlider = ({
   backgroundColor,
   delaySpeed = 5000
 }) => {
-  console.log({ animationSpeed, delaySpeed });
   return (
     <div
       style={{ backgroundColor: backgroundColor }}

@@ -61,11 +61,11 @@ const SidebarItem = ({
         <div
           title={label}
           className={cn(
-            'relative flex w-full cursor-pointer flex-col items-center justify-center overflow-hidden border-l-2 border-solid border-transparent p-2 py-4 text-start text-base text-sidenav-color-secondary hover:border-blue-300 hover:!bg-sidenav-active-hover-color focus:text-accent',
+            'relative flex w-full cursor-pointer flex-col items-center justify-center overflow-hidden border-l-2 border-solid border-transparent p-2 py-4 text-start text-base text-gray-800 hover:border-blue-300 hover:!bg-gray-100 focus:text-accent',
             {
               'mb-12': margin,
-              'border-blue-300 !text-white': currentLink[1] === inLink[1],
-              'border-blue-300 !bg-sidenav-active-color !text-white hover:!bg-sidenav-active-hover-color':
+              'border-blue-600 !text-white': currentLink[1] === inLink[1],
+              'border-blue-600 !bg-gray-200 !text-white hover:!bg-gray-100':
                 sublevelOpen || linkHighlight
             },
             {
@@ -82,13 +82,10 @@ const SidebarItem = ({
           title={label}
           onClick={closeSublevelSidebar}
           activeClassName={cn(
-            'relative !bg-sidenav-active-color hover:!bg-sidenav-active-hover-color !text-white border-blue-400',
-            {
-              'sidebar-triangle': !displaySublevelSidebar
-            }
+            'relative !bg-gray-200 hover:!bg-gray-100 !text-gray-800 border-blue-400'
           )}
           className={cn(
-            'relative flex w-full flex-col items-center justify-center overflow-hidden border-l-2 border-solid border-transparent py-3 text-start text-base text-sidenav-color-secondary hover:border-blue-300 hover:bg-sidenav-active-hover-color focus:text-white',
+            'relative flex w-full flex-col items-center justify-center overflow-hidden border-l-2 border-solid border-transparent py-3 text-start text-base text-gray-800 hover:border-blue-500 hover:bg-gray-100',
             { 'mb-12': margin },
             {
               'pointer-events-none opacity-70': disabled
@@ -114,7 +111,7 @@ const SidebarLabel = ({ icon, label }: { icon: string; label: string }) => {
   return (
     <React.Fragment>
       {icon && TagName && <TagName className="h-[22px] w-[22px]" />}
-      <span className="pt-1 text-xs font-medium text-gray-400">
+      <span className="pt-1 text-xs font-medium text-gray-800">
         {label?.split(' ')[0]}
       </span>
     </React.Fragment>

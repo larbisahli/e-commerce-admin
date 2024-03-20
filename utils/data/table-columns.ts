@@ -51,6 +51,22 @@ export const COLUMNS = {
     { label: 'Updated By', key: 'updatedBy' },
     { label: 'Actions', key: 'actions' }
   ],
+  customer: [
+    { label: 'fullname', key: 'fullname' },
+    { label: 'email', key: 'email' },
+    { label: 'active', key: 'active' },
+    { label: 'marketing_opt_in', key: 'marketingOptIn' },
+    { label: 'Phone', key: 'address' },
+    { label: 'country', key: 'address' },
+    { label: 'city', key: 'address' },
+    { label: 'Postal code', key: 'address' },
+    { label: 'State', key: 'address' },
+    { label: 'Address', key: 'address' },
+    { label: 'Registered At', key: 'registeredAt' },
+    { label: 'Placed By', key: 'createdBy' },
+    { label: 'Updated By', key: 'updatedBy' },
+    { label: 'Actions', key: 'actions' }
+  ],
   'shipping-zone': [
     { label: 'Logo', key: 'logo' },
     { label: 'Name', key: 'name' },

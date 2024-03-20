@@ -122,14 +122,11 @@ const MediaList = ({ media, refetch, loading }: IProps) => {
       return null;
     }
     return (
-      <div className="mb-6 mt-8 flex w-full justify-center">
+      <div className="mb-6 mt-8 flex w-full">
         <div
-          className={cn(
-            'grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6',
-            {
-              hidden: isMediaReady
-            }
-          )}
+          className={cn('flex flex-wrap justify-center md:justify-start', {
+            hidden: isMediaReady
+          })}
         >
           {renderImageLoader()}
           {newFolderClicked && (

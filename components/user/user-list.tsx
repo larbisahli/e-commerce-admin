@@ -283,7 +283,7 @@ const UserList = ({ loading, users, selectedColumns }: IProps) => {
       data={loading ? tablePlaceholderRow : users}
       rowKey="id"
       scroll={{ x: 800 }}
-      className="card mb-6 overflow-hidden"
+      className="mb-6 overflow-hidden border"
     />
   );
 };

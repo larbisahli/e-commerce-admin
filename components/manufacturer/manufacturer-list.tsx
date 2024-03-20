@@ -211,7 +211,7 @@ const ManufacturerList = ({
       data={loading ? tablePlaceholderRow : manufacturers}
       rowKey="id"
       scroll={{ x: 380 }}
-      className="card mb-6 overflow-hidden"
+      className="mb-6 overflow-hidden border"
     />
   );
 };

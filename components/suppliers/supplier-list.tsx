@@ -190,7 +190,7 @@ const SuppliersList = ({ loading, suppliers, selectedColumns }: IProps) => {
       data={loading ? tablePlaceholderRow : suppliers}
       rowKey="id"
       scroll={{ x: 380 }}
-      className="card mb-6 overflow-hidden"
+      className="mb-6 overflow-hidden border"
     />
   );
 };

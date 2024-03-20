@@ -24,8 +24,22 @@ module.exports = {
         '3xl': '1900px'
       },
       fontFamily: {
-        body: ['Inter', 'Mulish', 'sans-serif', 'Open Sans', 'system-ui'],
-        heading: ['Inter', 'Mulish', 'sans-serif', 'Open Sans', 'system-ui']
+        body: [
+          'Arimo',
+          'Inter',
+          'Mulish',
+          'sans-serif',
+          'Open Sans',
+          'system-ui'
+        ],
+        heading: [
+          'Arimo',
+          'Inter',
+          'Mulish',
+          'sans-serif',
+          'Open Sans',
+          'system-ui'
+        ]
       },
       colors: {
         light: withOpacity('--color-light'),
