@@ -93,7 +93,7 @@ const LanguageList = ({ loading, languages, selectedColumns }: IProps) => {
         dataIndex: 'id',
         key: 'id',
         align: alignLeft,
-        width: 50,
+        width: 80,
         ellipsis: true
       },
       {

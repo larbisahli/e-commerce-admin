@@ -40,9 +40,9 @@ const AttributeDeleteView = () => {
     deleteAttributeValue({ variables: { id } })
       .then(({ data }) => {
         const {
-          deleteAttribute: { name }
+          deleteAttribute: { id }
         } = data;
-        if (name) {
+        if (id) {
           notify(t('common:successfully-deleted'), 'success');
         }
         closeModal();

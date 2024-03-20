@@ -40,7 +40,7 @@ const SuppliersList = ({ loading, suppliers, selectedColumns }: IProps) => {
         dataIndex: 'id',
         key: 'id',
         align: alignLeft,
-        width: 50,
+        width: 80,
         ellipsis: true
       },
       {
@@ -48,7 +48,7 @@ const SuppliersList = ({ loading, suppliers, selectedColumns }: IProps) => {
         dataIndex: 'name',
         key: 'name',
         align: alignLeft,
-        width: 100,
+        width: 180,
         ellipsis: true,
         render: (supplier_name: string, record: TableRowProps) => {
           if (record?.loading) {
@@ -66,7 +66,7 @@ const SuppliersList = ({ loading, suppliers, selectedColumns }: IProps) => {
         dataIndex: 'company',
         key: 'company',
         align: alignLeft,
-        width: 160,
+        width: 200,
         ellipsis: true,
         render: (company: string, record: TableRowProps) => {
           if (record?.loading) {
@@ -84,7 +84,7 @@ const SuppliersList = ({ loading, suppliers, selectedColumns }: IProps) => {
         dataIndex: 'phoneNumber',
         key: 'phoneNumber',
         align: alignLeft,
-        width: 150,
+        width: 200,
         ellipsis: true,
         render: (phoneNumber: string, record: TableRowProps) => {
           if (record?.loading) {

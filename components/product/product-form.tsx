@@ -13,7 +13,7 @@ import { ROUTES } from '@utils/routes';
 import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
-import { memo, useEffect, useMemo, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 
 import { Actions, useFormReducer, useFormState } from './context/form.context';
 import LinkedProducts from './linked-products';

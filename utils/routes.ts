@@ -47,6 +47,7 @@ export const ROUTES = {
   MEDIA: '/admin/media',
   THEME: '/admin/store/theme',
   COMING_SOON: '/admin/coming-soon',
+  EARN: '/admin/earn',
   STORE_ABOUT_US: '/admin/store/page/about-us',
   STORE_CONTACT_US: '/admin/store/page/contact-us',
   STORE_FAQ: '/admin/store/page/faq',

@@ -46,22 +46,11 @@ const UserList = ({ loading, users, selectedColumns }: IProps) => {
   const columns = useMemo(() => {
     return [
       {
-        title: t('table:table-item-id'),
-        dataIndex: 'id',
-        key: 'id',
-        align: alignLeft,
-        width: 100,
-        ellipsis: true,
-        render: (id: string) => {
-          return id?.split('-')[0];
-        }
-      },
-      {
         title: t('table:table-item-avatar'),
         dataIndex: 'profile',
         key: 'profile',
         align: 'center',
-        width: 74,
+        width: 85,
         render: (profile: ImageType, record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
@@ -74,6 +63,8 @@ const UserList = ({ loading, users, selectedColumns }: IProps) => {
               firstName={record?.firstName}
               alt={`${record?.firstName} ${record?.lastName}`}
               customPlaceholder={placeholder}
+              width="w-12"
+              height="h-12"
             />
           );
         }

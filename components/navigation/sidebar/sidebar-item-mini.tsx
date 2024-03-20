@@ -98,7 +98,7 @@ const SidebarItem = ({
       )}
       {line && (
         <div className="mb-2 flex justify-center">
-          <div className="h-[2px] w-[76%] bg-sidenav-divider"></div>
+          <div className="h-[2px] w-[76%] bg-gray-200"></div>
         </div>
       )}
     </React.Fragment>

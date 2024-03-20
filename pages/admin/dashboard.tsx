@@ -1,5 +1,6 @@
 import AppLayout from '@components/layouts/app';
 import { useGetUser } from '@hooks/index';
+import { getAllFilesFrontMatter } from '@lib/mdx';
 import { verifyAuth } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { ROUTES } from '@utils/routes';

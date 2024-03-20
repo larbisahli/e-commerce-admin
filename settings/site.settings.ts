@@ -465,24 +465,23 @@ export const siteSettings = {
         line: true
       },
       {
+        id: 'WDIqE0I',
+        href: ROUTES.EARN,
+        label: 'sidebar-nav-item-affiliate',
+        icon: 'AffiliateIcon',
+        disabled: true
+      },
+      {
+        id: 'WDIqE0NMI',
+        href: ROUTES.SUPPORT,
+        label: 'sidebar-nav-item-support',
+        icon: 'SupportIcon'
+      },
+      {
         id: 'nMtvIg',
         href: ROUTES.SETTINGS,
         label: 'sidebar-nav-item-settings',
         icon: 'SettingsIcon'
-      },
-      {
-        id: 'WDIqE0NMI',
-        href: ROUTES.COMING_SOON,
-        label: 'sidebar-nav-item-support',
-        icon: 'SupportIcon',
-        disabled: true
-      },
-      {
-        id: 'WDIqE0I',
-        href: ROUTES.COMING_SOON,
-        label: 'sidebar-nav-item-invite-earn',
-        icon: 'AffiliateIcon',
-        disabled: true
       }
     ]
   },

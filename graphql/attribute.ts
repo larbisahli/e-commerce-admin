@@ -146,7 +146,7 @@ export const UPDATE_ATTRIBUTE = gql`
 export const DELETE_ATTRIBUTE = gql`
   mutation DeleteAttribute($id: Int!) {
     deleteAttribute(id: $id) {
-      name
+      id
     }
   }
 `;

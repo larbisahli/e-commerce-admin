@@ -41,7 +41,7 @@ const CategoryList = ({ loading, categories, selectedColumns }: IProps) => {
         dataIndex: 'id',
         key: 'id',
         align: alignLeft,
-        width: 120,
+        width: 80,
         ellipsis: true,
         render: (id, record: TableRowProps) => {
           if (record?.loading) {

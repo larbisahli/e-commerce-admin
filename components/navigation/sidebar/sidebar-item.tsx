@@ -123,7 +123,7 @@ const SidebarItem = ({
           )}
           className={cn(
             'flex w-full items-center overflow-hidden border-l-2 border-solid border-transparent p-2 pl-6 text-start text-base text-gray-800 hover:border-l-2 hover:border-solid hover:border-blue-500 hover:bg-gray-100 hover:text-gray-700',
-            { 'bg-gray-100': !!padding && !isSublevel },
+            { 'bg-gray-100 hover:bg-gray-200': !!padding && !isSublevel },
             {
               'pointer-events-none opacity-70': disabled
             }

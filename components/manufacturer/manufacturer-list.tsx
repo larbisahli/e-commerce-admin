@@ -55,7 +55,7 @@ const ManufacturerList = ({
         dataIndex: 'id',
         key: 'id',
         align: alignLeft,
-        width: 50,
+        width: 80,
         ellipsis: true
       },
       {
@@ -100,9 +100,8 @@ const ManufacturerList = ({
 
           if (record?.link) {
             return (
-              <Link href={record?.link}>
+              <Link href={record?.link} target="_blank">
                 <div
-                  target="_blank"
                   title={record?.link}
                   className="font-semibold capitalize text-blue-400"
                 >

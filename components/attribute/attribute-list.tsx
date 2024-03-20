@@ -47,7 +47,7 @@ const AttributeList = ({ loading, attributes, selectedColumns }: IProps) => {
         dataIndex: 'id',
         key: 'id',
         align: alignLeft,
-        width: 50,
+        width: 80,
         ellipsis: true
       },
       {
@@ -99,7 +99,7 @@ const AttributeList = ({ loading, attributes, selectedColumns }: IProps) => {
                 </Tooltip>
                 <div
                   data-tooltip-id={`att-v-value-tooltip-${att_values}`}
-                  className="whitespace-wrap"
+                  className="whitespace-wrap cut-line-3"
                 >
                   {att_values}
                 </div>
@@ -118,7 +118,7 @@ const AttributeList = ({ loading, attributes, selectedColumns }: IProps) => {
                         key={idx}
                         data-tooltip-id={`att-v-color-tooltip-${idx}-${color}-${value?.name}`}
                         data-tooltip-content={value?.name}
-                        className="m-1 h-6 w-6 rounded-sm border border-gray-300 shadow"
+                        className="m-1 h-6 w-6 rounded-sm border border-gray-300"
                         style={{ background: color }}
                       />
                       <Tooltip
@@ -130,7 +130,7 @@ const AttributeList = ({ loading, attributes, selectedColumns }: IProps) => {
                   );
                 }
                 return (
-                  <div key={idx} className="m-1 rounded-sm border p-1 shadow">
+                  <div key={idx} className="m-1 rounded-sm border p-1">
                     {color}
                   </div>
                 );

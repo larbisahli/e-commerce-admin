@@ -71,24 +71,26 @@ const Sidebar: React.FC<Props> = ({ absolute = false }) => {
         <div className="mb-3 flex justify-center">
           <div className="h-[1px] w-[90%] bg-sidenav-divider"></div>
         </div>
-        {siteSettings.sidebarLinks.admin.map(
-          ({ id, href, label, icon, line, subLinks, disabled }) => (
-            <SidebarItem
-              key={id}
-              id={id}
-              href={href}
-              label={t(label)}
-              icon={icon}
-              includes={href}
-              line={line}
-              subLinks={subLinks}
-              showLinkId={showLinkIdLevel1}
-              setShowLinkId={setShowLinkIdLevel1}
-              disabled={disabled}
-              showTriangle
-            />
-          )
-        )}
+        <div className="flex flex-col">
+          {siteSettings.sidebarLinks.admin.map(
+            ({ id, href, label, icon, line, subLinks, disabled }) => (
+              <SidebarItem
+                key={id}
+                id={id}
+                href={href}
+                label={t(label)}
+                icon={icon}
+                includes={href}
+                line={line}
+                subLinks={subLinks}
+                showLinkId={showLinkIdLevel1}
+                setShowLinkId={setShowLinkIdLevel1}
+                disabled={disabled}
+                showTriangle
+              />
+            )
+          )}
+        </div>
         <div className="h-32 w-full"></div>
       </Scrollbar>
     </aside>
