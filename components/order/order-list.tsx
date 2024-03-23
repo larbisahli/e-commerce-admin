@@ -255,17 +255,17 @@ const OrderList = ({ loading, orders, selectedColumns }: IProps) => {
       },
       {
         title: t('table:table-item-actions'),
-        dataIndex: 'id',
+        dataIndex: 'orderNumber',
         key: 'actions',
         align: 'center',
-        render: (id: string, record: TableRowProps) => {
+        render: (orderNumber: string, record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
           return (
             <ActionButtons
-              id={id}
-              editUrl={`${ROUTES.SHIPPING_ZONE}/edit/${id}`}
+              id={orderNumber}
+              editUrl={`${ROUTES.ORDERS}/${orderNumber}`}
               deleteModalView="DELETE_SHIPPING"
             />
           );

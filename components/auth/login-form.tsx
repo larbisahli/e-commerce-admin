@@ -11,7 +11,7 @@ import { isEmpty } from 'lodash';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
@@ -97,24 +97,28 @@ const LoginForm = () => {
   }
 
   return (
-    <>
+    <div className="flex flex-col items-center px-5">
       <div className="absolute z-50">
         <ReCAPTCHA
           sitekey={process.env.RECAPTCHA_SITE_KEY}
-          badge="bottomright"
+          badge="bottomleft"
           onChange={onReCaptchaChange}
           size="invisible"
           ref={_reCaptchaRef}
         />
       </div>
-      <form onSubmit={handleSubmit(onSubmit)} noValidate className="pt-8">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        noValidate
+        className="mt-8 w-[400px]"
+      >
         <div className="phone-number-class mb-5">
           <Input
             {...register('email')}
             type="email"
             placeholder={t('form:input-label-email')}
             variant="outline"
-            className="mb-4 w-full"
+            className="mb-4"
             error={t(errors?.email?.message!)}
           />
         </div>
@@ -128,13 +132,25 @@ const LoginForm = () => {
           forgotPageLink={ROUTES.FORGET_PASSWORD}
         />
         <Button
-          className="mt-8 w-full rounded-sm"
+          className="mt-8 w-full rounded-full"
           loading={loading && !isEmpty(error)}
           disabled={loading}
         >
           {t('form:button-label-login')}
         </Button>
-
+        <div>
+          <div className="relative flex items-center justify-center py-5">
+            <div className="absolute h-[1px] w-full bg-gray-300"></div>
+            <div className="z-10 bg-white px-3 text-xs uppercase text-gray-500">
+              or
+            </div>
+          </div>
+          <div
+            id="signUpDiv"
+            data-text="signup_with"
+            className="flex items-center justify-center"
+          ></div>
+        </div>
         {!isEmpty(error) ? (
           <Alert
             message={t(error?.message)}
@@ -144,17 +160,14 @@ const LoginForm = () => {
             onClose={() => setError(null)}
           />
         ) : null}
-        <div className=" p-5 text-center">
-          <span className="mr-1 text-gray-600">{t('dont-have-account')}</span>
-          <Link href={ROUTES.SIGNUP}>
-            <div className="font-normal text-blue-500">
-              {t('create-an-account')}
-            </div>
-          </Link>
+        {/* <div className="pt-5 text-center">
+          <div className="py-5 flex justify-center items-center relative">
+            <div className="absolute w-full h-[1px] bg-gray-300"></div>
+            <div className="text-sm uppercase bg-white z-10 px-3 text-gray-600">{t("dont-have-account")}</div>
         </div>
+        </div> */}
       </form>
-      <FormFooter />
-    </>
+    </div>
   );
 };
 

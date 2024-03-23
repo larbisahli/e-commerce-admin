@@ -1,22 +1,28 @@
+import { useQuery } from '@apollo/client';
 import Card from '@components/common/card';
 import AppLayout from '@components/layouts/app';
 import Button from '@components/ui/button';
-// import ErrorMessage from '@components/ui/error-message';
+import ErrorMessage from '@components/ui/error-message';
 import ValidationError from '@components/ui/form-validation-error';
 import Loader from '@components/ui/loader/loader';
-// import Loader from '@components/ui/loader/loader';
-// import ProgressBox from '@components/ui/progress-box/progress-box';
+import ProgressBox from '@components/ui/progress-box/progress-box';
 import SelectInput from '@components/ui/select-input';
-// import { useOrderQuery } from "@data/order/use-order.query";
-// import { useUpdateOrderMutation } from "@data/order/use-order-update.mutation";
-// import { useOrderStatusesQuery } from "@data/order-status/use-order-statuses.query";
+import { ORDER, ORDERS } from '@graphql/order';
+import { useErrorLogger } from '@hooks/useErrorLogger';
 import { siteSettings } from '@settings/site.settings';
-// import { Attachment } from '@ts-types/generated';
+import {
+  Attachment,
+  CustomerType,
+  OrderType,
+  Product
+} from '@ts-types/generated';
 import { formatAddress } from '@utils/format-address';
 import { useIsRTL } from '@utils/locals';
+import { ROUTES } from '@utils/routes';
+import usePrice from '@utils/use-price';
 import dynamic from 'next/dynamic';
-// import usePrice from '@utils/use-price';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -30,29 +36,40 @@ const Table = dynamic(
 type FormValues = {
   order_status: any;
 };
+
+interface TOrder {
+  order: OrderType;
+  customer: CustomerType;
+  products: Product[];
+}
+
+interface OrderVariable {
+  orderId: string;
+}
+
 export default function OrderDetailsPage() {
   const { t } = useTranslation();
   const { query } = useRouter();
   const { alignLeft, alignRight } = useIsRTL();
+  const orderId = query.orderId as string;
 
-  // const { mutate: updateOrder, isLoading: updating } = useUpdateOrderMutation();
+  const { data, loading, error } = useQuery<TOrder, OrderVariable>(ORDER, {
+    variables: {
+      orderId
+    },
+    fetchPolicy: 'cache-and-network'
+  });
 
-  // const { data: orderStatusData } = useOrderStatusesQuery({});
+  const { order } = data ?? {};
 
-  // const {
-  //   data,
-  //   isLoading: loading,
-  //   error,
-  // } = useOrderQuery(query.orderId as string);
+  useErrorLogger(error);
 
-  const data = [];
   const orderStatusData = [];
   const updating = false;
 
   const {
     handleSubmit,
     control,
-
     formState: { errors }
   } = useForm<FormValues>({
     defaultValues: { order_status: data?.order?.status?.id ?? '' }
@@ -68,37 +85,14 @@ export default function OrderDetailsPage() {
     //   },
     // });
   };
-  // const { price: subtotal } = usePrice(
-  //   data && {
-  //     amount: data?.order?.amount!,
-  //   }
-  // );
+  const { price: subtotal } = usePrice(
+    data && {
+      amount: 3342 //data?.order?.amount!,
+    }
+  );
 
-  // const { price: total } = usePrice(
-  //   data && {
-  //     amount: data?.order?.paid_total!,
-  //   }
-  // );
-
-  // const { price: discount } = usePrice(
-  //   data && {
-  //     amount: data?.order?.discount!,
-  //   }
-  // );
-
-  // const { price: delivery_fee } = usePrice(
-  //   data && {
-  //     amount: data?.order?.delivery_fee!,
-  //   }
-  // );
-
-  // const { price: sales_tax } = usePrice(
-  //   data && {
-  //     amount: data?.order?.sales_tax!,
-  //   }
-  // );
-  // if (loading) return <Loader text={t("common:text-loading")} />;
-  // if (error) return <ErrorMessage message={error.message} />;
+  if (loading) return <Loader text={t('common:text-loading')} />;
+  if (error) return <ErrorMessage message={error.message} />;
 
   const columns = [
     {
@@ -149,7 +143,7 @@ export default function OrderDetailsPage() {
     <Card>
       <div className="flex flex-col items-center lg:flex-row">
         <h3 className="mb-8 w-full whitespace-nowrap text-center text-2xl font-semibold text-heading lg:mb-0 lg:w-1/3 lg:text-start">
-          {t('form:input-label-order-id')} - {data?.order?.tracking_number}
+          {t('form:input-label-order-id')} - {order?.orderNumber}
         </h3>
 
         <form
@@ -187,12 +181,12 @@ export default function OrderDetailsPage() {
       </div>
 
       <div className="mb-10">
-        {data?.order ? (
+        {!data?.order ? (
           <Table
             //@ts-ignore
             columns={columns}
             emptyText={t('table:empty-table-data')}
-            data={data?.order?.products!}
+            data={data?.order?.products! ?? []}
             rowKey="id"
             scroll={{ x: 300 }}
           />
@@ -200,31 +194,26 @@ export default function OrderDetailsPage() {
           <span>{t('common:no-order-found')}</span>
         )}
 
-        <div className="flex w-full flex-col space-y-2 border-t-4 border-double border-border-200 px-4 py-4 ms-auto sm:w-1/2 md:w-1/3">
+        <div className="mt-2 flex w-full flex-col space-y-2 border-t-4 border-double border-border-200 px-4 py-4 ms-auto sm:w-1/2 md:w-1/3">
           <div className="flex items-center justify-between text-sm text-body">
             <span>{t('common:order-sub-total')}</span>
-            {/* <span>{subtotal}</span> */}
-            <span>{34}</span>
+            <span>{subtotal}</span>
           </div>
           <div className="flex items-center justify-between text-sm text-body">
             <span>{t('common:order-tax')}</span>
-            {/* <span>{sales_tax}</span> */}
-            <span>{34}</span>
+            <span>{subtotal}</span>
           </div>
           <div className="flex items-center justify-between text-sm text-body">
             <span>{t('common:order-delivery-fee')}</span>
-            {/* <span>{delivery_fee}</span> */}
-            <span>{23}</span>
+            <span>{subtotal}</span>
           </div>
           <div className="flex items-center justify-between text-sm text-body">
             <span>{t('common:order-discount')}</span>
-            {/* <span>{discount}</span> */}
-            <span>{21}</span>
+            <span>{subtotal}</span>
           </div>
           <div className="flex items-center justify-between text-base font-semibold text-heading">
             <span>{t('common:order-total')}</span>
-            {/* <span>{total}</span> */}
-            <span>{56}</span>
+            <span>{subtotal}</span>
           </div>
         </div>
       </div>
@@ -235,13 +224,15 @@ export default function OrderDetailsPage() {
             {t('common:billing-address')}
           </h3>
 
-          <div className="flex flex-col items-start space-y-1 text-sm text-body">
-            <span>{data?.order?.customer?.name}</span>
-            {data?.order?.billing_address && (
-              <span>{formatAddress(data.order.billing_address)}</span>
+          <div className="text-md flex flex-col items-start space-y-1 text-gray-700">
+            <Link href={`${ROUTES.CUSTOMER}/${order?.customer?.id}`}>
+              <div className="underline">{order?.customer?.fullName}</div>
+            </Link>
+            {order?.customer?.address && (
+              <span>{formatAddress(order?.customer?.address)}</span>
             )}
-            {data?.order?.customer_contact && (
-              <span>{data?.order?.customer_contact}</span>
+            {order?.customer?.address?.phoneNumber && (
+              <span>{order?.customer?.address?.phoneNumber}</span>
             )}
           </div>
         </div>
@@ -251,13 +242,15 @@ export default function OrderDetailsPage() {
             {t('common:shipping-address')}
           </h3>
 
-          <div className="flex flex-col items-start space-y-1 text-start text-sm text-body sm:items-end sm:text-end">
-            <span>{data?.order?.customer?.name}</span>
-            {data?.order?.shipping_address && (
-              <span>{formatAddress(data?.order.shipping_address)}</span>
+          <div className="text-md flex flex-col items-end space-y-1 text-gray-700">
+            <Link href={`${ROUTES.CUSTOMER}/${order?.customer?.id}`}>
+              <div className="underline">{order?.customer?.fullName}</div>
+            </Link>
+            {order?.customer?.address && (
+              <span>{formatAddress(order?.customer?.address)}</span>
             )}
-            {data?.order?.customer_contact && (
-              <span>{data?.order?.customer_contact}</span>
+            {order?.customer?.address?.phoneNumber && (
+              <span>{order?.customer?.address?.phoneNumber}</span>
             )}
           </div>
         </div>
@@ -265,6 +258,7 @@ export default function OrderDetailsPage() {
     </Card>
   );
 }
+
 OrderDetailsPage.Layout = AppLayout;
 
 export const getServerSideProps = async ({ locale }: any) => ({

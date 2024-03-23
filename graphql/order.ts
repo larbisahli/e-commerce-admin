@@ -1,9 +1,60 @@
 import { gql } from '@apollo/client';
 
 export const ORDER = gql`
-  query Order($id: Int!) {
-    order(id: $id) {
+  query Order($orderId: String!) {
+    order(orderId: $orderId) {
       id
+      orderNumber
+      totalQuantity
+      grandTotalInclTax
+      grandTotalExclTax
+      orderApprovedAt
+      paymentCode
+      orderStatus {
+        id
+        color
+        label
+      }
+      paymentStatus {
+        id
+        color
+        label
+      }
+      deliveryStatus {
+        id
+        color
+        label
+      }
+      items {
+        product {
+          id
+          sku
+          quantity
+        }
+        variantOption {
+          id
+          sku
+          quantity
+        }
+        totalInclTax
+        totalExclTax
+        totalQuantity
+      }
+      customer {
+        id
+        fullName
+        marketingOptIn
+        registeredAt
+        address {
+          addressLine1
+          phoneNumber
+          email
+          country {
+            name
+          }
+        }
+        registeredAt
+      }
     }
   }
 `;

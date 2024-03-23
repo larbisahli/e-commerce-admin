@@ -22,7 +22,7 @@ const classes = {
   disabled:
     'border border-border-base bg-gray-300 border-border-400 text-body cursor-not-allowed',
   disabledOutline: 'border border-border-base text-muted cursor-not-allowed',
-  small: 'px-3 py-0 h-11 text-sm',
+  small: 'px-3 py-0 h-9 text-sm',
   medium: 'px-5 py-0 h-12',
   big: 'px-10 py-0 h-14'
 };

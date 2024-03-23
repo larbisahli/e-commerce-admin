@@ -49,14 +49,16 @@ const moduleExports = {
     NEXT_PUBLIC_MAILCHIMP_URL:
       'https://devrev.us7.list-manage.com/subscribe/post?u=85b3c3a2231cd7d42156c2b25&amp;id=f17d885310&amp;f_id=00d7cfe4f0',
     TOKEN_ISSUER: 'dropgala.com',
-    // NEXT_PUBLIC_GOOGLE_MAP_API_KEY: 'AIzaSyDB2j-G5LJM0yPNG0AqziJjgh1UOW10W7I',
     FB_APPID: '',
     SENTRY_DSN:
       'https://bb6c9168b250492493d8695e9851c780@o1189599.ingest.sentry.io/6310398',
     NEXT_PUBLIC_SENTRY_DSN:
       'https://bb6c9168b250492493d8695e9851c780@o1189599.ingest.sentry.io/6310398',
     SENTRY_AUTH_TOKEN: '896bfeeab4b511ec839996dc720e1b31',
-    RECAPTCHA_SITE_KEY: '6LdJql4pAAAAAJocVjHmcQoj3pW13vgMqf_zP7CG'
+    RECAPTCHA_SITE_KEY: '6LdJql4pAAAAAJocVjHmcQoj3pW13vgMqf_zP7CG',
+    GOOGLE_OAUTH_CLIENT_ID:
+      '334672365238-6sat8ta6unldrefjd33ngah67bih7jfk.apps.googleusercontent.com',
+    GOOGLE_OAUTH_CLIENT_SECRET: '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'
   },
   typescript: {
     ignoreBuildErrors: true

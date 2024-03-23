@@ -35,7 +35,7 @@ export const siteSettings = {
           {
             id: '0tWw2Tg',
             href: ROUTES.ORDERS,
-            label: 'sidebar-nav-item-orders',
+            label: 'sidebar-nav-item-all-orders',
             padding: '35px',
             isSubLink: true
           },

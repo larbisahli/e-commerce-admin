@@ -4,8 +4,13 @@ function removeFalsy(obj: any) {
 
 export function formatAddress(address: any) {
   if (!address) return;
-  const temp = ['street_address', 'city', 'state', 'zip', 'country'].reduce(
-    (acc, k) => ({ ...acc, [k]: (address as any)[k] }),
+  const temp = ['addressLine1', 'city', 'state', 'zip', 'country'].reduce(
+    (acc, k) => {
+      if (k === 'country') {
+        return { ...acc, country: address?.country?.name };
+      }
+      return { ...acc, [k]: (address as any)[k] };
+    },
     {}
   );
   const formattedAddress = removeFalsy(temp);

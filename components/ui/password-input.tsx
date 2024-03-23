@@ -86,7 +86,7 @@ const PasswordInput = React.forwardRef<HTMLInputElement, Props>(
             <div className="mt-1 flex justify-end">
               <Link
                 href={forgotPageLink}
-                className="text-sm text-gray-700 transition-colors duration-200 hover:text-accent-hover focus:font-semibold focus:text-accent-700 focus:outline-none"
+                className="text-xs font-medium text-gray-500 underline transition-colors duration-200 hover:text-accent-hover focus:font-semibold focus:text-accent-700 focus:outline-none"
               >
                 {forgotPassHelpText}
               </Link>

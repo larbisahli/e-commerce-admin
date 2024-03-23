@@ -687,9 +687,10 @@ export interface Summary {
 }
 
 export interface OrderType {
+  id: number;
   orderNumber?: string;
-  couponId?: string;
-  customerId?: string;
+  couponId?: number;
+  customerId?: number;
   orderStatusId?: Nullable<string>;
   currency?: Nullable<CurrencyType>;
   paymentId?: string;
@@ -707,6 +708,16 @@ export interface OrderType {
   orderApprovedAt?: Scalars['Date'];
   orderDeliveredCarrierDate?: Scalars['Date'];
   orderDeliveredCustomerDate?: Scalars['Date'];
+  customer: CustomerType;
+  items: orderItems[];
+}
+
+export interface orderItems {
+  product: ProductType;
+  variantOption: VariationOptionsType;
+  totalInclTax: number;
+  totalExclTax: number;
+  totalQuantity: number;
 }
 
 export interface DashDataType {
@@ -726,6 +737,7 @@ export interface DashAnalyticsType {
 }
 
 export interface CustomerType {
+  id: number;
   fullName: string;
   address: Address;
 }
