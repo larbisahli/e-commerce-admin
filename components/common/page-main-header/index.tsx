@@ -79,48 +79,30 @@ const PageMainHeader = ({
             <>
               <button
                 onClick={() => handleOpenDrop('filter')}
-                className="flex cursor-pointer items-center p-2 text-sub-heading"
+                className="flex cursor-pointer items-center text-sub-heading"
               >
                 <div className="mr-2">
                   <FilterIcon height="1.2em" width="1.2em" />
                 </div>
                 <span className="">Filter</span>
-                <div className="ml-2">
-                  <ArrowDown
-                    height="1.2em"
-                    width="1.2em"
-                    className={cn('transition', {
-                      'rotate-180': openDrop === 'filter'
-                    })}
-                  />
-                </div>
-                <div className="mx-2 h-[40px] w-[1px] bg-gray-300"></div>
+                <div className="mx-4 h-[40px] w-[1px] bg-gray-300"></div>
               </button>
             </>
           )}
 
           <button
             onClick={() => handleOpenDrop('columns')}
-            className="flex cursor-pointer items-center p-2 text-sub-heading"
+            className="flex cursor-pointer items-center text-sub-heading"
           >
             <div className="mr-2">
               <SettingsIcon height="1.2em" width="1.2em" />
             </div>
             <span className="">Columns</span>
-            <div className="ml-2">
-              <ArrowDown
-                height="1.2em"
-                width="1.2em"
-                className={cn('transition', {
-                  'rotate-180': openDrop === 'columns'
-                })}
-              />
-            </div>
           </button>
 
-          {isExportVisible && (
+          {!isExportVisible && (
             <>
-              <div className="mx-2 h-[40px] w-[1px] bg-gray-300"></div>
+              <div className="mx-4 h-[40px] w-[1px] bg-gray-300"></div>
               <button
                 onClick={() => handleOpenDrop('exports')}
                 className="flex cursor-pointer items-center p-2 text-sub-heading"
@@ -129,21 +111,9 @@ const PageMainHeader = ({
                   <ExportIcon height="1.2em" width="1.2em" />
                 </div>
                 <span className="">Exports</span>
-                <div className="ml-2">
-                  <ArrowDown
-                    height="1.2em"
-                    width="1.2em"
-                    className={cn('transition', {
-                      'rotate-180': openDrop === 'exports'
-                    })}
-                  />
-                </div>
               </button>
             </>
           )}
-          <Button className="rounded-full bg-white" size="small">
-            <RefreshIcon width="25px" height="25px" />
-          </Button>
         </div>
       </div>
     );
@@ -169,13 +139,13 @@ const PageMainHeader = ({
     }
     return (
       <div className="mb-5">
-        {openDrop === 'columns' && (
-          <ColumnsComponent
-            columns={columns}
-            selectedColumns={selectedColumns}
-            handleColumnChange={handleColumnChange}
-          />
-        )}
+        <ColumnsComponent
+          closeModal={() => handleOpenDrop('columns')}
+          isOpen={openDrop === 'columns'}
+          columns={columns}
+          selectedColumns={selectedColumns}
+          handleColumnChange={handleColumnChange}
+        />
       </div>
     );
   };

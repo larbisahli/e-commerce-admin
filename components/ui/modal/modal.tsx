@@ -78,7 +78,7 @@ export default function Modal({
             <div
               className={cn(
                 'min-w-content inline-block max-w-full overflow-hidden bg-white text-start transition-all md:rounded-sm',
-                align === 'center' && 'relative align-middle',
+                align === 'center' && 'relative w-full align-middle sm:w-fit',
                 align === 'right' && 'absolute top-0 bottom-0 right-0 '
               )}
             >

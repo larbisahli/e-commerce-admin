@@ -66,10 +66,13 @@ export const TableSlice = createSlice({
       state: TableColumns,
       action: PayloadAction<{ tableName: string }>
     ) => {
+      const init = initialState();
       const tableName = action.payload.tableName;
-      const { columns } = initialState[tableName];
-      state[tableName].columns = columns;
-      window?.localStorage.setItem('@dropgala-tables', hydrate(state));
+      const table = init[tableName];
+      if (table?.columns) {
+        state[tableName].columns = table?.columns;
+        window?.localStorage.setItem('@dropgala-tables', hydrate(state));
+      }
     },
     rehydrate: (state: TableColumns, action: PayloadAction<TableColumns>) => {
       if (!isEmpty(action.payload)) {

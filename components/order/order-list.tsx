@@ -9,7 +9,9 @@ import { PDFDownloadLink } from '@react-pdf/renderer';
 import { siteSettings } from '@settings/site.settings';
 import {
   CreatedUpdatedByAt,
+  CustomerType,
   ImageType,
+  OrderStatus,
   OrderType,
   ShippingZoneType
 } from '@ts-types/generated';
@@ -49,24 +51,28 @@ const OrderList = ({ loading, orders, selectedColumns }: IProps) => {
         title: t('table:table-order-number'),
         dataIndex: 'orderNumber',
         key: 'orderNumber',
-        align: alignLeft,
-        width: 150,
-        ellipsis: true
+        align: 'center',
+        width: 120,
+        ellipsis: true,
+        render: (orderNumber: string, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
+          return <span className="text-md font-semibold">{orderNumber}</span>;
+        }
       },
       {
         title: t('table:table-customer-name'),
         dataIndex: 'customer',
         key: 'customer',
-        align: alignLeft,
-        width: 200,
+        align: 'center',
+        width: 180,
         ellipsis: true,
-        render: (name: string, record: TableRowProps) => {
+        render: (customer: CustomerType, record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
-          return (
-            <span className="font-semibold capitalize text-accent">{name}</span>
-          );
+          return <span className="capitalize">{customer.fullName}</span>;
         }
       },
       {
@@ -75,26 +81,14 @@ const OrderList = ({ loading, orders, selectedColumns }: IProps) => {
         key: 'customer',
         align: 'center',
         width: 230,
-        render: (rateType: string, record: TableRowProps) => {
+        render: (customer: CustomerType, record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
-          if (!rateType)
-            return (
-              <div
-                title="Not available"
-                className="!text-sm font-medium capitalize text-gray-500"
-              >
-                N/A
-              </div>
-            );
           return (
-            <Badge
-              className="!text-sm font-semibold capitalize"
-              text={record?.shippingZone?.freeShipping ? 'No Rate' : rateType}
-              color={'bg-gray-100'}
-              textColor={'text-gray-500'}
-            />
+            <span className="capitalize">
+              {customer?.address?.addressLine1}
+            </span>
           );
         }
       },
@@ -119,39 +113,29 @@ const OrderList = ({ loading, orders, selectedColumns }: IProps) => {
       },
       {
         title: t('table:table-payment-method'),
-        dataIndex: 'payment',
-        key: 'payment',
-        align: 'center',
-        width: 150,
-        render: (active: boolean, record: TableRowProps) => {
-          if (record?.loading) {
-            return <TableRowPlaceholder />;
-          }
-          return (
-            <Badge
-              className="!text-sm !text-gray-600"
-              text={active ? 'Visible' : 'Hidden'}
-              color={active ? 'bg-green-200' : 'bg-red-200'}
-            />
-          );
-        }
-      },
-      {
-        title: t('table:table-grant-total'),
         dataIndex: 'paymentCode',
         key: 'paymentCode',
         align: 'center',
         width: 150,
-        render: (freeShipping: boolean, record: TableRowProps) => {
+        render: (paymentCode: string, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
+          return <span className="font-medium">{paymentCode}</span>;
+        }
+      },
+      {
+        title: t('table:table-grant-total'),
+        dataIndex: 'grandTotalInclTax',
+        key: 'grandTotalInclTax',
+        align: 'center',
+        width: 150,
+        render: (grandTotalInclTax: number, record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
           return (
-            <Badge
-              className="!text-sm !text-gray-600"
-              text={freeShipping ? 'Yes' : 'No'}
-              color={freeShipping ? 'bg-green-200' : 'bg-red-200'}
-            />
+            <span>{grandTotalInclTax ? `$${grandTotalInclTax}` : 'Any'}</span>
           );
         }
       },
@@ -161,16 +145,18 @@ const OrderList = ({ loading, orders, selectedColumns }: IProps) => {
         key: 'orderStatus',
         align: 'center',
         width: 150,
-        render: (freeShipping: boolean, record: TableRowProps) => {
+        render: (orderStatus: OrderStatus, record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
           return (
-            <Badge
-              className="!text-sm !text-gray-600"
-              text={freeShipping ? 'Yes' : 'No'}
-              color={freeShipping ? 'bg-green-200' : 'bg-red-200'}
-            />
+            <span
+              className="rounded-sm border border-solid bg-white
+                     py-[5px] px-[10px] font-semibold capitalize shadow-sm"
+              style={{ color: orderStatus?.color }}
+            >
+              {orderStatus?.label}
+            </span>
           );
         }
       },
@@ -180,35 +166,39 @@ const OrderList = ({ loading, orders, selectedColumns }: IProps) => {
         key: 'paymentStatus',
         align: 'center',
         width: 150,
-        render: (freeShipping: boolean, record: TableRowProps) => {
+        render: (paymentStatus: OrderStatus, record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
           return (
-            <Badge
-              className="!text-sm !text-gray-600"
-              text={freeShipping ? 'Yes' : 'No'}
-              color={freeShipping ? 'bg-green-200' : 'bg-red-200'}
-            />
+            <span
+              className="rounded-sm border border-solid bg-white
+                     py-[5px] px-[10px] font-semibold capitalize shadow-sm"
+              style={{ color: paymentStatus?.color }}
+            >
+              {paymentStatus?.label}
+            </span>
           );
         }
       },
       {
         title: t('table:table-delivery-status'),
         dataIndex: 'deliveryStatus',
-        key: 'paymentCode',
+        key: 'deliveryStatus',
         align: 'center',
         width: 150,
-        render: (freeShipping: boolean, record: TableRowProps) => {
+        render: (deliveryStatus: OrderStatus, record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
           return (
-            <Badge
-              className="!text-sm !text-gray-600"
-              text={freeShipping ? 'Yes' : 'No'}
-              color={freeShipping ? 'bg-green-200' : 'bg-red-200'}
-            />
+            <span
+              className="rounded-sm border border-solid bg-white
+                     py-[5px] px-[10px] font-semibold capitalize shadow-sm"
+              style={{ color: deliveryStatus?.color }}
+            >
+              {deliveryStatus?.label}
+            </span>
           );
         }
       },
@@ -217,18 +207,14 @@ const OrderList = ({ loading, orders, selectedColumns }: IProps) => {
         dataIndex: 'createdAt',
         key: 'createdAt',
         align: 'center',
-        width: 150,
-        render: (freeShipping: boolean, record: TableRowProps) => {
+        width: 200,
+        render: (createdAt: Date, record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
-          return (
-            <Badge
-              className="!text-sm !text-gray-600"
-              text={freeShipping ? 'Yes' : 'No'}
-              color={freeShipping ? 'bg-green-200' : 'bg-red-200'}
-            />
-          );
+          return `${dayjs(createdAt).format('MMM D, YYYY')} at ${dayjs(
+            createdAt
+          ).format('h:mm A')}`;
         }
       },
       {

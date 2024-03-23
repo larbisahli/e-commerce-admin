@@ -2,11 +2,14 @@ import { ArrowNext } from '@components/icons/arrow-next';
 import { IosArrowDown } from '@components/icons/ios-arrow-down';
 import { IosArrowUp } from '@components/icons/ios-arrow-up';
 import Chart from '@components/ui/chart';
+import dayjs from 'dayjs';
+import { isEmpty } from 'lodash';
 import Link from 'next/link';
 import { useTranslation } from 'next-i18next';
-import React from 'react';
+import React, { useMemo } from 'react';
 
 const StickerCard = ({
+  loading,
   titleTransKey,
   href,
   hrefText,
@@ -14,19 +17,46 @@ const StickerCard = ({
   indicator,
   indicatorText,
   note,
-  data,
-  tooltip
+  data = [],
+  tooltip,
+  name
 }: any) => {
   const { t } = useTranslation('widgets');
+
+  const categories = useMemo(() => {
+    return Object.keys(data)?.map((date) => {
+      let day = new Date(date);
+      return dayjs(day).format('dddd, MMM D, YYYY');
+    });
+  }, [data]);
+  const series = useMemo(
+    () => [
+      {
+        name,
+        data: Object.keys(data)?.map((v) => data[v].value)
+      }
+    ],
+    [data, name]
+  );
 
   const options = {
     chart: {
       id: 'basic-bar',
       toolbar: {
         show: false
+      },
+      zoom: {
+        enabled: false
       }
     },
     tooltip,
+    fill: {
+      type: 'gradient',
+      gradient: {
+        opacityFrom: 1,
+        opacityTo: 0.7
+      }
+    },
     stroke: {
       curve: 'smooth',
       show: true,
@@ -56,6 +86,7 @@ const StickerCard = ({
       }
     },
     xaxis: {
+      type: 'datetime',
       labels: {
         show: false
       },
@@ -65,7 +96,7 @@ const StickerCard = ({
       axisTicks: {
         show: false
       },
-      categories: data?.categories ?? []
+      categories
     },
     yaxis: {
       axisBorder: {
@@ -84,24 +115,36 @@ const StickerCard = ({
     <div className="h-full w-full rounded-sm">
       <div className="flex h-full w-full flex-col justify-between">
         <div className="flex h-full w-full flex-col justify-between">
-          <div className="mb-auto w-full pb-3">
+          <div className="mb-auto w-full pb-2">
             <div className="flex w-full flex-col">
               <span className="mb-1 text-xl font-semibold text-heading">
-                {t(titleTransKey)}
+                {loading ? (
+                  <div className="animated-background h-4 max-w-[130px] rounded-sm" />
+                ) : (
+                  t(titleTransKey)
+                )}
               </span>
-              <Link href={href} className="w-fit">
-                <div className="text flex cursor-pointer items-center text-sm text-gray-700 hover:text-blue-600 hover:underline">
-                  <div>{t(hrefText)}</div>
-                  <div className="m-1">
-                    {<ArrowNext width={13} height={13} />}
+              {loading ? (
+                <div className="animated-background m-1 h-2 max-w-[40px] rounded-sm" />
+              ) : (
+                <Link href={href} className="w-fit">
+                  <div className="text flex cursor-pointer items-center text-sm text-gray-700 hover:text-blue-600 hover:underline">
+                    <div>{t(hrefText)}</div>
+                    <div className="m-1">
+                      {<ArrowNext width={13} height={13} />}
+                    </div>
                   </div>
-                </div>
-              </Link>
+                </Link>
+              )}
             </div>
           </div>
-          <span className="mb-2 text-3xl font-semibold text-heading">
-            {price}
-          </span>
+          {loading ? (
+            <div className="animated-background mb-2 h-6 max-w-[90px] rounded-sm" />
+          ) : (
+            <span className="mb-2 text-3xl font-semibold text-heading">
+              {price}
+            </span>
+          )}
           {indicator === 'up' && (
             <span
               className="inline-block text-sm font-semibold text-body"
@@ -127,10 +170,15 @@ const StickerCard = ({
             </span>
           )}
         </div>
-        {data?.categories?.length > 1 && (
-          <div className="h-full w-full">
-            <Chart options={options} series={data?.series ?? []} type="line" />
-          </div>
+        {loading ? (
+          <div className="animated-background h-20 max-w-full rounded-sm" />
+        ) : (
+          !isEmpty(data) &&
+          Object.keys(data)?.length > 1 && (
+            <div className="h-full w-full">
+              <Chart options={options} series={series} type="line" />
+            </div>
+          )
         )}
       </div>
     </div>

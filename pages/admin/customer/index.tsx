@@ -1,15 +1,14 @@
 import { useQuery } from '@apollo/client';
 import CustomerList from '@components/customers/customer-list';
 import AppLayout from '@components/layouts/app';
-import OrderList from '@components/order/order-list';
 import ErrorMessage from '@components/ui/error-message';
-import { SHIPPING_ZONES } from '@graphql/shipping-zone';
+import { CUSTOMERS } from '@graphql/customer';
 import { useGetUser } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useTableColumn } from '@hooks/useTableColumn';
 import { verifyAuth } from '@middleware/utils';
 import type { SSRProps } from '@ts-types/custom.types';
-import { OrderBy, OrderType, SortOrder } from '@ts-types/generated';
+import { CustomerType, OrderBy, SortOrder } from '@ts-types/generated';
 import { COLUMNS } from '@utils/data/table-columns';
 import { ROUTES } from '@utils/routes';
 import isEmpty from 'lodash/isEmpty';
@@ -37,8 +36,8 @@ const PageMainAction = dynamic(
 );
 
 interface TShipping {
-  orders: OrderType[];
-  orderCount: { count: number };
+  customers: CustomerType[];
+  customerCount: { count: number };
 }
 
 interface ShippingVariable {
@@ -55,12 +54,13 @@ export default function ShippingZonesPage({ client }: SSRProps) {
   const [limit, setLimit] = useState({ id: 1, value: 10, label: 10 });
   const [orderBy, setOrder] = useState(OrderBy.CREATED_AT);
 
-  const { selectedTableColumns, handleColumnChange } = useTableColumn('order');
+  const { selectedTableColumns, handleColumnChange } =
+    useTableColumn('customer');
 
   const { data, loading, error, fetchMore } = useQuery<
     TShipping,
     ShippingVariable
-  >(SHIPPING_ZONES, {
+  >(CUSTOMERS, {
     variables: {
       page,
       limit: limit.value,
@@ -70,7 +70,8 @@ export default function ShippingZonesPage({ client }: SSRProps) {
     fetchPolicy: 'cache-and-network'
   });
 
-  const { orders = [], orderCount: { count } = { count: 0 } } = data ?? {};
+  const { customers = [], customerCount: { count } = { count: 0 } } =
+    data ?? {};
 
   useGetUser(client);
   useErrorLogger(error);
@@ -126,7 +127,6 @@ export default function ShippingZonesPage({ client }: SSRProps) {
         customers={customers}
         selectedColumns={selectedTableColumns}
       />
-      {/* <OrderList orders={data?.orders} onPagination={handlePagination} /> */}
     </>
   );
 }

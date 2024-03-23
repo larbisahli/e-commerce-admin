@@ -2,6 +2,7 @@ import { useQuery } from '@apollo/client';
 import AppLayout from '@components/layouts/app';
 import OrderList from '@components/order/order-list';
 import ErrorMessage from '@components/ui/error-message';
+import { ORDERS } from '@graphql/order';
 import { SHIPPING_ZONES } from '@graphql/shipping-zone';
 import { useGetUser } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
@@ -59,7 +60,7 @@ export default function ShippingZonesPage({ client }: SSRProps) {
   const { data, loading, error, fetchMore } = useQuery<
     TShipping,
     ShippingVariable
-  >(SHIPPING_ZONES, {
+  >(ORDERS, {
     variables: {
       page,
       limit: limit.value,
@@ -120,7 +121,6 @@ export default function ShippingZonesPage({ client }: SSRProps) {
         orders={orders}
         selectedColumns={selectedTableColumns}
       />
-      {/* <OrderList orders={data?.orders} onPagination={handlePagination} /> */}
     </>
   );
 }

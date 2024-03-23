@@ -709,14 +709,33 @@ export interface OrderType {
   orderDeliveredCustomerDate?: Scalars['Date'];
 }
 
-// export declare type Address = {
-//   id: Scalars['ID'];
-//   title?: Nullable<Scalars['String']>;
-//   default?: Nullable<Scalars['Boolean']>;
-//   address?: Nullable<UserAddress>;
-//   type?: Nullable<Scalars['String']>;
-//   customer?: Nullable<User>;
-// };
+export interface DashDataType {
+  total: number;
+  data: {
+    [key: string]: {
+      value: number;
+    };
+  };
+}
+
+export interface DashAnalyticsType {
+  sales: DashDataType;
+  orders: DashDataType;
+  avgOrderValue: DashDataType;
+  revenue: DashDataType;
+}
+
+export interface CustomerType {
+  fullName: string;
+  address: Address;
+}
+
+export interface Address {
+  addressLine1: Scalars['String'];
+  email: string;
+  country: CountryType;
+  phoneNumber: string;
+}
 
 // export declare type UserAddress = {
 //   country?: Maybe<Scalars['String']>;

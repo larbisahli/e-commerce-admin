@@ -1,12 +1,16 @@
 import ActionButtons from '@components/common/action-buttons';
+import Badge from '@components/ui/badge/badge';
 import Loader from '@components/ui/loader/loader';
 import { TableRowPlaceholder } from '@components/ui/placeholders/Table';
 import ProfileCart from '@components/ui/profile-card';
 import { usePlaceholder } from '@hooks/usePlaceholder';
-import { Category, CreatedUpdatedByAt } from '@ts-types/generated';
+import {
+  Category,
+  CreatedUpdatedByAt,
+  CustomerType
+} from '@ts-types/generated';
 import { useIsRTL } from '@utils/locals';
 import { ROUTES } from '@utils/routes';
-import cn from 'classnames';
 import dayjs from 'dayjs';
 import isEmpty from 'lodash/isEmpty';
 import dynamic from 'next/dynamic';
@@ -19,7 +23,7 @@ const Table = dynamic(
 );
 
 export type IProps = {
-  customers: Customer[];
+  customers: CustomerType[];
   selectedColumns: string[];
   loading: boolean;
 };
@@ -45,84 +49,105 @@ const CustomerList = ({ loading, customers, selectedColumns }: IProps) => {
         ellipsis: true
       },
       {
-        title: t('table:table-item-title'),
-        dataIndex: 'name',
-        key: 'name',
-        align: alignLeft,
-        width: 200,
+        title: t('table:table-item-fullname'),
+        dataIndex: 'fullName',
+        key: 'fullName',
+        align: 'center',
+        width: 140,
         ellipsis: true,
-        render: (name: string, record: TableRowProps) => {
+        render: (fullName: string, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
+          return <span>{fullName}</span>;
+        }
+      },
+      {
+        title: t('table:table-item-email'),
+        dataIndex: 'address',
+        key: 'email',
+        align: 'center',
+        width: 200,
+        render: (address: CustomerType['address'], record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
+          return address?.email;
+        }
+      },
+      {
+        title: t('table:table-item-phone'),
+        dataIndex: 'address',
+        key: 'phoneNumber',
+        align: 'center',
+        width: 130,
+        render: (address: CustomerType['address'], record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
+          return address?.phoneNumber;
+        }
+      },
+      {
+        title: t('table:table-item-address'),
+        dataIndex: 'address',
+        key: 'addressLine1',
+        align: 'center',
+        width: 200,
+        render: (address: CustomerType['address'], record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
+          return address?.addressLine1;
+        }
+      },
+      {
+        title: t('table:table-item-country'),
+        dataIndex: 'address',
+        key: 'country',
+        align: 'center',
+        width: 100,
+        render: (address: CustomerType['address'], record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
+          return address?.country?.name;
+        }
+      },
+      {
+        title: t('table:table-item-marketing_opt_in'),
+        dataIndex: 'marketingOptIn',
+        key: 'marketingOptIn',
+        align: 'center',
+        width: 150,
+        render: (marketingOptIn: number, record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
           return (
-            <span
-              className={cn('font-semibold capitalize text-gray-800', {
-                'pl-3': record?.level === 2,
-                'pl-6': record?.level === 3,
-                'font-medium text-gray-600': record?.level !== 1
-              })}
-            >
-              {name ?? record?.translated?.name}
-            </span>
+            <Badge
+              className="!text-sm !text-gray-600"
+              text={marketingOptIn ? 'Yes' : 'No'}
+              color="bg-gray-100"
+            />
           );
         }
       },
       {
-        title: t('table:table-item-menu'),
-        dataIndex: 'includeInMenu',
-        key: 'includeInMenu',
-        align: 'center',
-        width: 120,
-        ellipsis: true,
-        render: (includeInMenu: boolean, record: TableRowProps) => {
-          if (record?.loading) {
-            return <TableRowPlaceholder />;
-          }
-          return <span>{includeInMenu ? 'Yes' : 'No'}</span>;
-        }
-      },
-      {
-        title: t('table:table-item-level'),
-        dataIndex: 'level',
-        key: 'level',
-        align: 'center',
-        width: 80,
-        render: (level: number, record: TableRowProps) => {
-          if (record?.loading) {
-            return <TableRowPlaceholder />;
-          }
-          return level;
-        }
-      },
-      {
-        title: t('table:table-item-position'),
-        dataIndex: 'position',
-        key: 'position',
-        align: 'center',
-        width: 80,
-        render: (position: number, record: TableRowProps) => {
-          if (record?.loading) {
-            return <TableRowPlaceholder />;
-          }
-          return position;
-        }
-      },
-      {
-        title: t('table:table-item-created-at'),
-        dataIndex: 'createdAt',
-        key: 'createdAt',
+        title: t('table:table-item-register-at'),
+        dataIndex: 'registeredAt',
+        key: 'registeredAt',
         align: alignLeft,
         width: 200,
         render: (
-          createdAt: CreatedUpdatedByAt['createdAt'],
+          registeredAt: CreatedUpdatedByAt['createdAt'],
           record: TableRowProps
         ) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
-          return `${dayjs(createdAt).format('MMM D, YYYY')} at ${dayjs(
-            createdAt
+          return `${dayjs(registeredAt).format('MMM D, YYYY')} at ${dayjs(
+            registeredAt
           ).format('h:mm A')}`;
         }
       },

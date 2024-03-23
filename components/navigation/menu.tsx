@@ -72,7 +72,7 @@ function NavMenu() {
         <Menu.Items
           as="div"
           style={{ zIndex: 60 }}
-          className="shadow-700 absolute right-0 mt-1 w-48 origin-top-right overflow-hidden rounded-sm border bg-white py-4 shadow focus:outline-none"
+          className="shadow-700 absolute right-0 mt-1 w-56 origin-top-right overflow-hidden rounded-sm border bg-white py-4 shadow focus:outline-none"
         >
           <div className="flex flex-col items-center justify-center border-b pb-3">
             <Avatar

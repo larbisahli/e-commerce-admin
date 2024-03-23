@@ -65,8 +65,8 @@ const OrderStatusList = ({
           }
           return (
             <span
-              className="rounded-md border border-solid bg-white
-                       py-[5px] px-[10px] font-semibold capitalize shadow-md"
+              className="rounded-sm border border-solid bg-white
+              py-[5px] px-[10px] font-semibold capitalize shadow-sm"
               style={{ color: record?.color }}
             >
               {label ?? record?.translated?.label}

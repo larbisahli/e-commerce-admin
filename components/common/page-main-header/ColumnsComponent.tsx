@@ -3,7 +3,12 @@ import { ResetIcon } from '@components/icons/reset';
 import Button from '@components/ui/button';
 import Checkbox from '@components/ui/checkbox';
 import isEmpty from 'lodash/isEmpty';
+import dynamic from 'next/dynamic';
 import React, { useMemo } from 'react';
+
+const Modal = dynamic(() => import('@components/ui/modal/modal'), {
+  ssr: false
+});
 
 interface Parameter {
   id?: string;
@@ -16,10 +21,14 @@ interface Props {
   // eslint-disable-next-line no-unused-vars
   columns: { label: string; key: string }[];
   selectedColumns: string[];
+  isOpen: boolean;
+  closeModal: () => void;
   handleColumnChange: (a: Parameter, reset?: boolean) => void;
 }
 
 const ColumnsComponent = ({
+  isOpen,
+  closeModal,
   columns = [],
   selectedColumns,
   handleColumnChange
@@ -41,26 +50,29 @@ const ColumnsComponent = ({
   };
 
   return (
-    <div className="flex items-center justify-between">
-      <div className="flex flex-1 flex-wrap items-center">
-        {columns?.map((column) => {
-          return (
-            <Column
-              key={column.key}
-              column={column}
-              handleCheck={handleCheck}
-              selectedColumns={selectedColumns}
-            />
-          );
-        })}
+    <Modal open={isOpen} onClose={closeModal} align="center">
+      <div className="w-full rounded-md bg-light p-6 pb-6 sm:w-[400px]">
+        <div className="py-5 font-semibold text-black">Columns:</div>
+        <div className="grid grid-cols-2 gap-4">
+          {columns?.map((column) => {
+            return (
+              <Column
+                key={column.key}
+                column={column}
+                handleCheck={handleCheck}
+                selectedColumns={selectedColumns}
+              />
+            );
+          })}
+        </div>
+        <div className="mt-6 flex justify-end">
+          <Button size="small" onClick={handleReset}>
+            <ResetIcon />
+            <span className="mx-1">Reset</span>
+          </Button>
+        </div>
       </div>
-      <div className="">
-        <Button size="small" onClick={handleReset}>
-          <ResetIcon />
-          <span className="mx-1">Reset</span>
-        </Button>
-      </div>
-    </div>
+    </Modal>
   );
 };
 
@@ -79,18 +91,16 @@ const Column = ({
     );
   }, [selectedColumns, column]);
   return (
-    <div key={column.key} className="my-4 mr-3">
-      <div className="text-xl">
-        <Checkbox
-          id={column.key}
-          className="text-xl font-medium text-body"
-          name={column.label}
-          // @ts-ignore
-          onChange={handleCheck}
-          checked={selected}
-          label={column.label}
-        />
-      </div>
+    <div key={column.key} className="text-xl">
+      <Checkbox
+        id={column.key}
+        className="text-xl font-medium text-body"
+        name={column.label}
+        // @ts-ignore
+        onChange={handleCheck}
+        checked={selected}
+        label={column.label}
+      />
     </div>
   );
 };
