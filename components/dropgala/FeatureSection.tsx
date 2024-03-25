@@ -2,6 +2,7 @@ import AdminLineIcon from '@components/icons/admin-line';
 import AnalyticsIcon from '@components/icons/analytics';
 import AbandonedCartIcon from '@components/icons/cart';
 import CurrencyConvertIcon from '@components/icons/currency-convert';
+import { CustomerCheckout } from '@components/icons/custom-checkout';
 import ExpressCheckoutIcon from '@components/icons/express-checkout';
 import GoogleAnalyticsIcon from '@components/icons/google-analytics';
 import LanguagesIcon from '@components/icons/languages';
@@ -21,14 +22,14 @@ const FeatureSection = () => {
       className="container mx-auto mt-0 w-full rounded p-4 lg:mt-24 lg:px-0"
     >
       <div className="flex flex-col items-center">
-        <h2 className="slide-in-bottom-h1 my-5 text-center text-3xl font-bold leading-tight text-gray-800 md:text-left">
-          Tools
+        <h2 className="slide-in-bottom-h1 my-5 mb-2 text-center text-4xl font-bold leading-tight text-gray-800 md:text-left">
+          Features
         </h2>
-        <p className="text-center">
+        <p className="text-center text-lg text-gray-600">
           All the tools and features you need to succeed
         </p>
       </div>
-      <div className="mt-8 grid grid-cols-1 gap-5 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+      <div className="mt-12 grid grid-cols-1 gap-5 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
         {/*  */}
         <div className="min-h-[280px] rounded-lg border bg-white shadow">
           <div className=" flex flex-col items-center justify-center p-4">
@@ -50,7 +51,7 @@ const FeatureSection = () => {
         <div className="min-h-[270px] rounded-lg border bg-white shadow">
           <div className=" flex flex-col items-center justify-center p-4">
             <div className="py-3 text-gray-700">
-              <LanguagesIcon />
+              <LanguagesIcon width={45} height={45} />
             </div>
             <div className="pt-1 text-center font-medium">
               Multilingual support
@@ -59,6 +60,23 @@ const FeatureSection = () => {
               <p>
                 Translate your products and content into multiple languages to
                 reach a global audience worldwide.
+              </p>
+            </div>
+          </div>
+        </div>
+        {/*  */}
+        <div className="min-h-[270px] rounded-lg border bg-white shadow">
+          <div className=" flex flex-col items-center justify-center p-4">
+            <div className="py-3 text-gray-700">
+              <CustomerCheckout />
+            </div>
+            <div className="pt-1 text-center font-medium">
+              Customize your checkout
+            </div>
+            <div className="pt-5 text-center text-gray-700">
+              <p>
+                Make it easier for your customers to complete the checkout.
+                Customize the fields and request only the necessary information.
               </p>
             </div>
           </div>
@@ -166,7 +184,7 @@ const FeatureSection = () => {
           </div>
         </div>
         {/*  */}
-        <div className="min-h-[270px] rounded-lg border bg-white shadow">
+        {/* <div className="min-h-[270px] rounded-lg border bg-white shadow">
           <div className=" flex flex-col items-center justify-center p-4">
             <div className="py-3 text-gray-700">
               <UpSellIcon />
@@ -179,7 +197,7 @@ const FeatureSection = () => {
               </p>
             </div>
           </div>
-        </div>
+        </div> */}
         {/*  */}
         <div className="min-h-[270px] rounded-lg border bg-white shadow">
           <div className=" flex flex-col items-center justify-center p-4">

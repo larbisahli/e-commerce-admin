@@ -1,12 +1,13 @@
 import React from 'react';
 
-function AnalyticsIcon() {
+function AnalyticsIcon({ ...props }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="32"
       height="32"
       viewBox="0 0 32 32"
+      {...props}
     >
       <path fill="currentColor" d="M4 2H2v26a2 2 0 002 2h26v-2H4z"></path>
       <path

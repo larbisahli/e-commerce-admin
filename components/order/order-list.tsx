@@ -23,6 +23,7 @@ import { useTranslation } from 'next-i18next';
 import { useMemo } from 'react';
 
 import InvoicePdf from './invoice-pdf';
+import Link from 'next/link';
 
 const Table = dynamic(
   () => import('@components/ui/table').then((mod) => mod.Table),
@@ -58,7 +59,13 @@ const OrderList = ({ loading, orders, selectedColumns }: IProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
-          return <span className="text-md font-semibold">{orderNumber}</span>;
+          return (
+            <Link href={`${ROUTES.ORDERS}/${orderNumber}`}>
+              <span className="text-md font-semibold text-blue-700 underline">
+                #{orderNumber}
+              </span>
+            </Link>
+          );
         }
       },
       {
@@ -265,7 +272,7 @@ const OrderList = ({ loading, orders, selectedColumns }: IProps) => {
           return (
             <ActionButtons
               id={orderNumber}
-              editUrl={`${ROUTES.ORDERS}/${orderNumber}`}
+              detailsUrl={`${ROUTES.ORDERS}/${orderNumber}`}
               deleteModalView="DELETE_SHIPPING"
             />
           );

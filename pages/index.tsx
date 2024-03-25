@@ -13,6 +13,7 @@ import { getAllFilesFrontMatter } from '@lib/mdx';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
+import HowItWorksSection from '@components/dropgala/HowItworksSection';
 
 const MAX_DISPLAY = 4;
 
@@ -48,6 +49,7 @@ const HomePage = ({ posts }) => {
       <main className="pt-16 lg:pt-20">
         {/* HERO SECTION */}
         <HeroSection />
+        <HowItWorksSection />
         <section className="container my-28 mx-auto flex flex-col-reverse flex-wrap items-center justify-between px-0 md:flex-row lg:px-4">
           {/* <!--Right Col--> */}
           <div className="w-fit max-w-[500px] overflow-y-hidden py-6 xl:w-3/5">
@@ -80,14 +82,10 @@ const HomePage = ({ posts }) => {
             </Link>
           </div>
         </section>
-
         {/* ----------------- Features ------------------- */}
-
         <FeatureSection />
-
         {/* ----------------- Pricing ------------------- */}
         {/* <PricingSection /> */}
-
         {/* ----------------- Blog section ---------------------- */}
         <section className="container mx-auto mt-22">
           <LatestBlogsCarousel posts={posts} MAX_DISPLAY={MAX_DISPLAY} />

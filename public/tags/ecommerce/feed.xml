@@ -2,22 +2,62 @@
   <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
       <title>Dropgala</title>
-      <link>https://dropgala.com/blog</link>
+      <link>https://www.dropgala.com/blog</link>
       <description>Check the latest news of E commerce, marketing, Tech....</description>
       <language>en-us</language>
       <managingEditor>larbi.sahli@dropgala.com (Dropgala)</managingEditor>
       <webMaster>larbi.sahli@dropgala.com (Dropgala)</webMaster>
-      <lastBuildDate>Wed, 12 Jul 2023 00:00:00 GMT</lastBuildDate>
-      <atom:link href="https://dropgala.com/tags/ecommerce/feed.xml" rel="self" type="application/rss+xml"/>
+      <lastBuildDate>Sun, 17 Mar 2024 00:00:00 GMT</lastBuildDate>
+      <atom:link href="https://www.dropgala.com/tags/ecommerce/feed.xml" rel="self" type="application/rss+xml"/>
       
   <item>
-    <guid>https://dropgala.com/blog/ecommerce-business-blueprint</guid>
-    <title>How To Start an Ecommerce Business</title>
-    <link>https://dropgala.com/blog/ecommerce-business-blueprint</link>
-    <description>How to derive the OLS Estimator with matrix notation and a tour of math typesetting using markdown with the help of KaTeX.</description>
-    <pubDate>Wed, 12 Jul 2023 00:00:00 GMT</pubDate>
+    <guid>https://www.dropgala.com/blog/e-commerce-what-is-it-and-how-to-start-it</guid>
+    <title>E-commerce: what is it and how to start it?</title>
+    <link>https://www.dropgala.com/blog/e-commerce-what-is-it-and-how-to-start-it</link>
+    <description>Globally, 2.87 billion people made online purchases. E-commerce facilitates online buying and selling, offering convenience and global reach.</description>
+    <pubDate>Sun, 17 Mar 2024 00:00:00 GMT</pubDate>
     <author>larbi.sahli@dropgala.com (Dropgala)</author>
-    <category>Ecommerce</category><category>Business</category>
+    <category>ecommerce</category><category>customers</category><category>services</category><category>business</category>
+  </item>
+
+  <item>
+    <guid>https://www.dropgala.com/blog/effective-strategies-for-handling-e-commerce-shipping</guid>
+    <title>Effective Strategies for Handling E-commerce Shipping</title>
+    <link>https://www.dropgala.com/blog/effective-strategies-for-handling-e-commerce-shipping</link>
+    <description>Explore e-commerce shipping: delivery, notifications, labels, rates, costs, packaging, customs, and best practices.</description>
+    <pubDate>Sun, 10 Mar 2024 00:00:00 GMT</pubDate>
+    <author>larbi.sahli@dropgala.com (Dropgala)</author>
+    <category>ecommerce</category><category>ecommerce-shipping</category>
+  </item>
+
+  <item>
+    <guid>https://www.dropgala.com/blog/how-to-start-a-business-in-10-steps</guid>
+    <title>How to start a business in 10 steps</title>
+    <link>https://www.dropgala.com/blog/how-to-start-a-business-in-10-steps</link>
+    <description>Initiate a successful online business with 10 steps: clear plan, exceptional product, and robust marketing strategy. From defining the idea to first orders, achieve success.</description>
+    <pubDate>Sun, 10 Mar 2024 00:00:00 GMT</pubDate>
+    <author>larbi.sahli@dropgala.com (Dropgala)</author>
+    <category>ecommerce</category><category>business</category>
+  </item>
+
+  <item>
+    <guid>https://www.dropgala.com/blog/e-commerce-business-models</guid>
+    <title>E-commerce business models</title>
+    <link>https://www.dropgala.com/blog/e-commerce-business-models</link>
+    <description>Explore e-commerce models, emphasizing long-term sustainability and success factors.</description>
+    <pubDate>Sat, 09 Mar 2024 00:00:00 GMT</pubDate>
+    <author>larbi.sahli@dropgala.com (Dropgala)</author>
+    <category>ecommerce</category><category>ecommerce-models</category><category>business</category>
+  </item>
+
+  <item>
+    <guid>https://www.dropgala.com/blog/discover-your-winning-product-by-putting-it-to-the-test</guid>
+    <title>Discover your winning product by putting it to the test.</title>
+    <link>https://www.dropgala.com/blog/discover-your-winning-product-by-putting-it-to-the-test</link>
+    <description>Business success hinges on finding an excellent product meeting market needs. A merchant&#39;s success is linked to the quality of the product they offer.</description>
+    <pubDate>Fri, 10 Mar 2023 00:00:00 GMT</pubDate>
+    <author>larbi.sahli@dropgala.com (Dropgala)</author>
+    <category>ecommerce</category><category>business</category>
   </item>
 
     </channel>
