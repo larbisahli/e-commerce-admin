@@ -29,6 +29,7 @@ const StickerCard = ({
       return dayjs(day).format('dddd, MMM D, YYYY');
     });
   }, [data]);
+
   const series = useMemo(
     () => [
       {

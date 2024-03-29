@@ -686,12 +686,14 @@ export interface Summary {
   totalShippingExclTax: FinalPrice;
 }
 
-export interface OrderType {
+export interface OrderType extends CreatedUpdatedByAt {
   id: number;
   orderNumber?: string;
   couponId?: number;
   customerId?: number;
-  orderStatusId?: Nullable<string>;
+  orderStatus?: OrderStatus;
+  deliveryStatus?: OrderStatus;
+  paymentStatus?: OrderStatus;
   currency?: Nullable<CurrencyType>;
   paymentId?: string;
   orderGeo?: {
@@ -699,11 +701,15 @@ export interface OrderType {
     city?: string;
     state?: string;
   };
-  grandTotalExclTax: Summary['grandTotalExclTax'];
-  grandTotalInclTax: Summary['grandTotalInclTax'];
-  subtotalInclTax: Summary['subtotalInclTax'];
-  subtotalExclTax: Summary['subtotalExclTax'];
-  totalDiscount: Summary['totalDiscount'];
+  grandTotalInclTax: number;
+  grandTotalExclTax: number;
+  subTotalInclTax: number;
+  subTotalExclTax: number;
+  discountAmount: number;
+  coupon?: Coupon;
+  tax?: TaxType;
+  totalShippingInclTax: number;
+  totalShippingExclTax: number;
   totalQuantity?: number;
   orderApprovedAt?: Scalars['Date'];
   orderDeliveredCarrierDate?: Scalars['Date'];
@@ -730,10 +736,21 @@ export interface DashDataType {
 }
 
 export interface DashAnalyticsType {
-  sales: DashDataType;
-  orders: DashDataType;
-  avgOrderValue: DashDataType;
-  revenue: DashDataType;
+  sales: {
+    date: Scalars['Date'];
+    value: Scalars['Int'];
+    quantity: Scalars['Int'];
+  }[];
+  orders: {
+    date: Scalars['Date'];
+    value: Scalars['Int'];
+    quantity: Scalars['Int'];
+  }[];
+  avgOrders: {
+    date: Scalars['Date'];
+    value: Scalars['Int'];
+    quantity: Scalars['Int'];
+  }[];
 }
 
 export interface CustomerType {
@@ -744,9 +761,13 @@ export interface CustomerType {
 
 export interface Address {
   addressLine1: Scalars['String'];
-  email: string;
+  email: Scalars['String'];
   country: CountryType;
-  phoneNumber: string;
+  addressLine2: Scalars['String'];
+  phoneNumber: Scalars['String'];
+  postalCode: Scalars['String'];
+  state: Scalars['String'];
+  city: Scalars['String'];
 }
 
 // export declare type UserAddress = {

@@ -22,6 +22,7 @@ export const ROUTES = {
   STORE_SETTINGS: '/admin/store/store-settings',
   WHATSAPP: '/admin/whatsapp',
   SUPPORT: '/admin/support',
+  PLANS: '/admin/plans',
   AFFILIATE: '/admin/affiliate-program',
   COLORS: '/admin/store/theme-settings/colors',
   STORE_NAVIGATION: '/admin/store/theme-settings/store-navigation',
@@ -46,6 +47,7 @@ export const ROUTES = {
   INVITE: '/admin/hero-banner',
   MEDIA: '/admin/media',
   THEME: '/admin/store/theme',
+  TEMPLATE: '/admin/store/template',
   COMING_SOON: '/admin/coming-soon',
   EARN: '/admin/earn',
   STORE_ABOUT_US: '/admin/store/page/about-us',
@@ -62,5 +64,6 @@ export const ROUTES = {
   LANGUAGES: '/admin/store/languages',
   STORE_EXTENSIONS: '/admin/store/extensions',
   MARKETING_NEWSLETTER: '/admin/marketing/newsletter',
-  ANALYTICS: '/admin/analytics'
+  ANALYTICS: '/admin/analytics',
+  STORE_BUILDER: '/admin/store/builder'
 };

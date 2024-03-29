@@ -9,6 +9,7 @@ export { BlogIcon } from '@components/icons/sidebar/blog';
 export { CategoriesIcon } from '@components/icons/sidebar/categories';
 export { CouponsIcon } from '@components/icons/sidebar/coupons';
 export { DashboardIcon } from '@components/icons/sidebar/dashboard';
+export { DesignIcon } from '@components/icons/sidebar/design';
 export { DollarIcon } from '@components/icons/sidebar/dollar';
 export { EmailIcon } from '@components/icons/sidebar/email';
 export { ImageFolder } from '@components/icons/sidebar/image-folder';

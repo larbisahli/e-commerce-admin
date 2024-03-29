@@ -1,5 +1,4 @@
 // import { Category } from '@ts-types/generated';
-import { Console } from 'console';
 import { isEmpty } from 'lodash';
 import React from 'react';
 

@@ -151,7 +151,7 @@ const MyThemeList = ({ themes }: IProps) => {
         render: (id: string, record: ThemeType) => (
           <ActionButtons
             id={id}
-            editUrl={record.isDefault ? `${ROUTES.THEME}/${id}` : null}
+            editUrl={record.isDefault ? `${ROUTES.TEMPLATE}/${id}` : null}
             activate={!record.isDefault}
             deleteModalView={!record.isDefault ? 'DELETE_STORE_THEME' : null}
           />

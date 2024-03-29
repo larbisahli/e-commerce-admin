@@ -4,20 +4,19 @@ export const DASH_ANALYTICS = gql`
   query GetDashAnalytics($dateId: String!) {
     getDashAnalytics(dateId: $dateId) {
       sales {
-        total
-        data
+        date
+        value
+        quantity
       }
       orders {
-        total
-        data
+        date
+        value
+        quantity
       }
-      avgOrderValue {
-        total
-        data
-      }
-      revenue {
-        total
-        data
+      avgOrders {
+        date
+        value
+        quantity
       }
     }
   }

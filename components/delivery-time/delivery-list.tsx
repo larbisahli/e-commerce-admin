@@ -65,7 +65,7 @@ const DeliveryList = ({ loading, deliveryTimes, selectedColumns }: IProps) => {
         dataIndex: 'unit',
         key: 'unit',
         align: alignLeft,
-        width: 150,
+        width: 100,
         ellipsis: true,
         render: (unit: { unit: string }, record: TableRowProps) => {
           if (record?.loading) {
@@ -78,8 +78,8 @@ const DeliveryList = ({ loading, deliveryTimes, selectedColumns }: IProps) => {
         title: t('table:table-item-minimum'),
         dataIndex: 'min',
         key: 'min',
-        align: alignLeft,
-        width: 150,
+        align: 'center',
+        width: 100,
         ellipsis: true,
         render: (min: number, record: TableRowProps) => {
           if (record?.loading) {
@@ -92,8 +92,8 @@ const DeliveryList = ({ loading, deliveryTimes, selectedColumns }: IProps) => {
         title: t('table:table-item-maximum'),
         dataIndex: 'max',
         key: 'max',
-        align: alignLeft,
-        width: 150,
+        align: 'center',
+        width: 100,
         ellipsis: true,
         render: (max: number, record: TableRowProps) => {
           if (record?.loading) {
@@ -106,7 +106,7 @@ const DeliveryList = ({ loading, deliveryTimes, selectedColumns }: IProps) => {
         title: t('table:table-item-created-at'),
         dataIndex: 'createdAt',
         key: 'createdAt',
-        align: alignLeft,
+        align: 'center',
         width: 200,
         render: (
           createdAt: CreatedUpdatedByAt['createdAt'],

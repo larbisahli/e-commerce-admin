@@ -104,7 +104,7 @@ const SuppliersList = ({ loading, suppliers, selectedColumns }: IProps) => {
         title: t('table:table-item-created-at'),
         dataIndex: 'createdAt',
         key: 'createdAt',
-        align: alignLeft,
+        align: 'center',
         width: 190,
         render: (
           createdAt: CreatedUpdatedByAt['updatedAt'],

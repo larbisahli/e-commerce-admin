@@ -66,7 +66,7 @@ const TaxList = ({ loading, taxes, selectedColumns }: IProps) => {
         title: t('table:table-item-created-at'),
         dataIndex: 'createdAt',
         key: 'createdAt',
-        align: alignLeft,
+        align: 'center',
         width: 150,
         render: (
           createdAt: CreatedUpdatedByAt['createdAt'],

@@ -41,6 +41,25 @@ export const ORDER_STATUSES = gql`
   }
 `;
 
+export const ORDER_STATUSES_FOR_SELECT = gql`
+  query OrderStatusForSelect(
+    $page: Int!
+    $limit: Int!
+    $orderBy: String!
+    $sortedBy: String!
+  ) {
+    orderStatusForSelect(
+      page: $page
+      limit: $limit
+      orderBy: $orderBy
+      sortedBy: $sortedBy
+    ) {
+      id
+      label
+    }
+  }
+`;
+
 export const ORDER_STATUS = gql`
   query GetOrderStatus($id: Int!, $language: LanguageInput!) {
     orderStatus(id: $id, language: $language) {

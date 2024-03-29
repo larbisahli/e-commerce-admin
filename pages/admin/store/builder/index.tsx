@@ -1,4 +1,4 @@
-import AppLayout from '@components/layouts/app';
+import BuilderLayout from '@components/layouts/builder';
 import { useGetUser } from '@hooks/index';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import type { SSRProps } from '@ts-types/custom.types';
@@ -8,7 +8,7 @@ import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-const SupportForm = dynamic(() => import('@components/support/support-form'), {
+const PlansComponents = dynamic(() => import('@components/plans'), {
   ssr: true
 });
 
@@ -17,7 +17,7 @@ export default function CreateSupplierPage({ client }: SSRProps) {
   return (
     <>
       <Head>
-        <title>Support | Dropgala</title>
+        <title>Store Builder | Dropgala</title>
         <link
           rel="icon"
           type="image/svg"
@@ -25,12 +25,12 @@ export default function CreateSupplierPage({ client }: SSRProps) {
           href="/svg/supplier.svg"
         />
       </Head>
-      <SupportForm />
+      <PlansComponents />
     </>
   );
 }
 
-CreateSupplierPage.Layout = AppLayout;
+CreateSupplierPage.Layout = BuilderLayout;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { locale } = context;

@@ -2,11 +2,13 @@ import { useQuery } from '@apollo/client';
 import RecentOrders from '@components/order/recent-orders';
 import StickerCard from '@components/widgets/sticker-card';
 import { DASH_ANALYTICS } from '@graphql/analytics';
+import { RECENT_ORDERS } from '@graphql/order';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetUser } from '@hooks/useGetUser';
 import { useSettings } from '@hooks/useSettings';
-import { DashAnalyticsType } from '@ts-types/generated';
+import { DashAnalyticsType, OrderType } from '@ts-types/generated';
 import classNames from 'classnames';
+import dayjs from 'dayjs';
 import { isEmpty } from 'lodash';
 import Head from 'next/head';
 import { useTranslation } from 'next-i18next';
@@ -15,54 +17,6 @@ import { useMemo, useState } from 'react';
 import GettingStartedSection from './GettingStartedSection';
 import RecommendationsSection from './RecommendationsSection';
 import TipsSection from './TipsSection';
-
-const ordersData = [
-  {
-    customer: 'Isaac frost',
-    total: 12,
-    created_at: Date.now(),
-    status: {
-      color: 'green',
-      name: 'Pending'
-    }
-  },
-  {
-    customer: 'Karl moore',
-    total: 120,
-    created_at: Date.now(),
-    status: {
-      color: 'red',
-      name: 'Canceled'
-    }
-  },
-  {
-    customer: 'Isaac frost',
-    total: 22,
-    created_at: Date.now(),
-    status: {
-      color: 'green',
-      name: 'Pending'
-    }
-  },
-  {
-    customer: 'Isaac frost',
-    total: 42,
-    created_at: Date.now(),
-    status: {
-      color: 'green',
-      name: 'Pending'
-    }
-  },
-  {
-    customer: 'Isaac frost',
-    total: 34,
-    created_at: Date.now(),
-    status: {
-      color: 'green',
-      name: 'Pending'
-    }
-  }
-];
 
 const dates = [
   {
@@ -106,6 +60,10 @@ interface TDashAnalytics {
   getDashAnalytics: DashAnalyticsType;
 }
 
+interface TDashOrders {
+  recentOrders: OrderType[];
+}
+
 export default function Dashboard() {
   const { t } = useTranslation();
 
@@ -115,31 +73,101 @@ export default function Dashboard() {
     label: '7 days'
   });
 
-  const { data, loading, error } = useQuery<TDashAnalytics, { dateId: string }>(
-    DASH_ANALYTICS,
-    {
-      variables: {
-        dateId: selectedDate.id
-      },
-      fetchPolicy: 'cache-and-network',
-      skip: isEmpty(selectedDate)
-    }
-  );
+  const {
+    data: recentOrderData,
+    loading: recentOrderLoading,
+    error: recentOrderError
+  } = useQuery<TDashOrders>(RECENT_ORDERS, {
+    variables: {},
+    fetchPolicy: 'cache-and-network',
+    skip: isEmpty(selectedDate)
+  });
 
-  const { getDashAnalytics } = data ?? {};
+  const { recentOrders } = recentOrderData ?? {};
+
+  const {
+    data: requestData,
+    loading,
+    error
+  } = useQuery<TDashAnalytics, { dateId: string }>(DASH_ANALYTICS, {
+    variables: {
+      dateId: selectedDate.id
+    },
+    fetchPolicy: 'cache-and-network',
+    skip: isEmpty(selectedDate)
+  });
+
+  const { getDashAnalytics } = requestData ?? {};
+  const {
+    sales: salesRows = [],
+    orders: orderRows = [],
+    avgOrders: avgOrderRows = []
+  } = getDashAnalytics ?? {};
 
   const {
     userInfo: { firstName = '' }
   } = useGetUser();
 
   useErrorLogger(error);
-
-  const sales = getDashAnalytics?.sales;
-  const orders = getDashAnalytics?.orders;
-  const avgOrderValue = getDashAnalytics?.avgOrderValue;
-  const revenue = getDashAnalytics?.revenue;
-
+  useErrorLogger(recentOrderError);
   const { systemCurrency } = useSettings();
+
+  const data = useMemo(() => {
+    return {
+      revenue: {
+        total: salesRows?.reduce((total, item) => total + item.value, 0),
+        data: salesRows?.reduce((result, item) => {
+          const { date, value } = item;
+          // @ts-ignore
+          result[dayjs(date)?.toISOString().split('T')[0]] = { value };
+          return result;
+        }, {})
+      },
+      orders: {
+        total: orderRows?.reduce((total, item) => total + item.quantity, 0),
+        data: orderRows?.reduce((result, item) => {
+          const { date, quantity } = item;
+          // @ts-ignore
+          result[dayjs(date)?.toISOString().split('T')[0]] = {
+            quantity,
+            value: quantity
+          };
+          return result;
+        }, {})
+      },
+      avgOrderValue: {
+        total: Number(
+          (
+            avgOrderRows?.reduce((acc, num) => acc + num.value, 0) /
+              avgOrderRows?.length || 0
+          ).toFixed(2)
+        ),
+        data: avgOrderRows?.reduce((result, item) => {
+          const { date, value } = item;
+          // @ts-ignore
+          result[dayjs(date)?.toISOString().split('T')[0]] = { value };
+          return result;
+        }, {})
+      },
+      sales: {
+        total: salesRows?.reduce((total, item) => total + item.quantity, 0),
+        data: salesRows?.reduce((result, item) => {
+          const { date, quantity } = item;
+          // @ts-ignore
+          result[dayjs(date)?.toISOString().split('T')[0]] = {
+            quantity,
+            value: quantity
+          };
+          return result;
+        }, {})
+      }
+    };
+  }, [avgOrderRows, orderRows, salesRows]);
+
+  const sales = data?.sales;
+  const orders = data?.orders;
+  const avgOrderValue = data?.avgOrderValue;
+  const revenue = data?.revenue;
 
   const dateRange = useMemo(() => {
     const now = new Date();
@@ -153,12 +181,15 @@ export default function Dashboard() {
   const revenueData = useMemo(() => {
     return FormatData(dateRange, revenue?.data);
   }, [dateRange, revenue?.data]);
+
   const salesData = useMemo(() => {
     return FormatData(dateRange, sales?.data);
   }, [dateRange, sales?.data]);
+
   const orderData = useMemo(() => {
     return FormatData(dateRange, orders?.data);
   }, [dateRange, orders?.data]);
+
   const avgOrderData = useMemo(() => {
     return FormatData(dateRange, avgOrderValue?.data);
   }, [dateRange, avgOrderValue?.data]);
@@ -288,7 +319,8 @@ export default function Dashboard() {
       </div>
       <div className="mt-6 mb-12 w-full">
         <RecentOrders
-          orders={ordersData}
+          loading={recentOrderLoading}
+          orders={recentOrders}
           title={t('table:recent-order-table-title')}
         />
       </div>

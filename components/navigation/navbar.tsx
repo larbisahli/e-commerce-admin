@@ -67,8 +67,6 @@ const Navbar = () => {
     userInfo: { store: { alias = '' } = {} }
   } = useGetUser();
 
-  const rev = 3439.89;
-
   return (
     <header
       className={cx(

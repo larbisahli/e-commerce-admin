@@ -1,10 +1,13 @@
+import { UpgradeIcon } from '@components/icons/sidebar/upgrade';
 import styles from '@components/navigation/scss/index.module.scss';
 import Scrollbar from '@components/ui/scrollbar';
 import { useGetUser } from '@hooks/useGetUser';
 import { useUI } from '@hooks/useUI';
 import { siteSettings } from '@settings/site.settings';
+import { ROUTES } from '@utils/routes';
 import classNames from 'classnames/bind';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 import { useTranslation } from 'next-i18next';
 import React, { useState } from 'react';
 
@@ -72,6 +75,23 @@ const Sidebar: React.FC<Props> = ({ absolute = false }) => {
           <div className="h-[1px] w-[90%] bg-sidenav-divider"></div>
         </div>
         <div className="flex flex-col">
+          <div className="mb-5">
+            <Link href={`${ROUTES.PLANS}`}>
+              <div className="flex items-center justify-between p-2 pl-6">
+                <div className="text-blue-500">
+                  <div className="flex items-center">
+                    <div>
+                      <UpgradeIcon width={25} height={25} />
+                    </div>
+                    <div className="font-medium">Upgrade plan</div>
+                  </div>
+                </div>
+                <div className="rounded-full bg-gray-200 px-3 py-1 text-xs font-medium uppercase text-black">
+                  basic
+                </div>
+              </div>
+            </Link>
+          </div>
           {siteSettings.sidebarLinks.admin.map(
             ({ id, href, label, icon, line, subLinks, disabled }) => (
               <SidebarItem

@@ -157,7 +157,7 @@ const AttributeList = ({ loading, attributes, selectedColumns }: IProps) => {
         title: t('table:table-item-created-at'),
         dataIndex: 'createdAt',
         key: 'createdAt',
-        align: alignLeft,
+        align: 'center',
         width: 200,
         render: (
           createdAt: CreatedUpdatedByAt['createdAt'],

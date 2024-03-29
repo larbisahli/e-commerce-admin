@@ -74,7 +74,7 @@ const NotificationMenu: React.FC<MenuType> = ({ data }) => {
                   Clear all
                 </button>
               </div>
-              {!!data.length ? (
+              {data.length ? (
                 data?.map((item: ItemType, index) => (
                   <NotificationCard
                     key={index}

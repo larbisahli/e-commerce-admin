@@ -3,29 +3,32 @@ import Card from '@components/common/card';
 import AppLayout from '@components/layouts/app';
 import Button from '@components/ui/button';
 import ErrorMessage from '@components/ui/error-message';
-import ValidationError from '@components/ui/form-validation-error';
+import Label from '@components/ui/label';
 import Loader from '@components/ui/loader/loader';
-import ProgressBox from '@components/ui/progress-box/progress-box';
 import SelectInput from '@components/ui/select-input';
-import { ORDER, ORDERS } from '@graphql/order';
+import { ORDER } from '@graphql/order';
+import { ORDER_STATUSES_FOR_SELECT } from '@graphql/order-status';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { siteSettings } from '@settings/site.settings';
+import { useSettings } from '@hooks/useSettings';
+import { verifyAuth } from '@middleware/utils';
+import { OrderBy, SortOrder } from '@ts-types/enums';
 import {
-  Attachment,
+  Address,
   CustomerType,
+  OrderStatus,
   OrderType,
   Product
 } from '@ts-types/generated';
 import { formatAddress } from '@utils/format-address';
-import { useIsRTL } from '@utils/locals';
 import { ROUTES } from '@utils/routes';
 import usePrice from '@utils/use-price';
+import { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 const Table = dynamic(
@@ -33,9 +36,7 @@ const Table = dynamic(
   { ssr: false, loading: () => <Loader text={'Loading'} /> }
 );
 
-type FormValues = {
-  order_status: any;
-};
+type FormValues = OrderType;
 
 interface TOrder {
   order: OrderType;
@@ -47,35 +48,77 @@ interface OrderVariable {
   orderId: string;
 }
 
+export interface QueryVariables {
+  page: number;
+  limit: number;
+  orderBy: OrderBy;
+  sortedBy: SortOrder;
+}
+
+interface TOrderStatus {
+  orderStatusForSelect: OrderStatus[];
+}
 export default function OrderDetailsPage() {
   const { t } = useTranslation();
   const { query } = useRouter();
-  const { alignLeft, alignRight } = useIsRTL();
   const orderId = query.orderId as string;
 
-  const { data, loading, error } = useQuery<TOrder, OrderVariable>(ORDER, {
+  const [displayBillAdds, setDisplayBillAdds] = useState(false);
+  const [displayShipAdds, setDisplayShipAdds] = useState(false);
+
+  const {
+    data: orderStatusData,
+    loading: orderStatusLoading,
+    error: orderStatusError
+  } = useQuery<TOrderStatus, QueryVariables>(ORDER_STATUSES_FOR_SELECT, {
+    variables: {
+      page: 1,
+      limit: 999,
+      orderBy: OrderBy.CREATED_AT,
+      sortedBy: SortOrder.Desc
+    },
+    fetchPolicy: 'cache-and-network'
+  });
+
+  const {
+    data: orderData,
+    loading,
+    error
+  } = useQuery<TOrder, OrderVariable>(ORDER, {
     variables: {
       orderId
     },
     fetchPolicy: 'cache-and-network'
   });
 
-  const { order } = data ?? {};
+  const { order } = orderData ?? {};
+  const { orderStatusForSelect } = orderStatusData ?? {};
 
   useErrorLogger(error);
+  useErrorLogger(orderStatusError);
 
-  const orderStatusData = [];
   const updating = false;
 
-  const {
-    handleSubmit,
-    control,
-    formState: { errors }
-  } = useForm<FormValues>({
-    defaultValues: { order_status: data?.order?.status?.id ?? '' }
+  const { handleSubmit, control, setValue } = useForm<FormValues>({
+    defaultValues: {}
   });
 
-  const ChangeStatus = ({ order_status }: FormValues) => {
+  const { systemCurrency } = useSettings();
+
+  useEffect(() => {
+    const { deliveryStatus, orderStatus, paymentStatus } = (order ??
+      {}) as OrderType;
+    deliveryStatus && setValue('deliveryStatus', deliveryStatus);
+    orderStatus && setValue('orderStatus', orderStatus);
+    paymentStatus && setValue('paymentStatus', paymentStatus);
+  }, [order, setValue]);
+
+  const ChangeStatus = ({
+    orderStatus,
+    deliveryStatus,
+    paymentStatus
+  }: FormValues) => {
+    console.log({ orderStatus, deliveryStatus, paymentStatus });
     // updateOrder({
     //   variables: {
     //     id: data?.order?.id as string,
@@ -85,9 +128,30 @@ export default function OrderDetailsPage() {
     //   },
     // });
   };
-  const { price: subtotal } = usePrice(
-    data && {
-      amount: 3342 //data?.order?.amount!,
+
+  const { price: subTotalExclTax } = usePrice(
+    order && {
+      amount: order?.subTotalExclTax!
+    }
+  );
+  const { price: subTotalInclTax } = usePrice(
+    order && {
+      amount: order?.subTotalInclTax!
+    }
+  );
+  const { price: discountAmount } = usePrice(
+    order && {
+      amount: order?.discountAmount!
+    }
+  );
+  const { price: grandTotalExclTax } = usePrice(
+    order && {
+      amount: order?.grandTotalExclTax!
+    }
+  );
+  const { price: grandTotalInclTax } = usePrice(
+    order && {
+      amount: order?.grandTotalInclTax!
     }
   );
 
@@ -96,144 +160,244 @@ export default function OrderDetailsPage() {
 
   const columns = [
     {
-      dataIndex: 'image',
-      key: 'image',
-      width: 70,
-      render: (image: Attachment) => (
-        <Image
-          src={image?.thumbnail ?? siteSettings.product.placeholder}
-          alt="alt text"
-          layout="fixed"
-          width={50}
-          height={50}
-        />
+      title: t('table:table-item-name'),
+      dataIndex: 'product',
+      key: 'product',
+      align: 'left',
+      render: (product: Product) => (
+        <Link target="_blank" href={`${ROUTES.PRODUCT}/edit/${product.id}`}>
+          <span className="font-medium text-accent underline">
+            {product?.name}
+          </span>
+        </Link>
       )
     },
     {
-      title: t('table:table-item-products'),
-      dataIndex: 'name',
-      key: 'name',
-      align: alignLeft,
-      render: (name: string, item: any) => (
+      title: t('table:table-item-sku'),
+      dataIndex: 'product',
+      key: 'product',
+      align: 'center',
+      render: (product: Product) => <span>{product?.sku}</span>
+    },
+    {
+      title: t('table:table-item-quantity'),
+      dataIndex: 'totalQuantity',
+      key: 'totalQuantity',
+      align: 'center',
+      render: (totalQuantity: number) => (
         <div>
-          <span>{name}</span>
-          <span className="mx-2">x</span>
-          <span className="font-semibold text-heading">
-            {item.pivot.order_quantity}
-          </span>
+          <span className="">{totalQuantity}</span>
         </div>
       )
     },
     {
       title: t('table:table-item-total'),
-      dataIndex: 'price',
-      key: 'price',
-      align: alignRight,
-      render: (_: any, item: any) => {
-        // const { price } = usePrice({
-        //   amount: parseFloat(item.pivot.subtotal),
-        // });
-        // return <span>{price}</span>;
-        return <span>{12}</span>;
+      dataIndex: 'totalInclTax',
+      key: 'totalInclTax',
+      align: 'center',
+      render: (totalInclTax: number) => {
+        return (
+          <span className="text-base font-semibold text-heading">{`${systemCurrency?.symbol} ${totalInclTax}`}</span>
+        );
       }
     }
   ];
 
+  const renderDetailAddress = (address: Address) => {
+    return (
+      <div className="w-full max-w-[400px] border shadow">
+        <div className="flex border-b px-2 py-1">
+          <span className="font-medium text-black">Address:</span>
+          <span className="text-md px-1">{address?.addressLine1}</span>
+        </div>
+        <div className="flex border-b px-2 py-1">
+          <span className="font-medium text-black">Country:</span>
+          <span className="text-md px-1">{address?.country?.name}</span>
+        </div>
+        <div className="flex border-b px-2 py-1">
+          <span className="font-medium text-black">City:</span>
+          <span className="text-md px-1">{address?.city}</span>
+        </div>
+        <div className="flex border-b px-2 py-1">
+          <span className="font-medium text-black">State:</span>
+          <span className="text-md px-1">{address?.state}</span>
+        </div>
+        <div className="flex border-b px-2 py-1">
+          <span className="font-medium text-black">Postal code:</span>
+          <span className="text-md px-1">{address?.postalCode}</span>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <Card>
-      <div className="flex flex-col items-center lg:flex-row">
+      <div className="mb-8">
         <h3 className="mb-8 w-full whitespace-nowrap text-center text-2xl font-semibold text-heading lg:mb-0 lg:w-1/3 lg:text-start">
           {t('form:input-label-order-id')} - {order?.orderNumber}
         </h3>
-
-        <form
-          onSubmit={handleSubmit(ChangeStatus)}
-          className="flex w-full items-start ms-auto lg:w-2/4"
-        >
-          <div className="z-20 w-full me-5">
-            <SelectInput
-              name="order_status"
-              control={control}
-              getOptionLabel={(option: any) => option.name}
-              getOptionValue={(option: any) => option.id}
-              options={orderStatusData?.order_statuses?.data}
-              placeholder={t('form:input-placeholder-order-status')}
-            />
-
-            <ValidationError message={t(errors?.order_status?.message)} />
-          </div>
-          <Button loading={updating}>
-            <span className="hidden sm:block">
-              {t('form:button-label-change-status')}
-            </span>
-            <span className="block sm:hidden">
-              {t('form:form:button-label-change')}
-            </span>
-          </Button>
-        </form>
       </div>
-
-      <div className="my-5 flex items-center justify-center lg:my-10">
-        {/* <ProgressBox
-          data={orderStatusData?.order_statuses?.data}
-          status={data?.order?.status?.serial!}
-        /> */}
-      </div>
-
-      <div className="mb-10">
-        {!data?.order ? (
-          <Table
-            //@ts-ignore
-            columns={columns}
-            emptyText={t('table:empty-table-data')}
-            data={data?.order?.products! ?? []}
-            rowKey="id"
-            scroll={{ x: 300 }}
+      <form
+        onSubmit={handleSubmit(ChangeStatus)}
+        className="flex w-full flex-col items-center justify-center lg:flex-row"
+      >
+        <div className="z-30 mb-3 w-full lg:mb-0 lg:me-5">
+          <Label>{t('form:input-label-order-status')}</Label>
+          <SelectInput
+            name="orderStatus"
+            control={control}
+            getOptionLabel={(option: any) => option.label}
+            getOptionValue={(option: any) => option.id}
+            options={orderStatusForSelect}
+            loading={orderStatusLoading || loading}
+            placeholder={t('form:input-placeholder-order-status')}
           />
+        </div>
+        <div className="z-20 mb-3 w-full lg:mb-0 lg:me-5">
+          <Label>{t('form:input-label-payment-status')}</Label>
+          <SelectInput
+            name="paymentStatus"
+            control={control}
+            getOptionLabel={(option: any) => option.label}
+            getOptionValue={(option: any) => option.id}
+            options={orderStatusForSelect}
+            loading={orderStatusLoading || loading}
+            placeholder={t('form:input-placeholder-order-status')}
+          />
+        </div>
+        <div className="z-10 mb-3 w-full lg:mb-0 lg:me-5">
+          <Label>{t('form:input-label-delivery-status')}</Label>
+          <SelectInput
+            name="deliveryStatus"
+            control={control}
+            getOptionLabel={(option: any) => option.label}
+            getOptionValue={(option: any) => option.id}
+            options={orderStatusForSelect}
+            loading={orderStatusLoading || loading}
+            placeholder={t('form:input-placeholder-order-status')}
+          />
+        </div>
+        <Button loading={updating} className="mt-5">
+          {t('form:button-label-update-status')}
+        </Button>
+      </form>
+      <div className="my-10 flex flex-col justify-between lg:flex-row">
+        {order?.items?.length > 0 ? (
+          <div className="mb-4 w-full lg:w-[65%]">
+            <h3 className="mb-3 font-semibold text-heading">
+              {t('table:table-item-products')}
+            </h3>
+            <Table
+              //@ts-ignore
+              columns={columns}
+              emptyText={t('table:empty-table-data')}
+              data={order?.items! ?? []}
+              rowKey="id"
+              scroll={{ x: 300 }}
+              className="rounded-sm border"
+            />
+          </div>
         ) : (
           <span>{t('common:no-order-found')}</span>
         )}
 
-        <div className="mt-2 flex w-full flex-col space-y-2 border-t-4 border-double border-border-200 px-4 py-4 ms-auto sm:w-1/2 md:w-1/3">
-          <div className="flex items-center justify-between text-sm text-body">
-            <span>{t('common:order-sub-total')}</span>
-            <span>{subtotal}</span>
-          </div>
-          <div className="flex items-center justify-between text-sm text-body">
-            <span>{t('common:order-tax')}</span>
-            <span>{subtotal}</span>
-          </div>
-          <div className="flex items-center justify-between text-sm text-body">
-            <span>{t('common:order-delivery-fee')}</span>
-            <span>{subtotal}</span>
-          </div>
-          <div className="flex items-center justify-between text-sm text-body">
-            <span>{t('common:order-discount')}</span>
-            <span>{subtotal}</span>
-          </div>
-          <div className="flex items-center justify-between text-base font-semibold text-heading">
-            <span>{t('common:order-total')}</span>
-            <span>{subtotal}</span>
+        <div className="w-full lg:w-[33%]">
+          <h3 className="mb-3 font-semibold text-heading">
+            {t('table:table-item-summary')}
+          </h3>
+          <div className="flex w-full flex-col rounded-md border border-border-200 px-4 py-2 shadow-sm ms-auto">
+            <div className="flex items-center justify-between border-b border-dashed py-2 text-sm text-body">
+              <span className="text-base text-gray-900">
+                {t('common:order-sub-total')}
+              </span>
+              <div className="flex flex-col items-end">
+                <span className="text-base font-medium text-gray-700">
+                  {subTotalInclTax}
+                </span>
+                <div className="flex items-center justify-center text-xs text-gray-800">
+                  <span>{t('common:order-excl-tax')}</span>
+                  <span>{subTotalExclTax}</span>
+                </div>
+              </div>
+            </div>
+            <div className="flex items-center justify-between border-b border-dashed py-2 text-sm text-body">
+              <span className="text-base text-gray-900">
+                {t('common:order-delivery-fee')}
+              </span>
+              <div className="flex flex-col items-end">
+                <span className="text-base font-medium text-gray-700">
+                  {subTotalInclTax}
+                </span>
+                <div className="flex items-center justify-center text-xs text-gray-800">
+                  <span>{t('common:order-excl-tax')}</span>
+                  <span>{subTotalExclTax}</span>
+                </div>
+              </div>
+            </div>
+            <div className="flex items-center justify-between border-b border-dashed py-2 text-sm text-body">
+              <div className="flex items-center text-base text-gray-900">
+                <div>{t('common:order-discount')}</div>
+                {order?.coupon?.id && (
+                  <Link
+                    target="_blank"
+                    href={`${ROUTES.COUPON}/edit/${order?.coupon?.id}`}
+                  >
+                    <div className="mx-1 text-xs text-accent hover:underline">
+                      [{order?.coupon?.code}]
+                    </div>
+                  </Link>
+                )}
+              </div>
+              <span className="text-base font-medium text-gray-800">{`- ${discountAmount}`}</span>
+            </div>
+            <div className="flex items-center justify-between border-b border-dashed py-2 text-sm text-body">
+              <span className="text-base text-gray-900">
+                {t('common:order-tax-rate')}
+              </span>
+              <div className="flex flex-col items-end">
+                <span className="text-base font-medium text-gray-800">{`${order?.tax?.rate}%`}</span>
+              </div>
+            </div>
+            <div className="flex items-center justify-between py-2 text-base font-semibold">
+              <span className="text-lg text-black">
+                {t('common:order-total')}
+              </span>
+              <div className="flex flex-col items-end">
+                <span className="text-lg font-semibold text-black">
+                  {grandTotalInclTax}
+                </span>
+                <div className="flex items-center justify-center text-xs text-gray-700">
+                  <span>{t('common:order-excl-tax')}</span>
+                  <span>{grandTotalExclTax}</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between">
         <div className="mb-10 w-full sm:mb-0 sm:w-1/2 sm:pe-8">
           <h3 className="mb-3 border-b border-border-200 pb-2 font-semibold text-heading">
             {t('common:billing-address')}
           </h3>
-
           <div className="text-md flex flex-col items-start space-y-1 text-gray-700">
             <Link href={`${ROUTES.CUSTOMER}/${order?.customer?.id}`}>
-              <div className="underline">{order?.customer?.fullName}</div>
+              <div className="hover:text-accent hover:underline">
+                {order?.customer?.fullName}
+              </div>
             </Link>
             {order?.customer?.address && (
-              <span>{formatAddress(order?.customer?.address)}</span>
+              <button
+                className="text-start"
+                onClick={() => setDisplayShipAdds((v) => !v)}
+              >
+                <span>{formatAddress(order?.customer?.address)}</span>
+              </button>
             )}
             {order?.customer?.address?.phoneNumber && (
               <span>{order?.customer?.address?.phoneNumber}</span>
             )}
+            {displayShipAdds && renderDetailAddress(order?.customer?.address)}
           </div>
         </div>
 
@@ -241,17 +405,24 @@ export default function OrderDetailsPage() {
           <h3 className="mb-3 border-b border-border-200 pb-2 text-start font-semibold text-heading sm:text-end">
             {t('common:shipping-address')}
           </h3>
-
           <div className="text-md flex flex-col items-end space-y-1 text-gray-700">
             <Link href={`${ROUTES.CUSTOMER}/${order?.customer?.id}`}>
-              <div className="underline">{order?.customer?.fullName}</div>
+              <div className="hover:text-accent hover:underline">
+                {order?.customer?.fullName}
+              </div>
             </Link>
             {order?.customer?.address && (
-              <span>{formatAddress(order?.customer?.address)}</span>
+              <button
+                className="text-end"
+                onClick={() => setDisplayBillAdds((v) => !v)}
+              >
+                <span>{formatAddress(order?.customer?.address)}</span>
+              </button>
             )}
             {order?.customer?.address?.phoneNumber && (
               <span>{order?.customer?.address?.phoneNumber}</span>
             )}
+            {displayBillAdds && renderDetailAddress(order?.customer?.address)}
           </div>
         </div>
       </div>
@@ -261,8 +432,28 @@ export default function OrderDetailsPage() {
 
 OrderDetailsPage.Layout = AppLayout;
 
-export const getServerSideProps = async ({ locale }: any) => ({
-  props: {
-    ...(await serverSideTranslations(locale, ['common', 'form', 'table']))
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { locale } = context;
+  const { client } = await verifyAuth(context);
+
+  if (!client) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: ROUTES.LOGIN
+      }
+    };
   }
-});
+
+  return {
+    props: {
+      ...(await serverSideTranslations(locale!, [
+        'table',
+        'common',
+        'form',
+        'error'
+      ])),
+      client
+    }
+  };
+};

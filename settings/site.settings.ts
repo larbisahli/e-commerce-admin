@@ -84,13 +84,6 @@ export const siteSettings = {
             label: 'sidebar-nav-item-all-customers',
             padding: '35px',
             isSubLink: true
-          },
-          {
-            id: 'W13ECaCI',
-            href: ROUTES.CUSTOMER_GROUP,
-            label: 'sidebar-nav-item-customer-groups',
-            padding: '35px',
-            isSubLink: true
           }
         ],
         line: true
@@ -123,7 +116,7 @@ export const siteSettings = {
             isSubLink: true
           },
           {
-            id: 'D2IXKt',
+            id: 'D2XIXKt',
             href: ROUTES.SUPPLIER,
             label: 'sidebar-nav-item-suppliers',
             padding: '35px',
@@ -209,14 +202,21 @@ export const siteSettings = {
         icon: 'ShopIcon',
         subLinks: [
           {
-            id: '9YcWhG',
+            id: '9YcWKSLDhG',
+            href: ROUTES.STORE_BUILDER,
+            label: 'sidebar-nav-item-store-builder',
+            padding: '35px',
+            isSubLink: true
+          },
+          {
+            id: '9YcWhCCG',
             href: ROUTES.LANGUAGES,
             label: 'sidebar-nav-item-languages',
             padding: '35px',
             isSubLink: true
           },
           {
-            id: '9YcWhG',
+            id: '9YSDcWhG',
             href: ROUTES.STORE_EXTENSIONS,
             label: 'sidebar-nav-item-extensions',
             padding: '35px',
@@ -224,9 +224,9 @@ export const siteSettings = {
             disabled: true
           },
           {
-            id: '9YcWhG',
-            href: ROUTES.THEME,
-            label: 'sidebar-nav-item-themes',
+            id: '9YcW2hG',
+            href: ROUTES.TEMPLATE,
+            label: 'sidebar-nav-item-templates',
             padding: '35px',
             isSubLink: true
           },
@@ -464,13 +464,13 @@ export const siteSettings = {
         ],
         line: true
       },
-      {
-        id: 'WDIqE0I',
-        href: ROUTES.EARN,
-        label: 'sidebar-nav-item-affiliate',
-        icon: 'AffiliateIcon',
-        disabled: true
-      },
+      // {
+      //   id: 'WDIqE0I',
+      //   href: ROUTES.EARN,
+      //   label: 'sidebar-nav-item-affiliate',
+      //   icon: 'AffiliateIcon',
+      //   disabled: true
+      // },
       {
         id: 'WDIqE0NMI',
         href: ROUTES.SUPPORT,

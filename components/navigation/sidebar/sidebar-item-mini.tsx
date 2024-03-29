@@ -64,8 +64,8 @@ const SidebarItem = ({
             'relative flex w-full cursor-pointer flex-col items-center justify-center overflow-hidden border-l-2 border-solid border-transparent p-2 py-4 text-start text-base text-gray-800 hover:border-blue-300 hover:!bg-gray-100 focus:text-accent',
             {
               'mb-12': margin,
-              'border-blue-600 !text-white': currentLink[1] === inLink[1],
-              'border-blue-600 !bg-gray-200 !text-white hover:!bg-gray-100':
+              'border-blue-600': currentLink[1] === inLink[1],
+              'border-blue-600 !bg-gray-200 hover:!bg-gray-100':
                 sublevelOpen || linkHighlight
             },
             {

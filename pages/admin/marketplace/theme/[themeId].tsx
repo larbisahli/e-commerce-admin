@@ -32,10 +32,10 @@ export default function Themes({ client }: SSRProps) {
   const { query } = useRouter();
   const { t } = useTranslation();
 
-  const themeId = query.themeId as string;
+  const templateId = query.templateId as string;
 
   const { data, loading, error } = useQuery<TTheme, OptionsVariable>(THEME, {
-    variables: { id: themeId },
+    variables: { id: templateId },
     fetchPolicy: 'cache-and-network'
   });
 

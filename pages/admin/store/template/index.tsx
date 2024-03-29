@@ -60,8 +60,8 @@ export default function Themes({ client }: SSRProps) {
         <link rel="icon" type="image/svg" sizes="32x32" href="/svg/store.svg" />
       </Head>
       <PageMainAction
-        title={t('form:button-label-your-themes')}
-        label={t('form:button-label-your-themes')}
+        title={t('form:button-label-your-templates')}
+        label={t('form:button-label-your-templates')}
         showSelectLanguage={false}
         hideBorder
       />

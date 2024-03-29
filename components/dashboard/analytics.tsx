@@ -189,9 +189,9 @@ export default function Dashboard() {
             />
           </div>
         </div>
-        {selectedDate.id === 'custom' && (
+        <div className="relative ">
           <div className="mx-4 flex items-center">
-            <div className="">
+            <div className="pointer-events-none opacity-50">
               <Label className="h-[14px]">Form</Label>
               <Controller
                 control={control}
@@ -214,7 +214,7 @@ export default function Dashboard() {
             <div className="mx-2 flex items-center justify-center text-gray-500">
               <ArrowNext className="pt-[19px]"></ArrowNext>
             </div>
-            <div className="">
+            <div className="pointer-events-none opacity-50">
               <Label className="h-[14px]">To</Label>
               <Controller
                 control={control}
@@ -236,7 +236,10 @@ export default function Dashboard() {
               />
             </div>
           </div>
-        )}
+          <div className="absolute bottom-[-18px] mx-4 w-full text-xs text-gray-500">
+            Premium plan is required to change date
+          </div>
+        </div>
       </div>
       <div className="my-8 w-full">
         <div className="mb-6">

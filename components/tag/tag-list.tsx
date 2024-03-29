@@ -72,7 +72,7 @@ const TagList = ({ tags, selectedColumns, loading }: IProps) => {
         title: t('table:table-item-created-at'),
         dataIndex: 'createdAt',
         key: 'createdAt',
-        align: alignLeft,
+        align: 'center',
         width: 180,
         render: (
           createdAt: CreatedUpdatedByAt['createdAt'],

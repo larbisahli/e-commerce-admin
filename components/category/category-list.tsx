@@ -41,7 +41,7 @@ const CategoryList = ({ loading, categories, selectedColumns }: IProps) => {
         dataIndex: 'id',
         key: 'id',
         align: alignLeft,
-        width: 80,
+        width: 100,
         ellipsis: true,
         render: (id, record: TableRowProps) => {
           if (record?.loading) {
@@ -154,7 +154,7 @@ const CategoryList = ({ loading, categories, selectedColumns }: IProps) => {
         title: t('table:table-item-created-at'),
         dataIndex: 'createdAt',
         key: 'createdAt',
-        align: alignLeft,
+        align: 'center',
         width: 200,
         render: (
           createdAt: CreatedUpdatedByAt['createdAt'],

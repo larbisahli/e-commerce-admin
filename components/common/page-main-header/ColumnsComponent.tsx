@@ -54,10 +54,10 @@ const ColumnsComponent = ({
       <div className="w-full rounded-md bg-light p-6 pb-6 sm:w-[400px]">
         <div className="py-5 font-semibold text-black">Columns:</div>
         <div className="grid grid-cols-2 gap-4">
-          {columns?.map((column) => {
+          {columns?.map((column, idx) => {
             return (
               <Column
-                key={column.key}
+                key={column.key ?? idx}
                 column={column}
                 handleCheck={handleCheck}
                 selectedColumns={selectedColumns}

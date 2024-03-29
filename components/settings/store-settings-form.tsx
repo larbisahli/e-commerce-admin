@@ -257,7 +257,7 @@ export default function StoreSettingsForm({ settings }: IProps) {
       {t('form:logo-help-text')} <br />
       {t('form:logo-dimension-help-text')} &nbsp;
       <span className="font-bold">
-        {'350x50'} {t('common:pixel')}
+        {'160x160'} {t('common:pixel')}
       </span>
     </span>
   );

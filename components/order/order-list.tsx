@@ -1,29 +1,26 @@
 import ActionButtons from '@components/common/action-buttons';
-import ImageComponent from '@components/ImageComponent';
-import Badge from '@components/ui/badge/badge';
+import StatusBadge from '@components/common/statusBadge';
 import Loader from '@components/ui/loader/loader';
 import { TableRowPlaceholder } from '@components/ui/placeholders/Table';
 import ProfileCart from '@components/ui/profile-card';
 import { usePlaceholder } from '@hooks/usePlaceholder';
 import { PDFDownloadLink } from '@react-pdf/renderer';
-import { siteSettings } from '@settings/site.settings';
 import {
   CreatedUpdatedByAt,
   CustomerType,
-  ImageType,
   OrderStatus,
-  OrderType,
-  ShippingZoneType
+  OrderType
 } from '@ts-types/generated';
+import { formatAddress } from '@utils/format-address';
 import { useIsRTL } from '@utils/locals';
 import { ROUTES } from '@utils/routes';
 import dayjs from 'dayjs';
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 import { useTranslation } from 'next-i18next';
 import { useMemo } from 'react';
 
 import InvoicePdf from './invoice-pdf';
-import Link from 'next/link';
 
 const Table = dynamic(
   () => import('@components/ui/table').then((mod) => mod.Table),
@@ -36,7 +33,7 @@ export type IProps = {
   loading: boolean;
 };
 
-interface TableRowProps extends ShippingZoneType {
+interface TableRowProps extends OrderType {
   loading: boolean;
 }
 
@@ -69,7 +66,7 @@ const OrderList = ({ loading, orders, selectedColumns }: IProps) => {
         }
       },
       {
-        title: t('table:table-customer-name'),
+        title: t('table:table-item-customer'),
         dataIndex: 'customer',
         key: 'customer',
         align: 'center',
@@ -83,39 +80,33 @@ const OrderList = ({ loading, orders, selectedColumns }: IProps) => {
         }
       },
       {
-        title: t('table:table-customer-address'),
+        title: t('table:table-item-address'),
         dataIndex: 'customer',
         key: 'customer',
         align: 'center',
-        width: 230,
+        width: 350,
         render: (customer: CustomerType, record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
           return (
             <span className="capitalize">
-              {customer?.address?.addressLine1}
+              {formatAddress(customer?.address)}
             </span>
           );
         }
       },
       {
         title: t('table:table-quantity'),
-        dataIndex: 'quantity',
-        key: 'quantity',
+        dataIndex: 'totalQuantity',
+        key: 'totalQuantity',
         align: 'center',
         width: 100,
-        render: (freeShipping: boolean, record: TableRowProps) => {
+        render: (quantity: number, record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
-          return (
-            <Badge
-              className="!text-sm !text-gray-600"
-              text={freeShipping ? 'Yes' : 'No'}
-              color={freeShipping ? 'bg-green-200' : 'bg-red-200'}
-            />
-          );
+          return <div>{quantity}</div>;
         }
       },
       {
@@ -132,7 +123,7 @@ const OrderList = ({ loading, orders, selectedColumns }: IProps) => {
         }
       },
       {
-        title: t('table:table-grant-total'),
+        title: t('table:table-item-total'),
         dataIndex: 'grandTotalInclTax',
         key: 'grandTotalInclTax',
         align: 'center',
@@ -157,13 +148,10 @@ const OrderList = ({ loading, orders, selectedColumns }: IProps) => {
             return <TableRowPlaceholder />;
           }
           return (
-            <span
-              className="rounded-sm border border-solid bg-white
-                     py-[5px] px-[10px] font-semibold capitalize shadow-sm"
-              style={{ color: orderStatus?.color }}
-            >
-              {orderStatus?.label}
-            </span>
+            <StatusBadge
+              color={orderStatus?.color}
+              label={orderStatus?.label}
+            />
           );
         }
       },
@@ -178,13 +166,10 @@ const OrderList = ({ loading, orders, selectedColumns }: IProps) => {
             return <TableRowPlaceholder />;
           }
           return (
-            <span
-              className="rounded-sm border border-solid bg-white
-                     py-[5px] px-[10px] font-semibold capitalize shadow-sm"
-              style={{ color: paymentStatus?.color }}
-            >
-              {paymentStatus?.label}
-            </span>
+            <StatusBadge
+              color={paymentStatus?.color}
+              label={paymentStatus?.label}
+            />
           );
         }
       },
@@ -199,13 +184,10 @@ const OrderList = ({ loading, orders, selectedColumns }: IProps) => {
             return <TableRowPlaceholder />;
           }
           return (
-            <span
-              className="rounded-sm border border-solid bg-white
-                     py-[5px] px-[10px] font-semibold capitalize shadow-sm"
-              style={{ color: deliveryStatus?.color }}
-            >
-              {deliveryStatus?.label}
-            </span>
+            <StatusBadge
+              color={deliveryStatus?.color}
+              label={deliveryStatus?.label}
+            />
           );
         }
       },

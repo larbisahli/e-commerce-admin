@@ -8,8 +8,18 @@ export const ORDER = gql`
       totalQuantity
       grandTotalInclTax
       grandTotalExclTax
+      subTotalInclTax
+      subTotalExclTax
+      discountAmount
       orderApprovedAt
       paymentCode
+      coupon {
+        id
+        code
+      }
+      tax {
+        rate
+      }
       orderStatus {
         id
         color
@@ -28,6 +38,7 @@ export const ORDER = gql`
       items {
         product {
           id
+          name
           sku
           quantity
         }
@@ -40,6 +51,7 @@ export const ORDER = gql`
         totalExclTax
         totalQuantity
       }
+      createdAt
       customer {
         id
         fullName
@@ -49,6 +61,9 @@ export const ORDER = gql`
           addressLine1
           phoneNumber
           email
+          state
+          postalCode
+          city
           country {
             name
           }
@@ -81,6 +96,12 @@ export const ORDERS = gql`
         fullName
         address {
           addressLine1
+          state
+          postalCode
+          city
+          country {
+            name
+          }
         }
       }
       orderStatus {
@@ -98,6 +119,28 @@ export const ORDERS = gql`
         color
         label
       }
+      createdAt
+    }
+  }
+`;
+
+export const RECENT_ORDERS = gql`
+  query RecentOrders {
+    recentOrders {
+      id
+      orderNumber
+      totalQuantity
+      grandTotalInclTax
+      customer {
+        fullName
+        email
+      }
+      orderStatus {
+        id
+        color
+        label
+      }
+      createdAt
     }
   }
 `;
