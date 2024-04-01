@@ -15,7 +15,7 @@ import { useInView } from 'react-intersection-observer';
 interface Props {
   href?: string;
   title: string;
-  label: string;
+  label?: string;
   showSelectLanguage?: boolean;
   hideBorder?: boolean;
   onClick?: (e: any) => void;

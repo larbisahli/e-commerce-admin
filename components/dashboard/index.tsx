@@ -9,7 +9,7 @@ import { useSettings } from '@hooks/useSettings';
 import { DashAnalyticsType, OrderType } from '@ts-types/generated';
 import classNames from 'classnames';
 import dayjs from 'dayjs';
-import { isEmpty } from 'lodash';
+import { isEmpty, round } from 'lodash';
 import Head from 'next/head';
 import { useTranslation } from 'next-i18next';
 import { useMemo, useState } from 'react';
@@ -115,7 +115,7 @@ export default function Dashboard() {
   const data = useMemo(() => {
     return {
       revenue: {
-        total: salesRows?.reduce((total, item) => total + item.value, 0),
+        total: round(salesRows?.reduce((total, item) => total + item.value, 0)),
         data: salesRows?.reduce((result, item) => {
           const { date, value } = item;
           // @ts-ignore
@@ -136,11 +136,9 @@ export default function Dashboard() {
         }, {})
       },
       avgOrderValue: {
-        total: Number(
-          (
-            avgOrderRows?.reduce((acc, num) => acc + num.value, 0) /
-              avgOrderRows?.length || 0
-          ).toFixed(2)
+        total: round(
+          avgOrderRows?.reduce((acc, num) => acc + num.value, 0) /
+            avgOrderRows?.length || 0
         ),
         data: avgOrderRows?.reduce((result, item) => {
           const { date, value } = item;

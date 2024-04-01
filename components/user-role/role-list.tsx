@@ -25,24 +25,21 @@ const RoleList = ({ roles }: IProps) => {
         title: t('table:table-item-id'),
         dataIndex: 'id',
         key: 'id',
-        align: alignLeft,
+        align: 'center',
         width: 80,
         ellipsis: true
       },
       {
         title: t('table:table-item-name'),
-        dataIndex: 'roleName',
-        key: 'roleName',
-        align: alignLeft,
+        dataIndex: 'name',
+        key: 'name',
+        align: 'center',
         width: 120,
         ellipsis: true,
-        render: (roleName: string) => (
-          <div>
-            <span
-              style={{ width: 'fit-content' }}
-              className="text-13px border-sink-base block rounded border bg-gray-100 px-2 py-1 font-medium md:text-sm"
-            >
-              {roleName}
+        render: (name: string) => (
+          <div className="flex w-full items-center justify-center">
+            <span className="text-13px border-sink-base block w-full max-w-[200px] rounded-sm border bg-gray-100 px-2 py-1 font-medium md:text-sm">
+              {name}
             </span>
           </div>
         )

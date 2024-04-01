@@ -70,3 +70,24 @@ export interface ResourcePermissionType {
   [ACTION_PRIVILEGES.UPDATE]: boolean;
   [ACTION_PRIVILEGES.DELETE]: boolean;
 }
+
+export interface RoleInterfaceType {
+  id: number;
+  name: string;
+  privileges: PrivilegesType;
+}
+
+export type PrivilegesType = {
+  resources: {
+    [key: string]: {
+      permissions: CrudPrivileges;
+    };
+  };
+};
+
+export type CrudPrivileges = {
+  [ACTION_PRIVILEGES.READ]: boolean;
+  [ACTION_PRIVILEGES.WRITE]: boolean;
+  [ACTION_PRIVILEGES.UPDATE]: boolean;
+  [ACTION_PRIVILEGES.DELETE]: boolean;
+};

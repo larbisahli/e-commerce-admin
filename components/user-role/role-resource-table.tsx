@@ -41,7 +41,7 @@ const RoleResourceTable = ({ setRoles, roles }: IProps) => {
         dataIndex: [ACTION_PRIVILEGES.WRITE],
         key: [ACTION_PRIVILEGES.WRITE],
         align: 'center',
-        width: 100,
+        width: 70,
         render: (value, resource) => (
           <RenderResourceComponent
             field={ACTION_PRIVILEGES.WRITE}
@@ -56,7 +56,7 @@ const RoleResourceTable = ({ setRoles, roles }: IProps) => {
         dataIndex: [ACTION_PRIVILEGES.READ],
         key: [ACTION_PRIVILEGES.READ],
         align: 'center',
-        width: 100,
+        width: 70,
         render: (value, resource) => (
           <RenderResourceComponent
             field={ACTION_PRIVILEGES.READ}
@@ -71,7 +71,7 @@ const RoleResourceTable = ({ setRoles, roles }: IProps) => {
         dataIndex: [ACTION_PRIVILEGES.UPDATE],
         key: [ACTION_PRIVILEGES.UPDATE],
         align: 'center',
-        width: 100,
+        width: 70,
         render: (value, resource) => (
           <RenderResourceComponent
             field={ACTION_PRIVILEGES.UPDATE}
@@ -86,7 +86,7 @@ const RoleResourceTable = ({ setRoles, roles }: IProps) => {
         dataIndex: [ACTION_PRIVILEGES.DELETE],
         key: [ACTION_PRIVILEGES.DELETE],
         align: 'center',
-        width: 100,
+        width: 70,
         render: (value, resource) => (
           <RenderResourceComponent
             field={ACTION_PRIVILEGES.DELETE}
@@ -99,7 +99,7 @@ const RoleResourceTable = ({ setRoles, roles }: IProps) => {
       {
         title: t('table:table-item-all'),
         align: 'center',
-        width: 100,
+        width: 70,
         render: (_, resource) => (
           <RenderResourceComponent
             field={'select'}

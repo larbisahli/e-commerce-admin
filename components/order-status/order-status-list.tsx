@@ -57,7 +57,7 @@ const OrderStatusList = ({
         title: t('table:table-item-label'),
         dataIndex: 'label',
         key: 'label',
-        align: alignLeft,
+        align: 'center',
         ellipsis: true,
         width: 200,
         render: (label: string, record: TableRowProps) => {

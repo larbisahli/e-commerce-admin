@@ -98,9 +98,8 @@ export default function ShippingZonesPage({ client }: SSRProps) {
         <link rel="icon" type="image/svg" sizes="32x32" href="/svg/order.svg" />
       </Head>
       <PageMainAction
-        href={`${ROUTES.ORDERS}/create`}
+        hideBorder
         title={t('form:input-label-orders')}
-        label={t('form:button-label-add-order')}
         showSelectLanguage={false}
       />
       <PageMainHeader

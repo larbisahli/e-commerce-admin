@@ -16,7 +16,7 @@ export const ROUTES = {
   CATEGORY: '/admin/catalog/category',
   ATTRIBUTE: '/admin/catalog/attribute',
   PROFILE_UPDATE: '/admin/profile-update',
-  USER: '/admin/user',
+  USER: '/admin/user/members',
   USER_ROLE: '/admin/user/user_role',
   APPS: '/admin/apps',
   STORE_SETTINGS: '/admin/store/store-settings',

@@ -4,6 +4,7 @@ import FaqSection from '@components/dropgala/FaqSection';
 import FeatureSection from '@components/dropgala/FeatureSection';
 import Footer from '@components/dropgala/Footer';
 import HeroSection from '@components/dropgala/HeroSection';
+import HowItWorksSection from '@components/dropgala/HowItworksSection';
 import LatestBlogsCarousel from '@components/dropgala/LatestBlogsCarousel';
 import Navigation from '@components/dropgala/Navigation';
 import PricingSection from '@components/dropgala/PricingSection';
@@ -13,7 +14,6 @@ import { getAllFilesFrontMatter } from '@lib/mdx';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
-import HowItWorksSection from '@components/dropgala/HowItworksSection';
 
 const MAX_DISPLAY = 4;
 
@@ -50,7 +50,39 @@ const HomePage = ({ posts }) => {
         {/* HERO SECTION */}
         <HeroSection />
         <HowItWorksSection />
-        <section className="container my-28 mx-auto flex flex-col-reverse flex-wrap items-center justify-between px-0 md:flex-row lg:px-4">
+        <section className="container my-20 mx-auto px-0 md:flex-row lg:px-4">
+          <h2 className="text-center text-4xl font-semibold">
+            The all-in-one homebase for your brand
+          </h2>
+          <p className="text-center text-sm">
+            Create a fully-custom shop for your brand to deliver exceptional
+            quality for your community
+          </p>
+          <div className="container my-28 mx-auto flex flex-col-reverse flex-wrap items-center justify-between px-0 md:flex-row lg:px-4">
+            {/* <!--Right Col--> */}
+            <div className="flex w-full flex-col items-center justify-center overflow-y-hidden lg:items-start xl:w-2/5">
+              <h2 className="slide-in-bottom-h1 my-4 text-center text-xl font-bold leading-tight text-gray-800 md:text-left md:text-3xl">
+                CUSTOM STOREFRONT BUILDER
+              </h2>
+              <p className="slide-in-bottom-subtitle pb-8 text-center text-base leading-normal text-gray-700 md:text-left">
+                Dropgala gives you full control of your online store with a
+                no-code custom website builder. launch a beautiful shop that is
+                as unique as you are.
+              </p>
+            </div>
+            {/* <!--Left Col--> */}
+            <div className="w-fit max-w-[500px] overflow-y-hidden py-6 xl:w-3/5">
+              <Image
+                alt="store-site"
+                src="/landing.webp"
+                className="slide-in-bottom mx-auto lg:mr-0"
+                width={530}
+                height={300}
+              />
+            </div>
+          </div>
+        </section>
+        <section className="container my-20 mx-auto flex flex-col-reverse flex-wrap items-center justify-between px-0 md:flex-row lg:px-4">
           {/* <!--Right Col--> */}
           <div className="w-fit max-w-[500px] overflow-y-hidden py-6 xl:w-3/5">
             <Image

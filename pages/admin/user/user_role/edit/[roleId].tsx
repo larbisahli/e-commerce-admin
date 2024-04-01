@@ -39,7 +39,7 @@ export default function EditRolePage({ client }: SSRProps) {
     fetchPolicy: 'cache-and-network'
   });
 
-  const { role = [] } = data ?? {};
+  const { role = {} } = data ?? {};
 
   useGetUser(client);
   useErrorLogger(error);
@@ -86,7 +86,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   return {
     props: {
-      ...(await serverSideTranslations(locale, ['form', 'common', 'error'])),
+      ...(await serverSideTranslations(locale, [
+        'table',
+        'form',
+        'common',
+        'error'
+      ])),
       client: { ...(client ?? {}), csrfToken, csrfError }
     }
   };

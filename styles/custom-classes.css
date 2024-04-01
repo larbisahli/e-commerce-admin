@@ -245,6 +245,7 @@
 .custom-tooltip {
   font-size: 13px !important;
 }
+
 .hero-container {
   background: url(/hero-background.svg);
   background-size: contain;
@@ -254,4 +255,18 @@
 .slick-next:before {
   color: rgb(133, 132, 132) !important;
   padding: 3px;
+}
+
+.builder-container {
+  width: 100%;
+  height: calc(100vh - 80px);
+  max-width: 100%;
+  max-height: 100%;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 16px;
+  transition-property: max-width, max-height;
+  transition-duration: 0.2s;
+  transition-timing-function: cubic-bezier(0.64, 0, 0.35, 1);
+  position: relative;
+  user-select: none;
+  overflow: hidden;
 }

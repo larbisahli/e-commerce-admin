@@ -1,16 +1,22 @@
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import Card from '@components/common/card';
+import { DownloadFileIcon } from '@components/icons/download-file-icon';
 import AppLayout from '@components/layouts/app';
+import InvoicePdf from '@components/order/invoice-pdf';
 import Button from '@components/ui/button';
 import ErrorMessage from '@components/ui/error-message';
 import Label from '@components/ui/label';
 import Loader from '@components/ui/loader/loader';
 import SelectInput from '@components/ui/select-input';
-import { ORDER } from '@graphql/order';
+import { ORDER, UPDATE_STATUS_ORDER } from '@graphql/order';
 import { ORDER_STATUSES_FOR_SELECT } from '@graphql/order-status';
 import { useErrorLogger } from '@hooks/useErrorLogger';
+import { useGetUser } from '@hooks/useGetUser';
 import { useSettings } from '@hooks/useSettings';
-import { verifyAuth } from '@middleware/utils';
+import { notify } from '@lib/notify';
+import { verifyAuth, XSRFHandler } from '@middleware/utils';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import { SSRProps } from '@ts-types/custom.types';
 import { OrderBy, SortOrder } from '@ts-types/enums';
 import {
   Address,
@@ -22,6 +28,7 @@ import {
 import { formatAddress } from '@utils/format-address';
 import { ROUTES } from '@utils/routes';
 import usePrice from '@utils/use-price';
+import dayjs from 'dayjs';
 import { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
@@ -58,11 +65,13 @@ export interface QueryVariables {
 interface TOrderStatus {
   orderStatusForSelect: OrderStatus[];
 }
-export default function OrderDetailsPage() {
+export default function OrderDetailsPage({ client }: SSRProps) {
   const { t } = useTranslation();
   const { query } = useRouter();
+
   const orderId = query.orderId as string;
 
+  const [error, setError] = useState(null);
   const [displayBillAdds, setDisplayBillAdds] = useState(false);
   const [displayShipAdds, setDisplayShipAdds] = useState(false);
 
@@ -83,7 +92,7 @@ export default function OrderDetailsPage() {
   const {
     data: orderData,
     loading,
-    error
+    error: orderError
   } = useQuery<TOrder, OrderVariable>(ORDER, {
     variables: {
       orderId
@@ -91,13 +100,28 @@ export default function OrderDetailsPage() {
     fetchPolicy: 'cache-and-network'
   });
 
+  const { userInfo } = useGetUser(client);
+  const csrfToken = userInfo?.csrfToken;
+
+  const [updateOrderStatus, { loading: updatingStatus }] = useMutation(
+    UPDATE_STATUS_ORDER,
+    {
+      context: {
+        headers: {
+          'x-csrf-token': csrfToken
+        }
+      },
+      onCompleted: (data: { updateStatusOrder: OrderStatus }) => {
+        const { updateStatusOrder } = data;
+        if (updateStatusOrder?.id) {
+          notify(t('common:successfully-updated'), 'success');
+        }
+      }
+    }
+  );
+
   const { order } = orderData ?? {};
   const { orderStatusForSelect } = orderStatusData ?? {};
-
-  useErrorLogger(error);
-  useErrorLogger(orderStatusError);
-
-  const updating = false;
 
   const { handleSubmit, control, setValue } = useForm<FormValues>({
     defaultValues: {}
@@ -118,16 +142,21 @@ export default function OrderDetailsPage() {
     deliveryStatus,
     paymentStatus
   }: FormValues) => {
-    console.log({ orderStatus, deliveryStatus, paymentStatus });
-    // updateOrder({
-    //   variables: {
-    //     id: data?.order?.id as string,
-    //     input: {
-    //       status: order_status?.id as string,
-    //     },
-    //   },
-    // });
+    updateOrderStatus({
+      variables: {
+        id: order.id,
+        orderStatus: { id: orderStatus?.id },
+        deliveryStatus: { id: deliveryStatus?.id },
+        paymentStatus: { id: paymentStatus?.id }
+      }
+    }).catch((err) => {
+      setError(err);
+    });
   };
+
+  useErrorLogger(error);
+  useErrorLogger(orderError);
+  useErrorLogger(orderStatusError);
 
   const { price: subTotalExclTax } = usePrice(
     order && {
@@ -152,6 +181,16 @@ export default function OrderDetailsPage() {
   const { price: grandTotalInclTax } = usePrice(
     order && {
       amount: order?.grandTotalInclTax!
+    }
+  );
+  const { price: shipmentTotalExclTax } = usePrice(
+    order && {
+      amount: order?.orderShipment?.totalExclTax ?? 0
+    }
+  );
+  const { price: shipmentTotalInclTax } = usePrice(
+    order && {
+      amount: order?.orderShipment?.totalInclTax ?? 0
     }
   );
 
@@ -231,202 +270,296 @@ export default function OrderDetailsPage() {
   };
 
   return (
-    <Card>
-      <div className="mb-8">
-        <h3 className="mb-8 w-full whitespace-nowrap text-center text-2xl font-semibold text-heading lg:mb-0 lg:w-1/3 lg:text-start">
-          {t('form:input-label-order-id')} - {order?.orderNumber}
-        </h3>
+    <>
+      <div className="mb-5 flex justify-end">
+        <PDFDownloadLink
+          document={
+            <InvoicePdf order={order} systemCurrency={systemCurrency} />
+          }
+          fileName={`invoice-${order?.orderNumber}.pdf`}
+        >
+          {({ loading }: any) => (
+            <Button
+              loading={loading}
+              disabled={loading}
+              renderIcon={<DownloadFileIcon width="1.3rem" height="1.3rem" />}
+            >
+              Download Invoice
+            </Button>
+          )}
+        </PDFDownloadLink>
       </div>
-      <form
-        onSubmit={handleSubmit(ChangeStatus)}
-        className="flex w-full flex-col items-center justify-center lg:flex-row"
-      >
-        <div className="z-30 mb-3 w-full lg:mb-0 lg:me-5">
-          <Label>{t('form:input-label-order-status')}</Label>
-          <SelectInput
-            name="orderStatus"
-            control={control}
-            getOptionLabel={(option: any) => option.label}
-            getOptionValue={(option: any) => option.id}
-            options={orderStatusForSelect}
-            loading={orderStatusLoading || loading}
-            placeholder={t('form:input-placeholder-order-status')}
-          />
+      <Card>
+        <div className="mb-8">
+          <h3 className="mb-8 w-full whitespace-nowrap text-center text-2xl font-semibold text-heading lg:mb-0 lg:w-1/3 lg:text-start">
+            {t('form:input-label-order-id')} - {order?.orderNumber}
+          </h3>
         </div>
-        <div className="z-20 mb-3 w-full lg:mb-0 lg:me-5">
-          <Label>{t('form:input-label-payment-status')}</Label>
-          <SelectInput
-            name="paymentStatus"
-            control={control}
-            getOptionLabel={(option: any) => option.label}
-            getOptionValue={(option: any) => option.id}
-            options={orderStatusForSelect}
-            loading={orderStatusLoading || loading}
-            placeholder={t('form:input-placeholder-order-status')}
-          />
-        </div>
-        <div className="z-10 mb-3 w-full lg:mb-0 lg:me-5">
-          <Label>{t('form:input-label-delivery-status')}</Label>
-          <SelectInput
-            name="deliveryStatus"
-            control={control}
-            getOptionLabel={(option: any) => option.label}
-            getOptionValue={(option: any) => option.id}
-            options={orderStatusForSelect}
-            loading={orderStatusLoading || loading}
-            placeholder={t('form:input-placeholder-order-status')}
-          />
-        </div>
-        <Button loading={updating} className="mt-5">
-          {t('form:button-label-update-status')}
-        </Button>
-      </form>
-      <div className="my-10 flex flex-col justify-between lg:flex-row">
-        {order?.items?.length > 0 ? (
-          <div className="mb-4 w-full lg:w-[65%]">
-            <h3 className="mb-3 font-semibold text-heading">
-              {t('table:table-item-products')}
-            </h3>
-            <Table
-              //@ts-ignore
-              columns={columns}
-              emptyText={t('table:empty-table-data')}
-              data={order?.items! ?? []}
-              rowKey="id"
-              scroll={{ x: 300 }}
-              className="rounded-sm border"
+        <form
+          onSubmit={handleSubmit(ChangeStatus)}
+          className="flex w-full flex-col items-center justify-center lg:flex-row"
+        >
+          <div className="z-30 mb-3 w-full lg:mb-0 lg:me-5">
+            <Label>{t('form:input-label-order-status')}</Label>
+            <SelectInput
+              name="orderStatus"
+              control={control}
+              getOptionLabel={(option: any) => option.label}
+              getOptionValue={(option: any) => option.id}
+              options={orderStatusForSelect}
+              loading={orderStatusLoading || loading}
+              placeholder={t('form:input-placeholder-order-status')}
             />
           </div>
-        ) : (
-          <span>{t('common:no-order-found')}</span>
-        )}
+          <div className="z-20 mb-3 w-full lg:mb-0 lg:me-5">
+            <Label>{t('form:input-label-payment-status')}</Label>
+            <SelectInput
+              name="paymentStatus"
+              control={control}
+              getOptionLabel={(option: any) => option.label}
+              getOptionValue={(option: any) => option.id}
+              options={orderStatusForSelect}
+              loading={orderStatusLoading || loading}
+              placeholder={t('form:input-placeholder-order-status')}
+            />
+          </div>
+          <div className="z-10 mb-3 w-full lg:mb-0 lg:me-5">
+            <Label>{t('form:input-label-delivery-status')}</Label>
+            <SelectInput
+              name="deliveryStatus"
+              control={control}
+              getOptionLabel={(option: any) => option.label}
+              getOptionValue={(option: any) => option.id}
+              options={orderStatusForSelect}
+              loading={orderStatusLoading || loading}
+              placeholder={t('form:input-placeholder-order-status')}
+            />
+          </div>
+          <Button loading={updatingStatus} className="mt-5">
+            {t('form:button-label-update-status')}
+          </Button>
+        </form>
+        <div className="my-10 flex flex-col justify-between lg:flex-row">
+          {order?.items?.length > 0 ? (
+            <div className="mb-4 w-full lg:w-[65%]">
+              <h3 className="mb-3 font-semibold text-heading">
+                {t('table:table-item-products')}
+              </h3>
+              <Table
+                //@ts-ignore
+                columns={columns}
+                emptyText={t('table:empty-table-data')}
+                data={order?.items! ?? []}
+                rowKey="id"
+                scroll={{ x: 300 }}
+                className="rounded-sm border"
+              />
+            </div>
+          ) : (
+            <span>{t('common:no-order-found')}</span>
+          )}
 
-        <div className="w-full lg:w-[33%]">
-          <h3 className="mb-3 font-semibold text-heading">
-            {t('table:table-item-summary')}
-          </h3>
-          <div className="flex w-full flex-col rounded-md border border-border-200 px-4 py-2 shadow-sm ms-auto">
-            <div className="flex items-center justify-between border-b border-dashed py-2 text-sm text-body">
-              <span className="text-base text-gray-900">
-                {t('common:order-sub-total')}
-              </span>
-              <div className="flex flex-col items-end">
-                <span className="text-base font-medium text-gray-700">
-                  {subTotalInclTax}
+          <div className="w-full lg:w-[33%]">
+            <h3 className="mb-3 font-semibold text-heading">
+              {t('table:table-item-summary')}
+            </h3>
+            {/* Section 1 */}
+            <section className="flex w-full flex-col rounded-md border border-border-200 px-4 py-2 shadow-sm ms-auto">
+              <div className="flex items-center justify-between border-b border-dashed py-2 text-sm text-body">
+                <span className="text-base text-gray-900">
+                  {t('common:order-sub-total')}
                 </span>
-                <div className="flex items-center justify-center text-xs text-gray-800">
-                  <span>{t('common:order-excl-tax')}</span>
-                  <span>{subTotalExclTax}</span>
+                <div className="flex flex-col items-end">
+                  <span className="text-base font-medium text-gray-700">
+                    {subTotalInclTax}
+                  </span>
+                  <div className="flex items-center justify-center text-xs text-gray-800">
+                    <span>{t('common:order-excl-tax')}</span>
+                    <span>{subTotalExclTax}</span>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="flex items-center justify-between border-b border-dashed py-2 text-sm text-body">
-              <span className="text-base text-gray-900">
-                {t('common:order-delivery-fee')}
-              </span>
-              <div className="flex flex-col items-end">
-                <span className="text-base font-medium text-gray-700">
-                  {subTotalInclTax}
+              <div className="flex items-center justify-between border-b border-dashed py-2 text-sm text-body">
+                <span className="text-base text-gray-900">
+                  {t('common:order-delivery-fee')}
                 </span>
-                <div className="flex items-center justify-center text-xs text-gray-800">
-                  <span>{t('common:order-excl-tax')}</span>
-                  <span>{subTotalExclTax}</span>
+                <div className="flex flex-col items-end">
+                  <span className="text-base font-medium text-gray-700">
+                    {subTotalInclTax}
+                  </span>
+                  <div className="flex items-center justify-center text-xs text-gray-800">
+                    <span>{t('common:order-excl-tax')}</span>
+                    <span>{subTotalExclTax}</span>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="flex items-center justify-between border-b border-dashed py-2 text-sm text-body">
-              <div className="flex items-center text-base text-gray-900">
-                <div>{t('common:order-discount')}</div>
-                {order?.coupon?.id && (
-                  <Link
-                    target="_blank"
-                    href={`${ROUTES.COUPON}/edit/${order?.coupon?.id}`}
-                  >
-                    <div className="mx-1 text-xs text-accent hover:underline">
-                      [{order?.coupon?.code}]
-                    </div>
-                  </Link>
-                )}
+              <div className="flex items-center justify-between border-b border-dashed py-2 text-sm text-body">
+                <div className="flex items-center text-base text-gray-900">
+                  <div>{t('common:order-discount')}</div>
+                  {order?.coupon?.id && (
+                    <Link
+                      target="_blank"
+                      href={`${ROUTES.COUPON}/edit/${order?.coupon?.id}`}
+                    >
+                      <div className="mx-1 text-xs text-accent hover:underline">
+                        [{order?.coupon?.code}]
+                      </div>
+                    </Link>
+                  )}
+                </div>
+                <span className="text-base font-medium text-gray-800">{`- ${discountAmount}`}</span>
               </div>
-              <span className="text-base font-medium text-gray-800">{`- ${discountAmount}`}</span>
-            </div>
-            <div className="flex items-center justify-between border-b border-dashed py-2 text-sm text-body">
-              <span className="text-base text-gray-900">
-                {t('common:order-tax-rate')}
-              </span>
-              <div className="flex flex-col items-end">
-                <span className="text-base font-medium text-gray-800">{`${order?.tax?.rate}%`}</span>
-              </div>
-            </div>
-            <div className="flex items-center justify-between py-2 text-base font-semibold">
-              <span className="text-lg text-black">
-                {t('common:order-total')}
-              </span>
-              <div className="flex flex-col items-end">
-                <span className="text-lg font-semibold text-black">
-                  {grandTotalInclTax}
+              <div className="flex items-center justify-between border-b border-dashed py-2 text-sm text-body">
+                <span className="text-base text-gray-900">
+                  {t('common:order-tax-rate')}
                 </span>
-                <div className="flex items-center justify-center text-xs text-gray-700">
-                  <span>{t('common:order-excl-tax')}</span>
-                  <span>{grandTotalExclTax}</span>
+                <div className="flex flex-col items-end">
+                  <span className="text-base font-medium text-gray-800">{`${order?.tax?.rate}%`}</span>
                 </div>
               </div>
-            </div>
+              <div className="flex items-center justify-between py-2 text-base font-semibold">
+                <span className="text-lg text-black">
+                  {t('common:order-total')}
+                </span>
+                <div className="flex flex-col items-end">
+                  <span className="text-lg font-semibold text-black">
+                    {grandTotalInclTax}
+                  </span>
+                  <div className="flex items-center justify-center text-xs text-gray-700">
+                    <span>{t('common:order-excl-tax')}</span>
+                    <span>{grandTotalExclTax}</span>
+                  </div>
+                </div>
+              </div>
+            </section>
+            {/* Section 2 */}
+            <section className="mt-5 flex w-full flex-col rounded-md border border-border-200 px-4 py-2 shadow-sm ms-auto">
+              <div className="flex items-center justify-between border-b border-dashed py-2 text-sm text-body">
+                <span className="text-md text-gray-900">Payment method</span>
+                <span className="text-md font-medium text-gray-700">
+                  {order?.paymentCode}
+                </span>
+              </div>
+              <div className="flex items-center justify-between border-b border-dashed py-2 text-sm text-body">
+                <span className="text-md text-gray-900">Shipment method</span>
+                <Link
+                  target="_blank"
+                  href={`${ROUTES.SHIPPING_ZONE}/edit/${order?.orderShipment?.shipment?.id}`}
+                >
+                  <div className="text-md text-accent hover:underline">
+                    {order?.orderShipment?.shipment?.name}
+                  </div>
+                </Link>
+              </div>
+              <div className="flex items-center justify-between border-b border-dashed py-2 text-sm text-body">
+                <span className="text-md text-gray-900">Total weight</span>
+                <span className="text-md font-medium text-gray-700">
+                  {order?.orderShipment?.totalWeight
+                    ? `${order?.orderShipment?.totalWeight / 1000} kg`
+                    : 'N/A'}
+                </span>
+              </div>
+              <div className="flex items-center justify-between border-dashed py-2 text-sm text-body">
+                <span className="text-md font-medium text-black">
+                  Shipment total
+                </span>
+                <div className="flex flex-col items-end">
+                  <span className="text-md font-medium text-gray-700">
+                    {shipmentTotalInclTax}
+                  </span>
+                  <div className="flex items-center justify-center text-xs text-gray-800">
+                    <span>{t('common:order-excl-tax')}</span>
+                    <span>{shipmentTotalExclTax}</span>
+                  </div>
+                </div>
+              </div>
+            </section>
+            {/* Section 3 */}
+            <section className="mt-5 flex w-full flex-col rounded-md border border-border-200 px-4 py-2 shadow-sm ms-auto">
+              <div className="flex items-center justify-between border-b border-dashed py-2 text-sm text-body">
+                <span className="text-md text-gray-900">
+                  {t('form:input-label-currency')}
+                </span>
+                <span className="text-md text-gray-600">
+                  {order?.currency?.code}
+                </span>
+              </div>
+              <div className="flex items-center justify-between border-b border-dashed py-2 text-sm text-body">
+                <span className="text-md text-gray-900">Placed from IP</span>
+                <span className="text-md text-gray-600">
+                  {order?.orderGeo?.ip}
+                </span>
+              </div>
+              <div className="flex items-center justify-between border-dashed py-2 text-sm text-body">
+                <span className="text-md text-gray-900">Order Date</span>
+                <span className="text-md text-gray-600">
+                  {`${dayjs(order?.createdAt).format('MMM D, YYYY')} at ${dayjs(
+                    order?.createdAt
+                  ).format('h:mm A')}`}
+                </span>
+              </div>
+            </section>
           </div>
         </div>
-      </div>
-      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between">
-        <div className="mb-10 w-full sm:mb-0 sm:w-1/2 sm:pe-8">
-          <h3 className="mb-3 border-b border-border-200 pb-2 font-semibold text-heading">
-            {t('common:billing-address')}
-          </h3>
-          <div className="text-md flex flex-col items-start space-y-1 text-gray-700">
-            <Link href={`${ROUTES.CUSTOMER}/${order?.customer?.id}`}>
-              <div className="hover:text-accent hover:underline">
-                {order?.customer?.fullName}
-              </div>
-            </Link>
-            {order?.customer?.address && (
-              <button
-                className="text-start"
-                onClick={() => setDisplayShipAdds((v) => !v)}
-              >
-                <span>{formatAddress(order?.customer?.address)}</span>
-              </button>
-            )}
-            {order?.customer?.address?.phoneNumber && (
-              <span>{order?.customer?.address?.phoneNumber}</span>
-            )}
-            {displayShipAdds && renderDetailAddress(order?.customer?.address)}
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between">
+          <div className="mb-10 w-full sm:mb-0 sm:w-1/2 sm:pe-8">
+            <h3 className="mb-3 border-b border-border-200 pb-2 font-semibold text-heading">
+              {t('common:billing-address')}
+            </h3>
+            <div className="text-md flex flex-col items-start space-y-1 text-gray-700">
+              <Link href={`${ROUTES.CUSTOMER}/${order?.customer?.id}`}>
+                <div className="text-accent hover:underline">
+                  {order?.customer?.fullName}
+                </div>
+              </Link>
+              {order?.customer?.address && (
+                <button
+                  className="text-start"
+                  onClick={() => setDisplayShipAdds((v) => !v)}
+                >
+                  <span>{formatAddress(order?.customer?.address)}</span>
+                </button>
+              )}
+              {order?.customer?.address?.phoneNumber && (
+                <span>T: {order?.customer?.address?.phoneNumber}</span>
+              )}
+              {order?.customer?.address?.email && (
+                <span>{order?.customer?.address?.email}</span>
+              )}
+              {displayShipAdds && renderDetailAddress(order?.customer?.address)}
+            </div>
           </div>
-        </div>
 
-        <div className="w-full sm:w-1/2 sm:ps-8">
-          <h3 className="mb-3 border-b border-border-200 pb-2 text-start font-semibold text-heading sm:text-end">
-            {t('common:shipping-address')}
-          </h3>
-          <div className="text-md flex flex-col items-end space-y-1 text-gray-700">
-            <Link href={`${ROUTES.CUSTOMER}/${order?.customer?.id}`}>
-              <div className="hover:text-accent hover:underline">
-                {order?.customer?.fullName}
-              </div>
-            </Link>
-            {order?.customer?.address && (
-              <button
-                className="text-end"
-                onClick={() => setDisplayBillAdds((v) => !v)}
-              >
-                <span>{formatAddress(order?.customer?.address)}</span>
-              </button>
-            )}
-            {order?.customer?.address?.phoneNumber && (
-              <span>{order?.customer?.address?.phoneNumber}</span>
-            )}
-            {displayBillAdds && renderDetailAddress(order?.customer?.address)}
+          <div className="w-full sm:w-1/2 sm:ps-8">
+            <h3 className="mb-3 border-b border-border-200 pb-2 text-start font-semibold text-heading sm:text-end">
+              {t('common:shipping-address')}
+            </h3>
+            <div className="text-md flex flex-col items-end space-y-1 text-gray-700">
+              <Link href={`${ROUTES.CUSTOMER}/${order?.customer?.id}`}>
+                <div className="text-accent hover:underline">
+                  {order?.customer?.fullName}
+                </div>
+              </Link>
+              {order?.customer?.address && (
+                <button
+                  className="text-end"
+                  onClick={() => setDisplayBillAdds((v) => !v)}
+                >
+                  <span>{formatAddress(order?.customer?.address)}</span>
+                </button>
+              )}
+              {order?.customer?.address?.phoneNumber && (
+                <span>T: {order?.customer?.address?.phoneNumber}</span>
+              )}
+              {order?.customer?.address?.email && (
+                <span>{order?.customer?.address?.email}</span>
+              )}
+              {displayBillAdds && renderDetailAddress(order?.customer?.address)}
+            </div>
           </div>
         </div>
-      </div>
-    </Card>
+      </Card>
+    </>
   );
 }
 
@@ -445,6 +578,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
+  const { csrfToken, csrfError } = await XSRFHandler(context);
+
   return {
     props: {
       ...(await serverSideTranslations(locale!, [
@@ -453,7 +588,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         'form',
         'error'
       ])),
-      client
+      client: { ...(client ?? {}), csrfToken, csrfError }
     }
   };
 };

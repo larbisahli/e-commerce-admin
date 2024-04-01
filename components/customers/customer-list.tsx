@@ -9,6 +9,7 @@ import {
   CreatedUpdatedByAt,
   CustomerType
 } from '@ts-types/generated';
+import { formatAddress } from '@utils/format-address';
 import { useIsRTL } from '@utils/locals';
 import { ROUTES } from '@utils/routes';
 import dayjs from 'dayjs';
@@ -63,16 +64,16 @@ const CustomerList = ({ loading, customers, selectedColumns }: IProps) => {
         }
       },
       {
-        title: t('table:table-item-email'),
+        title: t('table:table-item-address'),
         dataIndex: 'address',
-        key: 'email',
+        key: 'address',
         align: 'center',
-        width: 200,
+        width: 250,
         render: (address: CustomerType['address'], record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
-          return address?.email;
+          return formatAddress(address);
         }
       },
       {
@@ -89,29 +90,16 @@ const CustomerList = ({ loading, customers, selectedColumns }: IProps) => {
         }
       },
       {
-        title: t('table:table-item-address'),
+        title: t('table:table-item-email'),
         dataIndex: 'address',
-        key: 'addressLine1',
+        key: 'email',
         align: 'center',
         width: 200,
         render: (address: CustomerType['address'], record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
-          return address?.addressLine1;
-        }
-      },
-      {
-        title: t('table:table-item-country'),
-        dataIndex: 'address',
-        key: 'country',
-        align: 'center',
-        width: 100,
-        render: (address: CustomerType['address'], record: TableRowProps) => {
-          if (record?.loading) {
-            return <TableRowPlaceholder />;
-          }
-          return address?.country?.name;
+          return address?.email;
         }
       },
       {
@@ -196,7 +184,11 @@ const CustomerList = ({ loading, customers, selectedColumns }: IProps) => {
             return <TableRowPlaceholder />;
           }
           return (
-            <ActionButtons id={id} editUrl={`${ROUTES.CATEGORY}/edit/${id}`} />
+            <ActionButtons
+              id={id}
+              deleteModalView="DELETE_ATTRIBUTE"
+              editUrl={`${ROUTES.CATEGORY}/edit/${id}`}
+            />
           );
         }
       }

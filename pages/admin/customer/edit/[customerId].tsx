@@ -7,7 +7,7 @@ import { useErrorLogger, useGetUser } from '@hooks/index';
 import { useSettings } from '@hooks/useSettings';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
-import { TaxType } from '@ts-types/generated';
+import { CustomerType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import { isEmpty } from 'lodash';
 import type { GetServerSideProps } from 'next';
@@ -16,13 +16,13 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-const CreateOrUpdateTaxForm = dynamic(
-  () => import('@components/tax/tax-form'),
+const CreateOrUpdateCustomerForm = dynamic(
+  () => import('@components/customers/customer-form'),
   { ssr: true }
 );
 
 interface THeroSlider {
-  tax: TaxType;
+  customer: CustomerType;
 }
 interface OptionsVariable {
   id: number;
@@ -31,22 +31,22 @@ interface OptionsVariable {
 export default function UpdateTaxPage({ client }: SSRProps) {
   const { query } = useRouter();
 
-  const taxId = parseInt(query.taxId as string, 10);
+  const customerId = parseInt(query.customerId as string, 10);
 
   const { selectedLanguage } = useSettings();
 
   const { data, loading, error } = useQuery<THeroSlider, OptionsVariable>(TAX, {
-    variables: { id: taxId },
+    variables: { id: customerId },
     fetchPolicy: 'cache-and-network',
     skip: isEmpty(selectedLanguage)
   });
 
-  const { tax = {} } = data ?? {};
+  const { customer = {} } = data ?? {};
 
   useGetUser(client);
   useErrorLogger(error);
 
-  if (isEmpty(tax) || loading) {
+  if (isEmpty(customerId) || loading) {
     return <PageFormPlaceholder />;
   }
 
@@ -65,7 +65,7 @@ export default function UpdateTaxPage({ client }: SSRProps) {
           href="/svg/customer.svg"
         />
       </Head>
-      <CreateOrUpdateTaxForm initialValues={tax} />
+      <CreateOrUpdateCustomerForm initialValues={customer} />
     </>
   );
 }

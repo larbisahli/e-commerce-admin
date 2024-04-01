@@ -14,18 +14,18 @@ import {
 } from '@hooks/index';
 import { notify } from '@lib/index';
 import { UserType } from '@ts-types/generated';
-import { ResourcePermissionType } from '@ts-types/index';
+import { RoleInterfaceType } from '@ts-types/index';
 import { ROUTES } from '@utils/routes';
 import isEmpty from 'lodash/isEmpty';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { resourceDefaultData } from './resource-data';
 import RoleResourceTable from './role-resource-table';
 
 type IProps = {
-  initialValues?: ResourcePermissionType | any;
+  initialValues?: RoleInterfaceType | any;
 };
 
 const RoleCreateUpdateForm = ({ initialValues }: IProps) => {
@@ -33,7 +33,7 @@ const RoleCreateUpdateForm = ({ initialValues }: IProps) => {
   const router = useRouter();
 
   const [roles, setRoles] = useState(resourceDefaultData);
-  const [roleName, setRoleName] = useState('');
+  const [roleName, setRoleName] = useState(() => initialValues?.name);
 
   const [error, setError] = useState();
   const [unsavedChanges, setUnsavedChanges] = useState(true);
@@ -63,7 +63,7 @@ const RoleCreateUpdateForm = ({ initialValues }: IProps) => {
     onCompleted: (data: { updateUser: UserType }) => {
       if (!isEmpty(data)) {
         notify(t('common:successfully-updated'), 'success');
-        router.push(ROUTES.USER);
+        router.push(ROUTES.USER_ROLE);
       }
     }
   });
@@ -73,9 +73,9 @@ const RoleCreateUpdateForm = ({ initialValues }: IProps) => {
   async function onSubmit(e) {
     e.preventDefault();
     const variables = {
-      roleName,
-      resource: {
-        privileges: Object.assign(
+      name: roleName,
+      privileges: {
+        resources: Object.assign(
           {},
           ...roles.map((role) => {
             const { resource, ...actions } = role;
@@ -106,6 +106,22 @@ const RoleCreateUpdateForm = ({ initialValues }: IProps) => {
     }
   }
 
+  useEffect(() => {
+    if (!isEmpty(initialValues?.privileges?.resources)) {
+      const resources = initialValues?.privileges?.resources;
+      setRoles(
+        // @ts-ignore
+        Object.keys(resources)?.map((key) => {
+          const resource = resources[key];
+          return {
+            resource: key,
+            ...resource?.permissions
+          };
+        })
+      );
+    }
+  }, [initialValues]);
+
   useWarnIfUnsavedChanges(unsavedChanges, () => {
     return confirm(t('common:UNSAVED_CHANGES'));
   });
@@ -122,9 +138,10 @@ const RoleCreateUpdateForm = ({ initialValues }: IProps) => {
         <Card className="w-full sm:w-[75%] md:w-[75%]">
           <div>
             <Input
-              name="roleName"
+              name="name"
               label={t('form:input-label-role-name')}
               onChange={(e) => setRoleName(e.target.value)}
+              value={roleName}
               type="text"
               variant="outline"
               className="mb-4"

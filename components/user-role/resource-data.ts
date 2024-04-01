@@ -2,13 +2,6 @@ import { ACTION_PRIVILEGES, RESOURCES } from '@ts-types/enums';
 
 export const resourceDefaultData = [
   {
-    resource: RESOURCES.PHOTOS,
-    [ACTION_PRIVILEGES.WRITE]: false,
-    [ACTION_PRIVILEGES.READ]: false,
-    [ACTION_PRIVILEGES.UPDATE]: false,
-    [ACTION_PRIVILEGES.DELETE]: false
-  },
-  {
     resource: RESOURCES.USER,
     [ACTION_PRIVILEGES.WRITE]: false,
     [ACTION_PRIVILEGES.READ]: false,
@@ -31,6 +24,13 @@ export const resourceDefaultData = [
   },
   {
     resource: RESOURCES.TAG,
+    [ACTION_PRIVILEGES.WRITE]: false,
+    [ACTION_PRIVILEGES.READ]: false,
+    [ACTION_PRIVILEGES.UPDATE]: false,
+    [ACTION_PRIVILEGES.DELETE]: false
+  },
+  {
+    resource: RESOURCES.TAX,
     [ACTION_PRIVILEGES.WRITE]: false,
     [ACTION_PRIVILEGES.READ]: false,
     [ACTION_PRIVILEGES.UPDATE]: false,
@@ -65,7 +65,7 @@ export const resourceDefaultData = [
     [ACTION_PRIVILEGES.DELETE]: false
   },
   {
-    resource: RESOURCES.SHIPPING_ZONE,
+    resource: RESOURCES.SHIPPING,
     [ACTION_PRIVILEGES.WRITE]: false,
     [ACTION_PRIVILEGES.READ]: false,
     [ACTION_PRIVILEGES.UPDATE]: false,
@@ -93,10 +93,73 @@ export const resourceDefaultData = [
     [ACTION_PRIVILEGES.DELETE]: false
   },
   {
-    resource: RESOURCES.SLIDESHOW,
+    resource: RESOURCES.SLIDERS,
+    [ACTION_PRIVILEGES.WRITE]: false,
+    [ACTION_PRIVILEGES.READ]: false,
+    [ACTION_PRIVILEGES.UPDATE]: false,
+    [ACTION_PRIVILEGES.DELETE]: false
+  },
+  {
+    resource: RESOURCES.THEME,
+    [ACTION_PRIVILEGES.WRITE]: false,
+    [ACTION_PRIVILEGES.READ]: false,
+    [ACTION_PRIVILEGES.UPDATE]: false,
+    [ACTION_PRIVILEGES.DELETE]: false
+  },
+  {
+    resource: RESOURCES.STORE,
+    [ACTION_PRIVILEGES.WRITE]: false,
+    [ACTION_PRIVILEGES.READ]: false,
+    [ACTION_PRIVILEGES.UPDATE]: false,
+    [ACTION_PRIVILEGES.DELETE]: false
+  },
+  {
+    resource: RESOURCES.MARKETPLACE,
+    [ACTION_PRIVILEGES.WRITE]: false,
+    [ACTION_PRIVILEGES.READ]: false,
+    [ACTION_PRIVILEGES.UPDATE]: false,
+    [ACTION_PRIVILEGES.DELETE]: false
+  },
+  {
+    resource: RESOURCES.STORE_SETTINGS,
+    [ACTION_PRIVILEGES.WRITE]: false,
+    [ACTION_PRIVILEGES.READ]: false,
+    [ACTION_PRIVILEGES.UPDATE]: false,
+    [ACTION_PRIVILEGES.DELETE]: false
+  },
+  {
+    resource: RESOURCES.PAGES,
+    [ACTION_PRIVILEGES.WRITE]: false,
+    [ACTION_PRIVILEGES.READ]: false,
+    [ACTION_PRIVILEGES.UPDATE]: false,
+    [ACTION_PRIVILEGES.DELETE]: false
+  },
+  {
+    resource: RESOURCES.MEDIA,
+    [ACTION_PRIVILEGES.WRITE]: false,
+    [ACTION_PRIVILEGES.READ]: false,
+    [ACTION_PRIVILEGES.UPDATE]: false,
+    [ACTION_PRIVILEGES.DELETE]: false
+  },
+  {
+    resource: RESOURCES.MANUFACTURER,
+    [ACTION_PRIVILEGES.WRITE]: false,
+    [ACTION_PRIVILEGES.READ]: false,
+    [ACTION_PRIVILEGES.UPDATE]: false,
+    [ACTION_PRIVILEGES.DELETE]: false
+  },
+  {
+    resource: RESOURCES.STORE_LANGUAGE,
     [ACTION_PRIVILEGES.WRITE]: false,
     [ACTION_PRIVILEGES.READ]: false,
     [ACTION_PRIVILEGES.UPDATE]: false,
     [ACTION_PRIVILEGES.DELETE]: false
   }
+  // {
+  //   resource: RESOURCES.STORE_BUILDER,
+  //   [ACTION_PRIVILEGES.WRITE]: false,
+  //   [ACTION_PRIVILEGES.READ]: false,
+  //   [ACTION_PRIVILEGES.UPDATE]: false,
+  //   [ACTION_PRIVILEGES.DELETE]: false
+  // }
 ];

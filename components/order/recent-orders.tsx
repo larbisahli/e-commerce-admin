@@ -121,13 +121,17 @@ const RecentOrders = ({ orders, title, loading }: IProps) => {
       dataIndex: 'orderStatus',
       key: 'orderStatus',
       align: 'center',
-      width: 150,
+      width: 200,
       render: (orderStatus: OrderStatus, record: TableRowProps) => {
         if (record?.loading) {
           return <TableRowPlaceholder />;
         }
         return (
-          <StatusBadge color={orderStatus?.color} label={orderStatus?.label} />
+          <StatusBadge
+            tooltip
+            color={orderStatus?.color}
+            label={orderStatus?.label}
+          />
         );
       }
     }

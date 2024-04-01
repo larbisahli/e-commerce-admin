@@ -1,15 +1,23 @@
 import React from 'react';
+import { Tooltip } from 'react-tooltip';
 import tinycolor from 'tinycolor2';
 
 type AvatarProps = {
   color?: string;
   label?: string;
+  tooltip?: boolean;
 };
 
-const StatusBadge: React.FC<AvatarProps> = ({ color, label }) => {
+const StatusBadge: React.FC<AvatarProps> = ({
+  color,
+  label,
+  tooltip = false
+}) => {
   return (
     <span
-      className="rounded-sm border border-solid py-[5px] px-[11px] text-sm font-semibold uppercase shadow-sm"
+      data-tooltip-id={`status-badge-tooltip-${color}-${label}`}
+      data-tooltip-content={label}
+      className="cut-line-1 rounded-sm border border-solid py-[5px] px-[11px] text-center text-sm font-semibold uppercase shadow-sm"
       style={{
         color,
         background: tinycolor(color).setAlpha(0.08),
@@ -17,6 +25,13 @@ const StatusBadge: React.FC<AvatarProps> = ({ color, label }) => {
       }}
     >
       {label}
+      {tooltip && (
+        <Tooltip
+          place="top"
+          className="z-50"
+          id={`status-badge-tooltip-${color}-${label}`}
+        />
+      )}
     </span>
   );
 };

@@ -8,7 +8,7 @@ import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-const PlansComponents = dynamic(() => import('@components/plans'), {
+const PlansComponents = dynamic(() => import('@components/store-builder'), {
   ssr: true
 });
 

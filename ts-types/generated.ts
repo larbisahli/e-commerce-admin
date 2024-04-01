@@ -694,6 +694,7 @@ export interface OrderType extends CreatedUpdatedByAt {
   orderStatus?: OrderStatus;
   deliveryStatus?: OrderStatus;
   paymentStatus?: OrderStatus;
+  paymentCode?: string;
   currency?: Nullable<CurrencyType>;
   paymentId?: string;
   orderGeo?: {
@@ -708,6 +709,15 @@ export interface OrderType extends CreatedUpdatedByAt {
   discountAmount: number;
   coupon?: Coupon;
   tax?: TaxType;
+  orderShipment?: {
+    shipment: {
+      id: number;
+      name: string;
+    };
+    totalWeight: number;
+    totalInclTax: number;
+    totalExclTax: number;
+  };
   totalShippingInclTax: number;
   totalShippingExclTax: number;
   totalQuantity?: number;

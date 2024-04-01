@@ -3,7 +3,7 @@ import { IosArrowDown } from '@components/icons/ios-arrow-down';
 import { IosArrowUp } from '@components/icons/ios-arrow-up';
 import Chart from '@components/ui/chart';
 import dayjs from 'dayjs';
-import { isEmpty } from 'lodash';
+import { isEmpty, round } from 'lodash';
 import Link from 'next/link';
 import { useTranslation } from 'next-i18next';
 import React, { useMemo } from 'react';
@@ -34,7 +34,7 @@ const StickerCard = ({
     () => [
       {
         name,
-        data: Object.keys(data)?.map((v) => data[v].value)
+        data: Object.keys(data)?.map((v) => round(data[v].value, 2))
       }
     ],
     [data, name]

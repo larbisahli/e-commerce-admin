@@ -4,6 +4,7 @@ import Loader from '@components/ui/loader/loader';
 import { TableRowPlaceholder } from '@components/ui/placeholders/Table';
 import ProfileCart from '@components/ui/profile-card';
 import { usePlaceholder } from '@hooks/usePlaceholder';
+import { useSettings } from '@hooks/useSettings';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import {
   CreatedUpdatedByAt,
@@ -42,6 +43,7 @@ const OrderList = ({ loading, orders, selectedColumns }: IProps) => {
   const { alignLeft } = useIsRTL();
   const rowExpandable = (record: any) => record.children?.length;
   const { tablePlaceholderRow } = usePlaceholder();
+  const { systemCurrency } = useSettings();
 
   const columns = useMemo(() => {
     return [
@@ -68,7 +70,7 @@ const OrderList = ({ loading, orders, selectedColumns }: IProps) => {
       {
         title: t('table:table-item-customer'),
         dataIndex: 'customer',
-        key: 'customer',
+        key: 'fullName',
         align: 'center',
         width: 180,
         ellipsis: true,
@@ -82,7 +84,7 @@ const OrderList = ({ loading, orders, selectedColumns }: IProps) => {
       {
         title: t('table:table-item-address'),
         dataIndex: 'customer',
-        key: 'customer',
+        key: 'address',
         align: 'center',
         width: 350,
         render: (customer: CustomerType, record: TableRowProps) => {
@@ -133,7 +135,11 @@ const OrderList = ({ loading, orders, selectedColumns }: IProps) => {
             return <TableRowPlaceholder />;
           }
           return (
-            <span>{grandTotalInclTax ? `$${grandTotalInclTax}` : 'Any'}</span>
+            <span>
+              {grandTotalInclTax
+                ? `${systemCurrency?.symbol}${grandTotalInclTax}`
+                : 'N/A'}
+            </span>
           );
         }
       },
@@ -142,13 +148,14 @@ const OrderList = ({ loading, orders, selectedColumns }: IProps) => {
         dataIndex: 'orderStatus',
         key: 'orderStatus',
         align: 'center',
-        width: 150,
+        width: 200,
         render: (orderStatus: OrderStatus, record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
           return (
             <StatusBadge
+              tooltip
               color={orderStatus?.color}
               label={orderStatus?.label}
             />
@@ -160,7 +167,7 @@ const OrderList = ({ loading, orders, selectedColumns }: IProps) => {
         dataIndex: 'paymentStatus',
         key: 'paymentStatus',
         align: 'center',
-        width: 150,
+        width: 200,
         render: (paymentStatus: OrderStatus, record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
@@ -178,7 +185,7 @@ const OrderList = ({ loading, orders, selectedColumns }: IProps) => {
         dataIndex: 'deliveryStatus',
         key: 'deliveryStatus',
         align: 'center',
-        width: 150,
+        width: 200,
         render: (deliveryStatus: OrderStatus, record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
@@ -224,25 +231,6 @@ const OrderList = ({ loading, orders, selectedColumns }: IProps) => {
         }
       },
       {
-        // title: "Download",
-        title: t('common:text-download'),
-        dataIndex: 'id',
-        key: 'download',
-        align: 'center',
-        render: (_id: string, order: any) => (
-          <div>
-            <PDFDownloadLink
-              document={<InvoicePdf order={order} />}
-              fileName="invoice.pdf"
-            >
-              {({ loading }: any) =>
-                loading ? t('common:text-loading') : t('common:text-download')
-              }
-            </PDFDownloadLink>
-          </div>
-        )
-      },
-      {
         title: t('table:table-item-actions'),
         dataIndex: 'orderNumber',
         key: 'actions',
@@ -262,7 +250,7 @@ const OrderList = ({ loading, orders, selectedColumns }: IProps) => {
         width: 200
       }
     ];
-  }, [alignLeft, t]);
+  }, [alignLeft, systemCurrency?.symbol, t]);
 
   const tableColumns = useMemo(() => {
     return columns?.filter(({ key }) => {

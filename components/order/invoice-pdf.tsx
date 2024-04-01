@@ -6,38 +6,78 @@ import {
   Text,
   View
 } from '@react-pdf/renderer';
-import { Order, UserAddress } from '@ts-types/generated';
+import { siteSettings } from '@settings/site.settings';
+import { CurrencyType } from '@ts-types/custom.types';
+import { OrderType, SettingsType } from '@ts-types/generated';
 import { formatAddress } from '@utils/format-address';
-import usePrice from '@utils/use-price';
+import { formatPrice, formatVariantPrice } from '@utils/use-price';
 import dayjs from 'dayjs';
+import { useMemo } from 'react';
 
-export default function InvoicePdf({ order }: { order: Order }) {
-  const { price: subtotal } = usePrice(
-    order && {
-      amount: order?.amount!
-    }
-  );
-  const { price: total } = usePrice(
-    order && {
-      amount: order?.paid_total!
-    }
-  );
-  const { price: discount } = usePrice(
-    order && {
-      amount: order?.discount!
-    }
-  );
-  const { price: delivery_fee } = usePrice(
-    order && {
-      amount: order?.delivery_fee!
-    }
-  );
-  const { price: sales_tax } = usePrice(
-    order && {
-      amount: order?.sales_tax!
-    }
-  );
+type PriceProps = {
+  amount: number;
+  baseAmount?: number;
+  currencyCode?: string;
+};
 
+function usePrice(data?: PriceProps | null) {
+  const { amount, baseAmount, currencyCode } = data ?? {};
+  const locale = siteSettings.defaultLanguage;
+  const value = useMemo(() => {
+    if (typeof amount !== 'number' || !currencyCode) return '';
+
+    return baseAmount
+      ? formatVariantPrice({ amount, baseAmount, currencyCode, locale })
+      : formatPrice({ amount, currencyCode, locale });
+  }, [amount, baseAmount, currencyCode, locale]);
+
+  return typeof value === 'string'
+    ? { price: value, basePrice: null, discount: null }
+    : value;
+}
+
+export default function InvoicePdf({
+  order = {},
+  systemCurrency
+}: {
+  order: OrderType;
+  systemCurrency: SettingsType['systemCurrency'];
+}) {
+  const { price: subTotalExclTax } = usePrice(
+    order && {
+      amount: order?.subTotalExclTax!
+    }
+  );
+  const { price: subTotalInclTax } = usePrice(
+    order && {
+      amount: order?.subTotalInclTax!
+    }
+  );
+  const { price: discountAmount } = usePrice(
+    order && {
+      amount: order?.discountAmount!
+    }
+  );
+  const { price: grandTotalExclTax } = usePrice(
+    order && {
+      amount: order?.grandTotalExclTax!
+    }
+  );
+  const { price: grandTotalInclTax } = usePrice(
+    order && {
+      amount: order?.grandTotalInclTax!
+    }
+  );
+  const { price: shipmentTotalExclTax } = usePrice(
+    order && {
+      amount: order?.orderShipment?.totalExclTax ?? 0
+    }
+  );
+  const { price: shipmentTotalInclTax } = usePrice(
+    order && {
+      amount: order?.orderShipment?.totalInclTax ?? 0
+    }
+  );
   return (
     <Document>
       <Page size="A4">
@@ -48,7 +88,7 @@ export default function InvoicePdf({ order }: { order: Order }) {
               <Text style={[styles.addressText, { marginBottom: 20 }]}>
                 Invoice No:
                 <Text style={{ color: '#374151', fontFamily: 'Lato Bold' }}>
-                  {order.tracking_number}
+                  {order?.orderNumber}
                 </Text>
               </Text>
               <Text
@@ -57,12 +97,14 @@ export default function InvoicePdf({ order }: { order: Order }) {
                   { color: '#374151', fontFamily: 'Lato Bold', fontSize: 12 }
                 ]}
               >
-                {order?.customer?.name}
+                {order?.customer?.fullName}
               </Text>
               <Text style={styles.addressText}>{order?.customer?.email}</Text>
-              <Text style={styles.addressText}>{order?.customer_contact}</Text>
               <Text style={styles.addressText}>
-                {formatAddress(order?.shipping_address as UserAddress)}
+                {order?.customer?.address?.phoneNumber}
+              </Text>
+              <Text style={styles.addressText}>
+                {formatAddress(order?.customer?.address)}
               </Text>
             </View>
 
@@ -88,7 +130,7 @@ export default function InvoicePdf({ order }: { order: Order }) {
 
           {/* Table */}
           <View style={styles.orderTable}>
-            {order.products.map((product, index) => {
+            {order?.items?.map((product, index) => {
               // const { price } = usePrice({
               //   // @ts-ignore
               //   amount: parseFloat(product.pivot.subtotal)
@@ -121,19 +163,19 @@ export default function InvoicePdf({ order }: { order: Order }) {
           <View style={styles.totalCountWrapper}>
             <View style={styles.totalCountRow}>
               <Text style={styles.totalCountCell}>Sub Total</Text>
-              <Text style={styles.totalCountCell}>{subtotal}</Text>
+              <Text style={styles.totalCountCell}>{subTotalInclTax}</Text>
             </View>
             <View style={styles.totalCountRow}>
               <Text style={styles.totalCountCell}>Discount</Text>
-              <Text style={styles.totalCountCell}>{discount}</Text>
+              <Text style={styles.totalCountCell}>{discountAmount}</Text>
             </View>
             <View style={styles.totalCountRow}>
               <Text style={styles.totalCountCell}>Tax</Text>
-              <Text style={styles.totalCountCell}>{sales_tax}</Text>
+              <Text style={styles.totalCountCell}>{order?.tax?.rate}</Text>
             </View>
             <View style={styles.totalCountRow}>
               <Text style={styles.totalCountCell}>Delivery Fee</Text>
-              <Text style={styles.totalCountCell}>{delivery_fee}</Text>
+              <Text style={styles.totalCountCell}>{shipmentTotalInclTax}</Text>
             </View>
             <View style={styles.totalCountRow}>
               <Text
@@ -150,7 +192,7 @@ export default function InvoicePdf({ order }: { order: Order }) {
                   { fontSize: 12, fontFamily: 'Lato Bold' }
                 ]}
               >
-                {total}
+                {grandTotalInclTax}
               </Text>
             </View>
           </View>

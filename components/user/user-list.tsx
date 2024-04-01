@@ -91,20 +91,17 @@ const UserList = ({ loading, users, selectedColumns }: IProps) => {
         title: t('table:table-item-roles'),
         dataIndex: 'role',
         key: 'role',
-        align: alignLeft,
+        align: 'center',
         ellipsis: true,
-        width: 200,
+        width: 150,
         render: (role: RoleType, record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
           return (
-            <div>
-              <span
-                style={{ width: 'fit-content' }}
-                className="text-13px border-sink-base block rounded border bg-gray-100 px-2 py-1 font-medium md:text-sm"
-              >
-                {role.name}
+            <div className="flex w-full items-center justify-center">
+              <span className="text-13px border-sink-base block w-full max-w-[200px] rounded-sm border bg-gray-100 px-2 py-1 text-center font-medium md:text-sm">
+                {role?.name}
               </span>
             </div>
           );
@@ -144,7 +141,7 @@ const UserList = ({ loading, users, selectedColumns }: IProps) => {
         title: t('table:table-item-email'),
         dataIndex: 'email',
         key: 'email',
-        align: alignLeft,
+        align: 'center',
         width: 200,
         ellipsis: true,
         render: (email: string, record: TableRowProps) => {
@@ -158,7 +155,7 @@ const UserList = ({ loading, users, selectedColumns }: IProps) => {
         title: t('table:table-item-phone'),
         dataIndex: 'phoneNumber',
         key: 'phoneNumber',
-        align: alignLeft,
+        align: 'center',
         width: 200,
         ellipsis: true,
         render: (phoneNumber: number, record: TableRowProps) => {
@@ -166,10 +163,10 @@ const UserList = ({ loading, users, selectedColumns }: IProps) => {
             return <TableRowPlaceholder />;
           }
           return (
-            <div>
+            <div className="flex items-center justify-center">
               <span
                 style={{ width: 'fit-content' }}
-                className="block font-medium"
+                className="block text-center font-medium"
               >
                 {phoneNumber ? '+' + phoneNumber : 'N/A'}
               </span>

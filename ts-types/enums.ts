@@ -49,18 +49,28 @@ export enum ACTION_PRIVILEGES {
 }
 
 export enum RESOURCES {
-  PHOTOS = 'photos',
   USER = 'user',
   CATEGORY = 'category',
   PRODUCT = 'product',
   TAG = 'tag',
+  TAX = 'tax',
   SUPPLIER = 'supplier',
   ATTRIBUTE = 'attribute',
   CUSTOMER = 'customer',
   COUPON = 'coupon',
-  SHIPPING_ZONE = 'shippingZone',
+  SHIPPING = 'shipping',
   ORDER_STATUS = 'orderStatus',
   ORDER = 'order',
   ROLE = 'role',
-  SLIDESHOW = 'slideshow'
+  SLIDERS = 'sliders',
+  THEME = 'theme',
+  STORE = 'store',
+  MARKETPLACE = 'marketPlace',
+  STORE_SETTINGS = 'storeSettings',
+  PAGES = 'pages',
+  MEDIA = 'media',
+  MANUFACTURER = 'manufacturer',
+  STORE_LANGUAGE = 'storeLanguage',
+  STORE_BUILDER = 'storeBuilder',
+  INTERNAL = 'internal'
 }

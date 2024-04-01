@@ -13,9 +13,24 @@ export const ORDER = gql`
       discountAmount
       orderApprovedAt
       paymentCode
+      orderGeo {
+        ip
+      }
+      currency {
+        code
+      }
       coupon {
         id
         code
+      }
+      orderShipment {
+        shipment {
+          id
+          name
+        }
+        totalWeight
+        totalInclTax
+        totalExclTax
       }
       tax {
         rate
@@ -70,6 +85,7 @@ export const ORDER = gql`
         }
         registeredAt
       }
+      createdAt
     }
   }
 `;
@@ -145,28 +161,18 @@ export const RECENT_ORDERS = gql`
   }
 `;
 
-export const CREATE_ORDER = gql`
-  mutation CreateShippingZone(
-    $name: String!
-    $logo: [ImageInput]
-    $displayName: String!
-    $active: Boolean!
-    $freeShipping: Boolean!
-    $rateType: String
-    $shippingRates: [ShippingRateInput]
-    $zones: [CountryInput]!
-    $deliveryTime: deliveryTimeInput
+export const UPDATE_STATUS_ORDER = gql`
+  mutation UpdateStatusOrder(
+    $id: Int!
+    $orderStatus: OrderStatusInput!
+    $paymentStatus: OrderStatusInput!
+    $deliveryStatus: OrderStatusInput!
   ) {
-    createShippingZone(
-      name: $name
-      logo: $logo
-      displayName: $displayName
-      active: $active
-      freeShipping: $freeShipping
-      rateType: $rateType
-      shippingRates: $shippingRates
-      zones: $zones
-      deliveryTime: $deliveryTime
+    updateStatusOrder(
+      id: $id
+      orderStatus: $orderStatus
+      paymentStatus: $paymentStatus
+      deliveryStatus: $deliveryStatus
     ) {
       id
     }
