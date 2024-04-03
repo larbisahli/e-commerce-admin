@@ -4,7 +4,7 @@ import {
   useModalAction,
   useModalState
 } from '@components/ui/modal/modal.context';
-import { COUPONS, DELETE_COUPON } from '@graphql/coupons';
+import { CUSTOMERS, DELETE_CUSTOMER } from '@graphql/customer';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetUser } from '@hooks/useGetUser';
 import { notify } from '@lib/notify';
@@ -19,15 +19,15 @@ const CustomerDeleteView = () => {
   const { userInfo } = useGetUser();
   const csrfToken = userInfo?.csrfToken;
 
-  const [deleteCoupon, { loading }] = useMutation(DELETE_COUPON, {
+  const [deleteCustomer, { loading }] = useMutation(DELETE_CUSTOMER, {
     context: {
       headers: {
         'x-csrf-token': csrfToken
       }
     },
     refetchQueries: [
-      COUPONS,
-      'CouponsForAdmin' // Query name
+      CUSTOMERS,
+      'Customers' // Query name
     ]
   });
 
@@ -37,10 +37,10 @@ const CustomerDeleteView = () => {
   useErrorLogger(error);
 
   async function handleDelete() {
-    deleteCoupon({ variables: { id } })
+    deleteCustomer({ variables: { id } })
       .then(({ data }) => {
         const {
-          deleteCoupon: { id }
+          deleteCustomer: { id }
         } = data;
         if (id) {
           notify(t('common:successfully-deleted'), 'success');

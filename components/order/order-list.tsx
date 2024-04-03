@@ -91,11 +91,8 @@ const OrderList = ({ loading, orders, selectedColumns }: IProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
-          return (
-            <span className="capitalize">
-              {formatAddress(customer?.address)}
-            </span>
-          );
+          const address = customer?.address[0] ?? {};
+          return <span className="capitalize">{formatAddress(address)}</span>;
         }
       },
       {

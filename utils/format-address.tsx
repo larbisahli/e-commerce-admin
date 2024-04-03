@@ -3,7 +3,7 @@ function removeFalsy(obj: any) {
 }
 
 export function formatAddress(address: any) {
-  if (!address) return;
+  if (!address) return 'N/A';
   const temp = [
     'addressLine1',
     'city',

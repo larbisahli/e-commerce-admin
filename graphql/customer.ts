@@ -1,9 +1,34 @@
 import { gql } from '@apollo/client';
 
 export const CUSTOMER = gql`
-  query ShippingZone($id: Int!, $language: LanguageInput!) {
-    shippingZone(id: $id, language: $language) {
+  query Customer($id: Int!) {
+    customer(id: $id) {
       id
+      fullName
+      email
+      marketingOptIn
+      registeredAt
+      active
+      tags {
+        id
+        name
+      }
+      address {
+        id
+        country {
+          iso2
+          name
+        }
+        email
+        addressLine1
+        addressLine2
+        phoneNumber
+        postalCode
+        state
+        city
+        isDefault
+      }
+      registeredAt
     }
   }
 `;
@@ -42,27 +67,21 @@ export const CUSTOMERS = gql`
 `;
 
 export const CREATE_CUSTOMER = gql`
-  mutation CreateShippingZone(
-    $name: String!
-    $logo: [ImageInput]
-    $displayName: String!
-    $active: Boolean!
-    $freeShipping: Boolean!
-    $rateType: String
-    $shippingRates: [ShippingRateInput]
-    $zones: [CountryInput]!
-    $deliveryTime: deliveryTimeInput
+  mutation CreateCustomer(
+    $fullName: String!
+    $email: String!
+    $active: Boolean
+    $marketingOptIn: Boolean!
+    $tags: [TagInput]
+    $address: [CustomerAddressInput]
   ) {
-    createShippingZone(
-      name: $name
-      logo: $logo
-      displayName: $displayName
+    createCustomer(
+      fullName: $fullName
+      email: $email
       active: $active
-      freeShipping: $freeShipping
-      rateType: $rateType
-      shippingRates: $shippingRates
-      zones: $zones
-      deliveryTime: $deliveryTime
+      marketingOptIn: $marketingOptIn
+      tags: $tags
+      address: $address
     ) {
       id
     }
@@ -70,26 +89,40 @@ export const CREATE_CUSTOMER = gql`
 `;
 
 export const UPDATE_CUSTOMER = gql`
-  mutation UpdateShippingZone(
+  mutation UpdateCustomer(
     $id: Int!
-    $shippingZone: ShippingZoneInput
-    $additions: UpdateRateAndZoneInput
-    $deletions: UpdateRateAndZoneInput
+    $fullName: String!
+    $email: String!
+    $active: Boolean
+    $marketingOptIn: Boolean
+    $tags: [TagInput]
+    $address: [CustomerAddressInput]
   ) {
-    updateShippingZone(
+    updateCustomer(
       id: $id
-      shippingZone: $shippingZone
-      additions: $additions
-      deletions: $deletions
+      fullName: $fullName
+      email: $email
+      active: $active
+      marketingOptIn: $marketingOptIn
+      tags: $tags
+      address: $address
     ) {
       id
     }
   }
 `;
 
+export const DELETE_CUSTOMER_ADDRESS = gql`
+  mutation DeleteCustomerAddress($id: Int!) {
+    deleteCustomerAddress(id: $id) {
+      id
+    }
+  }
+`;
+
 export const DELETE_CUSTOMER = gql`
-  mutation DeleteShippingZone($id: Int!) {
-    deleteShippingZone(id: $id) {
+  mutation DeleteCustomer($id: Int!) {
+    deleteCustomer(id: $id) {
       id
     }
   }

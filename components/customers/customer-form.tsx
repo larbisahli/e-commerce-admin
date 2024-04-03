@@ -2,152 +2,95 @@ import { useMutation, useQuery } from '@apollo/client';
 import Card from '@components/common/card';
 import { LanguageDefaultDescInfo } from '@components/common/commonComponents';
 import FormActions from '@components/common/FormActions';
-import ImageModal from '@components/image-modal';
+import Button from '@components/ui/button';
+import Checkbox from '@components/ui/checkbox';
 import Description from '@components/ui/description';
 import Input from '@components/ui/input';
 import Label from '@components/ui/label';
 import SelectInput from '@components/ui/select-input';
 import SwitchInput from '@components/ui/switch-input';
-import TextArea from '@components/ui/text-area';
 import {
-  CATEGORIES_FOR_SELECT,
-  CREATE_CATEGORY,
-  UPDATE_CATEGORY
-} from '@graphql/category';
+  CREATE_CUSTOMER,
+  DELETE_CUSTOMER_ADDRESS,
+  UPDATE_CUSTOMER
+} from '@graphql/customer';
+import { TAGS_FOR_SELECT } from '@graphql/tag';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useErrorLogger, useWarnIfUnsavedChanges } from '@hooks/index';
 import { useGetUser } from '@hooks/useGetUser';
 import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/index';
 import { LanguageProps } from '@ts-types/custom.types';
-import { Category, OrderBy, SaveOptions } from '@ts-types/generated';
+import {
+  Category,
+  CustomerAddressType,
+  CustomerType,
+  OrderBy,
+  Tag
+} from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
-import { translationFallback } from '@utils/utils';
 import isEmpty from 'lodash/isEmpty';
-import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
-import { Control, useForm } from 'react-hook-form';
-import slugify from 'slugify';
+import { useFieldArray, useForm } from 'react-hook-form';
 
 import { categoryValidationSchema } from './customer-validation-schema';
 
-interface TCategorySelect {
-  categorySelect: Category[];
-}
-
 interface OptionsVariable extends LanguageProps {
-  id: number;
+  id?: number;
   page: number;
   limit: number;
   orderBy: OrderBy;
 }
 
-function SelectCategories({
-  control,
-  setValue,
-  parent
-}: {
-  control: Control<FormValues>;
-  parent: { id: number };
-  setValue: any;
-}) {
-  const { t } = useTranslation();
-  const { query } = useRouter();
-  const { categoryId } = query;
-
-  const { selectedLanguage } = useSettings();
-
-  const { data, loading, error } = useQuery<TCategorySelect, OptionsVariable>(
-    CATEGORIES_FOR_SELECT,
-    {
-      variables: {
-        id: Number(categoryId),
-        page: 1,
-        limit: 999,
-        orderBy: OrderBy.CREATED_AT,
-        language: selectedLanguage
-      },
-      fetchPolicy: 'cache-and-network',
-      skip: isEmpty(selectedLanguage)
-    }
-  );
-
-  const categories = data?.categorySelect;
-
-  useErrorLogger(error);
-
-  useEffect(() => {
-    setValue('parent', categories?.find((v) => v?.id === parent?.id) ?? parent);
-  }, [categories]);
-
-  return (
-    <div>
-      <Label>{t('form:input-label-parent-category')}</Label>
-      <SelectInput
-        name="parent"
-        control={control}
-        getOptionLabel={(option: Category) => option.name}
-        getOptionValue={(option: Category) => option.id}
-        options={categories}
-        isClearable={true}
-        isLoading={loading}
-      />
-    </div>
-  );
-}
-
-type FormValues = Category;
+type FormValues = CustomerType;
 
 const defaultValues = {
-  name: '',
-  description: null,
-  parent: null,
-  includeInMenu: true,
-  includeInHomePage: true,
-  position: 1,
-  thumbnail: [],
-  icon: null,
-  urlKey: '',
-  metaTitle: '',
-  metaKeywords: '',
-  metaDescription: '',
-  metaRobots: { value: 'INDEX, FOLLOW' },
-  breadcrumbsPriority: 0,
-  metaImage: []
+  fullName: '',
+  email: '',
+  active: false,
+  marketingOptIn: false,
+  tags: [],
+  address: []
 };
 
 type IProps = {
-  initialValues?: Category | any;
-  isFork?: boolean;
+  initialValues?: CustomerType | any;
 };
 
-const metaRobotOptions = [
-  { value: 'INDEX, FOLLOW' },
-  { value: 'INDEX, NOFOLLOW' },
-  { value: 'NOINDEX, FOLLOW' },
-  { value: 'NOINDEX, NOFOLLOW' },
-  { value: 'INDEX, FOLLOW, NOARCHIVE' },
-  { value: 'INDEX, NOFOLLOW, NOARCHIVE' },
-  { value: 'NOINDEX, NOFOLLOW, NOARCHIVE' }
-];
+interface TagSelect {
+  tagSelect: Tag[];
+}
 
-export default function CreateOrUpdateCustomerForm({
-  initialValues,
-  isFork = false
-}: IProps) {
-  const router = useRouter();
+export default function CreateOrUpdateCustomerForm({ initialValues }: IProps) {
   const { t } = useTranslation();
   const createMode = isEmpty(initialValues);
 
-  const [saveMode, setSaveMode] = useState<SaveOptions>(SaveOptions.Default);
-
   const [error, setError] = useState(null);
   const [unsavedChanges, setUnsavedChanges] = useState(true);
+  const [deletedIndex, setDeletedIndex] = useState<number | null>(null);
 
   const { userInfo } = useGetUser();
 
-  const { selectedLanguage } = useSettings();
+  const { defaultLanguage } = useSettings();
+  const [countries, setCountries] = useState([]);
+
+  const {
+    data,
+    loading: tagLoading,
+    error: tagQueryError
+  } = useQuery<TagSelect, OptionsVariable>(TAGS_FOR_SELECT, {
+    variables: {
+      page: 1,
+      limit: 999,
+      orderBy: OrderBy.CREATED_AT,
+      language: defaultLanguage
+    },
+    fetchPolicy: 'cache-and-network',
+    skip: isEmpty(defaultLanguage)
+  });
+
+  const { tagSelect = [] } = data ?? {};
 
   const csrfToken = userInfo?.csrfToken;
 
@@ -155,96 +98,78 @@ export default function CreateOrUpdateCustomerForm({
     register,
     handleSubmit,
     control,
-    setValue,
-    getValues,
-    watch,
     formState: { errors }
   } = useForm<FormValues>({
-    defaultValues: createMode
-      ? defaultValues
-      : {
-          ...initialValues,
-          metaRobots: { value: initialValues?.metaRobots }
-        },
+    defaultValues: createMode ? defaultValues : initialValues,
     resolver: yupResolver(categoryValidationSchema)
   });
 
-  const [createCategory, { loading: creating }] = useMutation(CREATE_CATEGORY, {
+  const [createCustomer, { loading: creating }] = useMutation(CREATE_CUSTOMER, {
     context: {
       headers: {
         'x-csrf-token': csrfToken
       }
     },
-    onCompleted: (data: { createCategory: Category }) => {
-      const { id } = data.createCategory;
+    onCompleted: (data: { createCustomer: CustomerType }) => {
+      const { id } = data.createCustomer;
       if (!id) {
         return;
       }
-      if (saveMode === SaveOptions.Default) {
-        notify(t('common:successfully-created'), 'success');
-        router.push(`${ROUTES.CATEGORY}/edit/${id}`);
-      } else if (saveMode === SaveOptions.SaveClose) {
-        notify(t('common:successfully-created'), 'success');
-        router.push(ROUTES.CATEGORY);
-      } else if (saveMode === SaveOptions.SaveNew) {
-        notify(t('common:successfully-created'), 'success');
-        router.push(`${ROUTES.CATEGORY}/create`);
-      } else if (saveMode === SaveOptions.SaveDuplicate) {
-        notify(t('common:successfully-created'), 'success');
-        router.push(`${ROUTES.CATEGORY}/fork/${id}`);
-      }
-
-      setSaveMode(SaveOptions.Default);
+      notify(t('common:successfully-created'), 'success');
     }
   });
 
-  const [updateCategory, { loading: updating }] = useMutation(UPDATE_CATEGORY, {
+  const [updateCustomer, { loading: updating }] = useMutation(UPDATE_CUSTOMER, {
     context: {
       headers: {
         'x-csrf-token': csrfToken
       }
     },
-    onCompleted: (data: { updateCategory: Category }) => {
-      if (!isEmpty(data)) {
-        notify(t('common:successfully-updated'), 'success');
+    onCompleted: (data: { updateCustomer: CustomerType }) => {
+      const { id } = data.updateCustomer;
+      if (!id) {
+        return;
       }
+      notify(t('common:successfully-updated'), 'success');
     }
   });
 
+  const [deleteCustomerAddress, { loading: deleting }] = useMutation(
+    DELETE_CUSTOMER_ADDRESS,
+    {
+      context: {
+        headers: {
+          'x-csrf-token': csrfToken
+        }
+      }
+    }
+  );
+
   useErrorLogger(error);
+  useErrorLogger(tagQueryError);
+
+  // Get Countries
+  useEffect(() => {
+    async function getCountries() {
+      const { Countries } = await import('@utils/countries');
+      setCountries(Countries);
+    }
+    getCountries();
+  }, []);
 
   const onSubmit = async (values: FormValues) => {
     console.log({ values });
-    if (isEmpty(values.thumbnail)) {
-      notify(t('form:category-image-required'), 'warning');
-      return;
-    }
-
     const variables = {
-      name: values.name,
-      description: values.description,
-      includeInMenu: values.includeInMenu,
-      includeInHomePage: values.includeInHomePage,
-      position: Number(values.position),
-      thumbnail: values.thumbnail?.map(({ id }) => ({ id })),
-      parentId: isEmpty(values?.parent) ? null : values?.parent?.id,
-      language: selectedLanguage,
-      urlKey: values.urlKey,
-      metaTitle: values.metaTitle,
-      metaKeywords: values.metaKeywords,
-      metaDescription: values.metaDescription,
-      breadcrumbsPriority: Number(values.breadcrumbsPriority),
-      metaImage: values.metaImage?.map(({ id }) => ({ id })),
-      metaRobots: values.metaRobots.value
+      ...values,
+      tags: values.tags?.map((tag) => ({ id: tag?.id }))
     };
-
     setUnsavedChanges(false);
-    if (createMode || isFork) {
-      createCategory({ variables }).catch((err) => {
+    if (createMode) {
+      createCustomer({ variables }).catch((err) => {
         setError(err);
       });
     } else {
-      updateCategory({
+      updateCustomer({
         variables: { id: initialValues?.id, ...variables }
       }).catch((err) => {
         setError(err);
@@ -256,273 +181,243 @@ export default function CreateOrUpdateCustomerForm({
     return confirm(t('common:UNSAVED_CHANGES'));
   });
 
-  const generateSlug = (slug = '') => {
-    return slugify(slug?.replace(/[^A-Za-z0-9\s!?]/g, '-') ?? '', {
-      trim: false,
-      replacement: '-',
-      lower: true
-    });
-  };
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'address',
+    keyName: 'key'
+  });
 
-  const thumbnail = watch('thumbnail');
-  const includeInMenu = watch('includeInMenu');
-  const includeInHomePage = watch('includeInHomePage');
-  const name = watch('name');
-  const metaDescription = watch('metaDescription') ?? '';
-  const metaImage = watch('metaImage');
-  const urlKey = watch('urlKey');
-
-  useEffect(() => {
-    if (!includeInMenu) {
-      setValue('position', 0);
-    }
-  }, [includeInMenu, setValue]);
-
-  useEffect(() => {
-    if (!isEmpty(thumbnail) && isEmpty(metaImage)) {
-      setValue('metaImage', thumbnail);
-    }
-  }, [thumbnail, metaImage, setValue]);
-
-  useEffect(() => {
-    const value = generateSlug(urlKey);
-    setValue('urlKey', value);
-  }, [setValue, urlKey]);
-
-  const updateWhenEmpty = (field: string, isSlug = true) => {
-    // @ts-ignore
-    if (isEmpty(getValues(field))) {
-      // @ts-ignore
-      setValue(field, isSlug ? generateSlug(name) : name);
+  const removeCustomerAddress = (item: CustomerAddressType, index: number) => {
+    setDeletedIndex(index);
+    if (item?.id) {
+      deleteCustomerAddress({
+        variables: { id: item?.id },
+        onCompleted: (data: { deleteCustomerAddress: CustomerAddressType }) => {
+          const { id } = data.deleteCustomerAddress;
+          if (!id) {
+            return;
+          }
+          notify(t('common:successfully-deleted'), 'success');
+          remove(index);
+        }
+      }).catch((err) => {
+        setError(err);
+      });
+    } else {
+      remove(index);
     }
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormActions
-        backLink={ROUTES.CATEGORY}
-        forceSystemLang={createMode}
+        backLink={ROUTES.CUSTOMER}
+        showSelectLanguage={false}
         title={
           createMode
-            ? t('form:form-title-new-category')
-            : t('form:form-title-edit-category')
+            ? t('form:form-title-new-customer')
+            : t('form:form-title-edit-customer')
         }
         loading={creating || updating}
         disabled={creating || updating}
-        onSubmit={handleSubmit(onSubmit)}
-        saveOptions={
-          (createMode || isFork) && [
-            {
-              onClick: () => setSaveMode(SaveOptions.SaveNew),
-              name: t('common:button-label-save-new')
-            },
-            {
-              onClick: () => setSaveMode(SaveOptions.SaveDuplicate),
-              name: t('common:button-label-save-duplicate')
-            },
-            {
-              onClick: () => setSaveMode(SaveOptions.SaveClose),
-              name: t('common:button-label-save-close')
-            }
-          ]
-        }
       />
-      <LanguageDefaultDescInfo label="New Category" isVisible={createMode} />
       <div className="my-5 flex flex-wrap border-b border-dashed border-border-base pb-8 sm:my-8">
         <Description
-          title={t('form:input-label-image')}
-          details={t('form:category-image-helper-text')}
-          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
-        />
-        <Card className="w-full sm:w-8/12 md:w-2/3">
-          <ImageModal
-            label="form:label-add-category-image"
-            isRequiredLabel
-            onSelect={(photo) => setValue('thumbnail', photo)}
-            selected={thumbnail}
-            isThumbnail
-          />
-        </Card>
-      </div>
-      <div className="my-5 flex flex-wrap sm:my-8">
-        <Description
-          title={t('form:input-label-content')}
-          details={`${
-            initialValues
-              ? t('form:item-description-edit')
-              : t('form:item-description-add')
-          } ${t('form:category-description-helper-text')}`}
+          title={t('form:input-label-customer-info')}
+          details={t('form:category-image-customer-customer')}
           className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
         />
         <Card className="w-full sm:w-8/12 md:w-2/3">
           <Input
-            label={t('form:input-label-name')}
+            label={t('form:input-label-full-name')}
             isRequiredLabel
             // @ts-ignore
-            {...register('name')}
-            error={t(errors.name?.message!)}
-            placeholder={translationFallback(
-              initialValues,
-              'name',
-              'Enter category name'
-            )}
-            variant="outline"
-            className="mb-5"
-          />
-          <TextArea
-            label={t('form:input-label-description')}
-            isRequiredLabel
-            {...register('description')}
-            placeholder={translationFallback(
-              initialValues,
-              'description',
-              'Enter description name'
-            )}
-            error={t(errors.description?.message!)}
-            variant="outline"
-            className="mb-5"
-          />
-          <div className="my-5">
-            {(createMode || isFork) && (
-              <SelectCategories
-                control={control}
-                setValue={setValue}
-                parent={initialValues?.parent}
-              />
-            )}
-          </div>
-          <Input
-            label={`${t('form:input-label-position')}`}
-            type="number"
-            min={0}
-            {...register('position')}
-            disabled={!includeInMenu && !includeInHomePage}
-            error={t(errors.position?.message!)}
-            variant="outline"
-            className="mb-5"
-          />
-          <div className="mb-4">
-            <SwitchInput
-              name="includeInMenu"
-              label="Include in menu"
-              control={control}
-              errors={errors}
-            />
-          </div>
-          <div className="mb-4">
-            <SwitchInput
-              name="includeInHomePage"
-              label="Include in HomePage"
-              control={control}
-              errors={errors}
-            />
-          </div>
-        </Card>
-      </div>
-      <div className="my-5 flex flex-wrap sm:my-8">
-        <Description
-          title={t('form:input-label-search-engine-optimization')}
-          details={`${
-            initialValues
-              ? t('form:item-description-edit')
-              : t('form:item-description-add')
-          } ${t('form:category-description-helper-text')}`}
-          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
-        />
-        <Card className="w-full sm:w-8/12 md:w-2/3">
-          <Input
-            label={t('form:input-label-meta-title')}
-            isRequiredLabel
-            onFocus={() => updateWhenEmpty('metaTitle', false)}
-            {...register('metaTitle')}
-            placeholder={translationFallback(
-              initialValues,
-              'metaTitle',
-              'Enter meta title'
-            )}
-            error={t(errors.metaTitle?.message!)}
+            {...register('fullName')}
+            error={t(errors.fullName?.message!)}
+            placeholder={'Enter customer fullname'}
             variant="outline"
             className="mb-5"
           />
           <Input
-            label={t('form:input-label-url-key')}
+            label={t('form:input-label-email')}
             isRequiredLabel
-            onFocus={() => updateWhenEmpty('urlKey')}
-            {...register('urlKey')}
-            error={t(errors.urlKey?.message!)}
+            // @ts-ignore
+            {...register('email')}
+            error={t(errors.email?.message!)}
+            placeholder={'Enter customer email'}
             variant="outline"
             className="mb-5"
           />
           <div className="mb-5">
-            <Label isRequiredLabel>{t('form:input-label-meta-robots')}</Label>
+            <Label openTooltipOnClick>{t('sidebar-nav-item-tags')}</Label>
             <SelectInput
-              name="metaRobots"
               control={control}
-              getOptionLabel={(option: { value: string }) => option.value}
-              getOptionValue={(option: { value: string }) => option.value}
-              options={metaRobotOptions}
+              name="tags"
+              getOptionLabel={(option: any) => option.name}
+              getOptionValue={(option: any) => option.id}
+              options={tagSelect}
+              isMulti
+              isLoading={tagLoading}
             />
-          </div>
-          <TextArea
-            label={t('form:input-label-meta-keywords')}
-            {...register('metaKeywords')}
-            placeholder={translationFallback(
-              initialValues,
-              'metaKeywords',
-              'Enter meta keywords'
-            )}
-            note="Use a comma to separate the meta keywords"
-            rows={2}
-            variant="outline"
-            className="mb-5"
-          />
-          <TextArea
-            label={t('form:input-label-meta-description')}
-            {...register('metaDescription')}
-            placeholder={translationFallback(
-              initialValues,
-              'metaKeywords',
-              'Enter meta description'
-            )}
-            variant="outline"
-          />
-          <div style={{ fontSize: '.75rem' }} className="mb-5">
-            <div className="flex flex-wrap items-center">
-              <p className="mr-2 text-body">
-                Meta Description should optimally be between 150-160 characters
-              </p>
-              {metaDescription?.length < 160 ? (
-                <span className="text-green-600">{`(${
-                  metaDescription?.length ?? 0
-                }/160 characters max)`}</span>
-              ) : (
-                <span className="text-red-600">
-                  {`(${metaDescription?.length ?? 0}/160 characters max)`}
-                </span>
-              )}
-            </div>
-            <p className="my-2 text-xs text-red-500">
-              {t(errors.metaDescription?.message!)}
+            <p className="pt-1 text-xs text-gray-500">
+              {t('form:tag-info-note')}
             </p>
           </div>
-          <Input
-            label={`${t('form:input-label-breadcrumbs-priority')}`}
-            type="number"
-            min={0}
-            max={100}
-            {...register('breadcrumbsPriority')}
-            variant="outline"
-            className="mb-12"
-            note="100 is the highest priority. This setting defines the priority of each category to be selected for the product breadcrumbs."
-          />
-          <div className="my-5">
-            <ImageModal
-              onSelect={(image) => setValue('metaImage', image)}
-              isThumbnail
-              selected={metaImage}
-              modalId="metaImage"
-              label="form:label-add-meta-images"
+          <div className="mb-4">
+            <SwitchInput
+              name="active"
+              label="Active"
+              control={control}
+              errors={errors}
             />
+          </div>
+          <div className="mb-4">
+            <SwitchInput
+              name="marketingOptIn"
+              label="Marketing Opt In"
+              control={control}
+              errors={errors}
+            />
+          </div>
+        </Card>
+      </div>
+      <div className="my-5 flex flex-wrap sm:my-8">
+        <Description
+          title={t('form:input-label-customer-address')}
+          details={`${
+            initialValues
+              ? t('form:item-description-edit')
+              : t('form:item-description-add')
+          } ${t('form:customer-address-description-helper-text')}`}
+          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
+        />
+        <Card className="w-full sm:w-8/12 md:w-2/3">
+          <div>
+            {fields.map((item, index) => (
+              <div
+                key={index}
+                className="flex flex-col justify-between border-b border-dashed border-border-200 pb-5 last:border-0 md:pb-8"
+              >
+                <div className="mb-5 flex justify-between">
+                  <span className="mt-2 font-semibold text-blue-500">{`Address #${
+                    index + 1
+                  }`}</span>
+                  <button
+                    onClick={() => removeCustomerAddress(item, index)}
+                    type="button"
+                    className="text-sm text-red-500 transition-colors duration-200
+                      hover:text-red-700 focus:outline-none sm:col-span-1 sm:mt-4"
+                  >
+                    {t('form:button-label-remove')}
+                    {deleting && deletedIndex === index && (
+                      <span
+                        className="absolute h-4 w-4 animate-spin rounded-full
+                           border-2 border-t-2 border-transparent ms-2"
+                        style={{
+                          borderTopColor: 'red'
+                        }}
+                      />
+                    )}
+                  </button>
+                </div>
+                <Input
+                  className="mb-5"
+                  isRequiredLabel
+                  label={t('form:input-label-email')}
+                  variant="outline"
+                  {...register(`address.${index}.email` as const)}
+                  placeholder=""
+                  defaultValue={item.email}
+                />
+                <div className="mb-5">
+                  <Label>{t('form:input-label-country')}</Label>
+                  <SelectInput
+                    control={control}
+                    {...register(`address.${index}.country` as const)}
+                    getOptionLabel={(option: any) => option.name}
+                    getOptionValue={(option: any) => option.id}
+                    options={countries}
+                    isLoading={isEmpty(countries)}
+                    className="mb-5"
+                  />
+                </div>
+                <Input
+                  className="mb-5"
+                  isRequiredLabel
+                  label={t('form:input-label-address-line1')}
+                  variant="outline"
+                  {...register(`address.${index}.addressLine1` as const)}
+                  placeholder=""
+                  defaultValue={item.email}
+                />
+                <Input
+                  className="mb-5"
+                  label={t('form:input-label-address-line2')}
+                  variant="outline"
+                  {...register(`address.${index}.addressLine2` as const)}
+                  placeholder=""
+                  defaultValue={item.email}
+                />
+                <Input
+                  className="mb-5"
+                  label={t('form:input-label-phone')}
+                  variant="outline"
+                  {...register(`address.${index}.phoneNumber` as const)}
+                  placeholder=""
+                  defaultValue={item.email}
+                />
+                <Input
+                  className="mb-5"
+                  label={t('form:input-label-city')}
+                  variant="outline"
+                  {...register(`address.${index}.city` as const)}
+                  placeholder=""
+                  defaultValue={item.email}
+                />
+                <Input
+                  className="mb-5"
+                  label={t('form:input-label-post-code')}
+                  variant="outline"
+                  {...register(`address.${index}.postalCode` as const)}
+                  placeholder=""
+                  defaultValue={item.email}
+                />
+                <Input
+                  className="mb-5"
+                  label={t('form:input-label-state')}
+                  variant="outline"
+                  {...register(`address.${index}.state` as const)}
+                  placeholder=""
+                  defaultValue={item.email}
+                />
+                <Checkbox
+                  {...register(`address.${index}.isDefault` as const)}
+                  label={t('form:input-label-set-default')}
+                />
+              </div>
+            ))}
+          </div>
+          <div className="flex justify-end">
+            <Button
+              type="button"
+              onClick={() =>
+                append({
+                  id: null,
+                  email: '',
+                  addressLine1: '',
+                  addressLine2: '',
+                  phoneNumber: '',
+                  postalCode: '',
+                  state: '',
+                  city: '',
+                  isDefault: false,
+                  country: null
+                })
+              }
+              className="w-full sm:w-auto"
+            >
+              {t('form:button-label-add-address')}
+            </Button>
           </div>
         </Card>
       </div>

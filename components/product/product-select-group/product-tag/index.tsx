@@ -100,6 +100,7 @@ const ProductTag = ({ tags }: Props) => {
         onChange={onChange}
         isLoading={loading}
       />
+      <p className="pt-1 text-xs text-gray-500">{t('form:tag-info-note')}</p>
     </div>
   );
 };

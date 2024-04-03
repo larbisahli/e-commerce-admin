@@ -7,6 +7,7 @@ import { usePlaceholder } from '@hooks/usePlaceholder';
 import {
   Category,
   CreatedUpdatedByAt,
+  CustomerAddressType,
   CustomerType
 } from '@ts-types/generated';
 import { formatAddress } from '@utils/format-address';
@@ -73,7 +74,8 @@ const CustomerList = ({ loading, customers, selectedColumns }: IProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
-          return formatAddress(address);
+          const ad = address[0] ?? {};
+          return formatAddress(ad);
         }
       },
       {
@@ -86,7 +88,8 @@ const CustomerList = ({ loading, customers, selectedColumns }: IProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
-          return address?.phoneNumber;
+          const ad = address[0] ?? ({} as CustomerAddressType);
+          return ad?.phoneNumber ?? 'N/A';
         }
       },
       {
@@ -99,7 +102,8 @@ const CustomerList = ({ loading, customers, selectedColumns }: IProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
-          return address?.email;
+          const ad = address[0] ?? ({} as CustomerAddressType);
+          return ad?.email ?? 'N/A';
         }
       },
       {
@@ -186,8 +190,8 @@ const CustomerList = ({ loading, customers, selectedColumns }: IProps) => {
           return (
             <ActionButtons
               id={id}
-              deleteModalView="DELETE_ATTRIBUTE"
-              editUrl={`${ROUTES.CATEGORY}/edit/${id}`}
+              deleteModalView="DELETE_CUSTOMER"
+              editUrl={`${ROUTES.CUSTOMER}/edit/${id}`}
             />
           );
         }

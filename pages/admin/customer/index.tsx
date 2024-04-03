@@ -6,7 +6,7 @@ import { CUSTOMERS } from '@graphql/customer';
 import { useGetUser } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useTableColumn } from '@hooks/useTableColumn';
-import { verifyAuth } from '@middleware/utils';
+import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import type { SSRProps } from '@ts-types/custom.types';
 import { CustomerType, OrderBy, SortOrder } from '@ts-types/generated';
 import { COLUMNS } from '@utils/data/table-columns';
@@ -104,7 +104,7 @@ export default function ShippingZonesPage({ client }: SSRProps) {
         />
       </Head>
       <PageMainAction
-        href={`${ROUTES.ORDERS}/create`}
+        href={`${ROUTES.CUSTOMER}/create`}
         title={t('form:input-label-customers')}
         label={t('form:button-label-add-customer')}
         showSelectLanguage={false}
@@ -145,6 +145,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
+  const { csrfToken, csrfError } = await XSRFHandler(context);
+
   return {
     props: {
       ...(await serverSideTranslations(locale!, [
@@ -153,7 +155,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         'form',
         'error'
       ])),
-      client
+      client: { ...(client ?? {}), csrfToken, csrfError }
     }
   };
 };

@@ -3,6 +3,7 @@ import {
   BAN_CUSTOMER,
   DELETE_ATTRIBUTE,
   DELETE_COUPON,
+  DELETE_CUSTOMER,
   DELETE_DELIVERY_TIME,
   DELETE_LANGUAGE,
   DELETE_MANUFACTURER,
@@ -74,6 +75,10 @@ const LanguageDeleteView = dynamic(
   () => import('@components/language/language-delete-view')
 );
 
+const CustomerDeleteView = dynamic(
+  () => import('@components/customers/customer-delete-view')
+);
+
 // const AttributeExportImport = dynamic(
 //   () => import('@components/attribute/attribute-import-export')
 // );
@@ -86,6 +91,7 @@ const ManagedModal = () => {
     <Modal open={isOpen} onClose={closeModal}>
       {view === DELETE_PRODUCT && <ProductDeleteView />}
       {view === DELETE_ATTRIBUTE && <AttributeDeleteView />}
+      {view === DELETE_CUSTOMER && <CustomerDeleteView />}
       {view === DELETE_COUPON && <CouponDeleteView />}
       {view === DELETE_SHIPPING && <ShippingDeleteView />}
       {view === DELETE_TAG && <TagDeleteView />}

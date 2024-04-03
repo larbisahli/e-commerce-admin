@@ -8,8 +8,8 @@ import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-const CreateOrUpdateTaxForm = dynamic(
-  () => import('@components/tax/tax-form'),
+const CreateOrUpdateCustomerForm = dynamic(
+  () => import('@components/customers/customer-form'),
   { ssr: true }
 );
 
@@ -26,7 +26,7 @@ export default function CreateSlidePage({ client }: SSRProps) {
           href="/svg/customer.svg"
         />
       </Head>
-      <CreateOrUpdateTaxForm />
+      <CreateOrUpdateCustomerForm />
     </>
   );
 }

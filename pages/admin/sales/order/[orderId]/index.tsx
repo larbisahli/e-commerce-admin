@@ -19,7 +19,7 @@ import { PDFDownloadLink } from '@react-pdf/renderer';
 import { SSRProps } from '@ts-types/custom.types';
 import { OrderBy, SortOrder } from '@ts-types/enums';
 import {
-  Address,
+  CustomerAddressType,
   CustomerType,
   OrderStatus,
   OrderType,
@@ -242,7 +242,7 @@ export default function OrderDetailsPage({ client }: SSRProps) {
     }
   ];
 
-  const renderDetailAddress = (address: Address) => {
+  const renderDetailAddress = (address: CustomerAddressType) => {
     return (
       <div className="w-full max-w-[400px] border shadow">
         <div className="flex border-b px-2 py-1">
@@ -268,6 +268,8 @@ export default function OrderDetailsPage({ client }: SSRProps) {
       </div>
     );
   };
+
+  const address = order?.customer?.address[0] ?? ({} as CustomerAddressType);
 
   return (
     <>
@@ -512,21 +514,17 @@ export default function OrderDetailsPage({ client }: SSRProps) {
                   {order?.customer?.fullName}
                 </div>
               </Link>
-              {order?.customer?.address && (
+              {address && (
                 <button
                   className="text-start"
                   onClick={() => setDisplayShipAdds((v) => !v)}
                 >
-                  <span>{formatAddress(order?.customer?.address)}</span>
+                  <span>{formatAddress(address)}</span>
                 </button>
               )}
-              {order?.customer?.address?.phoneNumber && (
-                <span>T: {order?.customer?.address?.phoneNumber}</span>
-              )}
-              {order?.customer?.address?.email && (
-                <span>{order?.customer?.address?.email}</span>
-              )}
-              {displayShipAdds && renderDetailAddress(order?.customer?.address)}
+              {address?.phoneNumber && <span>T: {address?.phoneNumber}</span>}
+              {address?.email && <span>{address?.email}</span>}
+              {displayShipAdds && renderDetailAddress(address)}
             </div>
           </div>
 
@@ -540,21 +538,17 @@ export default function OrderDetailsPage({ client }: SSRProps) {
                   {order?.customer?.fullName}
                 </div>
               </Link>
-              {order?.customer?.address && (
+              {address && (
                 <button
                   className="text-end"
                   onClick={() => setDisplayBillAdds((v) => !v)}
                 >
-                  <span>{formatAddress(order?.customer?.address)}</span>
+                  <span>{formatAddress(address)}</span>
                 </button>
               )}
-              {order?.customer?.address?.phoneNumber && (
-                <span>T: {order?.customer?.address?.phoneNumber}</span>
-              )}
-              {order?.customer?.address?.email && (
-                <span>{order?.customer?.address?.email}</span>
-              )}
-              {displayBillAdds && renderDetailAddress(order?.customer?.address)}
+              {address?.phoneNumber && <span>T: {address?.phoneNumber}</span>}
+              {address?.email && <span>{address?.email}</span>}
+              {displayBillAdds && renderDetailAddress(address)}
             </div>
           </div>
         </div>

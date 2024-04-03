@@ -763,21 +763,28 @@ export interface DashAnalyticsType {
   }[];
 }
 
-export interface CustomerType {
+export interface CustomerType extends CreatedUpdatedByAt {
   id: number;
-  fullName: string;
-  address: Address;
+  fullName?: string;
+  email?: string;
+  password?: string;
+  active?: boolean;
+  marketingOptIn?: boolean;
+  address?: CustomerAddressType[];
+  tags?: Tag[];
 }
 
-export interface Address {
-  addressLine1: Scalars['String'];
-  email: Scalars['String'];
-  country: CountryType;
-  addressLine2: Scalars['String'];
-  phoneNumber: Scalars['String'];
-  postalCode: Scalars['String'];
-  state: Scalars['String'];
-  city: Scalars['String'];
+export interface CustomerAddressType {
+  id: number;
+  email?: string;
+  country?: CountryType;
+  addressLine1?: string;
+  addressLine2?: Nullable<string>;
+  phoneNumber?: string;
+  postalCode?: string;
+  state?: string;
+  city?: string;
+  isDefault?: boolean;
 }
 
 // export declare type UserAddress = {

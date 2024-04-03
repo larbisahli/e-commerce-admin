@@ -377,7 +377,6 @@ export default function CreateOrUpdateAttributeForm({
                 </div>
               ))}
             </div>
-
             <Button
               type="button"
               onClick={() =>

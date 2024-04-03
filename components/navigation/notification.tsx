@@ -109,7 +109,7 @@ export default function NavNotification() {
       >
         <div
           className={cn(
-            'flex h-10 w-10 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-white text-gray-500',
+            'flex h-10 w-10 cursor-pointer items-center justify-center overflow-hidden bg-white text-gray-500',
             { 'border-red-400': hasNotification }
           )}
         >
