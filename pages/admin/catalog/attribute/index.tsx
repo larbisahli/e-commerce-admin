@@ -104,6 +104,7 @@ export default function AttributePage({ client }: SSRProps) {
         href={`${ROUTES.ATTRIBUTE}/create`}
         title={t('common:sidebar-nav-item-attributes')}
         label={t('form:button-label-add-attribute')}
+        infoText="Product attributes are qualities describing them (e.g. dimensions, power, resolution, etc.). You can use attributes to create product variants to sell a product in several versions (e.g. different colour/size), at different prices and with different availability"
       />
       <PageMainHeader
         columns={COLUMNS['attribute']}

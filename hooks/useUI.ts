@@ -6,6 +6,7 @@ import {
   MODAL_DATA,
   MODAL_VIEWS,
   openSublevelSidebar,
+  setBuilderDeviceView,
   setModalData,
   setModalView,
   toggleSidebar
@@ -35,6 +36,8 @@ export const useUI = () => {
       dispatch(setModalData({ data })),
     setModalView: ({ view }: { view: MODAL_VIEWS }) =>
       dispatch(setModalView({ view })),
-    toggleSidebar: ({ field }) => dispatch(toggleSidebar({ field }))
+    toggleSidebar: ({ field }) => dispatch(toggleSidebar({ field })),
+    setBuilderDeviceView: ({ isMobileView }) =>
+      dispatch(setBuilderDeviceView({ isMobileView }))
   };
 };

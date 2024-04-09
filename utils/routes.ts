@@ -65,5 +65,13 @@ export const ROUTES = {
   STORE_EXTENSIONS: '/admin/store/extensions',
   MARKETING_NEWSLETTER: '/admin/marketing/newsletter',
   ANALYTICS: '/admin/analytics',
-  STORE_BUILDER: '/admin/store/builder'
+  BUILDER_GENERAL: '/admin/store/builder/general',
+  BUILDER_LOGO_IDENTITY: '/admin/store/builder/general/logo-identity',
+  BUILDER_COLOR_APPEARANCE: '/admin/store/builder/general/colors-appearance',
+  BUILDER_TYPOGRAPHY: '/admin/store/builder/general/typography',
+  BUILDER_ANALYTICS: '/admin/store/builder/general/analytics',
+  BUILDER_SOCIAL_LINKS: '/admin/store/builder/general/social-links',
+  BUILDER_TEMPLATES: '/admin/store/builder/general/templates',
+  BUILDER_PAGES: '/admin/store/builder/general/pages',
+  BUILDER_LAYOUT: '/admin/store/builder/layout'
 };

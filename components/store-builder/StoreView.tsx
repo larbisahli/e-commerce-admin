@@ -1,16 +1,29 @@
 import Loader from '@components/ui/loader/loader';
+import { useUI } from '@hooks/useUI';
+import cn from 'classnames';
 import React, { useRef, useState } from 'react';
 
-export default function PlansComponents() {
+export default function StoreViewComponents() {
   const iframeRef = useRef(null);
   const [loading, setLoading] = useState(true);
+
+  const {
+    ui: {
+      builder: { isMobileView }
+    }
+  } = useUI();
+
   // const reload =()=>{
   //   setLoading(true)
   //   iframeRef.current.contentWindow.location.href = "http://127.0.0.1:3000"
   // }
   return (
     <div className="flex h-full items-center justify-center">
-      <div className="builder-container">
+      <div
+        className={cn('builder-container rounded-sm', {
+          'builder-container--mobile': isMobileView
+        })}
+      >
         <div className="pointer-events-nones absolute top-0 left-0 z-10 h-full w-full">
           {loading && (
             <div className="flex h-full items-center justify-center">
@@ -20,7 +33,7 @@ export default function PlansComponents() {
           <iframe
             ref={iframeRef}
             title="Shop preview"
-            src="http://127.0.0.1:3000"
+            src="http://127.0.0.1:3002"
             width="100%"
             height="100%"
             className="w-fill h-full"

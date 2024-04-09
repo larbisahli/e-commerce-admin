@@ -33,6 +33,7 @@ interface Props {
   isThumbnail?: boolean;
   modalId?: string;
   label?: string;
+  labelClassName?: string;
   isRequiredLabel?: boolean;
 }
 
@@ -42,6 +43,7 @@ const ImageModal = ({
   isThumbnail,
   isRequiredLabel = false,
   modalId = 'image_modal',
+  labelClassName = '',
   label = 'Add product images'
 }: Props) => {
   const { t } = useTranslation();
@@ -105,7 +107,9 @@ const ImageModal = ({
     <div className="w-full">
       {/* BUTTON */}
       <div className="flex items-center justify-between border-b pb-5">
-        <Label isRequiredLabel={isRequiredLabel}>{t(label)}</Label>
+        <Label className={labelClassName} isRequiredLabel={isRequiredLabel}>
+          {t(label)}
+        </Label>
         <Button
           onClick={(e) => {
             e.preventDefault();

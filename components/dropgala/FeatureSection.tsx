@@ -9,9 +9,9 @@ import LanguagesIcon from '@components/icons/languages';
 import MediaIcon from '@components/icons/media';
 import PluginIcon from '@components/icons/plugin';
 import PwaIcon from '@components/icons/pwa';
-import ThemeIcon from '@components/icons/pwa copy';
 import SheetsIcon from '@components/icons/sheets';
 import ShipIcon from '@components/icons/ship';
+import ThemeIcon from '@components/icons/theme';
 import ThumbUpIcon from '@components/icons/thumb-up';
 import UpSellIcon from '@components/icons/upsell';
 

@@ -8,6 +8,9 @@ export interface State {
   displayModal: boolean;
   modalData: any;
   modalView: string;
+  builder: {
+    isMobileView: boolean;
+  };
 }
 
 const initialState = {
@@ -17,7 +20,10 @@ const initialState = {
   SublevelSidebarId: null,
   displayModal: false,
   modalView: 'LOGIN_VIEW',
-  modalData: null
+  modalData: null,
+  builder: {
+    isMobileView: false
+  }
 };
 
 export type MODAL_VIEWS =
@@ -81,6 +87,12 @@ export const UISlice = createSlice({
       action: PayloadAction<{ data: MODAL_DATA }>
     ) => {
       state.modalData = action.payload.data;
+    },
+    setBuilderDeviceView: (
+      state: State,
+      action: PayloadAction<{ isMobileView: boolean }>
+    ) => {
+      state.builder.isMobileView = action.payload.isMobileView;
     }
   }
 });
@@ -93,7 +105,8 @@ export const {
   closeSidebarIfPresent,
   handleModal,
   setModalView,
-  setModalData
+  setModalData,
+  setBuilderDeviceView
 } = UISlice.actions;
 
 export default UISlice.reducer;

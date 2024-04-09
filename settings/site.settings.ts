@@ -202,8 +202,8 @@ export const siteSettings = {
         icon: 'ShopIcon',
         subLinks: [
           {
-            id: '9YcWKSLDhG',
-            href: ROUTES.STORE_BUILDER,
+            id: '9YcWhCCG2LKO',
+            href: ROUTES.BUILDER_GENERAL,
             label: 'sidebar-nav-item-store-builder',
             padding: '35px',
             isSubLink: true

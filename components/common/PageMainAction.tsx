@@ -1,4 +1,5 @@
 import { Add } from '@components/icons/add';
+import InfoSvg from '@components/icons/info';
 import LinkButton from '@components/ui/link-button';
 import Select from '@components/ui/select/select';
 import { useAppDispatch } from '@hooks/useGetUser';
@@ -16,6 +17,7 @@ interface Props {
   href?: string;
   title: string;
   label?: string;
+  infoText?: string;
   showSelectLanguage?: boolean;
   hideBorder?: boolean;
   onClick?: (e: any) => void;
@@ -34,7 +36,8 @@ const PageMainAction = ({
   RenderIcon,
   hideBorder = false,
   showSelectLanguage = true,
-  params
+  params,
+  infoText
 }: Props) => {
   const { t } = useTranslation();
 
@@ -141,6 +144,14 @@ const PageMainAction = ({
   return (
     <>
       <h1 className="mb-4 text-xl font-bold text-gray-700">{title}</h1>
+      {infoText && (
+        <div className="my-4 flex max-w-4xl items-center text-gray-500">
+          <div className="text-gray-400">
+            <InfoSvg width={35} height={35} />
+          </div>
+          <div className="ml-3 text-sm">{infoText}</div>
+        </div>
+      )}
       <div
         ref={ref}
         className={cn(
