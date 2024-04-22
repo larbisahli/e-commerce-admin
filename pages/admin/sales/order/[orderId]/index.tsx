@@ -509,7 +509,7 @@ export default function OrderDetailsPage({ client }: SSRProps) {
               {t('common:billing-address')}
             </h3>
             <div className="text-md flex flex-col items-start space-y-1 text-gray-700">
-              <Link href={`${ROUTES.CUSTOMER}/${order?.customer?.id}`}>
+              <Link href={`${ROUTES.CUSTOMER}/edit/${order?.customer?.id}`}>
                 <div className="text-accent hover:underline">
                   {order?.customer?.fullName}
                 </div>
@@ -533,7 +533,7 @@ export default function OrderDetailsPage({ client }: SSRProps) {
               {t('common:shipping-address')}
             </h3>
             <div className="text-md flex flex-col items-end space-y-1 text-gray-700">
-              <Link href={`${ROUTES.CUSTOMER}/${order?.customer?.id}`}>
+              <Link href={`${ROUTES.CUSTOMER}/edit/${order?.customer?.id}`}>
                 <div className="text-accent hover:underline">
                   {order?.customer?.fullName}
                 </div>

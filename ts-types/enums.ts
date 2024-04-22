@@ -74,3 +74,42 @@ export enum RESOURCES {
   STORE_BUILDER = 'storeBuilder',
   INTERNAL = 'internal'
 }
+
+export enum ModuleNames {
+  HEADER = 'Header',
+  PROMO_SLIDER = 'PromoSlider',
+  FOOTER = 'Footer',
+  HERO_BANNER = 'HeroBanner',
+  CART_DRAWER = 'CartDrawer',
+  MENU_DRAWER = 'MenuDrawer',
+  HOMEPAGE_CATEGORIES = 'HomepageCategories',
+  CATEGORIES_LIST = 'CategoryList',
+  PRODUCT_CARD = 'ProductCard',
+  PRODUCT_DETAILS = 'ProductDetails',
+  LINKED_PRODUCTS = 'LinkedProducts',
+  BREADCRUMB = 'Breadcrumb',
+  CHECKOUT_BREADCRUMB = 'CheckoutBreadcrumb',
+  CHECKOUT_FOOTER = 'CheckoutFooter',
+  CHECKOUT_INFORMATION = 'CheckoutInformation',
+  CHECKOUT_ITEMS = 'CheckoutItems',
+  CHECKOUT_SHIPPING = 'CheckoutShipping',
+  CHECKOUT_PAYMENT = 'CheckoutPayment',
+  CHECKOUT_HEADER = 'CheckoutHeader',
+  CHECKOUT_CART_ITEMS = 'CheckoutCartItems',
+  CONFIRMATION_SUMMARY = 'ConfirmationSummary',
+  ORDER_SUMMARY = 'OrderSummary',
+  CATEGORY_DETAILS = 'CategoryDetails',
+  PAGINATION = 'Pagination',
+  MISCELLANEOUS = 'Miscellaneous',
+  PAGE_CMS = 'PageCms',
+  INSTALL_PROMPT = 'InstallPrompt',
+  PRODUCT_NOT_FOUND = 'ProductNotFound',
+  PRODUCT_LIST_WIDGET = 'ProductListWidget',
+  COOKIE_POPUP = 'CookiePopup',
+  PROMO_BANNER = 'PromoBanner',
+  OFFLINE_NOTICE = 'OfflineNotice'
+}
+
+export enum StoreBuilder {
+  GALA_CMS_BUILDER = 'gala-cms-builder'
+}

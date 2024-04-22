@@ -63,11 +63,11 @@ export const replace = (array, index: number, replacerIndex: number) => {
 
 export const mediaURL = PRODUCTION_ENV
   ? process.env.MEDIA_URL
-  : 'http://127.0.0.1:5002/media';
+  : 'http://localhost:5002/media';
 
 export const apiURL = PRODUCTION_ENV
   ? process.env.API_URL
-  : 'http://127.0.0.1:5002';
+  : 'http://localhost:5002';
 
 // export const mediaURL = 'http://192.168.1.102:5001/media';
 
@@ -205,3 +205,18 @@ export const translationFallback = (
   }
   return placeholder;
 };
+
+/**
+ * Desc: get value from object/array if path/key exists
+ * @param {Object} object/array in which find the path/key
+ * @param {String} path/key, has to find in object/array
+ * @param {any} default value if path/key not present
+ * @return {any} return the value if path/key matches else default value if present else undefined
+ * */
+export const resolvePath = (obj: any, path: string, defaultValue: any) =>
+  (path || '')
+    .split('.')
+    .reduce(
+      (o, p) => (o && o[p] !== undefined ? o[p] : defaultValue),
+      obj || {}
+    );

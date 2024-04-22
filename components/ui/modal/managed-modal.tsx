@@ -1,6 +1,7 @@
 import Modal from '@components/ui/modal/modal';
 import {
   BAN_CUSTOMER,
+  CMS_BUILDER_MODAL,
   DELETE_ATTRIBUTE,
   DELETE_COUPON,
   DELETE_CUSTOMER,
@@ -10,7 +11,6 @@ import {
   DELETE_ORDER_STATUS,
   DELETE_PRODUCT,
   DELETE_SHIPPING,
-  DELETE_SLIDER,
   DELETE_SUPPLIER,
   DELETE_TAG,
   DELETE_TAX,
@@ -53,10 +53,6 @@ const SupplierDeleteView = dynamic(
   () => import('@components/suppliers/supplier-delete-view')
 );
 
-const SliderDeleteView = dynamic(
-  () => import('@components/hero-banner/slider-delete-view')
-);
-
 const TaxDeleteView = dynamic(() => import('@components/tax/tax-delete-view'));
 
 const ManufacturerDeleteView = dynamic(
@@ -77,6 +73,10 @@ const LanguageDeleteView = dynamic(
 
 const CustomerDeleteView = dynamic(
   () => import('@components/customers/customer-delete-view')
+);
+
+const CmsEditorModal = dynamic(
+  () => import('@components/store-builder/cms-editor')
 );
 
 // const AttributeExportImport = dynamic(
@@ -100,11 +100,11 @@ const ManagedModal = () => {
       {view === DELETE_ORDER_STATUS && <OrderStatusDeleteView />}
       {view === DELETE_USER && <UserDeleteView />}
       {view === DELETE_SUPPLIER && <SupplierDeleteView />}
-      {view === DELETE_SLIDER && <SliderDeleteView />}
       {view === DELETE_TAX && <TaxDeleteView />}
       {view === DELETE_MANUFACTURER && <ManufacturerDeleteView />}
       {view === DELETE_DELIVERY_TIME && <DeliveryTimeDeleteView />}
       {view === FAVICON_VIEWER_MODAL && <FaviconModalView />}
+      {view === CMS_BUILDER_MODAL && <CmsEditorModal />}
     </Modal>
   );
 };

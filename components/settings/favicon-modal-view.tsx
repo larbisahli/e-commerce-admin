@@ -97,7 +97,7 @@ const FaviconModalView = () => {
     <div className="z-50 flex h-[100vh] max-h-[800px] w-[100vw] flex-col overflow-y-auto bg-white md:h-fit md:w-[70vw] 2xl:w-[60vw]">
       <div
         className="border-b border-gray-200 bg-gray-100 p-4 text-lg font-semibold capitalize
-              text-gray-800 shadow"
+              text-gray-800"
       >
         Store favicons
       </div>

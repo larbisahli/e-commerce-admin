@@ -34,6 +34,7 @@ const moduleExports = {
     // iconSizes: [],
     domains: [
       '127.0.0.1',
+      'localhost',
       'media.dropgala.com',
       'api.dropgala.com',
       'dropgala.com',

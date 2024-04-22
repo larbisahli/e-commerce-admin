@@ -3,7 +3,6 @@ import 'slick-carousel/slick/slick-theme.css';
 
 import { useMutation } from '@apollo/client';
 import Card from '@components/common/card';
-import FormActions from '@components/common/FormActions';
 import Button from '@components/ui/button';
 import ColorPicker from '@components/ui/color-picker/color-picker';
 import Description from '@components/ui/description';
@@ -20,19 +19,16 @@ import {
 import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/index';
 import type { PromoBannerType } from '@ts-types/generated';
-import ReactHtmlParser from 'html-react-parser';
+import { resolvePath } from '@utils/utils';
 import cloneDeep from 'lodash/cloneDeep';
 import isEmpty from 'lodash/isEmpty';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import React from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 
-const Slider = dynamic(() => import('react-slick'), {
-  loading: () => <Loader height="40px" />,
-  ssr: false
-});
+import FormActions from '../../helpers/FormActions';
 
 const Editor = dynamic(() => import('@components/ui/editor'), {
   loading: () => <Loader height="150px" text="Editor..." />,
@@ -71,19 +67,20 @@ const defaultValues = {
   animationSpeed: { value: 500, name: '500 Milliseconds' },
   delaySpeed: { value: 3000, name: '3 seconds' },
   backgroundColor: '#da7c25',
-  direction: 'LTR',
-  status: 'draft',
+  direction: 'horizontal',
   sliders: []
 };
 
 type IProps = {
-  initialValues?: PromoBannerType | any;
+  data?: PromoBannerType | any;
 };
 
-export default function CreateOrUpdatePromoSlideForm({
-  initialValues
-}: IProps) {
+const CreateOrUpdatePromoSlideForm = ({ data }: IProps) => {
   const { t } = useTranslation();
+
+  const initialValues = resolvePath(data, 'fields.data', {});
+
+  console.log({ data, initialValues });
 
   const [error, setError] = useState(null);
   const [unsavedChanges, setUnsavedChanges] = useState(true);
@@ -150,7 +147,7 @@ export default function CreateOrUpdatePromoSlideForm({
     };
 
     updatePromoSlider({
-      variables: { id: initialValues.id, ...variables }
+      variables: { id: data.id, ...variables }
     }).catch((err) => {
       setError(err);
     });
@@ -163,36 +160,10 @@ export default function CreateOrUpdatePromoSlideForm({
   });
 
   const backgroundColor = watch('backgroundColor');
-  const direction = watch('direction');
-  const animationSpeed = watch('animationSpeed');
-  const delaySpeed = watch('delaySpeed');
-  const sliders = watch('sliders');
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <FormActions
-        hideBackLink
-        showCancel={false}
-        title={
-          isEmpty(initialValues)
-            ? t('form:form-title-new-banner')
-            : t('form:form-title-edit-banner')
-        }
-        loading={updating}
-        disabled={updating}
-      />
-      <div className="">
-        <Label>{t('form:input-label-demo')}</Label>
-        <PromoSlider
-          {...{
-            delaySpeed: delaySpeed?.value,
-            animationSpeed: animationSpeed?.value,
-            direction,
-            sliders,
-            backgroundColor
-          }}
-        />
-      </div>
+      <FormActions title="Banner" />
       <div className="my-5 flex flex-wrap sm:my-8">
         <Description
           title={t('form:input-label-description')}
@@ -232,35 +203,19 @@ export default function CreateOrUpdatePromoSlideForm({
             <DisplayColorCode color={backgroundColor} />
           </ColorPicker>
           <div className="mt-5">
-            <Label>{t('form:input-label-slide-direction')}</Label>
+            <Label>{t('form:input-label-direction')}</Label>
             <Radio
               {...register('direction')}
-              label={t('form:input-label-rtl')}
-              id="rtl"
-              value="RTL"
+              label={t('form:input-label-vertical')}
+              id="vertical"
+              value="vertical"
               className="mb-2"
             />
             <Radio
               {...register('direction')}
-              id="ltr"
-              label={t('form:input-label-ltr')}
-              value="LTR"
-            />
-          </div>
-          <div className="mt-5">
-            <Label>{t('form:input-label-status')}</Label>
-            <Radio
-              {...register('status')}
-              label={t('form:input-label-published')}
-              id="published"
-              value="publish"
-              className="mb-2"
-            />
-            <Radio
-              {...register('status')}
-              id="draft"
-              label={t('form:input-label-draft')}
-              value="draft"
+              id="horizontal"
+              value="horizontal"
+              label={t('form:input-label-horizontal')}
             />
           </div>
         </Card>
@@ -329,7 +284,7 @@ export default function CreateOrUpdatePromoSlideForm({
       </div>
     </form>
   );
-}
+};
 
 const DisplayColorCode = ({ color }: { color: string }) => {
   return (
@@ -346,42 +301,4 @@ const DisplayColorCode = ({ color }: { color: string }) => {
   );
 };
 
-const settings = {
-  dots: false,
-  infinite: true,
-  arrows: false,
-  autoplay: true,
-  slidesToShow: 1,
-  slidesToScroll: 1
-};
-
-const PromoSlider = ({
-  animationSpeed = 500,
-  direction,
-  sliders,
-  backgroundColor,
-  delaySpeed = 5000
-}) => {
-  return (
-    <div
-      style={{ backgroundColor: backgroundColor }}
-      className="mb-22 bg-blue-300"
-    >
-      <Slider
-        {...settings}
-        rtl={direction === 'RTL'}
-        speed={animationSpeed}
-        autoplaySpeed={delaySpeed}
-      >
-        {sliders?.map(({ content }, idx) => (
-          <div
-            key={idx}
-            className="!flex h-[40px] w-full items-center justify-center"
-          >
-            <div className="w-fit">{ReactHtmlParser(content ?? '')}</div>
-          </div>
-        ))}
-      </Slider>
-    </div>
-  );
-};
+export default memo(CreateOrUpdatePromoSlideForm);

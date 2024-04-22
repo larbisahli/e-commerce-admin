@@ -111,7 +111,7 @@ const ProductModal = () => {
       <div className="flex h-[100vh] max-h-screen w-[100vw] flex-col overflow-y-auto bg-white md:h-fit md:w-[60vw] 2xl:w-[50vw]">
         <div
           className="border-b border-gray-200 bg-gray-100 p-4 text-lg font-semibold capitalize
-           text-gray-800 shadow"
+           text-gray-800"
         >
           Products
         </div>

@@ -1,9 +1,6 @@
 /* eslint-disable jsx-a11y/interactive-supports-focus */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import { useMutation } from '@apollo/client';
 import Card from '@components/common/card';
-import { LanguageDefaultDescInfo } from '@components/common/commonComponents';
-import FormActions from '@components/common/FormActions';
 import ImageModal from '@components/image-modal';
 import ColorPicker from '@components/ui/color-picker/color-picker';
 import Description from '@components/ui/description';
@@ -11,23 +8,11 @@ import Input from '@components/ui/input';
 import Label from '@components/ui/label';
 import Radio from '@components/ui/radio';
 import TextArea from '@components/ui/text-area';
-import { CREATE_HERO_SLIDE, UPDATE_HERO_SLIDE } from '@graphql/hero-banner';
-import {
-  useErrorLogger,
-  useGetUser,
-  useWarnIfUnsavedChanges
-} from '@hooks/index';
-import { useSettings } from '@hooks/useSettings';
-import { notify } from '@lib/index';
 import type { HeroBannerType, ImageType } from '@ts-types/generated';
-import { SaveOptions } from '@ts-types/generated';
-import { ROUTES } from '@utils/routes';
 import { translationFallback } from '@utils/utils';
 import cloneDeep from 'lodash/cloneDeep';
 import isEmpty from 'lodash/isEmpty';
-import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
-import { useState } from 'react';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -53,23 +38,15 @@ const defaultValues = {
 
 type IProps = {
   initialValues?: HeroBannerType | any;
-  isFork?: boolean;
+  onSubmit: (e: FormValues) => void;
 };
 
 export default function CreateOrUpdateSlideForm({
   initialValues,
-  isFork = false
+  onSubmit
 }: IProps) {
-  const router = useRouter();
   const { t } = useTranslation();
   const createMode = isEmpty(initialValues);
-
-  const [error, setError] = useState(null);
-  const [unsavedChanges, setUnsavedChanges] = useState(true);
-
-  const [saveMode, setSaveMode] = useState<SaveOptions>(SaveOptions.Default);
-
-  const { selectedLanguage } = useSettings();
 
   const {
     watch,
@@ -89,122 +66,12 @@ export default function CreateOrUpdateSlideForm({
       : (defaultValues as HeroBannerType)
   });
 
-  const { userInfo } = useGetUser();
-  const csrfToken = userInfo?.csrfToken;
-
   const styles = watch('styles');
   const thumbnail = watch('thumbnail') as ImageType[];
   const btnLabel = watch('btnLabel');
   const title = watch('title');
   const description = watch('description');
   const align = watch('align');
-
-  const [createHeroSlider, { loading: creating, reset: resetCreateMutation }] =
-    useMutation(CREATE_HERO_SLIDE, {
-      context: {
-        headers: {
-          'x-csrf-token': csrfToken
-        }
-      },
-      onCompleted: (data: { createHeroSlide: HeroBannerType }) => {
-        const { id } = data.createHeroSlide;
-        if (!id) {
-          return;
-        }
-        if (saveMode === SaveOptions.Default) {
-          notify(t('common:successfully-created'), 'success');
-          router.push(`${ROUTES.HERO_BANNER}/edit/${id}`);
-        } else if (saveMode === SaveOptions.SaveClose) {
-          notify(t('common:successfully-created'), 'success');
-          router.push(ROUTES.HERO_BANNER);
-        } else if (saveMode === SaveOptions.SaveNew) {
-          notify(t('common:successfully-created'), 'success');
-          router.push(`${ROUTES.HERO_BANNER}/create`);
-        } else if (saveMode === SaveOptions.SaveDuplicate) {
-          notify(t('common:successfully-created'), 'success');
-          router.push(`${ROUTES.HERO_BANNER}/fork/${id}`);
-        }
-        setSaveMode(SaveOptions.Default);
-      }
-    });
-  const [updateHeroSlider, { loading: updating, reset: resetUpdateMutation }] =
-    useMutation(UPDATE_HERO_SLIDE, {
-      context: {
-        headers: {
-          'x-csrf-token': csrfToken
-        }
-      },
-      onCompleted: (data: { updateHeroSlide: HeroBannerType }) => {
-        const { id } = data.updateHeroSlide;
-        if (!id) {
-          return;
-        }
-        if (saveMode === SaveOptions.Default) {
-          notify(t('common:successfully-created'), 'success');
-          router.push(`${ROUTES.HERO_BANNER}/edit/${id}`);
-        } else if (saveMode === SaveOptions.SaveClose) {
-          notify(t('common:successfully-created'), 'success');
-          router.push(ROUTES.HERO_BANNER);
-        } else if (saveMode === SaveOptions.SaveNew) {
-          notify(t('common:successfully-created'), 'success');
-          router.push(`${ROUTES.HERO_BANNER}/create`);
-        } else if (saveMode === SaveOptions.SaveDuplicate) {
-          notify(t('common:successfully-created'), 'success');
-          router.push(`${ROUTES.HERO_BANNER}/fork/${id}`);
-        }
-        setSaveMode(SaveOptions.Default);
-      }
-    });
-
-  useErrorLogger(error);
-
-  const onSubmit = async (values: FormValues) => {
-    if (isEmpty(values.thumbnail)) {
-      notify('form:category-image-required', 'warning');
-      return;
-    }
-
-    const variables = {
-      title: values.title,
-      url: values.url,
-      thumbnail: [
-        {
-          id: values.thumbnail[0]?.id
-        }
-      ],
-      description: values.description,
-      btnLabel: values.btnLabel,
-      position: Number(values.position),
-      published: values.status === 'publish',
-      language: selectedLanguage,
-      align: values.align,
-      styles: {
-        textColor: values.styles.textColor,
-        btnBgc: values.styles.btnBgc,
-        btnTextColor: values.styles.btnTextColor
-      }
-    };
-
-    setUnsavedChanges(false);
-    if (createMode || isFork) {
-      createHeroSlider({ variables }).catch((err) => {
-        setError(err);
-        resetCreateMutation();
-      });
-    } else {
-      const { id = null } = initialValues as HeroBannerType;
-      updateHeroSlider({
-        variables: { id, ...variables }
-      }).catch((err) => {
-        setError(err);
-        resetUpdateMutation();
-      });
-    }
-  };
-
-  useWarnIfUnsavedChanges(unsavedChanges, () => {
-    return confirm(t('common:UNSAVED_CHANGES'));
-  });
 
   const ImageInformation = (
     <span>
@@ -217,36 +84,7 @@ export default function CreateOrUpdateSlideForm({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <FormActions
-        backLink={ROUTES.HERO_BANNER}
-        forceSystemLang={createMode}
-        title={
-          createMode
-            ? t('form:form-title-new-banner')
-            : t('form:form-title-edit-banner')
-        }
-        loading={creating || updating}
-        disabled={creating || updating}
-        onSubmit={handleSubmit(onSubmit)}
-        saveOptions={
-          (createMode || isFork) && [
-            {
-              onClick: () => setSaveMode(SaveOptions.SaveNew),
-              name: t('common:button-label-save-new')
-            },
-            {
-              onClick: () => setSaveMode(SaveOptions.SaveDuplicate),
-              name: t('common:button-label-save-duplicate')
-            },
-            {
-              onClick: () => setSaveMode(SaveOptions.SaveClose),
-              name: t('common:button-label-save-close')
-            }
-          ]
-        }
-      />
-      <LanguageDefaultDescInfo label="New hero banner" isVisible={createMode} />
-      <div className="my-5 flex flex-wrap border-b border-dashed border-border-base pb-8 sm:my-8">
+      <div className="flex flex-wrap border-b border-dashed border-border-base pb-8 first-line:my-5 sm:my-8">
         <Description
           title={t('form:input-label-image')}
           details={ImageInformation}

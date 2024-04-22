@@ -174,40 +174,18 @@ export const siteSettings = {
         ]
       },
       {
-        id: 'WaIqCI',
-        href: '#',
-        label: 'sidebar-nav-item-sliders',
-        icon: 'SliderIcon',
-        subLinks: [
-          {
-            id: 'WaIE1CI',
-            href: ROUTES.HERO_BANNER,
-            label: 'sidebar-nav-item-hero-banner',
-            padding: '35px',
-            isSubLink: true
-          },
-          {
-            id: 'WaIE3WCI',
-            href: ROUTES.PROMO_BANNER,
-            label: 'sidebar-nav-item-promo-banner',
-            padding: '35px',
-            isSubLink: true
-          }
-        ]
-      },
-      {
         id: 'JU3uxd',
         href: 'store',
         label: 'sidebar-nav-item-store',
         icon: 'ShopIcon',
         subLinks: [
-          {
-            id: '9YcWhCCG2LKO',
-            href: ROUTES.BUILDER_GENERAL,
-            label: 'sidebar-nav-item-store-builder',
-            padding: '35px',
-            isSubLink: true
-          },
+          // {
+          //   id: '9YcWhCCG2LKO',
+          //   href: ROUTES.BUILDER_GENERAL,
+          //   label: 'sidebar-nav-item-store-builder',
+          //   padding: '35px',
+          //   isSubLink: true
+          // },
           {
             id: '9YcWhCCG',
             href: ROUTES.LANGUAGES,
@@ -312,6 +290,12 @@ export const siteSettings = {
       //     }
       //   ]
       // },
+      {
+        id: 'WD0912IqEI',
+        href: ROUTES.BUILDER_GENERAL,
+        label: 'sidebar-nav-item-content',
+        icon: 'LayoutSvg'
+      },
       {
         id: 'WD0912IqEI',
         href: ROUTES.ANALYTICS,

@@ -387,6 +387,8 @@
   "pwa-settings": "PWA Settings",
   "shop-settings-status": "Status",
   "input-label-status": "Status",
+  "input-label-vertical": "Vertical",
+  "input-label-horizontal": "Horizontal",
   "shop-settings-helper-text": "Add your shop settings information from here",
   "pwa-settings-helper-text": "Add your Progressive Web App settings information from here",
   "success-register": "Your registration was successful",

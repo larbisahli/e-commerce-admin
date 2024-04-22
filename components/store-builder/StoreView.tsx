@@ -15,7 +15,7 @@ export default function StoreViewComponents() {
 
   // const reload =()=>{
   //   setLoading(true)
-  //   iframeRef.current.contentWindow.location.href = "http://127.0.0.1:3000"
+  //   iframeRef.current.contentWindow.location.href = "http://localhost:3000"
   // }
   return (
     <div className="flex h-full items-center justify-center">
@@ -33,7 +33,7 @@ export default function StoreViewComponents() {
           <iframe
             ref={iframeRef}
             title="Shop preview"
-            src="http://127.0.0.1:3002"
+            src="http://localhost:3000"
             width="100%"
             height="100%"
             className="w-fill h-full"

@@ -12,13 +12,15 @@ import { useRouter } from 'next/router';
 import Script from 'next/script';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { Fragment, useEffect, useRef } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 
 import bgImage from '../../public/no-revisions.jpg';
 
 const LoginPage = ({ client }: SSRProps) => {
   const router = useRouter();
   const { t } = useTranslation('common');
+
+  const [googleCredentials, setGoogleCredentials] = useState(null);
 
   useGetUser(client);
 
@@ -28,6 +30,7 @@ const LoginPage = ({ client }: SSRProps) => {
 
   const handleGoogle = async (response) => {
     console.log('handleGoogle :>> ', { response });
+    setGoogleCredentials(response);
   };
 
   const initGoogleAuth = () => {
@@ -41,9 +44,10 @@ const LoginPage = ({ client }: SSRProps) => {
       const divRef = document.getElementById('signUpDiv');
       google.accounts.id.renderButton(divRef, {
         type: 'standard',
-        theme: 'outline',
+        theme: 'filled_blue',
         size: 'large',
-        text: 'continue_with',
+        text: 'signin_with',
+        logo_alignment: 'left',
         width: 400,
         shape: 'pill'
       });
@@ -58,7 +62,7 @@ const LoginPage = ({ client }: SSRProps) => {
         src="https://accounts.google.com/gsi/client"
         onReady={initGoogleAuth}
       />
-      <div className="flex  h-screen items-center justify-center">
+      <div className="flex h-screen items-center justify-center">
         {/* --------- */}
         <div className="hidden flex-1 md:block">
           <div className="relative h-screen overflow-hidden">
@@ -95,7 +99,7 @@ const LoginPage = ({ client }: SSRProps) => {
                 Fill in your Dropgala account email and password.
               </p>
             </div>
-            <LoginForm />
+            <LoginForm googleCredentials={googleCredentials} />
           </div>
           <div className="flex flex-1 items-end justify-center pb-7">
             <FormFooter links={false} />

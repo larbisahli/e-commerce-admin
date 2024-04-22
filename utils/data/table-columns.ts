@@ -88,17 +88,6 @@ export const COLUMNS = {
     { label: 'Updated By', key: 'updatedBy' },
     { label: 'Actions', key: 'actions' }
   ],
-  'hero-banner': [
-    { label: 'Thumbnail', key: 'thumbnail' },
-    { label: 'Title', key: 'title' },
-    { label: 'Clicks', key: 'clicks' },
-    { label: 'Position', key: 'position' },
-    { label: 'Status', key: 'published' },
-    { label: 'Creation Date', key: 'createdAt' },
-    { label: 'Placed By', key: 'createdBy' },
-    { label: 'Updated By', key: 'updatedBy' },
-    { label: 'Actions', key: 'actions' }
-  ],
   coupon: [
     { label: 'Code', key: 'code' },
     { label: 'Order Amount Limit', key: 'orderAmountLimit' },

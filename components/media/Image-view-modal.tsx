@@ -236,7 +236,7 @@ const ImageViewModal = () => {
           <div className="flex h-full w-full flex-col">
             <div
               className="border-b border-gray-200 bg-gray-100 p-4 text-lg font-semibold capitalize
-              text-gray-800 shadow"
+              text-gray-800"
             >
               {name}
             </div>

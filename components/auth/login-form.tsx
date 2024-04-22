@@ -2,21 +2,17 @@ import Alert from '@components/ui/alert';
 import Button from '@components/ui/button';
 import Input from '@components/ui/input';
 import PasswordInput from '@components/ui/password-input';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetUser } from '@hooks/useGetUser';
 import { ROUTES } from '@utils/routes';
 import { apiURL } from '@utils/utils';
 import { isEmpty } from 'lodash';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useRef, useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
-
-import FormFooter from './form-footer';
 
 type FormValues = {
   alias: string;
@@ -35,35 +31,67 @@ const defaultValues = {
   password: ''
 };
 
-const LoginForm = () => {
+type GoogleCredentials = {
+  credential: string;
+  select_by: string;
+};
+
+interface Props {
+  googleCredentials: GoogleCredentials;
+}
+
+const LoginForm = ({ googleCredentials }: Props) => {
   const _reCaptchaRef = useRef<any>();
   const router = useRouter();
   const { t } = useTranslation();
 
-  const [error, setError] = useState(null);
+  const [error, setFetchError] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
     getValues
-  } = useForm<FormValues>({
-    defaultValues,
-    resolver: yupResolver(loginFormSchema)
-  });
+  } = useForm<FormValues>({ defaultValues });
 
   const { userInfo } = useGetUser();
-
   const csrfToken = userInfo?.csrfToken;
+
+  useEffect(() => {
+    if (googleCredentials?.credential) {
+      onSubmit();
+    }
+  }, [googleCredentials]);
 
   useErrorLogger(error);
 
   function onReCaptchaChange(token) {
     const variables = getValues();
 
+    const credential = googleCredentials?.credential;
+
     setLoading(true);
-    setError(null);
+    setFetchError(null);
+
+    if (!credential && !variables?.email) {
+      setError('email', {
+        type: 'required',
+        message: t('form:error-email-required')
+      });
+      setLoading(false);
+      return;
+    }
+    if (!credential && !variables?.password) {
+      setError('password', {
+        type: 'required',
+        message: t('form:error-password-required')
+      });
+      setLoading(false);
+      return;
+    }
+
     fetch(`${apiURL}/login`, {
       method: 'POST',
       credentials: 'include',
@@ -71,7 +99,11 @@ const LoginForm = () => {
         'Content-Type': 'application/json',
         'x-csrf-token': csrfToken
       },
-      body: JSON.stringify({ ...variables, token })
+      body: JSON.stringify({
+        ...variables,
+        credential,
+        token
+      })
     })
       .then((response) => response.json())
       .then((data) => {
@@ -80,14 +112,14 @@ const LoginForm = () => {
         if (data?.success) {
           router.push(ROUTES.DASHBOARD);
         } else if (data?.message) {
-          setError(data);
+          setFetchError(data);
           _reCaptchaRef.current.reset();
         }
       })
       .catch((err) => {
         console.log({ err, message: err?.message });
         setLoading(false);
-        setError(err);
+        setFetchError(err);
         _reCaptchaRef.current.reset();
       });
   }
@@ -132,7 +164,7 @@ const LoginForm = () => {
           forgotPageLink={ROUTES.FORGET_PASSWORD}
         />
         <Button
-          className="mt-8 w-full rounded-full"
+          className="mt-8 h-[40px] w-full rounded-full "
           loading={loading && !isEmpty(error)}
           disabled={loading}
         >
@@ -157,7 +189,7 @@ const LoginForm = () => {
             variant="error"
             closeable={true}
             className="mt-5"
-            onClose={() => setError(null)}
+            onClose={() => setFetchError(null)}
           />
         ) : null}
         {/* <div className="pt-5 text-center">
