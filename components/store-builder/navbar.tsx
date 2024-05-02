@@ -1,10 +1,11 @@
 import DesktopIcon from '@components/icons/desktop-icon';
 import MobileIcon from '@components/icons/mobile-icon';
-import ThemeIcon from '@components/icons/theme';
+import TabletIcon from '@components/icons/tablet-icon';
 import styles from '@components/navigation/scss/index.module.scss';
 import Button from '@components/ui/button';
 import { useGetUser } from '@hooks/useGetUser';
 import { useUI } from '@hooks/useUI';
+import { DEVICE_VIEWS } from '@ts-types/enums';
 import { ROUTES } from '@utils/routes';
 import cn from 'classnames';
 import classNames from 'classnames/bind';
@@ -22,7 +23,7 @@ const Navbar = () => {
 
   const {
     ui: {
-      builder: { isMobileView }
+      builder: { deviceView }
     },
     setBuilderDeviceView
   } = useUI();
@@ -47,19 +48,40 @@ const Navbar = () => {
         </Link>
         <div className="flex flex-1 items-center justify-end space-s-5">
           <button
-            onClick={() => setBuilderDeviceView({ isMobileView: false })}
+            onClick={() =>
+              setBuilderDeviceView({ deviceView: DEVICE_VIEWS.DESKTOP })
+            }
             className={cn(
               'flex h-10 w-10 items-center justify-center rounded-sm border border-gray-300 text-gray-600 hover:border-accent hover:text-accent',
-              { 'border-accent text-accent': !isMobileView }
+              {
+                'border-accent text-accent': deviceView === DEVICE_VIEWS.DESKTOP
+              }
             )}
           >
             <DesktopIcon width={20} height={20} />
           </button>
           <button
-            onClick={() => setBuilderDeviceView({ isMobileView: true })}
+            onClick={() =>
+              setBuilderDeviceView({ deviceView: DEVICE_VIEWS.TABLET })
+            }
             className={cn(
               'flex h-10 w-10 items-center justify-center rounded-sm border border-gray-300 text-gray-600 hover:border-accent hover:text-accent',
-              { 'border-accent text-accent': isMobileView }
+              {
+                'border-accent text-accent': deviceView === DEVICE_VIEWS.TABLET
+              }
+            )}
+          >
+            <TabletIcon width={20} height={20} />
+          </button>
+          <button
+            onClick={() =>
+              setBuilderDeviceView({ deviceView: DEVICE_VIEWS.MOBILE })
+            }
+            className={cn(
+              'flex h-10 w-10 items-center justify-center rounded-sm border border-gray-300 text-gray-600 hover:border-accent hover:text-accent',
+              {
+                'border-accent text-accent': deviceView === DEVICE_VIEWS.MOBILE
+              }
             )}
           >
             <MobileIcon width={20} height={20} />

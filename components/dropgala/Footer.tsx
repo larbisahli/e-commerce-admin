@@ -2,6 +2,7 @@ import { ROUTES } from '@utils/routes';
 import Link from 'next/link';
 
 const Footer = () => {
+  const year = new Date().getFullYear();
   return (
     <div className="fade-in container mx-auto w-full border-t border-dotted border-gray-300 pt-8 pb-6 text-center text-sm md:text-left">
       <div className="flex flex-wrap items-center justify-center">
@@ -45,7 +46,7 @@ const Footer = () => {
         <span className="text-xl font-bold text-gray-500">dropgala</span>
       </div>
       <p className="text-gray-500 no-underline hover:no-underline">
-        &copy; Dropgala 2023 All rights reserved.
+        &copy; {`Dropgala ${year} All rights reserved.`}
       </p>
     </div>
   );

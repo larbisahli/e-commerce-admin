@@ -37,8 +37,7 @@ const LoginPage = ({ client }: SSRProps) => {
     const google = (window as any).google;
     if (google) {
       google.accounts.id.initialize({
-        client_id:
-          '334672365238-6sat8ta6unldrefjd33ngah67bih7jfk.apps.googleusercontent.com',
+        client_id: process.env.GOOGLE_OAUTH_CLIENT_ID,
         callback: handleGoogle
       });
       const divRef = document.getElementById('signUpDiv');
@@ -49,7 +48,7 @@ const LoginPage = ({ client }: SSRProps) => {
         text: 'signin_with',
         logo_alignment: 'left',
         width: 400,
-        shape: 'pill'
+        shape: 'rectangular'
       });
       google.accounts.id.prompt();
     }

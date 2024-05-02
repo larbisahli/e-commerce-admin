@@ -71,7 +71,7 @@ const AppLayout: React.FC = ({ children }: Props) => {
       </div>
       <div className="flex flex-1">
         <Sidebar>{children}</Sidebar>
-        <div className={cn('nxl:ps-20 lg:pl-[350px]', 'h-full w-full')}>
+        <div className={cn('nxl:ps-20 lg:pl-[320px]', 'h-full w-full')}>
           <Navbar />
           <div className="h-full pl-6 pr-4 pb-4 pt-[66px]">
             <StoreViewComponents />

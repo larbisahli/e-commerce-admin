@@ -12,7 +12,6 @@ import { useTranslation } from 'next-i18next';
 import { useEffect, useRef, useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useForm } from 'react-hook-form';
-import * as yup from 'yup';
 
 type FormValues = {
   alias: string;
@@ -20,11 +19,6 @@ type FormValues = {
   password: string;
   success: boolean;
 };
-
-const loginFormSchema = yup.object().shape({
-  email: yup.string().email().required('form:error-email-required'),
-  password: yup.string().required('form:error-password-required')
-});
 
 const defaultValues = {
   email: '',
@@ -107,8 +101,14 @@ const LoginForm = ({ googleCredentials }: Props) => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log({ data });
+        console.log('?????????', { data });
         setLoading(false);
+        if (!isEmpty(data?.registration)) {
+          router.push(
+            `/admin/signup?credential=${data?.registration?.credential}`
+          );
+          return;
+        }
         if (data?.success) {
           router.push(ROUTES.DASHBOARD);
         } else if (data?.message) {
@@ -164,7 +164,7 @@ const LoginForm = ({ googleCredentials }: Props) => {
           forgotPageLink={ROUTES.FORGET_PASSWORD}
         />
         <Button
-          className="mt-8 h-[40px] w-full rounded-full "
+          className="mt-8 h-[40px] w-full rounded-[4px] !py-5"
           loading={loading && !isEmpty(error)}
           disabled={loading}
         >

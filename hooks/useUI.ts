@@ -37,7 +37,7 @@ export const useUI = () => {
     setModalView: ({ view }: { view: MODAL_VIEWS }) =>
       dispatch(setModalView({ view })),
     toggleSidebar: ({ field }) => dispatch(toggleSidebar({ field })),
-    setBuilderDeviceView: ({ isMobileView }) =>
-      dispatch(setBuilderDeviceView({ isMobileView }))
+    setBuilderDeviceView: ({ deviceView }) =>
+      dispatch(setBuilderDeviceView({ deviceView }))
   };
 };

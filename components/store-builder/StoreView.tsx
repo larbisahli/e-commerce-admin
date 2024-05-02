@@ -1,5 +1,6 @@
 import Loader from '@components/ui/loader/loader';
 import { useUI } from '@hooks/useUI';
+import { DEVICE_VIEWS } from '@ts-types/enums';
 import cn from 'classnames';
 import React, { useRef, useState } from 'react';
 
@@ -9,7 +10,7 @@ export default function StoreViewComponents() {
 
   const {
     ui: {
-      builder: { isMobileView }
+      builder: { deviceView }
     }
   } = useUI();
 
@@ -21,7 +22,8 @@ export default function StoreViewComponents() {
     <div className="flex h-full items-center justify-center">
       <div
         className={cn('builder-container rounded-sm', {
-          'builder-container--mobile': isMobileView
+          'builder-container--mobile': deviceView === DEVICE_VIEWS.MOBILE,
+          'builder-container--tablet': deviceView === DEVICE_VIEWS.TABLET
         })}
       >
         <div className="pointer-events-nones absolute top-0 left-0 z-10 h-full w-full">

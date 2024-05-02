@@ -1,5 +1,7 @@
 import { EmailIcon } from '@components/icons/sidebar';
 import Button from '@components/ui/button';
+import Loader from '@components/ui/loader/loader';
+import { SignupMethods } from '@ts-types/enums';
 import { ROUTES } from '@utils/routes';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -9,21 +11,12 @@ import React from 'react';
 import bgImage from '../../../public/no-revisions.jpg';
 import FormFooter from '../form-footer';
 
-type GoogleCredentials = {
-  credential: string;
-  select_by: string;
-};
-
-interface Props {
-  googleCredentials: GoogleCredentials;
-}
-
-const RegistrationChoice = ({ googleCredentials }: Props) => {
+const RegistrationChoice = ({ loading, setSignupMethod }: any) => {
   const { t } = useTranslation('common');
-
   return (
-    <div className="flex h-screen items-center justify-center">
+    <div className="relative flex h-screen items-center justify-center">
       {/* --------- */}
+
       <div className="hidden flex-1 md:block">
         <div className="relative h-screen overflow-hidden">
           <Image
@@ -37,7 +30,7 @@ const RegistrationChoice = ({ googleCredentials }: Props) => {
         </div>
       </div>
       {/* --------- */}
-      <div className="flex h-full flex-1 flex-col">
+      <div className="flex h-full flex-1 flex-col ">
         <div className="m-2 mx-12 mt-8 flex justify-end">
           <Link href={ROUTES.LOGIN}>
             <div className="text-lg font-medium text-black hover:underline">
@@ -45,7 +38,14 @@ const RegistrationChoice = ({ googleCredentials }: Props) => {
             </div>
           </Link>
         </div>
-        <div className="mx-auto mt-8 max-w-[400px] bg-white p-4">
+        <div className="relative mx-auto mt-8 max-w-[450px] bg-white p-4">
+          {loading && (
+            <div className="absolute inset-0 z-50 flex items-end justify-center">
+              <div className="absolute bottom-[-100px]">
+                <Loader special />
+              </div>
+            </div>
+          )}
           <div className="mb-1 flex flex-col">
             <h3 className="text-left text-4xl font-semibold">Start now</h3>
             <div className="py-1 text-xs text-gray-500">
@@ -81,8 +81,9 @@ const RegistrationChoice = ({ googleCredentials }: Props) => {
                 </div>
               </div>
               <Button
-                className="h-[40px] w-[400px] rounded-full"
+                className="h-[40px] w-[400px] rounded-[4px] !py-5"
                 renderIcon={<EmailIcon width="1.3rem" height="1.3rem" />}
+                onClick={() => setSignupMethod(SignupMethods.EMAIL)}
               >
                 Sign up with email
               </Button>

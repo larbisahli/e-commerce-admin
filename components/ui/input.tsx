@@ -72,7 +72,7 @@ const Input = React.forwardRef<HTMLInputElement, Props>(
           htmlFor={name}
           className={cn(
             'mb-2 block text-sm font-semibold leading-none text-body-dark',
-            { 'text-gray-300': disabled }
+            { 'text-gray-400': disabled }
           )}
         >
           {label}
@@ -121,7 +121,7 @@ const Input = React.forwardRef<HTMLInputElement, Props>(
           type={type}
           ref={ref}
           className={cn(rootClassName, renderLabel && 'pr-11', {
-            'text-gray-300': disabled
+            'text-gray-400': disabled
           })}
           autoComplete="off"
           autoCorrect="off"

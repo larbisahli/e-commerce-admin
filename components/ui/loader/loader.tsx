@@ -15,7 +15,7 @@ const Loader = (props: Props) => {
   const {
     className,
     showText = true,
-    text = 'Loading...',
+    text = 'Please wait...',
     simple,
     special = false,
     height = 'calc(100px)',
@@ -115,9 +115,9 @@ const Loader = (props: Props) => {
             strokeWidth="24"
           ></line>
         </svg>
-        <span className="text-md stroke-gray-500 font-medium">
-          Please wait...
-        </span>
+        {showText && (
+          <span className="text-md stroke-gray-500 font-medium">{text}</span>
+        )}
       </div>
     );
   }

@@ -20,7 +20,7 @@ const Sidebar: React.FC<Props> = ({ children }) => {
     <aside
       style={{ height: 'calc(100% - (58px))' }}
       className={cx(
-        'fixed bottom-0 z-50 mt-0 hidden h-full w-[350px] overflow-y-auto rounded-sm border-r bg-white px-5 py-3 shadow-lg start-0  lg:block',
+        'fixed bottom-0 z-50 mt-0 hidden h-full w-[320px] overflow-y-auto rounded-sm border-r bg-white px-5 py-3 shadow-lg start-0  lg:block',
         {
           '!hidden': displayMiniSidebar
         }

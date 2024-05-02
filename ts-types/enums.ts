@@ -113,3 +113,15 @@ export enum ModuleNames {
 export enum StoreBuilder {
   GALA_CMS_BUILDER = 'gala-cms-builder'
 }
+
+export enum SignupMethods {
+  NONE = 'NONE',
+  GOOGLE = 'GOOGLE',
+  EMAIL = 'EMAIL'
+}
+
+export enum DEVICE_VIEWS {
+  DESKTOP = 'DESKTOP',
+  TABLET = 'TABLET',
+  MOBILE = 'MOBILE'
+}

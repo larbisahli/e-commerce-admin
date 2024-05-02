@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import Login from '@pages/admin/dropgala-123-login';
+import Login from '@pages/admin/login';
 
 import { render, screen } from './test-utils';
 

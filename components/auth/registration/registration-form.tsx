@@ -7,6 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetUser } from '@hooks/useGetUser';
 import { CurrencyType } from '@ts-types/custom.types';
+import { SignupMethods } from '@ts-types/enums';
 import { CountryType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import { apiURL } from '@utils/utils';
@@ -77,7 +78,11 @@ const defaultValues = {
   }
 };
 
-const RegistrationForm = () => {
+const RegistrationForm = ({
+  googleCredentials,
+  googlePayload,
+  signupMethod
+}: any) => {
   const _reCaptchaRef = useRef<any>();
   const router = useRouter();
   const { t } = useTranslation();
@@ -117,8 +122,13 @@ const RegistrationForm = () => {
   function onReCaptchaChange(token) {
     const values = getValues();
 
+    const credential = googleCredentials?.credential;
+
     const variables = {
       ...values,
+      credential,
+      googleProfileImage: googlePayload?.picture,
+      password: !credential ? values.password : null,
       alias: alias
         ?.toString()
         ?.toLowerCase()
@@ -234,6 +244,16 @@ const RegistrationForm = () => {
     }
   }, [countries, iso2, setValue]);
 
+  // Set placeholder password and other values when google signup
+  useEffect(() => {
+    if (signupMethod === SignupMethods.GOOGLE) {
+      setValue('password', '0');
+      setValue('firstName', googlePayload?.given_name);
+      setValue('lastName', googlePayload?.family_name);
+      setValue('email', googlePayload?.email);
+    }
+  }, [setValue, signupMethod, googlePayload]);
+
   const alias = watch('alias');
   const country = watch('country');
   const phoneNumber = watch('phoneNumber');
@@ -333,6 +353,7 @@ const RegistrationForm = () => {
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <div className={cn({ hidden: step !== 0 })}>
           <Step1Form
+            signupMethod={signupMethod}
             register={register}
             errors={errors}
             password={password}

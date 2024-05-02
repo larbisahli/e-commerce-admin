@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { DEVICE_VIEWS } from '@ts-types/enums';
 
 export interface State {
   displayMobileSidebar: boolean;
@@ -9,7 +10,7 @@ export interface State {
   modalData: any;
   modalView: string;
   builder: {
-    isMobileView: boolean;
+    deviceView: DEVICE_VIEWS;
   };
 }
 
@@ -22,7 +23,7 @@ const initialState = {
   modalView: 'LOGIN_VIEW',
   modalData: null,
   builder: {
-    isMobileView: false
+    deviceView: DEVICE_VIEWS.DESKTOP
   }
 };
 
@@ -90,9 +91,9 @@ export const UISlice = createSlice({
     },
     setBuilderDeviceView: (
       state: State,
-      action: PayloadAction<{ isMobileView: boolean }>
+      action: PayloadAction<{ deviceView: DEVICE_VIEWS }>
     ) => {
-      state.builder.isMobileView = action.payload.isMobileView;
+      state.builder.deviceView = action.payload.deviceView;
     }
   }
 });

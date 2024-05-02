@@ -1,13 +1,19 @@
 import RegisterCheckbox from '@components/ui/checkbox/register-checkbox';
 import Input from '@components/ui/input';
 import PasswordInput from '@components/ui/password-input';
+import { SignupMethods } from '@ts-types/enums';
 import { useTranslation } from 'next-i18next';
 import React from 'react';
 import PasswordStrengthBar from 'react-password-strength-bar';
 
-const Step1Form = ({ register, errors, password, setPasswordStrength }) => {
+const Step1Form = ({
+  register,
+  errors,
+  password,
+  setPasswordStrength,
+  signupMethod
+}) => {
   const { t } = useTranslation();
-
   return (
     <div className="h-full">
       <div className="flex items-center justify-between">
@@ -33,26 +39,29 @@ const Step1Form = ({ register, errors, password, setPasswordStrength }) => {
           label={t('form:input-label-email')}
           variant="outline"
           className="mb-4 w-full"
+          disabled={signupMethod === SignupMethods.GOOGLE}
           error={t(errors?.email?.message!)}
         />
       </div>
-      <div className="mb-5">
-        <PasswordInput
-          {...register('password')}
-          label={t('form:input-label-password')}
-          variant="outline"
-          className="mb-4 w-full"
-          error={t(errors?.password?.message!)}
-        />
-        <PasswordStrengthBar
-          onChangeScore={(score, feedback) => {
-            setPasswordStrength({ score, feedback });
-          }}
-          className="mb-5"
-          password={password}
-          scoreWords={['Very weak', 'Weak', 'Good', 'Strong']}
-        />
-      </div>
+      {signupMethod === SignupMethods.EMAIL && (
+        <div className="mb-5">
+          <PasswordInput
+            {...register('password')}
+            label={t('form:input-label-password')}
+            variant="outline"
+            className="mb-4 w-full"
+            error={t(errors?.password?.message!)}
+          />
+          <PasswordStrengthBar
+            onChangeScore={(score, feedback) => {
+              setPasswordStrength({ score, feedback });
+            }}
+            className="mb-5"
+            password={password}
+            scoreWords={['Very weak', 'Weak', 'Good', 'Strong']}
+          />
+        </div>
+      )}
       <div className="mb-5">
         <RegisterCheckbox
           {...register('acceptCondition')}

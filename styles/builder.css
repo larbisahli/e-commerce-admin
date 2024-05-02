@@ -17,3 +17,9 @@
   max-height: 700px;
   margin-top: 25px;
 }
+
+.builder-container--tablet {
+  max-width: 790px;
+  max-height: 700px;
+  margin-top: 25px;
+}

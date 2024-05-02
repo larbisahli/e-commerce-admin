@@ -7,6 +7,7 @@ import { ROUTES } from '@utils/routes';
 import Link from 'next/link';
 
 const FormFooter = ({ links = true, isSignUp = false }) => {
+  const year = new Date().getFullYear();
   return (
     <footer className="mt-16">
       {links && (
@@ -66,7 +67,7 @@ const FormFooter = ({ links = true, isSignUp = false }) => {
         <p className="m-3 text-center italic text-gray-600">
           Create Your Dream Online Store Effortlessly with Dropgala!
         </p>
-        <p>© dropgala 2023 All rights reserved</p>
+        <p>&copy; {`Dropgala ${year} All rights reserved.`}</p>
       </div>
     </footer>
   );
