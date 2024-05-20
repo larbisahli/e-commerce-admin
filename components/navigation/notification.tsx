@@ -97,7 +97,7 @@ const RenderNotificationItem = ({ content }) => {
 export default function NavNotification() {
   const { t } = useTranslation('common');
 
-  const hasNotification = true;
+  const hasNotification = false;
 
   return (
     <Menu as="div" className="relative inline-block text-left">
@@ -122,7 +122,7 @@ export default function NavNotification() {
               7
             </span>
           )}
-          {!hasNotification && <Bell width={25} height={25} />}
+          {!hasNotification && <Bell width={20} height={20} />}
         </div>
       </Menu.Button>
       <Transition

@@ -1,16 +1,22 @@
 import AdminLineIcon from '@components/icons/admin-line';
 import AnalyticsIcon from '@components/icons/analytics';
 import AbandonedCartIcon from '@components/icons/cart';
+import { CouponSvgIcon } from '@components/icons/coupon';
+import { CouponIcon } from '@components/icons/coupon-icon';
 import CurrencyConvertIcon from '@components/icons/currency-convert';
 import { CustomerCheckout } from '@components/icons/custom-checkout';
+import DataLockIcon from '@components/icons/data-lock';
+import CustomDesignIcon from '@components/icons/design';
 import ExpressCheckoutIcon from '@components/icons/express-checkout';
 import GoogleAnalyticsIcon from '@components/icons/google-analytics';
 import LanguagesIcon from '@components/icons/languages';
 import MediaIcon from '@components/icons/media';
 import PluginIcon from '@components/icons/plugin';
 import PwaIcon from '@components/icons/pwa';
+import SalesAnalyticsIcon from '@components/icons/sales-analytics';
 import SheetsIcon from '@components/icons/sheets';
 import ShipIcon from '@components/icons/ship';
+import { DesignIcon } from '@components/icons/sidebar';
 import ThemeIcon from '@components/icons/theme';
 import ThumbUpIcon from '@components/icons/thumb-up';
 import UpSellIcon from '@components/icons/upsell';
@@ -154,6 +160,23 @@ const FeatureSection = () => {
         <div className="min-h-[270px] rounded-lg border bg-white shadow">
           <div className=" flex flex-col items-center justify-center p-4">
             <div className="py-3 text-gray-800">
+              <CustomDesignIcon />
+            </div>
+            <div className="pt-1 text-center font-medium">
+              Site Customization
+            </div>
+            <div className="pt-5 text-center text-gray-700">
+              <p>
+                Build your own custom store with a no-code website builder (or
+                upload your own code)
+              </p>
+            </div>
+          </div>
+        </div>
+        {/*  */}
+        <div className="min-h-[270px] rounded-lg border bg-white shadow">
+          <div className=" flex flex-col items-center justify-center p-4">
+            <div className="py-3 text-gray-800">
               <ThemeIcon />
             </div>
             <div className="pt-1 text-center font-medium">
@@ -202,6 +225,23 @@ const FeatureSection = () => {
         <div className="min-h-[270px] rounded-lg border bg-white shadow">
           <div className=" flex flex-col items-center justify-center p-4">
             <div className="py-3 text-gray-700">
+              <CouponSvgIcon />
+            </div>
+            <div className="pt-1 text-center font-medium">
+              Custom promo codes
+            </div>
+            <div className="pt-5 text-center text-gray-700">
+              <p>
+                Offer custom promo codes, giveaway links, and discounts to your
+                customers
+              </p>
+            </div>
+          </div>
+        </div>
+        {/*  */}
+        <div className="min-h-[270px] rounded-lg border bg-white shadow">
+          <div className=" flex flex-col items-center justify-center p-4">
+            <div className="py-3 text-gray-700">
               <AbandonedCartIcon />
             </div>
             <div className="pt-1 text-center font-medium">Abandoned Carts</div>
@@ -210,6 +250,21 @@ const FeatureSection = () => {
                 Recover lost sales by reaching out to customers who've abandoned
                 their carts. Remind them what's in their cart and take them back
                 to the checkout page.
+              </p>
+            </div>
+          </div>
+        </div>
+        {/*  */}
+        <div className="min-h-[270px] rounded-lg border bg-white shadow">
+          <div className=" flex flex-col items-center justify-center p-4">
+            <div className="py-3 text-gray-700">
+              <SalesAnalyticsIcon />
+            </div>
+            <div className="pt-1 text-center font-medium">Sales analytics</div>
+            <div className="pt-5 text-center text-gray-700">
+              <p>
+                Gain insights about your customers and the types of products
+                that they love
               </p>
             </div>
           </div>
@@ -243,6 +298,23 @@ const FeatureSection = () => {
                 By incorporating Google Analytics into your store, you can
                 monitor visitor interactions, orders, checkout, products, and
                 beyond.
+              </p>
+            </div>
+          </div>
+        </div>
+        {/*  */}
+        <div className="min-h-[270px] rounded-lg border bg-white shadow">
+          <div className=" flex flex-col items-center justify-center p-4">
+            <div className="py-3 text-gray-700">
+              <DataLockIcon />
+            </div>
+            <div className="pt-1 text-center font-medium">
+              Full ownership of data
+            </div>
+            <div className="pt-5 text-center text-gray-700">
+              <p>
+                We believe your customers and your data belongs to you, not the
+                platform you're using
               </p>
             </div>
           </div>

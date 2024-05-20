@@ -1,8 +1,10 @@
 import Modal from '@components/ui/modal/modal';
 import {
+  ADD_SECTION_MODAL,
   BAN_CUSTOMER,
   CMS_BUILDER_MODAL,
   DELETE_ATTRIBUTE,
+  DELETE_COMPONENT,
   DELETE_COUPON,
   DELETE_CUSTOMER,
   DELETE_DELIVERY_TIME,
@@ -79,16 +81,31 @@ const CmsEditorModal = dynamic(
   () => import('@components/store-builder/cms-editor')
 );
 
+const AddSectionModal = dynamic(
+  () => import('@components/store-builder/cms-editor/add-section')
+);
+
+const ComponentDeleteView = dynamic(
+  () =>
+    import(
+      '@components/store-builder/cms-editor/add-section/component-delete-view'
+    )
+);
+
 // const AttributeExportImport = dynamic(
 //   () => import('@components/attribute/attribute-import-export')
 // );
 
 const ManagedModal = () => {
-  const { isOpen, view } = useModalState();
+  const { isOpen, view, meta } = useModalState();
   const { closeModal } = useModalAction();
 
   return (
-    <Modal open={isOpen} onClose={closeModal}>
+    <Modal
+      open={isOpen}
+      onClose={closeModal}
+      closeOnClickOutside={meta?.closeOnClickOutside ?? true}
+    >
       {view === DELETE_PRODUCT && <ProductDeleteView />}
       {view === DELETE_ATTRIBUTE && <AttributeDeleteView />}
       {view === DELETE_CUSTOMER && <CustomerDeleteView />}
@@ -105,6 +122,8 @@ const ManagedModal = () => {
       {view === DELETE_DELIVERY_TIME && <DeliveryTimeDeleteView />}
       {view === FAVICON_VIEWER_MODAL && <FaviconModalView />}
       {view === CMS_BUILDER_MODAL && <CmsEditorModal />}
+      {view === ADD_SECTION_MODAL && <AddSectionModal />}
+      {view === DELETE_COMPONENT && <ComponentDeleteView />}
     </Modal>
   );
 };

@@ -153,6 +153,8 @@ export async function XSRFHandler(context: GetServerSidePropsContext) {
     // create new token
     csrfToken = tokens.create(csrfSecret);
 
+    // TODO: Renew when token is close to expiry
+
     if (!storedCsrfSecret && csrfSecret) {
       cookies.set(CookieNames.XSRF_TOKEN, csrfSecret, {
         httpOnly: true,

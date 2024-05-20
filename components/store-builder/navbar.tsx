@@ -25,7 +25,7 @@ const Navbar = () => {
     ui: {
       builder: { deviceView }
     },
-    setBuilderDeviceView
+    updateBuilderInfo
   } = useUI();
 
   return (
@@ -35,7 +35,7 @@ const Navbar = () => {
       )}
     >
       <nav className={cx('flex items-center justify-between px-5 py-2')}>
-        <Link href={ROUTES.DASHBOARD} className="flex items-center pl-6">
+        <Link href={ROUTES.DASHBOARD} className="flex items-center">
           <div className="flex items-center pt-1 text-lg font-medium capitalize text-black">
             <Image
               src={'/favicon/icons/icon_android_192x192.png'}
@@ -47,45 +47,52 @@ const Navbar = () => {
           </div>
         </Link>
         <div className="flex flex-1 items-center justify-end space-s-5">
-          <button
-            onClick={() =>
-              setBuilderDeviceView({ deviceView: DEVICE_VIEWS.DESKTOP })
-            }
-            className={cn(
-              'flex h-10 w-10 items-center justify-center rounded-sm border border-gray-300 text-gray-600 hover:border-accent hover:text-accent',
-              {
-                'border-accent text-accent': deviceView === DEVICE_VIEWS.DESKTOP
+          <div className="flex">
+            <button
+              onClick={() =>
+                updateBuilderInfo({ deviceView: DEVICE_VIEWS.DESKTOP })
               }
-            )}
-          >
-            <DesktopIcon width={20} height={20} />
-          </button>
-          <button
-            onClick={() =>
-              setBuilderDeviceView({ deviceView: DEVICE_VIEWS.TABLET })
-            }
-            className={cn(
-              'flex h-10 w-10 items-center justify-center rounded-sm border border-gray-300 text-gray-600 hover:border-accent hover:text-accent',
-              {
-                'border-accent text-accent': deviceView === DEVICE_VIEWS.TABLET
+              className={cn(
+                'flex h-7 w-10 items-center justify-center rounded-l-sm border-t border-b border-l border-gray-300 text-gray-600 hover:bg-gray-200 hover:text-blue-700',
+                {
+                  'border-accent bg-blue-100 text-accent transition-colors hover:bg-blue-200':
+                    deviceView === DEVICE_VIEWS.DESKTOP
+                }
+              )}
+            >
+              <DesktopIcon width={18} height={18} />
+            </button>
+            <button
+              onClick={() =>
+                updateBuilderInfo({ deviceView: DEVICE_VIEWS.TABLET })
               }
-            )}
-          >
-            <TabletIcon width={20} height={20} />
-          </button>
-          <button
-            onClick={() =>
-              setBuilderDeviceView({ deviceView: DEVICE_VIEWS.MOBILE })
-            }
-            className={cn(
-              'flex h-10 w-10 items-center justify-center rounded-sm border border-gray-300 text-gray-600 hover:border-accent hover:text-accent',
-              {
-                'border-accent text-accent': deviceView === DEVICE_VIEWS.MOBILE
+              className={cn(
+                'flex h-7 w-10 items-center justify-center border-t border-b border-r border-l border-gray-300 text-gray-600 transition-colors hover:bg-gray-200 hover:text-blue-700',
+                {
+                  'border-accent bg-blue-100 text-accent hover:bg-blue-200':
+                    deviceView === DEVICE_VIEWS.TABLET,
+                  'border-l-accent': deviceView === DEVICE_VIEWS.DESKTOP,
+                  '!border-r-0': deviceView === DEVICE_VIEWS.MOBILE
+                }
+              )}
+            >
+              <TabletIcon width={18} height={18} />
+            </button>
+            <button
+              onClick={() =>
+                updateBuilderInfo({ deviceView: DEVICE_VIEWS.MOBILE })
               }
-            )}
-          >
-            <MobileIcon width={20} height={20} />
-          </button>
+              className={cn(
+                'flex h-7 w-10 items-center justify-center rounded-r-sm border-t border-b border-r border-gray-300 text-gray-600 hover:bg-gray-200 hover:text-blue-700',
+                {
+                  'border-l border-accent border-l-accent bg-blue-100 text-accent transition-colors hover:bg-blue-200':
+                    deviceView === DEVICE_VIEWS.MOBILE
+                }
+              )}
+            >
+              <MobileIcon width={18} height={18} />
+            </button>
+          </div>
           <Button className="bg-green-600 hover:bg-green-700">Publish</Button>
         </div>
       </nav>

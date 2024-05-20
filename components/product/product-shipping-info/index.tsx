@@ -207,6 +207,7 @@ function ProductShippingInfoForm({ state, productType, initialValues }: Props) {
               ? t('form:item-description-edit')
               : t('form:item-description-add')
           } ${t('form:form-description-simple-product-info')}`}
+          // Enter the dimensions and weight of this product to help calculate shipping rate. These measurements are for the product's shipping container. They are used to help calculate shipping price and do not show up on your storefront.
           className="w-full px-0 pb-5 sm:w-1/4 sm:py-8 sm:pe-4 md:w-1/4 md:pe-5"
         />
 

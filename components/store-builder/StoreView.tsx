@@ -2,7 +2,7 @@ import Loader from '@components/ui/loader/loader';
 import { useUI } from '@hooks/useUI';
 import { DEVICE_VIEWS } from '@ts-types/enums';
 import cn from 'classnames';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 export default function StoreViewComponents() {
   const iframeRef = useRef(null);
@@ -10,14 +10,23 @@ export default function StoreViewComponents() {
 
   const {
     ui: {
-      builder: { deviceView }
-    }
+      builder: { deviceView, isReloadStoreFront }
+    },
+    updateBuilderInfo
   } = useUI();
 
-  // const reload =()=>{
-  //   setLoading(true)
-  //   iframeRef.current.contentWindow.location.href = "http://localhost:3000"
-  // }
+  const reload = () => {
+    setLoading(true);
+    iframeRef.current.contentWindow.location.href = 'http://localhost:3000';
+    updateBuilderInfo({ isReloadStoreFront: false });
+  };
+
+  useEffect(() => {
+    if (isReloadStoreFront) {
+      reload();
+    }
+  }, [isReloadStoreFront]);
+
   return (
     <div className="flex h-full items-center justify-center">
       <div
@@ -40,6 +49,7 @@ export default function StoreViewComponents() {
             height="100%"
             className="w-fill h-full"
             onLoad={() => setLoading(false)}
+            id="storefront-iframe"
           ></iframe>
         </div>
       </div>

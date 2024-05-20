@@ -75,15 +75,12 @@ export enum RESOURCES {
   INTERNAL = 'internal'
 }
 
-export enum ModuleNames {
+export enum ModuleGroups {
   HEADER = 'Header',
-  PROMO_SLIDER = 'PromoSlider',
   FOOTER = 'Footer',
-  HERO_BANNER = 'HeroBanner',
   CART_DRAWER = 'CartDrawer',
   MENU_DRAWER = 'MenuDrawer',
   HOMEPAGE_CATEGORIES = 'HomepageCategories',
-  CATEGORIES_LIST = 'CategoryList',
   PRODUCT_CARD = 'ProductCard',
   PRODUCT_DETAILS = 'ProductDetails',
   LINKED_PRODUCTS = 'LinkedProducts',
@@ -101,17 +98,49 @@ export enum ModuleNames {
   CATEGORY_DETAILS = 'CategoryDetails',
   PAGINATION = 'Pagination',
   MISCELLANEOUS = 'Miscellaneous',
-  PAGE_CMS = 'PageCms',
   INSTALL_PROMPT = 'InstallPrompt',
   PRODUCT_NOT_FOUND = 'ProductNotFound',
-  PRODUCT_LIST_WIDGET = 'ProductListWidget',
   COOKIE_POPUP = 'CookiePopup',
   PROMO_BANNER = 'PromoBanner',
-  OFFLINE_NOTICE = 'OfflineNotice'
+  OFFLINE_NOTICE = 'OfflineNotice',
+  SUBSCRIPTION = 'Subscription',
+  TEXT = 'Text',
+  IMAGE = 'Image',
+  IMAGE_BANNER = 'ImageBanner',
+  VIDEO_BANNER = 'VideoBanner',
+  HTML = 'Html',
+  CATEGORY_LIST = 'CategoryList',
+  PRODUCT_LIST = 'ProductList',
+  HERO_CAROUSEL = 'HeroCarousel'
 }
 
 export enum StoreBuilder {
-  GALA_CMS_BUILDER = 'gala-cms-builder'
+  GALA_CMS_BUILDER = 'gala-cms-builder',
+  GALA_CMS_BUILDER_PAGE = 'gala-cms-builder-page'
+}
+
+export enum StoreBuilderActions {
+  EDIT_ACTION = 'EDIT_ACTION',
+  DELETE_ACTION = 'DELETE_ACTION',
+  ADD_NEW_BEFORE = 'ADD_NEW_BEFORE',
+  ADD_NEW_AFTER = 'ADD_NEW_AFTER',
+  DUPLICATE_BLOCK = 'DUPLICATE_BLOCK'
+}
+
+export enum StoreLayoutNames {
+  HOMEPAGE = 'home-page',
+  PRODUCT_PAGE = 'product-page',
+  TERMS_OF_SERVICES = 'terms-of-service',
+  CHECKOUT = 'checkout',
+  CONTACT = 'contact',
+  PRIVACY_POLICY = 'privacy-policy',
+  RETURN_FAQ = 'returns-faq'
+}
+
+export enum PageLayoutBlocks {
+  Header = 'jssHeader',
+  Main = 'jssMain',
+  Footer = 'jssFooter'
 }
 
 export enum SignupMethods {

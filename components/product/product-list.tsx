@@ -19,6 +19,7 @@ import isEmpty from 'lodash/isEmpty';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
 import { memo, useMemo } from 'react';
+import { useGetUser } from '@hooks/useGetUser';
 
 const Table = dynamic(
   () => import('@components/ui/table').then((mod) => mod.Table),
@@ -38,6 +39,9 @@ interface TableRowProps extends Product {
 const ProductList = ({ loading, products, selectedColumns }: IProps) => {
   const { t } = useTranslation();
   const { alignLeft, alignRight } = useIsRTL();
+  const {
+    userInfo: { store: { alias = '' } = {} }
+  } = useGetUser();
 
   const { tablePlaceholderRow } = usePlaceholder();
 
@@ -254,6 +258,7 @@ const ProductList = ({ loading, products, selectedColumns }: IProps) => {
           return (
             <ActionButtons
               id={id}
+              detailsUrl={`https://${alias}.dropgala.shop/product/${record.productSeo?.slug}`}
               editUrl={`${ROUTES.PRODUCT}/edit/${id}`}
               deleteModalView="DELETE_PRODUCT"
             />

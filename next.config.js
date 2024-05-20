@@ -38,7 +38,8 @@ const moduleExports = {
       'media.dropgala.com',
       'api.dropgala.com',
       'dropgala.com',
-      'dropgala.s3.eu-west-3.amazonaws.com'
+      'dropgala.s3.eu-west-3.amazonaws.com',
+      'lh3.googleusercontent.com'
     ],
     path: '/_next/image',
     loader: 'default'

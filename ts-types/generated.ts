@@ -116,6 +116,7 @@ export interface UserType extends CreatedUpdatedByAt {
   profile: ImageType[];
   phoneNumber: string;
   role: RoleType;
+  googleProfileImage?: string;
   roleId?: number;
   active: boolean;
   isAdmin: boolean;
@@ -463,6 +464,8 @@ export interface ImageType {
   isThumbnail?: boolean;
   createdAt?: Scalars['DateTime'];
   size?: Scalars['Int'];
+  height?: Scalars['Int'];
+  width?: Scalars['Int'];
 }
 
 export interface MediaType extends CreatedUpdatedByAt {
@@ -540,20 +543,6 @@ export interface TaxType extends CreatedUpdatedByAt {
   rate?: Scalars['Int'];
   isDefault?: Scalars['Boolean'];
   countries?: TaxCountryType[];
-}
-
-export interface PromoBannerType extends CreatedUpdatedByAt {
-  id?: Scalars['Int'];
-  animationSpeed: { value: number; name: string };
-  delaySpeed: { value: number; name: string };
-  backgroundColor: string;
-  direction: 'RLT' | 'LTR';
-  published?: Scalars['Boolean'];
-  status?: 'draft' | 'publish';
-  sliders?: {
-    content: string;
-    position?: Scalars['Int'];
-  }[];
 }
 
 export interface SettingsType {
@@ -785,6 +774,49 @@ export interface CustomerAddressType {
   state?: string;
   city?: string;
   isDefault?: boolean;
+}
+
+export interface LayoutModuleType {
+  name: Scalars['String'];
+  group: Scalars['String'];
+  pathname: Scalars['String'];
+  isDefault: Scalars['Boolean'];
+  thumbnail: ImageType;
+}
+
+export interface StoreTemplateType {
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  description: Scalars['String'];
+  publish: Scalars['Boolean'];
+  thumbnail: ImageType[];
+  gallery: {
+    image: ImageType[];
+    position: Scalars['Int'];
+  }[];
+}
+
+export interface StoreLayoutType {
+  id: Scalars['ID'];
+  name: Scalars['String'];
+}
+
+export interface StoreLayoutBlockType {
+  id: Scalars['String'];
+}
+
+export interface StoreLayoutComponentType {
+  layoutBlockId: Scalars['String'];
+  contentId: Scalars['ID'];
+  componentId: Scalars['ID'];
+  moduleName: string;
+  position: Scalars['Int'];
+  data?: StoreLayoutComponentContentType;
+  children?: StoreLayoutComponentType[] | [];
+}
+
+export interface StoreLayoutComponentContentType {
+  [key: string]: string | number | boolean | any;
 }
 
 // export declare type UserAddress = {

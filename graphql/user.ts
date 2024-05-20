@@ -60,6 +60,7 @@ export const USER_AUTH = gql`
         tier
         alias
       }
+      googleProfileImage
       profile {
         id
         image
@@ -90,6 +91,7 @@ export const USERS = gql`
       email
       isAdmin
       phoneNumber
+      googleProfileImage
       profile {
         image
         placeholder

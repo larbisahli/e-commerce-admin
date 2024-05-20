@@ -1,5 +1,8 @@
 import { FormPlaceholder } from '@components/ui/placeholders/Form';
-import { FormActionPlaceholder } from '@components/ui/placeholders/FormAction';
+import {
+  ContentFormActionPlaceholder,
+  FormActionPlaceholder
+} from '@components/ui/placeholders/FormAction';
 
 export const LanguageDefaultDescInfo = ({ label, isVisible }) => {
   if (!isVisible) {
@@ -17,6 +20,15 @@ export const PageFormPlaceholder = () => {
   return (
     <div>
       <FormActionPlaceholder />
+      <FormPlaceholder />
+    </div>
+  );
+};
+
+export const ContentFormPlaceholder = () => {
+  return (
+    <div className="w-full">
+      <ContentFormActionPlaceholder />
       <FormPlaceholder />
     </div>
   );

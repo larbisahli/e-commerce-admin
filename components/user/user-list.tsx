@@ -17,6 +17,7 @@ import { ROUTES } from '@utils/routes';
 import cn from 'classnames';
 import dayjs from 'dayjs';
 import dynamic from 'next/dynamic';
+import Image from 'next/image';
 import { useTranslation } from 'next-i18next';
 import { useMemo } from 'react';
 
@@ -38,9 +39,7 @@ interface TableRowProps extends UserType {
 const UserList = ({ loading, users, selectedColumns }: IProps) => {
   const { t } = useTranslation();
   const { alignLeft } = useIsRTL();
-
   const { userInfo } = useGetUser();
-
   const { tablePlaceholderRow } = usePlaceholder();
 
   const columns = useMemo(() => {
@@ -55,8 +54,22 @@ const UserList = ({ loading, users, selectedColumns }: IProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
-
+          const { googleProfileImage } = record;
           const { image, placeholder } = profile[0] ?? {};
+
+          if (googleProfileImage && !image) {
+            return (
+              <div className="relative h-10 w-10 cursor-pointer overflow-hidden rounded-sm">
+                <Image
+                  layout="fill"
+                  objectFit="cover"
+                  priority={true}
+                  alt=""
+                  src={googleProfileImage}
+                />
+              </div>
+            );
+          }
           return (
             <Avatar
               src={image}

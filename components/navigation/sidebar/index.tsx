@@ -77,7 +77,7 @@ const Sidebar: React.FC<Props> = ({ absolute = false }) => {
         <div className="flex flex-col">
           <div className="mb-5">
             <Link href={`${ROUTES.PLANS}`}>
-              <div className="flex items-center justify-between p-2 pl-6">
+              <div className="flex flex-col p-2 pl-6">
                 <div className="text-blue-500">
                   <div className="flex items-center">
                     <div>
@@ -86,8 +86,8 @@ const Sidebar: React.FC<Props> = ({ absolute = false }) => {
                     <div className="font-medium">Upgrade plan</div>
                   </div>
                 </div>
-                <div className="rounded-full bg-gray-200 px-3 py-1 text-xs font-medium uppercase text-black">
-                  basic
+                <div className="w-fit rounded-full bg-gray-200 px-3 py-1 text-xs font-medium text-black">
+                  14 days trial
                 </div>
               </div>
             </Link>

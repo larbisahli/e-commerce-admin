@@ -11,18 +11,23 @@ export default function NavigationLink() {
       <Link href={ROUTES.BUILDER_GENERAL}>
         <div
           className={cn(
-            'mx-2 text-xl font-semibold text-gray-700 hover:text-black',
+            'mr-2 text-xl font-semibold text-gray-700 hover:text-black',
             pathname === ROUTES.BUILDER_GENERAL && 'text-black underline'
           )}
         >
           General
         </div>
       </Link>
-      <Link href={ROUTES.BUILDER_LAYOUT}>
+      <Link
+        href={{
+          pathname: `${ROUTES.BUILDER_LAYOUT}/[layoutName]`,
+          query: { layoutName: 'home-page' }
+        }}
+      >
         <div
           className={cn(
             'mx-2 text-xl font-semibold text-gray-700 hover:text-black',
-            pathname === ROUTES.BUILDER_LAYOUT && 'text-black underline'
+            pathname.split('/').includes('layout') && 'text-black underline'
           )}
         >
           Layout

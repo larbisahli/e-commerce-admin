@@ -31,6 +31,9 @@ export const PRODUCTS = gql`
       }
       quantity
       published
+      productSeo {
+        slug
+      }
       thumbnail {
         id
         image

@@ -291,7 +291,7 @@ const ProductSeo = ({ state, productContent, initialValues }: Props) => {
             placeholder={translationFallback(
               initialValues?.productSeo,
               'metaKeywords',
-              'Accessories, keywords...'
+              'e.g. Widget, affordable, portable, etc...'
             )}
           />
           <TextArea

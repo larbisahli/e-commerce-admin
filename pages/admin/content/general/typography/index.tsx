@@ -23,12 +23,12 @@ export default function CreateSupplierPage({ client }: SSRProps) {
           href="/svg/supplier.svg"
         />
       </Head>
-      <div>
+      <div className="px-5">
         <div className="mt-5">
           <div className="mb-5">
             <Link
               href={ROUTES.BUILDER_GENERAL}
-              className="absolute left-0 cursor-pointer pt-1 text-gray-500 hover:text-black"
+              className="absolute left-0 cursor-pointer px-5 pt-1 text-gray-500 hover:text-black"
             >
               <BackArrowIcon width={20} height={20} />
             </Link>

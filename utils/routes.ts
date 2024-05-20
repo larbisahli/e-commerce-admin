@@ -7,6 +7,7 @@ export const ROUTES = {
   ORDER_STATUS: '/admin/sales/order-status',
   ORDERS: '/admin/sales/order',
   PRODUCT: '/admin/catalog/product',
+  COLLECTIONS: '/admin/catalog/collections',
   COUPON: '/admin/coupon',
   CUSTOMER: '/admin/customer',
   CUSTOMER_GROUP: '/admin/customer/group',

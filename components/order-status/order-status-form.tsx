@@ -30,19 +30,84 @@ import { useForm } from 'react-hook-form';
 import { orderStatusValidationSchema } from './order-status-validation-schema';
 
 const statuses = [
-  { value: 'processing', label: 'Processing' },
-  { value: 'canceled', label: 'Canceled' },
-  { value: 'closed', label: 'Closed' },
-  { value: 'complete', label: 'Complete' },
-  { value: 'fraud', label: 'Fraud' },
-  { value: 'held', label: 'Held' },
-  { value: 'pending', label: 'Pending' },
-  { value: 'payment_review', label: 'Payment Review' },
-  { value: 'pending_payment', label: 'Pending Payment' },
-  { value: 'payment_canceled', label: 'Payment Canceled' },
-  { value: 'paypal_canceled_reversal', label: 'Paypal Canceled Reversal' },
-  { value: 'paypal_reversed', label: 'Paypal Reversed' },
-  { value: 'pending_paypal', label: 'Pending Paypal' }
+  {
+    value: 'processing',
+    label: 'Processing',
+    description:
+      'Customer started the checkout process, but did not complete it.'
+  },
+  {
+    value: 'canceled',
+    label: 'Canceled',
+    description:
+      'Seller has cancelled an order, due to a stock inconsistency or other reasons.'
+  },
+  {
+    value: 'declined',
+    label: 'Declined',
+    description:
+      'Seller has marked the order as declined for lack of manual payment, or other reasons.'
+  },
+  {
+    value: 'incomplete',
+    label: 'Incomplete',
+    description:
+      'An incomplete order happens when a shopper reached the payment page, but did not complete the transaction.'
+  },
+  {
+    value: 'refunded',
+    label: 'Refunded',
+    description: 'Seller has used the Refund action.'
+  },
+  {
+    value: 'completed',
+    label: 'Completed',
+    description:
+      'Client has paid for their digital product and their file(s) are available for download.'
+  },
+  {
+    value: 'shipped',
+    label: 'Shipped',
+    description:
+      'Order has been shipped, but receipt has not been confirmed; seller has used the Ship Items action.'
+  },
+  { value: 'fraud', label: 'Fraud', description: 'Suspected Fraud.' },
+  { value: 'held', label: 'Held', description: 'Order on hold.' },
+  {
+    value: 'pending',
+    label: 'Pending',
+    description:
+      'Customer started the checkout process, but did not complete it.'
+  },
+  {
+    value: 'payment_review',
+    label: 'Payment Review',
+    description:
+      'Customer has completed checkout process, but payment has yet to be confirmed.'
+  },
+  {
+    value: 'pending_payment',
+    label: 'Pending Payment',
+    description:
+      'Customer has completed checkout process, but payment has yet to be confirmed.'
+  },
+  {
+    value: 'payment_canceled',
+    label: 'Payment Canceled',
+    description: 'Seller has cancelled payment'
+  },
+  {
+    value: 'disputed',
+    label: 'Disputed',
+    description:
+      'Customer has initiated a dispute resolution process for the PayPal transaction that paid for the order.'
+  },
+  {
+    value: 'manual_verification_required',
+    label: 'Manual Verification Required',
+    description:
+      'Order on hold while some aspect needs to be manually confirmed.'
+  }
 ];
 
 type FormValues = {

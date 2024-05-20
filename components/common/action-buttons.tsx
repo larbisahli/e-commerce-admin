@@ -116,6 +116,7 @@ const ActionButtons = ({
           className="ml-2 flex h-9 w-9 items-center justify-center rounded-sm border text-base text-gray-500 transition duration-200 hover:text-heading hover:shadow-xl"
           data-tooltip-id="actions-tooltip"
           data-tooltip-content={t('text-view')}
+          target="_blank"
         >
           <Eye width={24} />
         </Link>

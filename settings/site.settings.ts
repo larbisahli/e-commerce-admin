@@ -102,6 +102,13 @@ export const siteSettings = {
             isSubLink: true
           },
           {
+            id: '4855yLk',
+            href: ROUTES.COLLECTIONS,
+            label: 'sidebar-nav-item-collections',
+            padding: '35px',
+            isSubLink: true
+          },
+          {
             id: '4859yLk',
             href: ROUTES.CATEGORY,
             label: 'sidebar-nav-item-categories',
@@ -128,15 +135,15 @@ export const siteSettings = {
             label: 'sidebar-nav-item-manufacturers',
             padding: '35px',
             isSubLink: true
+          },
+          {
+            id: 'D2IXKt',
+            href: ROUTES.COMING_SOON,
+            label: 'sidebar-nav-item-reviews',
+            padding: '35px',
+            isSubLink: true,
+            disabled: true
           }
-          // {
-          //   id: 'D2IXKt',
-          //   href: ROUTES.COMING_SOON,
-          //   label: 'sidebar-nav-item-reviews',
-          //   padding: '35px',
-          //   isSubLink: true,
-          //   disabled: true
-          // }
         ]
       },
       {
@@ -176,16 +183,16 @@ export const siteSettings = {
       {
         id: 'JU3uxd',
         href: 'store',
-        label: 'sidebar-nav-item-store',
+        label: 'sidebar-nav-item-storefront',
         icon: 'ShopIcon',
         subLinks: [
-          // {
-          //   id: '9YcWhCCG2LKO',
-          //   href: ROUTES.BUILDER_GENERAL,
-          //   label: 'sidebar-nav-item-store-builder',
-          //   padding: '35px',
-          //   isSubLink: true
-          // },
+          {
+            id: '9YcWhCOaCG2LKO',
+            href: ROUTES.BUILDER_GENERAL,
+            label: 'sidebar-nav-item-site-design',
+            padding: '35px',
+            isSubLink: true
+          },
           {
             id: '9YcWhCCG',
             href: ROUTES.LANGUAGES,
@@ -291,13 +298,7 @@ export const siteSettings = {
       //   ]
       // },
       {
-        id: 'WD0912IqEI',
-        href: ROUTES.BUILDER_GENERAL,
-        label: 'sidebar-nav-item-content',
-        icon: 'LayoutSvg'
-      },
-      {
-        id: 'WD0912IqEI',
+        id: 'WD091WF2IqEI',
         href: ROUTES.ANALYTICS,
         label: 'sidebar-nav-item-analytics',
         icon: 'AnalyticsIcon'

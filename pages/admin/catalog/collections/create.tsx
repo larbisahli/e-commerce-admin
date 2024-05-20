@@ -1,34 +1,38 @@
-import BuilderLayout from '@components/layouts/builder';
-import NavigationLink from '@components/store-builder/navigationLink';
+import { PageFormPlaceholder } from '@components/common/commonComponents';
+import AppLayout from '@components/layouts/app';
 import { useGetUser } from '@hooks/index';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
-import type { SSRProps } from '@ts-types/custom.types';
+import { SSRProps } from '@ts-types/custom.types';
 import { ROUTES } from '@utils/routes';
 import type { GetServerSideProps } from 'next';
+import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-export default function CreateSupplierPage({ client }: SSRProps) {
+const CreateOrUpdateAttributeForm = dynamic(
+  () => import('@components/attribute/attribute-form'),
+  { ssr: true, loading: () => <PageFormPlaceholder /> }
+);
+
+export default function CreateAttributePage({ client }: SSRProps) {
   useGetUser(client);
   return (
     <>
       <Head>
-        <title>Store Builder | Dropgala</title>
+        <title>Create Attribute | Dropgala</title>
         <link
           rel="icon"
           type="image/svg"
           sizes="32x32"
-          href="/svg/supplier.svg"
+          href="/svg/attribute.svg"
         />
       </Head>
-      <div>
-        <NavigationLink />
-      </div>
+      <CreateOrUpdateAttributeForm />
     </>
   );
 }
 
-CreateSupplierPage.Layout = BuilderLayout;
+CreateAttributePage.Layout = AppLayout;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { locale } = context;
@@ -57,14 +61,3 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
   };
 };
-
-// store-design/layout/index/sections/header
-// store-design/layout/8c4cc176-0c02-4bc6-b39c-458a8689512d/ (privacy page)
-// store-design/layout/8c4cc176-0c02-4bc6-b39c-458a8689512d/sections/header
-
-// store-design/general/logo-identity
-// store-design/general/colors-appearance
-// store-design/general/typography
-// store-design/general/analytics
-// store-design/general/social-links
-// store-design/general/templates

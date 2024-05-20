@@ -10,9 +10,16 @@ interface Props {
   errors?: any;
   label: string;
   name: string;
+  labelClassName?: string;
 }
 
-const SwitchInput = ({ control, label, name, errors }: Props) => {
+const SwitchInput = ({
+  control,
+  label,
+  name,
+  errors,
+  labelClassName
+}: Props) => {
   const { t } = useTranslation();
   return (
     <div className="flex items-center">
@@ -37,7 +44,12 @@ const SwitchInput = ({ control, label, name, errors }: Props) => {
           </Switch>
         )}
       />
-      <div className="ml-2 block text-sm font-medium leading-none text-gray-600">
+      <div
+        className={cn(
+          'ml-2 block text-sm font-medium leading-none text-gray-600',
+          labelClassName
+        )}
+      >
         {label}
       </div>
       <ValidationError message={t(errors?.[name]?.message)} />

@@ -1,0 +1,14 @@
+export { CustomHtmlSectionIcon as Html } from './custom-html';
+export { ImageSectionIcon as Image } from './image';
+export { ImageBannerSectionIcon as ImageBanner } from './image-banner';
+export { ImageTextSectionIcon } from './image-text';
+export { NewsletterSectionIcon as Subscription } from './newsletter';
+export { PromoSectionIcon as PromoBanner } from './promo';
+export { TextSectionIcon as Text } from './text';
+export { CategoryCollectionSectionIcon as CategoryList } from './category-collection';
+export { CarouselSectionIcon as Carousel } from './carousel';
+export { ProductCollectionSectionIcon as ProductList } from './product-collection';
+export { VideoBannerSectionIcon as VideoBanner } from './video-banner';
+export { DividerSectionIcon as Divider } from './divider';
+export { SpacerSectionIcon as Spacer } from './spacer';
+export { LayoutSectionIcon as Layout } from './layout';

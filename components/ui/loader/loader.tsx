@@ -39,7 +39,7 @@ const Loader = (props: Props) => {
       >
         <svg
           style={{ animationDuration: '3s' }}
-          className="h-16 w-16 animate-spin stroke-gray-500"
+          className="h-16 w-16 animate-spin stroke-gray-600"
           viewBox="0 0 256 256"
         >
           <line

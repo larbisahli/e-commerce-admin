@@ -59,7 +59,7 @@ const FormActions = ({
             getOptionLabel={(option: any) => option.name}
             getOptionValue={(option: any) => option.id}
             onChange={onLanguageChange}
-            isDisabled={forceSystemLang}
+            isDisabled={forceSystemLang || disabled}
             isLoading={isLoading}
             className="w-full"
           />

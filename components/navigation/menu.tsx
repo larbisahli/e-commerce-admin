@@ -5,6 +5,7 @@ import { useGetUser } from '@hooks/index';
 import { ROUTES } from '@utils/routes';
 import cn from 'classnames';
 import classNames from 'classnames/bind';
+import Image from 'next/image';
 import { useTranslation } from 'next-i18next';
 import { Fragment, memo } from 'react';
 
@@ -39,10 +40,13 @@ function NavMenu() {
       firstName = '',
       lastName = '',
       email,
-      store: { alias = '' } = {}
+      store: { alias = '' } = {},
+      googleProfileImage
     }
   } = useGetUser();
   const { image = null, placeholder = null } = profile[0] ?? {};
+
+  console.log({ googleProfileImage });
 
   return (
     <Menu as="div" className="relative inline-block text-left">
@@ -52,12 +56,24 @@ function NavMenu() {
           'border-hover'
         )}
       >
-        <Avatar
-          className="!rounded-sm"
-          src={image}
-          firstName={firstName}
-          customPlaceholder={placeholder}
-        />
+        {googleProfileImage && !image ? (
+          <div className="relative h-10 w-10 cursor-pointer overflow-hidden rounded-sm">
+            <Image
+              layout="fill"
+              objectFit="cover"
+              priority={true}
+              alt=""
+              src={googleProfileImage}
+            />
+          </div>
+        ) : (
+          <Avatar
+            className="!rounded-sm"
+            src={image}
+            firstName={firstName}
+            customPlaceholder={placeholder}
+          />
+        )}
       </Menu.Button>
 
       <Transition

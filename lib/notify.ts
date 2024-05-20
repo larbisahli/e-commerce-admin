@@ -1,19 +1,23 @@
 import { toast, ToastPosition } from 'react-toastify';
 
 interface OptionsType {
-  position: ToastPosition;
-  autoClose: number;
-  hideProgressBar: boolean;
-  closeOnClick: boolean;
-  pauseOnHover: boolean;
-  draggable: boolean;
-  progress: any;
+  position?: ToastPosition;
+  autoClose?: number;
+  hideProgressBar?: boolean;
+  closeOnClick?: boolean;
+  pauseOnHover?: boolean;
+  draggable?: boolean;
+  progress?: any;
 }
 
 type Type = 'success' | 'error' | 'info' | 'warning';
 
 /** types: success | error | info | warning */
-export function notify(Message: string, type: Type): void {
+export function notify(
+  Message: string,
+  type: Type,
+  options?: OptionsType
+): void {
   const Options: OptionsType = {
     position: 'top-right',
     autoClose: 5000,
@@ -21,7 +25,8 @@ export function notify(Message: string, type: Type): void {
     closeOnClick: true,
     pauseOnHover: true,
     draggable: true,
-    progress: undefined
+    progress: undefined,
+    ...options
   };
 
   switch (type) {

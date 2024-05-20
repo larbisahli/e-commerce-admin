@@ -11,6 +11,7 @@ export interface State {
   modalView: string;
   builder: {
     deviceView: DEVICE_VIEWS;
+    isReloadStoreFront: boolean;
   };
 }
 
@@ -23,7 +24,8 @@ const initialState = {
   modalView: 'LOGIN_VIEW',
   modalData: null,
   builder: {
-    deviceView: DEVICE_VIEWS.DESKTOP
+    deviceView: DEVICE_VIEWS.DESKTOP,
+    isReloadStoreFront: false
   }
 };
 
@@ -89,11 +91,8 @@ export const UISlice = createSlice({
     ) => {
       state.modalData = action.payload.data;
     },
-    setBuilderDeviceView: (
-      state: State,
-      action: PayloadAction<{ deviceView: DEVICE_VIEWS }>
-    ) => {
-      state.builder.deviceView = action.payload.deviceView;
+    updateBuilderInfo: (state: State, action: PayloadAction<any>) => {
+      state.builder = { ...state.builder, ...action.payload };
     }
   }
 });
@@ -107,7 +106,7 @@ export const {
   handleModal,
   setModalView,
   setModalData,
-  setBuilderDeviceView
+  updateBuilderInfo
 } = UISlice.actions;
 
 export default UISlice.reducer;

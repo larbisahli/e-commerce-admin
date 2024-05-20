@@ -23,3 +23,21 @@ export const FormActionPlaceholder = () => {
     </div>
   );
 };
+
+export const ContentFormActionPlaceholder = () => {
+  return (
+    <div className="">
+      <div className="mb-3 flex w-full flex-wrap items-center justify-center border-b border-gray-300 p-3 py-1 px-0 md:justify-between">
+        <div className="flex w-full items-center md:mb-0 md:w-fit">
+          <div className="animated-background my-2 h-5 w-[100px] rounded-sm border border-gray-200"></div>
+        </div>
+        <div className="flex w-full items-center justify-between md:w-fit md:justify-start">
+          <div className="relative mr-4 flex  h-[45px] w-[220px] items-center justify-end">
+            <div className="animated-background my-2 h-5 w-[200px] rounded-sm border border-gray-200"></div>
+          </div>
+          <div className="animated-background my-2 h-5 w-[100px] rounded-sm border border-gray-200"></div>
+        </div>
+      </div>
+    </div>
+  );
+};

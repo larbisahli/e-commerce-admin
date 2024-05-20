@@ -7,7 +7,7 @@ import { useGetUser } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useSettings } from '@hooks/useSettings';
 import { useTableColumn } from '@hooks/useTableColumn';
-import { verifyAuth } from '@middleware/utils';
+import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import type { SSRProps, TableQueryVariables } from '@ts-types/custom.types';
 import type { Product } from '@ts-types/generated';
 import { OrderBy, ProductType, SortOrder } from '@ts-types/generated';
@@ -149,10 +149,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
+  const { csrfToken, csrfError } = await XSRFHandler(context);
+
   return {
     props: {
       ...(await serverSideTranslations(locale, ['table', 'common', 'form'])),
-      client: null
+      client: { ...(client ?? {}), csrfToken, csrfError }
     }
   };
 };

@@ -22,7 +22,7 @@ const Scrollbar: React.FC<ScrollbarProps> = ({
   return (
     <OverlayScrollbarsComponent
       options={{
-        className: cn('os-theme-thin-dark', className),
+        className: cn('os-theme-thin-dark h-full', className),
         scrollbars: {
           autoHide
         },

@@ -29,7 +29,7 @@ export default function CreateSupplierPage({ client }: SSRProps) {
           href="/svg/supplier.svg"
         />
       </Head>
-      <div>
+      <div className="px-5">
         <NavigationLink />
         <div className="mt-5">
           <Link
@@ -76,15 +76,6 @@ export default function CreateSupplierPage({ client }: SSRProps) {
               <SocialIcon width={20} height={20} />
             </div>
             <div className="mx-2 px-1 text-base text-black">Social links</div>
-          </Link>
-          <Link
-            href={ROUTES.BUILDER_PAGES}
-            className="flex cursor-pointer items-center py-3 px-2 hover:bg-gray-100"
-          >
-            <div className="text-gray-900">
-              <PagesIcon width={25} height={25} />
-            </div>
-            <div className="mx-2 px-1 text-base text-black">Pages</div>
           </Link>
           <Link
             href={ROUTES.BUILDER_TEMPLATES}

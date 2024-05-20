@@ -6,10 +6,10 @@ import {
   MODAL_DATA,
   MODAL_VIEWS,
   openSublevelSidebar,
-  setBuilderDeviceView,
   setModalData,
   setModalView,
-  toggleSidebar
+  toggleSidebar,
+  updateBuilderInfo
 } from '@store/ui';
 
 import { useAppDispatch, useAppSelector } from './useGetUser';
@@ -37,7 +37,6 @@ export const useUI = () => {
     setModalView: ({ view }: { view: MODAL_VIEWS }) =>
       dispatch(setModalView({ view })),
     toggleSidebar: ({ field }) => dispatch(toggleSidebar({ field })),
-    setBuilderDeviceView: ({ deviceView }) =>
-      dispatch(setBuilderDeviceView({ deviceView }))
+    updateBuilderInfo: (data) => dispatch(updateBuilderInfo(data))
   };
 };

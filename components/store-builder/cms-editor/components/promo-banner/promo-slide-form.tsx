@@ -1,25 +1,21 @@
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
-
 import { useMutation } from '@apollo/client';
 import Card from '@components/common/card';
 import Button from '@components/ui/button';
 import ColorPicker from '@components/ui/color-picker/color-picker';
 import Description from '@components/ui/description';
+import Input from '@components/ui/input';
 import Label from '@components/ui/label';
 import Loader from '@components/ui/loader/loader';
 import Radio from '@components/ui/radio';
 import SelectInput from '@components/ui/select-input';
-import { UPDATE_PROMO_SLIDE } from '@graphql/promo-slide';
-import {
-  useErrorLogger,
-  useGetUser,
-  useWarnIfUnsavedChanges
-} from '@hooks/index';
+import SwitchInput from '@components/ui/switch-input';
+import { UPDATE_LAYOUT_COMPONENT_CONTENT } from '@graphql/content';
+import { useErrorLogger, useGetUser } from '@hooks/index';
 import { useSettings } from '@hooks/useSettings';
+import { useUI } from '@hooks/useUI';
 import { notify } from '@lib/index';
-import type { PromoBannerType } from '@ts-types/generated';
-import { resolvePath } from '@utils/utils';
+import type { PromoBannerType } from '@ts-types/content.types';
+import type { StoreLayoutComponentType } from '@ts-types/generated';
 import cloneDeep from 'lodash/cloneDeep';
 import isEmpty from 'lodash/isEmpty';
 import dynamic from 'next/dynamic';
@@ -36,6 +32,7 @@ const Editor = dynamic(() => import('@components/ui/editor'), {
 });
 
 const animationSpeedOptions = [
+  { value: 500, name: '500 milliseconds' },
   { value: 1000, name: '1 second' },
   { value: 2000, name: '2 seconds' },
   { value: 3000, name: '3 seconds' },
@@ -45,12 +42,12 @@ const animationSpeedOptions = [
   { value: 7000, name: '7 seconds' },
   { value: 8000, name: '8 seconds' },
   { value: 9000, name: '9 seconds' },
-  { value: 10000, name: '10 seconds' },
-  { value: 15000, name: '15 seconds' },
-  { value: 20000, name: '20 seconds' }
+  { value: 10000, name: '10 seconds' }
 ];
 
 const delaySpeedOptions = [
+  { value: 1000, name: '1 seconds' },
+  { value: 2000, name: '2 seconds' },
   { value: 3000, name: '3 seconds' },
   { value: 4000, name: '4 seconds' },
   { value: 5000, name: '5 seconds' },
@@ -68,63 +65,59 @@ const defaultValues = {
   delaySpeed: { value: 3000, name: '3 seconds' },
   backgroundColor: '#da7c25',
   direction: 'horizontal',
-  sliders: []
+  slidesPerView: 1,
+  langDirection: { label: 'LTR' },
+  loop: true,
+  draggable: true,
+  items: []
 };
 
 type IProps = {
-  data?: PromoBannerType | any;
+  initialValues?: StoreLayoutComponentType;
 };
 
-const CreateOrUpdatePromoSlideForm = ({ data }: IProps) => {
+const CreateOrUpdatePromoSlideForm = ({ initialValues }: IProps) => {
   const { t } = useTranslation();
 
-  const initialValues = resolvePath(data, 'fields.data', {});
-
-  console.log({ data, initialValues });
-
+  const data = initialValues.data;
   const [error, setError] = useState(null);
-  const [unsavedChanges, setUnsavedChanges] = useState(true);
-
   const { selectedLanguage } = useSettings();
+
+  const { updateBuilderInfo } = useUI();
 
   const { watch, register, handleSubmit, control, setValue } =
     useForm<FormValues>({
-      defaultValues: !isEmpty(initialValues)
-        ? cloneDeep({
-            ...initialValues,
-            animationSpeed: animationSpeedOptions?.find(
-              (e) => e.value === initialValues.animationSpeed
-            ),
-            delaySpeed: delaySpeedOptions?.find(
-              (e) => e.value === initialValues.delaySpeed
-            ),
-            status: (initialValues as PromoBannerType)?.published
-              ? 'publish'
-              : 'draft'
-          })
+      defaultValues: !isEmpty(data)
+        ? cloneDeep({ ...data })
         : (defaultValues as PromoBannerType)
     });
 
   const { fields, append, remove } = useFieldArray({
     control,
-    name: 'sliders',
+    name: 'items',
     keyName: 'key'
   });
 
   const { userInfo } = useGetUser();
   const csrfToken = userInfo?.csrfToken;
 
-  const [updatePromoSlider, { loading: updating }] = useMutation(
-    UPDATE_PROMO_SLIDE,
+  const [updateLayoutComponent, { loading: updating }] = useMutation(
+    UPDATE_LAYOUT_COMPONENT_CONTENT,
     {
       context: {
         headers: {
           'x-csrf-token': csrfToken
         }
       },
-      onCompleted: (data: { updatePromoSlide: PromoBannerType }) => {
+      onCompleted: (data: {
+        updateLayoutComponent: StoreLayoutComponentType;
+      }) => {
         if (!isEmpty(data)) {
-          notify(t('common:successfully-updated'), 'success');
+          notify(t('common:successfully-updated'), 'success', {
+            position: 'top-center',
+            autoClose: 2000
+          });
+          updateBuilderInfo({ isReloadStoreFront: true });
         }
       }
     }
@@ -134,41 +127,42 @@ const CreateOrUpdatePromoSlideForm = ({ data }: IProps) => {
 
   const onSubmit = async (values: FormValues) => {
     const variables = {
-      direction: values.direction,
-      backgroundColor: values.backgroundColor,
-      animationSpeed: values?.animationSpeed?.value,
-      delaySpeed: values?.delaySpeed?.value,
-      published: values.status === 'publish',
+      componentId: initialValues.componentId,
+      contentId: initialValues?.contentId,
       language: selectedLanguage,
-      sliders: values?.sliders?.map((slider, idx) => ({
-        ...slider,
-        position: idx
-      }))
+      data: {
+        direction: values.direction,
+        backgroundColor: values.backgroundColor,
+        animationSpeed: values?.animationSpeed,
+        delaySpeed: values?.delaySpeed,
+        loop: values.loop,
+        slidesPerView: values.slidesPerView,
+        langDirection: values.langDirection,
+        draggable: values.draggable,
+        items: values?.items?.map((slider, idx) => ({
+          ...slider,
+          position: idx
+        }))
+      }
     };
 
-    updatePromoSlider({
-      variables: { id: data.id, ...variables }
-    }).catch((err) => {
+    updateLayoutComponent({ variables }).catch((err) => {
       setError(err);
     });
-
-    setUnsavedChanges(false);
   };
 
-  useWarnIfUnsavedChanges(unsavedChanges, () => {
-    return confirm(t('common:UNSAVED_CHANGES'));
-  });
-
   const backgroundColor = watch('backgroundColor');
+  const loop = watch('loop');
+  const draggable = watch('draggable');
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <FormActions title="Banner" />
+      <FormActions title="Banner" disabled={updating} loading={updating} />
       <div className="my-5 flex flex-wrap sm:my-8">
         <Description
-          title={t('form:input-label-description')}
+          title={t('form:input-label-configuration')}
           details={`${
-            initialValues
+            data
               ? t('form:item-description-edit')
               : t('form:item-description-add')
           } ${t('form:hero-slider-description-helper-text')}`}
@@ -195,6 +189,25 @@ const CreateOrUpdatePromoSlideForm = ({ data }: IProps) => {
               options={delaySpeedOptions}
             />
           </div>
+          <div>
+            <Label>{t('form:input-label-lang-direction')}</Label>
+            <SelectInput
+              name="langDirection"
+              control={control}
+              getOptionLabel={(option: { label: string }) => option?.label}
+              getOptionValue={(option: { label: string }) => option?.label}
+              options={[{ label: 'LTR' }, { label: 'RTL' }]}
+            />
+          </div>
+          <Input
+            label={`${t('form:input-label-slides-per-view')}`}
+            type="number"
+            min={1}
+            max={fields?.length ?? 1}
+            {...register('slidesPerView')}
+            variant="outline"
+            className="mt-5"
+          />
           <ColorPicker
             label={t('form:input-background-color')}
             {...register(`backgroundColor`)}
@@ -218,13 +231,31 @@ const CreateOrUpdatePromoSlideForm = ({ data }: IProps) => {
               label={t('form:input-label-horizontal')}
             />
           </div>
+          <div className="mt-4">
+            <Label>Infinite loop</Label>
+            <SwitchInput
+              name="loop"
+              label={loop ? 'On' : 'Off'}
+              control={control}
+              labelClassName="font-normal"
+            />
+          </div>
+          <div className="mt-4">
+            <Label>Draggable</Label>
+            <SwitchInput
+              name="draggable"
+              label={draggable ? 'On' : 'Off'}
+              control={control}
+              labelClassName="font-normal"
+            />
+          </div>
         </Card>
       </div>
       <div className="my-5 flex flex-wrap sm:my-8">
         <Description
-          title={t('form:input-label-sliders')}
+          title={t('form:input-label-content')}
           details={`${
-            initialValues
+            data
               ? t('form:item-description-edit')
               : t('form:item-description-add')
           } ${t('form:hero-slider-style-helper-text')}`}
@@ -245,10 +276,10 @@ const CreateOrUpdatePromoSlideForm = ({ data }: IProps) => {
                 <div className="flex flex-col justify-between">
                   <Label>{t('form:input-label-title')}</Label>
                   <Editor
-                    name={`sliders.${index}.content`}
+                    name={`items.${index}.content`}
                     value={slide.content}
                     onChange={(value) =>
-                      setValue(`sliders.${index}.content`, value)
+                      setValue(`items.${index}.content`, value)
                     }
                     className="mb-5  sm:col-span-2"
                     defaultValue=""

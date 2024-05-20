@@ -7,7 +7,8 @@ export default function Modal({
   open,
   onClose,
   children,
-  align = 'center'
+  align = 'center',
+  closeOnClickOutside = true
 }: any) {
   const cancelButtonRef = useRef(null);
 
@@ -17,6 +18,13 @@ export default function Modal({
       document.documentElement.style.overflow = 'auto';
     }
   }, [open]);
+
+  const handleClose = () => {
+    if (closeOnClickOutside) {
+      onClose();
+    }
+    return;
+  };
 
   return (
     <Transition show={open} as={Fragment}>
@@ -28,7 +36,7 @@ export default function Modal({
         static
         unmount={false}
         open={open}
-        onClose={onClose}
+        onClose={handleClose}
       >
         <div className="min-h-full text-center">
           <Transition.Child
@@ -40,7 +48,10 @@ export default function Modal({
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <Dialog.Overlay className="fixed inset-0 h-full w-full bg-gray-900 bg-opacity-50" />
+            <Dialog.Overlay
+              style={{ backdropFilter: 'blur(1px)' }}
+              className="fixed inset-0 h-full w-full bg-gray-900 bg-opacity-50"
+            />
           </Transition.Child>
 
           {/* This element is to trick the browser into centering the modal contents. */}
