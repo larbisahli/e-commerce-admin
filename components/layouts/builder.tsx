@@ -1,5 +1,6 @@
 import { ArrowNext } from '@components/icons/arrow-next';
 import { ArrowPrev } from '@components/icons/arrow-prev';
+import { TwoArrowPrev } from '@components/icons/two-arrow';
 import Navbar from '@components/store-builder/navbar';
 import Sidebar from '@components/store-builder/sidebar';
 import { useModalAction } from '@components/ui/modal/modal.context';
@@ -114,9 +115,12 @@ const AppLayout: React.FC = ({ children }: Props) => {
         {!showSlider && (
           <button
             onClick={() => setShowSlider((prev) => !prev)}
-            className="!fixed top-0 left-0 z-[999] mt-[65px] ml-2 flex cursor-pointer justify-end border p-1 shadow hover:bg-gray-100"
+            className={cn(
+              '!fixed top-0 left-0 z-[999] mt-[65px] ml-2 flex cursor-pointer justify-end border p-1 shadow hover:bg-gray-100',
+              !showSlider && 'rotate-180'
+            )}
           >
-            {showSlider ? <ArrowPrev /> : <ArrowNext />}
+            <TwoArrowPrev width={18} height={18} />
           </button>
         )}
         <div

@@ -31,12 +31,12 @@ const Navbar = () => {
   return (
     <header
       className={cx(
-        'fixed top-0 right-0 left-0 z-40 h-[58px] w-full border-b bg-gray-100 shadow-sm'
+        'fixed top-0 right-0 left-0 z-40 w-full border-b bg-gray-100 shadow-sm'
       )}
     >
-      <nav className={cx('flex items-center justify-between px-5 py-2')}>
+      <nav className={cx('flex h-[58px] items-center justify-between px-5')}>
         <Link href={ROUTES.DASHBOARD} className="flex items-center">
-          <div className="flex items-center pt-1 text-lg font-medium capitalize text-black">
+          <div className="flex items-center text-lg font-medium capitalize text-black">
             <Image
               src={'/favicon/icons/icon_android_192x192.png'}
               alt="logo"
@@ -47,7 +47,7 @@ const Navbar = () => {
           </div>
         </Link>
         <div className="flex flex-1 items-center justify-end space-s-5">
-          <div className="flex">
+          <div className="flex flex-1 items-center justify-center">
             <button
               onClick={() =>
                 updateBuilderInfo({ deviceView: DEVICE_VIEWS.DESKTOP })
@@ -93,7 +93,6 @@ const Navbar = () => {
               <MobileIcon width={18} height={18} />
             </button>
           </div>
-          <Button className="bg-green-600 hover:bg-green-700">Publish</Button>
         </div>
       </nav>
     </header>

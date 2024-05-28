@@ -10,6 +10,7 @@ export const selectStyles = {
     paddingTop: 12,
     paddingBottom: 12,
     cursor: 'pointer',
+    textTransform: 'capitalize',
     borderBottom: state.isSelected
       ? '1px solid #a6c7f4c4'
       : '1px solid #E5E7EB',
@@ -26,6 +27,7 @@ export const selectStyles = {
     backgroundColor: state.isDisabled ? '#eee' : '#ffffff',
     borderRadius: 2,
     border: '1px solid #D1D5DB',
+    textTransform: 'capitalize',
     borderColor: state.isFocused ? 'rgb(var(--color-accent-500))' : '#D1D5DB',
     boxShadow:
       state.menuIsOpen &&
@@ -109,6 +111,7 @@ export const simpleSelectStyles = {
     fontSize: '0.875rem',
     color: state.isSelected ? '#222' : '#6B7280',
     cursor: 'pointer',
+    textTransform: 'capitalize',
     borderBottom: state.isSelected
       ? '1px solid #a6c7f4c4'
       : '1px solid #E5E7EB',

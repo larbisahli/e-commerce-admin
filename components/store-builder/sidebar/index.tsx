@@ -1,9 +1,9 @@
-import { ArrowPrev } from '@components/icons/arrow-prev';
+import { TwoArrowPrev } from '@components/icons/two-arrow';
 import styles from '@components/navigation/scss/index.module.scss';
 import Scrollbar from '@components/ui/scrollbar';
 import { useUI } from '@hooks/useUI';
 import classNames from 'classnames/bind';
-import React, { useState } from 'react';
+import React from 'react';
 
 let cx = classNames.bind(styles);
 
@@ -33,10 +33,10 @@ const Sidebar: React.FC<Props> = ({ showSlider, setShowSlider, children }) => {
         <button
           onClick={() => setShowSlider((prev) => !prev)}
           className={classNames(
-            'absolute top-0 right-0 z-50 m-1 mt-3  flex cursor-pointer justify-end border p-1 shadow hover:bg-gray-100'
+            'absolute top-0 right-0 z-50 m-1 mt-5 flex cursor-pointer justify-end p-1'
           )}
         >
-          <ArrowPrev />
+          <TwoArrowPrev width={18} height={18} />
         </button>
         <div className="relative h-full w-full py-3">{children}</div>
       </Scrollbar>

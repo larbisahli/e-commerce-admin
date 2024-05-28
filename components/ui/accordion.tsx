@@ -38,17 +38,16 @@ export const Accordion: React.FC<CollapseProps> = ({
           <button
             className={cn(
               btnClassName,
-              'text-skin-base flex w-full cursor-pointer justify-between  border-b border-solid border-border-base bg-white px-5 py-4 text-start text-base font-medium shadow-sm focus:outline-none 2xl:px-6 2xl:py-6',
+              'text-skin-base flex w-full cursor-pointer justify-between  border-b border-dashed border-border-base bg-white py-4 pr-2 pl-0 text-start text-base font-medium shadow-sm focus:outline-none 2xl:px-6 2xl:py-6',
               {
                 '!border-none': open,
-                'shadow-lg': open,
                 'pointer-events-none bg-gray-100 text-gray-400': disabled,
                 'pointer-events-none': loading
               }
             )}
             onClick={onChange}
           >
-            <div className="flex items-end ">
+            <div className="flex items-end">
               <Title />
               {isUpdated && (
                 <div
@@ -71,14 +70,14 @@ export const Accordion: React.FC<CollapseProps> = ({
               )}
             </div>
             <div
-              className={cn('text-gray-400 transition', {
+              className={cn('text-gray-500 transition', {
                 'rotate-180': open
               })}
             >
               {loading ? (
                 <div className={styles.loading_small}></div>
               ) : (
-                <ArrowCircleDown width={'2em'} height={'2em'} />
+                <ArrowCircleDown width={'1em'} height={'1em'} />
               )}
             </div>
           </button>
@@ -86,7 +85,7 @@ export const Accordion: React.FC<CollapseProps> = ({
             className={cn(
               '2xl:text-15px text-skin-base -mt-1 hidden pb-4 text-sm leading-7 transition-all 2xl:mt-0 2xl:pb-7',
               {
-                '!block': open
+                '!block border-b': open
               }
             )}
           >

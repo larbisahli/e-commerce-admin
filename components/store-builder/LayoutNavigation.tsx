@@ -18,6 +18,7 @@ import {
 } from '@graphql/content';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetUser } from '@hooks/useGetUser';
+import { useUI } from '@hooks/useUI';
 import { notify } from '@lib/notify';
 import {
   ADD_SECTION_MODAL,
@@ -33,9 +34,8 @@ import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import React, { useEffect, useState } from 'react';
 
-import LayoutSectionLoader from './cms-editor/add-section/helpers/LayoutSectionLoader';
-import { useUI } from '@hooks/useUI';
 import { moduleNameMap } from './cms-editor/add-section/helpers/data/section-data';
+import LayoutSectionLoader from './cms-editor/add-section/helpers/LayoutSectionLoader';
 
 const pages = [
   {
@@ -300,6 +300,7 @@ export default function LayoutNavigation({
             {layoutBlocks?.map((block) => {
               const Icon = IconModules[block.moduleGroup];
               return (
+                // eslint-disable-next-line jsx-a11y/mouse-events-have-key-events
                 <div
                   role="button"
                   tabIndex={0}

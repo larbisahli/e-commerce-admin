@@ -1,13 +1,10 @@
 .color_picker {
-  @apply flex h-12 w-12 appearance-none items-center rounded-full border border-border-200 bg-transparent p-0 outline-none focus:outline-none focus:ring-0;
+  @apply flex h-6 w-6 appearance-none items-center rounded-sm bg-transparent p-0 outline-none focus:outline-none focus:ring-0;
 }
 
 .color_picker::-webkit-color-swatch-wrapper {
   padding: 0;
 }
 .color_picker::-webkit-color-swatch {
-  border-radius: 100%;
-  box-shadow:
-    rgba(0, 0, 0, 0.1) 0px 4px 6px -1px,
-    rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+  @apply rounded-sm border-0;
 }

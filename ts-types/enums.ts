@@ -109,6 +109,9 @@ export enum ModuleGroups {
   IMAGE_BANNER = 'ImageBanner',
   VIDEO_BANNER = 'VideoBanner',
   HTML = 'Html',
+  DIVIDER = 'Divider',
+  SPACER = 'Spacer',
+  LAYOUT = 'Layout',
   CATEGORY_LIST = 'CategoryList',
   PRODUCT_LIST = 'ProductList',
   HERO_CAROUSEL = 'HeroCarousel'

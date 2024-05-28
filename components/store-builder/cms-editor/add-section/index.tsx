@@ -15,6 +15,7 @@ import classNames from 'classnames';
 import { isEmpty } from 'lodash';
 import { useTranslation } from 'next-i18next';
 import { memo, useState } from 'react';
+
 import {
   sectionsLayout,
   sectionsOthers,
@@ -88,6 +89,7 @@ const AddSectionModal = () => {
         beforeComponentId: meta?.beforeComponentId,
         afterComponentId: meta?.afterComponentId,
         data: section.data,
+        styles: section.styles,
         position
       }
     }).catch((err) => {

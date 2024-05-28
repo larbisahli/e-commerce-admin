@@ -9,8 +9,12 @@ export const STORE_LAYOUT_COMPONENT_CONTENT = gql`
       componentId: $componentId
       language: $language
     ) {
+      moduleName
       contentId
       data
+    }
+    storeLayoutComponentStyles(componentId: $componentId) {
+      styles
     }
   }
 `;
@@ -51,6 +55,17 @@ export const UPDATE_LAYOUT_COMPONENT_CONTENT = gql`
   }
 `;
 
+export const UPDATE_LAYOUT_COMPONENT_STYLES = gql`
+  mutation UpdateLayoutComponentStyles(
+    $componentId: ID!
+    $styles: JSONObject!
+  ) {
+    updateLayoutComponentStyles(componentId: $componentId, styles: $styles) {
+      componentId
+    }
+  }
+`;
+
 export const UPDATE_LAYOUT_COMPONENT_MODULE_NAME = gql`
   mutation UpdateComponentModuleName($componentId: ID!, $moduleName: String!) {
     updateComponentModuleName(
@@ -71,6 +86,7 @@ export const ADD_LAYOUT_COMPONENT = gql`
     $afterComponentId: String
     $position: Int!
     $data: JSONObject!
+    $styles: JSONObject!
   ) {
     addLayoutComponent(
       layoutName: $layoutName
@@ -79,6 +95,7 @@ export const ADD_LAYOUT_COMPONENT = gql`
       afterComponentId: $afterComponentId
       position: $position
       data: $data
+      styles: $styles
     ) {
       componentId
     }

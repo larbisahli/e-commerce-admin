@@ -1,18 +1,24 @@
+import { useMutation } from '@apollo/client';
+import { NoComponentIcon } from '@components/icons/builder/no-component';
+import { CheckMark } from '@components/icons/checkmark';
+import Loader from '@components/ui/loader/loader';
+import {
+  STORE_LAYOUT_COMPONENT_CONTENT,
+  STORE_LAYOUTS,
+  UPDATE_LAYOUT_COMPONENT_MODULE_NAME
+} from '@graphql/content';
+import { useErrorLogger } from '@hooks/useErrorLogger';
+import { useGetUser } from '@hooks/useGetUser';
+import { useUI } from '@hooks/useUI';
+import { notify } from '@lib/notify';
+import { StoreLayoutComponentType } from '@ts-types/generated';
 import cn from 'classnames';
+import { isEmpty } from 'lodash';
 import Image from 'next/image';
 import { useTranslation } from 'next-i18next';
 import { memo, useEffect, useState } from 'react';
-import { CheckMark } from '@components/icons/checkmark';
+
 import { componentsThumbnail } from '../add-section/helpers/data/components-showcase-data';
-import { useMutation } from '@apollo/client';
-import { UPDATE_LAYOUT_COMPONENT_MODULE_NAME } from '@graphql/content';
-import { useGetUser } from '@hooks/useGetUser';
-import { StoreLayoutComponentType } from '@ts-types/generated';
-import { isEmpty } from 'lodash';
-import { notify } from '@lib/notify';
-import Loader from '@components/ui/loader/loader';
-import { useErrorLogger } from '@hooks/useErrorLogger';
-import { NoComponentIcon } from '@components/icons/builder/no-component';
 
 interface Props {
   moduleName: string;
@@ -32,7 +38,10 @@ const ComponentsShowcase = ({
   });
   const [selectedLoadingModuleName, setSelectedLoadingModuleName] =
     useState(null);
+  const [hoveredModuleName, setHoveredModuleName] = useState(null);
   const [error, setError] = useState(null);
+
+  const { updateBuilderInfo } = useUI();
 
   const { userInfo } = useGetUser();
   const csrfToken = userInfo?.csrfToken;
@@ -59,8 +68,15 @@ const ComponentsShowcase = ({
               (c) => c.moduleName === data.updateComponentModuleName.moduleName
             )
           );
+          updateBuilderInfo({ isReloadStoreFront: true });
         }
-      }
+      },
+      refetchQueries: [
+        STORE_LAYOUTS,
+        'StoreLayouts',
+        STORE_LAYOUT_COMPONENT_CONTENT,
+        'StoreLayoutComponentContent'
+      ]
     }
   );
 
@@ -95,7 +111,7 @@ const ComponentsShowcase = ({
               <NoComponentIcon height={45} width={45} />
             </div>
             <div className="text-lg font-medium">No components available</div>
-            <p className="text-sm text-gray-500">
+            <p className="text-center text-sm text-gray-500">
               There is no components available for this module
             </p>
           </div>
@@ -103,6 +119,14 @@ const ComponentsShowcase = ({
       );
     }
     return null;
+  };
+
+  const onMouseEnterHandler = (moduleName: string) => {
+    setHoveredModuleName(moduleName);
+  };
+
+  const onMouseLeaveHandler = () => {
+    setHoveredModuleName(null);
   };
 
   const renderPlugins = () => {
@@ -116,7 +140,17 @@ const ComponentsShowcase = ({
               <div className="relative h-full w-full pt-3">
                 {components?.map((component) => {
                   return (
-                    <div key={component.id} className="relative">
+                    <div
+                      key={component.moduleName}
+                      className="relative"
+                      onMouseEnter={() =>
+                        onMouseEnterHandler(component.moduleName)
+                      }
+                      onMouseLeave={onMouseLeaveHandler}
+                    >
+                      {component.moduleName === hoveredModuleName && (
+                        <ShowCaseTool {...component} />
+                      )}
                       {loading &&
                         selectedLoadingModuleName === component.moduleName && (
                           <div className="absolute top-0 right-0 left-0 bottom-0 z-50 flex items-center justify-center">
@@ -142,11 +176,18 @@ const ComponentsShowcase = ({
                           </div>
                         )}
                         <Image
-                          alt=""
-                          src={component.thumbnail}
+                          alt="thumbnail"
+                          src={component.thumbnail?.image}
                           width={500}
                           height={300}
                         />
+                        {/* <ImageComponent
+                          src={component.thumbnail?.image}
+                          customPlaceholder={component.thumbnail?.placeholder}
+                          width={500}
+                          height={300}
+                          objectFit="cover"
+                        /> */}
                       </button>
                     </div>
                   );
@@ -163,6 +204,21 @@ const ComponentsShowcase = ({
     <div className="h-full">
       {renderEmpty()}
       {renderPlugins()}
+    </div>
+  );
+};
+
+const ShowCaseTool = ({ title, thumbnail }) => {
+  return (
+    <div className="fixed top-[90px] left-[475px] z-50 rounded-md border bg-white p-3 shadow">
+      <h3 className="pb-1 text-lg font-medium text-black">{title}</h3>
+      <Image
+        alt="thumbnail"
+        src={thumbnail?.image}
+        width={800}
+        height={400}
+        className="rounded-md border"
+      />
     </div>
   );
 };

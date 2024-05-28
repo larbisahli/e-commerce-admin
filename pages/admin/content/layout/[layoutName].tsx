@@ -1,10 +1,7 @@
 import { useQuery } from '@apollo/client';
 import BuilderLayout from '@components/layouts/builder';
-import LayoutSectionLoader from '@components/store-builder/cms-editor/add-section/helpers/LayoutSectionLoader';
 import LayoutNavigation from '@components/store-builder/LayoutNavigation';
 import NavigationLink from '@components/store-builder/navigationLink';
-import Loader from '@components/ui/loader/loader';
-import Scrollbar from '@components/ui/scrollbar';
 import { STORE_LAYOUTS } from '@graphql/content';
 import { useErrorLogger, useGetUser } from '@hooks/index';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';

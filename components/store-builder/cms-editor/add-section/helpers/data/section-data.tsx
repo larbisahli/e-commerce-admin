@@ -1,17 +1,17 @@
 import {
-  Text,
+  Carousel,
+  CategoryList,
+  Divider,
   Html,
   Image,
   ImageBanner,
-  CategoryList,
-  Carousel,
-  Subscription,
-  PromoBanner,
+  Layout,
   ProductList,
-  VideoBanner,
-  Divider,
+  PromoBanner,
   Spacer,
-  Layout
+  Subscription,
+  Text,
+  VideoBanner
 } from '@components/icons/builder/sections';
 
 export const sectionsLayout = [
@@ -22,13 +22,42 @@ export const sectionsLayout = [
     icon: () => <Text />,
     data: {
       header: 'About',
-      text: 'This is a sample text about your amazing brand. Include as many details as you need! This is a sample text about your amazing brand. Include as many details as you need! This is a sample text about your amazing brand. Include as many details as you need!'
+      description:
+        'This is a sample text about your amazing brand. Include as many details as you need! This is a sample text about your amazing brand. Include as many details as you need! This is a sample text about your amazing brand. Include as many details as you need!'
+    },
+    styles: {
+      header: {
+        fontFamily: '',
+        fontWeight: '',
+        fontStyle: '',
+        lineHeight: '',
+        textTransform: '',
+        textDecoration: '',
+        textAlign: 'center',
+        letterSpacing: 0.25,
+        fontSize: '',
+        color: '#222'
+      },
+      description: {
+        fontFamily: '',
+        fontWeight: '',
+        fontStyle: '',
+        lineHeight: '',
+        textTransform: '',
+        textDecoration: '',
+        textAlign: '',
+        letterSpacing: 0.25,
+        fontSize: '',
+        color: '#222'
+      },
+      sectionSize: 'auto'
     }
   },
   {
     title: 'Image',
     moduleName: 'Image',
     description: 'Upload an image.',
+    // eslint-disable-next-line jsx-a11y/alt-text
     icon: () => <Image />,
     data: {
       thumbnail: [
@@ -39,36 +68,78 @@ export const sectionsLayout = [
           height: 500,
           width: 1000
         }
-      ],
-      sectionSize: 'auto',
-      borderRadius: { value: 'lg' },
-      objectFit: { value: 'fill' }
+      ]
+    },
+    styles: {
+      objectFit: { value: 'fill' },
+      border: {
+        borderRadius: 10,
+        borderStyle: {
+          value: 'solid',
+          label: 'Solid'
+        },
+        borderWidth: 0,
+        borderColor: '#222'
+      },
+      overlay: {
+        overlayOpacity: 0,
+        overlayColor: '#000'
+      },
+      sectionSize: 'auto'
     }
   },
   {
     title: 'Image banner',
-    moduleName: 'ImageBanner',
+    moduleName: 'ImageBannerHeadingCenter',
     description: 'Combine image, text, and buttons.',
     icon: () => <ImageBanner />,
     data: {
-      header: 'Bold new looks',
-      text: 'Volutpat non odio pellentesque phasellus. In quis elit facilisis lectus eget vestibulum nisl fames. Nibh nibh viverra et facilisi pretium. Placerat egestas maecenas nunc urna elit elementum adipiscing. Eget et enim, id faucibus ut mollis. Tristique iaculis faucibus duis pulvinar nulla tellus. In diam cursus nunc eget lorem nullam quisque. Nisl, erat viverra turpis morbi eget. Eget amet pulvinar dignissim viverra at amet ac.',
-      btnLabel: 'Browse new merch',
-      btnLink: '/collections/all',
-      showOverlay: false,
-      overlayOpacity: 10,
-      sectionSize: 'full',
-      headerSize: 'large',
+      header: 'Title copy goes here',
+      description:
+        'Volutpat non odio pellentesque phasellus. In quis elit facilisis lectus eget vestibulum nisl fames. Nibh nibh viverra et facilisi pretium. Placerat egestas maecenas nunc urna elit elementum adipiscing. Eget et enim, id faucibus ut mollis. Tristique iaculis faucibus duis pulvinar nulla tellus. In diam cursus nunc eget lorem nullam quisque. Nisl, erat viverra turpis morbi eget. Eget amet pulvinar dignissim viverra at amet ac.',
+      buttonLabel: 'Browse new merch',
+      buttonLink: '/collections/all',
       contentAlignment: 'center',
-      headerColor: '#000',
-      textColor: '#333',
-      btnBgColor: '#000',
-      btnTextColor: '#fff',
-      objectFit: 'cover',
-      borderRadius: 'lg',
-      image: 'dropgala/defaults/images/hero-banner/slider-xbox.png',
-      placeholder:
-        'dropgala/defaults/images/hero-banner/slider-xbox_placeholder.png'
+      thumbnail: [
+        {
+          image: 'dropgala/defaults/images/hero-banner/slider-xbox.png',
+          placeholder:
+            'dropgala/defaults/images/hero-banner/slider-xbox_placeholder.png',
+          height: 500,
+          width: 1000
+        }
+      ]
+    },
+    styles: {
+      header: {
+        fontFamily: '',
+        fontWeight: '',
+        fontStyle: '',
+        lineHeight: '',
+        textTransform: '',
+        textDecoration: '',
+        textAlign: '',
+        letterSpacing: 0.25,
+        fontSize: '',
+        color: '#222'
+      },
+      description: {
+        fontFamily: '',
+        fontWeight: '',
+        fontStyle: '',
+        lineHeight: '',
+        textTransform: '',
+        textDecoration: '',
+        textAlign: '',
+        letterSpacing: 0.25,
+        fontSize: '',
+        color: '#222'
+      },
+      sectionSize: 'auto',
+      overlay: {
+        overlayOpacity: 0,
+        overlayColor: '#000'
+      }
     }
   },
   {
@@ -78,19 +149,47 @@ export const sectionsLayout = [
     icon: () => <VideoBanner />,
     data: {
       header: 'Bold new looks',
-      text: '',
+      description:
+        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia, molestiae quas vel',
       buttonText: 'Browse new merch',
       buttonLink: '/collections/all',
-      showOverlay: false,
-      overlayOpacity: 10,
-      sectionSize: 'full', // auto
-      headerSize: 'large',
-      contentAlignment: 'center',
-      headerColor: '#000',
-      textColor: '#333',
-      btnBgColor: '#fff',
-      btnTextColor: '#fff',
-      video_url: '' // vimeo or youtube
+      videoUrl: '',
+      displayContent: false,
+      autoplay: true,
+      controls: false,
+      mute: true,
+      loop: false
+    },
+    styles: {
+      header: {
+        fontFamily: '',
+        fontWeight: '',
+        fontStyle: '',
+        lineHeight: '',
+        textTransform: '',
+        textDecoration: '',
+        textAlign: '',
+        letterSpacing: 0.25,
+        fontSize: '',
+        color: '#222'
+      },
+      description: {
+        fontFamily: '',
+        fontWeight: '',
+        fontStyle: '',
+        lineHeight: '',
+        textTransform: '',
+        textDecoration: '',
+        textAlign: '',
+        letterSpacing: 0.25,
+        fontSize: '',
+        color: '#222'
+      },
+      sectionSize: 'auto',
+      overlay: {
+        overlayOpacity: 0,
+        overlayColor: '#000'
+      }
     }
   },
   {
@@ -99,9 +198,11 @@ export const sectionsLayout = [
     description: 'Embed your own code.',
     icon: () => <Html />,
     data: {
-      customHtml: '',
-      customCss: '',
-      sectionSize: 'full' // auto
+      html: ''
+    },
+    styles: {
+      css: '',
+      sectionSize: 'full'
     }
   },
   {
@@ -109,21 +210,34 @@ export const sectionsLayout = [
     moduleName: 'Divider',
     description: 'Add an underlined division on a web page.',
     icon: () => <Divider />,
-    data: {}
+    data: {},
+    styles: {
+      alignment: 'center',
+      lineColor: '#e0dcdc',
+      lineStyle: { value: 'solid' },
+      lineThickness: 1,
+      lineWidth: 37
+    }
   },
   {
     title: 'Spacer',
     moduleName: 'Spacer',
     description: 'Add space between components.',
     icon: () => <Spacer />,
-    data: {}
+    data: {},
+    styles: {
+      spaceHeight: 50
+    }
   },
   {
-    title: 'Layout',
+    title: 'Layout Block',
     moduleName: 'Layout',
     description: 'Customize your layout with multiple columns.',
     icon: () => <Layout />,
-    data: {}
+    data: {},
+    styles: {
+      sectionSize: 'full'
+    }
   }
 ];
 
@@ -135,8 +249,10 @@ export const sectionsShop = [
     icon: () => <CategoryList />,
     data: {
       header: 'Featured categories',
-      categories: [],
-      sectionSize: 'full' // auto
+      categories: []
+    },
+    styles: {
+      sectionSize: 'full'
     }
   },
   {
@@ -147,12 +263,14 @@ export const sectionsShop = [
     data: {
       header: 'Featured products',
       collectionId: '',
-      sectionSize: 'full', // auto
       numberOfProducts: 10,
       ShowAllBtn: {
         text: 'View all',
         link: '/collections/name'
       }
+    },
+    styles: {
+      sectionSize: 'full'
     }
   },
   {
@@ -163,7 +281,6 @@ export const sectionsShop = [
     data: {
       delaySpeed: { value: 3000, name: '3 seconds' },
       animationSpeed: { value: 500, name: '500 milliseconds' },
-      backgroundColor: '#ea580c',
       slidesPerView: 1,
       direction: 'horizontal',
       langDirection: { label: 'RTL' },
@@ -180,11 +297,15 @@ export const sectionsShop = [
             '<p><strong>Special offer: </strong><span style="font-size: 14px;font-family: sans-serif;">free delivery, pay on delivery, faster and order now </span><span style="color: rgb(31,41,55);font-size: 14px;font-family: Inter, Mulish, sans-serif, "Open Sans", system-ui;">🔥🔥🔥</span></p>'
         }
       ]
+    },
+    styles: {
+      backgroundColor: '#ea580c',
+      sectionSize: 'full'
     }
   },
   {
     title: 'Carousel',
-    moduleName: 'Carousel',
+    moduleName: 'HeroCarousel',
     description: 'Slideshows a combination of image, text, and buttons.',
     icon: () => <Carousel />,
     data: {
@@ -227,6 +348,9 @@ export const sectionsShop = [
         pauseOnHover: false,
         autoplaySpeed: 5000
       }
+    },
+    styles: {
+      sectionSize: 'full'
     }
   }
 ];
@@ -240,12 +364,15 @@ export const sectionsOthers = [
     data: {
       header: 'Join the newsletter',
       text: 'Get sneak peeks of upcoming videos and much more!'
+    },
+    styles: {
+      sectionSize: 'full'
     }
   }
 ];
 
 export const moduleNameMap = {
-  HeroCarousel: 'Hero carousel',
+  Carousel: 'Carousel',
   PromoBanner: 'Promo banner',
   ProductList: 'Featured product collection',
   CategoryList: 'Featured category collection',
@@ -253,5 +380,8 @@ export const moduleNameMap = {
   VideoBanner: 'Video banner',
   ImageBanner: 'Image banner',
   Image: 'Image',
-  Text: 'Text'
+  Text: 'Text',
+  Spacer: 'Spacer',
+  Divider: 'Divider',
+  Layout: 'Layout'
 };

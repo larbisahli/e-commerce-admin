@@ -14,17 +14,39 @@ import { memo } from 'react';
 import ModuleShowcase from './helpers/ModuleShowcase';
 
 const HeroCarouselForm = dynamic(() => import('./components/hero-carousel'), {
-  ssr: true,
+  ssr: false,
   loading: () => <Loader special />
 });
-
 const ImageForm = dynamic(() => import('./components/image'), {
-  ssr: true,
+  ssr: false,
   loading: () => <Loader special />
 });
-
 const PromoBannerForm = dynamic(() => import('./components/promo-banner'), {
-  ssr: true,
+  ssr: false,
+  loading: () => <Loader special />
+});
+const VideoBannerContent = dynamic(() => import('./components/video-banner'), {
+  ssr: false,
+  loading: () => <Loader special />
+});
+const ImageBannerContent = dynamic(() => import('./components/image-banner'), {
+  ssr: false,
+  loading: () => <Loader special />
+});
+const TextContent = dynamic(() => import('./components/text'), {
+  ssr: false,
+  loading: () => <Loader special />
+});
+const DividerContent = dynamic(() => import('./components/divider'), {
+  ssr: false,
+  loading: () => <Loader special />
+});
+const SpacerContent = dynamic(() => import('./components/spacer'), {
+  ssr: false,
+  loading: () => <Loader special />
+});
+const LayoutContent = dynamic(() => import('./components/layout'), {
+  ssr: false,
   loading: () => <Loader special />
 });
 
@@ -34,6 +56,7 @@ export interface OptionsVariable {
 }
 export interface TComponent {
   storeLayoutComponentContent: StoreLayoutComponentType;
+  storeLayoutComponentStyles: StoreLayoutComponentType;
 }
 
 const CmsEditorModal = () => {
@@ -53,18 +76,27 @@ const CmsEditorModal = () => {
     }
   );
 
-  const { storeLayoutComponentContent = {} } = data ?? {};
+  const { storeLayoutComponentContent = {}, storeLayoutComponentStyles = {} } =
+    data ?? {};
 
   useErrorLogger(error);
 
   console.log('=====Y>', { meta, storeLayoutComponentContent });
+
+  const initialValues = {
+    ...meta,
+    ...storeLayoutComponentContent,
+    ...storeLayoutComponentStyles
+  };
+
+  console.log({ initialValues });
 
   return (
     <div className="flex h-[90vh] w-[90vw] flex-col overflow-hidden">
       <div className="border-b border-gray-200 bg-gray-100 p-4 text-lg font-semibold capitalize text-gray-800">
         CMS Editor
       </div>
-      <div className="w-full overflow-y-auto p-4">
+      <div className="h-full w-full overflow-y-auto p-4">
         <div className="flex h-full text-sm text-gray-600">
           <div className="h-full w-full overflow-y-hidden px-0 pb-5 sm:w-4/12 md:w-1/3 md:pe-5">
             <ModuleShowcase
@@ -81,22 +113,30 @@ const CmsEditorModal = () => {
             )}
             {meta?.moduleGroup === ModuleGroups.PROMO_BANNER &&
               !isEmpty(storeLayoutComponentContent) &&
-              !loading && (
-                <PromoBannerForm
-                  initialValues={{ ...meta, ...storeLayoutComponentContent }}
-                />
-              )}
+              !loading && <PromoBannerForm initialValues={initialValues} />}
             {meta?.moduleGroup === ModuleGroups.HERO_CAROUSEL &&
               !isEmpty(storeLayoutComponentContent) &&
-              !loading && (
-                <HeroCarouselForm
-                  initialValues={{ ...meta, ...storeLayoutComponentContent }}
-                />
-              )}
+              !loading && <HeroCarouselForm initialValues={initialValues} />}
             {meta?.moduleGroup === ModuleGroups.IMAGE && !loading && (
-              <ImageForm
-                initialValues={{ ...meta, ...storeLayoutComponentContent }}
-              />
+              <ImageForm initialValues={initialValues} />
+            )}
+            {meta?.moduleGroup === ModuleGroups.VIDEO_BANNER && !loading && (
+              <VideoBannerContent initialValues={initialValues} />
+            )}
+            {meta?.moduleGroup === ModuleGroups.IMAGE_BANNER && !loading && (
+              <ImageBannerContent initialValues={initialValues} />
+            )}
+            {meta?.moduleGroup === ModuleGroups.TEXT && !loading && (
+              <TextContent initialValues={initialValues} />
+            )}
+            {meta?.moduleGroup === ModuleGroups.DIVIDER && !loading && (
+              <DividerContent initialValues={initialValues} />
+            )}
+            {meta?.moduleGroup === ModuleGroups.SPACER && !loading && (
+              <SpacerContent initialValues={initialValues} />
+            )}
+            {meta?.moduleGroup === ModuleGroups.LAYOUT && !loading && (
+              <LayoutContent initialValues={initialValues} />
             )}
           </div>
         </div>

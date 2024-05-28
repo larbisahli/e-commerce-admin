@@ -14,17 +14,21 @@ import { memo, useEffect } from 'react';
 interface Props {
   loading?: boolean;
   disabled?: boolean;
+  isLang?: boolean;
   forceSystemLang?: boolean;
   title: string;
   handleBack?: () => void;
+  btnLabel: string;
 }
 
 const FormActions = ({
   loading,
   disabled,
+  isLang = true,
   forceSystemLang,
   handleBack,
-  title
+  title,
+  btnLabel
 }: Props) => {
   const { t } = useTranslation();
   const { closeModal } = useModalAction();
@@ -51,26 +55,28 @@ const FormActions = ({
   const renderActions = () => {
     return (
       <div className="flex w-full items-center justify-between md:w-fit md:justify-start">
-        <div className="relative mr-4 ml-4 flex h-[40px] w-[220px] items-center justify-end">
-          <Select
-            options={languages}
-            value={selectedLanguage}
-            name="language"
-            getOptionLabel={(option: any) => option.name}
-            getOptionValue={(option: any) => option.id}
-            onChange={onLanguageChange}
-            isDisabled={forceSystemLang || disabled}
-            isLoading={isLoading}
-            className="w-full"
-          />
-        </div>
+        {isLang && (
+          <div className="relative mr-4 ml-4 flex h-[40px] w-[220px] items-center justify-end">
+            <Select
+              options={languages}
+              value={selectedLanguage}
+              name="language"
+              getOptionLabel={(option: any) => option.name}
+              getOptionValue={(option: any) => option.id}
+              onChange={onLanguageChange}
+              isDisabled={forceSystemLang || disabled}
+              isLoading={isLoading}
+              className="w-full"
+            />
+          </div>
+        )}
         <Button
           className="mr-4"
           variant="outline"
           onClick={() => closeModal(CMS_BUILDER_MODAL)}
           disabled={disabled}
         >
-          <div className="text-lg">{t('form:button-label-cancel')}</div>
+          <div>{t('form:button-label-cancel')}</div>
         </Button>
         {saveButton()}
       </div>
@@ -84,7 +90,7 @@ const FormActions = ({
         disabled={disabled}
         renderIcon={<SaveIcon width="1.3rem" height="1.3rem" />}
       >
-        <div className="text-lg">{t('form:button-label-save')}</div>
+        <div>{btnLabel}</div>
       </Button>
     );
   };
@@ -93,7 +99,7 @@ const FormActions = ({
     <>
       <div>
         <div
-          className="mb-3 flex flex-wrap items-center
+          className="mb-3 flex items-center
         justify-between border-b border-gray-300 p-3 px-0 pt-0"
         >
           {handleBack instanceof Function ? (
@@ -101,7 +107,7 @@ const FormActions = ({
               <ArrowPrev />
             </Button>
           ) : (
-            <h3 className="px-3 text-lg font-medium">{title}</h3>
+            <h3 className="px-3 font-medium">{title}</h3>
           )}
           {renderActions()}
         </div>

@@ -30,7 +30,7 @@ export default function NavigationLink() {
             pathname.split('/').includes('layout') && 'text-black underline'
           )}
         >
-          Layout
+          Layers
         </div>
       </Link>
     </div>

@@ -235,6 +235,7 @@
   border: 1px solid #b7b7b7 !important;
   pointer-events: auto !important;
   opacity: 1 !important;
+  z-index: 999;
 }
 
 .form-tooltip-arrow {
@@ -255,4 +256,10 @@
 .slick-next:before {
   color: rgb(133, 132, 132) !important;
   padding: 3px;
+}
+
+.hide-arrow[type='number']::-webkit-inner-spin-button,
+.hide-arrow[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }

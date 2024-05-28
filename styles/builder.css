@@ -18,6 +18,13 @@
   opacity: 1;
 }
 
+/* .builder-container--desktop {
+  box-shadow: rgba(48, 53, 64, 0.2) 0px 1px 6px;
+  border: 0px;
+  border-radius: 10px;
+  opacity: 1;
+} */
+
 .builder-container--mobile {
   max-width: 390px;
   max-height: 700px;

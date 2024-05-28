@@ -19,11 +19,12 @@ const ColorPicker = React.forwardRef<HTMLInputElement, Props>(
       <div className={className}>
         <label
           htmlFor={name}
-          className="mb-3 block text-sm font-semibold leading-none text-body-dark"
+          className="block text-sm leading-none text-body-dark"
         >
           {label}
         </label>
         <div className="flex items-center">
+          {children}
           <input
             id={name}
             name={name}
@@ -37,7 +38,6 @@ const ColorPicker = React.forwardRef<HTMLInputElement, Props>(
             aria-invalid={error ? 'true' : 'false'}
             {...rest}
           />
-          {children}
         </div>
         {error && <p className="my-2 text-end text-xs text-red-500">{error}</p>}
       </div>

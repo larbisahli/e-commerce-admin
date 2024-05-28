@@ -60,17 +60,7 @@ const delaySpeedOptions = [
 
 type FormValues = PromoBannerType;
 
-const defaultValues = {
-  animationSpeed: { value: 500, name: '500 Milliseconds' },
-  delaySpeed: { value: 3000, name: '3 seconds' },
-  backgroundColor: '#da7c25',
-  direction: 'horizontal',
-  slidesPerView: 1,
-  langDirection: { label: 'LTR' },
-  loop: true,
-  draggable: true,
-  items: []
-};
+const defaultValues = {};
 
 type IProps = {
   initialValues?: StoreLayoutComponentType;
@@ -157,7 +147,12 @@ const CreateOrUpdatePromoSlideForm = ({ initialValues }: IProps) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <FormActions title="Banner" disabled={updating} loading={updating} />
+      <FormActions
+        btnLabel="Save"
+        title="Banner"
+        disabled={updating}
+        loading={updating}
+      />
       <div className="my-5 flex flex-wrap sm:my-8">
         <Description
           title={t('form:input-label-configuration')}
@@ -211,7 +206,7 @@ const CreateOrUpdatePromoSlideForm = ({ initialValues }: IProps) => {
           <ColorPicker
             label={t('form:input-background-color')}
             {...register(`backgroundColor`)}
-            className="mt-5"
+            className="mt-5 flex items-center justify-between"
           >
             <DisplayColorCode color={backgroundColor} />
           </ColorPicker>
@@ -321,12 +316,7 @@ const DisplayColorCode = ({ color }: { color: string }) => {
   return (
     <>
       {color !== null && (
-        <span
-          className="rounded border border-border-200 bg-gray-100 px-2 py-1
-                         text-sm text-heading ms-3"
-        >
-          {color}
-        </span>
+        <span className="mr-2 text-sm text-heading">{color}</span>
       )}
     </>
   );

@@ -62,7 +62,7 @@ const PluginsShowcase = (props: Props) => {
               <NoPluginIcon height={45} width={45} />
             </div>
             <div className="text-lg font-medium">No plugins available</div>
-            <p className="text-sm text-gray-500">
+            <p className="text-center text-sm text-gray-500">
               Try to look for available plugins in the app marketplace
             </p>
             <div>

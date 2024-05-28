@@ -179,3 +179,53 @@ export interface TableQueryVariables {
 export interface LanguageProps {
   language: LanguageType;
 }
+
+export enum TextAlignEnum {
+  LEFT = 'left',
+  CENTER = 'center',
+  RIGHT = 'right'
+}
+
+export enum BorderEnum {
+  LEFT = 'left',
+  TOP = 'top',
+  RIGHT = 'right',
+  BOTTOM = 'bottom',
+  ALL = 'all'
+}
+
+export interface PageBuilderStyles {
+  Typography: {
+    fontFamily: string;
+    fontWeight: number;
+    fontStyle: string;
+    lineHeight: number;
+    textTransform: string;
+    textDecoration: string;
+    textAlign: TextAlignEnum;
+    letterSpacing: number;
+    fontSize: string;
+    color: string;
+  };
+  Border: {
+    borderRadius: number;
+    borderStyle: string;
+    borderWidth: number;
+    borderColor: string;
+    border: BorderEnum;
+  };
+  Spacing: {
+    marginTop: number;
+    marginLeft: number;
+    marginRight: number;
+    marginBottom: number;
+    paddingTop: number;
+    paddingRight: number;
+    paddingLeft: number;
+    paddingBottom: number;
+  };
+  Overlay: {
+    overlayOpacity: number;
+    overlayColor: string;
+  };
+}
