@@ -1,6 +1,9 @@
 import { useMutation } from '@apollo/client';
 import Card from '@components/common/card';
+import ImageModal from '@components/image-modal';
+import Checkbox from '@components/ui/checkbox';
 import Description from '@components/ui/description';
+import Input from '@components/ui/input';
 import { UPDATE_LAYOUT_COMPONENT_CONTENT } from '@graphql/content';
 import { useErrorLogger, useGetUser } from '@hooks/index';
 import { useSettings } from '@hooks/useSettings';
@@ -13,14 +16,13 @@ import { useTranslation } from 'next-i18next';
 import { memo, useState } from 'react';
 import React from 'react';
 import { useForm } from 'react-hook-form';
+
 import FormActions from '../../helpers/FormActions';
-import ImageModal from '@components/image-modal';
 
 type FormValues = {
   thumbnail: ImageType[];
-  sectionSize: string;
-  borderRadius: number;
-  objectFit: { value: string };
+  link: string;
+  newWindow: boolean;
 };
 
 const defaultValues = {};
@@ -38,7 +40,7 @@ const ImageForm = ({ initialValues }: IProps) => {
 
   const { updateBuilderInfo } = useUI();
 
-  const { watch, handleSubmit, setValue } = useForm<FormValues>({
+  const { watch, handleSubmit, setValue, register } = useForm<FormValues>({
     defaultValues: !isEmpty(data)
       ? cloneDeep({ ...data })
       : (defaultValues as FormValues)
@@ -63,7 +65,7 @@ const ImageForm = ({ initialValues }: IProps) => {
             position: 'top-center',
             autoClose: 2000
           });
-          updateBuilderInfo({ isReloadStoreFront: true });
+          updateBuilderInfo({ isReloadIframe: true });
         }
       }
     }
@@ -77,7 +79,9 @@ const ImageForm = ({ initialValues }: IProps) => {
       contentId: initialValues?.contentId,
       language: selectedLanguage,
       data: {
-        thumbnail: values.thumbnail
+        thumbnail: values.thumbnail,
+        link: values.link,
+        target: values.newWindow ? '_blank' : '_self'
       }
     };
 
@@ -103,6 +107,19 @@ const ImageForm = ({ initialValues }: IProps) => {
           className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
         />
         <Card className="w-full sm:w-8/12 md:w-2/3">
+          <Input
+            label={'Links to (URL)'}
+            {...register('link')}
+            placeholder={'/collections/all'}
+            variant="outline"
+            className="mb-5"
+          />
+          <div className="mb-3">
+            <Checkbox
+              {...register('newWindow' as const)}
+              label={'Open in new window'}
+            />
+          </div>
           <ImageModal
             label="form:label-add-image"
             isRequiredLabel

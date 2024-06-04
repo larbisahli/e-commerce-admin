@@ -1,5 +1,3 @@
-import { ArrowNext } from '@components/icons/arrow-next';
-import { ArrowPrev } from '@components/icons/arrow-prev';
 import { TwoArrowPrev } from '@components/icons/two-arrow';
 import Navbar from '@components/store-builder/navbar';
 import Sidebar from '@components/store-builder/sidebar';
@@ -10,7 +8,8 @@ import { fetchStoreSettings, setCurrentLanguage } from '@store/settings';
 import {
   ADD_SECTION_MODAL,
   CMS_BUILDER_MODAL,
-  DELETE_COMPONENT
+  DELETE_COMPONENT,
+  LIBRARY_SECTION_MODAL
 } from '@ts-types/constants';
 import { StoreBuilder, StoreBuilderActions } from '@ts-types/enums';
 import cn from 'classnames';
@@ -40,8 +39,6 @@ const AppLayout: React.FC = ({ children }: Props) => {
   const [showSlider, setShowSlider] = useState(true);
 
   const layoutNameQuery = query.layoutName as string;
-
-  console.log({ query });
 
   // Fetch store settings
   useEffect(() => {
@@ -90,6 +87,16 @@ const AppLayout: React.FC = ({ children }: Props) => {
             } else if (data.actionType === StoreBuilderActions.DELETE_ACTION) {
               openModal(DELETE_COMPONENT, data.componentId, {});
             }
+          }
+          if (e.data?.source === StoreBuilder.GALA_CMS_BUILDER_LIBRARY) {
+            const data = e.data;
+            console.log('message ::>', data, layoutName.current);
+            openModal(LIBRARY_SECTION_MODAL, null, {
+              componentId: data.componentId,
+              moduleName: data.moduleName,
+              moduleGroup: data.moduleGroup,
+              layoutName: layoutName.current
+            });
           }
         },
         false

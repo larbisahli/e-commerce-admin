@@ -1,12 +1,13 @@
 import { useMutation } from '@apollo/client';
+import { AddSectionIcon } from '@components/icons/builder/add-section';
 import { FooterIcon } from '@components/icons/builder/footer';
 import { GrabIcon } from '@components/icons/builder/grab';
 import { HeaderIcon } from '@components/icons/builder/header';
+import { NewPageIcon } from '@components/icons/builder/new-page';
+import { PageSettingsIcon } from '@components/icons/builder/page-settings';
 import * as IconModules from '@components/icons/builder/sections';
 import { Eye } from '@components/icons/eye-icon';
 import { EyeOff } from '@components/icons/eye-off-icon';
-import { AddIcon } from '@components/icons/sidebar';
-import { AddFillIcon } from '@components/icons/sidebar/addFillIcon';
 import Trash from '@components/icons/trash';
 import Loader from '@components/ui/loader/loader';
 import { useModalAction } from '@components/ui/modal/modal.context';
@@ -23,72 +24,38 @@ import { notify } from '@lib/notify';
 import {
   ADD_SECTION_MODAL,
   CMS_BUILDER_MODAL,
-  DELETE_COMPONENT
+  DELETE_COMPONENT,
+  NEW_PAGE_MODAL
 } from '@ts-types/constants';
-import { StoreBuilder, StoreLayoutNames } from '@ts-types/enums';
+import { ModuleGroups, StoreBuilder, StoreLayoutNames } from '@ts-types/enums';
 import { ROUTES } from '@utils/routes';
+import { getBuilderSrc } from '@utils/utils';
 import classNames from 'classnames';
 import { clone, isEmpty, sortBy } from 'lodash';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { moduleNameMap } from './cms-editor/add-section/helpers/data/section-data';
 import LayoutSectionLoader from './cms-editor/add-section/helpers/LayoutSectionLoader';
 
-const pages = [
-  {
-    id: StoreLayoutNames.HOMEPAGE,
-    label: 'Home page'
-  },
-  {
-    id: StoreLayoutNames.PRODUCT_PAGE,
-    label: 'Product page'
-  },
-  {
-    id: StoreLayoutNames.CONTACT,
-    label: 'Contact'
-  },
-  {
-    id: StoreLayoutNames.PRIVACY_POLICY,
-    label: 'Privacy Policy'
-  },
-  {
-    id: StoreLayoutNames.RETURN_FAQ,
-    label: 'Return & FAQ'
-  },
-  {
-    id: StoreLayoutNames.TERMS_OF_SERVICES,
-    label: 'Terms of Services'
-  },
-  {
-    id: 'CUSTOM',
-    label: 'New Page'
-  }
-];
-
-const CustomOption = ({ innerProps, data, isSelected }) => {
+const CustomOption = ({ innerProps, data }) => {
   return (
     <Link
       href={{
         pathname: `${ROUTES.BUILDER_LAYOUT}/[layoutName]`,
-        query: { layoutName: data?.id }
+        query: { layoutName: data?.name }
       }}
     >
       <div
         {...innerProps}
         className={classNames(
           'z-50 flex cursor-pointer items-center p-2 px-4 hover:bg-gray-100',
-          { 'border-t py-3': data?.id === 'CUSTOM' }
+          { 'border-t py-3': data?.name === 'CUSTOM' }
         )}
       >
-        {data?.id === 'CUSTOM' && (
-          <span className="mr-2 rounded-full bg-accent text-white">
-            <AddIcon width={18} height={18} />
-          </span>
-        )}
-        <span className="text-sm font-normal">{data?.label}</span>
+        <span className="text-sm font-normal capitalize">{data?.title}</span>
       </div>
     </Link>
   );
@@ -96,6 +63,7 @@ const CustomOption = ({ innerProps, data, isSelected }) => {
 
 export default function LayoutNavigation({
   storeLayoutComponents,
+  storeLayoutCommonComponents,
   loading,
   storeLayouts
 }) {
@@ -106,18 +74,22 @@ export default function LayoutNavigation({
   const { openModal } = useModalAction();
 
   const [selectedPage, setSelectedPage] = useState({
-    id: StoreLayoutNames.HOMEPAGE,
-    label: 'Home page'
+    name: StoreLayoutNames.HOMEPAGE,
+    title: 'Home page',
+    isCustom: false
   });
+
   const [layoutBlocks, setLayoutBlocks] = useState([]);
   const [draggedItemId, setDraggedItemId] = useState(null);
 
   const [error, setError] = useState(null);
 
   const { userInfo } = useGetUser();
+
   const { updateBuilderInfo } = useUI();
 
   const csrfToken = userInfo?.csrfToken;
+  const alias = userInfo?.store?.alias;
 
   const [updateLayoutComponentVisibility, { loading: visibilityLoading }] =
     useMutation(UPDATE_LAYOUT_COMPONENT_VISIBILITY, {
@@ -129,7 +101,7 @@ export default function LayoutNavigation({
       refetchQueries: [STORE_LAYOUTS, 'StoreLayouts'],
       onCompleted: (data: { updateLayoutComponentVisibility: any }) => {
         if (!isEmpty(data.updateLayoutComponentVisibility)) {
-          updateBuilderInfo({ isReloadStoreFront: true });
+          updateBuilderInfo({ isReloadIframe: true });
           notify(t('common:successfully-updated'), 'success', {
             position: 'top-center',
             autoClose: 1000
@@ -150,7 +122,7 @@ export default function LayoutNavigation({
         updateLayoutComponentsPosition: { success: boolean };
       }) => {
         if (data.updateLayoutComponentsPosition.success) {
-          updateBuilderInfo({ isReloadStoreFront: true });
+          updateBuilderInfo({ isReloadIframe: true });
           notify(t('common:successfully-updated'), 'success', {
             position: 'top-center',
             autoClose: 1000
@@ -160,6 +132,13 @@ export default function LayoutNavigation({
     });
 
   useErrorLogger(error);
+
+  useEffect(() => {
+    if (layoutName) {
+      const value = storeLayouts?.find((layout) => layout.name === layoutName);
+      setSelectedPage(value);
+    }
+  }, [layoutName, storeLayouts]);
 
   useEffect(() => {
     const blocks = clone(storeLayoutComponents);
@@ -237,6 +216,7 @@ export default function LayoutNavigation({
     moduleName: string;
     componentId: string;
   }) => {
+    // @ts-ignore
     var iframeWin = document.getElementById('storefront-iframe').contentWindow;
     iframeWin.postMessage(
       {
@@ -244,8 +224,16 @@ export default function LayoutNavigation({
         moduleName: block?.moduleName,
         componentId: block?.componentId
       },
-      'http://localhost:3000'
+      getBuilderSrc(alias)
     );
+  };
+
+  const handleStoreLayoutSelect = (layout) => {
+    setSelectedPage(layout);
+    const iframeSrc = layout?.isCustom
+      ? getBuilderSrc(alias, `pages/${layout.name}`)
+      : getBuilderSrc(alias, layout.name);
+    updateBuilderInfo({ isReloadIframe: true, iframeSrc });
   };
 
   const handleHover = (block: any) => {
@@ -256,24 +244,78 @@ export default function LayoutNavigation({
     handleStoreComponentSelect(null);
   };
 
+  const headerComponent = useMemo(
+    () =>
+      storeLayoutCommonComponents?.find(
+        (component) => component?.moduleGroup === ModuleGroups.HEADER
+      ),
+    [storeLayoutCommonComponents]
+  );
+  const footerComponent = useMemo(
+    () =>
+      storeLayoutCommonComponents?.find(
+        (component) => component?.moduleGroup === ModuleGroups.FOOTER
+      ),
+    [storeLayoutCommonComponents]
+  );
+  const commonComponent = useMemo(
+    () =>
+      storeLayoutCommonComponents?.filter(
+        (component) =>
+          component?.moduleGroup !== ModuleGroups.FOOTER &&
+          component?.moduleGroup !== ModuleGroups.HEADER
+      ),
+    [storeLayoutCommonComponents]
+  );
+
   const isLoading =
-    isEmpty(layoutBlocks) || loading || positionLoading || visibilityLoading;
+    (isEmpty(layoutBlocks) && loading) ||
+    loading ||
+    positionLoading ||
+    visibilityLoading;
 
   return (
     <div>
-      <div className="z-50 my-5 px-5">
+      <div className="z-50 mx-4 mt-5 mb-1 border-b border-dashed pb-3">
         <Select
-          options={pages}
+          options={storeLayouts}
           value={selectedPage}
           name="page"
-          getOptionLabel={(option: any) => `Page: ${option.label}`}
-          getOptionValue={(option: any) => option.id}
-          onChange={setSelectedPage}
+          getOptionLabel={(option: any) => `Page: ${option.title}`}
+          getOptionValue={(option: any) => option.name}
+          onChange={handleStoreLayoutSelect}
           components={{ Option: CustomOption }}
           className="z-50"
         />
+        <button
+          className={classNames(
+            'group z-50 flex cursor-pointer items-center pt-2 hover:text-blue-700'
+          )}
+          onClick={() => {
+            openModal(NEW_PAGE_MODAL, null, {});
+          }}
+        >
+          <NewPageIcon width={18} height={18} />
+          <span className="px-2 text-sm font-normal text-gray-700 group-hover:text-gray-900">
+            Create New Page
+          </span>
+        </button>
+        <button
+          className={classNames(
+            'group z-50 hidden cursor-pointer items-center py-1 hover:text-blue-700',
+            selectedPage?.isCustom && '!flex'
+          )}
+          onClick={() => {
+            openModal(NEW_PAGE_MODAL, null, { layout: selectedPage });
+          }}
+        >
+          <PageSettingsIcon width={18} height={18} />
+          <span className="px-2 text-sm font-normal text-gray-700 group-hover:text-gray-900">
+            Page Settings
+          </span>
+        </button>
       </div>
-      <div className="relative">
+      <div className="relative min-h-[300px]">
         {isLoading && (
           <div className="absolute top-0 right-0 left-0 bottom-0 z-30 flex items-center justify-center">
             <Loader special />
@@ -284,8 +326,8 @@ export default function LayoutNavigation({
           <div
             role="button"
             tabIndex={0}
-            onKeyDown={(e) => handleKeyDown(e, { moduleName: 'Header' })}
-            onClick={() => handleClick({ moduleName: 'Header' })}
+            onKeyDown={(e) => handleKeyDown(e, headerComponent)}
+            onClick={() => handleClick(headerComponent)}
             className="mx-2 flex cursor-pointer items-center rounded-sm px-3 py-4 hover:bg-gray-200"
           >
             <div className="mr-2">
@@ -296,7 +338,7 @@ export default function LayoutNavigation({
           {/* MAIN */}
           <div className="mx-auto my-2 h-[1px] w-[90%] bg-gray-300"></div>
           <div className="mx-2">
-            {isEmpty(layoutBlocks) && <LayoutSectionLoader />}
+            {isLoading && <LayoutSectionLoader />}
             {layoutBlocks?.map((block) => {
               const Icon = IconModules[block.moduleGroup];
               return (
@@ -375,18 +417,45 @@ export default function LayoutNavigation({
               className="flex w-full cursor-pointer items-center rounded-sm px-3 py-4 hover:bg-gray-200"
             >
               <div className="mr-2 w-6 text-blue-700">
-                <AddFillIcon width={20} height={20} />
+                <AddSectionIcon width={18} height={18} />
               </div>
               <div className="text-blue-700">Add section</div>
             </button>
           </div>
+          <div className="mx-auto my-2 h-[1px] w-[90%] bg-gray-200"></div>
+          {/* COMMON */}
+          <div className="mx-2">
+            {commonComponent?.map((block) => {
+              const Icon = IconModules[block.moduleGroup];
+              return (
+                <div
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => handleKeyDown(e, block)}
+                  onClick={() => handleClick(block)}
+                  key={block.componentId}
+                  className={classNames(
+                    'group flex cursor-pointer items-center rounded-sm py-4 pl-3 pr-1 text-gray-700 hover:bg-gray-100',
+                    { 'opacity-50': block.componentId === draggedItemId }
+                  )}
+                >
+                  <div className="mr-2 w-6">
+                    {Icon && <Icon width={20} height={20} />}
+                  </div>
+                  <div className="cut-line-1 flex-1 text-base">
+                    {moduleNameMap[block.moduleGroup]}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
           <div className="mx-auto my-2 h-[1px] w-[90%] bg-gray-300"></div>
-          {/* HEADER */}
+          {/* FOOTER */}
           <div
             role="button"
             tabIndex={0}
-            onKeyDown={(e) => handleKeyDown(e, { moduleName: 'Header' })}
-            onClick={() => handleClick({ moduleName: 'Header' })}
+            onKeyDown={(e) => handleKeyDown(e, footerComponent)}
+            onClick={() => handleClick(footerComponent)}
             className="mx-2 flex cursor-pointer items-center rounded-sm px-3 py-4 hover:bg-gray-200"
           >
             <div className="mr-2">

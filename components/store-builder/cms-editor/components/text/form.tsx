@@ -70,7 +70,7 @@ const TextForm = ({ initialValues }: IProps) => {
             position: 'top-center',
             autoClose: 2000
           });
-          updateBuilderInfo({ isReloadStoreFront: true });
+          updateBuilderInfo({ isReloadIframe: true });
         }
       }
     }

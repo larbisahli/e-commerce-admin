@@ -54,7 +54,7 @@ const AddSectionModal = () => {
     onCompleted: (data: { addLayoutComponent: any }) => {
       if (!isEmpty(data.addLayoutComponent)) {
         closeModal(ADD_SECTION_MODAL);
-        updateBuilderInfo({ isReloadStoreFront: true });
+        updateBuilderInfo({ isReloadIframe: true });
         notify(t('common:successfully-added'), 'success', {
           position: 'top-center',
           autoClose: 1000
@@ -90,6 +90,7 @@ const AddSectionModal = () => {
         afterComponentId: meta?.afterComponentId,
         data: section.data,
         styles: section.styles,
+        children: section.children,
         position
       }
     }).catch((err) => {
@@ -98,7 +99,7 @@ const AddSectionModal = () => {
   };
 
   return (
-    <div className="relative flex h-[90vh] w-[60vw] flex-col overflow-hidden">
+    <div className="relative flex h-[90vh] w-[65vw] flex-col overflow-hidden">
       <div className="border-b border-gray-200 bg-gray-100 p-4 text-lg font-semibold capitalize text-gray-800">
         Add section
       </div>
@@ -123,7 +124,9 @@ const AddSectionModal = () => {
                   key={idx}
                   className="flex max-w-[390px] items-center border-t py-5"
                 >
-                  <div className="mr-4">{section.icon()}</div>
+                  <div className="mr-4 flex h-[55px] w-[55px] items-center justify-center rounded-md border text-gray-800 shadow">
+                    <div>{section.icon()}</div>
+                  </div>
                   <div className="flex-1">
                     <span className="font-medium">{section.title}</span>
                     <p className="text-sm text-gray-500">
@@ -151,7 +154,9 @@ const AddSectionModal = () => {
                   key={idx}
                   className="flex max-w-[390px] items-center border-t py-5"
                 >
-                  <div className="mr-4 text-gray-800">{section.icon()}</div>
+                  <div className="mr-4 flex h-[55px] w-[55px] items-center justify-center rounded-md border text-gray-800 shadow">
+                    <div>{section.icon()}</div>
+                  </div>
                   <div className="flex-1">
                     <span className="font-medium">{section.title}</span>
                     <p className="text-sm text-gray-500">
@@ -179,7 +184,9 @@ const AddSectionModal = () => {
                   key={idx}
                   className="flex max-w-[390px] items-center border-y py-5"
                 >
-                  <div className="mr-4">{section.icon()}</div>
+                  <div className="mr-4 flex h-[55px] w-[55px] items-center justify-center rounded-md border text-gray-800 shadow">
+                    <div>{section.icon()}</div>
+                  </div>
                   <div className="flex-1">
                     <span className="font-medium">{section.title}</span>
                     <p className="text-sm text-gray-500">

@@ -34,6 +34,23 @@ export const STORE_LAYOUTS = gql`
       isVisible
       position
     }
+    storeLayoutCommonComponents {
+      componentId
+      moduleName
+      moduleGroup
+    }
+  }
+`;
+
+export const GET_STORE_LAYOUT = gql`
+  query GetLayoutPage($id: ID!, $language: LanguageInput!) {
+    getLayoutPage(id: $id, language: $language) {
+      id
+      name
+      title
+      isCustom
+      metadata
+    }
   }
 `;
 
@@ -78,6 +95,46 @@ export const UPDATE_LAYOUT_COMPONENT_MODULE_NAME = gql`
   }
 `;
 
+export const CREATE_LAYOUT = gql`
+  mutation CreateLayout(
+    $title: String!
+    $slug: String!
+    $metadata: JSONObject!
+    $language: LanguageInput!
+  ) {
+    createLayout(
+      title: $title
+      slug: $slug
+      metadata: $metadata
+      language: $language
+    ) {
+      id
+      name
+    }
+  }
+`;
+
+export const UPDATE_LAYOUT = gql`
+  mutation UpdateLayout(
+    $id: ID!
+    $title: String!
+    $slug: String!
+    $metadata: JSONObject!
+    $language: LanguageInput!
+  ) {
+    updateLayout(
+      id: $id
+      title: $title
+      slug: $slug
+      metadata: $metadata
+      language: $language
+    ) {
+      id
+      name
+    }
+  }
+`;
+
 export const ADD_LAYOUT_COMPONENT = gql`
   mutation AddLayoutComponent(
     $layoutName: String!
@@ -87,6 +144,7 @@ export const ADD_LAYOUT_COMPONENT = gql`
     $position: Int!
     $data: JSONObject!
     $styles: JSONObject!
+    $children: [StoreLayoutComponentInput]
   ) {
     addLayoutComponent(
       layoutName: $layoutName
@@ -96,6 +154,7 @@ export const ADD_LAYOUT_COMPONENT = gql`
       position: $position
       data: $data
       styles: $styles
+      children: $children
     ) {
       componentId
     }

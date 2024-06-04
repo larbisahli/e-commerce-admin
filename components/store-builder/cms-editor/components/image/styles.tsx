@@ -2,10 +2,12 @@ import { useMutation } from '@apollo/client';
 import Card from '@components/common/card';
 import Description from '@components/ui/description';
 import Label from '@components/ui/label';
+import SelectInput from '@components/ui/select-input';
 import { UPDATE_LAYOUT_COMPONENT_STYLES } from '@graphql/content';
 import { useErrorLogger, useGetUser } from '@hooks/index';
 import { useUI } from '@hooks/useUI';
 import { notify } from '@lib/index';
+import { PageBuilderStyles } from '@ts-types/custom.types';
 import type { StoreLayoutComponentType } from '@ts-types/generated';
 import cloneDeep from 'lodash/cloneDeep';
 import isEmpty from 'lodash/isEmpty';
@@ -13,13 +15,12 @@ import { useTranslation } from 'next-i18next';
 import { memo, useState } from 'react';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+
 import FormActions from '../../helpers/FormActions';
-import ContainerWidth from '../common/containerWidth';
 import Border from '../common/Border';
-import { PageBuilderStyles } from '@ts-types/custom.types';
-import { ObjectFitTooltipContent } from '../common/ToolTips';
-import SelectInput from '@components/ui/select-input';
+import ContainerWidth from '../common/containerWidth';
 import Overlay from '../common/Overlay';
+import { ObjectFitTooltipContent } from '../common/ToolTips';
 
 const objectFitOptions = [
   { value: 'fill' },
@@ -76,7 +77,7 @@ const ImageStyles = ({ initialValues }: IProps) => {
             position: 'top-center',
             autoClose: 2000
           });
-          updateBuilderInfo({ isReloadStoreFront: true });
+          updateBuilderInfo({ isReloadIframe: true });
         }
       }
     }

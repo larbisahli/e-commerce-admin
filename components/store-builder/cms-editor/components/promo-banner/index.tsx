@@ -1,7 +1,5 @@
-import { ComponentIcon } from '@components/icons/builder/component';
 import { ContentIcon } from '@components/icons/builder/content';
 import { CssStyleIcon } from '@components/icons/builder/css-style';
-import PluginIcon from '@components/icons/plugin';
 import Loader from '@components/ui/loader/loader';
 import { Tab } from '@headlessui/react';
 import type { StoreLayoutComponentType } from '@ts-types/generated';

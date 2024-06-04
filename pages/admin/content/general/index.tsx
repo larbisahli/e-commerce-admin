@@ -1,7 +1,6 @@
 import AnalyticsIcon from '@components/icons/analytics';
 import { ColorIcon } from '@components/icons/builder/color';
 import { LogoIdentityIcon } from '@components/icons/builder/logo-identity';
-import { PagesIcon } from '@components/icons/builder/pages';
 import { SocialIcon } from '@components/icons/builder/social';
 import { TemplateIcon } from '@components/icons/builder/template';
 import { TypographyIcon } from '@components/icons/builder/typography';

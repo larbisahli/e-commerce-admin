@@ -1,11 +1,13 @@
 export { CarouselSectionIcon as Carousel } from './carousel';
 export { CategoryCollectionSectionIcon as CategoryList } from './category-collection';
+export { CookiePopupIcon as CookiePopup } from './cookie-popup';
 export { CustomHtmlSectionIcon as Html } from './custom-html';
 export { DividerSectionIcon as Divider } from './divider';
+export { EditorialTextSectionIcon as EditorialText } from './editorial-text';
 export { ImageSectionIcon as Image } from './image';
 export { ImageBannerSectionIcon as ImageBanner } from './image-banner';
 export { ImageTextSectionIcon } from './image-text';
-export { LayoutSectionIcon as Layout } from './layout';
+export { InstallPromptIcon as InstallPrompt } from './install-prompt';
 export { NewsletterSectionIcon as Subscription } from './newsletter';
 export { ProductCollectionSectionIcon as ProductList } from './product-collection';
 export { PromoSectionIcon as PromoBanner } from './promo';

@@ -19,6 +19,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import FormActions from '../../helpers/FormActions';
 import Border from '../common/Border';
 import ContainerWidth from '../common/containerWidth';
+import Spacing from '../common/Spacing';
 import { ObjectFitTooltipContent } from '../common/ToolTips';
 import Typography from '../common/Typography';
 
@@ -78,7 +79,7 @@ const ImageBannerStyles = ({ initialValues }: IProps) => {
             position: 'top-center',
             autoClose: 2000
           });
-          updateBuilderInfo({ isReloadStoreFront: true });
+          updateBuilderInfo({ isReloadIframe: true });
         }
       }
     }

@@ -17,7 +17,9 @@ import {
   DELETE_TAG,
   DELETE_TAX,
   DELETE_USER,
-  FAVICON_VIEWER_MODAL
+  FAVICON_VIEWER_MODAL,
+  LIBRARY_SECTION_MODAL,
+  NEW_PAGE_MODAL
 } from '@ts-types/constants';
 import dynamic from 'next/dynamic';
 
@@ -85,11 +87,19 @@ const AddSectionModal = dynamic(
   () => import('@components/store-builder/cms-editor/add-section')
 );
 
+const LibrarySectionModal = dynamic(
+  () => import('@components/store-builder/cms-editor/library-section')
+);
+
 const ComponentDeleteView = dynamic(
   () =>
     import(
       '@components/store-builder/cms-editor/add-section/component-delete-view'
     )
+);
+
+const NewPageModal = dynamic(
+  () => import('@components/store-builder/cms-editor/new-page')
 );
 
 // const AttributeExportImport = dynamic(
@@ -123,6 +133,8 @@ const ManagedModal = () => {
       {view === FAVICON_VIEWER_MODAL && <FaviconModalView />}
       {view === CMS_BUILDER_MODAL && <CmsEditorModal />}
       {view === ADD_SECTION_MODAL && <AddSectionModal />}
+      {view === LIBRARY_SECTION_MODAL && <LibrarySectionModal />}
+      {view === NEW_PAGE_MODAL && <NewPageModal />}
       {view === DELETE_COMPONENT && <ComponentDeleteView />}
     </Modal>
   );

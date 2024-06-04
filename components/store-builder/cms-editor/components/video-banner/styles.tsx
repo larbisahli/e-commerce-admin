@@ -16,6 +16,7 @@ import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import FormActions from '../../helpers/FormActions';
+import Border from '../common/Border';
 import ContainerWidth from '../common/containerWidth';
 import Overlay from '../common/Overlay';
 import Typography from '../common/Typography';
@@ -25,6 +26,7 @@ type FormValues = {
   header: PageBuilderStyles['Typography'];
   description: PageBuilderStyles['Typography'];
   overlay: PageBuilderStyles['Typography'];
+  border: PageBuilderStyles['Border'];
 };
 
 const defaultValues = {};
@@ -67,7 +69,7 @@ const VideoBannerStyles = ({ initialValues }: IProps) => {
             position: 'top-center',
             autoClose: 2000
           });
-          updateBuilderInfo({ isReloadStoreFront: true });
+          updateBuilderInfo({ isReloadIframe: true });
         }
       }
     }
@@ -82,7 +84,8 @@ const VideoBannerStyles = ({ initialValues }: IProps) => {
         sectionSize: values.sectionSize,
         header: values.header,
         description: values.description,
-        overlay: values.overlay
+        overlay: values.overlay,
+        border: values.border
       }
     };
     updateLayoutComponent({ variables }).catch((err) => {
@@ -118,6 +121,9 @@ const VideoBannerStyles = ({ initialValues }: IProps) => {
             </div>
             <div className="mb-5">
               <Typography label={'Description'} name={'description'} />
+            </div>
+            <div className="mb-5">
+              <Border label={'Border'} name={'border'} />
             </div>
             <div className="mb-5">
               <Overlay label={'Overlay'} name={'overlay'} />

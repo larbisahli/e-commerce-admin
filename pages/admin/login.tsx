@@ -83,7 +83,7 @@ const LoginPage = ({ client }: SSRProps) => {
                 <Image src={'/logo.svg'} alt="logo" width={120} height={30} />
               </div>
             </Link>
-            <Link href={ROUTES.SIGNUP}>
+            <Link href={ROUTES.SIGNUP} shallow>
               <div className="text-lg font-medium text-black hover:underline">
                 Start for free now
               </div>

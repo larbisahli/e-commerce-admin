@@ -1,12 +1,13 @@
 import React, { memo } from 'react';
 
 import EditorComponent from './editor';
-// import EditorComponent from './editorjs';
 
 interface EditorInputProps {
   control?: any;
   className?: string;
   placeholder?: string;
+  editorClassName?: string;
+  options?: string[];
   name: string;
   [key: string]: unknown;
 }

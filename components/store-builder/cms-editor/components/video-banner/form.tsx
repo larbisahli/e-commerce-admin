@@ -1,25 +1,26 @@
 import { useMutation } from '@apollo/client';
 import Card from '@components/common/card';
+import Checkbox from '@components/ui/checkbox';
 import Description from '@components/ui/description';
+import Input from '@components/ui/input';
+import TextArea from '@components/ui/text-area';
 import { UPDATE_LAYOUT_COMPONENT_CONTENT } from '@graphql/content';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { useErrorLogger, useGetUser } from '@hooks/index';
 import { useSettings } from '@hooks/useSettings';
 import { useUI } from '@hooks/useUI';
 import { notify } from '@lib/index';
 import type { StoreLayoutComponentType } from '@ts-types/generated';
+import classNames from 'classnames';
 import cloneDeep from 'lodash/cloneDeep';
 import isEmpty from 'lodash/isEmpty';
 import { useTranslation } from 'next-i18next';
 import { memo, useState } from 'react';
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import FormActions from '../../helpers/FormActions';
-import Input from '@components/ui/input';
-import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import Checkbox from '@components/ui/checkbox';
-import classNames from 'classnames';
-import TextArea from '@components/ui/text-area';
+
+import FormActions from '../../helpers/FormActions';
 
 export const validationSchema = yup.object().shape({
   videoUrl: yup.string().required('form:error-url-required')
@@ -96,7 +97,7 @@ const VideoBannerForm = ({ initialValues }: IProps) => {
             position: 'top-center',
             autoClose: 2000
           });
-          updateBuilderInfo({ isReloadStoreFront: true });
+          updateBuilderInfo({ isReloadIframe: true });
         }
       }
     }

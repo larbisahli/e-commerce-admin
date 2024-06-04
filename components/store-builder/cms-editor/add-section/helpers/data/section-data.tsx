@@ -2,10 +2,10 @@ import {
   Carousel,
   CategoryList,
   Divider,
+  EditorialText,
   Html,
   Image,
   ImageBanner,
-  Layout,
   ProductList,
   PromoBanner,
   Spacer,
@@ -27,28 +27,57 @@ export const sectionsLayout = [
     },
     styles: {
       header: {
-        fontFamily: '',
-        fontWeight: '',
-        fontStyle: '',
-        lineHeight: '',
-        textTransform: '',
-        textDecoration: '',
+        color: '#050505',
+        fontSize: 32,
+        fontStyle: 'normal',
         textAlign: 'center',
+        fontFamily: {
+          label: 'Lato',
+          value: '--font-lato'
+        },
+        fontWeight: {
+          label: '400 - Normal',
+          value: 400
+        },
+        lineHeight: 32,
         letterSpacing: 0.25,
-        fontSize: '',
-        color: '#222'
+        textTransform: 'capitalized',
+        textDecoration: 'none'
       },
       description: {
-        fontFamily: '',
-        fontWeight: '',
-        fontStyle: '',
-        lineHeight: '',
-        textTransform: '',
-        textDecoration: '',
-        textAlign: '',
+        color: '#050505',
+        fontSize: 18,
+        fontStyle: 'normal',
+        textAlign: 'center',
+        fontFamily: {
+          label: 'Lato',
+          value: '--font-lato'
+        },
+        fontWeight: {
+          label: '400 - Normal',
+          value: 400
+        },
+        lineHeight: 18,
         letterSpacing: 0.25,
-        fontSize: '',
-        color: '#222'
+        textTransform: 'lowercase',
+        textDecoration: 'none'
+      },
+      sectionSize: 'auto'
+    }
+  },
+  {
+    title: 'WYSIWYG Editor',
+    moduleName: 'EditorialText',
+    description: 'Create a rich textual content.',
+    icon: () => <EditorialText />,
+    data: {
+      content:
+        '<p style="text-align:left;"><span style="color: rgb(65,65,65);background-color: rgb(255,255,255);font-size: 14px;font-family: sans-serif;">This shop is your new portal for online shopping in a simple and easy way.</span></p><p style="text-align:left;"><span style="color: rgb(65,65,65);background-color: rgb(255,255,255);font-size: 14px;font-family: sans-serif;">We offer you high quality products at a competitive price that you will not find anywhere else on the market. Shopping with us is a fun and safe process. We provide you with all the facilities you need, so you can choose the product, the payment process or the shipping process for it.</span></p>'
+    },
+    styles: {
+      fontFamily: {
+        label: 'Lato',
+        value: '--font-lato'
       },
       sectionSize: 'auto'
     }
@@ -68,7 +97,9 @@ export const sectionsLayout = [
           height: 500,
           width: 1000
         }
-      ]
+      ],
+      link: null,
+      target: '_self'
     },
     styles: {
       objectFit: { value: 'fill' },
@@ -79,7 +110,8 @@ export const sectionsLayout = [
           label: 'Solid'
         },
         borderWidth: 0,
-        borderColor: '#222'
+        borderColor: '#222',
+        border: 'all'
       },
       overlay: {
         overlayOpacity: 0,
@@ -112,35 +144,52 @@ export const sectionsLayout = [
     },
     styles: {
       header: {
-        fontFamily: '',
-        fontWeight: '',
-        fontStyle: '',
-        lineHeight: '',
-        textTransform: '',
-        textDecoration: '',
-        textAlign: '',
+        color: '#050505',
+        fontSize: 32,
+        fontStyle: 'normal',
+        textAlign: 'center',
+        fontFamily: {
+          label: 'Lato',
+          value: '--font-lato'
+        },
+        fontWeight: {
+          label: '400 - Normal',
+          value: 400
+        },
+        lineHeight: 32,
         letterSpacing: 0.25,
-        fontSize: '',
-        color: '#222'
+        textTransform: 'capitalized',
+        textDecoration: 'none'
       },
       description: {
-        fontFamily: '',
-        fontWeight: '',
-        fontStyle: '',
-        lineHeight: '',
-        textTransform: '',
-        textDecoration: '',
-        textAlign: '',
-        letterSpacing: 0.25,
-        fontSize: '',
-        color: '#222'
+        color: '#050505',
+        fontSize: 18,
+        fontStyle: 'normal',
+        textAlign: 'center',
+        fontFamily: {
+          label: 'Lato',
+          value: '--font-lato'
+        },
+        fontWeight: {
+          label: '400 - Normal',
+          value: 400
+        },
+        lineHeight: 18,
+        letterSpacing: 0,
+        textTransform: 'lowercase',
+        textDecoration: 'none'
       },
       sectionSize: 'auto',
       overlay: {
         overlayOpacity: 0,
         overlayColor: '#000'
       }
-    }
+    },
+    children: [
+      {
+        moduleName: 'ButtonPrimary'
+      }
+    ]
   },
   {
     title: 'Video banner',
@@ -162,34 +211,56 @@ export const sectionsLayout = [
     },
     styles: {
       header: {
-        fontFamily: '',
-        fontWeight: '',
-        fontStyle: '',
-        lineHeight: '',
-        textTransform: '',
-        textDecoration: '',
-        textAlign: '',
+        color: '#050505',
+        fontSize: 32,
+        fontStyle: 'normal',
+        textAlign: 'center',
+        fontFamily: {
+          label: 'Lato',
+          value: '--font-lato'
+        },
+        fontWeight: {
+          label: '400 - Normal',
+          value: 400
+        },
+        lineHeight: 32,
         letterSpacing: 0.25,
-        fontSize: '',
-        color: '#222'
+        textTransform: 'capitalized',
+        textDecoration: 'none'
       },
       description: {
-        fontFamily: '',
-        fontWeight: '',
-        fontStyle: '',
-        lineHeight: '',
-        textTransform: '',
-        textDecoration: '',
-        textAlign: '',
-        letterSpacing: 0.25,
-        fontSize: '',
-        color: '#222'
+        color: '#050505',
+        fontSize: 18,
+        fontStyle: 'normal',
+        textAlign: 'center',
+        fontFamily: {
+          label: 'Lato',
+          value: '--font-lato'
+        },
+        fontWeight: {
+          label: '400 - Normal',
+          value: 400
+        },
+        lineHeight: 18,
+        letterSpacing: 0,
+        textTransform: 'lowercase',
+        textDecoration: 'none'
       },
-      sectionSize: 'auto',
       overlay: {
         overlayOpacity: 0,
         overlayColor: '#000'
-      }
+      },
+      border: {
+        borderRadius: 10,
+        borderStyle: {
+          value: 'solid',
+          label: 'Solid'
+        },
+        borderWidth: 0,
+        borderColor: '#222',
+        border: 'all'
+      },
+      sectionSize: 'auto'
     }
   },
   {
@@ -198,7 +269,7 @@ export const sectionsLayout = [
     description: 'Embed your own code.',
     icon: () => <Html />,
     data: {
-      html: ''
+      html: '<div><p>Your custom HTML code.</p></div>'
     },
     styles: {
       css: '',
@@ -227,16 +298,6 @@ export const sectionsLayout = [
     data: {},
     styles: {
       spaceHeight: 50
-    }
-  },
-  {
-    title: 'Layout Block',
-    moduleName: 'Layout',
-    description: 'Customize your layout with multiple columns.',
-    icon: () => <Layout />,
-    data: {},
-    styles: {
-      sectionSize: 'full'
     }
   }
 ];
@@ -372,6 +433,7 @@ export const sectionsOthers = [
 ];
 
 export const moduleNameMap = {
+  EditorialText: 'WYSIWYG Editor',
   Carousel: 'Carousel',
   PromoBanner: 'Promo banner',
   ProductList: 'Featured product collection',
@@ -383,5 +445,7 @@ export const moduleNameMap = {
   Text: 'Text',
   Spacer: 'Spacer',
   Divider: 'Divider',
+  CookiePopup: 'Cookie Consent',
+  InstallPrompt: 'Install Prompt',
   Layout: 'Layout'
 };

@@ -1,18 +1,19 @@
 import { ContentIcon } from '@components/icons/builder/content';
+import { CssStyleIcon } from '@components/icons/builder/css-style';
 import { Tab } from '@headlessui/react';
 import type { StoreLayoutComponentType } from '@ts-types/generated';
 import classNames from 'classnames';
 import { Fragment, memo } from 'react';
 import React from 'react';
-import TextForm from './form';
-import { CssStyleIcon } from '@components/icons/builder/css-style';
-import TextStyles from './styles';
+
+import CookiePopupForm from './form';
+import CookiePopupStyles from './styles';
 
 type IProps = {
   initialValues?: StoreLayoutComponentType;
 };
 
-const TextContent = ({ initialValues }: IProps) => {
+const CookiePopupContent = ({ initialValues }: IProps) => {
   return (
     <Tab.Group>
       <Tab.List className="-mb-px flex flex-wrap border-b border-gray-200 text-center text-sm font-medium  text-gray-500 dark:text-gray-400">
@@ -52,12 +53,12 @@ const TextContent = ({ initialValues }: IProps) => {
       <Tab.Panels>
         <Tab.Panel unmount={false}>
           <div className="pt-3">
-            <TextForm initialValues={initialValues} />
+            <CookiePopupForm initialValues={initialValues} />
           </div>
         </Tab.Panel>
         <Tab.Panel unmount={false}>
           <div className="pt-3">
-            <TextStyles initialValues={initialValues} />
+            <CookiePopupStyles initialValues={initialValues} />
           </div>
         </Tab.Panel>
       </Tab.Panels>
@@ -65,4 +66,4 @@ const TextContent = ({ initialValues }: IProps) => {
   );
 };
 
-export default memo(TextContent);
+export default memo(CookiePopupContent);

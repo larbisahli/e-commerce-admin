@@ -1,6 +1,8 @@
 import Loader from '@components/ui/loader/loader';
+import { useGetUser } from '@hooks/useGetUser';
 import { useUI } from '@hooks/useUI';
 import { DEVICE_VIEWS } from '@ts-types/enums';
+import { getBuilderSrc } from '@utils/utils';
 import cn from 'classnames';
 import React, { useEffect, useRef, useState } from 'react';
 
@@ -10,22 +12,27 @@ export default function StoreViewComponents() {
 
   const {
     ui: {
-      builder: { deviceView, isReloadStoreFront }
+      builder: { deviceView, isReloadIframe, iframeSrc }
     },
     updateBuilderInfo
   } = useUI();
 
+  const { userInfo } = useGetUser();
+
+  const alias = userInfo?.store?.alias;
+
   const reload = () => {
     setLoading(true);
-    iframeRef.current.contentWindow.location.href = 'http://localhost:3000';
-    updateBuilderInfo({ isReloadStoreFront: false });
+    iframeRef.current.contentWindow.location.href =
+      iframeSrc ?? getBuilderSrc(alias);
+    updateBuilderInfo({ isReloadIframe: false });
   };
 
   useEffect(() => {
-    if (isReloadStoreFront) {
+    if (isReloadIframe) {
       reload();
     }
-  }, [isReloadStoreFront]);
+  }, [isReloadIframe]);
 
   return (
     <div className="flex h-full items-center justify-center">
@@ -45,7 +52,7 @@ export default function StoreViewComponents() {
           <iframe
             ref={iframeRef}
             title="Shop preview"
-            src="http://localhost:3000"
+            src={getBuilderSrc(alias)}
             width="100%"
             height="100%"
             className="w-fill h-full"

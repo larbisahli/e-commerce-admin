@@ -45,10 +45,36 @@ const SpacerContent = dynamic(() => import('./components/spacer'), {
   ssr: false,
   loading: () => <Loader special />
 });
-const LayoutContent = dynamic(() => import('./components/layout'), {
+const HtmlContent = dynamic(() => import('./components/html'), {
   ssr: false,
   loading: () => <Loader special />
 });
+const EditorialTextContent = dynamic(
+  () => import('./components/editorial-text'),
+  {
+    ssr: false,
+    loading: () => <Loader special />
+  }
+);
+const HeaderContent = dynamic(() => import('./components/header'), {
+  ssr: false,
+  loading: () => <Loader special />
+});
+const FooterContent = dynamic(() => import('./components/footer'), {
+  ssr: false,
+  loading: () => <Loader special />
+});
+const CookiePopupContent = dynamic(() => import('./components/cookie-popup'), {
+  ssr: false,
+  loading: () => <Loader special />
+});
+const InstallPromptContent = dynamic(
+  () => import('./components/install-prompt'),
+  {
+    ssr: false,
+    loading: () => <Loader special />
+  }
+);
 
 export interface OptionsVariable {
   componentId: string;
@@ -89,7 +115,7 @@ const CmsEditorModal = () => {
     ...storeLayoutComponentStyles
   };
 
-  console.log({ initialValues });
+  console.log('EDITOR >>', { initialValues });
 
   return (
     <div className="flex h-[90vh] w-[90vw] flex-col overflow-hidden">
@@ -135,8 +161,23 @@ const CmsEditorModal = () => {
             {meta?.moduleGroup === ModuleGroups.SPACER && !loading && (
               <SpacerContent initialValues={initialValues} />
             )}
-            {meta?.moduleGroup === ModuleGroups.LAYOUT && !loading && (
-              <LayoutContent initialValues={initialValues} />
+            {meta?.moduleGroup === ModuleGroups.HTML && !loading && (
+              <HtmlContent initialValues={initialValues} />
+            )}
+            {meta?.moduleGroup === ModuleGroups.EDITORIAL_TEXT && !loading && (
+              <EditorialTextContent initialValues={initialValues} />
+            )}
+            {meta?.moduleGroup === ModuleGroups.HEADER && !loading && (
+              <HeaderContent initialValues={initialValues} />
+            )}
+            {meta?.moduleGroup === ModuleGroups.FOOTER && !loading && (
+              <FooterContent initialValues={initialValues} />
+            )}
+            {meta?.moduleGroup === ModuleGroups.COOKIE_POPUP && !loading && (
+              <CookiePopupContent initialValues={initialValues} />
+            )}
+            {meta?.moduleGroup === ModuleGroups.INSTALL_PROMPT && !loading && (
+              <InstallPromptContent initialValues={initialValues} />
             )}
           </div>
         </div>

@@ -45,7 +45,7 @@ const ComponentDeleteView = () => {
           deleteLayoutComponent: { componentId }
         } = data;
         if (componentId) {
-          updateBuilderInfo({ isReloadStoreFront: true });
+          updateBuilderInfo({ isReloadIframe: true });
           notify(t('common:successfully-deleted'), 'success', {
             position: 'top-center',
             autoClose: 1000

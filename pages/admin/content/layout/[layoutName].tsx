@@ -25,6 +25,11 @@ interface TLayout {
     contentId: string;
     data: any;
   }[];
+  storeLayoutCommonComponents: {
+    id: string;
+    name: string;
+    title: string;
+  }[];
 }
 
 interface OptionsVariable {
@@ -34,7 +39,7 @@ interface OptionsVariable {
 export default function CreateSupplierPage({ client }: SSRProps) {
   useGetUser(client);
 
-  const { query } = useRouter();
+  const { query, push } = useRouter();
   const layoutName = query.layoutName as string;
 
   const { data, loading, error } = useQuery<TLayout, OptionsVariable>(
@@ -45,7 +50,11 @@ export default function CreateSupplierPage({ client }: SSRProps) {
     }
   );
 
-  const { storeLayouts = [], storeLayoutComponents = [] } = data ?? {};
+  const {
+    storeLayouts = [],
+    storeLayoutComponents = [],
+    storeLayoutCommonComponents = []
+  } = data ?? {};
 
   useErrorLogger(error);
 
@@ -59,8 +68,11 @@ export default function CreateSupplierPage({ client }: SSRProps) {
       function (e) {
         if (e.data?.source === StoreBuilder.GALA_CMS_BUILDER_PAGE) {
           const layout = e.data?.layout;
-          if (layout) {
-            console.log({ layout });
+          if (layout?.layoutName) {
+            push(`${ROUTES.BUILDER_LAYOUT}/${layout?.layoutName}`, null, {
+              shallow: false
+            });
+            console.log('>>>> Storefront page changes', { layout });
           }
         }
       },
@@ -85,6 +97,7 @@ export default function CreateSupplierPage({ client }: SSRProps) {
         </div>
         <LayoutNavigation
           loading={loading}
+          storeLayoutCommonComponents={storeLayoutCommonComponents}
           storeLayoutComponents={storeLayoutComponents}
           storeLayouts={storeLayouts}
         />

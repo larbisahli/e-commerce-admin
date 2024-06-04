@@ -220,3 +220,10 @@ export const resolvePath = (obj: any, path: string, defaultValue: any) =>
       (o, p) => (o && o[p] !== undefined ? o[p] : defaultValue),
       obj || {}
     );
+
+export const getBuilderSrc = (alias: string, path?: string) => {
+  const pathname = path === 'home-page' ? '' : path ?? '';
+  return PRODUCTION_ENV
+    ? `https://${alias}.dropgala.shop/${pathname}`
+    : `http://localhost:3000/${pathname}`;
+};

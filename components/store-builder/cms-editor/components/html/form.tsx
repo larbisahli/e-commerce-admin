@@ -1,7 +1,6 @@
 import { useMutation } from '@apollo/client';
 import Card from '@components/common/card';
 import Description from '@components/ui/description';
-import Input from '@components/ui/input';
 import TextArea from '@components/ui/text-area';
 import { UPDATE_LAYOUT_COMPONENT_CONTENT } from '@graphql/content';
 import { useErrorLogger, useGetUser } from '@hooks/index';
@@ -19,10 +18,7 @@ import { useForm } from 'react-hook-form';
 import FormActions from '../../helpers/FormActions';
 
 type FormValues = {
-  header: string;
-  description: string;
-  buttonLink: string;
-  buttonLabel: string;
+  innerHtml: string;
 };
 
 const defaultValues = {};
@@ -31,7 +27,7 @@ type IProps = {
   initialValues?: StoreLayoutComponentType;
 };
 
-const TextForm = ({ initialValues }: IProps) => {
+const HtmlForm = ({ initialValues }: IProps) => {
   const { t } = useTranslation();
 
   const data = initialValues.data;
@@ -40,12 +36,7 @@ const TextForm = ({ initialValues }: IProps) => {
 
   const { updateBuilderInfo } = useUI();
 
-  const {
-    register,
-    watch,
-    handleSubmit,
-    formState: { errors }
-  } = useForm<FormValues>({
+  const { handleSubmit, register } = useForm<FormValues>({
     defaultValues: !isEmpty(data)
       ? cloneDeep({ ...data })
       : (defaultValues as FormValues)
@@ -70,7 +61,7 @@ const TextForm = ({ initialValues }: IProps) => {
             position: 'top-center',
             autoClose: 2000
           });
-          updateBuilderInfo({ isReloadStoreFront: true });
+          updateBuilderInfo({ isReloadIframe: true });
         }
       }
     }
@@ -84,10 +75,7 @@ const TextForm = ({ initialValues }: IProps) => {
       contentId: initialValues?.contentId,
       language: selectedLanguage,
       data: {
-        header: values.header,
-        description: values.description,
-        buttonLabel: values.buttonLabel,
-        buttonLink: values.buttonLink
+        innerHtml: values.innerHtml
       }
     };
 
@@ -111,17 +99,10 @@ const TextForm = ({ initialValues }: IProps) => {
           className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
         />
         <Card className="w-full sm:w-8/12 md:w-2/3">
-          <Input
-            label={'Heading'}
-            {...register('header')}
-            placeholder={'Heading'}
-            variant="outline"
-            className="mb-5"
-          />
           <TextArea
-            label={'Description'}
-            {...register('description')}
-            placeholder={'Lorem ipsum dolor sit amet...'}
+            label={'Html content'}
+            {...register('innerHtml')}
+            placeholder={'<div><p>Your custom HTML code.</p></div>'}
             variant="outline"
             className="mb-5"
           />
@@ -131,4 +112,4 @@ const TextForm = ({ initialValues }: IProps) => {
   );
 };
 
-export default memo(TextForm);
+export default memo(HtmlForm);

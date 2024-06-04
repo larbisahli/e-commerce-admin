@@ -1,5 +1,6 @@
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
+import classNames from 'classnames';
 import {
   ContentState,
   convertFromHTML,
@@ -7,7 +8,6 @@ import {
   EditorState
 } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
-import draftToMarkdown from 'draftjs-to-markdown';
 import isEmpty from 'lodash/isEmpty';
 import React, { memo, useEffect, useMemo, useState } from 'react';
 import { Editor } from 'react-draft-wysiwyg';
@@ -47,6 +47,19 @@ const EditorComponent = (props) => {
     return state;
   };
 
+  const options = props.options ?? [
+    'inline',
+    'blockType',
+    'fontSize',
+    'fontFamily',
+    'list',
+    'textAlign',
+    'colorPicker',
+    'emoji',
+    'link',
+    'history'
+  ];
+
   return (
     <div className={props.className}>
       <Editor
@@ -55,20 +68,9 @@ const EditorComponent = (props) => {
         editorState={editorState}
         onEditorStateChange={onEditorStateChange}
         wrapperClassName="editor-wrapper-class"
-        editorClassName="editor-class"
+        editorClassName={classNames('editor-class', props.editorClassName)}
         toolbar={{
-          options: [
-            'inline',
-            'blockType',
-            'fontSize',
-            'fontFamily',
-            'list',
-            'textAlign',
-            'colorPicker',
-            'emoji',
-            'link',
-            'history'
-          ],
+          options,
           inline: { inDropdown: true },
           list: { inDropdown: true },
           textAlign: { inDropdown: true },

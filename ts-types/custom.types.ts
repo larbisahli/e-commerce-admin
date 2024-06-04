@@ -20,7 +20,9 @@ import type {
   DELETE_USER_TYPE,
   FAVICON_VIEWER_MODAL_TYPE,
   IMAGE_MODAL_TYPE,
+  LIBRARY_SECTION_MODAL_TYPE,
   MEDIA_ITEM_MODAL_TYPE,
+  NEW_PAGE_MODAL_TYPE,
   PRODUCT_MODAL_TYPE,
   TAX_MODAL_TYPE
 } from './constants';
@@ -89,6 +91,8 @@ export type ModalView =
   | FAVICON_VIEWER_MODAL_TYPE
   | CMS_BUILDER_MODAL_TYPE
   | ADD_SECTION_MODAL_TYPE
+  | LIBRARY_SECTION_MODAL_TYPE
+  | NEW_PAGE_MODAL_TYPE
   | DELETE_COMPONENT_TYPE
   | MEDIA_ITEM_MODAL_TYPE
   | TAX_MODAL_TYPE;
@@ -196,8 +200,8 @@ export enum BorderEnum {
 
 export interface PageBuilderStyles {
   Typography: {
-    fontFamily: string;
-    fontWeight: number;
+    fontFamily: { value: string };
+    fontWeight: { value: string };
     fontStyle: string;
     lineHeight: number;
     textTransform: string;
@@ -209,7 +213,7 @@ export interface PageBuilderStyles {
   };
   Border: {
     borderRadius: number;
-    borderStyle: string;
+    borderStyle: { value: string };
     borderWidth: number;
     borderColor: string;
     border: BorderEnum;

@@ -107,7 +107,7 @@ const FormActions = ({
               <ArrowPrev />
             </Button>
           ) : (
-            <h3 className="px-3 font-medium">{title}</h3>
+            <h3 className="font-medium">{title}</h3>
           )}
           {renderActions()}
         </div>

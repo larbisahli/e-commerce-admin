@@ -107,14 +107,14 @@ export default function SignUp({ client }: SSRProps) {
     }
   };
 
-  console.log({ signupMethod });
-
   return (
     <Fragment>
       {/* Google Signup/signin script */}
       <Script
         src="https://accounts.google.com/gsi/client"
-        onReady={initGoogleAuth}
+        onReady={() => {
+          setTimeout(initGoogleAuth, 300);
+        }}
       />
       {!signupMethod && (
         <div className="w flex h-screen w-screen items-center justify-center">

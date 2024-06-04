@@ -68,7 +68,7 @@ const ComponentsShowcase = ({
               (c) => c.moduleName === data.updateComponentModuleName.moduleName
             )
           );
-          updateBuilderInfo({ isReloadStoreFront: true });
+          updateBuilderInfo({ isReloadIframe: true });
         }
       },
       refetchQueries: [
@@ -129,7 +129,7 @@ const ComponentsShowcase = ({
     setHoveredModuleName(null);
   };
 
-  const renderPlugins = () => {
+  const renderComponents = () => {
     if (isEmpty(components)) return null;
     return (
       <div className="relative">
@@ -171,7 +171,7 @@ const ComponentsShowcase = ({
                       >
                         {selectedComponent?.moduleName ===
                           component.moduleName && (
-                          <div className="absolute top-0 right-0 rounded-bl-full border border-green-600 bg-green-500 p-1 pb-2 pl-2 text-white">
+                          <div className="absolute top-0 right-0 rounded-bl-full border border-blue-300 bg-blue-600 p-1 pb-2 pl-2 text-white">
                             <CheckMark width={16} height={16} />
                           </div>
                         )}
@@ -203,7 +203,7 @@ const ComponentsShowcase = ({
   return (
     <div className="h-full">
       {renderEmpty()}
-      {renderPlugins()}
+      {renderComponents()}
     </div>
   );
 };

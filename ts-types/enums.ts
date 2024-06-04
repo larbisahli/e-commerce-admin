@@ -114,12 +114,15 @@ export enum ModuleGroups {
   LAYOUT = 'Layout',
   CATEGORY_LIST = 'CategoryList',
   PRODUCT_LIST = 'ProductList',
-  HERO_CAROUSEL = 'HeroCarousel'
+  HERO_CAROUSEL = 'HeroCarousel',
+  BUTTON = 'Button',
+  EDITORIAL_TEXT = 'EditorialText'
 }
 
 export enum StoreBuilder {
   GALA_CMS_BUILDER = 'gala-cms-builder',
-  GALA_CMS_BUILDER_PAGE = 'gala-cms-builder-page'
+  GALA_CMS_BUILDER_PAGE = 'gala-cms-builder-page',
+  GALA_CMS_BUILDER_LIBRARY = 'gala-cms-builder-library'
 }
 
 export enum StoreBuilderActions {

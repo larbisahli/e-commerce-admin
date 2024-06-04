@@ -1,27 +1,24 @@
 import { useMutation } from '@apollo/client';
 import Card from '@components/common/card';
 import Description from '@components/ui/description';
-import Label from '@components/ui/label';
 import { UPDATE_LAYOUT_COMPONENT_STYLES } from '@graphql/content';
 import { useErrorLogger, useGetUser } from '@hooks/index';
 import { useUI } from '@hooks/useUI';
 import { notify } from '@lib/index';
+import { PageBuilderStyles } from '@ts-types/custom.types';
 import type { StoreLayoutComponentType } from '@ts-types/generated';
 import cloneDeep from 'lodash/cloneDeep';
 import isEmpty from 'lodash/isEmpty';
 import { useTranslation } from 'next-i18next';
 import { memo, useState } from 'react';
 import React from 'react';
-import { useForm, FormProvider } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
+
 import FormActions from '../../helpers/FormActions';
-import ContainerWidth from '../common/containerWidth';
-import { PageBuilderStyles } from '@ts-types/custom.types';
 import Typography from '../common/Typography';
 
 type FormValues = {
-  sectionSize: string;
-  title: PageBuilderStyles['Typography'];
-  description: PageBuilderStyles['Typography'];
+  cookieText: PageBuilderStyles['Typography'];
 };
 
 const defaultValues = {};
@@ -30,7 +27,7 @@ type IProps = {
   initialValues?: any;
 };
 
-const TextStyles = ({ initialValues }: IProps) => {
+const InstallPromptStyles = ({ initialValues }: IProps) => {
   const { t } = useTranslation();
 
   const [error, setError] = useState(null);
@@ -64,7 +61,7 @@ const TextStyles = ({ initialValues }: IProps) => {
             position: 'top-center',
             autoClose: 2000
           });
-          updateBuilderInfo({ isReloadStoreFront: true });
+          updateBuilderInfo({ isReloadIframe: true });
         }
       }
     }
@@ -76,17 +73,13 @@ const TextStyles = ({ initialValues }: IProps) => {
     const variables = {
       componentId: initialValues.componentId,
       styles: {
-        sectionSize: values.sectionSize,
-        title: values.title,
-        description: values.description
+        cookieText: values.cookieText
       }
     };
     updateLayoutComponent({ variables }).catch((err) => {
       setError(err);
     });
   };
-
-  const sectionSize = methods.watch('sectionSize');
 
   return (
     <FormProvider {...methods}>
@@ -110,17 +103,7 @@ const TextStyles = ({ initialValues }: IProps) => {
           />
           <Card className="w-full sm:w-8/12 md:w-2/3">
             <div className="mb-5">
-              <Typography label={'Title'} name={'title'} />
-            </div>
-            <div className="mb-5">
-              <Typography label={'Description'} name={'description'} />
-            </div>
-            <div className="mt-5 flex items-center justify-between">
-              <Label>{t('form:input-label-section-size')}</Label>
-              <ContainerWidth
-                value={sectionSize}
-                setValue={(v) => methods.setValue('sectionSize', v)}
-              />
+              <Typography label={'Cookie Text'} name={'cookieText'} />
             </div>
           </Card>
         </div>
@@ -129,4 +112,4 @@ const TextStyles = ({ initialValues }: IProps) => {
   );
 };
 
-export default memo(TextStyles);
+export default memo(InstallPromptStyles);
