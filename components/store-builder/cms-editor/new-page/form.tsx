@@ -30,7 +30,10 @@ type FormValues = {
   seo: {
     metaTitle: string;
     metaDescription: string;
-    ogMedia: ImageType[];
+    ogTitle: string;
+    ogDescription: string;
+    ogImage: ImageType[];
+    metaTags: string;
   };
 };
 
@@ -162,10 +165,12 @@ const NewPageForm = (props: Props) => {
   };
 
   const metaDescription = watch('seo.metaDescription');
+  const ogDescription = watch('seo.ogDescription');
   const slug = watch('slug');
-  const ogMedia = watch('seo.ogMedia');
+  const ogImage = watch('seo.ogImage');
 
   const metaDesLen = metaDescription?.length ?? 0;
+  const ogDesLen = ogDescription?.length ?? 0;
 
   useEffect(() => {
     const value = generateSlug(slug);
@@ -247,13 +252,47 @@ const NewPageForm = (props: Props) => {
               </span>
             )}
           </div>
+          <Input
+            label={t('form:input-label-meta-tags')}
+            {...register('seo.metaTags')}
+            variant="outline"
+            className="mb-5"
+            placeholder="tag1, tag2, tag3..."
+            note="Use a comma to separate the meta keywords"
+          />
+          <Input
+            label={t('form:input-label-og-title')}
+            {...register('seo.ogTitle')}
+            variant="outline"
+            className="mb-5"
+          />
+          <TextArea
+            label={t('form:input-label-og-description')}
+            {...register('seo.ogDescription')}
+            variant="outline"
+          />
+          <div
+            style={{ fontSize: '.75rem' }}
+            className="mb-5 flex flex-wrap items-center"
+          >
+            <p className="mr-2 text-body">
+              OG Description should optimally be between 55-160 characters
+            </p>
+            {metaDesLen < 160 ? (
+              <span className="text-green-600">{`(${ogDesLen}/160 characters max)`}</span>
+            ) : (
+              <span className="text-red-600">
+                {`(${metaDesLen}/160 characters max)`}
+              </span>
+            )}
+          </div>
           <div className="my-5">
             <ImageModal
-              onSelect={(img) => setValue('seo.ogMedia', img)}
+              onSelect={(img) => setValue('seo.ogImage', img)}
               isThumbnail
-              selected={ogMedia}
+              selected={ogImage}
               modalId="metaImage"
-              label="form:label-add-meta-images"
+              label="form:input-label-og-image"
             />
           </div>
         </Card>

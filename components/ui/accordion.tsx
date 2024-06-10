@@ -37,8 +37,8 @@ export const Accordion: React.FC<CollapseProps> = ({
         <div>
           <button
             className={cn(
-              btnClassName,
               'text-skin-base flex w-full cursor-pointer justify-between  border-b border-dashed border-border-base bg-white py-4 pr-2 pl-0 text-start text-base font-medium shadow-sm focus:outline-none 2xl:px-6 2xl:py-6',
+              btnClassName,
               {
                 '!border-none': open,
                 'pointer-events-none bg-gray-100 text-gray-400': disabled,

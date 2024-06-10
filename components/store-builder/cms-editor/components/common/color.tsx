@@ -16,7 +16,7 @@ const DisplayColorCode = ({ color }: { color: string }) => {
   return (
     <>
       {color !== null && (
-        <span className="mr-2 text-sm text-heading">{color}</span>
+        <span className="mr-2 text-xs text-heading">{color}</span>
       )}
     </>
   );

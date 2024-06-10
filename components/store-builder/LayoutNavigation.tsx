@@ -9,6 +9,7 @@ import * as IconModules from '@components/icons/builder/sections';
 import { Eye } from '@components/icons/eye-icon';
 import { EyeOff } from '@components/icons/eye-off-icon';
 import Trash from '@components/icons/trash';
+import Accordion from '@components/ui/accordion';
 import Loader from '@components/ui/loader/loader';
 import { useModalAction } from '@components/ui/modal/modal.context';
 import Select from '@components/ui/select/select';
@@ -41,11 +42,12 @@ import { moduleNameMap } from './cms-editor/add-section/helpers/data/section-dat
 import LayoutSectionLoader from './cms-editor/add-section/helpers/LayoutSectionLoader';
 
 const CustomOption = ({ innerProps, data }) => {
+  const layoutName = data?.name;
   return (
     <Link
       href={{
         pathname: `${ROUTES.BUILDER_LAYOUT}/[layoutName]`,
-        query: { layoutName: data?.name }
+        query: { layoutName }
       }}
     >
       <div
@@ -230,9 +232,22 @@ export default function LayoutNavigation({
 
   const handleStoreLayoutSelect = (layout) => {
     setSelectedPage(layout);
-    const iframeSrc = layout?.isCustom
-      ? getBuilderSrc(alias, `pages/${layout.name}`)
-      : getBuilderSrc(alias, layout.name);
+    let layoutName = layout.name;
+    let iframeSrc = layout?.isCustom
+      ? getBuilderSrc(alias, `pages/${layoutName}`)
+      : getBuilderSrc(alias, layoutName);
+    if (layout.name === StoreLayoutNames.CATEGORY) {
+      iframeSrc = getBuilderSrc(
+        alias,
+        'category/edb2cd3b74c999af70f0b7054990f2072dc6e10a847af6ed05954b8994b730fe'
+      );
+    }
+    if (layout.name === StoreLayoutNames.PRODUCT) {
+      iframeSrc = getBuilderSrc(
+        alias,
+        'product/a8792157cb4f27fb949c035f45518c61e884bb86e6f420204379c2baa8beb66e'
+      );
+    }
     updateBuilderInfo({ isReloadIframe: true, iframeSrc });
   };
 
@@ -276,7 +291,7 @@ export default function LayoutNavigation({
 
   return (
     <div>
-      <div className="z-50 mx-4 mt-5 mb-1 border-b border-dashed pb-3">
+      <div className="z-50 mx-4 mt-5 mb-1 pb-3">
         <Select
           options={storeLayouts}
           value={selectedPage}
@@ -296,7 +311,7 @@ export default function LayoutNavigation({
           }}
         >
           <NewPageIcon width={18} height={18} />
-          <span className="px-2 text-sm font-normal text-gray-700 group-hover:text-gray-900">
+          <span className="px-2 text-sm font-normal text-gray-600 group-hover:text-gray-900">
             Create New Page
           </span>
         </button>
@@ -310,7 +325,7 @@ export default function LayoutNavigation({
           }}
         >
           <PageSettingsIcon width={18} height={18} />
-          <span className="px-2 text-sm font-normal text-gray-700 group-hover:text-gray-900">
+          <span className="px-2 text-sm font-normal text-gray-600 group-hover:text-gray-900">
             Page Settings
           </span>
         </button>
@@ -422,33 +437,6 @@ export default function LayoutNavigation({
               <div className="text-blue-700">Add section</div>
             </button>
           </div>
-          <div className="mx-auto my-2 h-[1px] w-[90%] bg-gray-200"></div>
-          {/* COMMON */}
-          <div className="mx-2">
-            {commonComponent?.map((block) => {
-              const Icon = IconModules[block.moduleGroup];
-              return (
-                <div
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) => handleKeyDown(e, block)}
-                  onClick={() => handleClick(block)}
-                  key={block.componentId}
-                  className={classNames(
-                    'group flex cursor-pointer items-center rounded-sm py-4 pl-3 pr-1 text-gray-700 hover:bg-gray-100',
-                    { 'opacity-50': block.componentId === draggedItemId }
-                  )}
-                >
-                  <div className="mr-2 w-6">
-                    {Icon && <Icon width={20} height={20} />}
-                  </div>
-                  <div className="cut-line-1 flex-1 text-base">
-                    {moduleNameMap[block.moduleGroup]}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
           <div className="mx-auto my-2 h-[1px] w-[90%] bg-gray-300"></div>
           {/* FOOTER */}
           <div
@@ -462,6 +450,39 @@ export default function LayoutNavigation({
               <FooterIcon />
             </div>
             <div className="text-gray-700">Footer</div>
+          </div>
+          <div className="mx-auto my-2 h-[1px] w-[90%] bg-gray-200"></div>
+          {/* COMMON */}
+          <div className="mx-5">
+            <Accordion
+              Title={() => (
+                <h3 className="text-sm text-gray-500">Common Components</h3>
+              )}
+            >
+              {commonComponent?.map((block) => {
+                const Icon = IconModules[block.moduleGroup];
+                return (
+                  <div
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => handleKeyDown(e, block)}
+                    onClick={() => handleClick(block)}
+                    key={block.componentId}
+                    className={classNames(
+                      'group flex cursor-pointer items-center rounded-sm py-4 text-gray-700 hover:bg-gray-100',
+                      { 'opacity-50': block.componentId === draggedItemId }
+                    )}
+                  >
+                    <div className="mr-2 w-6">
+                      {Icon && <Icon width={20} height={20} />}
+                    </div>
+                    <div className="cut-line-1 flex-1 text-base">
+                      {moduleNameMap[block.moduleGroup]}
+                    </div>
+                  </div>
+                );
+              })}
+            </Accordion>
           </div>
         </div>
       </div>

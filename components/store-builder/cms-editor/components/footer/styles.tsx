@@ -1,8 +1,6 @@
 import { useMutation } from '@apollo/client';
 import Card from '@components/common/card';
 import Description from '@components/ui/description';
-import Label from '@components/ui/label';
-import SelectInput from '@components/ui/select-input';
 import { UPDATE_LAYOUT_COMPONENT_STYLES } from '@graphql/content';
 import { useErrorLogger, useGetUser } from '@hooks/index';
 import { useUI } from '@hooks/useUI';
@@ -18,24 +16,12 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import FormActions from '../../helpers/FormActions';
 import Border from '../common/Border';
-import ContainerWidth from '../common/containerWidth';
-import { ObjectFitTooltipContent } from '../common/ToolTips';
 import Typography from '../common/Typography';
 
-const objectFitOptions = [
-  { value: 'fill' },
-  { value: 'cover' },
-  { value: 'contain' },
-  { value: 'scale-down' },
-  { value: 'none' }
-];
-
 type FormValues = {
-  sectionSize: string;
   header: PageBuilderStyles['Typography'];
   description: PageBuilderStyles['Typography'];
   imageBorder: PageBuilderStyles['Border'];
-  objectFit: { value: string };
 };
 
 const defaultValues = {};
@@ -90,19 +76,15 @@ const FooterStyles = ({ initialValues }: IProps) => {
     const variables = {
       componentId: initialValues.componentId,
       styles: {
-        sectionSize: values.sectionSize,
         header: values.header,
         description: values.description,
-        imageBorder: values.imageBorder,
-        objectFit: values.objectFit
+        imageBorder: values.imageBorder
       }
     };
     updateLayoutComponent({ variables }).catch((err) => {
       setError(err);
     });
   };
-
-  const sectionSize = methods.watch('sectionSize');
 
   return (
     <FormProvider {...methods}>
@@ -133,32 +115,6 @@ const FooterStyles = ({ initialValues }: IProps) => {
             </div>
             <div className="mb-5">
               <Border label={'Image Border'} name={'imageBorder'} />
-            </div>
-            <div className="mb-3">
-              <div className="flex items-center justify-between">
-                <Label
-                  tooltipId="objectFit"
-                  renderTooltip={<ObjectFitTooltipContent />}
-                >
-                  {t('form:input-label-object-fit')}
-                </Label>
-                <div className="w-32">
-                  <SelectInput
-                    name="objectFit"
-                    control={methods.control}
-                    getOptionLabel={(option) => option.value}
-                    getOptionValue={(option) => option.value}
-                    options={objectFitOptions}
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="mt-5 flex items-center justify-between">
-              <Label>{t('form:input-label-section-size')}</Label>
-              <ContainerWidth
-                value={sectionSize}
-                setValue={(v) => methods.setValue('sectionSize', v)}
-              />
             </div>
           </Card>
         </div>

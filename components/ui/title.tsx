@@ -8,10 +8,7 @@ export interface Props extends LabelHTMLAttributes<HTMLLabelElement> {
 const Title: React.FC<Props> = ({ className = 'mb-3', ...rest }) => {
   return (
     <span
-      className={cn(
-        'block text-sm font-semibold leading-none text-body-dark',
-        className
-      )}
+      className={cn('block text-sm leading-none text-body-dark', className)}
       {...rest}
     />
   );

@@ -72,6 +72,12 @@ export const settingsSlice = createSlice({
         state.systemCurrency = payload.systemCurrency;
         state.storeEmail = payload.storeEmail;
         state.languages = payload.languages;
+        state.tier = payload.tier;
+        state.storeName = payload.storeName;
+        state.storeEmail = payload.storeEmail;
+        state.status = payload.status;
+        state.published = payload.published;
+        state.createdAt = payload.createdAt;
       }
     );
     builder.addCase(

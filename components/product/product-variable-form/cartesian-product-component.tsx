@@ -118,7 +118,7 @@ const CartesianProductComponent = ({
   return (
     <Accordion
       isUpdated={isUpdated}
-      btnClassName="mt-1 bg-gray-100"
+      btnClassName="mt-1 bg-gray-50 !px-5"
       Title={() => (
         <Title className="!text-lg">
           {t('form:form-title-variant')}:{' '}
@@ -133,6 +133,7 @@ const CartesianProductComponent = ({
         <div className="grid grid-cols-3 gap-3">
           <Input
             label={t('form:input-label-sale-price')}
+            subLabel={t('form:input-label-exclude-tax')}
             isRequiredLabel
             type="number"
             id={`salePrice-${index}`}
@@ -148,6 +149,7 @@ const CartesianProductComponent = ({
           />
           <Input
             label={t('form:input-label-compare-price')}
+            subLabel={t('form:input-label-exclude-tax')}
             name="comparePrice"
             min={0}
             onChange={HandleInputChange}
@@ -234,10 +236,7 @@ const CartesianProductComponent = ({
                     value={weightUnit}
                     name="weightUnit"
                     getOptionLabel={(option: any) => option.unit}
-                    getOptionValue={(option: any) =>
-                      option.unit?.charAt(0)?.toUpperCase() +
-                      option.unit?.slice(1)
-                    }
+                    getOptionValue={(option: any) => option.unit}
                     onChange={(value) => onSelectChange(value, 'weightUnit')}
                     className="w-full"
                   />

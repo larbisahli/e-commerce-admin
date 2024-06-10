@@ -36,13 +36,6 @@ export const STORE_SETTINGS = gql`
         name
       }
       canonicalUrl
-      socials {
-        url
-        icon {
-          value
-          label
-        }
-      }
       maxCheckoutQuantity
       maxCheckoutAmount
       maintenanceMode
@@ -115,7 +108,6 @@ export const UPDATE_STORE_SETTINGS = gql`
     $currencies: [CurrencyInput!]!
     $defaultCurrency: CurrencyInput!
     $canonicalUrl: String
-    $socials: [SocialInput]
     $maxCheckoutQuantity: Int
     $maxCheckoutAmount: Int
     $seo: StoreSettingsSeoInput
@@ -137,7 +129,6 @@ export const UPDATE_STORE_SETTINGS = gql`
       currencies: $currencies
       defaultCurrency: $defaultCurrency
       canonicalUrl: $canonicalUrl
-      socials: $socials
       maxCheckoutQuantity: $maxCheckoutQuantity
       maxCheckoutAmount: $maxCheckoutAmount
       seo: $seo

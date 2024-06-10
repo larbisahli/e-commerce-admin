@@ -106,5 +106,31 @@ export const componentsThumbnail = {
       },
       title: 'Hero Stack'
     }
+  ],
+  Footer: [
+    {
+      moduleName: 'Footer',
+      thumbnail: {
+        image: '/static/components/footer/footer-dark.png',
+        placeholder: '/static/components/footer/footer-dark.png'
+      },
+      title: 'Footer Dark'
+    },
+    {
+      moduleName: 'FooterSubscribe',
+      thumbnail: {
+        image: '/static/components/footer/footer-subscribe.png',
+        placeholder: '/static/components/footer/footer-subscribe.png'
+      },
+      title: 'Footer Subscribe'
+    },
+    {
+      moduleName: 'FooterLight',
+      thumbnail: {
+        image: '/static/components/footer/footer-light.png',
+        placeholder: '/static/components/footer/footer-light.png'
+      },
+      title: 'Footer Light'
+    }
   ]
 };

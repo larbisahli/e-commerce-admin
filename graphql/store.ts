@@ -18,6 +18,10 @@ export const STORE_CONFIG = gql`
         isDefault
         isSystem
       }
+      published
+      tier
+      status
+      createdAt
     }
   }
 `;

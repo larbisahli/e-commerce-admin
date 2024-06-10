@@ -95,7 +95,7 @@ export const siteSettings = {
         icon: 'ProductsIcon',
         subLinks: [
           {
-            id: '4855yLk',
+            id: '48554yLk',
             href: ROUTES.PRODUCT,
             label: 'sidebar-nav-item-products',
             padding: '35px',
@@ -130,7 +130,7 @@ export const siteSettings = {
             isSubLink: true
           },
           {
-            id: 'D2IXKt',
+            id: 'D2IXXKt',
             href: ROUTES.MANUFACTURER,
             label: 'sidebar-nav-item-manufacturers',
             padding: '35px',
@@ -214,56 +214,6 @@ export const siteSettings = {
             label: 'sidebar-nav-item-templates',
             padding: '35px',
             isSubLink: true
-          },
-          {
-            id: 'XU3uxdPo',
-            label: 'sidebar-nav-item-pages',
-            padding: '35px',
-            isSubLink: true,
-            subLinks: [
-              {
-                id: '9Yc234G',
-                href: ROUTES.STORE_ABOUT_US,
-                label: 'sidebar-nav-item-about-us',
-                padding: '45px',
-                isSubLink: true
-              },
-              {
-                id: '9342HWhG',
-                href: ROUTES.STORE_CONTACT_US,
-                label: 'sidebar-nav-item-contact-us',
-                padding: '45px',
-                isSubLink: true
-              },
-              {
-                id: '923442HWhG',
-                href: ROUTES.STORE_FAQ,
-                label: 'sidebar-nav-item-faq',
-                padding: '45px',
-                isSubLink: true
-              },
-              {
-                id: '93149832HWhG',
-                href: ROUTES.STORE_TERMS,
-                label: 'sidebar-nav-item-terms',
-                padding: '45px',
-                isSubLink: true
-              },
-              {
-                id: '90049RTHWhG',
-                href: ROUTES.STORE_POLICY,
-                label: 'sidebar-nav-item-privacy-policy',
-                padding: '45px',
-                isSubLink: true
-              },
-              {
-                id: '9349RTHWhG',
-                href: ROUTES.STORE_RETURN_POLICY,
-                label: 'sidebar-nav-item-return-policy',
-                padding: '45px',
-                isSubLink: true
-              }
-            ]
           },
           {
             id: 'XDsaWhG',

@@ -9,12 +9,17 @@ import ComponentsShowcase from './components';
 const LibrarySectionModal = () => {
   const { t } = useTranslation();
   const { meta } = useModalState();
+  console.log({ meta });
   const handleTitle = () => {
     if (meta.moduleGroup === ModuleGroups.BUTTON) return 'Buttons';
+    if (meta.moduleGroup === ModuleGroups.CATEGORY_DETAILS)
+      return 'Category details';
+    if (meta.moduleGroup === ModuleGroups.BREADCRUMB) return 'Breadcrumbs';
+    if (meta.moduleGroup === ModuleGroups.PRODUCT_CARD) return 'Product cards';
   };
   return (
     <div className="relative flex h-[70vh] w-[50vw] flex-col overflow-hidden">
-      <div className="border-b border-gray-200 bg-gray-50 p-4 text-base font-light capitalize text-gray-800">
+      <div className="font border-b border-gray-200 bg-gray-50 p-4 text-base capitalize text-gray-800">
         {`UI Library > ${handleTitle()}`}
       </div>
       <div

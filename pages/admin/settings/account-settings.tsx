@@ -16,7 +16,7 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const SettingsForm = dynamic(
-  () => import('@components/settings/settings-form'),
+  () => import('@components/settings/store-settings-form'),
   { ssr: true }
 );
 

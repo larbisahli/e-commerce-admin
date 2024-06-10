@@ -470,6 +470,7 @@ export interface ImageType {
 
 export interface MediaType extends CreatedUpdatedByAt {
   id?: Scalars['ID'];
+  parentId?: Scalars['ID'];
   parent?: MediaType;
   children?: MediaType[];
   name?: Scalars['String'];
@@ -558,6 +559,8 @@ export interface SettingsType {
   tier?: string;
   languages?: LanguageType[];
   webmanifest?: WebmanifestType;
+  status?: string;
+  createdAt?: Scalars['DateTime'];
   currencies?: {
     symbol: string;
     name: string;
@@ -750,6 +753,10 @@ export interface DashAnalyticsType {
     value: Scalars['Int'];
     quantity: Scalars['Int'];
   }[];
+  order: { count: number };
+  customer: { count: number };
+  product: { count: number };
+  category: { count: number };
 }
 
 export interface CustomerType extends CreatedUpdatedByAt {

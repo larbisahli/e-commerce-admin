@@ -111,6 +111,7 @@
   "input-label-breadcrumbs-priority": "Breadcrumbs Priority",
   "input-label-price": "Price",
   "input-label-sale-price": "Sale Price",
+  "input-label-exclude-tax": "(excluding tax)",
   "input-label-quantity": "Quantity",
   "input-label-unit": "Unit",
   "input-label-width": "Width",

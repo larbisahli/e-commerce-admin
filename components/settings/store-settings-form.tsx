@@ -6,7 +6,6 @@ import FormActions from '@components/common/FormActions';
 import { Eye } from '@components/icons/eye-icon';
 import { LockSvg } from '@components/icons/lock';
 import { ResetIcon } from '@components/icons/reset';
-import * as socialIcons from '@components/icons/social';
 import ImageModal from '@components/image-modal';
 import Button from '@components/ui/button';
 import Checkbox from '@components/ui/checkbox';
@@ -35,7 +34,7 @@ import { isValidPhoneNumber } from 'libphonenumber-js';
 import { isEmpty } from 'lodash';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
-import { useFieldArray, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import PhoneInput from 'react-phone-input-2';
 
 import { settingsValidationSchema } from './settings-validation-schema';
@@ -69,25 +68,6 @@ const paymentMethods = [
   }
 ];
 
-const socialIcon = [
-  {
-    value: 'FacebookIcon',
-    label: 'Facebook'
-  },
-  {
-    value: 'InstagramIcon',
-    label: 'Instagram'
-  },
-  {
-    value: 'TwitterIcon',
-    label: 'Twitter'
-  },
-  {
-    value: 'YouTubeIcon',
-    label: 'Youtube'
-  }
-];
-
 const webmanifestDisplays = [
   { name: 'fullscreen' },
   { name: 'standalone' },
@@ -104,19 +84,6 @@ const webmanifestOrientations = [
   { name: 'portrait-primary' },
   { name: 'portrait-secondary' }
 ];
-
-export const updatedIcons = socialIcon.map((item: any) => {
-  const TagName = socialIcons[item.value];
-  item.label = (
-    <div className="flex items-center text-body space-s-4">
-      <span className="flex h-4 w-4 items-center justify-center">
-        {TagName && <TagName className="h-4 w-4" />}
-      </span>
-      <span>{item.label}</span>
-    </div>
-  );
-  return item;
-});
 
 type IProps = {
   settings?: SettingsType;
@@ -146,25 +113,8 @@ export default function StoreSettingsForm({ settings }: IProps) {
         settings?.maintenancePassword ?? generateMaintenancePassword(),
       defaultCurrency: settings?.currencies?.find(
         (currency) => currency.is_default
-      ),
-      socials: !isEmpty(settings?.socials)
-        ? settings?.socials.map((social: any) => ({
-            icon: updatedIcons?.find(
-              (icon) => icon?.value === social?.icon?.value
-            ),
-            url: social?.url
-          }))
-        : []
+      )
     }
-  });
-
-  const {
-    fields: socialFields,
-    append: socialAppend,
-    remove: socialRemove
-  } = useFieldArray({
-    control,
-    name: 'socials'
   });
 
   const { userInfo } = useGetUser();
@@ -233,14 +183,6 @@ export default function StoreSettingsForm({ settings }: IProps) {
         maxCheckoutQuantity: Number(values.maxCheckoutQuantity),
         maxCheckoutAmount: Number(values.maxCheckoutAmount),
         maintenancePassword,
-        socials: values?.socials
-          ? values?.socials?.map((social: any) => ({
-              icon: {
-                value: social?.icon?.value
-              },
-              url: social?.url
-            }))
-          : [],
         seo: {
           ...values.seo,
           ogImage: ogImage?.map(({ id }) => ({ id }))
@@ -327,7 +269,8 @@ export default function StoreSettingsForm({ settings }: IProps) {
             selected={logo}
             isThumbnail
             modalId="logo"
-            label="form:label-add-store-logo"
+            label="form:label-logo"
+            labelClassName="text-base font-medium"
           />
         </Card>
       </div>
@@ -344,7 +287,8 @@ export default function StoreSettingsForm({ settings }: IProps) {
             selected={favicon}
             isThumbnail
             modalId="favicon"
-            label="form:label-add-store-favicon"
+            label="form:label-favicon"
+            labelClassName="text-base font-medium"
           />
 
           <div className="flex justify-end">
@@ -665,70 +609,6 @@ export default function StoreSettingsForm({ settings }: IProps) {
           </div>
         </Card>
       </div>
-
-      <div className="my-5 flex flex-wrap border-b border-dashed border-gray-300 pb-8 sm:my-8">
-        <Description
-          title={t('form:social-settings')}
-          details={t('form:shop-settings-helper-text')}
-          className="w-full px-0 pb-5 sm:w-1/4 sm:py-8 sm:pe-4 md:w-1/4 md:pe-5"
-        />
-
-        <Card className="w-full sm:w-3/4 md:w-3/4">
-          {/* Social and Icon picker */}
-          <div>
-            {socialFields.map((item, index: number) => (
-              <div
-                className="border-b border-dashed border-border-200 py-5 first:mt-5 first:border-t last:border-b-0 md:py-8 md:first:mt-10"
-                key={index}
-              >
-                <div className="grid grid-cols-1 gap-5 sm:grid-cols-5">
-                  <div className="sm:col-span-2">
-                    <Label className="whitespace-nowrap">
-                      {t('form:input-label-select-platform')}
-                    </Label>
-                    <SelectInput
-                      name={`socials.${index}.icon` as const}
-                      // getOptionLabel={(option: { label: string }) => option.label}
-                      // getOptionValue={(option: { id: string }) => option.id}
-                      control={control}
-                      options={updatedIcons}
-                      isClearable={true}
-                      defaultValue={item?.icon!}
-                    />
-                  </div>
-                  <Input
-                    className="sm:col-span-2"
-                    label={t('form:input-label-social-url')}
-                    variant="outline"
-                    {...register(`socials.${index}.url` as const)}
-                    defaultValue={item.url!} // make sure to set up defaultValue
-                  />
-                  <button
-                    onClick={() => {
-                      socialRemove(index);
-                    }}
-                    type="button"
-                    className="text-sm text-red-500 transition-colors duration-200 hover:text-red-700 focus:outline-none sm:col-span-1 sm:mt-4"
-                  >
-                    {t('form:button-label-remove')}
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <Button
-            type="button"
-            onClick={() =>
-              socialAppend({ icon: { value: 'FacebookIcon' }, url: '' })
-            }
-            className="w-full sm:w-auto"
-          >
-            {t('form:button-label-add-social')}
-          </Button>
-        </Card>
-      </div>
-
       <div className="my-5 flex flex-wrap border-b border-dashed border-gray-300 pb-8">
         <Description
           title={t('form:pwa-settings')}
@@ -794,18 +674,18 @@ export default function StoreSettingsForm({ settings }: IProps) {
               variant="outline"
               className="mb-5"
             />
-            <div className="flex items-center">
+            <div className="flex max-w-[280px] flex-col">
               <ColorPicker
                 label={t('form:input-label-color')}
                 {...register('webmanifest.theme_color')}
-                className="m-5 ml-0"
+                className="mb-2 flex items-center justify-between"
               >
                 <DisplayColorCode color={webThemeColor} />
               </ColorPicker>
               <ColorPicker
                 label={t('form:input-label-background-color')}
                 {...register('webmanifest.background_color')}
-                className="m-5 ml-0"
+                className="flex items-center justify-between"
               >
                 <DisplayColorCode color={WebBackgroundColor} />
               </ColorPicker>
@@ -876,12 +756,7 @@ const DisplayColorCode = ({ color }: { color: string }) => {
   return (
     <>
       {color !== null && (
-        <span
-          className="rounded border border-border-200 bg-gray-100 px-2 py-1
-                         text-sm text-heading ms-3"
-        >
-          {color}
-        </span>
+        <span className="mr-2 text-sm text-heading">{color}</span>
       )}
     </>
   );

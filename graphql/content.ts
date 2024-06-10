@@ -186,3 +186,17 @@ export const DELETE_LAYOUT_COMPONENT = gql`
     }
   }
 `;
+
+export const GET_THEME_SETTINGS = gql`
+  query GetThemeSettings {
+    getThemeSettings
+  }
+`;
+
+export const UPDATE_THEME_SETTINGS = gql`
+  mutation UpdateThemeSettings($settings: JSONObject!) {
+    updateThemeSettings(settings: $settings) {
+      id
+    }
+  }
+`;

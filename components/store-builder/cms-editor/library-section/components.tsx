@@ -146,7 +146,7 @@ const ComponentsShowcase = ({
                             <Loader special />
                           </div>
                         )}
-                      <span className="mb-2 font-light text-gray-800 underline">
+                      <span className="mb-2 text-gray-800 underline">
                         {component.title}
                       </span>
                       <button

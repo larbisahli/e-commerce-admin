@@ -5,9 +5,15 @@ import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import type { SSRProps } from '@ts-types/custom.types';
 import { ROUTES } from '@utils/routes';
 import type { GetServerSideProps } from 'next';
+import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import Link from 'next/link';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+
+const Typography = dynamic(
+  () => import('@components/store-builder/general/template'),
+  { ssr: true, loading: () => <div></div> }
+);
 
 export default function CreateSupplierPage({ client }: SSRProps) {
   useGetUser(client);
@@ -34,6 +40,9 @@ export default function CreateSupplierPage({ client }: SSRProps) {
             <h3 className="text flex-1 text-center text-xl font-semibold text-black">
               Templates
             </h3>
+          </div>
+          <div>
+            <Typography />
           </div>
         </div>
       </div>

@@ -63,19 +63,21 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         disabled={disabled}
         {...rest}
       >
-        <div className="mr-2 flex">
-          {loading ? (
-            <span
-              className={classes.loading}
-              style={{
-                borderTopColor:
-                  variant === 'outline' ? 'currentColor' : '#777777'
-              }}
-            />
-          ) : (
-            renderIcon
-          )}
-        </div>
+        {!!renderIcon && (
+          <div className="mr-2 flex">
+            {loading ? (
+              <span
+                className={classes.loading}
+                style={{
+                  borderTopColor:
+                    variant === 'outline' ? 'currentColor' : '#777777'
+                }}
+              />
+            ) : (
+              renderIcon
+            )}
+          </div>
+        )}
         {children}
       </button>
     );

@@ -13,8 +13,8 @@ interface FilesState {
 
 const initialState = {
   fileStore: {
-    parent: {},
-    children: []
+    parent: {} as MediaType,
+    children: [] as MediaType[]
   }
 };
 

@@ -1,5 +1,7 @@
+import { ModuleGroups } from '@ts-types/enums';
+
 export const componentsLibrary = {
-  Button: [
+  [ModuleGroups.BUTTON]: [
     {
       moduleName: 'ButtonPrimary',
       title: 'Button Primary',
@@ -30,6 +32,26 @@ export const componentsLibrary = {
       thumbnail: {
         image: '/static/library/buttons/outline-rounded.png',
         placeholder: '/static/library/buttons/outline-rounded.png'
+      }
+    }
+  ],
+  [ModuleGroups.CATEGORY_DETAILS]: [
+    {
+      moduleName: 'CategoryDetails',
+      title: 'Category details',
+      thumbnail: {
+        image: '/static/library/category-details/category-details.png',
+        placeholder: '/static/library/category-details/category-details.png'
+      }
+    }
+  ],
+  [ModuleGroups.BREADCRUMB]: [
+    {
+      moduleName: 'Breadcrumb',
+      title: 'Breadcrumb',
+      thumbnail: {
+        image: '/static/library/breadcrumb/breadcrumb.png',
+        placeholder: '/static/library/breadcrumb/breadcrumb.png'
       }
     }
   ]

@@ -26,6 +26,7 @@ import React from 'react';
 
 import CountryTaxModal from './country-tax-modal';
 import TaxCountryList from './tax-country-list';
+import { RenderTooltipTaxName } from './ToolTips';
 
 type IProps = {
   initialValues?: TaxType | any;
@@ -191,6 +192,7 @@ export default function CreateOrUpdateTaxForm({ initialValues }: IProps) {
               'name',
               'Enter a title'
             )}
+            renderTooltip={<RenderTooltipTaxName />}
           />
           <Input
             label={`${t('form:input-label-tax-rate')} (%)`}

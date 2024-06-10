@@ -25,7 +25,7 @@ module.exports = {
       },
       fontFamily: {
         body: [
-          'Arimo',
+          'Lato',
           'Inter',
           'Mulish',
           'sans-serif',
@@ -33,7 +33,7 @@ module.exports = {
           'system-ui'
         ],
         heading: [
-          'Arimo',
+          'Lato',
           'Inter',
           'Mulish',
           'sans-serif',

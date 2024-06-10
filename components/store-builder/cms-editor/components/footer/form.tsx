@@ -3,10 +3,13 @@ import Card from '@components/common/card';
 import { AlignCenterIcon } from '@components/icons/builder/align-center';
 import { AlignLeftIcon } from '@components/icons/builder/align-left';
 import { AlignRightIcon } from '@components/icons/builder/align-right';
+import * as socialIcons from '@components/icons/social';
 import ImageModal from '@components/image-modal';
+import Button from '@components/ui/button';
 import Description from '@components/ui/description';
 import Input from '@components/ui/input';
 import Label from '@components/ui/label';
+import SelectInput from '@components/ui/select-input';
 import TextArea from '@components/ui/text-area';
 import { UPDATE_LAYOUT_COMPONENT_CONTENT } from '@graphql/content';
 import { useErrorLogger, useGetUser } from '@hooks/index';
@@ -21,7 +24,7 @@ import isEmpty from 'lodash/isEmpty';
 import { useTranslation } from 'next-i18next';
 import { memo, useState } from 'react';
 import React from 'react';
-import { useForm } from 'react-hook-form';
+import { useFieldArray, useForm } from 'react-hook-form';
 
 import FormActions from '../../helpers/FormActions';
 
@@ -32,13 +35,55 @@ type FormValues = {
   buttonLink: string;
   buttonLabel: string;
   contentAlignment: string;
+  socials: any[];
 };
 
 const defaultValues = {};
 
+const socialIcon = [
+  {
+    value: 'FacebookIcon',
+    label: 'Facebook'
+  },
+  {
+    value: 'InstagramIcon',
+    label: 'Instagram'
+  },
+  {
+    value: 'TwitterIcon',
+    label: 'Twitter'
+  },
+  {
+    value: 'YouTubeIcon',
+    label: 'Youtube'
+  }
+];
+
+export const updatedIcons = socialIcon.map((item: any) => {
+  const TagName = socialIcons[item.value];
+  item.label = (
+    <div className="flex items-center text-body space-s-4">
+      <span className="flex h-4 w-4 items-center justify-center">
+        {TagName && <TagName className="h-4 w-4" />}
+      </span>
+      <span>{item.label}</span>
+    </div>
+  );
+  return item;
+});
+
 type IProps = {
   initialValues?: StoreLayoutComponentType;
 };
+
+// socials: !isEmpty(settings?.socials)
+//         ? settings?.socials.map((social: any) => ({
+//             icon: updatedIcons?.find(
+//               (icon) => icon?.value === social?.icon?.value
+//             ),
+//             url: social?.url
+//           }))
+//         : []
 
 const FooterForm = ({ initialValues }: IProps) => {
   const { t } = useTranslation();
@@ -51,11 +96,12 @@ const FooterForm = ({ initialValues }: IProps) => {
 
   const { updateBuilderInfo } = useUI();
 
-  const { register, watch, setValue, handleSubmit } = useForm<FormValues>({
-    defaultValues: !isEmpty(data)
-      ? cloneDeep({ ...data })
-      : (defaultValues as FormValues)
-  });
+  const { register, control, watch, setValue, handleSubmit } =
+    useForm<FormValues>({
+      defaultValues: !isEmpty(data)
+        ? cloneDeep({ ...data })
+        : (defaultValues as FormValues)
+    });
 
   const { userInfo } = useGetUser();
   const csrfToken = userInfo?.csrfToken;
@@ -111,6 +157,15 @@ const FooterForm = ({ initialValues }: IProps) => {
     e.preventDefault();
     setValue('contentAlignment', value);
   };
+
+  const {
+    fields: socialFields,
+    append: socialAppend,
+    remove: socialRemove
+  } = useFieldArray({
+    control,
+    name: 'socials'
+  });
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -224,6 +279,69 @@ const FooterForm = ({ initialValues }: IProps) => {
               </div>
             </div>
           )}
+        </Card>
+      </div>
+
+      <div className="my-5 flex flex-wrap border-b border-dashed border-gray-300 pb-8 sm:my-8">
+        <Description
+          title={t('form:social-settings')}
+          details={t('form:shop-settings-helper-text')}
+          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
+        />
+
+        <Card className="w-full sm:w-8/12 md:w-2/3">
+          {/* Social and Icon picker */}
+          <div>
+            {socialFields.map((item, index: number) => (
+              <div
+                className="border-b border-dashed border-border-200 py-5 first:mt-5 first:border-t last:border-b-0 md:py-8 md:first:mt-10"
+                key={index}
+              >
+                <div className="relative grid grid-cols-2 gap-5">
+                  <div>
+                    <Label className="whitespace-nowrap">
+                      {t('form:input-label-select-platform')}
+                    </Label>
+                    <SelectInput
+                      name={`socials.${index}.icon` as const}
+                      // getOptionLabel={(option: { label: string }) => option.label}
+                      // getOptionValue={(option: { id: string }) => option.id}
+                      control={control}
+                      options={updatedIcons}
+                      isClearable={true}
+                      defaultValue={item?.icon!}
+                    />
+                  </div>
+                  <Input
+                    label={t('form:input-label-social-url')}
+                    variant="outline"
+                    inputClassName="!rounded-sm"
+                    {...register(`socials.${index}.url` as const)}
+                    defaultValue={item.url!} // make sure to set up defaultValue
+                  />
+                  <button
+                    onClick={() => {
+                      socialRemove(index);
+                    }}
+                    type="button"
+                    className="absolute top-[-20px] right-0 text-sm text-red-500 transition-colors duration-200 hover:text-red-700 focus:outline-none sm:col-span-1 sm:mt-4"
+                  >
+                    {t('form:button-label-remove')}
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <Button
+            type="button"
+            onClick={() =>
+              socialAppend({ icon: { value: 'FacebookIcon' }, url: '' })
+            }
+            className="w-full sm:w-auto"
+          >
+            {t('form:button-label-add-social')}
+          </Button>
         </Card>
       </div>
     </form>

@@ -2,6 +2,7 @@ import { UpgradeIcon } from '@components/icons/sidebar/upgrade';
 import styles from '@components/navigation/scss/index.module.scss';
 import Scrollbar from '@components/ui/scrollbar';
 import { useGetUser } from '@hooks/useGetUser';
+import { useSettings } from '@hooks/useSettings';
 import { useUI } from '@hooks/useUI';
 import { siteSettings } from '@settings/site.settings';
 import { ROUTES } from '@utils/routes';
@@ -9,7 +10,7 @@ import classNames from 'classnames/bind';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useTranslation } from 'next-i18next';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import SidebarItem from './sidebar-item';
 
@@ -30,6 +31,8 @@ const Sidebar: React.FC<Props> = ({ absolute = false }) => {
   const {
     userInfo: { store: { storeName = '' } = {} }
   } = useGetUser();
+
+  const { tier } = useSettings();
 
   return (
     <aside
@@ -67,30 +70,23 @@ const Sidebar: React.FC<Props> = ({ absolute = false }) => {
               </div>
             </motion.button>
           </div>
-          <div className="cut-line-1 px-2  pt-1 text-lg font-medium capitalize text-black">
-            {storeName}
+          <div className="cut-line-1 px-2  pt-1 text-xl font-bold capitalize text-blue-600">
+            Dropgala
           </div>
         </div>
         <div className="mb-3 flex justify-center">
           <div className="h-[1px] w-[90%] bg-sidenav-divider"></div>
         </div>
         <div className="flex flex-col">
-          <div className="mb-5">
-            <Link href={`${ROUTES.PLANS}`}>
-              <div className="flex flex-col p-2 pl-6">
-                <div className="text-blue-500">
-                  <div className="flex items-center">
-                    <div>
-                      <UpgradeIcon width={25} height={25} />
-                    </div>
-                    <div className="font-medium">Upgrade plan</div>
-                  </div>
-                </div>
-                <div className="w-fit rounded-full bg-gray-200 px-3 py-1 text-xs font-medium text-black">
-                  14 days trial
-                </div>
+          <div className="mb-5 pl-6">
+            <div className=" item-center flex flex-col px-2 pt-1">
+              <div className="cut-line-1 text-lg font-medium capitalize text-black">
+                {storeName}
               </div>
-            </Link>
+              <div className="mt-1 w-fit text-xs font-medium text-gray-600">
+                {tier === 'BASIC' && 'Trial Plan Store'}
+              </div>
+            </div>
           </div>
           {siteSettings.sidebarLinks.admin.map(
             ({ id, href, label, icon, line, subLinks, disabled }) => (

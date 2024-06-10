@@ -94,7 +94,7 @@ const FaviconModalView = () => {
   } = useGetUser();
 
   return (
-    <div className="z-50 flex h-[100vh] max-h-[800px] w-[100vw] flex-col overflow-y-auto bg-white md:h-fit md:w-[70vw] 2xl:w-[60vw]">
+    <div className="z-50 flex h-[90vh] max-h-[750px] w-[90vw] flex-col overflow-y-auto bg-white md:h-fit md:w-[70vw] 2xl:w-[60vw]">
       <div
         className="border-b border-gray-200 bg-gray-100 p-4 text-lg font-semibold capitalize
               text-gray-800"
@@ -132,6 +132,7 @@ const FaviconModalView = () => {
                         alt="favicon"
                         width={favicon.width}
                         height={favicon.height}
+                        className="rounded-sm"
                       />
                     </li>
                   );

@@ -68,7 +68,7 @@ const RecommendationsSection = () => {
               </span>
               <div className="mt-4 flex w-full">
                 <input
-                  className="flex-1 rounded-sm border border-gray-400 px-2 py-2 text-lg font-extralight text-black outline-none"
+                  className="flex-1 rounded-sm border border-gray-400 px-2 py-2 text-lg font-light text-black outline-none"
                   readOnly
                   value={`https://link.drogala.com/${alias}`}
                 />

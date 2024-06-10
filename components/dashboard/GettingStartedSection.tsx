@@ -10,9 +10,9 @@ import Link from 'next/link';
 const GettingStartedSection = () => {
   return (
     <div className="mb-8 w-full">
-      <div className="mb-2 flex flex-1 items-end text-lg font-medium">
+      <h3 className="mb-4 flex flex-1 items-end text-xl text-gray-900">
         Getting started
-      </div>
+      </h3>
       <div className="mt-5 flex flex-col border border-r-0 border-gray-300 sm:flex-row">
         <div className="flex h-[150px] flex-1 border-r border-b border-gray-300 sm:border-b-0">
           {/* Feedback verification section */}

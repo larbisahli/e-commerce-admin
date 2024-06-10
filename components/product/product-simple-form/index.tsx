@@ -273,6 +273,7 @@ function ProductSimpleForm({
       <Card className="w-full sm:w-3/4 md:w-3/4">
         <Input
           label={t('form:input-label-sale-price')}
+          subLabel={t('form:input-label-exclude-tax')}
           isRequiredLabel
           name="salePrice"
           value={salePrice}
@@ -286,6 +287,7 @@ function ProductSimpleForm({
         />
         <Input
           label={t('form:input-label-compare-price')}
+          subLabel={t('form:input-label-exclude-tax')}
           name="comparePrice"
           value={comparePrice}
           onChange={handleChange}

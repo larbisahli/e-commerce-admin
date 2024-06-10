@@ -157,34 +157,37 @@ const ComponentsShowcase = ({
                             <Loader special />
                           </div>
                         )}
-                      <span className="mb-2 font-medium">
-                        {component.title}
-                      </span>
+                      <div className="mb-2 flex items-center font-medium">
+                        <span>{component.title}</span>
+                        {selectedComponent?.moduleName ===
+                          component.moduleName && (
+                          <div className="mx-2 flex h-[18px] w-[18px] items-center justify-center rounded-full border bg-green-600 text-white">
+                            <CheckMark width={10} height={10} />
+                          </div>
+                        )}
+                      </div>
                       <button
                         onClick={() => handleClick(component)}
                         className={cn(
-                          'relative mb-5 cursor-pointer rounded-sm border-2 border-dashed border-white transition-transform duration-500 ease-in-out me-2 hover:border-black hover:opacity-70 hover:shadow',
+                          'relative mb-5 cursor-pointer border border-gray-200',
+                          'group max-w-[410px] overflow-hidden rounded-md border-solid shadow transition-transform duration-500 ease-in-out me-2 hover:border-gray-300 hover:opacity-70',
                           selectedComponent?.moduleName ===
-                            component.moduleName && '!border-blue-500 shadow',
+                            component.moduleName &&
+                            '!border-2 !border-blue-500 shadow',
                           loading && 'blur-[2px]'
                         )}
                       >
-                        {selectedComponent?.moduleName ===
-                          component.moduleName && (
-                          <div className="absolute top-0 right-0 rounded-bl-full border border-blue-300 bg-blue-600 p-1 pb-2 pl-2 text-white">
-                            <CheckMark width={16} height={16} />
-                          </div>
-                        )}
                         <Image
                           alt="thumbnail"
+                          className="rounded-md bg-gray-100 transition-all duration-300 group-hover:scale-110"
                           src={component.thumbnail?.image}
-                          width={500}
+                          width={450}
                           height={300}
                         />
                         {/* <ImageComponent
                           src={component.thumbnail?.image}
                           customPlaceholder={component.thumbnail?.placeholder}
-                          width={500}
+                          width={450}
                           height={300}
                           objectFit="cover"
                         /> */}

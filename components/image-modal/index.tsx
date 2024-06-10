@@ -1,6 +1,4 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-to-interactive-role */
-import 'rc-pagination/assets/index.css';
-
 import Uploader from '@components/common/uploader';
 import { ArrowPrev } from '@components/icons/arrow-prev';
 import { ImagesSvg } from '@components/icons/images';
@@ -9,14 +7,9 @@ import Button from '@components/ui/button';
 import Label from '@components/ui/label';
 import Loader from '@components/ui/loader/loader';
 import Modal from '@components/ui/modal/modal';
-import {
-  useModalAction,
-  useModalState
-} from '@components/ui/modal/modal.context';
 import PageLoader from '@components/ui/page-loader/page-loader';
 import Thumbs from '@components/ui/thumbs';
 import { useFiles } from '@hooks/useFiles';
-import { IMAGE_MODAL } from '@ts-types/constants';
 import { ImageType } from '@ts-types/generated';
 import cn from 'classnames';
 import { isEmpty } from 'lodash';
@@ -208,7 +201,7 @@ const ImageModal = ({
                   className="absolute top-1 left-0 right-0 bottom-0 z-[120]"
                 >
                   <div className="absolute top-1/3 left-1/2 z-10 -translate-x-1/2 -translate-y-1/2 transform">
-                    <PageLoader text={t('common:text-loading')} />
+                    <PageLoader />
                   </div>
                 </div>
               )}

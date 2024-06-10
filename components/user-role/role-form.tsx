@@ -147,7 +147,7 @@ const RoleCreateUpdateForm = ({ initialValues }: IProps) => {
               className="mb-4"
             />
           </div>
-          <div className="mt-5 mb-2 block text-sm font-semibold leading-none text-body-dark">
+          <div className="mt-5 mb-2 block text-sm leading-none text-body-dark">
             Permissions
           </div>
           <div>

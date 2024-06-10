@@ -55,7 +55,7 @@ const InputPhoneNumber = React.forwardRef<HTMLInputElement, Props>(
       <div className={className}>
         <label
           htmlFor={name}
-          className="mb-3 block text-sm font-semibold leading-none text-body-dark"
+          className="mb-3 block text-sm leading-none text-body-dark"
         >
           {label}
         </label>

@@ -139,6 +139,8 @@ export enum StoreLayoutNames {
   TERMS_OF_SERVICES = 'terms-of-service',
   CHECKOUT = 'checkout',
   CONTACT = 'contact',
+  CATEGORY = 'category',
+  PRODUCT = 'product',
   PRIVACY_POLICY = 'privacy-policy',
   RETURN_FAQ = 'returns-faq'
 }

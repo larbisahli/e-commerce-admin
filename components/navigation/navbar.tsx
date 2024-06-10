@@ -1,14 +1,17 @@
 import { AddIcon, MyShopIcon } from '@components/icons/sidebar';
+import { UpgradeIcon } from '@components/icons/sidebar/upgrade';
 import styles from '@components/navigation/scss/index.module.scss';
+import Button from '@components/ui/button';
 import Link from '@components/ui/link';
 import { useGetUser } from '@hooks/useGetUser';
 import { useMediaQuery } from '@hooks/useMediaQuery';
+import { useSettings } from '@hooks/useSettings';
 import { useUI } from '@hooks/useUI';
 import { ROUTES } from '@utils/routes';
 import classNames from 'classnames/bind';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'next-i18next';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import NavMenu from './menu';
 import NavNotification from './notification';
@@ -67,6 +70,26 @@ const Navbar = () => {
     userInfo: { store: { alias = '' } = {} }
   } = useGetUser();
 
+  const { createdAt, tier } = useSettings();
+
+  const trialDaysLeft = useMemo(() => {
+    if (!createdAt) return [];
+    const trialDays = 14;
+    const oneDay = 24 * 60 * 60 * 1000;
+    const firstDate = new Date(createdAt);
+    const secondDate = new Date(Date.now() - oneDay * trialDays);
+    console.log(
+      { firstDate, secondDate },
+      Math.round(Math.abs((Number(firstDate) - Number(secondDate)) / oneDay))
+    );
+    const diffDays = Math.round(
+      Math.abs((Number(firstDate) - Number(secondDate)) / oneDay)
+    );
+    const arrayNum = diffDays.toString().split('');
+    if (arrayNum.length > 1) return arrayNum;
+    return [0, ...arrayNum];
+  }, [createdAt]);
+
   return (
     <header
       className={cx(
@@ -109,6 +132,31 @@ const Navbar = () => {
             <SearchBar />
           </div>
         </div> */}
+        <div className="">
+          <Link href={`${ROUTES.PLANS}`}>
+            <div className="flex items-center pl-6">
+              <Button>
+                <div className="flex items-center">
+                  <div>
+                    <UpgradeIcon width={25} height={25} />
+                  </div>
+                  <div className="font-medium">Upgrade plan</div>
+                </div>
+              </Button>
+              <div className="mx-2 w-fit rounded-sm p-1 text-sm text-gray-500">
+                {trialDaysLeft.map((day) => (
+                  <span
+                    key={day}
+                    className="mx-[2px] w-full rounded-sm border bg-gray-200 px-1 py-1 text-black"
+                  >
+                    {day}
+                  </span>
+                ))}
+                <span className="mx-1">Days left in your trial.</span>
+              </div>
+            </div>
+          </Link>
+        </div>
         <div className="flex flex-1 items-center justify-end space-s-5">
           <Link
             className="flex h-10 w-10 items-center justify-center rounded-sm border bg-white text-gray-600 hover:border-blue-300 hover:text-accent"

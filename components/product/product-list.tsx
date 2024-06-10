@@ -3,6 +3,7 @@ import ImageComponent from '@components/ImageComponent';
 import Badge from '@components/ui/badge/badge';
 import Loader from '@components/ui/loader/loader';
 import { TableRowPlaceholder } from '@components/ui/placeholders/Table';
+import { useGetUser } from '@hooks/useGetUser';
 import { usePlaceholder } from '@hooks/usePlaceholder';
 import { siteSettings } from '@settings/site.settings';
 import type { Nullable } from '@ts-types/custom.types';
@@ -19,7 +20,6 @@ import isEmpty from 'lodash/isEmpty';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
 import { memo, useMemo } from 'react';
-import { useGetUser } from '@hooks/useGetUser';
 
 const Table = dynamic(
   () => import('@components/ui/table').then((mod) => mod.Table),
@@ -93,7 +93,12 @@ const ProductList = ({ loading, products, selectedColumns }: IProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
-          return name ?? record?.translated?.name;
+          const value = name ?? record?.translated?.name;
+          return (
+            <div className="cut-line-2" title={value}>
+              {value}
+            </div>
+          );
         }
       },
       {

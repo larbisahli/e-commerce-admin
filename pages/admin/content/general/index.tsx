@@ -1,22 +1,43 @@
-import AnalyticsIcon from '@components/icons/analytics';
-import { ColorIcon } from '@components/icons/builder/color';
-import { LogoIdentityIcon } from '@components/icons/builder/logo-identity';
-import { SocialIcon } from '@components/icons/builder/social';
-import { TemplateIcon } from '@components/icons/builder/template';
-import { TypographyIcon } from '@components/icons/builder/typography';
+import { useQuery } from '@apollo/client';
 import BuilderLayout from '@components/layouts/builder';
+import { ThemeSettingsType } from '@components/store-builder/general/theme-styles';
 import NavigationLink from '@components/store-builder/navigationLink';
-import { useGetUser } from '@hooks/index';
+import Loader from '@components/ui/loader/loader';
+import { GET_THEME_SETTINGS } from '@graphql/content';
+import { useErrorLogger, useGetUser } from '@hooks/index';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import type { SSRProps } from '@ts-types/custom.types';
 import { ROUTES } from '@utils/routes';
+import { isEmpty } from 'lodash';
 import type { GetServerSideProps } from 'next';
+import dynamic from 'next/dynamic';
 import Head from 'next/head';
-import Link from 'next/link';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+
+const ThemeStyles = dynamic(
+  () => import('@components/store-builder/general/theme-styles'),
+  { ssr: true, loading: () => <Loader special /> }
+);
+
+interface TThemeSettings {
+  getThemeSettings: ThemeSettingsType;
+}
 
 export default function CreateSupplierPage({ client }: SSRProps) {
   useGetUser(client);
+
+  const { data, loading, error } = useQuery<TThemeSettings>(
+    GET_THEME_SETTINGS,
+    {
+      variables: {},
+      fetchPolicy: 'cache-and-network'
+    }
+  );
+
+  const { getThemeSettings = null } = data ?? {};
+
+  useErrorLogger(error);
+
   return (
     <>
       <Head>
@@ -28,53 +49,17 @@ export default function CreateSupplierPage({ client }: SSRProps) {
           href="/svg/supplier.svg"
         />
       </Head>
-      <div className="px-5">
+      <div className="px-5 pt-0">
         <NavigationLink />
-        <div className="mt-5">
+        {/* <div className="mt-5">
           <Link
-            href={ROUTES.BUILDER_LOGO_IDENTITY}
+            href={ROUTES.THEME_STYLES}
             className="flex cursor-pointer items-center py-3 px-2 hover:bg-gray-100"
           >
             <div className="text-gray-900">
-              <LogoIdentityIcon width={25} height={25} />
+              <DesignIcon width={25} height={25} />
             </div>
-            <div className="mx-2 px-1 text-base text-black">Logo & dentity</div>
-          </Link>
-          <Link
-            href={ROUTES.BUILDER_COLOR_APPEARANCE}
-            className="flex cursor-pointer items-center py-3 px-2 hover:bg-gray-100"
-          >
-            <div className="text-gray-900">
-              <ColorIcon width={25} height={25} />
-            </div>
-            <div className="mx-2 text-base text-black">Color & appearance</div>
-          </Link>
-          <Link
-            href={ROUTES.BUILDER_TYPOGRAPHY}
-            className="flex cursor-pointer items-center py-3 px-2 hover:bg-gray-100"
-          >
-            <div className="text-gray-900">
-              <TypographyIcon width={20} height={20} />
-            </div>
-            <div className="mx-2 px-1 text-base text-black">Typography</div>
-          </Link>
-          <Link
-            href={ROUTES.BUILDER_ANALYTICS}
-            className="flex cursor-pointer items-center py-3 px-2 hover:bg-gray-100"
-          >
-            <div className="text-gray-900">
-              <AnalyticsIcon width={20} height={20} />
-            </div>
-            <div className="mx-2 px-1 text-base text-black">Analytics</div>
-          </Link>
-          <Link
-            href={ROUTES.BUILDER_SOCIAL_LINKS}
-            className="flex cursor-pointer items-center py-3 px-2 hover:bg-gray-100"
-          >
-            <div className="text-gray-900">
-              <SocialIcon width={20} height={20} />
-            </div>
-            <div className="mx-2 px-1 text-base text-black">Social links</div>
+            <div className="mx-2 text-base text-black">Theme Styles</div>
           </Link>
           <Link
             href={ROUTES.BUILDER_TEMPLATES}
@@ -85,6 +70,16 @@ export default function CreateSupplierPage({ client }: SSRProps) {
             </div>
             <div className="mx-2 px-1 text-base text-black">Templates</div>
           </Link>
+        </div> */}
+        <div className="relative">
+          {loading && isEmpty(getThemeSettings) && (
+            <div className="pt-5">
+              <Loader special />
+            </div>
+          )}
+          {!loading && !isEmpty(getThemeSettings) && (
+            <ThemeStyles initialValues={getThemeSettings} />
+          )}
         </div>
       </div>
     </>
@@ -120,7 +115,3 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
   };
 };
-
-// store-design/layout/index/sections/header
-// store-design/layout/8c4cc176-0c02-4bc6-b39c-458a8689512d/ (privacy page)
-// store-design/layout/8c4cc176-0c02-4bc6-b39c-458a8689512d/sections/header

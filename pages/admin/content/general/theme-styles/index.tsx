@@ -1,26 +1,53 @@
+import { useQuery } from '@apollo/client';
 import { BackArrowIcon } from '@components/icons/builder/arrow-back';
 import BuilderLayout from '@components/layouts/builder';
-import { useModalAction } from '@components/ui/modal/modal.context';
-import { useGetUser } from '@hooks/index';
+import { ThemeSettingsType } from '@components/store-builder/general/theme-styles';
+import Loader from '@components/ui/loader/loader';
+import { GET_THEME_SETTINGS } from '@graphql/content';
+import { useErrorLogger, useGetUser } from '@hooks/index';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import type { SSRProps } from '@ts-types/custom.types';
 import { ROUTES } from '@utils/routes';
+import { isEmpty } from 'lodash';
 import type { GetServerSideProps } from 'next';
+import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import Link from 'next/link';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-export default function CreateSupplierPage({ client }: SSRProps) {
+const ThemeStyles = dynamic(
+  () => import('@components/store-builder/general/theme-styles'),
+  { ssr: true, loading: () => <Loader special /> }
+);
+
+interface TThemeSettings {
+  getThemeSettings: ThemeSettingsType;
+}
+
+export default function ThemeStylesPage({ client }: SSRProps) {
   useGetUser(client);
+
+  const { data, loading, error } = useQuery<TThemeSettings>(
+    GET_THEME_SETTINGS,
+    {
+      variables: {},
+      fetchPolicy: 'cache-and-network'
+    }
+  );
+
+  const { getThemeSettings = null } = data ?? {};
+
+  useErrorLogger(error);
+
   return (
     <>
       <Head>
-        <title>Typography | Dropgala</title>
+        <title>Theme Styles | Dropgala</title>
         <link
           rel="icon"
           type="image/svg"
           sizes="32x32"
-          href="/svg/supplier.svg"
+          href="/svg/design.svg"
         />
       </Head>
       <div className="px-5">
@@ -33,8 +60,18 @@ export default function CreateSupplierPage({ client }: SSRProps) {
               <BackArrowIcon width={20} height={20} />
             </Link>
             <h3 className="text flex-1 text-center text-xl font-semibold text-black">
-              Typography
+              Theme Styles
             </h3>
+          </div>
+          <div className="relative">
+            {loading && isEmpty(getThemeSettings) && (
+              <div className="pt-5">
+                <Loader special />
+              </div>
+            )}
+            {!loading && !isEmpty(getThemeSettings) && (
+              <ThemeStyles initialValues={getThemeSettings} />
+            )}
           </div>
         </div>
       </div>
@@ -42,7 +79,7 @@ export default function CreateSupplierPage({ client }: SSRProps) {
   );
 }
 
-CreateSupplierPage.Layout = BuilderLayout;
+ThemeStylesPage.Layout = BuilderLayout;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { locale } = context;
@@ -71,14 +108,3 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
   };
 };
-
-// store-design/layout/index/sections/header
-// store-design/layout/8c4cc176-0c02-4bc6-b39c-458a8689512d/ (privacy page)
-// store-design/layout/8c4cc176-0c02-4bc6-b39c-458a8689512d/sections/header
-
-// store-design/general/logo-identity
-// store-design/general/colors-appearance
-// store-design/general/typography
-// store-design/general/analytics
-// store-design/general/social-links
-// store-design/general/templates

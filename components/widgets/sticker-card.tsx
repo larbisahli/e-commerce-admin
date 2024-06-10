@@ -142,9 +142,7 @@ const StickerCard = ({
           {loading ? (
             <div className="animated-background mb-2 h-6 max-w-[90px] rounded-sm" />
           ) : (
-            <span className="mb-2 text-3xl font-semibold text-heading">
-              {price}
-            </span>
+            <span className="mb-2 text-3xl text-heading">{price}</span>
           )}
           {indicator === 'up' && (
             <span

@@ -67,12 +67,7 @@ export const ROUTES = {
   MARKETING_NEWSLETTER: '/admin/marketing/newsletter',
   ANALYTICS: '/admin/analytics',
   BUILDER_GENERAL: '/admin/content/general',
-  BUILDER_LOGO_IDENTITY: '/admin/content/general/logo-identity',
-  BUILDER_COLOR_APPEARANCE: '/admin/content/general/colors-appearance',
-  BUILDER_TYPOGRAPHY: '/admin/content/general/typography',
-  BUILDER_ANALYTICS: '/admin/content/general/analytics',
-  BUILDER_SOCIAL_LINKS: '/admin/content/general/social-links',
+  THEME_STYLES: '/admin/content/general/theme-styles',
   BUILDER_TEMPLATES: '/admin/content/general/templates',
-  BUILDER_PAGES: '/admin/content/general/pages',
   BUILDER_LAYOUT: '/admin/content/layout'
 };

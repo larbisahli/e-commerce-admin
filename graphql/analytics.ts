@@ -18,6 +18,18 @@ export const DASH_ANALYTICS = gql`
         value
         quantity
       }
+      order {
+        count
+      }
+      customer {
+        count
+      }
+      product {
+        count
+      }
+      category {
+        count
+      }
     }
   }
 `;
