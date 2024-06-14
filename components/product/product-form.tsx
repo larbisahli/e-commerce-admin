@@ -62,7 +62,6 @@ function ProductForm({
     trackInventory,
     freeShipping,
     displayProductMeasurements,
-    includeInHomepage,
     quantity,
     sku,
     thumbnail,
@@ -129,7 +128,6 @@ function ProductForm({
     trackInventory,
     freeShipping,
     displayProductMeasurements,
-    includeInHomepage,
     id
   };
   const linkedProductsState = {

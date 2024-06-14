@@ -65,6 +65,24 @@ export const componentsThumbnail = {
       title: 'Simple 8'
     }
   ],
+  ProductList: [
+    {
+      moduleName: 'ProductListRegular',
+      thumbnail: {
+        image: '/static/components/product-list/product-list-regular.png',
+        placeholder: '/static/components/product-list/product-list-regular.png'
+      },
+      title: 'Product list regular'
+    },
+    {
+      moduleName: 'ProductListSlide',
+      thumbnail: {
+        image: '/static/components/product-list/product-list-slide.png',
+        placeholder: '/static/components/product-list/product-list-slide.png'
+      },
+      title: 'Product list slide'
+    }
+  ],
   ImageBanner: [
     {
       moduleName: 'ImageBannerContentCenter',

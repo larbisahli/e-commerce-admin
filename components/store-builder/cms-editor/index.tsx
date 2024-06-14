@@ -75,6 +75,17 @@ const InstallPromptContent = dynamic(
     loading: () => <Loader special />
   }
 );
+const CategoryListContent = dynamic(
+  () => import('./components/category-list'),
+  {
+    ssr: false,
+    loading: () => <Loader special />
+  }
+);
+const ProductListContent = dynamic(() => import('./components/product-list'), {
+  ssr: false,
+  loading: () => <Loader special />
+});
 
 export interface OptionsVariable {
   componentId: string;
@@ -178,6 +189,12 @@ const CmsEditorModal = () => {
             )}
             {meta?.moduleGroup === ModuleGroups.INSTALL_PROMPT && !loading && (
               <InstallPromptContent initialValues={initialValues} />
+            )}
+            {meta?.moduleGroup === ModuleGroups.CATEGORY_LIST && !loading && (
+              <CategoryListContent initialValues={initialValues} />
+            )}
+            {meta?.moduleGroup === ModuleGroups.PRODUCT_LIST && !loading && (
+              <ProductListContent initialValues={initialValues} />
             )}
           </div>
         </div>

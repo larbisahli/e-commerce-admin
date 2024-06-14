@@ -77,7 +77,6 @@ export const PRODUCT = gql`
       trackInventory
       freeShipping
       displayProductMeasurements
-      includeInHomepage
       translated {
         name
         description
@@ -271,7 +270,6 @@ export const CREATE_PRODUCT = gql`
     $trackInventory: Boolean!
     $freeShipping: Boolean!
     $displayProductMeasurements: Boolean!
-    $includeInHomepage: Boolean!
     $note: String
     $sku: String
     $thumbnail: [ImageInput!]!
@@ -303,7 +301,6 @@ export const CREATE_PRODUCT = gql`
       trackInventory: $trackInventory
       freeShipping: $freeShipping
       displayProductMeasurements: $displayProductMeasurements
-      includeInHomepage: $includeInHomepage
       note: $note
       sku: $sku
       thumbnail: $thumbnail
@@ -389,7 +386,6 @@ export const UPDATE_PRODUCT_CONTENT = gql`
     $trackInventory: Boolean!
     $freeShipping: Boolean!
     $displayProductMeasurements: Boolean!
-    $includeInHomepage: Boolean!
     $productSeo: ProductSeoInput!
     $language: LanguageInput!
   ) {
@@ -403,7 +399,6 @@ export const UPDATE_PRODUCT_CONTENT = gql`
       trackInventory: $trackInventory
       freeShipping: $freeShipping
       displayProductMeasurements: $displayProductMeasurements
-      includeInHomepage: $includeInHomepage
       productSeo: $productSeo
       language: $language
     ) {
@@ -416,7 +411,6 @@ export const UPDATE_PRODUCT_CONTENT = gql`
       trackInventory
       freeShipping
       displayProductMeasurements
-      includeInHomepage
     }
   }
 `;

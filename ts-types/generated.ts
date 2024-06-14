@@ -142,7 +142,6 @@ export interface Category extends CreatedUpdatedByAt {
   level?: Scalars['Int'];
   hasChildren?: Scalars['Boolean'];
   includeInMenu?: Scalars['Boolean'];
-  includeInHomePage?: Scalars['Boolean'];
   position?: Scalars['Int'];
   parent?: Nullable<CategoryRefLevel2>;
   urlKey?: Scalars['String'];
@@ -369,7 +368,6 @@ export interface Product extends CreatedUpdatedByAt {
   disableOutOfStock?: Scalars['Boolean'];
   freeShipping?: Scalars['Boolean'];
   displayProductMeasurements?: Scalars['Boolean'];
-  includeInHomepage?: Scalars['Boolean'];
   trackInventory?: Scalars['Boolean'];
   translated?: {
     name?: Scalars['String'];

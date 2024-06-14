@@ -2,11 +2,11 @@ import { useQuery } from '@apollo/client';
 import BuilderLayout from '@components/layouts/builder';
 import LayoutNavigation from '@components/store-builder/LayoutNavigation';
 import NavigationLink from '@components/store-builder/navigationLink';
-import { STORE_LAYOUTS } from '@graphql/content';
+import { STORE_LAYOUTS, STORE_LAYOUTS_COMPONENTS } from '@graphql/content';
 import { useErrorLogger, useGetUser } from '@hooks/index';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import type { SSRProps } from '@ts-types/custom.types';
-import { StoreBuilder } from '@ts-types/enums';
+import { StoreBuilder, StoreLayoutNames } from '@ts-types/enums';
 import { ROUTES } from '@utils/routes';
 import type { GetServerSideProps } from 'next';
 import Head from 'next/head';
@@ -42,21 +42,37 @@ export default function CreateSupplierPage({ client }: SSRProps) {
   const { query, push } = useRouter();
   const layoutName = query.layoutName as string;
 
-  const { data, loading, error } = useQuery<TLayout, OptionsVariable>(
-    STORE_LAYOUTS,
-    {
-      variables: { layoutName },
-      fetchPolicy: 'cache-and-network'
-    }
-  );
+  const isCategoryPage = layoutName === StoreLayoutNames.CATEGORY;
+  const isCartPage = layoutName === StoreLayoutNames.CART;
+  const isCheckoutPage = layoutName === StoreLayoutNames.CHECKOUT;
+  const isProductPage = layoutName === StoreLayoutNames.PRODUCT;
 
   const {
-    storeLayouts = [],
-    storeLayoutComponents = [],
-    storeLayoutCommonComponents = []
-  } = data ?? {};
+    data: lData,
+    loading: lLoading,
+    error: lError
+  } = useQuery<TLayout, OptionsVariable>(STORE_LAYOUTS, {
+    fetchPolicy: 'cache-and-network'
+  });
 
-  useErrorLogger(error);
+  const {
+    data: lcData,
+    loading: lcLoading,
+    error: lcError
+  } = useQuery<TLayout, OptionsVariable>(STORE_LAYOUTS_COMPONENTS, {
+    variables: { layoutName },
+    fetchPolicy: 'cache-and-network',
+    skip: isCategoryPage || isCartPage || isCheckoutPage || isProductPage
+  });
+
+  const loading = lLoading || lcLoading;
+
+  const { storeLayouts = [] } = lData ?? {};
+  const { storeLayoutComponents = [], storeLayoutCommonComponents = [] } =
+    lcData ?? {};
+
+  useErrorLogger(lcError);
+  useErrorLogger(lError);
 
   /**
    * BUILDER EVENT LISTENER

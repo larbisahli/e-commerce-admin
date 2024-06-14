@@ -20,13 +20,18 @@ export const STORE_LAYOUT_COMPONENT_CONTENT = gql`
 `;
 
 export const STORE_LAYOUTS = gql`
-  query StoreLayouts($layoutName: String!) {
+  query StoreLayouts {
     storeLayouts {
       id
       name
       title
       isCustom
     }
+  }
+`;
+
+export const STORE_LAYOUTS_COMPONENTS = gql`
+  query StoreLayoutComponents($layoutName: String!) {
     storeLayoutComponents(layoutName: $layoutName) {
       componentId
       moduleName

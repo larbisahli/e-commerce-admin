@@ -116,7 +116,8 @@ export enum ModuleGroups {
   PRODUCT_LIST = 'ProductList',
   HERO_CAROUSEL = 'HeroCarousel',
   BUTTON = 'Button',
-  EDITORIAL_TEXT = 'EditorialText'
+  EDITORIAL_TEXT = 'EditorialText',
+  BANNER_WIDGET = 'BannerWidget'
 }
 
 export enum StoreBuilder {
@@ -138,6 +139,7 @@ export enum StoreLayoutNames {
   PRODUCT_PAGE = 'product-page',
   TERMS_OF_SERVICES = 'terms-of-service',
   CHECKOUT = 'checkout',
+  CART = 'cart',
   CONTACT = 'contact',
   CATEGORY = 'category',
   PRODUCT = 'product',

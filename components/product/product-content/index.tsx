@@ -41,7 +41,6 @@ interface Props {
     status: Product['status'];
     disableOutOfStock: Product['disableOutOfStock'];
     freeShipping: Product['freeShipping'];
-    includeInHomepage: Product['includeInHomepage'];
     trackInventory: Product['trackInventory'];
     displayProductMeasurements: Product['displayProductMeasurements'];
     isUpdateMode: boolean;
@@ -95,7 +94,6 @@ const ProductContent = ({ state, initialValues, productSeo }: Props) => {
     status,
     disableOutOfStock,
     freeShipping,
-    includeInHomepage,
     trackInventory,
     displayProductMeasurements,
     isUpdateMode
@@ -114,7 +112,6 @@ const ProductContent = ({ state, initialValues, productSeo }: Props) => {
       disableOutOfStock: initProductContent.disableOutOfStock,
       trackInventory: initProductContent.trackInventory,
       freeShipping: initProductContent.freeShipping,
-      includeInHomepage: initProductContent.includeInHomepage,
       displayProductMeasurements: initProductContent.displayProductMeasurements
     };
     const currentProductContent = {
@@ -125,7 +122,6 @@ const ProductContent = ({ state, initialValues, productSeo }: Props) => {
       disableOutOfStock,
       trackInventory,
       freeShipping,
-      includeInHomepage,
       displayProductMeasurements
     };
     console.log({
@@ -139,7 +135,6 @@ const ProductContent = ({ state, initialValues, productSeo }: Props) => {
     disableOutOfStock,
     displayProductMeasurements,
     freeShipping,
-    includeInHomepage,
     trackInventory,
     initProductContent,
     isUpdateMode,
@@ -197,7 +192,6 @@ const ProductContent = ({ state, initialValues, productSeo }: Props) => {
         trackInventory,
         freeShipping,
         displayProductMeasurements,
-        includeInHomepage,
         productSeo: {
           metaTitle: productSeo?.metaTitle,
           metaKeywords: productSeo?.metaKeywords,
@@ -320,15 +314,6 @@ const ProductContent = ({ state, initialValues, productSeo }: Props) => {
               onMouseLeaveTopLevel={checkForUpdateHandler}
               checked={disableOutOfStock}
               label={t('form:input-label-disable-out-of-stock')}
-            />
-          </div>
-          <div className="my-2">
-            <Checkbox
-              name="includeInHomepage"
-              onChange={handleChange}
-              onMouseLeaveTopLevel={checkForUpdateHandler}
-              checked={includeInHomepage}
-              label={t('form:input-label-display-to-homepage')}
             />
           </div>
           <div className="my-2">

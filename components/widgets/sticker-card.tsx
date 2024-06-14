@@ -116,11 +116,11 @@ const StickerCard = ({
     <div className="h-full w-full rounded-sm">
       <div className="flex h-full w-full flex-col justify-between">
         <div className="flex h-full w-full flex-col justify-between">
-          <div className="mb-auto w-full pb-2">
+          <div className="mb-auto w-full">
             <div className="flex w-full flex-col">
               <span className="mb-1 text-xl font-semibold text-heading">
                 {loading ? (
-                  <div className="animated-background h-4 max-w-[130px] rounded-sm" />
+                  <div className="animated-background mb-1 h-4 max-w-[130px] rounded-sm" />
                 ) : (
                   t(titleTransKey)
                 )}
@@ -140,9 +140,9 @@ const StickerCard = ({
             </div>
           </div>
           {loading ? (
-            <div className="animated-background mb-2 h-6 max-w-[90px] rounded-sm" />
+            <div className="animated-background h-6 max-w-[90px] rounded-sm" />
           ) : (
-            <span className="mb-2 text-3xl text-heading">{price}</span>
+            <span className="text-3xl text-heading">{price}</span>
           )}
           {indicator === 'up' && (
             <span
@@ -174,7 +174,7 @@ const StickerCard = ({
         ) : (
           !isEmpty(data) &&
           Object.keys(data)?.length > 1 && (
-            <div className="h-full w-full">
+            <div className="w-full0 h-full">
               <Chart options={options} series={series} type="line" />
             </div>
           )

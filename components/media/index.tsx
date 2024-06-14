@@ -166,7 +166,7 @@ const MediaList = ({ media, refetch, loading }: IProps) => {
               </Button>
             )}
             <div className="text-sm font-semibold text-gray-600">{`${count} ${
-              count > 1 ? 'images' : 'image'
+              count > 1 ? 'files' : 'file'
             } found`}</div>
           </div>
           <Button

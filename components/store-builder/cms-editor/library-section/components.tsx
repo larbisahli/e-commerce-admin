@@ -6,6 +6,7 @@ import { useModalAction } from '@components/ui/modal/modal.context';
 import {
   STORE_LAYOUT_COMPONENT_CONTENT,
   STORE_LAYOUTS,
+  STORE_LAYOUTS_COMPONENTS,
   UPDATE_LAYOUT_COMPONENT_MODULE_NAME
 } from '@graphql/content';
 import { useErrorLogger } from '@hooks/useErrorLogger';
@@ -77,8 +78,8 @@ const ComponentsShowcase = ({
         }
       },
       refetchQueries: [
-        STORE_LAYOUTS,
-        'StoreLayouts',
+        STORE_LAYOUTS_COMPONENTS,
+        'StoreLayoutComponents',
         STORE_LAYOUT_COMPONENT_CONTENT,
         'StoreLayoutComponentContent'
       ]
@@ -130,15 +131,15 @@ const ComponentsShowcase = ({
     if (isEmpty(components)) return null;
     return (
       <div className={cn('relative')}>
-        <div className="relative">
-          <div className="h-full">
+        <div className="relative w-full">
+          <div className="h-full w-full">
             <div className="flex w-full flex-col">
-              <div className="relative mb-8 grid h-full w-full grid-cols-2 gap-3 pt-3">
+              <div className="relative mb-8 flex w-full flex-wrap items-center justify-between pt-3">
                 {components?.map((component) => {
                   return (
                     <div
                       key={component.moduleName}
-                      className="relative flex flex-col border-b"
+                      className="relative my-4 flex w-[48%] flex-col border-b"
                     >
                       {loading &&
                         selectedLoadingModuleName === component.moduleName && (
@@ -146,28 +147,30 @@ const ComponentsShowcase = ({
                             <Loader special />
                           </div>
                         )}
-                      <span className="mb-2 text-gray-800 underline">
-                        {component.title}
-                      </span>
+                      <div className="mb-2 flex items-center font-medium text-gray-800 underline">
+                        <span>{component.title}</span>
+                        {selectedComponent?.moduleName ===
+                          component.moduleName && (
+                          <div className="mx-2 flex h-[18px] w-[18px] items-center justify-center rounded-full border bg-green-600 text-white">
+                            <CheckMark width={10} height={10} />
+                          </div>
+                        )}
+                      </div>
                       <button
                         onClick={() => handleClick(component)}
                         className={cn(
-                          'relative mb-5 cursor-pointer rounded-sm border-2 border-dashed border-white transition-transform duration-500 ease-in-out me-2 hover:border-black hover:opacity-70 hover:shadow',
+                          'relative mb-5 cursor-pointer border border-gray-200',
+                          'group overflow-hidden rounded-md border-solid shadow transition-transform duration-500 ease-in-out me-2 hover:border-gray-300 hover:opacity-70',
                           selectedComponent?.moduleName ===
-                            component.moduleName && '!border-blue-500 shadow',
+                            component.moduleName &&
+                            '!border-2 !border-blue-500 shadow',
                           loading && 'blur-[2px]'
                         )}
                       >
-                        {selectedComponent?.moduleName ===
-                          component.moduleName && (
-                          <div className="absolute top-0 right-0 rounded-bl-full border border-blue-300 bg-blue-600 p-1 pb-2 pl-2 text-white">
-                            <CheckMark width={16} height={16} />
-                          </div>
-                        )}
                         <Image
                           alt="thumbnail"
                           src={component.thumbnail?.image}
-                          width={500}
+                          width={400}
                           height={300}
                         />
                         {/* <ImageComponent
@@ -190,7 +193,7 @@ const ComponentsShowcase = ({
   };
 
   return (
-    <div className="h-full">
+    <div className="h-full w-full">
       {renderEmpty()}
       {renderComponents()}
     </div>

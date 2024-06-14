@@ -6,7 +6,6 @@ export const CREATE_CATEGORY = gql`
     $name: String!
     $description: String!
     $includeInMenu: Boolean!
-    $includeInHomePage: Boolean!
     $position: Int!
     $thumbnail: [ImageInput]
     $urlKey: String!
@@ -23,7 +22,6 @@ export const CREATE_CATEGORY = gql`
       name: $name
       description: $description
       includeInMenu: $includeInMenu
-      includeInHomePage: $includeInHomePage
       position: $position
       thumbnail: $thumbnail
       urlKey: $urlKey
@@ -48,7 +46,6 @@ export const UPDATE_CATEGORY = gql`
     $name: String!
     $description: String
     $includeInMenu: Boolean!
-    $includeInHomePage: Boolean!
     $position: Int!
     $thumbnail: [ImageInput]
     $urlKey: String!
@@ -66,7 +63,6 @@ export const UPDATE_CATEGORY = gql`
       name: $name
       description: $description
       includeInMenu: $includeInMenu
-      includeInHomePage: $includeInHomePage
       position: $position
       thumbnail: $thumbnail
       urlKey: $urlKey
@@ -108,7 +104,6 @@ export const CATEGORIES = gql`
         name
       }
       includeInMenu
-      includeInHomePage
       level
       position
       children {
@@ -119,7 +114,6 @@ export const CATEGORIES = gql`
           name
         }
         includeInMenu
-        includeInHomePage
         level
         position
         children {
@@ -130,7 +124,6 @@ export const CATEGORIES = gql`
             name
           }
           includeInMenu
-          includeInHomePage
           level
           position
           createdAt
@@ -186,7 +179,6 @@ export const CATEGORY = gql`
       name
       description
       includeInMenu
-      includeInHomePage
       position
       translated {
         name
@@ -255,6 +247,7 @@ export const CATEGORIES_FOR_SELECT_ALL = gql`
       translated {
         name
       }
+      urlKey
     }
   }
 `;

@@ -1,10 +1,12 @@
 import { useMutation } from '@apollo/client';
 import { NoComponentIcon } from '@components/icons/builder/no-component';
 import { CheckMark } from '@components/icons/checkmark';
+import { Eye } from '@components/icons/eye-icon';
 import Loader from '@components/ui/loader/loader';
 import {
   STORE_LAYOUT_COMPONENT_CONTENT,
   STORE_LAYOUTS,
+  STORE_LAYOUTS_COMPONENTS,
   UPDATE_LAYOUT_COMPONENT_MODULE_NAME
 } from '@graphql/content';
 import { useErrorLogger } from '@hooks/useErrorLogger';
@@ -72,8 +74,8 @@ const ComponentsShowcase = ({
         }
       },
       refetchQueries: [
-        STORE_LAYOUTS,
-        'StoreLayouts',
+        STORE_LAYOUTS_COMPONENTS,
+        'StoreLayoutComponents',
         STORE_LAYOUT_COMPONENT_CONTENT,
         'StoreLayoutComponentContent'
       ]
@@ -140,14 +142,7 @@ const ComponentsShowcase = ({
               <div className="relative h-full w-full pt-3">
                 {components?.map((component) => {
                   return (
-                    <div
-                      key={component.moduleName}
-                      className="relative"
-                      onMouseEnter={() =>
-                        onMouseEnterHandler(component.moduleName)
-                      }
-                      onMouseLeave={onMouseLeaveHandler}
-                    >
+                    <div key={component.moduleName} className="relative">
                       {component.moduleName === hoveredModuleName && (
                         <ShowCaseTool {...component} />
                       )}
@@ -157,14 +152,25 @@ const ComponentsShowcase = ({
                             <Loader special />
                           </div>
                         )}
-                      <div className="mb-2 flex items-center font-medium">
-                        <span>{component.title}</span>
-                        {selectedComponent?.moduleName ===
-                          component.moduleName && (
-                          <div className="mx-2 flex h-[18px] w-[18px] items-center justify-center rounded-full border bg-green-600 text-white">
-                            <CheckMark width={10} height={10} />
-                          </div>
-                        )}
+                      <div className="mb-2 flex max-w-[410px] items-center justify-between">
+                        <div className="flex flex-1 items-center font-medium">
+                          <span>{component.title}</span>
+                          {selectedComponent?.moduleName ===
+                            component.moduleName && (
+                            <div className="mx-2 flex h-[18px] w-[18px] items-center justify-center rounded-full border bg-green-600 text-white">
+                              <CheckMark width={10} height={10} />
+                            </div>
+                          )}
+                        </div>
+                        <div
+                          onMouseEnter={() =>
+                            onMouseEnterHandler(component.moduleName)
+                          }
+                          onMouseLeave={onMouseLeaveHandler}
+                          className="cursor-pointer text-gray-500 hover:text-blue-500"
+                        >
+                          <Eye width={20} height={20} />
+                        </div>
                       </div>
                       <button
                         onClick={() => handleClick(component)}

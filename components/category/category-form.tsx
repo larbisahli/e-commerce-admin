@@ -104,7 +104,6 @@ const defaultValues = {
   description: null,
   parent: null,
   includeInMenu: true,
-  includeInHomePage: true,
   position: 1,
   thumbnail: [],
   icon: null,
@@ -224,7 +223,6 @@ export default function CreateOrUpdateCategoriesForm({
       name: values.name,
       description: values.description,
       includeInMenu: values.includeInMenu,
-      includeInHomePage: values.includeInHomePage,
       position: Number(values.position),
       thumbnail: values.thumbnail?.map(({ id }) => ({ id })),
       parentId: isEmpty(values?.parent) ? null : values?.parent?.id,
@@ -266,7 +264,6 @@ export default function CreateOrUpdateCategoriesForm({
 
   const thumbnail = watch('thumbnail');
   const includeInMenu = watch('includeInMenu');
-  const includeInHomePage = watch('includeInHomePage');
   const name = watch('name');
   const metaDescription = watch('metaDescription') ?? '';
   const metaImage = watch('metaImage');
@@ -396,7 +393,7 @@ export default function CreateOrUpdateCategoriesForm({
             type="number"
             min={0}
             {...register('position')}
-            disabled={!includeInMenu && !includeInHomePage}
+            disabled={!includeInMenu}
             error={t(errors.position?.message!)}
             variant="outline"
             className="mb-5"
@@ -405,14 +402,6 @@ export default function CreateOrUpdateCategoriesForm({
             <SwitchInput
               name="includeInMenu"
               label="Include in menu"
-              control={control}
-              errors={errors}
-            />
-          </div>
-          <div className="mb-4">
-            <SwitchInput
-              name="includeInHomePage"
-              label="Include in HomePage"
               control={control}
               errors={errors}
             />

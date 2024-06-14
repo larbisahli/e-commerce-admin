@@ -18,17 +18,13 @@ const LibrarySectionModal = () => {
     if (meta.moduleGroup === ModuleGroups.PRODUCT_CARD) return 'Product cards';
   };
   return (
-    <div className="relative flex h-[70vh] w-[50vw] flex-col overflow-hidden">
+    <div className="relative flex h-[70vh] w-[55vw] flex-col overflow-hidden">
       <div className="font border-b border-gray-200 bg-gray-50 p-4 text-base capitalize text-gray-800">
         {`UI Library > ${handleTitle()}`}
       </div>
-      <div
-        className={classNames(
-          'flex h-full w-full justify-center overflow-auto p-8 pb-5'
-        )}
-      >
-        <div className="h-full pr-4">
-          <div className="h-full">
+      <div className={classNames('flex h-full w-full overflow-auto p-8 pb-5')}>
+        <div className="h-full w-full pr-4">
+          <div className="h-full w-full">
             <ComponentsShowcase {...meta} />
           </div>
         </div>

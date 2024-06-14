@@ -54,5 +54,33 @@ export const componentsLibrary = {
         placeholder: '/static/library/breadcrumb/breadcrumb.png'
       }
     }
+  ],
+  [ModuleGroups.PRODUCT_CARD]: [
+    {
+      moduleName: 'ProductCard',
+      title: 'Product Card Default',
+      thumbnail: {
+        image: '/static/library/product-card/product-card.png',
+        placeholder: '/static/library/product-card/product-card.png'
+      }
+    }
+  ],
+  [ModuleGroups.BANNER_WIDGET]: [
+    {
+      moduleName: 'BannerWidgetBg',
+      title: 'Banner Widget with background',
+      thumbnail: {
+        image: '/static/library/banner-widget/banner-widget-bg.png',
+        placeholder: '/static/library/banner-widget/banner-widget-bg.png'
+      }
+    },
+    {
+      moduleName: 'BannerWidgetNoBg',
+      title: 'Banner Widget with no background',
+      thumbnail: {
+        image: '/static/library/banner-widget/banner-widget-no-bg.png',
+        placeholder: '/static/library/banner-widget/banner-widget-no-bg.png'
+      }
+    }
   ]
 };

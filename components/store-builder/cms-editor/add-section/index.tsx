@@ -4,7 +4,10 @@ import {
   useModalAction,
   useModalState
 } from '@components/ui/modal/modal.context';
-import { ADD_LAYOUT_COMPONENT, STORE_LAYOUTS } from '@graphql/content';
+import {
+  ADD_LAYOUT_COMPONENT,
+  STORE_LAYOUTS_COMPONENTS
+} from '@graphql/content';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetUser } from '@hooks/useGetUser';
 import { useUI } from '@hooks/useUI';
@@ -50,7 +53,7 @@ const AddSectionModal = () => {
         'x-csrf-token': csrfToken
       }
     },
-    refetchQueries: [STORE_LAYOUTS, 'StoreLayouts'],
+    refetchQueries: [STORE_LAYOUTS_COMPONENTS, 'StoreLayoutComponents'],
     onCompleted: (data: { addLayoutComponent: any }) => {
       if (!isEmpty(data.addLayoutComponent)) {
         closeModal(ADD_SECTION_MODAL);

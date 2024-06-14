@@ -1,25 +1,13 @@
-/* eslint-disable jsx-a11y/no-noninteractive-element-to-interactive-role */
 import 'rc-pagination/assets/index.css';
 
 import { useQuery } from '@apollo/client';
 import ProductListMini from '@components/product/product-list-mini';
 import Button from '@components/ui/button';
 import Modal from '@components/ui/modal/modal';
-import {
-  useModalAction,
-  useModalState
-} from '@components/ui/modal/modal.context';
 import Pagination2 from '@components/ui/pagination2';
 import { PRODUCTS } from '@graphql/product';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useSettings } from '@hooks/useSettings';
-import {
-  CROSS_SELL_PRODUCTS,
-  PRODUCT_COLLECTION,
-  PRODUCT_MODAL,
-  RELATED_PRODUCTS,
-  UPSELL_PRODUCTS
-} from '@ts-types/constants';
 import { TableQueryVariables } from '@ts-types/custom.types';
 import { OrderBy, SortOrder } from '@ts-types/enums';
 import { Product } from '@ts-types/generated';
@@ -37,13 +25,8 @@ interface ProductVariable extends TableQueryVariables {
   id: number;
 }
 
-const ProductModal = () => {
+const ProductModal = ({ modalOpen, collection, setModalOpen, setValue }) => {
   const { t } = useTranslation();
-
-  const { closeModal } = useModalAction();
-  const { isOpen, id, meta } = useModalState();
-
-  console.log('>>>>>>>>>', { isOpen, id, meta });
 
   const [page, setPage] = useState(1);
   const [selectedProducts, setSelectedProducts] = useState<{ id: string }[]>(
@@ -91,53 +74,45 @@ const ProductModal = () => {
   };
 
   useEffect(() => {
-    setSelectedProducts(meta?.selectedProducts ?? []);
-  }, [meta]);
-
-  const open =
-    (id === RELATED_PRODUCTS ||
-      id === UPSELL_PRODUCTS ||
-      id === PRODUCT_COLLECTION ||
-      id === CROSS_SELL_PRODUCTS) &&
-    isOpen;
+    setSelectedProducts(collection ?? []);
+  }, [collection]);
 
   const onCloseSave = () => {
-    closeModal(PRODUCT_MODAL, id, { selectedProducts });
+    setValue('collection', selectedProducts);
+    setModalOpen(false);
   };
 
   const onClose = () => {
-    closeModal(PRODUCT_MODAL, id);
+    setModalOpen(false);
   };
 
   return (
-    <Modal open={open} onClose={onClose} align="right">
-      <div className="flex h-[100vh] max-h-screen w-[100vw] flex-col overflow-y-auto bg-white md:h-fit md:w-[60vw] 2xl:w-[50vw]">
-        <div className="flex h-[100vh] max-h-screen w-[100vw] flex-col overflow-y-auto bg-white md:w-[60vw] 2xl:w-[50vw]">
-          <div
-            className="border-b border-gray-200 bg-gray-100 p-4 text-lg font-semibold capitalize
+    <Modal open={modalOpen} onClose={onClose} align="right">
+      <div className="flex h-[100vh] max-h-screen w-[100vw] flex-col overflow-y-auto bg-white md:w-[60vw] 2xl:w-[50vw]">
+        <div
+          className="border-b border-gray-200 bg-gray-100 p-4 text-lg font-semibold capitalize
            text-gray-800"
-          >
-            Products
-          </div>
-          <div className="flex-1 overflow-auto">
-            <ProductListMini
-              products={products}
-              loading={loading}
-              selectedProducts={selectedProducts}
-              setSelectedProducts={setSelectedProducts}
+        >
+          Products
+        </div>
+        <div className="flex-1 overflow-auto">
+          <ProductListMini
+            products={products}
+            loading={loading}
+            selectedProducts={selectedProducts}
+            setSelectedProducts={setSelectedProducts}
+          />
+        </div>
+        <div className="m-3 mb-16 flex h-fit items-center justify-between p-5 md:mb-0">
+          <div className="flex-1">
+            <Pagination2
+              total={count}
+              current={page}
+              pageSize={limit.value}
+              onChange={handlePagination}
             />
           </div>
-          <div className="m-3 mb-16 flex h-fit items-center justify-between p-5 md:mb-0">
-            <div className="flex-1">
-              <Pagination2
-                total={count}
-                current={page}
-                pageSize={limit.value}
-                onChange={handlePagination}
-              />
-            </div>
-            <Button onClick={onCloseSave}>Add Selected Products</Button>
-          </div>
+          <Button onClick={onCloseSave}>Add Selected Products</Button>
         </div>
       </div>
     </Modal>

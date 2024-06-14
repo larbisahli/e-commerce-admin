@@ -11,7 +11,7 @@ import { useIsRTL } from '@utils/locals';
 import { isEmpty } from 'lodash';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 
 const Table = dynamic(
   () => import('@components/ui/table').then((mod) => mod.Table),
@@ -49,7 +49,7 @@ const ProductListMini = ({
         dataIndex: 'id',
         key: 'id',
         align: alignLeft,
-        width: 80,
+        width: 50,
         ellipsis: true,
         render: (id: string, record: TableRowProps) => {
           if (record?.loading) {
@@ -78,8 +78,8 @@ const ProductListMini = ({
         title: t('table:table-item-thumbnail'),
         dataIndex: 'thumbnail',
         key: 'thumbnail',
-        align: 'left',
-        width: 45,
+        align: alignLeft,
+        width: 50,
         render: (thumbnail: ImageType, record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
@@ -103,11 +103,25 @@ const ProductListMini = ({
         }
       },
       {
+        title: t('table:table-item-sku'),
+        dataIndex: 'sku',
+        key: 'sku',
+        align: 'center',
+        width: 40,
+        ellipsis: true,
+        render: (sku: string, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
+          return sku;
+        }
+      },
+      {
         title: t('table:table-item-title'),
         dataIndex: 'name',
         key: 'name',
         align: alignLeft,
-        width: 80,
+        width: 150,
         ellipsis: true,
         render: (name: string, record: TableRowProps) => {
           if (record?.loading) {
@@ -121,26 +135,12 @@ const ProductListMini = ({
         dataIndex: 'quantity',
         key: 'quantity',
         align: 'center',
-        width: 30,
+        width: 50,
         render: (quantity: string, record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
           return quantity;
-        }
-      },
-      {
-        title: t('table:table-item-sku'),
-        dataIndex: 'sku',
-        key: 'sku',
-        align: 'center',
-        width: 40,
-        ellipsis: true,
-        render: (sku: string, record: TableRowProps) => {
-          if (record?.loading) {
-            return <TableRowPlaceholder />;
-          }
-          return sku;
         }
       }
     ];

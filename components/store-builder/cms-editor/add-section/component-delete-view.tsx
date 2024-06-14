@@ -4,7 +4,10 @@ import {
   useModalAction,
   useModalState
 } from '@components/ui/modal/modal.context';
-import { DELETE_LAYOUT_COMPONENT, STORE_LAYOUTS } from '@graphql/content';
+import {
+  DELETE_LAYOUT_COMPONENT,
+  STORE_LAYOUTS_COMPONENTS
+} from '@graphql/content';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetUser } from '@hooks/useGetUser';
 import { useUI } from '@hooks/useUI';
@@ -32,7 +35,7 @@ const ComponentDeleteView = () => {
           'x-csrf-token': csrfToken
         }
       },
-      refetchQueries: [STORE_LAYOUTS, 'StoreLayouts']
+      refetchQueries: [STORE_LAYOUTS_COMPONENTS, 'StoreLayoutComponents']
     }
   );
 

@@ -102,13 +102,6 @@ export const siteSettings = {
             isSubLink: true
           },
           {
-            id: '4855yLk',
-            href: ROUTES.COLLECTIONS,
-            label: 'sidebar-nav-item-collections',
-            padding: '35px',
-            isSubLink: true
-          },
-          {
             id: '4859yLk',
             href: ROUTES.CATEGORY,
             label: 'sidebar-nav-item-categories',

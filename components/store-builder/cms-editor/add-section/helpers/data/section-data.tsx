@@ -187,7 +187,10 @@ export const sectionsLayout = [
     },
     children: [
       {
-        moduleName: 'ButtonPrimary'
+        moduleName: 'ButtonPrimary',
+        position: 0,
+        data: {},
+        styles: {}
       }
     ]
   },
@@ -202,7 +205,7 @@ export const sectionsLayout = [
         'Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia, molestiae quas vel',
       buttonText: 'Browse new merch',
       buttonLink: '/collections/all',
-      videoUrl: '',
+      videoUrl: 'https://www.youtube.com/watch?v=luFGI13Mv8o',
       displayContent: false,
       autoplay: true,
       controls: false,
@@ -261,7 +264,23 @@ export const sectionsLayout = [
         border: 'all'
       },
       sectionSize: 'auto'
-    }
+    },
+    children: [
+      {
+        moduleName: 'BannerWidgetBg',
+        position: 0,
+        data: {},
+        styles: {},
+        children: [
+          {
+            moduleName: 'ButtonPrimary',
+            position: 0,
+            data: {},
+            styles: {}
+          }
+        ]
+      }
+    ]
   },
   {
     title: 'Custom HTML',
@@ -309,10 +328,30 @@ export const sectionsShop = [
     description: 'Showcase your categories.',
     icon: () => <CategoryList />,
     data: {
-      header: 'Featured categories',
-      categories: []
+      header: 'Featured products',
+      category: null,
+      buttonLabel: 'View all',
+      collection: []
     },
     styles: {
+      header: {
+        color: '#050505',
+        fontSize: 32,
+        fontStyle: 'normal',
+        textAlign: 'center',
+        fontFamily: {
+          label: 'Lato',
+          value: '--font-lato'
+        },
+        fontWeight: {
+          label: '400 - Normal',
+          value: 400
+        },
+        lineHeight: 32,
+        letterSpacing: 0.25,
+        textTransform: 'capitalized',
+        textDecoration: 'none'
+      },
       sectionSize: 'full'
     }
   },
@@ -323,14 +362,29 @@ export const sectionsShop = [
     icon: () => <ProductList />,
     data: {
       header: 'Featured products',
-      collectionId: '',
-      numberOfProducts: 10,
-      ShowAllBtn: {
-        text: 'View all',
-        link: '/collections/name'
-      }
+      category: null,
+      buttonLabel: 'View all',
+      collection: []
     },
     styles: {
+      header: {
+        color: '#050505',
+        fontSize: 32,
+        fontStyle: 'normal',
+        textAlign: 'center',
+        fontFamily: {
+          label: 'Lato',
+          value: '--font-lato'
+        },
+        fontWeight: {
+          label: '400 - Normal',
+          value: 400
+        },
+        lineHeight: 32,
+        letterSpacing: 0.25,
+        textTransform: 'capitalized',
+        textDecoration: 'none'
+      },
       sectionSize: 'full'
     }
   },

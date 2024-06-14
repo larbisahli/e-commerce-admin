@@ -153,6 +153,7 @@ const Navbar = () => {
                   </span>
                 ))}
                 <span className="mx-1">Days left in your trial.</span>
+                {/* <span className="mx-1"> Your trial ends today.</span> */}
               </div>
             </div>
           </Link>

@@ -370,6 +370,7 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
+
       <div className="mt-6 mb-12 w-full">
         <RecentOrders
           loading={recentOrderLoading}

@@ -24,7 +24,6 @@ export const initialState: ProductFormType = {
   type: { id: ProductType.Simple, name: 'Simple' },
   status: ProductStatus.Draft,
   disableOutOfStock: true,
-  includeInHomepage: true,
   trackInventory: true,
   freeShipping: false,
   displayProductMeasurements: false,
