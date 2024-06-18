@@ -3,7 +3,7 @@ import { PageFormPlaceholder } from '@components/common/commonComponents';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
 import { SUPPLIER } from '@graphql/supplier';
-import { useGetUser } from '@hooks/index';
+import { useGetClient } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import type { SSRProps } from '@ts-types/custom.types';
@@ -26,6 +26,7 @@ interface TAttribute {
 }
 interface OptionsVariable {
   id: number;
+  etag: string;
 }
 
 export default function UpdateSupplierPage({ client }: SSRProps) {
@@ -33,19 +34,24 @@ export default function UpdateSupplierPage({ client }: SSRProps) {
 
   const supplierId = parseInt(query.supplierId as string, 10);
 
+  const {
+    userInfo: { store: { etag } = {} }
+  } = useGetClient(client);
+
   const { data, loading, error } = useQuery<TAttribute, OptionsVariable>(
     SUPPLIER,
     {
       variables: {
-        id: supplierId
+        id: supplierId,
+        etag: etag?.supplierEtag
       },
-      fetchPolicy: 'cache-and-network'
+      fetchPolicy: 'cache-and-network',
+      skip: isEmpty(etag)
     }
   );
 
   const { supplier = [] } = data ?? {};
 
-  useGetUser(client);
   useErrorLogger(error);
 
   if (isEmpty(supplier) || loading) {

@@ -3,7 +3,7 @@ import AppLayout from '@components/layouts/app';
 import SuppliersList from '@components/suppliers/supplier-list';
 import ErrorMessage from '@components/ui/error-message';
 import { SUPPLIERS } from '@graphql/supplier';
-import { useErrorLogger, useGetUser } from '@hooks/index';
+import { useErrorLogger, useGetClient } from '@hooks/index';
 import { useTableColumn } from '@hooks/useTableColumn';
 import { verifyAuth } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
@@ -44,6 +44,7 @@ export interface Variables {
   limit: number;
   orderBy: OrderBy;
   sortedBy: SortOrder;
+  etag: string;
 }
 
 export default function SuppliersPage({ client }: SSRProps) {
@@ -56,6 +57,10 @@ export default function SuppliersPage({ client }: SSRProps) {
   const { selectedTableColumns, handleColumnChange } =
     useTableColumn('supplier');
 
+  const {
+    userInfo: { store: { etag } = {} }
+  } = useGetClient(client);
+
   const { data, loading, error, fetchMore } = useQuery<TSupplier, Variables>(
     SUPPLIERS,
     {
@@ -63,16 +68,17 @@ export default function SuppliersPage({ client }: SSRProps) {
         page,
         limit: limit.value,
         orderBy,
-        sortedBy: SortOrder.Desc
+        sortedBy: SortOrder.Desc,
+        etag: etag?.supplierEtag
       },
-      fetchPolicy: 'cache-and-network'
+      fetchPolicy: 'cache-and-network',
+      skip: isEmpty(etag)
     }
   );
 
   const { suppliers = [], supplierCount: { count } = { count: 0 } } =
     data ?? {};
 
-  useGetUser(client);
   useErrorLogger(error);
 
   const handlePagination = (current: number) => {

@@ -1,6 +1,6 @@
 import AdminFooter from '@components/common/admin-footer';
 import SublevelNavigation from '@components/navigation/sublevel-navigation';
-import { useAppDispatch } from '@hooks/useGetUser';
+import { useAppDispatch, useGetClient } from '@hooks/useGetClient';
 import { useSettings } from '@hooks/useSettings';
 import { useUI } from '@hooks/useUI';
 import { fetchStoreSettings, setCurrentLanguage } from '@store/settings';
@@ -21,12 +21,15 @@ const AppLayout: React.FC = ({ children }: Props) => {
 
   const dispatch = useAppDispatch();
 
+  const { userInfo } = useGetClient();
   const { languages = [] } = useSettings();
 
   // Fetch store settings
   useEffect(() => {
-    dispatch(fetchStoreSettings());
-  }, [dispatch]);
+    if (userInfo?.store?.etag) {
+      dispatch(fetchStoreSettings({ etag: userInfo?.store?.etag }));
+    }
+  }, [dispatch, userInfo]);
 
   const systemLanguage = useMemo(
     () => languages?.find((lang) => lang.isSystem),

@@ -17,7 +17,7 @@ import {
 import { TAGS_FOR_SELECT } from '@graphql/tag';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useErrorLogger, useWarnIfUnsavedChanges } from '@hooks/index';
-import { useGetUser } from '@hooks/useGetUser';
+import { useGetClient } from '@hooks/useGetClient';
 import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/index';
 import { LanguageProps } from '@ts-types/custom.types';
@@ -41,6 +41,7 @@ interface OptionsVariable extends LanguageProps {
   page: number;
   limit: number;
   orderBy: OrderBy;
+  etag: string;
 }
 
 type FormValues = CustomerType;
@@ -70,7 +71,9 @@ export default function CreateOrUpdateCustomerForm({ initialValues }: IProps) {
   const [unsavedChanges, setUnsavedChanges] = useState(true);
   const [deletedIndex, setDeletedIndex] = useState<number | null>(null);
 
-  const { userInfo } = useGetUser();
+  const {
+    userInfo: { csrfToken, store: { etag } = {} }
+  } = useGetClient();
 
   const { defaultLanguage } = useSettings();
   const [countries, setCountries] = useState([]);
@@ -84,15 +87,14 @@ export default function CreateOrUpdateCustomerForm({ initialValues }: IProps) {
       page: 1,
       limit: 999,
       orderBy: OrderBy.CREATED_AT,
-      language: defaultLanguage
+      language: defaultLanguage,
+      etag: etag?.tagEtag
     },
     fetchPolicy: 'cache-and-network',
-    skip: isEmpty(defaultLanguage)
+    skip: isEmpty(defaultLanguage) || isEmpty(etag)
   });
 
   const { tagSelect = [] } = data ?? {};
-
-  const csrfToken = userInfo?.csrfToken;
 
   const {
     register,

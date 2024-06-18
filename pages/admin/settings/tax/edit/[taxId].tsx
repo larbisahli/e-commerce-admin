@@ -3,7 +3,7 @@ import { PageFormPlaceholder } from '@components/common/commonComponents';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
 import { TAX } from '@graphql/tax';
-import { useErrorLogger, useGetUser } from '@hooks/index';
+import { useErrorLogger, useGetClient } from '@hooks/index';
 import { useSettings } from '@hooks/useSettings';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
@@ -21,11 +21,12 @@ const CreateOrUpdateTaxForm = dynamic(
   { ssr: true }
 );
 
-interface THeroSlider {
+interface TTax {
   tax: TaxType;
 }
 interface OptionsVariable {
   id: number;
+  etag: string;
 }
 
 export default function UpdateTaxPage({ client }: SSRProps) {
@@ -35,15 +36,21 @@ export default function UpdateTaxPage({ client }: SSRProps) {
 
   const { selectedLanguage } = useSettings();
 
-  const { data, loading, error } = useQuery<THeroSlider, OptionsVariable>(TAX, {
-    variables: { id: taxId },
+  const {
+    userInfo: { store: { etag } = {} }
+  } = useGetClient(client);
+
+  const { data, loading, error } = useQuery<TTax, OptionsVariable>(TAX, {
+    variables: {
+      id: taxId,
+      etag: etag?.taxEtag
+    },
     fetchPolicy: 'cache-and-network',
-    skip: isEmpty(selectedLanguage)
+    skip: isEmpty(selectedLanguage) || isEmpty(etag)
   });
 
   const { tax = {} } = data ?? {};
 
-  useGetUser(client);
   useErrorLogger(error);
 
   if (isEmpty(tax) || loading) {

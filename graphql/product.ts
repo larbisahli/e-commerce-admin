@@ -8,8 +8,9 @@ export const PRODUCTS = gql`
     $orderBy: String!
     $sortedBy: String!
     $language: LanguageInput!
+    $etag: String!
   ) {
-    productCount {
+    productCount(etag: $etag) {
       count
     }
     products(
@@ -19,6 +20,7 @@ export const PRODUCTS = gql`
       orderBy: $orderBy
       sortedBy: $sortedBy
       language: $language
+      etag: $etag
     ) {
       id
       sku
@@ -58,8 +60,8 @@ export const PRODUCTS = gql`
 `;
 
 export const PRODUCT = gql`
-  query Product($id: Int!, $language: LanguageInput!) {
-    product(id: $id, language: $language) {
+  query Product($id: Int!, $language: LanguageInput!, $etag: String!) {
+    product(id: $id, language: $language, etag: $etag) {
       id
       name
       description
@@ -198,8 +200,8 @@ export const PRODUCT = gql`
 `;
 
 export const LINKED_PRODUCTS = gql`
-  query RelatedProducts($id: Int, $language: LanguageInput!) {
-    relatedProducts(id: $id, language: $language) {
+  query RelatedProducts($id: Int, $language: LanguageInput!, $etag: String!) {
+    relatedProducts(id: $id, language: $language, etag: $etag) {
       id
       sku
       name
@@ -217,7 +219,7 @@ export const LINKED_PRODUCTS = gql`
         placeholder
       }
     }
-    upsellProducts(id: $id, language: $language) {
+    upsellProducts(id: $id, language: $language, etag: $etag) {
       id
       sku
       name
@@ -235,7 +237,7 @@ export const LINKED_PRODUCTS = gql`
         placeholder
       }
     }
-    crossSellProducts(id: $id, language: $language) {
+    crossSellProducts(id: $id, language: $language, etag: $etag) {
       id
       sku
       name

@@ -16,7 +16,7 @@ import {
 } from '@graphql/category';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useErrorLogger, useWarnIfUnsavedChanges } from '@hooks/index';
-import { useGetUser } from '@hooks/useGetUser';
+import { useGetClient } from '@hooks/useGetClient';
 import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/index';
 import { LanguageProps } from '@ts-types/custom.types';
@@ -41,6 +41,7 @@ interface OptionsVariable extends LanguageProps {
   page: number;
   limit: number;
   orderBy: OrderBy;
+  etag: string;
 }
 
 function SelectCategories({
@@ -58,6 +59,10 @@ function SelectCategories({
 
   const { selectedLanguage } = useSettings();
 
+  const {
+    userInfo: { store: { etag } = {} }
+  } = useGetClient();
+
   const { data, loading, error } = useQuery<TCategorySelect, OptionsVariable>(
     CATEGORIES_FOR_SELECT,
     {
@@ -66,10 +71,11 @@ function SelectCategories({
         page: 1,
         limit: 999,
         orderBy: OrderBy.CREATED_AT,
-        language: selectedLanguage
+        language: selectedLanguage,
+        etag: etag?.categoryEtag
       },
       fetchPolicy: 'cache-and-network',
-      skip: isEmpty(selectedLanguage)
+      skip: isEmpty(selectedLanguage) || isEmpty(etag)
     }
   );
 
@@ -144,7 +150,7 @@ export default function CreateOrUpdateCategoriesForm({
   const [error, setError] = useState(null);
   const [unsavedChanges, setUnsavedChanges] = useState(true);
 
-  const { userInfo } = useGetUser();
+  const { userInfo } = useGetClient();
 
   const { selectedLanguage } = useSettings();
 

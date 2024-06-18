@@ -1,6 +1,6 @@
 import { PageFormPlaceholder } from '@components/common/commonComponents';
 import AppLayout from '@components/layouts/app';
-import { useGetUser } from '@hooks/index';
+import { useGetClient } from '@hooks/index';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import type { SSRProps } from '@ts-types/custom.types';
 import { ROUTES } from '@utils/routes';
@@ -15,7 +15,7 @@ const CreateOrUpdateShippingForm = dynamic(
 );
 
 export default function CreateShippingPage({ client }: SSRProps) {
-  useGetUser(client);
+  useGetClient(client);
   return (
     <>
       <Head>

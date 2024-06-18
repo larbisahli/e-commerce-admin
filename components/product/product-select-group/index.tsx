@@ -6,7 +6,7 @@ import Button from '@components/ui/button';
 import Description from '@components/ui/description';
 import { UPDATE_PRODUCT_SELECT_GROUP } from '@graphql/product';
 import { useDifferenceWith } from '@hooks/useDifferenceWith';
-import { useGetUser } from '@hooks/useGetUser';
+import { useGetClient } from '@hooks/useGetClient';
 import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/notify';
 import {
@@ -98,7 +98,7 @@ const ProductSelectGroup = ({ state, initialValues }: Props) => {
 
   const { selectedLanguage } = useSettings();
 
-  const { userInfo } = useGetUser();
+  const { userInfo } = useGetClient();
   const csrfToken = userInfo?.csrfToken;
 
   const [updateProductSelectGroup, { loading }] = useMutation(

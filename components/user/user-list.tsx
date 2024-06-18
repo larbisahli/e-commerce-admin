@@ -4,7 +4,7 @@ import Badge from '@components/ui/badge/badge';
 import Loader from '@components/ui/loader/loader';
 import { TableRowPlaceholder } from '@components/ui/placeholders/Table';
 import ProfileCart from '@components/ui/profile-card';
-import { useGetUser } from '@hooks/index';
+import { useGetClient } from '@hooks/index';
 import { usePlaceholder } from '@hooks/usePlaceholder';
 import {
   CreatedUpdatedByAt,
@@ -39,7 +39,7 @@ interface TableRowProps extends UserType {
 const UserList = ({ loading, users, selectedColumns }: IProps) => {
   const { t } = useTranslation();
   const { alignLeft } = useIsRTL();
-  const { userInfo } = useGetUser();
+  const { userInfo } = useGetClient();
   const { tablePlaceholderRow } = usePlaceholder();
 
   const columns = useMemo(() => {

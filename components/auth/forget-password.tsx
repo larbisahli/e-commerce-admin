@@ -6,7 +6,7 @@ import Input from '@components/ui/input';
 import { FORGET_PASSWORD } from '@graphql/login';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetUser } from '@hooks/useGetUser';
+import { useGetClient } from '@hooks/useGetClient';
 import { ROUTES } from '@utils/routes';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
@@ -24,7 +24,7 @@ const ForgetPassword = () => {
 
   const router = useRouter();
 
-  const { userInfo } = useGetUser();
+  const { userInfo } = useGetClient();
 
   const csrfToken = userInfo?.csrfToken;
 

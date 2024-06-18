@@ -1,5 +1,5 @@
 import AppLayout from '@components/layouts/app';
-import { useGetUser } from '@hooks/index';
+import { useGetClient } from '@hooks/index';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import type { SSRProps } from '@ts-types/custom.types';
 import { ROUTES } from '@utils/routes';
@@ -14,7 +14,7 @@ const CreateOrUpdateManufacturerForm = dynamic(
 );
 
 export default function CreateManufacturerPage({ client }: SSRProps) {
-  useGetUser(client);
+  useGetClient(client);
   return (
     <>
       <Head>

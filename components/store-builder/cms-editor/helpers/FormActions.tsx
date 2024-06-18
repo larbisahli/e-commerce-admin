@@ -3,7 +3,7 @@ import { SaveIcon } from '@components/icons/save-icon';
 import Button from '@components/ui/button';
 import { useModalAction } from '@components/ui/modal/modal.context';
 import Select from '@components/ui/select/select';
-import { useAppDispatch } from '@hooks/useGetUser';
+import { useAppDispatch } from '@hooks/useGetClient';
 import { useSettings } from '@hooks/useSettings';
 import { setCurrentLanguage } from '@store/settings';
 import { CMS_BUILDER_MODAL } from '@ts-types/constants';

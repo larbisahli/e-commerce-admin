@@ -7,7 +7,7 @@ import { TableRowPlaceholder } from '@components/ui/placeholders/Table';
 import ProfileCart from '@components/ui/profile-card';
 import { LANGUAGES, SET_DEFAULT_LANGUAGE } from '@graphql/language';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useAppDispatch, useGetUser } from '@hooks/useGetUser';
+import { useAppDispatch, useGetClient } from '@hooks/useGetClient';
 import { usePlaceholder } from '@hooks/usePlaceholder';
 import { notify } from '@lib/notify';
 import { fetchStoreSettings } from '@store/settings';
@@ -45,7 +45,7 @@ const LanguageList = ({ loading, languages, selectedColumns }: IProps) => {
 
   const { tablePlaceholderRow } = usePlaceholder();
 
-  const { userInfo } = useGetUser();
+  const { userInfo } = useGetClient();
   const csrfToken = userInfo?.csrfToken;
 
   const dispatch = useAppDispatch();
@@ -61,7 +61,7 @@ const LanguageList = ({ loading, languages, selectedColumns }: IProps) => {
       refetchQueries: [LANGUAGES, 'Languages'],
       onCompleted: (data: { setDefaultLanguage: LanguageType }) => {
         if (!isEmpty(data.setDefaultLanguage)) {
-          dispatch(fetchStoreSettings());
+          dispatch(fetchStoreSettings({ etag: userInfo.store.etag }));
           notify(
             t('common:successfully-updated', {
               displayName: data.setDefaultLanguage?.name

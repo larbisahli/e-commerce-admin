@@ -4,7 +4,7 @@ import BuilderLayout from '@components/layouts/builder';
 import { ThemeSettingsType } from '@components/store-builder/general/theme-styles';
 import Loader from '@components/ui/loader/loader';
 import { GET_THEME_SETTINGS } from '@graphql/content';
-import { useErrorLogger, useGetUser } from '@hooks/index';
+import { useErrorLogger, useGetClient } from '@hooks/index';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import type { SSRProps } from '@ts-types/custom.types';
 import { ROUTES } from '@utils/routes';
@@ -25,13 +25,18 @@ interface TThemeSettings {
 }
 
 export default function ThemeStylesPage({ client }: SSRProps) {
-  useGetUser(client);
+  const {
+    userInfo: { store: { etag } = {} }
+  } = useGetClient(client);
 
   const { data, loading, error } = useQuery<TThemeSettings>(
     GET_THEME_SETTINGS,
     {
-      variables: {},
-      fetchPolicy: 'cache-and-network'
+      variables: {
+        etag: etag?.layoutEtag
+      },
+      fetchPolicy: 'cache-and-network',
+      skip: isEmpty(etag)
     }
   );
 

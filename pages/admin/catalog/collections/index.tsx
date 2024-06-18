@@ -3,7 +3,7 @@ import AttributeList from '@components/attribute/attribute-list';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
 import { ATTRIBUTES } from '@graphql/attribute';
-import { useErrorLogger, useGetUser } from '@hooks/index';
+import { useErrorLogger, useGetClient } from '@hooks/index';
 import { useSettings } from '@hooks/useSettings';
 import { useTableColumn } from '@hooks/useTableColumn';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
@@ -52,6 +52,10 @@ export default function AttributePage({ client }: SSRProps) {
 
   const { selectedLanguage } = useSettings();
 
+  const {
+    userInfo: { store: { etag } = {} }
+  } = useGetClient(client);
+
   const { data, loading, error, fetchMore } = useQuery<
     TAttributes,
     TableQueryVariables
@@ -61,16 +65,16 @@ export default function AttributePage({ client }: SSRProps) {
       limit: limit.value,
       orderBy,
       sortedBy: SortOrder.Desc,
-      language: selectedLanguage
+      language: selectedLanguage,
+      etag: etag?.attributeEtag
     },
     fetchPolicy: 'cache-and-network',
-    skip: isEmpty(selectedLanguage)
+    skip: isEmpty(selectedLanguage) || isEmpty(etag)
   });
 
   const { attributes = [], attributeCount: { count } = { count: 0 } } =
     data ?? {};
 
-  useGetUser(client);
   useErrorLogger(error);
 
   const handlePagination = (current: number) => {

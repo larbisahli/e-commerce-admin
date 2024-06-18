@@ -3,7 +3,7 @@ import { ArrowPrev } from '@components/icons/arrow-prev';
 import { SaveIcon } from '@components/icons/save-icon';
 import Button from '@components/ui/button';
 import Select from '@components/ui/select/select';
-import { useAppDispatch } from '@hooks/useGetUser';
+import { useAppDispatch } from '@hooks/useGetClient';
 import { useSettings } from '@hooks/useSettings';
 import { useUI } from '@hooks/useUI';
 import { setCurrentLanguage } from '@store/settings';

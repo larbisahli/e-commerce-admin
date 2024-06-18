@@ -5,7 +5,7 @@ import Alert from '@components/ui/alert';
 import Button from '@components/ui/button';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetUser } from '@hooks/useGetUser';
+import { useGetClient } from '@hooks/useGetClient';
 import { CurrencyType } from '@ts-types/custom.types';
 import { SignupMethods } from '@ts-types/enums';
 import { CountryType } from '@ts-types/generated';
@@ -113,7 +113,7 @@ const RegistrationForm = ({
     resolver: yupResolver(registrationFormSchema)
   });
 
-  const { userInfo } = useGetUser();
+  const { userInfo } = useGetClient();
 
   const csrfToken = userInfo?.csrfToken;
 

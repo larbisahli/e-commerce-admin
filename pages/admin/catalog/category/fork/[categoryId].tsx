@@ -3,7 +3,7 @@ import { PageFormPlaceholder } from '@components/common/commonComponents';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
 import { CATEGORY } from '@graphql/category';
-import { useErrorLogger, useGetUser } from '@hooks/index';
+import { useErrorLogger, useGetClient } from '@hooks/index';
 import { useSettings } from '@hooks/useSettings';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { LanguageProps, SSRProps } from '@ts-types/custom.types';
@@ -37,21 +37,25 @@ export default function UpdateCategoriesPage({ client }: SSRProps) {
 
   const { selectedLanguage } = useSettings();
 
+  const {
+    userInfo: { store: { etag } = {} }
+  } = useGetClient(client);
+
   const { data, loading, error } = useQuery<TCategory, OptionsVariable>(
     CATEGORY,
     {
       variables: {
         id: categoryId,
-        language: selectedLanguage
+        language: selectedLanguage,
+        etag: etag?.categoryEtag
       },
       fetchPolicy: 'cache-and-network',
-      skip: isEmpty(selectedLanguage)
+      skip: isEmpty(selectedLanguage) || isEmpty(etag)
     }
   );
 
   const { category = [] } = data ?? {};
 
-  useGetUser(client);
   useErrorLogger(error);
 
   if (isEmpty(category) || loading) {

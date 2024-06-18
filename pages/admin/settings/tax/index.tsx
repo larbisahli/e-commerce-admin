@@ -3,7 +3,7 @@ import AppLayout from '@components/layouts/app';
 import TaxList from '@components/tax/tax-list';
 import ErrorMessage from '@components/ui/error-message';
 import { TAXES } from '@graphql/tax';
-import { useErrorLogger, useGetUser } from '@hooks/index';
+import { useErrorLogger, useGetClient } from '@hooks/index';
 import { useSettings } from '@hooks/useSettings';
 import { useTableColumn } from '@hooks/useTableColumn';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
@@ -37,6 +37,7 @@ interface OptionsVariable {
   limit: number;
   orderBy: OrderBy;
   sortedBy: SortOrder;
+  etag: string;
 }
 
 export default function HeroBanner({ client }: SSRProps) {
@@ -45,6 +46,10 @@ export default function HeroBanner({ client }: SSRProps) {
   const [orderBy, setOrder] = useState(OrderBy.CREATED_AT);
   const { selectedTableColumns } = useTableColumn('tax');
 
+  const {
+    userInfo: { store: { etag } = {} }
+  } = useGetClient(client);
+
   const { data, loading, error } = useQuery<THeroBanner, OptionsVariable>(
     TAXES,
     {
@@ -52,15 +57,16 @@ export default function HeroBanner({ client }: SSRProps) {
         page: 1,
         limit: 999,
         orderBy,
-        sortedBy: SortOrder.Desc
+        sortedBy: SortOrder.Desc,
+        etag: etag?.taxEtag
       },
-      fetchPolicy: 'cache-and-network'
+      fetchPolicy: 'cache-and-network',
+      skip: isEmpty(etag)
     }
   );
 
   const { taxes = [], taxCount: { count } = { count: 0 } } = data ?? {};
 
-  useGetUser(client);
   useErrorLogger(error);
 
   if (!isEmpty(error)) {

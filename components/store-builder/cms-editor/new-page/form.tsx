@@ -7,7 +7,7 @@ import { useModalAction } from '@components/ui/modal/modal.context';
 import TextArea from '@components/ui/text-area';
 import { CREATE_LAYOUT, UPDATE_LAYOUT } from '@graphql/content';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetUser } from '@hooks/useGetUser';
+import { useGetClient } from '@hooks/useGetClient';
 import { useSettings } from '@hooks/useSettings';
 import { useUI } from '@hooks/useUI';
 import { notify } from '@lib/notify';
@@ -73,7 +73,7 @@ const NewPageForm = (props: Props) => {
 
   const { selectedLanguage } = useSettings();
 
-  const { userInfo } = useGetUser();
+  const { userInfo } = useGetClient();
   const alias = userInfo?.store?.alias;
   const csrfToken = userInfo?.csrfToken;
 

@@ -3,7 +3,7 @@ import { SaveIcon } from '@components/icons/save-icon';
 import ImageModal from '@components/image-modal';
 import Button from '@components/ui/button';
 import { UPDATE_PRODUCT_GALLERY } from '@graphql/product';
-import { useErrorLogger, useGetUser } from '@hooks/index';
+import { useErrorLogger, useGetClient } from '@hooks/index';
 import { useDifferenceWith } from '@hooks/useDifferenceWith';
 import { notify } from '@lib/notify';
 import { ImageType, Product } from '@ts-types/generated';
@@ -41,7 +41,7 @@ const ProductGallery = ({ state, initialValues }: Props) => {
     isUpdateMode
   );
 
-  const { userInfo } = useGetUser();
+  const { userInfo } = useGetClient();
   const csrfToken = userInfo?.csrfToken;
 
   const [updateProduct, { loading }] = useMutation(UPDATE_PRODUCT_GALLERY, {

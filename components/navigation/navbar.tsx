@@ -3,7 +3,7 @@ import { UpgradeIcon } from '@components/icons/sidebar/upgrade';
 import styles from '@components/navigation/scss/index.module.scss';
 import Button from '@components/ui/button';
 import Link from '@components/ui/link';
-import { useGetUser } from '@hooks/useGetUser';
+import { useGetClient } from '@hooks/useGetClient';
 import { useMediaQuery } from '@hooks/useMediaQuery';
 import { useSettings } from '@hooks/useSettings';
 import { useUI } from '@hooks/useUI';
@@ -68,7 +68,7 @@ const Navbar = () => {
 
   const {
     userInfo: { store: { alias = '' } = {} }
-  } = useGetUser();
+  } = useGetClient();
 
   const { createdAt, tier } = useSettings();
 
@@ -78,10 +78,6 @@ const Navbar = () => {
     const oneDay = 24 * 60 * 60 * 1000;
     const firstDate = new Date(createdAt);
     const secondDate = new Date(Date.now() - oneDay * trialDays);
-    console.log(
-      { firstDate, secondDate },
-      Math.round(Math.abs((Number(firstDate) - Number(secondDate)) / oneDay))
-    );
     const diffDays = Math.round(
       Math.abs((Number(firstDate) - Number(secondDate)) / oneDay)
     );

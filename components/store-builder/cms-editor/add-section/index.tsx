@@ -9,7 +9,7 @@ import {
   STORE_LAYOUTS_COMPONENTS
 } from '@graphql/content';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetUser } from '@hooks/useGetUser';
+import { useGetClient } from '@hooks/useGetClient';
 import { useUI } from '@hooks/useUI';
 import { notify } from '@lib/notify';
 import { ADD_SECTION_MODAL } from '@ts-types/constants';
@@ -43,7 +43,7 @@ const AddSectionModal = () => {
 
   const [error, setError] = useState(null);
 
-  const { userInfo } = useGetUser();
+  const { userInfo } = useGetClient();
 
   const csrfToken = userInfo?.csrfToken;
 

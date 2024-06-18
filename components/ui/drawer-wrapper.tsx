@@ -1,5 +1,5 @@
 import { CloseIcon } from '@components/icons/close-icon';
-import { useGetUser } from '@hooks/useGetUser';
+import { useGetClient } from '@hooks/useGetClient';
 import cn from 'classnames';
 import React from 'react';
 

@@ -3,7 +3,7 @@ import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { MEDIA } from '@graphql/media';
-import { useErrorLogger, useGetUser } from '@hooks/index';
+import { useErrorLogger, useGetClient } from '@hooks/index';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { MediaType } from '@ts-types/generated';
@@ -32,6 +32,7 @@ interface OptionsVariable {
   id: string;
   page: number;
   limit: number;
+  etag: string;
 }
 
 export default function Files({ client }: SSRProps) {
@@ -39,21 +40,26 @@ export default function Files({ client }: SSRProps) {
 
   const id = query.id as string;
 
+  const {
+    userInfo: { store: { etag } = {} }
+  } = useGetClient(client);
+
   const { data, loading, error, refetch } = useQuery<TMedia, OptionsVariable>(
     MEDIA,
     {
       variables: {
         id,
         page: 1,
-        limit: 10
+        limit: 10,
+        etag: etag?.mediaEtag
       },
-      fetchPolicy: 'cache-and-network'
+      fetchPolicy: 'cache-and-network',
+      skip: isEmpty(etag)
     }
   );
 
   const { media } = data ?? {};
 
-  useGetUser(client);
   useErrorLogger(error);
 
   if (!isEmpty(error)) {

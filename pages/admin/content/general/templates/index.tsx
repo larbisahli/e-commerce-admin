@@ -1,6 +1,6 @@
 import { BackArrowIcon } from '@components/icons/builder/arrow-back';
 import BuilderLayout from '@components/layouts/builder';
-import { useGetUser } from '@hooks/index';
+import { useGetClient } from '@hooks/index';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import type { SSRProps } from '@ts-types/custom.types';
 import { ROUTES } from '@utils/routes';
@@ -16,7 +16,7 @@ const Typography = dynamic(
 );
 
 export default function CreateSupplierPage({ client }: SSRProps) {
-  useGetUser(client);
+  useGetClient(client);
   return (
     <>
       <Head>

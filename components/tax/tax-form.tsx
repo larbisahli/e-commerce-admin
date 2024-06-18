@@ -10,7 +10,7 @@ import { useModalAction } from '@components/ui/modal/modal.context';
 import { CREATE_TAX, UPDATE_TAX } from '@graphql/tax';
 import {
   useErrorLogger,
-  useGetUser,
+  useGetClient,
   useWarnIfUnsavedChanges
 } from '@hooks/index';
 import { notify } from '@lib/index';
@@ -48,7 +48,7 @@ export default function CreateOrUpdateTaxForm({ initialValues }: IProps) {
 
   const { openModal } = useModalAction();
 
-  const { userInfo } = useGetUser();
+  const { userInfo } = useGetClient();
   const csrfToken = userInfo?.csrfToken;
 
   useEffect(() => {

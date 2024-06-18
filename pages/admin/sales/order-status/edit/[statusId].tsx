@@ -3,7 +3,7 @@ import { PageFormPlaceholder } from '@components/common/commonComponents';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
 import { ORDER_STATUS } from '@graphql/order-status';
-import { useGetUser } from '@hooks/index';
+import { useGetClient } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useSettings } from '@hooks/useSettings';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
@@ -38,18 +38,25 @@ export default function UpdateOrderStatusPage({ client }: SSRProps) {
 
   const { selectedLanguage } = useSettings();
 
+  const {
+    userInfo: { store: { etag } = {} }
+  } = useGetClient(client);
+
   const { data, loading, error } = useQuery<TOrderStatus, OptionsVariable>(
     ORDER_STATUS,
     {
-      variables: { id: statusId, language: selectedLanguage },
+      variables: {
+        id: statusId,
+        language: selectedLanguage,
+        etag: etag?.orderStatusEtag
+      },
       fetchPolicy: 'cache-and-network',
-      skip: isEmpty(selectedLanguage)
+      skip: isEmpty(selectedLanguage) || isEmpty(etag)
     }
   );
 
   const { orderStatus = [] } = data ?? {};
 
-  useGetUser(client);
   useErrorLogger(error);
 
   if (isEmpty(orderStatus) || loading) {

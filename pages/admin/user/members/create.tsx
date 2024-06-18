@@ -1,5 +1,5 @@
 import AppLayout from '@components/layouts/app';
-import { useGetUser } from '@hooks/index';
+import { useGetClient } from '@hooks/index';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { ROUTES } from '@utils/routes';
@@ -16,7 +16,7 @@ const UserCreateUpdateForm = dynamic(
 
 export default function CreateUserPage({ client }: SSRProps) {
   const { t } = useTranslation();
-  useGetUser(client);
+  useGetClient(client);
 
   return (
     <>

@@ -10,7 +10,7 @@ import {
   UPDATE_LAYOUT_COMPONENT_MODULE_NAME
 } from '@graphql/content';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetUser } from '@hooks/useGetUser';
+import { useGetClient } from '@hooks/useGetClient';
 import { useUI } from '@hooks/useUI';
 import { notify } from '@lib/notify';
 import { StoreLayoutComponentType } from '@ts-types/generated';
@@ -45,7 +45,7 @@ const ComponentsShowcase = ({
 
   const { updateBuilderInfo } = useUI();
 
-  const { userInfo } = useGetUser();
+  const { userInfo } = useGetClient();
   const csrfToken = userInfo?.csrfToken;
 
   const [updateComponentModuleName, { loading }] = useMutation(

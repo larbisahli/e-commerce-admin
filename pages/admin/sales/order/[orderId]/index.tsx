@@ -11,7 +11,7 @@ import SelectInput from '@components/ui/select-input';
 import { ORDER, UPDATE_STATUS_ORDER } from '@graphql/order';
 import { ORDER_STATUSES_FOR_SELECT } from '@graphql/order-status';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetUser } from '@hooks/useGetUser';
+import { useGetClient } from '@hooks/useGetClient';
 import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/notify';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
@@ -29,6 +29,7 @@ import { formatAddress } from '@utils/format-address';
 import { ROUTES } from '@utils/routes';
 import usePrice from '@utils/use-price';
 import dayjs from 'dayjs';
+import { isEmpty } from 'lodash';
 import { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
@@ -53,6 +54,7 @@ interface TOrder {
 
 interface OrderVariable {
   orderId: string;
+  etag: string;
 }
 
 export interface QueryVariables {
@@ -60,6 +62,7 @@ export interface QueryVariables {
   limit: number;
   orderBy: OrderBy;
   sortedBy: SortOrder;
+  etag: string;
 }
 
 interface TOrderStatus {
@@ -76,6 +79,10 @@ export default function OrderDetailsPage({ client }: SSRProps) {
   const [displayShipAdds, setDisplayShipAdds] = useState(false);
 
   const {
+    userInfo: { csrfToken, store: { etag } = {} }
+  } = useGetClient(client);
+
+  const {
     data: orderStatusData,
     loading: orderStatusLoading,
     error: orderStatusError
@@ -84,9 +91,11 @@ export default function OrderDetailsPage({ client }: SSRProps) {
       page: 1,
       limit: 999,
       orderBy: OrderBy.CREATED_AT,
-      sortedBy: SortOrder.Desc
+      sortedBy: SortOrder.Desc,
+      etag: etag?.orderStatusEtag
     },
-    fetchPolicy: 'cache-and-network'
+    fetchPolicy: 'cache-and-network',
+    skip: isEmpty(etag)
   });
 
   const {
@@ -95,13 +104,12 @@ export default function OrderDetailsPage({ client }: SSRProps) {
     error: orderError
   } = useQuery<TOrder, OrderVariable>(ORDER, {
     variables: {
-      orderId
+      orderId,
+      etag: etag?.orderEtag
     },
-    fetchPolicy: 'cache-and-network'
+    fetchPolicy: 'cache-and-network',
+    skip: isEmpty(etag)
   });
-
-  const { userInfo } = useGetUser(client);
-  const csrfToken = userInfo?.csrfToken;
 
   const [updateOrderStatus, { loading: updatingStatus }] = useMutation(
     UPDATE_STATUS_ORDER,

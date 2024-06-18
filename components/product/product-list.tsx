@@ -3,7 +3,7 @@ import ImageComponent from '@components/ImageComponent';
 import Badge from '@components/ui/badge/badge';
 import Loader from '@components/ui/loader/loader';
 import { TableRowPlaceholder } from '@components/ui/placeholders/Table';
-import { useGetUser } from '@hooks/useGetUser';
+import { useGetClient } from '@hooks/useGetClient';
 import { usePlaceholder } from '@hooks/usePlaceholder';
 import { siteSettings } from '@settings/site.settings';
 import type { Nullable } from '@ts-types/custom.types';
@@ -41,7 +41,7 @@ const ProductList = ({ loading, products, selectedColumns }: IProps) => {
   const { alignLeft, alignRight } = useIsRTL();
   const {
     userInfo: { store: { alias = '' } = {} }
-  } = useGetUser();
+  } = useGetClient();
 
   const { tablePlaceholderRow } = usePlaceholder();
 

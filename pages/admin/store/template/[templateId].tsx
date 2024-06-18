@@ -4,11 +4,12 @@ import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { STORE_SETTINGS } from '@graphql/settings';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetUser } from '@hooks/useGetUser';
+import { useGetClient } from '@hooks/useGetClient';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { SettingsType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
+import { isEmpty } from 'lodash';
 import { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
@@ -27,14 +28,20 @@ interface tSettings {
 export default function StoreSettings({ client }: SSRProps) {
   const { t } = useTranslation();
 
+  const {
+    userInfo: { store: { etag } = {} }
+  } = useGetClient(client);
+
   const { data, loading, error } = useQuery<tSettings>(STORE_SETTINGS, {
-    variables: {},
-    fetchPolicy: 'cache-and-network'
+    variables: {
+      etag: etag?.configEtag
+    },
+    fetchPolicy: 'cache-and-network',
+    skip: isEmpty(etag)
   });
 
   const { getStoreSettings: settings } = data ?? {};
 
-  useGetUser(client);
   useErrorLogger(error);
 
   if (loading) {

@@ -1,6 +1,5 @@
 import AppLayout from '@components/layouts/app';
-import { useGetUser } from '@hooks/index';
-import { getAllFilesFrontMatter } from '@lib/mdx';
+import { useGetClient } from '@hooks/index';
 import { verifyAuth } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { ROUTES } from '@utils/routes';
@@ -11,7 +10,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 const Dashboard = dynamic(() => import('@components/dashboard'));
 
 export default function HomeDashboard({ client }: SSRProps) {
-  useGetUser(client);
+  useGetClient(client);
   return <Dashboard />;
 }
 

@@ -3,7 +3,7 @@ import { PageFormPlaceholder } from '@components/common/commonComponents';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
 import { TAG } from '@graphql/tag';
-import { useErrorLogger, useGetUser } from '@hooks/index';
+import { useErrorLogger, useGetClient } from '@hooks/index';
 import { useSettings } from '@hooks/useSettings';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { LanguageProps, SSRProps } from '@ts-types/custom.types';
@@ -38,15 +38,22 @@ export default function UpdateTagPage({ client }: SSRProps) {
 
   const { selectedLanguage } = useSettings();
 
+  const {
+    userInfo: { store: { etag } = {} }
+  } = useGetClient(client);
+
   const { data, loading, error } = useQuery<TTag, OptionsVariable>(TAG, {
-    variables: { id: tagId, language: selectedLanguage },
+    variables: {
+      id: tagId,
+      language: selectedLanguage,
+      etag: etag?.tagEtag
+    },
     fetchPolicy: 'cache-and-network',
-    skip: isEmpty(selectedLanguage)
+    skip: isEmpty(selectedLanguage) || isEmpty(etag)
   });
 
   const { tag = [] } = data ?? {};
 
-  useGetUser(client);
   useErrorLogger(error);
 
   if (isEmpty(tag) || loading) {

@@ -15,7 +15,7 @@ import Input from '@components/ui/input';
 import TextArea from '@components/ui/text-area';
 import { UPDATE_PRODUCT_SEO } from '@graphql/product';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetUser } from '@hooks/useGetUser';
+import { useGetClient } from '@hooks/useGetClient';
 import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/notify';
 import { Product } from '@ts-types/generated';
@@ -80,7 +80,7 @@ const ProductSeo = ({ state, productContent, initialValues }: Props) => {
 
   const dispatch = useFormReducer();
 
-  const { userInfo } = useGetUser();
+  const { userInfo } = useGetClient();
   const csrfToken = userInfo?.csrfToken;
 
   const [updateProductSeo, { loading }] = useMutation(UPDATE_PRODUCT_SEO, {

@@ -7,7 +7,7 @@ import { PaymentIcon } from '@components/icons/payment-icon';
 import { TagIcon, UsersIcon } from '@components/icons/sidebar';
 import { TaxIcon } from '@components/icons/sidebar/tax';
 import AppLayout from '@components/layouts/app';
-import { useGetUser } from '@hooks/index';
+import { useGetClient } from '@hooks/index';
 import { verifyAuth } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { ROUTES } from '@utils/routes';
@@ -73,7 +73,7 @@ const settingRoutes = [
 export default function Settings({ client }: SSRProps) {
   const { t } = useTranslation();
 
-  useGetUser(client);
+  useGetClient(client);
 
   return (
     <>

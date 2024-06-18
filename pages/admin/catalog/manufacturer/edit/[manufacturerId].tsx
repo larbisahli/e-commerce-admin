@@ -3,7 +3,7 @@ import { PageFormPlaceholder } from '@components/common/commonComponents';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
 import { MANUFACTURER } from '@graphql/manufacturer';
-import { useGetUser } from '@hooks/index';
+import { useGetClient } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useSettings } from '@hooks/useSettings';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
@@ -38,21 +38,25 @@ export default function UpdateManufacturerPage({ client }: SSRProps) {
 
   const { selectedLanguage } = useSettings();
 
+  const {
+    userInfo: { store: { etag } = {} }
+  } = useGetClient(client);
+
   const { data, loading, error } = useQuery<TManufacturer, OptionsVariable>(
     MANUFACTURER,
     {
       variables: {
         id: manufacturerId,
-        language: selectedLanguage
+        language: selectedLanguage,
+        etag: etag?.manufacturerEtag
       },
       fetchPolicy: 'cache-and-network',
-      skip: isEmpty(selectedLanguage)
+      skip: isEmpty(selectedLanguage) || isEmpty(etag)
     }
   );
 
   const { manufacturer = [] } = data ?? {};
 
-  useGetUser(client);
   useErrorLogger(error);
 
   if (isEmpty(manufacturer) || loading) {

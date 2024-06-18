@@ -8,6 +8,7 @@ import Label from '@components/ui/label';
 import Select from '@components/ui/select/select';
 import { SUPPLIERS_FOR_SELECT } from '@graphql/supplier';
 import { useErrorLogger } from '@hooks/useErrorLogger';
+import { useGetClient } from '@hooks/useGetClient';
 import { useSettings } from '@hooks/useSettings';
 import { LanguageType, OrderBy, Suppliers } from '@ts-types/generated';
 import { isEmpty } from 'lodash';
@@ -28,6 +29,7 @@ interface OptionsVariable {
   limit: number;
   orderBy: OrderBy;
   language: LanguageType;
+  etag: string;
 }
 
 const ProductSupplier = ({ suppliers }: Props) => {
@@ -37,6 +39,10 @@ const ProductSupplier = ({ suppliers }: Props) => {
 
   const { selectedLanguage } = useSettings();
 
+  const {
+    userInfo: { store: { etag } = {} }
+  } = useGetClient();
+
   const { data, loading, error } = useQuery<TSupplierSelect, OptionsVariable>(
     SUPPLIERS_FOR_SELECT,
     {
@@ -44,10 +50,11 @@ const ProductSupplier = ({ suppliers }: Props) => {
         page: 1,
         limit: 999,
         orderBy: OrderBy.CREATED_AT,
-        language: selectedLanguage
+        language: selectedLanguage,
+        etag: etag?.supplierEtag
       },
       fetchPolicy: 'cache-and-network',
-      skip: isEmpty(selectedLanguage)
+      skip: isEmpty(selectedLanguage) || isEmpty(etag)
     }
   );
 

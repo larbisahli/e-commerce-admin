@@ -3,7 +3,7 @@ import { PageFormPlaceholder } from '@components/common/commonComponents';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
 import { ATTRIBUTE } from '@graphql/attribute';
-import { useGetUser } from '@hooks/index';
+import { useGetClient } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useSettings } from '@hooks/useSettings';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
@@ -38,19 +38,23 @@ export default function UpdateAttributePage({ client }: SSRProps) {
 
   const { selectedLanguage } = useSettings();
 
+  const {
+    userInfo: { store: { etag } = {} }
+  } = useGetClient(client);
+
   const { data, loading, error } = useQuery<TAttribute, OptionsVariable>(
     ATTRIBUTE,
     {
       variables: {
         id: attributeId,
-        language: selectedLanguage
+        language: selectedLanguage,
+        etag: etag?.attributeEtag
       },
       fetchPolicy: 'cache-and-network',
-      skip: isEmpty(selectedLanguage)
+      skip: isEmpty(selectedLanguage) || isEmpty(etag)
     }
   );
 
-  useGetUser(client);
   useErrorLogger(error);
 
   const { attribute = [] } = data ?? {};

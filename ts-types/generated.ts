@@ -131,6 +131,27 @@ export interface UserType extends CreatedUpdatedByAt {
   ali?: string;
 }
 
+export interface EtagGroupsType {
+  couponEtag: string;
+  mediaEtag: string;
+  shipmentEtag: string;
+  userEtag: string;
+  supplierEtag: string;
+  configEtag: string;
+  layoutEtag: string;
+  productEtag: string;
+  categoryEtag: string;
+  customerEtag: string;
+  analyticEtag: string;
+  orderEtag: string;
+  tagEtag: string;
+  manufacturerEtag: string;
+  attributeEtag: string;
+  userRoleEtag: string;
+  orderStatusEtag: string;
+  taxEtag: string;
+}
+
 export interface Category extends CreatedUpdatedByAt {
   id?: Scalars['Int'];
   parentId?: Nullable<Scalars['Int']>;
@@ -629,6 +650,7 @@ export interface SettingsType {
   tax: TaxType;
   maintenanceMode: boolean;
   maintenancePassword: number;
+  etag: EtagGroupsType;
 }
 
 export interface WebmanifestType {

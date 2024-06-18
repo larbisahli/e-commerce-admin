@@ -9,7 +9,7 @@ import Label from '@components/ui/label';
 import Select from '@components/ui/select/select';
 import { UPDATE_PRODUCT_SHIPPING_INFO } from '@graphql/product';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetUser } from '@hooks/useGetUser';
+import { useGetClient } from '@hooks/useGetClient';
 import { notify } from '@lib/notify';
 import { Nullable } from '@ts-types/custom.types';
 import { Product, ProductType } from '@ts-types/generated';
@@ -50,7 +50,7 @@ function ProductShippingInfoForm({ state, productType, initialValues }: Props) {
   const [error, setError] = useState(null);
   useErrorLogger(error);
 
-  const { userInfo } = useGetUser();
+  const { userInfo } = useGetClient();
   const csrfToken = userInfo?.csrfToken;
 
   const [updateProductShippingInfo, { loading }] = useMutation(

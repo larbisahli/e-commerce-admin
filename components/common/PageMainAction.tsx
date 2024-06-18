@@ -2,7 +2,7 @@ import { Add } from '@components/icons/add';
 import InfoSvg from '@components/icons/info';
 import LinkButton from '@components/ui/link-button';
 import Select from '@components/ui/select/select';
-import { useAppDispatch } from '@hooks/useGetUser';
+import { useAppDispatch } from '@hooks/useGetClient';
 import { useSettings } from '@hooks/useSettings';
 import { useUI } from '@hooks/useUI';
 import { setCurrentLanguage } from '@store/settings';

@@ -3,7 +3,7 @@ import Button from '@components/ui/button';
 import Input from '@components/ui/input';
 import PasswordInput from '@components/ui/password-input';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetUser } from '@hooks/useGetUser';
+import { useGetClient } from '@hooks/useGetClient';
 import { ROUTES } from '@utils/routes';
 import { apiURL } from '@utils/utils';
 import { isEmpty } from 'lodash';
@@ -50,7 +50,7 @@ const LoginForm = ({ googleCredentials }: Props) => {
     getValues
   } = useForm<FormValues>({ defaultValues });
 
-  const { userInfo } = useGetUser();
+  const { userInfo } = useGetClient();
   const csrfToken = userInfo?.csrfToken;
 
   useEffect(() => {

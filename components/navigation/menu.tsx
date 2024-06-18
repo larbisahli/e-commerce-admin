@@ -1,7 +1,7 @@
 import Avatar from '@components/common/avatar';
 import Link from '@components/ui/link';
 import { Menu, Transition } from '@headlessui/react';
-import { useGetUser } from '@hooks/index';
+import { useGetClient } from '@hooks/index';
 import { ROUTES } from '@utils/routes';
 import cn from 'classnames';
 import classNames from 'classnames/bind';
@@ -43,10 +43,8 @@ function NavMenu() {
       store: { alias = '' } = {},
       googleProfileImage
     }
-  } = useGetUser();
+  } = useGetClient();
   const { image = null, placeholder = null } = profile[0] ?? {};
-
-  console.log({ googleProfileImage });
 
   return (
     <Menu as="div" className="relative inline-block text-left">
@@ -91,14 +89,25 @@ function NavMenu() {
           className="shadow-700 absolute right-0 mt-1 w-56 origin-top-right overflow-hidden rounded-sm border bg-white py-4 shadow focus:outline-none"
         >
           <div className="flex flex-col items-center justify-center border-b pb-3">
-            <Avatar
-              className="mb-2 !rounded-full"
-              src={image}
-              firstName={firstName}
-              customPlaceholder={placeholder}
-              width="w-14"
-              height="h-14"
-            />
+            {googleProfileImage && !image ? (
+              <Image
+                priority={true}
+                alt=""
+                src={googleProfileImage}
+                className="mb-2 h-14 w-14 !rounded-full"
+                width={56}
+                height={56}
+              />
+            ) : (
+              <Avatar
+                className="mb-2 !rounded-full"
+                src={image}
+                firstName={firstName}
+                customPlaceholder={placeholder}
+                width="w-14"
+                height="h-14"
+              />
+            )}
             {firstName && (
               <div className="px-4 text-sm font-medium capitalize text-gray-800">{`${firstName} ${lastName}`}</div>
             )}
@@ -108,7 +117,7 @@ function NavMenu() {
               </div>
             )}
           </div>
-          <div className="flex items-center p-2  text-xs text-gray-600">
+          <div className="flex items-center p-2 px-4  text-xs text-gray-600">
             <span>Your store:</span>
             <Link
               target="_blank"

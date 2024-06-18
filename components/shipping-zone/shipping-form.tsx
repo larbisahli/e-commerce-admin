@@ -13,7 +13,7 @@ import { CREATE_SHIPPING, UPDATE_SHIPPING } from '@graphql/shipping-zone';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   useErrorLogger,
-  useGetUser,
+  useGetClient,
   useWarnIfUnsavedChanges
 } from '@hooks/index';
 import { useSettings } from '@hooks/useSettings';
@@ -119,6 +119,10 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
   const { systemLanguage } = useSettings();
 
   const {
+    userInfo: { csrfToken, store: { etag } = {} }
+  } = useGetClient();
+
+  const {
     data,
     loading,
     error: deliveryTimeError
@@ -127,16 +131,14 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
       page: 1,
       limit: 999,
       orderBy: OrderBy.CREATED_AT,
-      language: systemLanguage
+      language: systemLanguage,
+      etag: etag?.shipmentEtag
     },
     fetchPolicy: 'cache-and-network',
-    skip: isEmpty(systemLanguage)
+    skip: isEmpty(systemLanguage) || isEmpty(etag)
   });
 
   const { deliveryTimeSelect = [] } = data ?? {};
-
-  const { userInfo } = useGetUser();
-  const csrfToken = userInfo?.csrfToken;
 
   const [
     createShippingZone,

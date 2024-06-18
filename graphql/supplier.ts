@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const SUPPLIER = gql`
-  query Supplier($id: Int!) {
-    supplier(id: $id) {
+  query Supplier($id: Int!, $etag: String!) {
+    supplier(id: $id, etag: $etag) {
       id
       name
       company
@@ -25,8 +25,9 @@ export const SUPPLIERS = gql`
     $limit: Int!
     $orderBy: String
     $sortedBy: String
+    $etag: String!
   ) {
-    supplierCount {
+    supplierCount(etag: $etag) {
       count
     }
     suppliers(
@@ -34,6 +35,7 @@ export const SUPPLIERS = gql`
       limit: $limit
       orderBy: $orderBy
       sortedBy: $sortedBy
+      etag: $etag
     ) {
       id
       name
@@ -61,8 +63,18 @@ export const SUPPLIERS = gql`
 `;
 
 export const SUPPLIERS_FOR_SELECT = gql`
-  query SuppliersForSelect($page: Int!, $limit: Int!, $orderBy: String!) {
-    suppliersForSelect(page: $page, limit: $limit, orderBy: $orderBy) {
+  query SuppliersForSelect(
+    $page: Int!
+    $limit: Int!
+    $orderBy: String!
+    $etag: String!
+  ) {
+    suppliersForSelect(
+      page: $page
+      limit: $limit
+      orderBy: $orderBy
+      etag: $etag
+    ) {
       id
       name
     }

@@ -9,7 +9,7 @@ import Input from '@components/ui/input';
 import { CREATE_ROLE, UPDATE_ROLE } from '@graphql/user-role';
 import {
   useErrorLogger,
-  useGetUser,
+  useGetClient,
   useWarnIfUnsavedChanges
 } from '@hooks/index';
 import { notify } from '@lib/index';
@@ -38,7 +38,7 @@ const RoleCreateUpdateForm = ({ initialValues }: IProps) => {
   const [error, setError] = useState();
   const [unsavedChanges, setUnsavedChanges] = useState(true);
 
-  const { userInfo } = useGetUser();
+  const { userInfo } = useGetClient();
   const csrfToken = userInfo?.csrfToken;
 
   const [createRole, { loading: creating }] = useMutation(CREATE_ROLE, {

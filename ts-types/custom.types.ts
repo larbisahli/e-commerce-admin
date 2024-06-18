@@ -141,6 +141,7 @@ export interface TableQueryVariables {
   orderBy: OrderBy;
   sortedBy: SortOrder;
   language: LanguageType;
+  etag: string;
 }
 
 // export type ProductsQueryOptionsType = {
@@ -182,6 +183,7 @@ export interface TableQueryVariables {
 
 export interface LanguageProps {
   language: LanguageType;
+  etag: string;
 }
 
 export enum TextAlignEnum {

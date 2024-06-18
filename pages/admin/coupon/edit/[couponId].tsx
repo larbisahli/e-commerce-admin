@@ -3,7 +3,7 @@ import { PageFormPlaceholder } from '@components/common/commonComponents';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
 import { COUPON } from '@graphql/coupons';
-import { useErrorLogger, useGetUser } from '@hooks/index';
+import { useErrorLogger, useGetClient } from '@hooks/index';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { Coupon } from '@ts-types/generated';
@@ -26,6 +26,7 @@ interface TCoupon {
 
 interface OptionsVariable {
   id: number;
+  etag: string;
 }
 
 export default function UpdateCouponPage({ client }: SSRProps) {
@@ -33,14 +34,21 @@ export default function UpdateCouponPage({ client }: SSRProps) {
 
   const couponId = parseInt(query.couponId as string, 10);
 
+  const {
+    userInfo: { store: { etag } = {} }
+  } = useGetClient(client);
+
   const { data, loading, error } = useQuery<TCoupon, OptionsVariable>(COUPON, {
-    variables: { id: couponId },
-    fetchPolicy: 'cache-and-network'
+    variables: {
+      id: couponId,
+      etag: etag?.couponEtag
+    },
+    fetchPolicy: 'cache-and-network',
+    skip: isEmpty(etag)
   });
 
   const { coupon = [] } = data ?? {};
 
-  useGetUser(client);
   useErrorLogger(error);
 
   if (isEmpty(coupon) || loading) {

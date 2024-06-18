@@ -1,7 +1,7 @@
 import FormFooter from '@components/auth/form-footer';
 import LoginForm from '@components/auth/login-form';
 // import LogoSvg from '@components/icons/logo';
-import { useGetUser } from '@hooks/index';
+import { useGetClient } from '@hooks/index';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { ROUTES } from '@utils/routes';
@@ -22,7 +22,7 @@ const LoginPage = ({ client }: SSRProps) => {
 
   const [googleCredentials, setGoogleCredentials] = useState(null);
 
-  useGetUser(client);
+  useGetClient(client);
 
   useEffect(() => {
     router.prefetch('/dashboard');

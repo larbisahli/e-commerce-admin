@@ -1,6 +1,6 @@
 import AppLayout from '@components/layouts/app';
 import Loader from '@components/ui/loader/loader';
-import { useGetUser } from '@hooks/index';
+import { useGetClient } from '@hooks/index';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { ROUTES } from '@utils/routes';
@@ -15,7 +15,7 @@ const CreateOrUpdateTagForm = dynamic(
 );
 
 export default function CreateCategoriesPage({ client }: SSRProps) {
-  useGetUser(client);
+  useGetClient(client);
 
   return (
     <>

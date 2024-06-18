@@ -1,8 +1,6 @@
-import { useMutation, useQuery } from '@apollo/client';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
-import { HERO_BANNER_LIST, UPDATE_HERO_SLIDE } from '@graphql/hero-banner';
-import { useErrorLogger, useGetUser } from '@hooks/index';
+import { useErrorLogger, useGetClient } from '@hooks/index';
 import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/notify';
 import { LanguageProps, SSRProps } from '@ts-types/custom.types';
@@ -35,43 +33,10 @@ export default function CreateOrUpdateHeroSlideForm({ client }: SSRProps) {
   const [sliderId, setSliderId] = useState(null);
   const [error, setError] = useState(null);
 
-  const { userInfo } = useGetUser();
+  const { userInfo } = useGetClient();
   const csrfToken = userInfo?.csrfToken;
 
-  const {
-    data,
-    loading,
-    error: queryError
-  } = useQuery<THeroBanner, OptionsVariable>(HERO_BANNER_LIST, {
-    variables: {
-      page: 1,
-      limit: 999,
-      language: selectedLanguage
-    },
-    fetchPolicy: 'cache-and-network',
-    skip: isEmpty(selectedLanguage)
-  });
-
-  const [updateHeroSlider, { loading: updating, reset: resetUpdateMutation }] =
-    useMutation(UPDATE_HERO_SLIDE, {
-      context: {
-        headers: {
-          'x-csrf-token': csrfToken
-        }
-      },
-      onCompleted: (data: { updateHeroSlide: HeroBannerType }) => {
-        const { id } = data.updateHeroSlide;
-        if (!id) {
-          return;
-        }
-        notify(t('common:successfully-created'), 'success');
-      }
-    });
-
-  const { heroSlideList = [] } = data ?? {};
-
-  useGetUser(client);
-  useErrorLogger(queryError);
+  useGetClient(client);
   useErrorLogger(error);
 
   const handleEdit = (id: string) => {
@@ -113,11 +78,11 @@ export default function CreateOrUpdateHeroSlideForm({ client }: SSRProps) {
       }
     };
 
-    updateHeroSlider({
-      variables: { ...variables }
-    }).catch((err) => {
-      setError(err);
-    });
+    // updateHeroSlider({
+    //   variables: { ...variables }
+    // }).catch((err) => {
+    //   setError(err);
+    // });
   };
 
   if (!isEmpty(error)) {
@@ -129,8 +94,8 @@ export default function CreateOrUpdateHeroSlideForm({ client }: SSRProps) {
       <FormActions title="Hero sliders" handleBack={sliderId && handleBack} />
       {!sliderId ? (
         <HeroBannerList
-          loading={loading}
-          heroBannerList={heroSlideList}
+          loading={false}
+          heroBannerList={[]}
           handleEdit={handleEdit}
           handleDelete={handleDelete}
         />

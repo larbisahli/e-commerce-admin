@@ -3,7 +3,7 @@ import { PageFormPlaceholder } from '@components/common/commonComponents';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
 import { SHIPPING_ZONE } from '@graphql/shipping-zone';
-import { useGetUser } from '@hooks/index';
+import { useGetClient } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useSettings } from '@hooks/useSettings';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
@@ -35,16 +35,23 @@ export default function UpdateShippingPage({ client }: SSRProps) {
 
   const { systemLanguage } = useSettings();
 
+  const {
+    userInfo: { store: { etag } = {} }
+  } = useGetClient(client);
+
   const { data, loading, error } = useQuery<ShippingZoneType, ShippingVariable>(
     SHIPPING_ZONE,
     {
-      variables: { id: shippingId, language: systemLanguage },
+      variables: {
+        id: shippingId,
+        language: systemLanguage,
+        etag: etag?.shipmentEtag
+      },
       fetchPolicy: 'cache-and-network',
-      skip: isEmpty(systemLanguage)
+      skip: isEmpty(systemLanguage) || isEmpty(etag)
     }
   );
 
-  useGetUser(client);
   useErrorLogger(error);
 
   if (isEmpty(data?.shippingZone) || loading) {

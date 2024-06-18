@@ -12,7 +12,7 @@ import {
   updateBuilderInfo
 } from '@store/ui';
 
-import { useAppDispatch, useAppSelector } from './useGetUser';
+import { useAppDispatch, useAppSelector } from './useGetClient';
 
 export const useUI = () => {
   const ui = useAppSelector((state) => state.ui);

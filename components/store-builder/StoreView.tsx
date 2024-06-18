@@ -1,5 +1,5 @@
 import Loader from '@components/ui/loader/loader';
-import { useGetUser } from '@hooks/useGetUser';
+import { useGetClient } from '@hooks/useGetClient';
 import { useUI } from '@hooks/useUI';
 import { DEVICE_VIEWS } from '@ts-types/enums';
 import { getBuilderSrc } from '@utils/utils';
@@ -17,7 +17,7 @@ export default function StoreViewComponents() {
     updateBuilderInfo
   } = useUI();
 
-  const { userInfo } = useGetUser();
+  const { userInfo } = useGetClient();
 
   const alias = userInfo?.store?.alias;
 

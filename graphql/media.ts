@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const MEDIA = gql`
-  query Media($id: ID, $page: Int!, $limit: Int!) {
-    media(id: $id, page: $page, limit: $limit) {
+  query Media($id: ID, $page: Int!, $limit: Int!, $etag: String!) {
+    media(id: $id, page: $page, limit: $limit, etag: $etag) {
       parent {
         id
         name

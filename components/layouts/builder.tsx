@@ -2,7 +2,7 @@ import { TwoArrowPrev } from '@components/icons/two-arrow';
 import Navbar from '@components/store-builder/navbar';
 import Sidebar from '@components/store-builder/sidebar';
 import { useModalAction } from '@components/ui/modal/modal.context';
-import { useAppDispatch } from '@hooks/useGetUser';
+import { useAppDispatch, useGetClient } from '@hooks/useGetClient';
 import { useSettings } from '@hooks/useSettings';
 import { fetchStoreSettings, setCurrentLanguage } from '@store/settings';
 import {
@@ -36,6 +36,8 @@ const AppLayout: React.FC = ({ children }: Props) => {
   const dispatch = useAppDispatch();
   const { openModal } = useModalAction();
   const { languages = [] } = useSettings();
+  const { userInfo } = useGetClient();
+
   const [showSlider, setShowSlider] = useState(true);
 
   const layoutNameQuery = query.layoutName as string;
@@ -47,8 +49,10 @@ const AppLayout: React.FC = ({ children }: Props) => {
 
   // Fetch store settings
   useEffect(() => {
-    dispatch(fetchStoreSettings());
-  }, [dispatch]);
+    if (userInfo?.store?.etag) {
+      dispatch(fetchStoreSettings({ etag: userInfo?.store?.etag }));
+    }
+  }, [dispatch, userInfo]);
 
   const systemLanguage = useMemo(
     () => languages?.find((lang) => lang.isSystem),

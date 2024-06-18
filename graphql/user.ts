@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const USER_INFO = gql`
-  query UserInfo($id: ID!, $payload: ID!) {
-    userInfo(id: $id, payload: $payload) {
+  query UserInfo($id: ID!, $payload: ID!, $etag: String!) {
+    userInfo(id: $id, payload: $payload, etag: $etag) {
       id
       firstName
       lastName
@@ -22,8 +22,8 @@ export const USER_INFO = gql`
 `;
 
 export const USER = gql`
-  query User($id: ID!) {
-    user(id: $id) {
+  query User($id: ID!, $etag: String!) {
+    user(id: $id, etag: $etag) {
       id
       firstName
       lastName
@@ -55,10 +55,29 @@ export const USER_AUTH = gql`
       isAdmin
       active
       store {
-        storeName
         published
         tier
         alias
+        etag {
+          couponEtag
+          mediaEtag
+          shipmentEtag
+          userEtag
+          supplierEtag
+          configEtag
+          layoutEtag
+          productEtag
+          categoryEtag
+          customerEtag
+          analyticEtag
+          orderEtag
+          tagEtag
+          manufacturerEtag
+          attributeEtag
+          userRoleEtag
+          orderStatusEtag
+          taxEtag
+        }
       }
       googleProfileImage
       profile {
@@ -80,11 +99,18 @@ export const USERS = gql`
     $limit: Int!
     $orderBy: String!
     $sortedBy: String!
+    $etag: String!
   ) {
-    userCount {
+    userCount(etag: $etag) {
       count
     }
-    users(page: $page, limit: $limit, orderBy: $orderBy, sortedBy: $sortedBy) {
+    users(
+      page: $page
+      limit: $limit
+      orderBy: $orderBy
+      sortedBy: $sortedBy
+      etag: $etag
+    ) {
       id
       firstName
       lastName

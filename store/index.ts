@@ -1,16 +1,16 @@
 import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit';
+import ClientReducer from '@store/client';
 import FilesReducer from '@store/files';
 import SettingsReducer from '@store/settings';
 import TableReducer from '@store/table';
 import UIReducer from '@store/ui';
-import UserReducer from '@store/user';
 import { PRODUCTION_ENV } from '@utils/utils';
 
-export function makeStore() {
+export function createStore() {
   return configureStore({
     reducer: {
       settings: SettingsReducer,
-      userInfo: UserReducer,
+      client: ClientReducer,
       files: FilesReducer,
       tables: TableReducer,
       ui: UIReducer
@@ -19,7 +19,9 @@ export function makeStore() {
   });
 }
 
-const store = makeStore();
+const store = createStore();
+
+export type AppStore = ReturnType<typeof createStore>;
 
 export type AppState = ReturnType<typeof store.getState>;
 

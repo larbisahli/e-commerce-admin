@@ -25,8 +25,8 @@ export const UPDATE_PAGE = gql`
 `;
 
 export const GET_PAGE = gql`
-  query GetPage($slug: String!, $language: LanguageInput!) {
-    getPage(slug: $slug, language: $language) {
+  query GetPage($slug: String!, $language: LanguageInput!, $etag: String!) {
+    getPage(slug: $slug, language: $language, etag: $etag) {
       id
       slug
       name

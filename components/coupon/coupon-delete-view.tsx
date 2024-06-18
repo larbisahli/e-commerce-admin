@@ -6,7 +6,7 @@ import {
 } from '@components/ui/modal/modal.context';
 import { COUPONS, DELETE_COUPON } from '@graphql/coupons';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetUser } from '@hooks/useGetUser';
+import { useGetClient } from '@hooks/useGetClient';
 import { notify } from '@lib/notify';
 import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
@@ -16,7 +16,7 @@ const CouponDeleteView = () => {
 
   const [error, setError] = useState(null);
 
-  const { userInfo } = useGetUser();
+  const { userInfo } = useGetClient();
   const csrfToken = userInfo?.csrfToken;
 
   const [deleteCoupon, { loading }] = useMutation(DELETE_COUPON, {

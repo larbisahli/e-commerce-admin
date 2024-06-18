@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const SHIPPING_ZONE = gql`
-  query ShippingZone($id: Int!, $language: LanguageInput!) {
-    shippingZone(id: $id, language: $language) {
+  query ShippingZone($id: Int!, $language: LanguageInput!, $etag: String!) {
+    shippingZone(id: $id, language: $language, etag: $etag) {
       id
       logo {
         id
@@ -19,13 +19,13 @@ export const SHIPPING_ZONE = gql`
         name
       }
     }
-    zones(id: $id) {
+    zones(id: $id, etag: $etag) {
       id
       zoneId
       name
       iso2
     }
-    shippingRates(id: $id) {
+    shippingRates(id: $id, etag: $etag) {
       id
       weightUnit {
         unit
@@ -44,8 +44,9 @@ export const SHIPPING_ZONES = gql`
     $limit: Int!
     $orderBy: String!
     $sortedBy: String!
+    $etag: String!
   ) {
-    shippingZoneCount {
+    shippingZoneCount(etag: $etag) {
       count
     }
     shippingZones(
@@ -53,6 +54,7 @@ export const SHIPPING_ZONES = gql`
       limit: $limit
       orderBy: $orderBy
       sortedBy: $sortedBy
+      etag: $etag
     ) {
       id
       logo {

@@ -3,7 +3,7 @@ import { PageFormPlaceholder } from '@components/common/commonComponents';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
 import { PRODUCT } from '@graphql/product';
-import { useGetUser } from '@hooks/index';
+import { useGetClient } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useSettings } from '@hooks/useSettings';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
@@ -38,16 +38,23 @@ export default function UpdateProductPage({ client }: SSRProps) {
 
   const { selectedLanguage } = useSettings();
 
+  const {
+    userInfo: { store: { etag } = {} }
+  } = useGetClient(client);
+
   const { data, loading, error } = useQuery<TProduct, productVariable>(
     PRODUCT,
     {
-      variables: { id: productId, language: selectedLanguage },
+      variables: {
+        id: productId,
+        language: selectedLanguage,
+        etag: etag?.productEtag
+      },
       fetchPolicy: 'cache-and-network',
-      skip: isEmpty(selectedLanguage)
+      skip: isEmpty(selectedLanguage) || isEmpty(etag)
     }
   );
 
-  useGetUser(client);
   useErrorLogger(error);
 
   const { product = {} } = data ?? {};

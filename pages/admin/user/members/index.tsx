@@ -3,7 +3,7 @@ import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
 import UserList from '@components/user/user-list';
 import { USERS } from '@graphql/user';
-import { useErrorLogger, useGetUser } from '@hooks/index';
+import { useErrorLogger, useGetClient } from '@hooks/index';
 import { useTableColumn } from '@hooks/useTableColumn';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
@@ -44,6 +44,7 @@ interface OptionsVariable {
   limit: number;
   orderBy: OrderBy;
   sortedBy: SortOrder;
+  etag: string;
 }
 
 export default function User({ client }: SSRProps) {
@@ -55,6 +56,10 @@ export default function User({ client }: SSRProps) {
 
   const { selectedTableColumns, handleColumnChange } = useTableColumn('user');
 
+  const {
+    userInfo: { store: { etag } = {} }
+  } = useGetClient(client);
+
   const { data, loading, error, fetchMore } = useQuery<TUser, OptionsVariable>(
     USERS,
     {
@@ -62,15 +67,16 @@ export default function User({ client }: SSRProps) {
         page,
         limit: limit.value,
         orderBy,
-        sortedBy: SortOrder.Desc
+        sortedBy: SortOrder.Desc,
+        etag: etag?.userEtag
       },
-      fetchPolicy: 'cache-and-network'
+      fetchPolicy: 'cache-and-network',
+      skip: isEmpty(etag)
     }
   );
 
   const { users = [], userCount: { count } = { count: 0 } } = data ?? {};
 
-  useGetUser(client);
   useErrorLogger(error);
 
   function handlePagination(current: any) {

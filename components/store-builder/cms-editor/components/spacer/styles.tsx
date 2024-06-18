@@ -5,7 +5,7 @@ import Card from '@components/common/card';
 import Description from '@components/ui/description';
 import Label from '@components/ui/label';
 import { UPDATE_LAYOUT_COMPONENT_STYLES } from '@graphql/content';
-import { useErrorLogger, useGetUser } from '@hooks/index';
+import { useErrorLogger, useGetClient } from '@hooks/index';
 import { useUI } from '@hooks/useUI';
 import { notify } from '@lib/index';
 import type { StoreLayoutComponentType } from '@ts-types/generated';
@@ -44,7 +44,7 @@ const SpacerStyles = ({ initialValues }: IProps) => {
       : (defaultValues as FormValues)
   });
 
-  const { userInfo } = useGetUser();
+  const { userInfo } = useGetClient();
   const csrfToken = userInfo?.csrfToken;
 
   const [updateLayoutComponent, { loading: updating }] = useMutation(

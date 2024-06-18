@@ -3,6 +3,7 @@ import Loader from '@components/ui/loader/loader';
 import { useModalState } from '@components/ui/modal/modal.context';
 import { GET_STORE_LAYOUT } from '@graphql/content';
 import { useErrorLogger } from '@hooks/useErrorLogger';
+import { useGetClient } from '@hooks/useGetClient';
 import { useSettings } from '@hooks/useSettings';
 import { LanguageProps } from '@ts-types/custom.types';
 import classNames from 'classnames';
@@ -25,15 +26,20 @@ const NewPageModal = () => {
 
   const { selectedLanguage } = useSettings();
 
+  const {
+    userInfo: { store: { etag } = {} }
+  } = useGetClient();
+
   const { data, loading, error } = useQuery<TLayoutPage, OptionsVariable>(
     GET_STORE_LAYOUT,
     {
       variables: {
         id: layout?.id,
-        language: selectedLanguage
+        language: selectedLanguage,
+        etag: etag?.layoutEtag
       },
       fetchPolicy: 'cache-and-network',
-      skip: isEmpty(selectedLanguage) || !layout?.id
+      skip: isEmpty(selectedLanguage) || !layout?.id || isEmpty(etag)
     }
   );
 

@@ -6,11 +6,18 @@ export const TAXES = gql`
     $limit: Int!
     $orderBy: String!
     $sortedBy: String!
+    $etag: String!
   ) {
-    taxCount {
+    taxCount(etag: $etag) {
       count
     }
-    taxes(page: $page, limit: $limit, orderBy: $orderBy, sortedBy: $sortedBy) {
+    taxes(
+      page: $page
+      limit: $limit
+      orderBy: $orderBy
+      sortedBy: $sortedBy
+      etag: $etag
+    ) {
       id
       name
       rate
@@ -31,8 +38,8 @@ export const TAXES = gql`
 `;
 
 export const TAX = gql`
-  query Tax($id: Int!) {
-    tax(id: $id) {
+  query Tax($id: Int!, $etag: String!) {
+    tax(id: $id, etag: $etag) {
       id
       name
       rate
@@ -55,8 +62,13 @@ export const TAX = gql`
 `;
 
 export const TAX_FOR_SELECT = gql`
-  query GetTaxesSelectSelect($page: Int!, $limit: Int!, $orderBy: String!) {
-    taxSelect(page: $page, limit: $limit, orderBy: $orderBy) {
+  query GetTaxesSelectSelect(
+    $page: Int!
+    $limit: Int!
+    $orderBy: String!
+    $etag: String!
+  ) {
+    taxSelect(page: $page, limit: $limit, orderBy: $orderBy, etag: $etag) {
       id
       name
     }

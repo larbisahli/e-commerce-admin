@@ -6,8 +6,9 @@ export const LANGUAGES = gql`
     $limit: Int!
     $orderBy: String!
     $sortedBy: String!
+    $etag: String!
   ) {
-    languageCount {
+    languageCount(etag: $etag) {
       count
     }
     languages(
@@ -15,6 +16,7 @@ export const LANGUAGES = gql`
       limit: $limit
       orderBy: $orderBy
       sortedBy: $sortedBy
+      etag: $etag
     ) {
       id
       name
@@ -40,8 +42,8 @@ export const LANGUAGES = gql`
 `;
 
 export const LANGUAGE = gql`
-  query Language($id: Int!) {
-    language(id: $id) {
+  query Language($id: Int!, $etag: String!) {
+    language(id: $id, etag: $etag) {
       id
       name
       localeId
@@ -53,8 +55,13 @@ export const LANGUAGE = gql`
 `;
 
 export const LANGUAGES_FOR_SELECT = gql`
-  query GetLanguageSelect($page: Int!, $limit: Int!, $orderBy: String!) {
-    languageSelect(page: $page, limit: $limit, orderBy: $orderBy) {
+  query GetLanguageSelect(
+    $page: Int!
+    $limit: Int!
+    $orderBy: String!
+    $etag: String!
+  ) {
+    languageSelect(page: $page, limit: $limit, orderBy: $orderBy, etag: $etag) {
       id
       name
       localeId

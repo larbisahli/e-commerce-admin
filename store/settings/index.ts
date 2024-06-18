@@ -2,7 +2,11 @@ import { STORE_CONFIG } from '@graphql/store';
 import apolloClient from '@lib/apollo-client';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { AppState } from '@store/index';
-import { LanguageType, SettingsType } from '@ts-types/generated';
+import {
+  EtagGroupsType,
+  LanguageType,
+  SettingsType
+} from '@ts-types/generated';
 
 export interface SettingsState extends SettingsType {
   isLoading?: boolean;
@@ -12,12 +16,14 @@ export interface SettingsState extends SettingsType {
 // Create the thunk
 export const fetchStoreSettings = createAsyncThunk(
   'settings/fetchStoreSettings',
-  async () => {
+  async (args: { etag: EtagGroupsType }) => {
     const { data } = await apolloClient.query<{
       getStoreAdminConfig: SettingsType;
     }>({
       query: STORE_CONFIG,
-      variables: {},
+      variables: {
+        etag: args.etag.configEtag
+      },
       fetchPolicy: 'no-cache'
     });
 

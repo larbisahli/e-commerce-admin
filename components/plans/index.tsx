@@ -10,7 +10,7 @@ import Button from '@components/ui/button';
 import Input from '@components/ui/input';
 import TextArea from '@components/ui/text-area';
 import { CREATE_SUPPLIER } from '@graphql/supplier';
-import { useGetUser } from '@hooks/index';
+import { useGetClient } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { notify } from '@lib/index';
 import type { Suppliers } from '@ts-types/generated';
@@ -56,7 +56,7 @@ export default function PlansComponents({ initialValues }: IProps) {
     defaultValues: initialValues ? { ...initialValues } : defaultValues
   });
 
-  const { userInfo } = useGetUser();
+  const { userInfo } = useGetClient();
   const csrfToken = userInfo?.csrfToken;
 
   const [createSupplier, { loading }] = useMutation(CREATE_SUPPLIER, {

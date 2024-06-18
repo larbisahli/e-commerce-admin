@@ -4,24 +4,26 @@ export const STORE_LAYOUT_COMPONENT_CONTENT = gql`
   query StoreLayoutComponentContent(
     $componentId: ID!
     $language: LanguageInput!
+    $etag: String!
   ) {
     storeLayoutComponentContent(
       componentId: $componentId
       language: $language
+      etag: $etag
     ) {
       moduleName
       contentId
       data
     }
-    storeLayoutComponentStyles(componentId: $componentId) {
+    storeLayoutComponentStyles(componentId: $componentId, etag: $etag) {
       styles
     }
   }
 `;
 
 export const STORE_LAYOUTS = gql`
-  query StoreLayouts {
-    storeLayouts {
+  query StoreLayouts($etag: String!) {
+    storeLayouts(etag: $etag) {
       id
       name
       title
@@ -31,15 +33,15 @@ export const STORE_LAYOUTS = gql`
 `;
 
 export const STORE_LAYOUTS_COMPONENTS = gql`
-  query StoreLayoutComponents($layoutName: String!) {
-    storeLayoutComponents(layoutName: $layoutName) {
+  query StoreLayoutComponents($layoutName: String!, $etag: String!) {
+    storeLayoutComponents(layoutName: $layoutName, etag: $etag) {
       componentId
       moduleName
       moduleGroup
       isVisible
       position
     }
-    storeLayoutCommonComponents {
+    storeLayoutCommonComponents(etag: $etag) {
       componentId
       moduleName
       moduleGroup
@@ -48,8 +50,8 @@ export const STORE_LAYOUTS_COMPONENTS = gql`
 `;
 
 export const GET_STORE_LAYOUT = gql`
-  query GetLayoutPage($id: ID!, $language: LanguageInput!) {
-    getLayoutPage(id: $id, language: $language) {
+  query GetLayoutPage($id: ID!, $language: LanguageInput!, $etag: String!) {
+    getLayoutPage(id: $id, language: $language, etag: $etag) {
       id
       name
       title
@@ -193,8 +195,8 @@ export const DELETE_LAYOUT_COMPONENT = gql`
 `;
 
 export const GET_THEME_SETTINGS = gql`
-  query GetThemeSettings {
-    getThemeSettings
+  query GetThemeSettings($etag: String!) {
+    getThemeSettings(etag: $etag)
   }
 `;
 

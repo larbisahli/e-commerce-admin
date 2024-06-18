@@ -6,8 +6,9 @@ export const COUPONS = gql`
     $limit: Int!
     $orderBy: String!
     $sortedBy: String!
+    $etag: String!
   ) {
-    couponCount {
+    couponCount(etag: $etag) {
       count
     }
     coupons(
@@ -15,6 +16,7 @@ export const COUPONS = gql`
       limit: $limit
       orderBy: $orderBy
       sortedBy: $sortedBy
+      etag: $etag
     ) {
       id
       code
@@ -42,8 +44,8 @@ export const COUPONS = gql`
 `;
 
 export const COUPON = gql`
-  query Coupon($id: Int!) {
-    coupon(id: $id) {
+  query Coupon($id: Int!, $etag: String!) {
+    coupon(id: $id, etag: $etag) {
       id
       code
       orderAmountLimit

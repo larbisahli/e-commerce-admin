@@ -6,7 +6,7 @@ import {
 } from '@components/ui/modal/modal.context';
 import { DELETE_USER, USERS } from '@graphql/user';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetUser } from '@hooks/useGetUser';
+import { useGetClient } from '@hooks/useGetClient';
 import { notify } from '@lib/index';
 import { UserType } from '@ts-types/generated';
 import { useTranslation } from 'next-i18next';
@@ -17,7 +17,7 @@ const UserDeleteView = () => {
 
   const [error, setError] = useState(null);
 
-  const { userInfo } = useGetUser();
+  const { userInfo } = useGetClient();
   const csrfToken = userInfo?.csrfToken;
 
   const [deleteAttributeValue, { loading }] = useMutation(DELETE_USER, {

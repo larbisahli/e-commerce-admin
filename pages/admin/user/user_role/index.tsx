@@ -5,7 +5,7 @@ import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import RoleList from '@components/user-role/role-list';
 import { ROLES } from '@graphql/user-role';
-import { useErrorLogger, useGetUser } from '@hooks/index';
+import { useErrorLogger, useGetClient } from '@hooks/index';
 import { verifyAuth } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { RoleType } from '@ts-types/generated';
@@ -24,14 +24,20 @@ interface TRole {
 export default function UserRole({ client }: SSRProps) {
   const { t } = useTranslation();
 
+  const {
+    userInfo: { store: { etag } = {} }
+  } = useGetClient(client);
+
   const { data, loading, error } = useQuery<TRole>(ROLES, {
-    variables: {},
-    fetchPolicy: 'cache-and-network'
+    variables: {
+      etag: etag?.userRoleEtag
+    },
+    fetchPolicy: 'cache-and-network',
+    skip: isEmpty(etag)
   });
 
   const { roles = [] } = data ?? {};
 
-  useGetUser(client);
   useErrorLogger(error);
 
   if (loading) {

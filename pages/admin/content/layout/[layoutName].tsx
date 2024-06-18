@@ -3,11 +3,12 @@ import BuilderLayout from '@components/layouts/builder';
 import LayoutNavigation from '@components/store-builder/LayoutNavigation';
 import NavigationLink from '@components/store-builder/navigationLink';
 import { STORE_LAYOUTS, STORE_LAYOUTS_COMPONENTS } from '@graphql/content';
-import { useErrorLogger, useGetUser } from '@hooks/index';
+import { useErrorLogger, useGetClient } from '@hooks/index';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import type { SSRProps } from '@ts-types/custom.types';
 import { StoreBuilder, StoreLayoutNames } from '@ts-types/enums';
 import { ROUTES } from '@utils/routes';
+import { isEmpty } from 'lodash';
 import type { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -33,12 +34,11 @@ interface TLayout {
 }
 
 interface OptionsVariable {
-  layoutName: string;
+  layoutName?: string;
+  etag: string;
 }
 
 export default function CreateSupplierPage({ client }: SSRProps) {
-  useGetUser(client);
-
   const { query, push } = useRouter();
   const layoutName = query.layoutName as string;
 
@@ -48,11 +48,19 @@ export default function CreateSupplierPage({ client }: SSRProps) {
   const isProductPage = layoutName === StoreLayoutNames.PRODUCT;
 
   const {
+    userInfo: { store: { etag } = {} }
+  } = useGetClient(client);
+
+  const {
     data: lData,
     loading: lLoading,
     error: lError
   } = useQuery<TLayout, OptionsVariable>(STORE_LAYOUTS, {
-    fetchPolicy: 'cache-and-network'
+    variables: {
+      etag: etag?.layoutEtag
+    },
+    fetchPolicy: 'cache-and-network',
+    skip: isEmpty(etag)
   });
 
   const {
@@ -60,9 +68,17 @@ export default function CreateSupplierPage({ client }: SSRProps) {
     loading: lcLoading,
     error: lcError
   } = useQuery<TLayout, OptionsVariable>(STORE_LAYOUTS_COMPONENTS, {
-    variables: { layoutName },
+    variables: {
+      layoutName,
+      etag: etag?.layoutEtag
+    },
     fetchPolicy: 'cache-and-network',
-    skip: isCategoryPage || isCartPage || isCheckoutPage || isProductPage
+    skip:
+      isCategoryPage ||
+      isCartPage ||
+      isCheckoutPage ||
+      isProductPage ||
+      isEmpty(etag)
   });
 
   const loading = lLoading || lcLoading;

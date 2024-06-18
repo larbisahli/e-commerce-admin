@@ -7,8 +7,9 @@ export const TAGS = gql`
     $orderBy: String!
     $sortedBy: String!
     $language: LanguageInput!
+    $etag: String!
   ) {
-    tagCount {
+    tagCount(etag: $etag) {
       count
     }
     tags(
@@ -17,6 +18,7 @@ export const TAGS = gql`
       orderBy: $orderBy
       sortedBy: $sortedBy
       language: $language
+      etag: $etag
     ) {
       id
       name
@@ -40,8 +42,8 @@ export const TAGS = gql`
 `;
 
 export const TAG = gql`
-  query Tag($id: Int!, $language: LanguageInput!) {
-    tag(id: $id, language: $language) {
+  query Tag($id: Int!, $language: LanguageInput!, $etag: String!) {
+    tag(id: $id, language: $language, etag: $etag) {
       id
       name
       translated {
@@ -57,12 +59,14 @@ export const TAGS_FOR_SELECT = gql`
     $limit: Int!
     $orderBy: String!
     $language: LanguageInput!
+    $etag: String!
   ) {
     tagSelect(
       page: $page
       limit: $limit
       orderBy: $orderBy
       language: $language
+      etag: $etag
     ) {
       id
       name

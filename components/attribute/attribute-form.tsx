@@ -16,7 +16,7 @@ import {
   UPDATE_ATTRIBUTE
 } from '@graphql/attribute';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetUser } from '@hooks/useGetUser';
+import { useGetClient } from '@hooks/useGetClient';
 import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/index';
 import { AttributeTypes } from '@ts-types/enums';
@@ -75,7 +75,7 @@ export default function CreateOrUpdateAttributeForm({
         }
   });
 
-  const { userInfo } = useGetUser();
+  const { userInfo } = useGetClient();
   const csrfToken = userInfo?.csrfToken;
 
   const { fields, append, remove } = useFieldArray({

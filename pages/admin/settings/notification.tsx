@@ -4,7 +4,7 @@ import NotificationList from '@components/notification/notification-list';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { ROLES } from '@graphql/user-role';
-import { useErrorLogger, useGetUser } from '@hooks/index';
+import { useErrorLogger, useGetClient } from '@hooks/index';
 import { useTableColumn } from '@hooks/useTableColumn';
 import { verifyAuth } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
@@ -50,8 +50,14 @@ export default function UserRole({ client }: SSRProps) {
   const { selectedTableColumns, handleColumnChange } =
     useTableColumn('notification');
 
+  const {
+    userInfo: { store: { etag } = {} }
+  } = useGetClient(client);
+
   const { data, loading, error, fetchMore } = useQuery<TRole>(ROLES, {
-    variables: {},
+    variables: {
+      etag: etag?.userRoleEtag
+    },
     fetchPolicy: 'cache-and-network',
     skip: true
   });
@@ -83,7 +89,6 @@ export default function UserRole({ client }: SSRProps) {
     }
   ];
 
-  useGetUser(client);
   useErrorLogger(error);
 
   function handlePagination(current: any) {

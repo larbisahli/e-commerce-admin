@@ -86,8 +86,9 @@ export const CATEGORIES = gql`
     $orderBy: String!
     $sortedBy: String!
     $language: LanguageInput!
+    $etag: String!
   ) {
-    categoryCount {
+    categoryCount(etag: $etag) {
       count
     }
     categories(
@@ -96,6 +97,7 @@ export const CATEGORIES = gql`
       orderBy: $orderBy
       sortedBy: $sortedBy
       language: $language
+      etag: $etag
     ) {
       id
       parentId
@@ -169,8 +171,8 @@ export const CATEGORIES = gql`
 `;
 
 export const CATEGORY = gql`
-  query Category($id: Int!, $language: LanguageInput!) {
-    category(id: $id, language: $language) {
+  query Category($id: Int!, $language: LanguageInput!, $etag: String!) {
+    category(id: $id, language: $language, etag: $etag) {
       id
       parentId
       parent {
@@ -215,6 +217,7 @@ export const CATEGORIES_FOR_SELECT = gql`
     $limit: Int!
     $orderBy: String!
     $language: LanguageInput!
+    $etag: String!
   ) {
     categorySelect(
       id: $id
@@ -222,6 +225,7 @@ export const CATEGORIES_FOR_SELECT = gql`
       limit: $limit
       orderBy: $orderBy
       language: $language
+      etag: $etag
     ) {
       id
       name
@@ -235,12 +239,14 @@ export const CATEGORIES_FOR_SELECT_ALL = gql`
     $limit: Int!
     $orderBy: String!
     $language: LanguageInput!
+    $etag: String!
   ) {
     categorySelectAll(
       page: $page
       limit: $limit
       orderBy: $orderBy
       language: $language
+      etag: $etag
     ) {
       id
       name

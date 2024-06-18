@@ -4,7 +4,7 @@ import { LanguageDefaultDescInfo } from '@components/common/commonComponents';
 import FormActions from '@components/common/FormActions';
 import Description from '@components/ui/description';
 import { CREATE_PRODUCT } from '@graphql/product';
-import { useErrorLogger, useGetUser } from '@hooks/index';
+import { useErrorLogger, useGetClient } from '@hooks/index';
 import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/index';
 import { Product } from '@ts-types/generated';
@@ -143,7 +143,7 @@ function ProductForm({
   const [error, setError] = useState(null);
   const { selectedLanguage } = useSettings();
 
-  const { userInfo } = useGetUser();
+  const { userInfo } = useGetClient();
   const csrfToken = userInfo?.csrfToken;
 
   useErrorLogger(error);

@@ -3,7 +3,7 @@ import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { THEME } from '@graphql/theme';
-import { useErrorLogger, useGetUser } from '@hooks/index';
+import { useErrorLogger, useGetClient } from '@hooks/index';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { ThemeType } from '@ts-types/generated';
@@ -26,6 +26,7 @@ interface TTheme {
 
 interface OptionsVariable {
   id: string;
+  etag: string;
 }
 
 export default function Themes({ client }: SSRProps) {
@@ -34,14 +35,21 @@ export default function Themes({ client }: SSRProps) {
 
   const templateId = query.templateId as string;
 
+  const {
+    userInfo: { store: { etag } = {} }
+  } = useGetClient(client);
+
   const { data, loading, error } = useQuery<TTheme, OptionsVariable>(THEME, {
-    variables: { id: templateId },
-    fetchPolicy: 'cache-and-network'
+    variables: {
+      id: templateId,
+      etag: etag?.configEtag
+    },
+    fetchPolicy: 'cache-and-network',
+    skip: isEmpty(etag)
   });
 
   const { theme } = data ?? {};
 
-  useGetUser(client);
   useErrorLogger(error);
 
   if (loading) {

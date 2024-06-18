@@ -9,6 +9,7 @@ import Label from '@components/ui/label';
 import Select from '@components/ui/select/select';
 import { MANUFACTURERS_FOR_SELECT } from '@graphql/manufacturer';
 import { useErrorLogger } from '@hooks/useErrorLogger';
+import { useGetClient } from '@hooks/useGetClient';
 import { useSettings } from '@hooks/useSettings';
 import {
   Category,
@@ -33,6 +34,7 @@ interface OptionsVariable {
   limit: number;
   orderBy: OrderBy;
   language: LanguageType;
+  etag: string;
 }
 
 const ProductManufacturer = ({ manufacturers }: Props) => {
@@ -42,6 +44,10 @@ const ProductManufacturer = ({ manufacturers }: Props) => {
 
   const { selectedLanguage } = useSettings();
 
+  const {
+    userInfo: { store: { etag } = {} }
+  } = useGetClient();
+
   const { data, loading, error } = useQuery<
     TManufacturerSelect,
     OptionsVariable
@@ -50,10 +56,11 @@ const ProductManufacturer = ({ manufacturers }: Props) => {
       page: 1,
       limit: 999,
       orderBy: OrderBy.CREATED_AT,
-      language: selectedLanguage
+      language: selectedLanguage,
+      etag: etag?.manufacturerEtag
     },
     fetchPolicy: 'cache-and-network',
-    skip: isEmpty(selectedLanguage)
+    skip: isEmpty(selectedLanguage) || isEmpty(etag)
   });
 
   const { manufacturersForSelect = [] } = data ?? {};

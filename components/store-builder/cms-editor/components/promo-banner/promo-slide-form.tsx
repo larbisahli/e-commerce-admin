@@ -10,7 +10,7 @@ import Radio from '@components/ui/radio';
 import SelectInput from '@components/ui/select-input';
 import SwitchInput from '@components/ui/switch-input';
 import { UPDATE_LAYOUT_COMPONENT_CONTENT } from '@graphql/content';
-import { useErrorLogger, useGetUser } from '@hooks/index';
+import { useErrorLogger, useGetClient } from '@hooks/index';
 import { useSettings } from '@hooks/useSettings';
 import { useUI } from '@hooks/useUI';
 import { notify } from '@lib/index';
@@ -88,7 +88,7 @@ const CreateOrUpdatePromoSlideForm = ({ initialValues }: IProps) => {
     keyName: 'key'
   });
 
-  const { userInfo } = useGetUser();
+  const { userInfo } = useGetClient();
   const csrfToken = userInfo?.csrfToken;
 
   const [updateLayoutComponent, { loading: updating }] = useMutation(

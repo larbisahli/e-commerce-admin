@@ -3,7 +3,7 @@ import DeliveryList from '@components/delivery-time/delivery-list';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
 import { DELIVERY_TIMES } from '@graphql/delivery-time';
-import { useGetUser } from '@hooks/index';
+import { useGetClient } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useSettings } from '@hooks/useSettings';
 import { useTableColumn } from '@hooks/useTableColumn';
@@ -54,6 +54,10 @@ export default function ShippingZonesPage({ client }: SSRProps) {
 
   const { selectedLanguage } = useSettings();
 
+  const {
+    userInfo: { store: { etag } = {} }
+  } = useGetClient(client);
+
   const { data, loading, error, fetchMore } = useQuery<
     TDelivery,
     TableQueryVariables
@@ -63,16 +67,16 @@ export default function ShippingZonesPage({ client }: SSRProps) {
       limit: limit.value,
       orderBy,
       sortedBy: SortOrder.Desc,
-      language: selectedLanguage
+      language: selectedLanguage,
+      etag: etag?.shipmentEtag
     },
     fetchPolicy: 'cache-and-network',
-    skip: isEmpty(selectedLanguage)
+    skip: isEmpty(selectedLanguage) || isEmpty(etag)
   });
 
   const { deliveryTimes = [], deliveryTimeCount: { count } = { count: 0 } } =
     data ?? {};
 
-  useGetUser(client);
   useErrorLogger(error);
 
   const handlePagination = (current: number) => {

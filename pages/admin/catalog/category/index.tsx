@@ -3,7 +3,7 @@ import CategoryList from '@components/category/category-list';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
 import { CATEGORIES } from '@graphql/category';
-import { useErrorLogger, useGetUser } from '@hooks/index';
+import { useErrorLogger, useGetClient } from '@hooks/index';
 import { useSettings } from '@hooks/useSettings';
 import { useTableColumn } from '@hooks/useTableColumn';
 import { verifyAuth } from '@middleware/utils';
@@ -53,6 +53,10 @@ export default function Categories({ client }: SSRProps) {
 
   const { selectedLanguage } = useSettings();
 
+  const {
+    userInfo: { store: { etag } = {} }
+  } = useGetClient(client);
+
   const { data, loading, error, fetchMore } = useQuery<
     TCategories,
     TableQueryVariables
@@ -62,16 +66,16 @@ export default function Categories({ client }: SSRProps) {
       limit: limit.value,
       orderBy,
       sortedBy: SortOrder.Desc,
-      language: selectedLanguage
+      language: selectedLanguage,
+      etag: etag?.categoryEtag
     },
     fetchPolicy: 'cache-and-network',
-    skip: isEmpty(selectedLanguage)
+    skip: isEmpty(selectedLanguage) || isEmpty(etag)
   });
 
   const { categories = [], categoryCount: { count } = { count: 0 } } =
     data ?? {};
 
-  useGetUser(client);
   useErrorLogger(error);
 
   const handlePagination = (current: number) => {

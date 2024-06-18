@@ -1,5 +1,5 @@
 import ForgetPassword from '@components/auth/forget-password';
-import { useGetUser } from '@hooks/index';
+import { useGetClient } from '@hooks/index';
 import { XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { GetServerSideProps } from 'next';
@@ -12,7 +12,7 @@ import { Fragment } from 'react';
 const ForgetPasswordPage = ({ client }: SSRProps) => {
   const { t } = useTranslation('common');
 
-  useGetUser(client);
+  useGetClient(client);
 
   return (
     <Fragment>

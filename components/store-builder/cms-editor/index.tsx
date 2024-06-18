@@ -4,6 +4,7 @@ import Loader from '@components/ui/loader/loader';
 import { useModalState } from '@components/ui/modal/modal.context';
 import { STORE_LAYOUT_COMPONENT_CONTENT } from '@graphql/content';
 import { useErrorLogger } from '@hooks/useErrorLogger';
+import { useGetClient } from '@hooks/useGetClient';
 import { useSettings } from '@hooks/useSettings';
 import { ModuleGroups } from '@ts-types/enums';
 import { LanguageType, StoreLayoutComponentType } from '@ts-types/generated';
@@ -90,6 +91,7 @@ const ProductListContent = dynamic(() => import('./components/product-list'), {
 export interface OptionsVariable {
   componentId: string;
   language: LanguageType;
+  etag: string;
 }
 export interface TComponent {
   storeLayoutComponentContent: StoreLayoutComponentType;
@@ -101,15 +103,20 @@ const CmsEditorModal = () => {
 
   const { selectedLanguage } = useSettings();
 
+  const {
+    userInfo: { store: { etag } = {} }
+  } = useGetClient();
+
   const { data, loading, error } = useQuery<TComponent, OptionsVariable>(
     STORE_LAYOUT_COMPONENT_CONTENT,
     {
       variables: {
         componentId: meta?.componentId as string,
-        language: selectedLanguage
+        language: selectedLanguage,
+        etag: etag?.layoutEtag
       },
       fetchPolicy: 'cache-and-network',
-      skip: isEmpty(selectedLanguage) || !meta?.componentId
+      skip: isEmpty(selectedLanguage) || !meta?.componentId || isEmpty(etag)
     }
   );
 

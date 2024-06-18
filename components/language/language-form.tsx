@@ -10,9 +10,9 @@ import Scrollbar from '@components/ui/scrollbar';
 import SelectInput from '@components/ui/select-input';
 import { CREATE_LANGUAGE, UPDATE_LANGUAGE } from '@graphql/language';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useGetUser } from '@hooks/index';
+import { useGetClient } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useAppDispatch } from '@hooks/useGetUser';
+import { useAppDispatch } from '@hooks/useGetClient';
 import { notify } from '@lib/notify';
 import { fetchStoreSettings } from '@store/settings';
 import { LanguageType } from '@ts-types/generated';
@@ -110,7 +110,7 @@ export default function LanguageForm({
 
   const dispatch = useAppDispatch();
 
-  const { userInfo } = useGetUser();
+  const { userInfo } = useGetClient();
   const csrfToken = userInfo?.csrfToken;
 
   const [updateLanguage, { loading: updating }] = useMutation(UPDATE_LANGUAGE, {
@@ -122,7 +122,7 @@ export default function LanguageForm({
     onCompleted: (data: { updateLanguage: LanguageType }) => {
       if (!isEmpty(data?.updateLanguage)) {
         // Updalocalete store languages
-        dispatch(fetchStoreSettings());
+        dispatch(fetchStoreSettings({ etag: userInfo?.store?.etag }));
         notify(t('common:successfully-updated'), 'success');
         router.push(ROUTES.LANGUAGES);
       }
@@ -138,7 +138,7 @@ export default function LanguageForm({
     onCompleted: (data: { createLanguage: LanguageType }) => {
       if (!isEmpty(data?.createLanguage)) {
         // Update store languages
-        dispatch(fetchStoreSettings());
+        dispatch(fetchStoreSettings({ etag: userInfo?.store?.etag }));
         notify(t('common:successfully-created'), 'success');
         router.push(ROUTES.LANGUAGES);
       }

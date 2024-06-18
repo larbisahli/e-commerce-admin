@@ -3,7 +3,7 @@ import LanguageList from '@components/language/language-list';
 import AppLayout from '@components/layouts/app';
 import { Error } from '@components/ui/error-message';
 import { LANGUAGES } from '@graphql/language';
-import { useErrorLogger, useGetUser } from '@hooks/index';
+import { useErrorLogger, useGetClient } from '@hooks/index';
 import { useTableColumn } from '@hooks/useTableColumn';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
@@ -44,6 +44,7 @@ interface OptionsVariable {
   limit: number;
   orderBy: OrderBy;
   sortedBy: SortOrder;
+  etag: string;
 }
 
 export default function Languages({ client }: SSRProps) {
@@ -56,6 +57,10 @@ export default function Languages({ client }: SSRProps) {
   const { selectedTableColumns, handleColumnChange } =
     useTableColumn('language');
 
+  const {
+    userInfo: { store: { etag } = {} }
+  } = useGetClient(client);
+
   const { data, loading, error, fetchMore } = useQuery<
     TLanguages,
     OptionsVariable
@@ -64,15 +69,16 @@ export default function Languages({ client }: SSRProps) {
       page,
       limit: limit.value,
       orderBy,
-      sortedBy: SortOrder.Desc
+      sortedBy: SortOrder.Desc,
+      etag: etag?.configEtag
     },
-    fetchPolicy: 'cache-and-network'
+    fetchPolicy: 'cache-and-network',
+    skip: isEmpty(etag)
   });
 
   const { languages = [], languageCount: { count } = { count: 0 } } =
     data ?? {};
 
-  useGetUser(client);
   useErrorLogger(error);
 
   function handlePagination(current: any) {

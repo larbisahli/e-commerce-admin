@@ -8,7 +8,7 @@ import Input from '@components/ui/input';
 import Label from '@components/ui/label';
 import SelectInput from '@components/ui/select-input';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetUser } from '@hooks/useGetUser';
+import { useGetClient } from '@hooks/useGetClient';
 import { CURRENCY } from '@utils/currency';
 import { apiURL } from '@utils/utils';
 import { useTranslation } from 'next-i18next';
@@ -83,7 +83,7 @@ const Step2Form = ({ control, register, errors, alias }) => {
 const AliasViewer = ({ alias, executeCheckQuery }) => {
   const timeout = useRef(null);
 
-  const { userInfo } = useGetUser();
+  const { userInfo } = useGetClient();
 
   const csrfToken = userInfo?.csrfToken;
 

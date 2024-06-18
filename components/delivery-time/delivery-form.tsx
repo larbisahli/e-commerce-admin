@@ -14,7 +14,7 @@ import {
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   useErrorLogger,
-  useGetUser,
+  useGetClient,
   useWarnIfUnsavedChanges
 } from '@hooks/index';
 import { useSettings } from '@hooks/useSettings';
@@ -92,7 +92,7 @@ export default function CreateOrUpdateDeliveryForm({ initialValues }: IProps) {
         }
   });
 
-  const { userInfo } = useGetUser();
+  const { userInfo } = useGetClient();
   const csrfToken = userInfo?.csrfToken;
 
   const [

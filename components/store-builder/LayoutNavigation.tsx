@@ -19,7 +19,7 @@ import {
   UPDATE_LAYOUT_COMPONENTS_POSITION
 } from '@graphql/content';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetUser } from '@hooks/useGetUser';
+import { useGetClient } from '@hooks/useGetClient';
 import { useUI } from '@hooks/useUI';
 import { notify } from '@lib/notify';
 import {
@@ -91,7 +91,7 @@ export default function LayoutNavigation({
 
   const [error, setError] = useState(null);
 
-  const { userInfo } = useGetUser();
+  const { userInfo } = useGetClient();
 
   const { updateBuilderInfo } = useUI();
 

@@ -3,7 +3,7 @@ import { PageFormPlaceholder } from '@components/common/commonComponents';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
 import { LANGUAGE } from '@graphql/language';
-import { useErrorLogger, useGetUser } from '@hooks/index';
+import { useErrorLogger, useGetClient } from '@hooks/index';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { LanguageType } from '@ts-types/generated';
@@ -28,6 +28,7 @@ interface TLanguage {
 }
 interface OptionsVariable {
   id: number;
+  etag: string;
 }
 
 interface Props extends SSRProps {
@@ -39,17 +40,24 @@ export default function UpdateTagPage({ client, localeFiles = {} }: Props) {
 
   const id = parseInt(query.id as string, 10);
 
+  const {
+    userInfo: { store: { etag } = {} }
+  } = useGetClient(client);
+
   const { data, loading, error } = useQuery<TLanguage, OptionsVariable>(
     LANGUAGE,
     {
-      variables: { id },
-      fetchPolicy: 'cache-and-network'
+      variables: {
+        id,
+        etag: etag?.configEtag
+      },
+      fetchPolicy: 'cache-and-network',
+      skip: isEmpty(etag)
     }
   );
 
   const { language = [] } = data ?? {};
 
-  useGetUser(client);
   useErrorLogger(error);
 
   if (isEmpty(language) || loading) {

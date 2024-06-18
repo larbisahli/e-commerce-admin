@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client';
 import { MEDIA } from '@graphql/media';
-import { useErrorLogger } from '@hooks/index';
+import { useErrorLogger, useGetClient } from '@hooks/index';
 import { setFile } from '@store/files';
 import type { AppDispatch, AppState } from '@store/index';
 import { MediaType } from '@ts-types/generated';
@@ -22,10 +22,15 @@ interface OptionsVariable {
   id: string;
   page: number;
   limit: number;
+  etag: string;
 }
 
 export function useFiles({ id = null }: { id?: string | null }) {
   const { fileStore } = useAppSelector((state) => state.files);
+
+  const {
+    userInfo: { store: { etag } = {} }
+  } = useGetClient();
 
   const { data, loading, error, refetch } = useQuery<TMedia, OptionsVariable>(
     MEDIA,
@@ -33,9 +38,11 @@ export function useFiles({ id = null }: { id?: string | null }) {
       variables: {
         id,
         page: 1,
-        limit: 10
+        limit: 10,
+        etag: etag?.mediaEtag
       },
-      fetchPolicy: 'cache-and-network'
+      fetchPolicy: 'cache-and-network',
+      skip: isEmpty(etag)
     }
   );
 

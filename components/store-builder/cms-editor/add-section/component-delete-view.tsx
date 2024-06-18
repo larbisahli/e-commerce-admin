@@ -9,7 +9,7 @@ import {
   STORE_LAYOUTS_COMPONENTS
 } from '@graphql/content';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetUser } from '@hooks/useGetUser';
+import { useGetClient } from '@hooks/useGetClient';
 import { useUI } from '@hooks/useUI';
 import { notify } from '@lib/notify';
 import { useTranslation } from 'next-i18next';
@@ -24,7 +24,7 @@ const ComponentDeleteView = () => {
 
   const [error, setError] = useState(null);
 
-  const { userInfo } = useGetUser();
+  const { userInfo } = useGetClient();
   const csrfToken = userInfo?.csrfToken;
 
   const [deleteLayoutComponent, { loading }] = useMutation(

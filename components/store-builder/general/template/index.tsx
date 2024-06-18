@@ -5,7 +5,7 @@ import Button from '@components/ui/button';
 import Loader from '@components/ui/loader/loader';
 import { UPDATE_STORE_SETTINGS } from '@graphql/settings';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetUser } from '@hooks/useGetUser';
+import { useGetClient } from '@hooks/useGetClient';
 import { notify } from '@lib/notify';
 import { SettingsType } from '@ts-types/generated';
 import cn from 'classnames';
@@ -65,7 +65,7 @@ export default function Template({ initialValues }: IProps) {
     }
   });
 
-  const { userInfo } = useGetUser();
+  const { userInfo } = useGetClient();
 
   const csrfToken = userInfo?.csrfToken;
 

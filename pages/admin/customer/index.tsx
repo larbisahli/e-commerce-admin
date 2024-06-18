@@ -3,7 +3,7 @@ import CustomerList from '@components/customers/customer-list';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
 import { CUSTOMERS } from '@graphql/customer';
-import { useGetUser } from '@hooks/index';
+import { useGetClient } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useTableColumn } from '@hooks/useTableColumn';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
@@ -45,6 +45,7 @@ interface ShippingVariable {
   limit: number;
   orderBy: OrderBy;
   sortedBy: SortOrder;
+  etag: string;
 }
 
 export default function ShippingZonesPage({ client }: SSRProps) {
@@ -57,6 +58,10 @@ export default function ShippingZonesPage({ client }: SSRProps) {
   const { selectedTableColumns, handleColumnChange } =
     useTableColumn('customer');
 
+  const {
+    userInfo: { store: { etag } = {} }
+  } = useGetClient(client);
+
   const { data, loading, error, fetchMore } = useQuery<
     TShipping,
     ShippingVariable
@@ -65,15 +70,16 @@ export default function ShippingZonesPage({ client }: SSRProps) {
       page,
       limit: limit.value,
       orderBy,
-      sortedBy: SortOrder.Desc
+      sortedBy: SortOrder.Desc,
+      etag: etag?.customerEtag
     },
-    fetchPolicy: 'cache-and-network'
+    fetchPolicy: 'cache-and-network',
+    skip: isEmpty(etag)
   });
 
   const { customers = [], customerCount: { count } = { count: 0 } } =
     data ?? {};
 
-  useGetUser(client);
   useErrorLogger(error);
 
   const handlePagination = (current: number) => {

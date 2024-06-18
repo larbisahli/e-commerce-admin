@@ -4,7 +4,7 @@ import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { SETTINGS } from '@graphql/settings';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetUser } from '@hooks/useGetUser';
+import { useGetClient } from '@hooks/useGetClient';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { SettingsType } from '@ts-types/generated';
@@ -27,14 +27,19 @@ interface tSettings {
 export default function AccountInformation({ client }: SSRProps) {
   const { t } = useTranslation();
 
+  const {
+    userInfo: { store: { etag } = {} }
+  } = useGetClient(client);
+
   const { data, loading, error } = useQuery<tSettings>(SETTINGS, {
-    variables: {},
+    variables: {
+      etag: etag?.configEtag
+    },
     fetchPolicy: 'cache-and-network'
   });
 
   const { getSettings: settings } = data ?? {};
 
-  useGetUser(client);
   useErrorLogger(error);
 
   if (loading) {

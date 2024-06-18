@@ -1,5 +1,5 @@
 import AppLayout from '@components/layouts/app';
-import { useGetUser } from '@hooks/index';
+import { useGetClient } from '@hooks/index';
 import { verifyAuth } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { ROUTES } from '@utils/routes';
@@ -11,7 +11,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 const Dashboard = dynamic(() => import('@components/dashboard/analytics'));
 
 export default function Analytics({ client }: SSRProps) {
-  useGetUser(client);
+  useGetClient(client);
   return (
     <>
       <Head>

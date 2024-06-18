@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const CUSTOMER = gql`
-  query Customer($id: Int!) {
-    customer(id: $id) {
+  query Customer($id: Int!, $etag: String!) {
+    customer(id: $id, etag: $etag) {
       id
       fullName
       email
@@ -39,8 +39,9 @@ export const CUSTOMERS = gql`
     $limit: Int!
     $orderBy: String!
     $sortedBy: String!
+    $etag: String!
   ) {
-    customerCount {
+    customerCount(etag: $etag) {
       count
     }
     customers(
@@ -48,6 +49,7 @@ export const CUSTOMERS = gql`
       limit: $limit
       orderBy: $orderBy
       sortedBy: $sortedBy
+      etag: $etag
     ) {
       id
       fullName

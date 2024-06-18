@@ -27,8 +27,8 @@ export const UPDATE_PROMO_SLIDE = gql`
 `;
 
 export const PROMO_SLIDER = gql`
-  query PromoSlide($language: LanguageInput!) {
-    promoSlide(language: $language) {
+  query PromoSlide($language: LanguageInput!, $etag: String!) {
+    promoSlide(language: $language, etag: $etag) {
       id
       animationSpeed
       delaySpeed

@@ -3,7 +3,7 @@ import MobileIcon from '@components/icons/mobile-icon';
 import TabletIcon from '@components/icons/tablet-icon';
 import styles from '@components/navigation/scss/index.module.scss';
 import Button from '@components/ui/button';
-import { useGetUser } from '@hooks/useGetUser';
+import { useGetClient } from '@hooks/useGetClient';
 import { useUI } from '@hooks/useUI';
 import { DEVICE_VIEWS } from '@ts-types/enums';
 import { ROUTES } from '@utils/routes';
@@ -19,7 +19,7 @@ const Navbar = () => {
   const { t } = useTranslation();
   const {
     userInfo: { store: { alias = '' } = {} }
-  } = useGetUser();
+  } = useGetClient();
 
   const {
     ui: {

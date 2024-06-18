@@ -1,4 +1,4 @@
-import { useGetUser } from '@hooks/useGetUser';
+import { useGetClient } from '@hooks/useGetClient';
 import { ROUTES } from '@utils/routes';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -6,7 +6,7 @@ import Link from 'next/link';
 const RecommendationsSection = () => {
   const {
     userInfo: { store: { alias = '' } = {} }
-  } = useGetUser();
+  } = useGetClient();
   return (
     <div className="mb-12 w-full">
       <div className="mb-2 flex flex-1 items-end text-lg font-medium">

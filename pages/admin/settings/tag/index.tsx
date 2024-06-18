@@ -3,7 +3,7 @@ import AppLayout from '@components/layouts/app';
 import TagList from '@components/tag/tag-list';
 import ErrorMessage from '@components/ui/error-message';
 import { TAGS } from '@graphql/tag';
-import { useErrorLogger, useGetUser } from '@hooks/index';
+import { useErrorLogger, useGetClient } from '@hooks/index';
 import { useSettings } from '@hooks/useSettings';
 import { useTableColumn } from '@hooks/useTableColumn';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
@@ -51,6 +51,10 @@ export default function Tags({ client }: SSRProps) {
 
   const { selectedLanguage } = useSettings();
 
+  const {
+    userInfo: { store: { etag } = {} }
+  } = useGetClient(client);
+
   const { data, loading, error, fetchMore } = useQuery<
     TTags,
     TableQueryVariables
@@ -60,15 +64,15 @@ export default function Tags({ client }: SSRProps) {
       limit: limit.value,
       orderBy,
       sortedBy: SortOrder.Desc,
-      language: selectedLanguage
+      language: selectedLanguage,
+      etag: etag?.tagEtag
     },
     fetchPolicy: 'cache-and-network',
-    skip: isEmpty(selectedLanguage)
+    skip: isEmpty(selectedLanguage) || isEmpty(etag)
   });
 
   const { tags = [], tagCount: { count } = { count: 0 } } = data ?? {};
 
-  useGetUser(client);
   useErrorLogger(error);
 
   function handlePagination(current: any) {

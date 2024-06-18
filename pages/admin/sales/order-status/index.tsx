@@ -3,7 +3,7 @@ import AppLayout from '@components/layouts/app';
 import OrderStatusList from '@components/order-status/order-status-list';
 import ErrorMessage from '@components/ui/error-message';
 import { ORDER_STATUSES } from '@graphql/order-status';
-import { useErrorLogger, useGetUser } from '@hooks/index';
+import { useErrorLogger, useGetClient } from '@hooks/index';
 import { useSettings } from '@hooks/useSettings';
 import { useTableColumn } from '@hooks/useTableColumn';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
@@ -43,6 +43,10 @@ interface TOrderStatus {
 export default function OrderStatusPage({ client }: SSRProps) {
   const { t } = useTranslation();
 
+  const {
+    userInfo: { store: { etag } = {} }
+  } = useGetClient(client);
+
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState({ id: 1, value: 10, label: 10 });
   const [orderBy, setOrder] = useState(OrderBy.CREATED_AT);
@@ -61,16 +65,16 @@ export default function OrderStatusPage({ client }: SSRProps) {
       limit: limit.value,
       orderBy,
       sortedBy: SortOrder.Desc,
-      language: selectedLanguage
+      language: selectedLanguage,
+      etag: etag?.orderStatusEtag
     },
     fetchPolicy: 'cache-and-network',
-    skip: isEmpty(selectedLanguage)
+    skip: isEmpty(selectedLanguage) || isEmpty(etag)
   });
 
   const { orderStatuses = [], orderStatusCount: { count = 0 } = { count: 0 } } =
     data ?? {};
 
-  useGetUser(client);
   useErrorLogger(error);
 
   function handlePagination(current: any) {

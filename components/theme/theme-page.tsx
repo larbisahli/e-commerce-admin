@@ -6,7 +6,7 @@ import ImageComponent from '@components/ImageComponent';
 import Button from '@components/ui/button';
 import { ADD_STORE_THEME } from '@graphql/theme';
 import { useErrorLogger } from '@hooks/index';
-import { useGetUser } from '@hooks/useGetUser';
+import { useGetClient } from '@hooks/useGetClient';
 import { notify } from '@lib/index';
 import { ThemeType } from '@ts-types/generated';
 import { isEmpty } from 'lodash';
@@ -23,7 +23,7 @@ const ThemePage = ({ theme }: IProps) => {
   const { t } = useTranslation();
   const router = useRouter();
 
-  const { userInfo } = useGetUser();
+  const { userInfo } = useGetClient();
   const [error, setError] = useState(null);
 
   const csrfToken = userInfo?.csrfToken;

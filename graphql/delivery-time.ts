@@ -7,8 +7,9 @@ export const DELIVERY_TIMES = gql`
     $orderBy: String!
     $sortedBy: String!
     $language: LanguageInput!
+    $etag: String!
   ) {
-    deliveryTimeCount {
+    deliveryTimeCount(etag: $etag) {
       count
     }
     deliveryTimes(
@@ -17,6 +18,7 @@ export const DELIVERY_TIMES = gql`
       orderBy: $orderBy
       sortedBy: $sortedBy
       language: $language
+      etag: $etag
     ) {
       id
       name
@@ -45,8 +47,8 @@ export const DELIVERY_TIMES = gql`
 `;
 
 export const DELIVERY_TIME = gql`
-  query DeliveryTime($id: Int!, $language: LanguageInput!) {
-    deliveryTime(id: $id, language: $language) {
+  query DeliveryTime($id: Int!, $language: LanguageInput!, $etag: String!) {
+    deliveryTime(id: $id, language: $language, etag: $etag) {
       id
       name
       translated {
@@ -67,12 +69,14 @@ export const DELIVERY_TIME_SELECT = gql`
     $limit: Int!
     $orderBy: String!
     $language: LanguageInput!
+    $etag: String!
   ) {
     deliveryTimeSelect(
       page: $page
       limit: $limit
       orderBy: $orderBy
       language: $language
+      etag: $etag
     ) {
       id
       name

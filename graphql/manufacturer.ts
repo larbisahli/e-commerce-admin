@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const MANUFACTURER = gql`
-  query Manufacturer($id: Int!, $language: LanguageInput!) {
-    manufacturer(id: $id, language: $language) {
+  query Manufacturer($id: Int!, $language: LanguageInput!, $etag: String!) {
+    manufacturer(id: $id, language: $language, etag: $etag) {
       id
       name
       description
@@ -27,8 +27,9 @@ export const MANUFACTURERS = gql`
     $orderBy: String
     $sortedBy: String
     $language: LanguageInput!
+    $etag: String!
   ) {
-    manufacturerCount {
+    manufacturerCount(etag: $etag) {
       count
     }
     manufacturers(
@@ -37,6 +38,7 @@ export const MANUFACTURERS = gql`
       orderBy: $orderBy
       sortedBy: $sortedBy
       language: $language
+      etag: $etag
     ) {
       id
       name
@@ -71,12 +73,14 @@ export const MANUFACTURERS_FOR_SELECT = gql`
     $limit: Int!
     $orderBy: String!
     $language: LanguageInput!
+    $etag: String!
   ) {
     manufacturersForSelect(
       page: $page
       limit: $limit
       orderBy: $orderBy
       language: $language
+      etag: $etag
     ) {
       id
       name

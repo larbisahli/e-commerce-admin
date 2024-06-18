@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const DASH_ANALYTICS = gql`
-  query GetDashAnalytics($dateId: String!) {
-    getDashAnalytics(dateId: $dateId) {
+  query GetDashAnalytics($dateId: String!, $etag: String!) {
+    getDashAnalytics(dateId: $dateId, etag: $etag) {
       sales {
         date
         value

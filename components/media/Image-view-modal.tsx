@@ -12,7 +12,7 @@ import {
 } from '@components/ui/modal/modal.context';
 import { DELETE_IMAGE, MEDIA } from '@graphql/media';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetUser } from '@hooks/useGetUser';
+import { useGetClient } from '@hooks/useGetClient';
 import { notify } from '@lib/notify';
 import { MEDIA_ITEM_MODAL } from '@ts-types/constants';
 import { mediaURL } from '@utils/utils';
@@ -31,8 +31,9 @@ const ImageViewModal = () => {
   const { closeModal } = useModalAction();
   const { isOpen, view, id: parentId = null, meta } = useModalState();
 
-  const { userInfo } = useGetUser();
-  const csrfToken = userInfo?.csrfToken;
+  const {
+    userInfo: { csrfToken, store: { etag } = {} }
+  } = useGetClient();
 
   const [deletePhoto, { loading }] = useMutation(DELETE_IMAGE, {
     context: {
@@ -45,7 +46,8 @@ const ImageViewModal = () => {
         variables: {
           id: parentId,
           page: 1,
-          limit: 10
+          limit: 10,
+          etag: etag?.mediaEtag
         },
         query: MEDIA
       }

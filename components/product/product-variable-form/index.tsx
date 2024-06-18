@@ -7,7 +7,7 @@ import Title from '@components/ui/title';
 import { ATTRIBUTES_FOR_SELECT } from '@graphql/attribute';
 import { UPDATE_VARIABLE_PRODUCT_INFORMATION } from '@graphql/product';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetUser } from '@hooks/useGetUser';
+import { useGetClient } from '@hooks/useGetClient';
 import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/notify';
 import type { LanguageType, Product, VariationType } from '@ts-types/generated';
@@ -36,6 +36,7 @@ interface OptionsVariable {
   orderBy: OrderBy;
   sortedBy: SortOrder;
   language: LanguageType;
+  etag: string;
 }
 
 interface CartesianType {
@@ -107,6 +108,10 @@ function ProductVariableForm({
   const { selectedLanguage } = useSettings();
 
   const {
+    userInfo: { csrfToken, store: { etag } = {} }
+  } = useGetClient();
+
+  const {
     data,
     loading,
     error: queryError
@@ -116,14 +121,12 @@ function ProductVariableForm({
       limit: 999,
       orderBy: OrderBy.CREATED_AT,
       sortedBy: SortOrder.Desc,
-      language: selectedLanguage
+      language: selectedLanguage,
+      etag: etag?.attributeEtag
     },
     fetchPolicy: 'cache-and-network',
-    skip: isEmpty(selectedLanguage)
+    skip: isEmpty(selectedLanguage) || isEmpty(etag)
   });
-
-  const { userInfo } = useGetUser();
-  const csrfToken = userInfo?.csrfToken;
 
   const [updateVariableProductInformation, { loading: updateLoading }] =
     useMutation(UPDATE_VARIABLE_PRODUCT_INFORMATION, {

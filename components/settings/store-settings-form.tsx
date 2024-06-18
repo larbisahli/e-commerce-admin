@@ -22,7 +22,7 @@ import { UPDATE_STORE_SETTINGS } from '@graphql/settings';
 import { TAX_FOR_SELECT } from '@graphql/tax';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetUser } from '@hooks/useGetUser';
+import { useGetClient } from '@hooks/useGetClient';
 import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/notify';
 import { FAVICON_VIEWER_MODAL } from '@ts-types/constants';
@@ -58,6 +58,7 @@ interface OptionsVariable {
   page: number;
   limit: number;
   orderBy: OrderBy;
+  etag: string;
 }
 
 const paymentMethods = [
@@ -117,11 +118,11 @@ export default function StoreSettingsForm({ settings }: IProps) {
     }
   });
 
-  const { userInfo } = useGetUser();
+  const {
+    userInfo: { csrfToken, store: { etag } = {} }
+  } = useGetClient();
 
   const { openModal } = useModalAction();
-
-  const csrfToken = userInfo?.csrfToken;
 
   const [updateSettings, { loading: updating }] = useMutation(
     UPDATE_STORE_SETTINGS,
@@ -147,9 +148,11 @@ export default function StoreSettingsForm({ settings }: IProps) {
     variables: {
       page: 1,
       limit: 999,
-      orderBy: OrderBy.CREATED_AT
+      orderBy: OrderBy.CREATED_AT,
+      etag: etag?.taxEtag
     },
-    fetchPolicy: 'cache-and-network'
+    fetchPolicy: 'cache-and-network',
+    skip: isEmpty(etag)
   });
 
   const { taxSelect = [] } = settingsTax ?? {};

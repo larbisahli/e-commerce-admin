@@ -1,7 +1,7 @@
 import { UpgradeIcon } from '@components/icons/sidebar/upgrade';
 import styles from '@components/navigation/scss/index.module.scss';
 import Scrollbar from '@components/ui/scrollbar';
-import { useGetUser } from '@hooks/useGetUser';
+import { useGetClient } from '@hooks/useGetClient';
 import { useSettings } from '@hooks/useSettings';
 import { useUI } from '@hooks/useUI';
 import { siteSettings } from '@settings/site.settings';
@@ -28,11 +28,7 @@ const Sidebar: React.FC<Props> = ({ absolute = false }) => {
     ui: { displayMiniSidebar }
   } = useUI();
 
-  const {
-    userInfo: { store: { storeName = '' } = {} }
-  } = useGetUser();
-
-  const { tier } = useSettings();
+  const { tier, storeName } = useSettings();
 
   return (
     <aside

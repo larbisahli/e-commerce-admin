@@ -3,7 +3,7 @@ import { PageFormPlaceholder } from '@components/common/commonComponents';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
 import { USER } from '@graphql/user';
-import { useErrorLogger, useGetUser } from '@hooks/index';
+import { useErrorLogger, useGetClient } from '@hooks/index';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { UserType } from '@ts-types/generated';
@@ -27,6 +27,7 @@ interface TUser {
 
 interface OptionsVariable {
   id: string;
+  etag: string;
 }
 
 export default function EditUserPage({ client }: SSRProps) {
@@ -35,14 +36,21 @@ export default function EditUserPage({ client }: SSRProps) {
 
   const userId = query.userId as string;
 
+  const {
+    userInfo: { store: { etag } = {} }
+  } = useGetClient(client);
+
   const { data, loading, error } = useQuery<TUser, OptionsVariable>(USER, {
-    variables: { id: userId },
-    fetchPolicy: 'cache-and-network'
+    variables: {
+      id: userId,
+      etag: etag?.userEtag
+    },
+    fetchPolicy: 'cache-and-network',
+    skip: isEmpty(etag)
   });
 
   const { user = [] } = data ?? {};
 
-  useGetUser(client);
   useErrorLogger(error);
 
   if (isEmpty(user) || loading) {

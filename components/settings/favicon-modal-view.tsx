@@ -1,6 +1,6 @@
 import Button from '@components/ui/button';
 import { useModalAction } from '@components/ui/modal/modal.context';
-import { useGetUser } from '@hooks/useGetUser';
+import { useGetClient } from '@hooks/useGetClient';
 import { mediaURL } from '@utils/utils';
 import { useTranslation } from 'next-i18next';
 
@@ -91,7 +91,7 @@ const FaviconModalView = () => {
 
   const {
     userInfo: { store: { alias = '' } = {} }
-  } = useGetUser();
+  } = useGetClient();
 
   return (
     <div className="z-50 flex h-[90vh] max-h-[750px] w-[90vw] flex-col overflow-y-auto bg-white md:h-fit md:w-[70vw] 2xl:w-[60vw]">

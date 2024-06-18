@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const ATTRIBUTE = gql`
-  query Attribute($id: Int!, $language: LanguageInput!) {
-    attribute(id: $id, language: $language) {
+  query Attribute($id: Int!, $language: LanguageInput!, $etag: String!) {
+    attribute(id: $id, language: $language, etag: $etag) {
       id
       name
       type
@@ -29,8 +29,9 @@ export const ATTRIBUTES = gql`
     $orderBy: String!
     $sortedBy: String!
     $language: LanguageInput!
+    $etag: String!
   ) {
-    attributeCount {
+    attributeCount(etag: $etag) {
       count
     }
     attributes(
@@ -39,6 +40,7 @@ export const ATTRIBUTES = gql`
       orderBy: $orderBy
       sortedBy: $sortedBy
       language: $language
+      etag: $etag
     ) {
       id
       name
@@ -78,6 +80,7 @@ export const ATTRIBUTES_FOR_SELECT = gql`
     $orderBy: String!
     $sortedBy: String!
     $language: LanguageInput!
+    $etag: String!
   ) {
     attributes(
       page: $page
@@ -85,6 +88,7 @@ export const ATTRIBUTES_FOR_SELECT = gql`
       orderBy: $orderBy
       sortedBy: $sortedBy
       language: $language
+      etag: $etag
     ) {
       id
       name

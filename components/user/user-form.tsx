@@ -16,7 +16,7 @@ import { ROLES } from '@graphql/user-role';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   useErrorLogger,
-  useGetUser,
+  useGetClient,
   useWarnIfUnsavedChanges
 } from '@hooks/index';
 import { notify } from '@lib/index';
@@ -51,9 +51,16 @@ interface TRolesSelect {
 function SelectRoles({ control }: { control: Control<FormValues> }) {
   const { t } = useTranslation();
 
+  const {
+    userInfo: { store: { etag } = {} }
+  } = useGetClient();
+
   const { data, loading, error } = useQuery<TRolesSelect>(ROLES, {
-    variables: {},
-    fetchPolicy: 'cache-and-network'
+    variables: {
+      etag: etag?.userRoleEtag
+    },
+    fetchPolicy: 'cache-and-network',
+    skip: isEmpty(etag)
   });
 
   const { roles = [] } = data ?? {};
@@ -104,7 +111,7 @@ const UserCreateUpdateForm = ({ initialValues }: IProps) => {
     resolver: yupResolver(userValidationSchema)
   });
 
-  const { userInfo } = useGetUser();
+  const { userInfo } = useGetClient();
   const csrfToken = userInfo?.csrfToken;
 
   const [createUser, { loading: creating }] = useMutation(CREATE_USER, {

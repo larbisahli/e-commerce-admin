@@ -12,7 +12,7 @@ import Loader from '@components/ui/loader/loader';
 import Radio from '@components/ui/radio';
 import TextArea from '@components/ui/text-area';
 import { UPDATE_PRODUCT_CONTENT } from '@graphql/product';
-import { useErrorLogger, useGetUser } from '@hooks/index';
+import { useErrorLogger, useGetClient } from '@hooks/index';
 import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/notify';
 import { Nullable } from '@ts-types/custom.types';
@@ -66,7 +66,7 @@ const ProductContent = ({ state, initialValues, productSeo }: Props) => {
   const [error, setError] = useState(null);
   useErrorLogger(error);
 
-  const { userInfo } = useGetUser();
+  const { userInfo } = useGetClient();
   const csrfToken = userInfo?.csrfToken;
 
   const [updateProductContent, { loading }] = useMutation(

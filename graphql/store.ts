@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const STORE_CONFIG = gql`
-  query GetStoreAdminConfig {
-    getStoreAdminConfig {
+  query GetStoreAdminConfig($etag: String!) {
+    getStoreAdminConfig(etag: $etag) {
       storeName
       storeEmail
       storeNumber

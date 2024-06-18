@@ -3,7 +3,7 @@ import { PageFormPlaceholder } from '@components/common/commonComponents';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
 import { DELIVERY_TIME } from '@graphql/delivery-time';
-import { useGetUser } from '@hooks/index';
+import { useGetClient } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useSettings } from '@hooks/useSettings';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
@@ -33,18 +33,25 @@ export default function UpdateShippingPage({ client }: SSRProps) {
 
   const { selectedLanguage } = useSettings();
 
+  const {
+    userInfo: { store: { etag } = {} }
+  } = useGetClient(client);
+
   const { data, loading, error } = useQuery<
     { deliveryTime: DeliveryTimeType },
     DeliveryVariable
   >(DELIVERY_TIME, {
-    variables: { id: deliveryId, language: selectedLanguage },
+    variables: {
+      id: deliveryId,
+      language: selectedLanguage,
+      etag: etag?.shipmentEtag
+    },
     fetchPolicy: 'cache-and-network',
-    skip: isEmpty(selectedLanguage)
+    skip: isEmpty(selectedLanguage) || isEmpty(etag)
   });
 
   const { deliveryTime } = data ?? {};
 
-  useGetUser(client);
   useErrorLogger(error);
 
   if (isEmpty(deliveryTime) || loading) {

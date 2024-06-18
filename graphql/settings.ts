@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const STORE_SETTINGS = gql`
-  query GetStoreSettings {
-    getStoreSettings {
+  query GetStoreSettings($etag: String!) {
+    getStoreSettings(etag: $etag) {
       id
       favicon {
         id

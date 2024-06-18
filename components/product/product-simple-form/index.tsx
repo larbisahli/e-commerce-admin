@@ -7,7 +7,7 @@ import Input from '@components/ui/input';
 import { ATTRIBUTES_FOR_SELECT } from '@graphql/attribute';
 import { UPDATE_SIMPLE_PRODUCT_INFORMATION } from '@graphql/product';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetUser } from '@hooks/useGetUser';
+import { useGetClient } from '@hooks/useGetClient';
 import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/notify';
 import { OrderBy, SortOrder } from '@ts-types/enums';
@@ -32,6 +32,7 @@ interface OptionsVariable {
   orderBy: OrderBy;
   sortedBy: SortOrder;
   language: LanguageType;
+  etag: string;
 }
 
 type IProps = {
@@ -69,8 +70,9 @@ function ProductSimpleForm({
 
   const { selectedLanguage } = useSettings();
 
-  const { userInfo } = useGetUser();
-  const csrfToken = userInfo?.csrfToken;
+  const {
+    userInfo: { csrfToken, store: { etag } = {} }
+  } = useGetClient();
 
   const {
     data,
@@ -82,10 +84,11 @@ function ProductSimpleForm({
       limit: 999,
       orderBy: OrderBy.CREATED_AT,
       sortedBy: SortOrder.Desc,
-      language: selectedLanguage
+      language: selectedLanguage,
+      etag: etag?.attributeEtag
     },
     fetchPolicy: 'cache-and-network',
-    skip: isEmpty(selectedLanguage)
+    skip: isEmpty(selectedLanguage) || isEmpty(etag)
   });
 
   const [updateProductInformation, { loading }] = useMutation(

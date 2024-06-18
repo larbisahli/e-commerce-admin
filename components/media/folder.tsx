@@ -4,7 +4,7 @@ import FolderSvg from '@components/icons/folder';
 import ImageComponent from '@components/ImageComponent';
 import { useModalAction } from '@components/ui/modal/modal.context';
 import { CREATE_FOLDER, UPDATE_FOLDER } from '@graphql/media';
-import { useGetUser } from '@hooks/index';
+import { useGetClient } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { notify } from '@lib/notify';
 import { MEDIA_ITEM_MODAL } from '@ts-types/constants';
@@ -38,7 +38,7 @@ export default function Folder({
 
   const [error, setError] = useState(null);
 
-  const { userInfo } = useGetUser();
+  const { userInfo } = useGetClient();
   const csrfToken = userInfo?.csrfToken;
 
   const [createFolder, { loading: creating }] = useMutation(CREATE_FOLDER, {

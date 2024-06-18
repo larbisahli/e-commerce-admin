@@ -6,7 +6,7 @@ import Label from '@components/ui/label';
 import Select from '@components/ui/select/select';
 import { UPDATE_THEME_SETTINGS } from '@graphql/content';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetUser } from '@hooks/useGetUser';
+import { useGetClient } from '@hooks/useGetClient';
 import { useUI } from '@hooks/useUI';
 import { notify } from '@lib/notify';
 import { SettingsType } from '@ts-types/generated';
@@ -64,7 +64,7 @@ export default function ThemeStyles({ initialValues }: IProps) {
 
   const { updateBuilderInfo } = useUI();
 
-  const { userInfo } = useGetUser();
+  const { userInfo } = useGetClient();
 
   const csrfToken = userInfo?.csrfToken;
 

@@ -4,7 +4,7 @@ import OrderList from '@components/order/order-list';
 import ErrorMessage from '@components/ui/error-message';
 import { ORDERS } from '@graphql/order';
 import { SHIPPING_ZONES } from '@graphql/shipping-zone';
-import { useGetUser } from '@hooks/index';
+import { useGetClient } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useTableColumn } from '@hooks/useTableColumn';
 import { verifyAuth } from '@middleware/utils';
@@ -46,6 +46,7 @@ interface ShippingVariable {
   limit: number;
   orderBy: OrderBy;
   sortedBy: SortOrder;
+  etag: string;
 }
 
 export default function ShippingZonesPage({ client }: SSRProps) {
@@ -54,6 +55,10 @@ export default function ShippingZonesPage({ client }: SSRProps) {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState({ id: 1, value: 10, label: 10 });
   const [orderBy, setOrder] = useState(OrderBy.CREATED_AT);
+
+  const {
+    userInfo: { store: { etag } = {} }
+  } = useGetClient(client);
 
   const { selectedTableColumns, handleColumnChange } = useTableColumn('order');
 
@@ -65,14 +70,15 @@ export default function ShippingZonesPage({ client }: SSRProps) {
       page,
       limit: limit.value,
       orderBy,
-      sortedBy: SortOrder.Desc
+      sortedBy: SortOrder.Desc,
+      etag: etag?.orderEtag
     },
-    fetchPolicy: 'cache-and-network'
+    fetchPolicy: 'cache-and-network',
+    skip: isEmpty(etag)
   });
 
   const { orders = [], orderCount: { count } = { count: 0 } } = data ?? {};
 
-  useGetUser(client);
   useErrorLogger(error);
 
   const handlePagination = (current: number) => {

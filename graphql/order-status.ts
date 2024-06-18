@@ -7,8 +7,9 @@ export const ORDER_STATUSES = gql`
     $orderBy: String!
     $sortedBy: String!
     $language: LanguageInput!
+    $etag: String!
   ) {
-    orderStatusCount {
+    orderStatusCount(etag: $etag) {
       count
     }
     orderStatuses(
@@ -17,6 +18,7 @@ export const ORDER_STATUSES = gql`
       orderBy: $orderBy
       sortedBy: $sortedBy
       language: $language
+      etag: $etag
     ) {
       id
       label
@@ -47,12 +49,14 @@ export const ORDER_STATUSES_FOR_SELECT = gql`
     $limit: Int!
     $orderBy: String!
     $sortedBy: String!
+    $etag: String!
   ) {
     orderStatusForSelect(
       page: $page
       limit: $limit
       orderBy: $orderBy
       sortedBy: $sortedBy
+      etag: $etag
     ) {
       id
       label
@@ -61,8 +65,8 @@ export const ORDER_STATUSES_FOR_SELECT = gql`
 `;
 
 export const ORDER_STATUS = gql`
-  query GetOrderStatus($id: Int!, $language: LanguageInput!) {
-    orderStatus(id: $id, language: $language) {
+  query GetOrderStatus($id: Int!, $language: LanguageInput!, $etag: String!) {
+    orderStatus(id: $id, language: $language, etag: $etag) {
       id
       label
       translated {

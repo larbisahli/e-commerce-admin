@@ -1,7 +1,7 @@
 import RegistrationChoice from '@components/auth/registration/registration-choice';
 import RegistrationForm from '@components/auth/registration/registration-form';
 import Loader from '@components/ui/loader/loader';
-import { useErrorLogger, useGetUser } from '@hooks/index';
+import { useErrorLogger, useGetClient } from '@hooks/index';
 import { XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { SignupMethods } from '@ts-types/enums';
@@ -24,7 +24,7 @@ export default function SignUp({ client }: SSRProps) {
   const [googlePayload, setGooglePayload] = useState(null);
   const [signupMethod, setSignupMethod] = useState(null);
 
-  const { userInfo } = useGetUser(client);
+  const { userInfo } = useGetClient(client);
   const csrfToken = userInfo?.csrfToken;
 
   useErrorLogger(error);

@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const THEMES = gql`
-  query Themes {
-    themes {
+  query Themes($etag: String!) {
+    themes(etag: $etag) {
       id
       title
       themePath
@@ -19,8 +19,8 @@ export const THEMES = gql`
 `;
 
 export const STORE_THEMES = gql`
-  query StoreThemes {
-    storeThemes {
+  query StoreThemes($etag: String!) {
+    storeThemes(etag: $etag) {
       id
       title
       themePath
@@ -35,8 +35,8 @@ export const STORE_THEMES = gql`
 `;
 
 export const THEME = gql`
-  query Theme($id: ID!) {
-    theme(id: $id) {
+  query Theme($id: ID!, $etag: String!) {
+    theme(id: $id, etag: $etag) {
       id
       title
       themePath

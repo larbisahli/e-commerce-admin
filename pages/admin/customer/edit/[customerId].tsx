@@ -3,7 +3,7 @@ import { PageFormPlaceholder } from '@components/common/commonComponents';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
 import { CUSTOMER } from '@graphql/customer';
-import { useErrorLogger, useGetUser } from '@hooks/index';
+import { useErrorLogger, useGetClient } from '@hooks/index';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { CustomerType } from '@ts-types/generated';
@@ -25,6 +25,7 @@ interface THeroSlider {
 }
 interface OptionsVariable {
   id: number;
+  etag: string;
 }
 
 export default function UpdateTaxPage({ client }: SSRProps) {
@@ -32,17 +33,24 @@ export default function UpdateTaxPage({ client }: SSRProps) {
 
   const customerId = parseInt(query.customerId as string, 10);
 
+  const {
+    userInfo: { store: { etag } = {} }
+  } = useGetClient(client);
+
   const { data, loading, error } = useQuery<THeroSlider, OptionsVariable>(
     CUSTOMER,
     {
-      variables: { id: customerId },
-      fetchPolicy: 'cache-and-network'
+      variables: {
+        id: customerId,
+        etag: etag?.customerEtag
+      },
+      fetchPolicy: 'cache-and-network',
+      skip: isEmpty(etag)
     }
   );
 
   const { customer = {} } = data ?? {};
 
-  useGetUser(client);
   useErrorLogger(error);
 
   if (isEmpty(customer) || loading) {

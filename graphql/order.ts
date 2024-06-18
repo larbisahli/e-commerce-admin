@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const ORDER = gql`
-  query Order($orderId: String!) {
-    order(orderId: $orderId) {
+  query Order($orderId: String!, $etag: String!) {
+    order(orderId: $orderId, etag: $etag) {
       id
       orderNumber
       totalQuantity
@@ -96,11 +96,18 @@ export const ORDERS = gql`
     $limit: Int!
     $orderBy: String!
     $sortedBy: String!
+    $etag: String!
   ) {
-    orderCount {
+    orderCount(etag: $etag) {
       count
     }
-    orders(page: $page, limit: $limit, orderBy: $orderBy, sortedBy: $sortedBy) {
+    orders(
+      page: $page
+      limit: $limit
+      orderBy: $orderBy
+      sortedBy: $sortedBy
+      etag: $etag
+    ) {
       id
       orderNumber
       totalQuantity
@@ -141,8 +148,8 @@ export const ORDERS = gql`
 `;
 
 export const RECENT_ORDERS = gql`
-  query RecentOrders {
-    recentOrders {
+  query RecentOrders($etag: String!) {
+    recentOrders(etag: $etag) {
       id
       orderNumber
       totalQuantity

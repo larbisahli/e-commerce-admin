@@ -7,7 +7,7 @@ import Label from '@components/ui/label';
 import SelectInput from '@components/ui/select-input';
 import { CATEGORIES_FOR_SELECT_ALL } from '@graphql/category';
 import { UPDATE_LAYOUT_COMPONENT_CONTENT } from '@graphql/content';
-import { useErrorLogger, useGetUser } from '@hooks/index';
+import { useErrorLogger, useGetClient } from '@hooks/index';
 import { useSettings } from '@hooks/useSettings';
 import { useUI } from '@hooks/useUI';
 import { notify } from '@lib/index';
@@ -51,6 +51,7 @@ interface OptionsVariable {
   limit: number;
   orderBy: OrderBy;
   language: LanguageType;
+  etag: string;
 }
 
 const ProductListForm = ({ initialValues }: IProps) => {
@@ -70,8 +71,9 @@ const ProductListForm = ({ initialValues }: IProps) => {
         : (defaultValues as FormValues)
     });
 
-  const { userInfo } = useGetUser();
-  const csrfToken = userInfo?.csrfToken;
+  const {
+    userInfo: { csrfToken, store: { etag } = {} }
+  } = useGetClient();
 
   const {
     data: categories,
@@ -82,10 +84,11 @@ const ProductListForm = ({ initialValues }: IProps) => {
       page: 1,
       limit: 999,
       orderBy: OrderBy.CREATED_AT,
-      language: selectedLanguage
+      language: selectedLanguage,
+      etag: etag?.categoryEtag
     },
     fetchPolicy: 'cache-and-network',
-    skip: isEmpty(selectedLanguage)
+    skip: isEmpty(selectedLanguage) || isEmpty(etag)
   });
 
   const { categorySelectAll = [] } = categories ?? {};

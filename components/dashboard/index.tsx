@@ -5,7 +5,7 @@ import StickerCard from '@components/widgets/sticker-card';
 import { DASH_ANALYTICS } from '@graphql/analytics';
 import { RECENT_ORDERS } from '@graphql/order';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetUser } from '@hooks/useGetUser';
+import { useGetClient } from '@hooks/useGetClient';
 import { useSettings } from '@hooks/useSettings';
 import { DashAnalyticsType, OrderType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
@@ -70,6 +70,10 @@ interface TDashOrders {
 export default function Dashboard() {
   const { t } = useTranslation();
 
+  const {
+    userInfo: { firstName = '', store: { etag } = {} }
+  } = useGetClient();
+
   const [selectedDate, setSelectedDate] = useState({
     length: 7,
     id: '7_days',
@@ -80,10 +84,12 @@ export default function Dashboard() {
     data: recentOrderData,
     loading: recentOrderLoading,
     error: recentOrderError
-  } = useQuery<TDashOrders>(RECENT_ORDERS, {
-    variables: {},
+  } = useQuery<TDashOrders, { etag: string }>(RECENT_ORDERS, {
+    variables: {
+      etag: etag?.orderEtag
+    },
     fetchPolicy: 'cache-and-network',
-    skip: isEmpty(selectedDate)
+    skip: isEmpty(selectedDate) || isEmpty(etag)
   });
 
   const { recentOrders } = recentOrderData ?? {};
@@ -92,13 +98,17 @@ export default function Dashboard() {
     data: requestData,
     loading,
     error
-  } = useQuery<TDashAnalytics, { dateId: string }>(DASH_ANALYTICS, {
-    variables: {
-      dateId: selectedDate.id
-    },
-    fetchPolicy: 'cache-and-network',
-    skip: isEmpty(selectedDate)
-  });
+  } = useQuery<TDashAnalytics, { dateId: string; etag: string }>(
+    DASH_ANALYTICS,
+    {
+      variables: {
+        dateId: selectedDate.id,
+        etag: etag?.analyticEtag
+      },
+      fetchPolicy: 'cache-and-network',
+      skip: isEmpty(selectedDate) || isEmpty(etag)
+    }
+  );
 
   const { getDashAnalytics } = requestData ?? {};
   const {
@@ -110,10 +120,6 @@ export default function Dashboard() {
     product,
     category
   } = getDashAnalytics ?? {};
-
-  const {
-    userInfo: { firstName = '' }
-  } = useGetUser();
 
   useErrorLogger(error);
   useErrorLogger(recentOrderError);
@@ -214,7 +220,6 @@ export default function Dashboard() {
         <div className="text-3xl font-medium">
           <span>Welcome back,</span>
           <span className="mx-1 text-blue-600">{firstName}</span>
-          <span>👋</span>
         </div>
         <span className="text-md text-gray-500">
           {`You can impact someone's life today.`}

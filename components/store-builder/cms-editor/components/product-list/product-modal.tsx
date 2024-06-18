@@ -7,6 +7,7 @@ import Modal from '@components/ui/modal/modal';
 import Pagination2 from '@components/ui/pagination2';
 import { PRODUCTS } from '@graphql/product';
 import { useErrorLogger } from '@hooks/useErrorLogger';
+import { useGetClient } from '@hooks/useGetClient';
 import { useSettings } from '@hooks/useSettings';
 import { TableQueryVariables } from '@ts-types/custom.types';
 import { OrderBy, SortOrder } from '@ts-types/enums';
@@ -39,6 +40,10 @@ const ProductModal = ({ modalOpen, collection, setModalOpen, setValue }) => {
 
   const { selectedLanguage } = useSettings();
 
+  const {
+    userInfo: { store: { etag } = {} }
+  } = useGetClient();
+
   const productId = parseInt(query.productId as string, 10);
 
   const { data, loading, error, fetchMore } = useQuery<
@@ -51,10 +56,11 @@ const ProductModal = ({ modalOpen, collection, setModalOpen, setValue }) => {
       limit: limit.value,
       orderBy,
       sortedBy: SortOrder.Desc,
-      language: selectedLanguage
+      language: selectedLanguage,
+      etag: etag?.productEtag
     },
     fetchPolicy: 'cache-and-network',
-    skip: isEmpty(selectedLanguage)
+    skip: isEmpty(selectedLanguage) || isEmpty(etag)
   });
 
   const { products = [], productCount: { count } = { count: 0 } } = data ?? {};

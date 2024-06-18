@@ -3,7 +3,7 @@ import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { STORE_THEMES } from '@graphql/theme';
-import { useErrorLogger, useGetUser } from '@hooks/index';
+import { useErrorLogger, useGetClient } from '@hooks/index';
 import { verifyAuth } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { ThemeType } from '@ts-types/generated';
@@ -34,16 +34,20 @@ interface TTheme {
 export default function Themes({ client }: SSRProps) {
   const { t } = useTranslation();
 
+  const {
+    userInfo: { store: { etag } = {} }
+  } = useGetClient(client);
+
   const { data, loading, error } = useQuery<TTheme>(STORE_THEMES, {
-    variables: {},
-    fetchPolicy: 'cache-and-network'
+    variables: {
+      etag: etag?.configEtag
+    },
+    fetchPolicy: 'cache-and-network',
+    skip: isEmpty(etag)
   });
 
   const { storeThemes: themes = [] } = data ?? {};
 
-  console.log({ themes });
-
-  useGetUser(client);
   useErrorLogger(error);
 
   if (loading) {

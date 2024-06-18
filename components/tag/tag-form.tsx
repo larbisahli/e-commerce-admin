@@ -6,7 +6,7 @@ import Description from '@components/ui/description';
 import Input from '@components/ui/input';
 import { CREATE_TAG, UPDATE_TAG } from '@graphql/tag';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useGetUser } from '@hooks/index';
+import { useGetClient } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/notify';
@@ -51,7 +51,7 @@ export default function CreateOrUpdateTagForm({ initialValues }: IProps) {
 
   const { selectedLanguage } = useSettings();
 
-  const { userInfo } = useGetUser();
+  const { userInfo } = useGetClient();
   const csrfToken = userInfo?.csrfToken;
 
   const [createTag, { loading: creating }] = useMutation(CREATE_TAG, {

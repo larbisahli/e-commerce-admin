@@ -6,7 +6,7 @@ import {
 } from '@components/ui/modal/modal.context';
 import { DELETE_TAG, TAGS } from '@graphql/tag';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetUser } from '@hooks/useGetUser';
+import { useGetClient } from '@hooks/useGetClient';
 import { notify } from '@lib/notify';
 import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
@@ -16,7 +16,7 @@ const TagDeleteView = () => {
 
   const [error, setError] = useState(null);
 
-  const { userInfo } = useGetUser();
+  const { userInfo } = useGetClient();
   const csrfToken = userInfo?.csrfToken;
 
   const [deleteAttributeValue, { loading }] = useMutation(DELETE_TAG, {

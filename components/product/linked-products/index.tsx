@@ -8,7 +8,7 @@ import Description from '@components/ui/description';
 import { LINKED_PRODUCTS, UPDATE_LINKED_PRODUCTS } from '@graphql/product';
 import { useDifferenceWith } from '@hooks/useDifferenceWith';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetUser } from '@hooks/useGetUser';
+import { useGetClient } from '@hooks/useGetClient';
 import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/notify';
 import { LanguageProps } from '@ts-types/custom.types';
@@ -56,18 +56,23 @@ const LinkedProducts = ({ state, initialValues }: Props) => {
   const [error, setError] = useState(null);
 
   const {
+    userInfo: { csrfToken, store: { etag } = {} }
+  } = useGetClient();
+
+  const {
     data,
     loading,
     error: queryError,
     refetch
   } = useQuery<TProduct, productVariable>(LINKED_PRODUCTS, {
-    variables: { id: productId, language: selectedLanguage },
+    variables: {
+      id: productId,
+      language: selectedLanguage,
+      etag: etag?.productEtag
+    },
     fetchPolicy: 'cache-and-network',
-    skip: isEmpty(initialValues) && isEmpty(selectedLanguage)
+    skip: (isEmpty(initialValues) && isEmpty(selectedLanguage)) || isEmpty(etag)
   });
-
-  const { userInfo } = useGetUser();
-  const csrfToken = userInfo?.csrfToken;
 
   const [updateLinkedProducts, { loading: updateLoading }] = useMutation(
     UPDATE_LINKED_PRODUCTS,

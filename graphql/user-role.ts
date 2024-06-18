@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const ROLES = gql`
-  query Roles {
-    roles {
+  query Roles($etag: String!) {
+    roles(etag: $etag) {
       id
       name
     }
@@ -10,8 +10,8 @@ export const ROLES = gql`
 `;
 
 export const ROLE = gql`
-  query Role($id: ID!) {
-    role(id: $id) {
+  query Role($id: ID!, $etag: String!) {
+    role(id: $id, etag: $etag) {
       id
       name
       privileges {

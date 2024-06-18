@@ -5,7 +5,7 @@ import PasswordInput from '@components/ui/password-input';
 import { RESET_PASSWORD } from '@graphql/login';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetUser } from '@hooks/useGetUser';
+import { useGetClient } from '@hooks/useGetClient';
 import { ROUTES } from '@utils/routes';
 import { isEmpty } from 'lodash';
 import { useRouter } from 'next/router';
@@ -37,7 +37,7 @@ const ResetPassword = () => {
 
   console.log({ token });
 
-  const { userInfo } = useGetUser();
+  const { userInfo } = useGetClient();
 
   const csrfToken = userInfo?.csrfToken;
 
