@@ -15,9 +15,10 @@ import Input from '@components/ui/input';
 import TextArea from '@components/ui/text-area';
 import { UPDATE_PRODUCT_SEO } from '@graphql/product';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetClient } from '@hooks/useGetClient';
+import { useAppDispatch, useGetClient } from '@hooks/useGetClient';
 import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/notify';
+import { setEtag } from '@store/client';
 import { Product } from '@ts-types/generated';
 import { translationFallback } from '@utils/utils';
 import isEmpty from 'lodash/isEmpty';
@@ -79,6 +80,7 @@ const ProductSeo = ({ state, productContent, initialValues }: Props) => {
   const { selectedLanguage } = useSettings();
 
   const dispatch = useFormReducer();
+  const reduxDispatch = useAppDispatch();
 
   const { userInfo } = useGetClient();
   const csrfToken = userInfo?.csrfToken;
@@ -91,6 +93,8 @@ const ProductSeo = ({ state, productContent, initialValues }: Props) => {
     },
     onCompleted: (data: { updateProductSeo: Product }) => {
       if (!isEmpty(data?.updateProductSeo)) {
+        const { etag: newEtag } = data?.updateProductSeo ?? {};
+        reduxDispatch(setEtag({ etag: newEtag }));
         setInitProductSeo(data?.updateProductSeo?.productSeo);
         notify(t('common:successfully-updated'), 'success');
       }

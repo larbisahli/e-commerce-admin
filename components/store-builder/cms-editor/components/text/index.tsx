@@ -1,11 +1,12 @@
 import { ContentIcon } from '@components/icons/builder/content';
+import { CssStyleIcon } from '@components/icons/builder/css-style';
 import { Tab } from '@headlessui/react';
 import type { StoreLayoutComponentType } from '@ts-types/generated';
 import classNames from 'classnames';
 import { Fragment, memo } from 'react';
 import React from 'react';
+
 import TextForm from './form';
-import { CssStyleIcon } from '@components/icons/builder/css-style';
 import TextStyles from './styles';
 
 type IProps = {

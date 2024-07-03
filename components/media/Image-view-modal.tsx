@@ -235,7 +235,7 @@ const ImageViewModal = () => {
       {/* MODEL */}
       <Modal open={isOpen} onClose={closeModal} align="right">
         {view === MEDIA_ITEM_MODAL && (
-          <div className="flex h-full w-full flex-col">
+          <div className="flex h-full w-full flex-col overflow-auto">
             <div
               className="border-b border-gray-200 bg-gray-100 p-4 text-lg font-semibold capitalize
               text-gray-800"

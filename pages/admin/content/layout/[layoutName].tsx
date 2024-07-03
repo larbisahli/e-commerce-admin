@@ -2,12 +2,19 @@ import { useQuery } from '@apollo/client';
 import BuilderLayout from '@components/layouts/builder';
 import LayoutNavigation from '@components/store-builder/LayoutNavigation';
 import NavigationLink from '@components/store-builder/navigationLink';
+import { useModalState } from '@components/ui/modal/modal.context';
 import { STORE_LAYOUTS, STORE_LAYOUTS_COMPONENTS } from '@graphql/content';
 import { useErrorLogger, useGetClient } from '@hooks/index';
+import { useUI } from '@hooks/useUI';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import type { SSRProps } from '@ts-types/custom.types';
-import { StoreBuilder, StoreLayoutNames } from '@ts-types/enums';
+import {
+  StoreBuilder,
+  StoreBuilderActions,
+  StoreLayoutNames
+} from '@ts-types/enums';
 import { ROUTES } from '@utils/routes';
+import { getBuilderSrc } from '@utils/utils';
 import { isEmpty } from 'lodash';
 import type { GetServerSideProps } from 'next';
 import Head from 'next/head';
@@ -48,7 +55,7 @@ export default function CreateSupplierPage({ client }: SSRProps) {
   const isProductPage = layoutName === StoreLayoutNames.PRODUCT;
 
   const {
-    userInfo: { store: { etag } = {} }
+    userInfo: { store: { etag, alias } = {} }
   } = useGetClient(client);
 
   const {
@@ -90,6 +97,13 @@ export default function CreateSupplierPage({ client }: SSRProps) {
   useErrorLogger(lcError);
   useErrorLogger(lError);
 
+  const { meta } = useModalState();
+  const {
+    ui: {
+      builder: { iframeLoading }
+    }
+  } = useUI();
+
   /**
    * BUILDER EVENT LISTENER
    */
@@ -111,6 +125,25 @@ export default function CreateSupplierPage({ client }: SSRProps) {
       false
     );
   }, []);
+
+  /**
+   * STOREFRONT POSTMESSAGE FOR WINDOW SCROLL TO UPDATED COMPONENT
+   */
+  useEffect(() => {
+    if (alias && meta?.sectionId && !iframeLoading) {
+      // @ts-ignore
+      const iframeWin =
+        document.getElementById('storefront-iframe').contentWindow;
+      iframeWin.postMessage(
+        {
+          source: StoreBuilder.GALA_CMS_BUILDER,
+          actionType: StoreBuilderActions.SCROLL_TO_SECTION,
+          sectionId: meta?.sectionId
+        },
+        getBuilderSrc(alias)
+      );
+    }
+  }, [alias, meta?.sectionId, iframeLoading]);
 
   return (
     <>

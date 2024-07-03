@@ -99,7 +99,7 @@ export enum ModuleGroups {
   PAGINATION = 'Pagination',
   MISCELLANEOUS = 'Miscellaneous',
   INSTALL_PROMPT = 'InstallPrompt',
-  PRODUCT_NOT_FOUND = 'ProductNotFound',
+  CONTENT_NOT_FOUND = 'ContentNotFound',
   COOKIE_POPUP = 'CookiePopup',
   PROMO_BANNER = 'PromoBanner',
   OFFLINE_NOTICE = 'OfflineNotice',
@@ -113,8 +113,9 @@ export enum ModuleGroups {
   SPACER = 'Spacer',
   LAYOUT = 'Layout',
   CATEGORY_LIST = 'CategoryList',
+  CATEGORY_LIST_ITEM = 'CategoryListItem',
   PRODUCT_LIST = 'ProductList',
-  HERO_CAROUSEL = 'HeroCarousel',
+  CAROUSEL = 'Carousel',
   BUTTON = 'Button',
   EDITORIAL_TEXT = 'EditorialText',
   BANNER_WIDGET = 'BannerWidget'
@@ -131,7 +132,9 @@ export enum StoreBuilderActions {
   DELETE_ACTION = 'DELETE_ACTION',
   ADD_NEW_BEFORE = 'ADD_NEW_BEFORE',
   ADD_NEW_AFTER = 'ADD_NEW_AFTER',
-  DUPLICATE_BLOCK = 'DUPLICATE_BLOCK'
+  DUPLICATE_BLOCK = 'DUPLICATE_BLOCK',
+  SCROLL_TO_SECTION = 'SCROLL_TO_SECTION',
+  BLOCK_SELECTION = 'BLOCK_SELECTION'
 }
 
 export enum StoreLayoutNames {

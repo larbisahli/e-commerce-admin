@@ -9,8 +9,9 @@ import Label from '@components/ui/label';
 import Select from '@components/ui/select/select';
 import { UPDATE_PRODUCT_SHIPPING_INFO } from '@graphql/product';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetClient } from '@hooks/useGetClient';
+import { useAppDispatch, useGetClient } from '@hooks/useGetClient';
 import { notify } from '@lib/notify';
+import { setEtag } from '@store/client';
 import { Nullable } from '@ts-types/custom.types';
 import { Product, ProductType } from '@ts-types/generated';
 import isEmpty from 'lodash/isEmpty';
@@ -53,6 +54,8 @@ function ProductShippingInfoForm({ state, productType, initialValues }: Props) {
   const { userInfo } = useGetClient();
   const csrfToken = userInfo?.csrfToken;
 
+  const reduxDispatch = useAppDispatch();
+
   const [updateProductShippingInfo, { loading }] = useMutation(
     UPDATE_PRODUCT_SHIPPING_INFO,
     {
@@ -63,6 +66,8 @@ function ProductShippingInfoForm({ state, productType, initialValues }: Props) {
       },
       onCompleted: (data: { updateProductShippingInfo: Product }) => {
         if (!isEmpty(data?.updateProductShippingInfo)) {
+          const { etag: newEtag } = data?.updateProductShippingInfo ?? {};
+          reduxDispatch(setEtag({ etag: newEtag }));
           setInitProductShippingInfo(
             data?.updateProductShippingInfo?.productShippingInfo
           );

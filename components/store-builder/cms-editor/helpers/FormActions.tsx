@@ -15,7 +15,6 @@ interface Props {
   loading?: boolean;
   disabled?: boolean;
   isLang?: boolean;
-  forceSystemLang?: boolean;
   title: string;
   handleBack?: () => void;
   btnLabel: string;
@@ -25,7 +24,6 @@ const FormActions = ({
   loading,
   disabled,
   isLang = true,
-  forceSystemLang,
   handleBack,
   title,
   btnLabel
@@ -33,24 +31,13 @@ const FormActions = ({
   const { t } = useTranslation();
   const { closeModal } = useModalAction();
 
-  const {
-    systemLanguage,
-    languages = [],
-    isLoading,
-    selectedLanguage
-  } = useSettings();
+  const { languages = [], isLoading, selectedLanguage } = useSettings();
 
   const dispatch = useAppDispatch();
 
   const onLanguageChange = (language: LanguageType) => {
     dispatch(setCurrentLanguage({ language }));
   };
-
-  useEffect(() => {
-    if (forceSystemLang) {
-      dispatch(setCurrentLanguage({ language: systemLanguage }));
-    }
-  }, [systemLanguage, dispatch, forceSystemLang]);
 
   const renderActions = () => {
     return (
@@ -64,7 +51,6 @@ const FormActions = ({
               getOptionLabel={(option: any) => option.name}
               getOptionValue={(option: any) => option.id}
               onChange={onLanguageChange}
-              isDisabled={forceSystemLang || disabled}
               isLoading={isLoading}
               className="w-full"
             />

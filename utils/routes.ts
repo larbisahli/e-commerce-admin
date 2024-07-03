@@ -65,8 +65,7 @@ export const ROUTES = {
   STORE_EXTENSIONS: '/admin/store/extensions',
   MARKETING_NEWSLETTER: '/admin/marketing/newsletter',
   ANALYTICS: '/admin/analytics',
-  BUILDER_GENERAL: '/admin/content/general',
-  THEME_STYLES: '/admin/content/general/theme-styles',
-  BUILDER_TEMPLATES: '/admin/content/general/templates',
+  BUILDER_STYLES: '/admin/content/styles',
+  BUILDER_TEMPLATES: '/admin/content/templates',
   BUILDER_LAYOUT: '/admin/content/layout'
 };

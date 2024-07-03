@@ -142,7 +142,10 @@ export const UPDATE_ATTRIBUTE = gql`
       values: $values
       language: $language
     ) {
-      name
+      id
+      etag {
+        attributeEtag
+      }
     }
   }
 `;

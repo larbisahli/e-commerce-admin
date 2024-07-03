@@ -3,16 +3,17 @@ import { NoComponentIcon } from '@components/icons/builder/no-component';
 import { CheckMark } from '@components/icons/checkmark';
 import { Eye } from '@components/icons/eye-icon';
 import Loader from '@components/ui/loader/loader';
+import { useModalAction } from '@components/ui/modal/modal.context';
 import {
   STORE_LAYOUT_COMPONENT_CONTENT,
-  STORE_LAYOUTS,
   STORE_LAYOUTS_COMPONENTS,
   UPDATE_LAYOUT_COMPONENT_MODULE_NAME
 } from '@graphql/content';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetClient } from '@hooks/useGetClient';
+import { useAppDispatch, useGetClient } from '@hooks/useGetClient';
 import { useUI } from '@hooks/useUI';
 import { notify } from '@lib/notify';
+import { setEtag } from '@store/client';
 import { StoreLayoutComponentType } from '@ts-types/generated';
 import cn from 'classnames';
 import { isEmpty } from 'lodash';
@@ -44,6 +45,8 @@ const ComponentsShowcase = ({
   const [error, setError] = useState(null);
 
   const { updateBuilderInfo } = useUI();
+  const dispatch = useAppDispatch();
+  const { closeModal } = useModalAction();
 
   const { userInfo } = useGetClient();
   const csrfToken = userInfo?.csrfToken;
@@ -60,6 +63,8 @@ const ComponentsShowcase = ({
         updateComponentModuleName: StoreLayoutComponentType;
       }) => {
         if (!isEmpty(data.updateComponentModuleName)) {
+          const { etag: newEtag } = data?.updateComponentModuleName ?? {};
+          dispatch(setEtag({ etag: newEtag }));
           notify(t('common:successfully-updated'), 'success', {
             position: 'top-center',
             autoClose: 2000
@@ -71,13 +76,14 @@ const ComponentsShowcase = ({
             )
           );
           updateBuilderInfo({ isReloadIframe: true });
+          closeModal(null, null, { sectionId: componentId });
         }
       },
       refetchQueries: [
         STORE_LAYOUTS_COMPONENTS,
-        'StoreLayoutComponents',
-        STORE_LAYOUT_COMPONENT_CONTENT,
-        'StoreLayoutComponentContent'
+        'StoreLayoutComponents'
+        // STORE_LAYOUT_COMPONENT_CONTENT,
+        // 'StoreLayoutComponentContent'
       ]
     }
   );

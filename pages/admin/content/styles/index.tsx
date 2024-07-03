@@ -46,7 +46,7 @@ export default function CreateSupplierPage({ client }: SSRProps) {
   return (
     <>
       <Head>
-        <title>General | Dropgala</title>
+        <title>Styles | Dropgala</title>
         <link
           rel="icon"
           type="image/svg"
@@ -56,26 +56,6 @@ export default function CreateSupplierPage({ client }: SSRProps) {
       </Head>
       <div className="px-5 pt-0">
         <NavigationLink />
-        {/* <div className="mt-5">
-          <Link
-            href={ROUTES.THEME_STYLES}
-            className="flex cursor-pointer items-center py-3 px-2 hover:bg-gray-100"
-          >
-            <div className="text-gray-900">
-              <DesignIcon width={25} height={25} />
-            </div>
-            <div className="mx-2 text-base text-black">Theme Styles</div>
-          </Link>
-          <Link
-            href={ROUTES.BUILDER_TEMPLATES}
-            className="flex cursor-pointer items-center py-3 px-2 hover:bg-gray-100"
-          >
-            <div className="text-gray-900">
-              <TemplateIcon width={20} height={20} />
-            </div>
-            <div className="mx-2 px-1 text-base text-black">Templates</div>
-          </Link>
-        </div> */}
         <div className="relative">
           {loading && isEmpty(getThemeSettings) && (
             <div className="pt-5">

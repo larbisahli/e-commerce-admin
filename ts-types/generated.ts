@@ -83,6 +83,7 @@ export interface CreatedUpdatedByAt {
     lastName: string;
     profile?: ImageType;
   }>;
+  etag?: EtagGroupsType;
 }
 
 export interface RoleType {
@@ -179,6 +180,7 @@ export interface Category extends CreatedUpdatedByAt {
     metaKeywords?: Scalars['String'];
     metaDescription?: Scalars['String'];
   };
+  etag?: EtagGroupsType;
 }
 
 // To prevent circular references
@@ -239,6 +241,7 @@ export interface Attribute extends CreatedUpdatedByAt {
   translated?: {
     name?: Scalars['String'];
   };
+  etag?: EtagGroupsType;
 }
 
 export interface Tag extends CreatedUpdatedByAt {
@@ -279,6 +282,7 @@ export interface OrderStatus extends CreatedUpdatedByAt {
   translated?: {
     label: string;
   };
+  etag?: EtagGroupsType;
 }
 
 export interface Coupon extends CreatedUpdatedByAt {
@@ -410,6 +414,7 @@ export interface Product extends CreatedUpdatedByAt {
   relatedProducts?: Nullable<Array<Nullable<ProductRef>>>;
   upsellProducts?: Nullable<Array<Nullable<ProductRef>>>;
   crossSellProducts?: Nullable<Array<Nullable<ProductRef>>>;
+  etag?: EtagGroupsType;
   // [key: string]: any;
 }
 
@@ -519,6 +524,7 @@ export interface ManufacturerType extends CreatedUpdatedByAt {
     name?: Scalars['String'];
     description?: Nullable<CountryType>;
   };
+  etag?: EtagGroupsType;
 }
 
 export interface HeroBannerType extends CreatedUpdatedByAt {
@@ -841,6 +847,7 @@ export interface StoreLayoutComponentType {
   data?: StoreLayoutComponentContentType;
   styles?: StoreLayoutComponentContentType;
   children?: StoreLayoutComponentType[] | [];
+  etag?: EtagGroupsType;
 }
 
 export interface StoreLayoutComponentContentType {

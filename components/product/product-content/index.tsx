@@ -13,8 +13,10 @@ import Radio from '@components/ui/radio';
 import TextArea from '@components/ui/text-area';
 import { UPDATE_PRODUCT_CONTENT } from '@graphql/product';
 import { useErrorLogger, useGetClient } from '@hooks/index';
+import { useAppDispatch } from '@hooks/useGetClient';
 import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/notify';
+import { setEtag } from '@store/client';
 import { Nullable } from '@ts-types/custom.types';
 import { Product, ProductStatus } from '@ts-types/generated';
 import { translationFallback } from '@utils/utils';
@@ -57,6 +59,8 @@ const ProductContent = ({ state, initialValues, productSeo }: Props) => {
 
   const [isUpdated, setIsUpdated] = useState(false);
 
+  const reduxDispatch = useAppDispatch();
+
   const [initProductContent, setInitProductContent] = useState<Product>(
     () => initialValues
   );
@@ -79,6 +83,8 @@ const ProductContent = ({ state, initialValues, productSeo }: Props) => {
       },
       onCompleted: (data: { updateProductContent: Product }) => {
         if (!isEmpty(data?.updateProductContent)) {
+          const { etag: newEtag } = data?.updateProductContent ?? {};
+          reduxDispatch(setEtag({ etag: newEtag }));
           setInitProductContent(data?.updateProductContent);
           notify(t('common:successfully-updated'), 'success');
         }

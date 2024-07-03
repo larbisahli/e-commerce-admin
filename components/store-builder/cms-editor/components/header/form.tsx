@@ -7,12 +7,15 @@ import ImageModal from '@components/image-modal';
 import Description from '@components/ui/description';
 import Input from '@components/ui/input';
 import Label from '@components/ui/label';
+import { useModalAction } from '@components/ui/modal/modal.context';
 import TextArea from '@components/ui/text-area';
 import { UPDATE_LAYOUT_COMPONENT_CONTENT } from '@graphql/content';
 import { useErrorLogger, useGetClient } from '@hooks/index';
+import { useAppDispatch } from '@hooks/useGetClient';
 import { useSettings } from '@hooks/useSettings';
 import { useUI } from '@hooks/useUI';
 import { notify } from '@lib/index';
+import { setEtag } from '@store/client';
 import { TextAlignEnum } from '@ts-types/custom.types';
 import type { ImageType, StoreLayoutComponentType } from '@ts-types/generated';
 import classNames from 'classnames';
@@ -47,7 +50,7 @@ const HeaderForm = ({ initialValues }: IProps) => {
   const [error, setError] = useState(null);
   const { selectedLanguage } = useSettings();
 
-  console.log('ImageBannerForm', { initialValues });
+  const dispatch = useAppDispatch();
 
   const { updateBuilderInfo } = useUI();
 
@@ -58,6 +61,7 @@ const HeaderForm = ({ initialValues }: IProps) => {
   });
 
   const { userInfo } = useGetClient();
+  const { closeModal } = useModalAction();
   const csrfToken = userInfo?.csrfToken;
 
   const [updateLayoutComponent, { loading: updating }] = useMutation(
@@ -71,12 +75,15 @@ const HeaderForm = ({ initialValues }: IProps) => {
       onCompleted: (data: {
         updateLayoutComponent: StoreLayoutComponentType;
       }) => {
-        if (!isEmpty(data)) {
+        if (!isEmpty(data?.updateLayoutComponent)) {
+          const { etag: newEtag } = data?.updateLayoutComponent ?? {};
+          dispatch(setEtag({ etag: newEtag }));
           notify(t('common:successfully-updated'), 'success', {
             position: 'top-center',
             autoClose: 2000
           });
           updateBuilderInfo({ isReloadIframe: true });
+          closeModal(null, null, { sectionId: initialValues.componentId });
         }
       }
     }

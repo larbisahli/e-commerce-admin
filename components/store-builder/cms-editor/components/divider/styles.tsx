@@ -7,11 +7,14 @@ import { AlignLeftIcon } from '@components/icons/builder/align-left';
 import { AlignRightIcon } from '@components/icons/builder/align-right';
 import Description from '@components/ui/description';
 import Label from '@components/ui/label';
+import { useModalAction } from '@components/ui/modal/modal.context';
 import Select from '@components/ui/select/select';
 import { UPDATE_LAYOUT_COMPONENT_STYLES } from '@graphql/content';
 import { useErrorLogger, useGetClient } from '@hooks/index';
+import { useAppDispatch } from '@hooks/useGetClient';
 import { useUI } from '@hooks/useUI';
 import { notify } from '@lib/index';
+import { setEtag } from '@store/client';
 import type { StoreLayoutComponentType } from '@ts-types/generated';
 import classNames from 'classnames';
 import cloneDeep from 'lodash/cloneDeep';
@@ -62,6 +65,7 @@ const DividerStyles = ({ initialValues }: IProps) => {
   const data = initialValues?.styles;
 
   const { updateBuilderInfo } = useUI();
+  const dispatch = useAppDispatch();
 
   const methods = useForm<FormValues>({
     defaultValues: !isEmpty(data)
@@ -70,6 +74,7 @@ const DividerStyles = ({ initialValues }: IProps) => {
   });
 
   const { userInfo } = useGetClient();
+  const { closeModal } = useModalAction();
   const csrfToken = userInfo?.csrfToken;
 
   const [updateLayoutComponent, { loading: updating }] = useMutation(
@@ -81,14 +86,17 @@ const DividerStyles = ({ initialValues }: IProps) => {
         }
       },
       onCompleted: (data: {
-        UpdateLayoutComponentStyles: StoreLayoutComponentType;
+        updateLayoutComponentStyles: StoreLayoutComponentType;
       }) => {
-        if (!isEmpty(data)) {
+        if (!isEmpty(data?.updateLayoutComponentStyles)) {
+          const { etag: newEtag } = data?.updateLayoutComponentStyles ?? {};
+          dispatch(setEtag({ etag: newEtag }));
           notify(t('common:successfully-updated'), 'success', {
             position: 'top-center',
             autoClose: 2000
           });
           updateBuilderInfo({ isReloadIframe: true });
+          closeModal(null, null, { sectionId: initialValues.componentId });
         }
       }
     }

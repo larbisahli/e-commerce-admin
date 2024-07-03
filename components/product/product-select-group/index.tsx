@@ -6,9 +6,10 @@ import Button from '@components/ui/button';
 import Description from '@components/ui/description';
 import { UPDATE_PRODUCT_SELECT_GROUP } from '@graphql/product';
 import { useDifferenceWith } from '@hooks/useDifferenceWith';
-import { useGetClient } from '@hooks/useGetClient';
+import { useAppDispatch, useGetClient } from '@hooks/useGetClient';
 import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/notify';
+import { setEtag } from '@store/client';
 import {
   Category,
   ManufacturerType,
@@ -40,6 +41,8 @@ interface Props {
 const ProductSelectGroup = ({ state, initialValues }: Props) => {
   const { t } = useTranslation('common');
   const { query } = useRouter();
+
+  const reduxDispatch = useAppDispatch();
 
   const productId = parseInt(query.productId as string, 10);
 
@@ -111,6 +114,8 @@ const ProductSelectGroup = ({ state, initialValues }: Props) => {
       },
       onCompleted: (data: { updateProductSelectGroup: Product }) => {
         if (!isEmpty(data.updateProductSelectGroup)) {
+          const { etag: newEtag } = data?.updateProductSelectGroup ?? {};
+          reduxDispatch(setEtag({ etag: newEtag }));
           const {
             categories = [],
             tags = [],

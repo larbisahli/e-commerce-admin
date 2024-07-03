@@ -4,17 +4,18 @@ import Loader from '@components/ui/loader/loader';
 import { useModalState } from '@components/ui/modal/modal.context';
 import { STORE_LAYOUT_COMPONENT_CONTENT } from '@graphql/content';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetClient } from '@hooks/useGetClient';
+import { useAppDispatch, useGetClient } from '@hooks/useGetClient';
 import { useSettings } from '@hooks/useSettings';
+import { setCurrentLanguage } from '@store/settings';
 import { ModuleGroups } from '@ts-types/enums';
 import { LanguageType, StoreLayoutComponentType } from '@ts-types/generated';
 import { isEmpty } from 'lodash';
 import dynamic from 'next/dynamic';
-import { memo } from 'react';
+import { memo, useEffect } from 'react';
 
 import ModuleShowcase from './helpers/ModuleShowcase';
 
-const HeroCarouselForm = dynamic(() => import('./components/hero-carousel'), {
+const CarouselContent = dynamic(() => import('./components/hero-carousel'), {
   ssr: false,
   loading: () => <Loader special />
 });
@@ -101,7 +102,7 @@ export interface TComponent {
 const CmsEditorModal = () => {
   const { meta } = useModalState();
 
-  const { selectedLanguage } = useSettings();
+  const { defaultLanguage, selectedLanguage } = useSettings();
 
   const {
     userInfo: { store: { etag } = {} }
@@ -125,15 +126,21 @@ const CmsEditorModal = () => {
 
   useErrorLogger(error);
 
-  console.log('=====Y>', { meta, storeLayoutComponentContent });
-
   const initialValues = {
     ...meta,
     ...storeLayoutComponentContent,
     ...storeLayoutComponentStyles
   };
 
-  console.log('EDITOR >>', { initialValues });
+  console.log('EDITOR >>', { meta, initialValues });
+
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (defaultLanguage) {
+      dispatch(setCurrentLanguage({ language: defaultLanguage }));
+    }
+  }, [meta.moduleGroup, defaultLanguage, dispatch]);
 
   return (
     <div className="flex h-[90vh] w-[90vw] flex-col overflow-hidden">
@@ -158,9 +165,9 @@ const CmsEditorModal = () => {
             {meta?.moduleGroup === ModuleGroups.PROMO_BANNER &&
               !isEmpty(storeLayoutComponentContent) &&
               !loading && <PromoBannerForm initialValues={initialValues} />}
-            {meta?.moduleGroup === ModuleGroups.HERO_CAROUSEL &&
+            {meta?.moduleGroup === ModuleGroups.CAROUSEL &&
               !isEmpty(storeLayoutComponentContent) &&
-              !loading && <HeroCarouselForm initialValues={initialValues} />}
+              !loading && <CarouselContent initialValues={initialValues} />}
             {meta?.moduleGroup === ModuleGroups.IMAGE && !loading && (
               <ImageForm initialValues={initialValues} />
             )}

@@ -10,6 +10,7 @@ import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useAppDispatch, useGetClient } from '@hooks/useGetClient';
 import { usePlaceholder } from '@hooks/usePlaceholder';
 import { notify } from '@lib/notify';
+import { setEtag } from '@store/client';
 import { fetchStoreSettings } from '@store/settings';
 import { CreatedUpdatedByAt, LanguageType } from '@ts-types/generated';
 import { useIsRTL } from '@utils/locals';
@@ -61,7 +62,9 @@ const LanguageList = ({ loading, languages, selectedColumns }: IProps) => {
       refetchQueries: [LANGUAGES, 'Languages'],
       onCompleted: (data: { setDefaultLanguage: LanguageType }) => {
         if (!isEmpty(data.setDefaultLanguage)) {
-          dispatch(fetchStoreSettings({ etag: userInfo.store.etag }));
+          const { etag: newEtag } = data?.setDefaultLanguage ?? {};
+          dispatch(setEtag({ etag: newEtag }));
+          dispatch(fetchStoreSettings({ configEtag: newEtag.configEtag }));
           notify(
             t('common:successfully-updated', {
               displayName: data.setDefaultLanguage?.name

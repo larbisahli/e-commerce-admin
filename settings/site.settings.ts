@@ -181,7 +181,7 @@ export const siteSettings = {
         subLinks: [
           {
             id: '9YcWhCOaCG2LKO',
-            href: ROUTES.BUILDER_GENERAL,
+            href: ROUTES.BUILDER_STYLES,
             label: 'sidebar-nav-item-site-design',
             padding: '35px',
             isSubLink: true

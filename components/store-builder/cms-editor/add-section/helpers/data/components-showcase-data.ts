@@ -3,77 +3,21 @@ export const componentsThumbnail = {
     {
       moduleName: 'CategoryList',
       thumbnail: {
-        image: '/static/components/category-list/category-list-1.png',
-        placeholder: '/static/components/category-list/category-list-1.png'
+        image: '/static/components/category-list/category-list.png',
+        placeholder: '/static/components/category-list/category-list.png'
       },
-      title: 'Simple 1'
+      title: 'Category List Regular'
     },
     {
-      moduleName: 'CategoryList2',
+      moduleName: 'CategoryListSlide',
       thumbnail: {
-        image: '/static/components/category-list/category-list-2.png',
-        placeholder: '/static/components/category-list/category-list-2.png'
+        image: '/static/components/category-list/category-list-slide.png',
+        placeholder: '/static/components/category-list/category-list-slide.png'
       },
-      title: 'Simple 2'
-    },
-    {
-      moduleName: 'CategoryList3',
-      thumbnail: {
-        image: '/static/components/category-list/category-list-3.png',
-        placeholder: '/static/components/category-list/category-list-3.png'
-      },
-      title: 'Simple 3'
-    },
-    {
-      moduleName: 'CategoryList4',
-      thumbnail: {
-        image: '/static/components/category-list/category-list-4.png',
-        placeholder: '/static/components/category-list/category-list-4.png'
-      },
-      title: 'Simple 4'
-    },
-    {
-      moduleName: 'CategoryList5',
-      thumbnail: {
-        image: '/static/components/category-list/category-list-5.png',
-        placeholder: '/static/components/category-list/category-list-5.png'
-      },
-      title: 'Simple 5'
-    },
-    {
-      moduleName: 'CategoryList6',
-      thumbnail: {
-        image: '/static/components/category-list/category-list-6.png',
-        placeholder: '/static/components/category-list/category-list-6.png'
-      },
-      title: 'Simple 6'
-    },
-    {
-      moduleName: 'CategoryList7',
-      thumbnail: {
-        image: '/static/components/category-list/category-list-7.png',
-        placeholder: '/static/components/category-list/category-list-7.png'
-      },
-      title: 'Simple 7'
-    },
-    {
-      moduleName: 'CategoryList8',
-      thumbnail: {
-        image: '/static/components/category-list/category-list-8.png',
-        placeholder: '/static/components/category-list/category-list-8.png'
-      },
-      title: 'Simple 8'
+      title: 'Category List Slide'
     }
   ],
   ProductList: [
-    {
-      moduleName: 'ProductListRegular',
-      thumbnail: {
-        image: '/static/components/product-list/product-list-regular.png',
-        placeholder: '/static/components/product-list/product-list-regular.png'
-      },
-      title: 'Product list regular'
-    },
     {
       moduleName: 'ProductListSlide',
       thumbnail: {
@@ -81,6 +25,14 @@ export const componentsThumbnail = {
         placeholder: '/static/components/product-list/product-list-slide.png'
       },
       title: 'Product list slide'
+    },
+    {
+      moduleName: 'ProductList',
+      thumbnail: {
+        image: '/static/components/product-list/product-list-regular.png',
+        placeholder: '/static/components/product-list/product-list-regular.png'
+      },
+      title: 'Product list regular'
     }
   ],
   ImageBanner: [
@@ -149,6 +101,16 @@ export const componentsThumbnail = {
         placeholder: '/static/components/footer/footer-light.png'
       },
       title: 'Footer Light'
+    }
+  ],
+  Subscription: [
+    {
+      moduleName: 'Subscription',
+      thumbnail: {
+        image: '/static/components/subscription/subscription-default.png',
+        placeholder: '/static/components/subscription/subscription-default.png'
+      },
+      title: 'Subscription default'
     }
   ]
 };

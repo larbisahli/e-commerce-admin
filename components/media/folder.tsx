@@ -176,11 +176,11 @@ export default function Folder({
         title={folder?.name}
         className="group flex h-fit w-48 flex-col items-center p-5 hover:bg-blue-100"
       >
-        <div className="relative flex h-40 w-40 items-center justify-center rounded border border-gray-300 bg-gray-100">
-          <button
-            onClick={handleModalClick}
-            className="absolute top-0 right-0 z-30 hidden cursor-pointer bg-white px-1 text-black group-hover:block"
-          >
+        <button
+          onClick={handleModalClick}
+          className="relative flex h-40 w-40 items-center justify-center rounded border border-gray-300 bg-gray-100"
+        >
+          <button className="absolute top-0 right-0 z-30 hidden cursor-pointer bg-white px-1 text-black group-hover:block">
             <div className="rotate-90">
               <DotsIcon />
             </div>
@@ -195,7 +195,7 @@ export default function Folder({
             height={160}
             objectFit="cover"
           />
-        </div>
+        </button>
         {renderTitle()}
       </div>
     );

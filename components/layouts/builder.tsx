@@ -41,6 +41,7 @@ const AppLayout: React.FC = ({ children }: Props) => {
   const [showSlider, setShowSlider] = useState(true);
 
   const layoutNameQuery = query.layoutName as string;
+  const configEtag = userInfo?.store?.etag?.configEtag;
 
   // Fetch store settings
   useEffect(() => {
@@ -49,10 +50,10 @@ const AppLayout: React.FC = ({ children }: Props) => {
 
   // Fetch store settings
   useEffect(() => {
-    if (userInfo?.store?.etag) {
-      dispatch(fetchStoreSettings({ etag: userInfo?.store?.etag }));
+    if (configEtag) {
+      dispatch(fetchStoreSettings({ configEtag }));
     }
-  }, [dispatch, userInfo]);
+  }, [dispatch, configEtag]);
 
   const systemLanguage = useMemo(
     () => languages?.find((lang) => lang.isSystem),

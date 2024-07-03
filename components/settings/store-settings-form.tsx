@@ -22,9 +22,10 @@ import { UPDATE_STORE_SETTINGS } from '@graphql/settings';
 import { TAX_FOR_SELECT } from '@graphql/tax';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetClient } from '@hooks/useGetClient';
+import { useAppDispatch, useGetClient } from '@hooks/useGetClient';
 import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/notify';
+import { setEtag } from '@store/client';
 import { FAVICON_VIEWER_MODAL } from '@ts-types/constants';
 import { OrderBy } from '@ts-types/enums';
 import { SettingsType, TaxType } from '@ts-types/generated';
@@ -96,6 +97,7 @@ export default function StoreSettingsForm({ settings }: IProps) {
   const [error, setError] = useState(null);
 
   const { systemCurrency } = useSettings();
+  const dispatch = useAppDispatch();
 
   const {
     register,
@@ -132,8 +134,10 @@ export default function StoreSettingsForm({ settings }: IProps) {
           'x-csrf-token': csrfToken
         }
       },
-      onCompleted: (data: { updateSettings: SettingsType }) => {
-        if (!isEmpty(data)) {
+      onCompleted: (data: { updateStoreSettings: SettingsType }) => {
+        if (!isEmpty(data?.updateStoreSettings)) {
+          const { etag: newEtag } = data?.updateStoreSettings ?? {};
+          dispatch(setEtag({ etag: newEtag }));
           notify(t('common:successfully-updated'), 'success');
         }
       }

@@ -1,12 +1,15 @@
 import { useMutation } from '@apollo/client';
 import Card from '@components/common/card';
 import Description from '@components/ui/description';
+import { useModalAction } from '@components/ui/modal/modal.context';
 import TextArea from '@components/ui/text-area';
 import { UPDATE_LAYOUT_COMPONENT_CONTENT } from '@graphql/content';
 import { useErrorLogger, useGetClient } from '@hooks/index';
+import { useAppDispatch } from '@hooks/useGetClient';
 import { useSettings } from '@hooks/useSettings';
 import { useUI } from '@hooks/useUI';
 import { notify } from '@lib/index';
+import { setEtag } from '@store/client';
 import type { StoreLayoutComponentType } from '@ts-types/generated';
 import cloneDeep from 'lodash/cloneDeep';
 import isEmpty from 'lodash/isEmpty';
@@ -18,7 +21,7 @@ import { useForm } from 'react-hook-form';
 import FormActions from '../../helpers/FormActions';
 
 type FormValues = {
-  innerHtml: string;
+  html: string;
 };
 
 const defaultValues = {};
@@ -35,6 +38,7 @@ const HtmlForm = ({ initialValues }: IProps) => {
   const { selectedLanguage } = useSettings();
 
   const { updateBuilderInfo } = useUI();
+  const dispatch = useAppDispatch();
 
   const { handleSubmit, register } = useForm<FormValues>({
     defaultValues: !isEmpty(data)
@@ -43,6 +47,7 @@ const HtmlForm = ({ initialValues }: IProps) => {
   });
 
   const { userInfo } = useGetClient();
+  const { closeModal } = useModalAction();
   const csrfToken = userInfo?.csrfToken;
 
   const [updateLayoutComponent, { loading: updating }] = useMutation(
@@ -56,12 +61,15 @@ const HtmlForm = ({ initialValues }: IProps) => {
       onCompleted: (data: {
         updateLayoutComponent: StoreLayoutComponentType;
       }) => {
-        if (!isEmpty(data)) {
+        if (!isEmpty(data?.updateLayoutComponent)) {
+          const { etag: newEtag } = data?.updateLayoutComponent ?? {};
+          dispatch(setEtag({ etag: newEtag }));
           notify(t('common:successfully-updated'), 'success', {
             position: 'top-center',
             autoClose: 2000
           });
           updateBuilderInfo({ isReloadIframe: true });
+          closeModal(null, null, { sectionId: initialValues.componentId });
         }
       }
     }
@@ -75,7 +83,7 @@ const HtmlForm = ({ initialValues }: IProps) => {
       contentId: initialValues?.contentId,
       language: selectedLanguage,
       data: {
-        innerHtml: values.innerHtml
+        html: values.html
       }
     };
 
@@ -101,7 +109,7 @@ const HtmlForm = ({ initialValues }: IProps) => {
         <Card className="w-full sm:w-8/12 md:w-2/3">
           <TextArea
             label={'Html content'}
-            {...register('innerHtml')}
+            {...register('html')}
             placeholder={'<div><p>Your custom HTML code.</p></div>'}
             variant="outline"
             className="mb-5"

@@ -140,6 +140,9 @@ export const UPDATE_STORE_SETTINGS = gql`
       tax: $tax
     ) {
       id
+      etag {
+        configEtag
+      }
     }
   }
 `;

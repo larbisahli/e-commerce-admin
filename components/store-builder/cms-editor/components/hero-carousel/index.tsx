@@ -1,107 +1,69 @@
-import ErrorMessage from '@components/ui/error-message';
-import Loader from '@components/ui/loader/loader';
-import { useErrorLogger, useGetClient } from '@hooks/index';
-import { useSettings } from '@hooks/useSettings';
-import { notify } from '@lib/notify';
-import { LanguageProps, SSRProps } from '@ts-types/custom.types';
-import { HeroBannerType } from '@ts-types/generated';
-import isEmpty from 'lodash/isEmpty';
-import dynamic from 'next/dynamic';
-import { useState } from 'react';
+import { ContentIcon } from '@components/icons/builder/content';
+import { CssStyleIcon } from '@components/icons/builder/css-style';
+import { Tab } from '@headlessui/react';
+import type { StoreLayoutComponentType } from '@ts-types/generated';
+import classNames from 'classnames';
+import { Fragment, memo } from 'react';
+import React from 'react';
 
-import FormActions from '../../helpers/FormActions';
-import HeroBannerList from './hero-banner-list';
+import CarouselForm from './form';
+import CarouselStyles from './styles';
 
-const CreateOrUpdateSlideForm = dynamic(() => import('./hero-slide-form'), {
-  ssr: true,
-  loading: () => <Loader special />
-});
+type IProps = {
+  initialValues?: StoreLayoutComponentType;
+};
 
-interface THeroBanner {
-  heroSlideList: HeroBannerType[];
-  heroSlideListCount: { count: number };
-}
-
-interface OptionsVariable extends LanguageProps {
-  page: number;
-  limit: number;
-}
-
-export default function CreateOrUpdateHeroSlideForm({ client }: SSRProps) {
-  const { selectedLanguage } = useSettings();
-
-  const [sliderId, setSliderId] = useState(null);
-  const [error, setError] = useState(null);
-
-  const { userInfo } = useGetClient();
-  const csrfToken = userInfo?.csrfToken;
-
-  useGetClient(client);
-  useErrorLogger(error);
-
-  const handleEdit = (id: string) => {
-    setSliderId(id);
-  };
-
-  const handleDelete = (id: string) => {
-    setSliderId(id);
-  };
-
-  const handleBack = () => {
-    setSliderId(null);
-  };
-
-  const onSubmit = async (values: FormValues) => {
-    if (isEmpty(values.thumbnail)) {
-      notify('form:category-image-required', 'warning');
-      return;
-    }
-
-    const variables = {
-      title: values.title,
-      url: values.url,
-      thumbnail: [
-        {
-          id: values.thumbnail[0]?.id
-        }
-      ],
-      description: values.description,
-      btnLabel: values.btnLabel,
-      position: Number(values.position),
-      published: values.status === 'publish',
-      language: selectedLanguage,
-      align: values.align,
-      styles: {
-        textColor: values.styles.textColor,
-        btnBgc: values.styles.btnBgc,
-        btnTextColor: values.styles.btnTextColor
-      }
-    };
-
-    // updateHeroSlider({
-    //   variables: { ...variables }
-    // }).catch((err) => {
-    //   setError(err);
-    // });
-  };
-
-  if (!isEmpty(error)) {
-    return <ErrorMessage message={error.message} />;
-  }
-
+const CarouselContent = ({ initialValues }: IProps) => {
   return (
-    <div className="">
-      <FormActions title="Hero sliders" handleBack={sliderId && handleBack} />
-      {!sliderId ? (
-        <HeroBannerList
-          loading={false}
-          heroBannerList={[]}
-          handleEdit={handleEdit}
-          handleDelete={handleDelete}
-        />
-      ) : (
-        <CreateOrUpdateSlideForm initialValues={{}} onSubmit={onSubmit} />
-      )}
-    </div>
+    <Tab.Group>
+      <Tab.List className="-mb-px flex flex-wrap border-b border-gray-200 text-center text-sm font-medium  text-gray-500 dark:text-gray-400">
+        <Tab as={Fragment}>
+          {({ selected }) => (
+            <button
+              className={classNames(
+                'group mb-[-1px] inline-flex items-center justify-center rounded-t-lg border-b-2 border-transparent px-3 py-2 text-gray-800 outline-none hover:border-gray-300 hover:text-gray-600',
+                selected &&
+                  'border-b-accent text-accent hover:border-blue-700 hover:text-blue-700'
+              )}
+            >
+              <div className="mr-1">
+                <ContentIcon height={24} width={24} />
+              </div>
+              <div className="uppercase">Content</div>
+            </button>
+          )}
+        </Tab>
+        <Tab as={Fragment}>
+          {({ selected }) => (
+            <button
+              className={classNames(
+                'group mb-[-1px] inline-flex items-center justify-center rounded-t-lg border-b-2 border-transparent px-3 py-2 text-gray-800 outline-none hover:border-gray-300 hover:text-gray-600',
+                selected &&
+                  'border-b-accent text-accent hover:border-blue-700 hover:text-blue-700'
+              )}
+            >
+              <div className="mr-1">
+                <CssStyleIcon height={24} width={24} />
+              </div>
+              <div className="uppercase">Styles</div>
+            </button>
+          )}
+        </Tab>
+      </Tab.List>
+      <Tab.Panels>
+        <Tab.Panel unmount={false}>
+          <div className="pt-3">
+            <CarouselForm initialValues={initialValues} />
+          </div>
+        </Tab.Panel>
+        <Tab.Panel unmount={false}>
+          <div className="pt-3">
+            <CarouselStyles initialValues={initialValues} />
+          </div>
+        </Tab.Panel>
+      </Tab.Panels>
+    </Tab.Group>
   );
-}
+};
+
+export default memo(CarouselContent);

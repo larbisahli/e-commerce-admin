@@ -8,14 +8,14 @@ export default function NavigationLink() {
   const { pathname } = useRouter();
   return (
     <div className="flex items-center border-b pt-2 pb-3">
-      <Link href={ROUTES.BUILDER_GENERAL}>
+      <Link href={ROUTES.BUILDER_STYLES}>
         <div
           className={cn(
             'mr-2 text-xl font-semibold text-gray-700 hover:text-black',
-            pathname === ROUTES.BUILDER_GENERAL && 'text-black underline'
+            pathname === ROUTES.BUILDER_STYLES && 'text-black underline'
           )}
         >
-          General
+          Styles
         </div>
       </Link>
       <Link

@@ -88,7 +88,7 @@ export default function Modal({
           >
             <div
               className={cn(
-                'min-w-content inline-block max-w-full overflow-hidden bg-white text-start transition-all md:rounded-sm',
+                'min-w-content inline-block max-w-full overflow-auto bg-white text-start transition-all md:rounded-sm',
                 align === 'center' && 'relative w-full align-middle sm:w-fit',
                 align === 'right' && 'absolute top-0 bottom-0 right-0 '
               )}
@@ -105,7 +105,7 @@ export default function Modal({
               </button>
               <div
                 className={cn(
-                  'h-[100vh] overflow-y-auto',
+                  'h-[100vh]s overflow-y-auto',
                   align === 'center' && 'md:h-fit',
                   align === 'right' && ''
                 )}

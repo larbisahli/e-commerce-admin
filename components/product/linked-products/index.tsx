@@ -8,9 +8,10 @@ import Description from '@components/ui/description';
 import { LINKED_PRODUCTS, UPDATE_LINKED_PRODUCTS } from '@graphql/product';
 import { useDifferenceWith } from '@hooks/useDifferenceWith';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetClient } from '@hooks/useGetClient';
+import { useAppDispatch, useGetClient } from '@hooks/useGetClient';
 import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/notify';
+import { setEtag } from '@store/client';
 import { LanguageProps } from '@ts-types/custom.types';
 import type { Product } from '@ts-types/generated';
 import isEmpty from 'lodash/isEmpty';
@@ -43,6 +44,7 @@ const LinkedProducts = ({ state, initialValues }: Props) => {
   const { t } = useTranslation('common');
 
   const dispatch = useFormReducer();
+  const reduxDispatch = useAppDispatch();
 
   const { upsellProducts, relatedProducts, crossSellProducts, isUpdateMode } =
     state;
@@ -84,6 +86,8 @@ const LinkedProducts = ({ state, initialValues }: Props) => {
       },
       onCompleted: (data: { updateLinkedProducts: Product }) => {
         if (!isEmpty(data?.updateLinkedProducts)) {
+          const { etag: newEtag } = data?.updateLinkedProducts ?? {};
+          reduxDispatch(setEtag({ etag: newEtag }));
           // setInitProductShippingInfo(data?.updateProductShippingInfo?.productShippingInfo);
           notify(t('common:successfully-updated'), 'success');
           refetch();

@@ -16,9 +16,10 @@ import {
 } from '@graphql/category';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useErrorLogger, useWarnIfUnsavedChanges } from '@hooks/index';
-import { useGetClient } from '@hooks/useGetClient';
+import { useAppDispatch, useGetClient } from '@hooks/useGetClient';
 import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/index';
+import { setEtag } from '@store/client';
 import { LanguageProps } from '@ts-types/custom.types';
 import { Category, OrderBy, SaveOptions } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
@@ -153,6 +154,7 @@ export default function CreateOrUpdateCategoriesForm({
   const { userInfo } = useGetClient();
 
   const { selectedLanguage } = useSettings();
+  const dispatch = useAppDispatch();
 
   const csrfToken = userInfo?.csrfToken;
 
@@ -210,8 +212,10 @@ export default function CreateOrUpdateCategoriesForm({
       }
     },
     onCompleted: (data: { updateCategory: Category }) => {
-      if (!isEmpty(data)) {
+      if (!isEmpty(data?.updateCategory)) {
         notify(t('common:successfully-updated'), 'success');
+        const { etag: newEtag } = data?.updateCategory ?? {};
+        dispatch(setEtag({ etag: newEtag }));
       }
     }
   });

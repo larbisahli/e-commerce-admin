@@ -89,6 +89,7 @@ export const UPDATE_TAG = gql`
   mutation UpdateTag($id: Int!, $name: String!, $language: LanguageInput!) {
     updateTag(id: $id, name: $name, language: $language) {
       id
+      tagEtag
     }
   }
 `;

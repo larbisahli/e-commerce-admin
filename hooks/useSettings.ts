@@ -1,4 +1,5 @@
 import type { AppDispatch, AppState } from '@store/index';
+import { cloneDeep } from 'lodash';
 import { useMemo } from 'react';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 
@@ -18,5 +19,11 @@ export const useSettings = () => {
     [settings?.languages]
   );
 
-  return { ...settings, defaultLanguage, systemLanguage };
+  const languages = useMemo(() => {
+    return cloneDeep(settings?.languages)?.sort(function (x, y) {
+      return Number(y.isDefault) - Number(x.isDefault);
+    });
+  }, [settings?.languages]);
+
+  return { ...settings, languages, defaultLanguage, systemLanguage };
 };

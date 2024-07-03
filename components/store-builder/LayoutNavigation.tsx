@@ -19,16 +19,23 @@ import {
   UPDATE_LAYOUT_COMPONENTS_POSITION
 } from '@graphql/content';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetClient } from '@hooks/useGetClient';
+import { useAppDispatch, useGetClient } from '@hooks/useGetClient';
 import { useUI } from '@hooks/useUI';
 import { notify } from '@lib/notify';
+import { setEtag } from '@store/client';
 import {
   ADD_SECTION_MODAL,
   CMS_BUILDER_MODAL,
   DELETE_COMPONENT,
   NEW_PAGE_MODAL
 } from '@ts-types/constants';
-import { ModuleGroups, StoreBuilder, StoreLayoutNames } from '@ts-types/enums';
+import {
+  ModuleGroups,
+  StoreBuilder,
+  StoreBuilderActions,
+  StoreLayoutNames
+} from '@ts-types/enums';
+import { EtagGroupsType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import { getBuilderSrc } from '@utils/utils';
 import classNames from 'classnames';
@@ -94,6 +101,7 @@ export default function LayoutNavigation({
   const { userInfo } = useGetClient();
 
   const { updateBuilderInfo } = useUI();
+  const dispatch = useAppDispatch();
 
   const csrfToken = userInfo?.csrfToken;
   const alias = userInfo?.store?.alias;
@@ -108,6 +116,8 @@ export default function LayoutNavigation({
       refetchQueries: [STORE_LAYOUTS_COMPONENTS, 'StoreLayoutComponents'],
       onCompleted: (data: { updateLayoutComponentVisibility: any }) => {
         if (!isEmpty(data.updateLayoutComponentVisibility)) {
+          const { etag: newEtag } = data?.updateLayoutComponentVisibility ?? {};
+          dispatch(setEtag({ etag: newEtag }));
           updateBuilderInfo({ isReloadIframe: true });
           notify(t('common:successfully-updated'), 'success', {
             position: 'top-center',
@@ -126,9 +136,14 @@ export default function LayoutNavigation({
       },
       refetchQueries: [STORE_LAYOUTS_COMPONENTS, 'StoreLayoutComponents'],
       onCompleted: (data: {
-        updateLayoutComponentsPosition: { success: boolean };
+        updateLayoutComponentsPosition: {
+          success: boolean;
+          etag: EtagGroupsType;
+        };
       }) => {
         if (data.updateLayoutComponentsPosition.success) {
+          const { etag: newEtag } = data?.updateLayoutComponentsPosition ?? {};
+          dispatch(setEtag({ etag: newEtag }));
           updateBuilderInfo({ isReloadIframe: true });
           notify(t('common:successfully-updated'), 'success', {
             position: 'top-center',
@@ -224,10 +239,12 @@ export default function LayoutNavigation({
     componentId: string;
   }) => {
     // @ts-ignore
-    var iframeWin = document.getElementById('storefront-iframe').contentWindow;
+    const iframeWin =
+      document.getElementById('storefront-iframe').contentWindow;
     iframeWin.postMessage(
       {
         source: StoreBuilder.GALA_CMS_BUILDER,
+        actionType: StoreBuilderActions.BLOCK_SELECTION,
         moduleName: block?.moduleName,
         componentId: block?.componentId
       },
@@ -305,7 +322,7 @@ export default function LayoutNavigation({
           tabIndex={0}
           onKeyDown={(e) => handleKeyDown(e, headerComponent)}
           onClick={() => handleClick(headerComponent)}
-          className="mx-2 flex cursor-pointer items-center rounded-sm px-3 py-4 hover:bg-gray-200"
+          className="mx-2 flex cursor-pointer items-center rounded-sm border border-gray-200 bg-gray-100 px-3 py-3 shadow-sm hover:bg-gray-200"
         >
           <div className="mr-2">
             <HeaderIcon />
@@ -333,7 +350,7 @@ export default function LayoutNavigation({
                 onDragOver={(e) => handleDragOver(e, block.componentId)}
                 onDragEnd={handleDragEnd}
                 className={classNames(
-                  'group flex cursor-pointer items-center rounded-sm py-4 pl-3 pr-1 text-gray-700 hover:bg-gray-100',
+                  'group my-2 flex cursor-pointer items-center rounded-sm border border-gray-200 bg-gray-100 py-3 pl-3 pr-1 text-gray-700 shadow-sm hover:bg-gray-200',
                   { 'opacity-50': block.componentId === draggedItemId }
                 )}
               >
@@ -376,7 +393,7 @@ export default function LayoutNavigation({
                     onClick={(e) => {
                       if (e && e.stopPropagation) e.stopPropagation();
                     }}
-                    className="hidden cursor-grab group-hover:block"
+                    className="cursor-grab"
                   >
                     <GrabIcon width={20} height={20} />
                   </button>
@@ -391,12 +408,14 @@ export default function LayoutNavigation({
                 layoutName
               });
             }}
-            className="flex w-full cursor-pointer items-center rounded-sm px-3 py-4 hover:bg-gray-200"
+            className="group flex w-full cursor-pointer items-center rounded-sm px-3 py-4"
           >
-            <div className="mr-2 w-6 text-blue-700">
+            <div className="mr-2 w-6 text-blue-700 group-hover:text-blue-900">
               <AddSectionIcon width={18} height={18} />
             </div>
-            <div className="text-blue-700">Add section</div>
+            <div className="text-blue-700 group-hover:text-blue-900">
+              Add section
+            </div>
           </button>
         </div>
         <div className="mx-auto my-2 h-[1px] w-[90%] bg-gray-300"></div>
@@ -406,7 +425,7 @@ export default function LayoutNavigation({
           tabIndex={0}
           onKeyDown={(e) => handleKeyDown(e, footerComponent)}
           onClick={() => handleClick(footerComponent)}
-          className="mx-2 flex cursor-pointer items-center rounded-sm px-3 py-4 hover:bg-gray-200"
+          className="mx-2 flex cursor-pointer items-center rounded-sm border border-gray-200 bg-gray-100 px-3 py-3 shadow-sm hover:bg-gray-200"
         >
           <div className="mr-2">
             <FooterIcon />
@@ -431,7 +450,7 @@ export default function LayoutNavigation({
                   onClick={() => handleClick(block)}
                   key={block.componentId}
                   className={classNames(
-                    'group flex cursor-pointer items-center rounded-sm py-4 text-gray-700 hover:bg-gray-100',
+                    'group my-2 flex cursor-pointer items-center rounded-sm border border-gray-200 bg-gray-100 px-2 py-3 text-gray-700 shadow-sm hover:bg-gray-100',
                     { 'opacity-50': block.componentId === draggedItemId }
                   )}
                 >

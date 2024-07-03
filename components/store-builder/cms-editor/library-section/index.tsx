@@ -16,9 +16,12 @@ const LibrarySectionModal = () => {
       return 'Category details';
     if (meta.moduleGroup === ModuleGroups.BREADCRUMB) return 'Breadcrumbs';
     if (meta.moduleGroup === ModuleGroups.PRODUCT_CARD) return 'Product cards';
+    if (meta.moduleGroup === ModuleGroups.CATEGORY_LIST_ITEM)
+      return 'Category list items';
+    else return 'Component';
   };
   return (
-    <div className="relative flex h-[70vh] w-[55vw] flex-col overflow-hidden">
+    <div className="relative flex h-[75vh] w-[60vw] flex-col overflow-hidden">
       <div className="font border-b border-gray-200 bg-gray-50 p-4 text-base capitalize text-gray-800">
         {`UI Library > ${handleTitle()}`}
       </div>

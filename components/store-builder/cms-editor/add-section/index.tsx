@@ -9,9 +9,10 @@ import {
   STORE_LAYOUTS_COMPONENTS
 } from '@graphql/content';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetClient } from '@hooks/useGetClient';
+import { useAppDispatch, useGetClient } from '@hooks/useGetClient';
 import { useUI } from '@hooks/useUI';
 import { notify } from '@lib/notify';
+import { setEtag } from '@store/client';
 import { ADD_SECTION_MODAL } from '@ts-types/constants';
 import { LanguageType, StoreLayoutComponentType } from '@ts-types/generated';
 import classNames from 'classnames';
@@ -44,7 +45,7 @@ const AddSectionModal = () => {
   const [error, setError] = useState(null);
 
   const { userInfo } = useGetClient();
-
+  const dispatch = useAppDispatch();
   const csrfToken = userInfo?.csrfToken;
 
   const [addLayoutComponent, { loading }] = useMutation(ADD_LAYOUT_COMPONENT, {
@@ -56,7 +57,9 @@ const AddSectionModal = () => {
     refetchQueries: [STORE_LAYOUTS_COMPONENTS, 'StoreLayoutComponents'],
     onCompleted: (data: { addLayoutComponent: any }) => {
       if (!isEmpty(data.addLayoutComponent)) {
-        closeModal(ADD_SECTION_MODAL);
+        const { componentId, etag: newEtag } = data?.addLayoutComponent ?? {};
+        dispatch(setEtag({ etag: newEtag }));
+        closeModal(ADD_SECTION_MODAL, null, { sectionId: componentId });
         updateBuilderInfo({ isReloadIframe: true });
         notify(t('common:successfully-added'), 'success', {
           position: 'top-center',
@@ -102,7 +105,7 @@ const AddSectionModal = () => {
   };
 
   return (
-    <div className="relative flex h-[90vh] w-[65vw] flex-col overflow-hidden">
+    <div className="relative flex h-[90vh] w-[95vw] flex-col overflow-hidden lg:w-[65vw]">
       <div className="border-b border-gray-200 bg-gray-100 p-4 text-lg font-semibold capitalize text-gray-800">
         Add section
       </div>
@@ -120,13 +123,10 @@ const AddSectionModal = () => {
         {/* LAYOUT */}
         <div className="">
           <h2 className="mb-3 font-semibold">Layout</h2>
-          <div className="grid grid-cols-2 border-b">
+          <div className="grid grid-cols-1 gap-x-12 border-b sm:grid-cols-2">
             {sectionsLayout?.map((section, idx) => {
               return (
-                <div
-                  key={idx}
-                  className="flex max-w-[390px] items-center border-t py-5"
-                >
+                <div key={idx} className="flex items-center border-t py-5">
                   <div className="mr-4 flex h-[55px] w-[55px] items-center justify-center rounded-md border text-gray-800 shadow">
                     <div>{section.icon()}</div>
                   </div>
@@ -150,7 +150,7 @@ const AddSectionModal = () => {
         {/* SHOP */}
         <div className="mt-8">
           <h2 className="mb-3 font-semibold">Shop</h2>
-          <div className="grid grid-cols-2 gap-2 border-b">
+          <div className="grid grid-cols-1 gap-x-12 border-b sm:grid-cols-2">
             {sectionsShop?.map((section, idx) => {
               return (
                 <div
@@ -162,7 +162,7 @@ const AddSectionModal = () => {
                   </div>
                   <div className="flex-1">
                     <span className="font-medium">{section.title}</span>
-                    <p className="text-sm text-gray-500">
+                    <p className="max-w-[98%] text-sm text-gray-500">
                       {section.description}
                     </p>
                   </div>
@@ -180,7 +180,7 @@ const AddSectionModal = () => {
         {/* OTHERS */}
         <div className="my-8">
           <h2 className="mb-3 font-semibold">Others</h2>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 gap-x-12 border-b sm:grid-cols-2">
             {sectionsOthers?.map((section, idx) => {
               return (
                 <div

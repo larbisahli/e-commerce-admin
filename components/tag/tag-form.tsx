@@ -8,8 +8,10 @@ import { CREATE_TAG, UPDATE_TAG } from '@graphql/tag';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useGetClient } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
+import { useAppDispatch } from '@hooks/useGetClient';
 import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/notify';
+import { setEtag } from '@store/client';
 import { Tag } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import { translationFallback } from '@utils/utils';
@@ -53,6 +55,7 @@ export default function CreateOrUpdateTagForm({ initialValues }: IProps) {
 
   const { userInfo } = useGetClient();
   const csrfToken = userInfo?.csrfToken;
+  const dispatch = useAppDispatch();
 
   const [createTag, { loading: creating }] = useMutation(CREATE_TAG, {
     context: {
@@ -76,8 +79,10 @@ export default function CreateOrUpdateTagForm({ initialValues }: IProps) {
       }
     },
     onCompleted: (data: { updateTag: Tag }) => {
-      if (!isEmpty(data)) {
+      if (!isEmpty(data?.updateTag)) {
         notify(t('common:successfully-updated'), 'success');
+        const { etag: newEtag } = data?.updateTag ?? {};
+        dispatch(setEtag({ etag: newEtag }));
       }
     }
   });

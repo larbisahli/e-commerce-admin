@@ -16,9 +16,10 @@ import {
   UPDATE_ATTRIBUTE
 } from '@graphql/attribute';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetClient } from '@hooks/useGetClient';
+import { useAppDispatch, useGetClient } from '@hooks/useGetClient';
 import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/index';
+import { setEtag } from '@store/client';
 import { AttributeTypes } from '@ts-types/enums';
 import { Attribute, AttributeValue } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
@@ -85,6 +86,7 @@ export default function CreateOrUpdateAttributeForm({
   });
 
   const { selectedLanguage } = useSettings();
+  const dispatch = useAppDispatch();
 
   const [createAttribute, { loading: creating }] = useMutation(
     CREATE_ATTRIBUTE,
@@ -113,8 +115,10 @@ export default function CreateOrUpdateAttributeForm({
         }
       },
       onCompleted: (data: { updateAttribute: Attribute }) => {
-        if (!isEmpty(data)) {
+        if (!isEmpty(data?.updateAttribute)) {
           notify(t('common:successfully-updated'), 'success');
+          const { etag: newEtag } = data?.updateAttribute ?? {};
+          dispatch(setEtag({ etag: newEtag }));
         }
       }
     }

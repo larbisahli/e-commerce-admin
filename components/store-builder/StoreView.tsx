@@ -4,15 +4,14 @@ import { useUI } from '@hooks/useUI';
 import { DEVICE_VIEWS } from '@ts-types/enums';
 import { getBuilderSrc } from '@utils/utils';
 import cn from 'classnames';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 export default function StoreViewComponents() {
   const iframeRef = useRef(null);
-  const [loading, setLoading] = useState(true);
 
   const {
     ui: {
-      builder: { deviceView, isReloadIframe, iframeSrc }
+      builder: { deviceView, isReloadIframe, iframeSrc, iframeLoading }
     },
     updateBuilderInfo
   } = useUI();
@@ -22,9 +21,12 @@ export default function StoreViewComponents() {
   const alias = userInfo?.store?.alias;
 
   const reload = () => {
-    setLoading(true);
-    iframeRef.current.contentWindow.location.href =
-      iframeSrc ?? getBuilderSrc(alias);
+    updateBuilderInfo({ iframeLoading: true });
+    let src = getBuilderSrc(alias);
+    if (iframeSrc) {
+      src = iframeSrc;
+    }
+    iframeRef.current.contentWindow.location.href = src;
     updateBuilderInfo({ isReloadIframe: false });
   };
 
@@ -32,6 +34,7 @@ export default function StoreViewComponents() {
     if (isReloadIframe) {
       reload();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isReloadIframe]);
 
   return (
@@ -44,7 +47,7 @@ export default function StoreViewComponents() {
         })}
       >
         <div className="pointer-events-nones absolute top-0 left-0 z-10 h-full w-full">
-          {loading && (
+          {iframeLoading && (
             <div className="flex h-full items-center justify-center">
               <Loader special />
             </div>
@@ -56,7 +59,7 @@ export default function StoreViewComponents() {
             width="100%"
             height="100%"
             className="w-fill h-full"
-            onLoad={() => setLoading(false)}
+            onLoad={() => updateBuilderInfo({ iframeLoading: false })}
             id="storefront-iframe"
           ></iframe>
         </div>

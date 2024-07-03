@@ -16,8 +16,10 @@ import {
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useGetClient } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
+import { useAppDispatch } from '@hooks/useGetClient';
 import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/notify';
+import { setEtag } from '@store/client';
 import { OrderStatus, PrivacyType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import { translationFallback } from '@utils/utils';
@@ -113,7 +115,7 @@ const statuses = [
 type FormValues = {
   label: string;
   color: string;
-  status: { value: string };
+  status: { value: string; label: string; description: string };
   privacy: PrivacyType;
 };
 const defaultValues = {
@@ -131,12 +133,14 @@ export default function CreateOrUpdateOrderStatusForm({
   const { t } = useTranslation();
 
   const { selectedLanguage } = useSettings();
+  const dispatch = useAppDispatch();
 
   const [error, setError] = useState(null);
   const {
     register,
     handleSubmit,
     control,
+    watch,
     formState: { errors }
   } = useForm<FormValues>({
     shouldUnregister: true,
@@ -178,7 +182,9 @@ export default function CreateOrUpdateOrderStatusForm({
         }
       },
       onCompleted: (data: { updateOrderStatus: OrderStatus }) => {
-        if (!isEmpty(data)) {
+        if (!isEmpty(data?.updateOrderStatus)) {
+          const { etag: newEtag } = data?.updateOrderStatus ?? {};
+          dispatch(setEtag({ etag: newEtag }));
           notify(t('common:successfully-updated'), 'success');
         }
       }
@@ -215,6 +221,8 @@ export default function CreateOrUpdateOrderStatusForm({
       });
     }
   };
+
+  const status = watch('status');
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -254,6 +262,7 @@ export default function CreateOrUpdateOrderStatusForm({
               getOptionValue={(option: any) => option.value}
               options={statuses}
             />
+            <p className="pt-1 text-xs text-gray-500">{status?.description}</p>
           </div>
           <Input
             label={t('form:input-label')}
@@ -288,7 +297,7 @@ export default function CreateOrUpdateOrderStatusForm({
             label={t('form:input-label-color')}
             {...register('color')}
             error={t(errors.color?.message!)}
-            className="mt-5 pb-10"
+            className="mt-5 flex items-center justify-between pb-10"
           >
             <DisplayColorCode control={control} />
           </ColorPicker>

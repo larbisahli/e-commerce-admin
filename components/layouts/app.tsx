@@ -24,12 +24,14 @@ const AppLayout: React.FC = ({ children }: Props) => {
   const { userInfo } = useGetClient();
   const { languages = [] } = useSettings();
 
+  const configEtag = userInfo?.store?.etag?.configEtag;
+
   // Fetch store settings
   useEffect(() => {
-    if (userInfo?.store?.etag) {
-      dispatch(fetchStoreSettings({ etag: userInfo?.store?.etag }));
+    if (configEtag) {
+      dispatch(fetchStoreSettings({ configEtag }));
     }
-  }, [dispatch, userInfo]);
+  }, [dispatch, configEtag]);
 
   const systemLanguage = useMemo(
     () => languages?.find((lang) => lang.isSystem),

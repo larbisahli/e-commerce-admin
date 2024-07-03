@@ -95,6 +95,9 @@ export const CREATE_ORDER_STATUS = gql`
       language: $language
     ) {
       id
+      etag {
+        orderStatusEtag
+      }
     }
   }
 `;
@@ -117,6 +120,9 @@ export const UPDATE_ORDER_STATUS = gql`
       language: $language
     ) {
       id
+      etag {
+        orderStatusEtag
+      }
     }
   }
 `;
@@ -125,6 +131,9 @@ export const DELETE_ORDER_STATUS = gql`
   mutation DeleteOrderStatus($id: Int!) {
     deleteOrderStatus(id: $id) {
       id
+      etag {
+        orderStatusEtag
+      }
     }
   }
 `;

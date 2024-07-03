@@ -10,9 +10,7 @@ const DisplayColorCode = ({ control, name }: any) => {
   return (
     <>
       {color !== null && (
-        <span className="rounded border border-border-200 bg-gray-100 px-2 py-1 text-sm text-heading ms-3">
-          {color}
-        </span>
+        <span className="mr-2 text-sm text-heading">{color}</span>
       )}
     </>
   );

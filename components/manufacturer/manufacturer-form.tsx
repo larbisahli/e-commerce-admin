@@ -17,9 +17,11 @@ import {
 } from '@graphql/manufacturer';
 import { useGetClient } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
+import { useAppDispatch } from '@hooks/useGetClient';
 import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/index';
-import type { ManufacturerType, Suppliers } from '@ts-types/generated';
+import { setEtag } from '@store/client';
+import type { ManufacturerType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import { translationFallback } from '@utils/utils';
 import isEmpty from 'lodash/isEmpty';
@@ -63,6 +65,7 @@ export default function CreateOrUpdateManufacturerForm({
     defaultValues: initialValues ? { ...initialValues } : defaultValues
   });
 
+  const dispatch = useAppDispatch();
   const { userInfo } = useGetClient();
   const csrfToken = userInfo?.csrfToken;
 
@@ -92,9 +95,11 @@ export default function CreateOrUpdateManufacturerForm({
           'x-csrf-token': csrfToken
         }
       },
-      onCompleted: (data: { updateSupplier: Suppliers }) => {
-        if (!isEmpty(data)) {
+      onCompleted: (data: { updateManufacturer: ManufacturerType }) => {
+        if (!isEmpty(data?.updateManufacturer)) {
           notify(t('common:successfully-updated'), 'success');
+          const { etag: newEtag } = data?.updateManufacturer ?? {};
+          dispatch(setEtag({ etag: newEtag }));
         }
       }
     }

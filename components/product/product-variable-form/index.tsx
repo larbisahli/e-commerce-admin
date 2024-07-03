@@ -7,9 +7,10 @@ import Title from '@components/ui/title';
 import { ATTRIBUTES_FOR_SELECT } from '@graphql/attribute';
 import { UPDATE_VARIABLE_PRODUCT_INFORMATION } from '@graphql/product';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetClient } from '@hooks/useGetClient';
+import { useAppDispatch, useGetClient } from '@hooks/useGetClient';
 import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/notify';
+import { setEtag } from '@store/client';
 import type { LanguageType, Product, VariationType } from '@ts-types/generated';
 import { Attribute, OrderBy, SortOrder } from '@ts-types/generated';
 import { cartesian } from '@utils/cartesian';
@@ -89,6 +90,7 @@ function ProductVariableForm({
   const { t } = useTranslation();
 
   const dispatch = useFormReducer();
+  const reduxDispatch = useAppDispatch();
 
   const { query } = useRouter();
 
@@ -138,6 +140,8 @@ function ProductVariableForm({
       onCompleted: (data: { updateVariableProductInformation: Product }) => {
         const { updateVariableProductInformation } = data ?? {};
         if (!isEmpty(updateVariableProductInformation)) {
+          const { etag: newEtag } = updateVariableProductInformation ?? {};
+          reduxDispatch(setEtag({ etag: newEtag }));
           const { variations, variationOptions } =
             updateVariableProductInformation;
           // Update initial state

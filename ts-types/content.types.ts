@@ -7,7 +7,7 @@ export interface PromoBannerType {
   backgroundColor: string;
   direction: 'horizontal' | 'vertical';
   slidesPerView: number;
-  langDirection: { label: 'LTR' | 'RTL' };
+  langDirection: { value: 'LTR' | 'RTL' };
   loop?: Scalars['Boolean'];
   draggable?: Scalars['Boolean'];
   items?: {

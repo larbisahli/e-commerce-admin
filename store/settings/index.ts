@@ -16,13 +16,13 @@ export interface SettingsState extends SettingsType {
 // Create the thunk
 export const fetchStoreSettings = createAsyncThunk(
   'settings/fetchStoreSettings',
-  async (args: { etag: EtagGroupsType }) => {
+  async (args: { configEtag: EtagGroupsType['configEtag'] }) => {
     const { data } = await apolloClient.query<{
       getStoreAdminConfig: SettingsType;
     }>({
       query: STORE_CONFIG,
       variables: {
-        etag: args.etag.configEtag
+        etag: args.configEtag
       },
       fetchPolicy: 'no-cache'
     });

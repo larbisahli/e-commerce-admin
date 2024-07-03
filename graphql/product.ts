@@ -33,6 +33,8 @@ export const PRODUCTS = gql`
       }
       quantity
       published
+      disableOutOfStock
+      inStock
       productSeo {
         slug
       }
@@ -323,24 +325,9 @@ export const CREATE_PRODUCT = gql`
     ) {
       id
       name
-    }
-  }
-`;
-
-export const UPDATE_PRODUCT = gql`
-  mutation UpdateProduct(
-    $id: Int!
-    $language: LanguageInput!
-    $additions: ProductInput!
-    $deletions: ProductInput!
-  ) {
-    updateProduct(
-      id: $id
-      language: $language
-      additions: $additions
-      deletions: $deletions
-    ) {
-      id
+      etag {
+        productEtag
+      }
     }
   }
 `;
@@ -357,6 +344,9 @@ export const UPDATE_PRODUCT_THUMBNAIL = gql`
       deletions: $deletions
     ) {
       id
+      etag {
+        productEtag
+      }
     }
   }
 `;
@@ -373,6 +363,9 @@ export const UPDATE_PRODUCT_GALLERY = gql`
       deletions: $deletions
     ) {
       id
+      etag {
+        productEtag
+      }
     }
   }
 `;
@@ -413,6 +406,9 @@ export const UPDATE_PRODUCT_CONTENT = gql`
       trackInventory
       freeShipping
       displayProductMeasurements
+      etag {
+        productEtag
+      }
     }
   }
 `;
@@ -454,6 +450,9 @@ export const UPDATE_SIMPLE_PRODUCT_INFORMATION = gql`
           value
         }
       }
+      etag {
+        productEtag
+      }
     }
   }
 `;
@@ -486,6 +485,9 @@ export const UPDATE_PRODUCT_SELECT_GROUP = gql`
       manufacturers {
         id
         name
+      }
+      etag {
+        productEtag
       }
     }
   }
@@ -520,6 +522,9 @@ export const UPDATE_PRODUCT_SEO = gql`
           placeholder
         }
       }
+      etag {
+        productEtag
+      }
     }
   }
 `;
@@ -546,6 +551,9 @@ export const UPDATE_PRODUCT_SHIPPING_INFO = gql`
         dimensionUnit {
           unit
         }
+      }
+      etag {
+        productEtag
       }
     }
   }
@@ -608,6 +616,9 @@ export const UPDATE_LINKED_PRODUCTS = gql`
           placeholder
         }
       }
+      etag {
+        productEtag
+      }
     }
   }
 `;
@@ -662,6 +673,9 @@ export const UPDATE_VARIABLE_PRODUCT_INFORMATION = gql`
           value
         }
       }
+      etag {
+        productEtag
+      }
     }
   }
 `;
@@ -670,6 +684,9 @@ export const DELETE_PRODUCT = gql`
   mutation DeleteProduct($id: Int!) {
     deleteProduct(id: $id) {
       name
+      etag {
+        productEtag
+      }
     }
   }
 `;

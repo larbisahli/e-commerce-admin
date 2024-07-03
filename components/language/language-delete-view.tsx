@@ -6,8 +6,9 @@ import {
 } from '@components/ui/modal/modal.context';
 import { DELETE_LANGUAGE, LANGUAGES } from '@graphql/language';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetClient } from '@hooks/useGetClient';
+import { useAppDispatch, useGetClient } from '@hooks/useGetClient';
 import { notify } from '@lib/notify';
+import { setEtag } from '@store/client';
 import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
 
@@ -30,6 +31,7 @@ const TagDeleteView = () => {
 
   const { id, meta } = useModalState();
   const { closeModal } = useModalAction();
+  const dispatch = useAppDispatch();
 
   useErrorLogger(error);
 
@@ -37,9 +39,10 @@ const TagDeleteView = () => {
     deleteLanguage({ variables: { id, localeId: meta.localeId } })
       .then(({ data }) => {
         const {
-          deleteLanguage: { id }
+          deleteLanguage: { id, etag: newEtag }
         } = data;
         if (id) {
+          dispatch(setEtag({ etag: newEtag }));
           notify(t('common:successfully-deleted'), 'success');
         }
         closeModal();

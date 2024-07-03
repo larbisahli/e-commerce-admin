@@ -70,7 +70,7 @@ const RecommendationsSection = () => {
                 <input
                   className="flex-1 rounded-sm border border-gray-400 px-2 py-2 text-lg font-light text-black outline-none"
                   readOnly
-                  value={`https://link.drogala.com/${alias}`}
+                  value={`https://link.dropgala.com/${alias}`}
                 />
                 <button className="mx-2 rounded-sm bg-gray-200 px-4 font-semibold text-black hover:bg-gray-300">
                   Copy link

@@ -21,7 +21,7 @@ import { useFormContext } from 'react-hook-form';
 import Color from './color';
 import { fontFamilyOptions, fontWeightOptions } from './data';
 
-const Typography = ({ label, name }) => {
+const Typography = ({ label, name, isTextAlign = true }) => {
   const { register, watch, setValue } = useFormContext();
 
   const color = watch(`${name}.color`);
@@ -102,7 +102,7 @@ const Typography = ({ label, name }) => {
           <div className="ml-4 flex w-fit items-center justify-center rounded-sm border border-gray-300 p-1 px-2">
             <input
               type="number"
-              min={0}
+              min={-1}
               step="any"
               className="hide-arrow w-[35px] pr-1 text-right outline-none"
               {...register(`${name}.letterSpacing`)}
@@ -130,52 +130,54 @@ const Typography = ({ label, name }) => {
             register={register(`${name}.color`)}
           />
         </div>
-        <div className="mt-3 flex items-center justify-between">
-          <Label>Text align</Label>
-          <div className="flex items-center justify-center">
-            <button
-              onClick={(e) => handleTextAlign(e, TextAlignEnum.LEFT)}
-              title="Left"
-              className={classNames(
-                'flex h-7 w-10 items-center justify-center rounded-l-sm border-t border-b border-l border-gray-300 text-gray-600 hover:bg-gray-200 hover:text-blue-700',
-                {
-                  'border-accent bg-blue-100 text-accent transition-colors hover:bg-blue-200':
-                    textAlign === TextAlignEnum.LEFT
-                }
-              )}
-            >
-              <AlignLeftIcon width={18} height={18} />
-            </button>
-            <button
-              onClick={(e) => handleTextAlign(e, TextAlignEnum.CENTER)}
-              title="Center"
-              className={classNames(
-                'flex h-7 w-10 items-center justify-center border-t border-b border-r border-l border-gray-300 text-gray-600 transition-colors hover:bg-gray-200 hover:text-blue-700',
-                {
-                  'border-accent bg-blue-100 text-accent hover:bg-blue-200':
-                    textAlign === TextAlignEnum.CENTER,
-                  'border-l-accent': textAlign === TextAlignEnum.LEFT,
-                  '!border-r-0': textAlign === TextAlignEnum.RIGHT
-                }
-              )}
-            >
-              <AlignCenterIcon width={18} height={18} />
-            </button>
-            <button
-              onClick={(e) => handleTextAlign(e, TextAlignEnum.RIGHT)}
-              title="Right"
-              className={classNames(
-                'flex h-7 w-10 items-center justify-center rounded-r-sm border-t border-b border-r border-gray-300 text-gray-600 hover:bg-gray-200 hover:text-blue-700',
-                {
-                  'border-l border-accent border-l-accent bg-blue-100 text-accent transition-colors hover:bg-blue-200':
-                    textAlign === TextAlignEnum.RIGHT
-                }
-              )}
-            >
-              <AlignRightIcon width={18} height={18} />
-            </button>
+        {isTextAlign && (
+          <div className="mt-3 flex items-center justify-between">
+            <Label>Text align</Label>
+            <div className="flex items-center justify-center">
+              <button
+                onClick={(e) => handleTextAlign(e, TextAlignEnum.LEFT)}
+                title="Left"
+                className={classNames(
+                  'flex h-7 w-10 items-center justify-center rounded-l-sm border-t border-b border-l border-gray-300 text-gray-600 hover:bg-gray-200 hover:text-blue-700',
+                  {
+                    'border-accent bg-blue-100 text-accent transition-colors hover:bg-blue-200':
+                      textAlign === TextAlignEnum.LEFT
+                  }
+                )}
+              >
+                <AlignLeftIcon width={18} height={18} />
+              </button>
+              <button
+                onClick={(e) => handleTextAlign(e, TextAlignEnum.CENTER)}
+                title="Center"
+                className={classNames(
+                  'flex h-7 w-10 items-center justify-center border-t border-b border-r border-l border-gray-300 text-gray-600 transition-colors hover:bg-gray-200 hover:text-blue-700',
+                  {
+                    'border-accent bg-blue-100 text-accent hover:bg-blue-200':
+                      textAlign === TextAlignEnum.CENTER,
+                    'border-l-accent': textAlign === TextAlignEnum.LEFT,
+                    '!border-r-0': textAlign === TextAlignEnum.RIGHT
+                  }
+                )}
+              >
+                <AlignCenterIcon width={18} height={18} />
+              </button>
+              <button
+                onClick={(e) => handleTextAlign(e, TextAlignEnum.RIGHT)}
+                title="Right"
+                className={classNames(
+                  'flex h-7 w-10 items-center justify-center rounded-r-sm border-t border-b border-r border-gray-300 text-gray-600 hover:bg-gray-200 hover:text-blue-700',
+                  {
+                    'border-l border-accent border-l-accent bg-blue-100 text-accent transition-colors hover:bg-blue-200':
+                      textAlign === TextAlignEnum.RIGHT
+                  }
+                )}
+              >
+                <AlignRightIcon width={18} height={18} />
+              </button>
+            </div>
           </div>
-        </div>
+        )}
         <div className="mt-3 flex items-center justify-between">
           <Label>Font style</Label>
           <div className="flex items-center justify-center">

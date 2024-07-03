@@ -14,6 +14,7 @@ import { useGetClient } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useAppDispatch } from '@hooks/useGetClient';
 import { notify } from '@lib/notify';
+import { setEtag } from '@store/client';
 import { fetchStoreSettings } from '@store/settings';
 import { LanguageType } from '@ts-types/generated';
 import { locales } from '@utils/locales';
@@ -121,8 +122,10 @@ export default function LanguageForm({
     },
     onCompleted: (data: { updateLanguage: LanguageType }) => {
       if (!isEmpty(data?.updateLanguage)) {
-        // Updalocalete store languages
-        dispatch(fetchStoreSettings({ etag: userInfo?.store?.etag }));
+        // Update locale store languages
+        const { etag: newEtag } = data?.updateLanguage ?? {};
+        dispatch(setEtag({ etag: newEtag }));
+        dispatch(fetchStoreSettings({ configEtag: newEtag?.configEtag }));
         notify(t('common:successfully-updated'), 'success');
         router.push(ROUTES.LANGUAGES);
       }
@@ -138,7 +141,9 @@ export default function LanguageForm({
     onCompleted: (data: { createLanguage: LanguageType }) => {
       if (!isEmpty(data?.createLanguage)) {
         // Update store languages
-        dispatch(fetchStoreSettings({ etag: userInfo?.store?.etag }));
+        const { etag: newEtag } = data?.createLanguage ?? {};
+        dispatch(setEtag({ etag: newEtag }));
+        dispatch(fetchStoreSettings({ configEtag: newEtag?.configEtag }));
         notify(t('common:successfully-created'), 'success');
         router.push(ROUTES.LANGUAGES);
       }

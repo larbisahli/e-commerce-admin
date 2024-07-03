@@ -7,9 +7,10 @@ import Input from '@components/ui/input';
 import { ATTRIBUTES_FOR_SELECT } from '@graphql/attribute';
 import { UPDATE_SIMPLE_PRODUCT_INFORMATION } from '@graphql/product';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetClient } from '@hooks/useGetClient';
+import { useAppDispatch, useGetClient } from '@hooks/useGetClient';
 import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/notify';
+import { setEtag } from '@store/client';
 import { OrderBy, SortOrder } from '@ts-types/enums';
 import { Attribute, LanguageType, Product } from '@ts-types/generated';
 import { differenceWith, isEqual } from 'lodash';
@@ -67,6 +68,7 @@ function ProductSimpleForm({
 
   const { systemCurrency } = useSettings();
   const dispatch = useFormReducer();
+  const reduxDispatch = useAppDispatch();
 
   const { selectedLanguage } = useSettings();
 
@@ -102,6 +104,8 @@ function ProductSimpleForm({
       onCompleted: (data: { updateSimpleProductInformation: Product }) => {
         console.log({ data });
         if (!isEmpty(data?.updateSimpleProductInformation)) {
+          const { etag: newEtag } = data?.updateSimpleProductInformation ?? {};
+          reduxDispatch(setEtag({ etag: newEtag }));
           setInitProductInformation(data?.updateSimpleProductInformation);
           notify(t('common:successfully-updated'), 'success');
         }

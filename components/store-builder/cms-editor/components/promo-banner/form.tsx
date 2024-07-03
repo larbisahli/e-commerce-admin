@@ -1,19 +1,21 @@
 import { useMutation } from '@apollo/client';
 import Card from '@components/common/card';
 import Button from '@components/ui/button';
-import ColorPicker from '@components/ui/color-picker/color-picker';
 import Description from '@components/ui/description';
 import Input from '@components/ui/input';
 import Label from '@components/ui/label';
 import Loader from '@components/ui/loader/loader';
+import { useModalAction } from '@components/ui/modal/modal.context';
 import Radio from '@components/ui/radio';
 import SelectInput from '@components/ui/select-input';
 import SwitchInput from '@components/ui/switch-input';
 import { UPDATE_LAYOUT_COMPONENT_CONTENT } from '@graphql/content';
 import { useErrorLogger, useGetClient } from '@hooks/index';
+import { useAppDispatch } from '@hooks/useGetClient';
 import { useSettings } from '@hooks/useSettings';
 import { useUI } from '@hooks/useUI';
 import { notify } from '@lib/index';
+import { setEtag } from '@store/client';
 import type { PromoBannerType } from '@ts-types/content.types';
 import type { StoreLayoutComponentType } from '@ts-types/generated';
 import cloneDeep from 'lodash/cloneDeep';
@@ -25,38 +27,12 @@ import React from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 
 import FormActions from '../../helpers/FormActions';
+import { animationSpeedOptions, delaySpeedOptions } from '../common/data';
 
 const Editor = dynamic(() => import('@components/ui/editor'), {
   loading: () => <Loader height="150px" text="Editor..." />,
   ssr: false
 });
-
-const animationSpeedOptions = [
-  { value: 500, name: '500 milliseconds' },
-  { value: 1000, name: '1 second' },
-  { value: 2000, name: '2 seconds' },
-  { value: 3000, name: '3 seconds' },
-  { value: 4000, name: '4 seconds' },
-  { value: 5000, name: '5 seconds' },
-  { value: 6000, name: '6 seconds' },
-  { value: 7000, name: '7 seconds' },
-  { value: 8000, name: '8 seconds' },
-  { value: 9000, name: '9 seconds' },
-  { value: 10000, name: '10 seconds' }
-];
-
-const delaySpeedOptions = [
-  { value: 1000, name: '1 seconds' },
-  { value: 2000, name: '2 seconds' },
-  { value: 3000, name: '3 seconds' },
-  { value: 4000, name: '4 seconds' },
-  { value: 5000, name: '5 seconds' },
-  { value: 6000, name: '6 seconds' },
-  { value: 7000, name: '7 seconds' },
-  { value: 8000, name: '8 seconds' },
-  { value: 9000, name: '9 seconds' },
-  { value: 10000, name: '10 seconds' }
-];
 
 type FormValues = PromoBannerType;
 
@@ -66,14 +42,17 @@ type IProps = {
   initialValues?: StoreLayoutComponentType;
 };
 
-const CreateOrUpdatePromoSlideForm = ({ initialValues }: IProps) => {
+const PromoBannerForm = ({ initialValues }: IProps) => {
   const { t } = useTranslation();
 
   const data = initialValues.data;
   const [error, setError] = useState(null);
   const { selectedLanguage } = useSettings();
 
+  console.log('???????', { initialValues });
+
   const { updateBuilderInfo } = useUI();
+  const dispatch = useAppDispatch();
 
   const { watch, register, handleSubmit, control, setValue } =
     useForm<FormValues>({
@@ -89,6 +68,7 @@ const CreateOrUpdatePromoSlideForm = ({ initialValues }: IProps) => {
   });
 
   const { userInfo } = useGetClient();
+  const { closeModal } = useModalAction();
   const csrfToken = userInfo?.csrfToken;
 
   const [updateLayoutComponent, { loading: updating }] = useMutation(
@@ -102,12 +82,15 @@ const CreateOrUpdatePromoSlideForm = ({ initialValues }: IProps) => {
       onCompleted: (data: {
         updateLayoutComponent: StoreLayoutComponentType;
       }) => {
-        if (!isEmpty(data)) {
+        if (!isEmpty(data?.updateLayoutComponent)) {
+          const { etag: newEtag } = data?.updateLayoutComponent ?? {};
+          dispatch(setEtag({ etag: newEtag }));
           notify(t('common:successfully-updated'), 'success', {
             position: 'top-center',
             autoClose: 2000
           });
           updateBuilderInfo({ isReloadIframe: true });
+          closeModal(null, null, { sectionId: initialValues.componentId });
         }
       }
     }
@@ -122,7 +105,6 @@ const CreateOrUpdatePromoSlideForm = ({ initialValues }: IProps) => {
       language: selectedLanguage,
       data: {
         direction: values.direction,
-        backgroundColor: values.backgroundColor,
         animationSpeed: values?.animationSpeed,
         delaySpeed: values?.delaySpeed,
         loop: values.loop,
@@ -141,7 +123,6 @@ const CreateOrUpdatePromoSlideForm = ({ initialValues }: IProps) => {
     });
   };
 
-  const backgroundColor = watch('backgroundColor');
   const loop = watch('loop');
   const draggable = watch('draggable');
 
@@ -189,9 +170,9 @@ const CreateOrUpdatePromoSlideForm = ({ initialValues }: IProps) => {
             <SelectInput
               name="langDirection"
               control={control}
-              getOptionLabel={(option: { label: string }) => option?.label}
-              getOptionValue={(option: { label: string }) => option?.label}
-              options={[{ label: 'LTR' }, { label: 'RTL' }]}
+              getOptionLabel={(option: { value: string }) => option?.value}
+              getOptionValue={(option: { value: string }) => option?.value}
+              options={[{ value: 'LTR' }, { value: 'RTL' }]}
             />
           </div>
           <Input
@@ -203,13 +184,6 @@ const CreateOrUpdatePromoSlideForm = ({ initialValues }: IProps) => {
             variant="outline"
             className="mt-5"
           />
-          <ColorPicker
-            label={t('form:input-background-color')}
-            {...register(`backgroundColor`)}
-            className="mt-5 flex items-center justify-between"
-          >
-            <DisplayColorCode color={backgroundColor} />
-          </ColorPicker>
           <div className="mt-5">
             <Label>{t('form:input-label-direction')}</Label>
             <Radio
@@ -312,14 +286,4 @@ const CreateOrUpdatePromoSlideForm = ({ initialValues }: IProps) => {
   );
 };
 
-const DisplayColorCode = ({ color }: { color: string }) => {
-  return (
-    <>
-      {color !== null && (
-        <span className="mr-2 text-sm text-heading">{color}</span>
-      )}
-    </>
-  );
-};
-
-export default memo(CreateOrUpdatePromoSlideForm);
+export default memo(PromoBannerForm);

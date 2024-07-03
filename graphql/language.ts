@@ -88,6 +88,9 @@ export const UPDATE_LANGUAGE = gql`
     ) {
       id
       name
+      etag {
+        configEtag
+      }
     }
   }
 `;
@@ -109,6 +112,9 @@ export const CREATE_LANGUAGE = gql`
     ) {
       id
       name
+      etag {
+        configEtag
+      }
     }
   }
 `;
@@ -117,6 +123,9 @@ export const DELETE_LANGUAGE = gql`
   mutation DeleteLanguage($id: Int!, $localeId: String!) {
     deleteLanguage(id: $id, localeId: $localeId) {
       id
+      etag {
+        configEtag
+      }
     }
   }
 `;
@@ -126,6 +135,9 @@ export const SET_DEFAULT_LANGUAGE = gql`
     setDefaultLanguage(id: $id) {
       id
       name
+      etag {
+        configEtag
+      }
     }
   }
 `;

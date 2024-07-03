@@ -129,6 +129,9 @@ export const UPDATE_MANUFACTURER = gql`
       logo: $logo
     ) {
       id
+      etag {
+        manufacturerEtag
+      }
     }
   }
 `;

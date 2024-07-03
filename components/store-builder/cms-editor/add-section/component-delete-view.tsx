@@ -9,9 +9,10 @@ import {
   STORE_LAYOUTS_COMPONENTS
 } from '@graphql/content';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetClient } from '@hooks/useGetClient';
+import { useAppDispatch, useGetClient } from '@hooks/useGetClient';
 import { useUI } from '@hooks/useUI';
 import { notify } from '@lib/notify';
+import { setEtag } from '@store/client';
 import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
 
@@ -25,6 +26,8 @@ const ComponentDeleteView = () => {
   const [error, setError] = useState(null);
 
   const { userInfo } = useGetClient();
+  const dispatch = useAppDispatch();
+
   const csrfToken = userInfo?.csrfToken;
 
   const [deleteLayoutComponent, { loading }] = useMutation(
@@ -48,6 +51,8 @@ const ComponentDeleteView = () => {
           deleteLayoutComponent: { componentId }
         } = data;
         if (componentId) {
+          const { etag: newEtag } = data?.deleteLayoutComponent ?? {};
+          dispatch(setEtag({ etag: newEtag }));
           updateBuilderInfo({ isReloadIframe: true });
           notify(t('common:successfully-deleted'), 'success', {
             position: 'top-center',

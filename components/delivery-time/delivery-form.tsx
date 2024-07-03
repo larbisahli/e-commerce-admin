@@ -17,8 +17,10 @@ import {
   useGetClient,
   useWarnIfUnsavedChanges
 } from '@hooks/index';
+import { useAppDispatch } from '@hooks/useGetClient';
 import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/notify';
+import { setEtag } from '@store/client';
 import { Nullable } from '@ts-types/custom.types';
 import { DeliveryTimeType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
@@ -94,9 +96,10 @@ export default function CreateOrUpdateDeliveryForm({ initialValues }: IProps) {
 
   const { userInfo } = useGetClient();
   const csrfToken = userInfo?.csrfToken;
+  const dispatch = useAppDispatch();
 
   const [
-    createShippingZone,
+    createDeliveryTime,
     { loading: creating, reset: resetCreateMutation }
   ] = useMutation(CREATE_DELIVERY_TIME, {
     context: {
@@ -114,7 +117,7 @@ export default function CreateOrUpdateDeliveryForm({ initialValues }: IProps) {
   });
 
   const [
-    updateShippingZone,
+    updateDeliveryTime,
     { loading: updating, reset: resetUpdateMutation }
   ] = useMutation(UPDATE_DELIVERY_TIME, {
     context: {
@@ -123,8 +126,10 @@ export default function CreateOrUpdateDeliveryForm({ initialValues }: IProps) {
       }
     },
     onCompleted: (data: { updateDeliveryTime: DeliveryTimeType }) => {
-      if (!isEmpty(data)) {
+      if (!isEmpty(data?.updateDeliveryTime)) {
         notify(t('common:successfully-updated'), 'success');
+        const { etag: newEtag } = data?.updateDeliveryTime ?? {};
+        dispatch(setEtag({ etag: newEtag }));
       }
     }
   });
@@ -147,12 +152,12 @@ export default function CreateOrUpdateDeliveryForm({ initialValues }: IProps) {
 
     setUnsavedChanges(false);
     if (isEmpty(initialValues)) {
-      createShippingZone({ variables }).catch((err) => {
+      createDeliveryTime({ variables }).catch((err) => {
         setError(err);
         resetCreateMutation();
       });
     } else {
-      updateShippingZone({
+      updateDeliveryTime({
         variables: { id: initialValues?.id, ...variables }
       }).catch((err) => {
         setError(err);

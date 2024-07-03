@@ -122,6 +122,9 @@ export const UPDATE_DELIVERY_TIME = gql`
       language: $language
     ) {
       id
+      etag {
+        shipmentEtag
+      }
     }
   }
 `;

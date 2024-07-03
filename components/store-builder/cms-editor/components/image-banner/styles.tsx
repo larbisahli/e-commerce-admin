@@ -2,11 +2,14 @@ import { useMutation } from '@apollo/client';
 import Card from '@components/common/card';
 import Description from '@components/ui/description';
 import Label from '@components/ui/label';
+import { useModalAction } from '@components/ui/modal/modal.context';
 import SelectInput from '@components/ui/select-input';
 import { UPDATE_LAYOUT_COMPONENT_STYLES } from '@graphql/content';
 import { useErrorLogger, useGetClient } from '@hooks/index';
+import { useAppDispatch } from '@hooks/useGetClient';
 import { useUI } from '@hooks/useUI';
 import { notify } from '@lib/index';
+import { setEtag } from '@store/client';
 import { PageBuilderStyles } from '@ts-types/custom.types';
 import type { StoreLayoutComponentType } from '@ts-types/generated';
 import cloneDeep from 'lodash/cloneDeep';
@@ -19,7 +22,8 @@ import { FormProvider, useForm } from 'react-hook-form';
 import FormActions from '../../helpers/FormActions';
 import Border from '../common/Border';
 import ContainerWidth from '../common/containerWidth';
-import Spacing from '../common/Spacing';
+import FlexAlignment from '../common/flexAlignment';
+import Overlay from '../common/Overlay';
 import { ObjectFitTooltipContent } from '../common/ToolTips';
 import Typography from '../common/Typography';
 
@@ -37,6 +41,8 @@ type FormValues = {
   description: PageBuilderStyles['Typography'];
   imageBorder: PageBuilderStyles['Border'];
   objectFit: { value: string };
+  overlay: PageBuilderStyles['Overlay'];
+  flexAlignment: PageBuilderStyles['FlexAlignment'];
 };
 
 const defaultValues = {};
@@ -52,7 +58,12 @@ const ImageBannerStyles = ({ initialValues }: IProps) => {
 
   const data = initialValues?.styles;
 
+  const hasFlexAlignment =
+    initialValues?.moduleName === 'ImageBannerContentCenter';
+  const hasOverlay = initialValues?.moduleName === 'ImageBannerContentCenter';
+
   const { updateBuilderInfo } = useUI();
+  const dispatch = useAppDispatch();
 
   const methods = useForm<FormValues>({
     defaultValues: !isEmpty(data)
@@ -61,6 +72,7 @@ const ImageBannerStyles = ({ initialValues }: IProps) => {
   });
 
   const { userInfo } = useGetClient();
+  const { closeModal } = useModalAction();
   const csrfToken = userInfo?.csrfToken;
 
   const [updateLayoutComponent, { loading: updating }] = useMutation(
@@ -72,14 +84,17 @@ const ImageBannerStyles = ({ initialValues }: IProps) => {
         }
       },
       onCompleted: (data: {
-        UpdateLayoutComponentStyles: StoreLayoutComponentType;
+        updateLayoutComponentStyles: StoreLayoutComponentType;
       }) => {
-        if (!isEmpty(data)) {
+        if (!isEmpty(data?.updateLayoutComponentStyles)) {
+          const { etag: newEtag } = data?.updateLayoutComponentStyles ?? {};
+          dispatch(setEtag({ etag: newEtag }));
           notify(t('common:successfully-updated'), 'success', {
             position: 'top-center',
             autoClose: 2000
           });
           updateBuilderInfo({ isReloadIframe: true });
+          closeModal(null, null, { sectionId: initialValues.componentId });
         }
       }
     }
@@ -95,7 +110,9 @@ const ImageBannerStyles = ({ initialValues }: IProps) => {
         header: values.header,
         description: values.description,
         imageBorder: values.imageBorder,
-        objectFit: values.objectFit
+        objectFit: values.objectFit,
+        overlay: values.overlay,
+        flexAlignment: values.flexAlignment
       }
     };
     updateLayoutComponent({ variables }).catch((err) => {
@@ -127,14 +144,35 @@ const ImageBannerStyles = ({ initialValues }: IProps) => {
           />
           <Card className="w-full sm:w-8/12 md:w-2/3">
             <div className="mb-5">
-              <Typography label={'Header'} name={'header'} />
+              <Typography
+                isTextAlign={false}
+                label={'Header'}
+                name={'header'}
+              />
             </div>
             <div className="mb-5">
-              <Typography label={'Description'} name={'description'} />
+              <Typography
+                isTextAlign={false}
+                label={'Description'}
+                name={'description'}
+              />
             </div>
             <div className="mb-5">
               <Border label={'Image Border'} name={'imageBorder'} />
             </div>
+            {hasFlexAlignment && (
+              <div className="mb-5">
+                <Overlay label={'Overlay'} name={'overlay'} />
+              </div>
+            )}
+            {hasOverlay && (
+              <div className="mb-5">
+                <FlexAlignment
+                  label={'Content Alignment'}
+                  name={'flexAlignment'}
+                />
+              </div>
+            )}
             <div className="mb-3">
               <div className="flex items-center justify-between">
                 <Label

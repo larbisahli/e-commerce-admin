@@ -282,7 +282,7 @@ export default function OrderDetailsPage({ client }: SSRProps) {
   return (
     <>
       <div className="mb-5 flex justify-end">
-        <PDFDownloadLink
+        {/* <PDFDownloadLink
           document={
             <InvoicePdf order={order} systemCurrency={systemCurrency} />
           }
@@ -297,7 +297,7 @@ export default function OrderDetailsPage({ client }: SSRProps) {
               Download Invoice
             </Button>
           )}
-        </PDFDownloadLink>
+        </PDFDownloadLink> */}
       </div>
       <Card>
         <div className="mb-8">

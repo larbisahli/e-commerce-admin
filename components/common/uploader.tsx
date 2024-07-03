@@ -1,6 +1,9 @@
 import { UploadIcon } from '@components/icons/upload-icon';
 import { useErrorLogger } from '@hooks/index';
+import { useAppDispatch } from '@hooks/useGetClient';
 import { notify } from '@lib/notify';
+import { setEtag } from '@store/client';
+import { EtagGroupsType } from '@ts-types/generated';
 import { apiURL } from '@utils/utils';
 import cn from 'classnames';
 import { useTranslation } from 'next-i18next';
@@ -15,6 +18,7 @@ interface ImageType {
   size: number;
   error?: any;
   disable?: boolean;
+  etag?: EtagGroupsType;
 }
 
 export default function Uploader({
@@ -28,6 +32,7 @@ export default function Uploader({
   const [error, setError] = useState(null);
 
   useErrorLogger(error);
+  const dispatch = useAppDispatch();
 
   const { getRootProps, getInputProps } = useDropzone({
     multiple: true,
@@ -64,6 +69,7 @@ export default function Uploader({
 
                 if (image.success) {
                   setLoading(false);
+                  dispatch(setEtag({ etag: image.etag }));
                   refetch();
                 }
 

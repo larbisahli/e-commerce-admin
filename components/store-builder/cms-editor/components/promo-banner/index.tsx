@@ -1,17 +1,13 @@
 import { ContentIcon } from '@components/icons/builder/content';
 import { CssStyleIcon } from '@components/icons/builder/css-style';
-import Loader from '@components/ui/loader/loader';
 import { Tab } from '@headlessui/react';
 import type { StoreLayoutComponentType } from '@ts-types/generated';
 import classNames from 'classnames';
-import dynamic from 'next/dynamic';
 import { Fragment, memo } from 'react';
 import React from 'react';
 
-const CreateOrUpdatePromoSlideForm = dynamic(
-  () => import('./promo-slide-form'),
-  { ssr: true, loading: () => <Loader special /> }
-);
+import PromoBannerForm from './form';
+import PromoBannerStyles from './styles';
 
 type IProps = {
   initialValues?: StoreLayoutComponentType;
@@ -57,11 +53,13 @@ const PromoSlideContent = ({ initialValues }: IProps) => {
       <Tab.Panels>
         <Tab.Panel>
           <div className="pt-3">
-            <CreateOrUpdatePromoSlideForm initialValues={initialValues} />
+            <PromoBannerForm initialValues={initialValues} />
           </div>
         </Tab.Panel>
         <Tab.Panel>
-          <div className="pt-3">22222</div>
+          <div className="pt-3">
+            <PromoBannerStyles initialValues={initialValues} />
+          </div>
         </Tab.Panel>
       </Tab.Panels>
     </Tab.Group>

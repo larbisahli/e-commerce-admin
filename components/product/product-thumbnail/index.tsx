@@ -5,9 +5,10 @@ import Button from '@components/ui/button';
 import { UPDATE_PRODUCT_THUMBNAIL } from '@graphql/product';
 import { useDifferenceWith } from '@hooks/useDifferenceWith';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetClient } from '@hooks/useGetClient';
+import { useAppDispatch, useGetClient } from '@hooks/useGetClient';
 import { notify } from '@lib/notify';
-import { ImageType, Product } from '@ts-types/generated';
+import { setEtag } from '@store/client';
+import { EtagGroupsType, ImageType, Product } from '@ts-types/generated';
 import isEmpty from 'lodash/isEmpty';
 import { useTranslation } from 'next-i18next';
 import { memo, useState } from 'react';
@@ -26,6 +27,7 @@ const ProductThumbnail = ({ state, initialValues }: Props) => {
   const { t } = useTranslation();
 
   const dispatch = useFormReducer();
+  const reduxDispatch = useAppDispatch();
 
   const [initThumbnail, setInitThumbnail] = useState(
     () => initialValues?.thumbnail
@@ -53,8 +55,12 @@ const ProductThumbnail = ({ state, initialValues }: Props) => {
         'x-csrf-token': csrfToken
       }
     },
-    onCompleted: (data: { updateProductThumbnail: { id: number } }) => {
+    onCompleted: (data: {
+      updateProductThumbnail: { id: number; etag: EtagGroupsType };
+    }) => {
       if (!isEmpty(data?.updateProductThumbnail)) {
+        const { etag: newEtag } = data?.updateProductThumbnail ?? {};
+        reduxDispatch(setEtag({ etag: newEtag }));
         setInitThumbnail(thumbnail);
         notify(t('common:successfully-updated'), 'success');
       }

@@ -6,8 +6,9 @@ import {
 } from '@components/ui/modal/modal.context';
 import { DELETE_ORDER_STATUS, ORDER_STATUSES } from '@graphql/order-status';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetClient } from '@hooks/useGetClient';
+import { useAppDispatch, useGetClient } from '@hooks/useGetClient';
 import { notify } from '@lib/notify';
+import { setEtag } from '@store/client';
 import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
 
@@ -16,8 +17,9 @@ const OrderStatusDeleteView = () => {
 
   const [error, setError] = useState(null);
 
-  const { userInfo } = useGetClient();
-  const csrfToken = userInfo?.csrfToken;
+  const {
+    userInfo: { csrfToken }
+  } = useGetClient();
 
   const [deleteOrderStatusValue, { loading }] = useMutation(
     DELETE_ORDER_STATUS,
@@ -36,6 +38,7 @@ const OrderStatusDeleteView = () => {
 
   const { id } = useModalState();
   const { closeModal } = useModalAction();
+  const dispatch = useAppDispatch();
 
   useErrorLogger(error);
 
@@ -43,9 +46,10 @@ const OrderStatusDeleteView = () => {
     deleteOrderStatusValue({ variables: { id } })
       .then(({ data }) => {
         const {
-          deleteOrderStatus: { id }
+          deleteOrderStatus: { id, etag }
         } = data;
         if (id) {
+          dispatch(setEtag({ etag }));
           notify(t('common:successfully-deleted'), 'success');
         }
         closeModal();

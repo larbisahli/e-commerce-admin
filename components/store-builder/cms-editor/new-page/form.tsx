@@ -7,12 +7,13 @@ import { useModalAction } from '@components/ui/modal/modal.context';
 import TextArea from '@components/ui/text-area';
 import { CREATE_LAYOUT, UPDATE_LAYOUT } from '@graphql/content';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetClient } from '@hooks/useGetClient';
+import { useAppDispatch, useGetClient } from '@hooks/useGetClient';
 import { useSettings } from '@hooks/useSettings';
 import { useUI } from '@hooks/useUI';
 import { notify } from '@lib/notify';
+import { setEtag } from '@store/client';
 import { NEW_PAGE_MODAL } from '@ts-types/constants';
-import { ImageType } from '@ts-types/generated';
+import { EtagGroupsType, ImageType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import { getBuilderSrc } from '@utils/utils';
 import { isEmpty } from 'lodash';
@@ -72,7 +73,7 @@ const NewPageForm = (props: Props) => {
   const [error, setError] = useState(null);
 
   const { selectedLanguage } = useSettings();
-
+  const dispatch = useAppDispatch();
   const { userInfo } = useGetClient();
   const alias = userInfo?.store?.alias;
   const csrfToken = userInfo?.csrfToken;
@@ -85,9 +86,13 @@ const NewPageForm = (props: Props) => {
           'x-csrf-token': csrfToken
         }
       },
-      onCompleted: (data: { createLayout: { id: string; name: string } }) => {
+      onCompleted: (data: {
+        createLayout: { id: string; name: string; etag: EtagGroupsType };
+      }) => {
         const createLayout = data?.createLayout;
         if (!isEmpty(createLayout)) {
+          const { etag: newEtag } = createLayout ?? {};
+          dispatch(setEtag({ etag: newEtag }));
           notify(t('common:successfully-create'), 'success', {
             position: 'top-center',
             autoClose: 2000
@@ -111,9 +116,13 @@ const NewPageForm = (props: Props) => {
           'x-csrf-token': csrfToken
         }
       },
-      onCompleted: (data: { updateLayout: { id: string; name: string } }) => {
+      onCompleted: (data: {
+        updateLayout: { id: string; name: string; etag: EtagGroupsType };
+      }) => {
         const updateLayout = data?.updateLayout;
         if (!isEmpty(updateLayout)) {
+          const { etag: newEtag } = updateLayout ?? {};
+          dispatch(setEtag({ etag: newEtag }));
           notify(t('common:successfully-updated'), 'success', {
             position: 'top-center',
             autoClose: 2000

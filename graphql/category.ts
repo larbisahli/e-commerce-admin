@@ -75,6 +75,9 @@ export const UPDATE_CATEGORY = gql`
       language: $language
     ) {
       id
+      etag {
+        categoryEtag
+      }
     }
   }
 `;

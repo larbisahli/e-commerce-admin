@@ -3,13 +3,16 @@ import Card from '@components/common/card';
 import Checkbox from '@components/ui/checkbox';
 import Description from '@components/ui/description';
 import Input from '@components/ui/input';
+import { useModalAction } from '@components/ui/modal/modal.context';
 import TextArea from '@components/ui/text-area';
 import { UPDATE_LAYOUT_COMPONENT_CONTENT } from '@graphql/content';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useErrorLogger, useGetClient } from '@hooks/index';
+import { useAppDispatch } from '@hooks/useGetClient';
 import { useSettings } from '@hooks/useSettings';
 import { useUI } from '@hooks/useUI';
 import { notify } from '@lib/index';
+import { setEtag } from '@store/client';
 import type { StoreLayoutComponentType } from '@ts-types/generated';
 import classNames from 'classnames';
 import cloneDeep from 'lodash/cloneDeep';
@@ -39,19 +42,7 @@ type FormValues = {
   loop: boolean;
 };
 
-const defaultValues = {
-  videoUrl: '',
-  header: 'My header',
-  description:
-    'Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia, molestiae quas vel',
-  buttonLabel: 'See More',
-  buttonLink: '/collections/all',
-  displayContent: false,
-  autoplay: true,
-  controls: false,
-  mute: true,
-  loop: false
-};
+const defaultValues = {};
 
 type IProps = {
   initialValues?: StoreLayoutComponentType;
@@ -65,6 +56,7 @@ const VideoBannerForm = ({ initialValues }: IProps) => {
   const { selectedLanguage } = useSettings();
 
   const { updateBuilderInfo } = useUI();
+  const dispatch = useAppDispatch();
 
   const {
     register,
@@ -79,6 +71,7 @@ const VideoBannerForm = ({ initialValues }: IProps) => {
   });
 
   const { userInfo } = useGetClient();
+  const { closeModal } = useModalAction();
   const csrfToken = userInfo?.csrfToken;
 
   const [updateLayoutComponent, { loading: updating }] = useMutation(
@@ -92,12 +85,15 @@ const VideoBannerForm = ({ initialValues }: IProps) => {
       onCompleted: (data: {
         updateLayoutComponent: StoreLayoutComponentType;
       }) => {
-        if (!isEmpty(data)) {
+        if (!isEmpty(data?.updateLayoutComponent)) {
+          const { etag: newEtag } = data?.updateLayoutComponent ?? {};
+          dispatch(setEtag({ etag: newEtag }));
           notify(t('common:successfully-updated'), 'success', {
             position: 'top-center',
             autoClose: 2000
           });
           updateBuilderInfo({ isReloadIframe: true });
+          closeModal(null, null, { sectionId: initialValues.componentId });
         }
       }
     }

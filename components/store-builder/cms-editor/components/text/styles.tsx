@@ -1,11 +1,13 @@
 import { useMutation } from '@apollo/client';
 import Card from '@components/common/card';
 import Description from '@components/ui/description';
-import Label from '@components/ui/label';
+import { useModalAction } from '@components/ui/modal/modal.context';
 import { UPDATE_LAYOUT_COMPONENT_STYLES } from '@graphql/content';
 import { useErrorLogger, useGetClient } from '@hooks/index';
+import { useAppDispatch } from '@hooks/useGetClient';
 import { useUI } from '@hooks/useUI';
 import { notify } from '@lib/index';
+import { setEtag } from '@store/client';
 import { PageBuilderStyles } from '@ts-types/custom.types';
 import type { StoreLayoutComponentType } from '@ts-types/generated';
 import cloneDeep from 'lodash/cloneDeep';
@@ -16,11 +18,9 @@ import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import FormActions from '../../helpers/FormActions';
-import ContainerWidth from '../common/containerWidth';
 import Typography from '../common/Typography';
 
 type FormValues = {
-  sectionSize: string;
   header: PageBuilderStyles['Typography'];
   description: PageBuilderStyles['Typography'];
 };
@@ -39,6 +39,7 @@ const TextStyles = ({ initialValues }: IProps) => {
   const data = initialValues?.styles;
 
   const { updateBuilderInfo } = useUI();
+  const dispatch = useAppDispatch();
 
   const methods = useForm<FormValues>({
     defaultValues: !isEmpty(data)
@@ -47,6 +48,7 @@ const TextStyles = ({ initialValues }: IProps) => {
   });
 
   const { userInfo } = useGetClient();
+  const { closeModal } = useModalAction();
   const csrfToken = userInfo?.csrfToken;
 
   const [updateLayoutComponent, { loading: updating }] = useMutation(
@@ -58,14 +60,17 @@ const TextStyles = ({ initialValues }: IProps) => {
         }
       },
       onCompleted: (data: {
-        UpdateLayoutComponentStyles: StoreLayoutComponentType;
+        updateLayoutComponentStyles: StoreLayoutComponentType;
       }) => {
-        if (!isEmpty(data)) {
+        if (!isEmpty(data?.updateLayoutComponentStyles)) {
+          const { etag: newEtag } = data?.updateLayoutComponentStyles ?? {};
+          dispatch(setEtag({ etag: newEtag }));
           notify(t('common:successfully-updated'), 'success', {
             position: 'top-center',
             autoClose: 2000
           });
           updateBuilderInfo({ isReloadIframe: true });
+          closeModal(null, null, { sectionId: initialValues.componentId });
         }
       }
     }
@@ -77,7 +82,6 @@ const TextStyles = ({ initialValues }: IProps) => {
     const variables = {
       componentId: initialValues.componentId,
       styles: {
-        sectionSize: values.sectionSize,
         header: values.header,
         description: values.description
       }
@@ -86,8 +90,6 @@ const TextStyles = ({ initialValues }: IProps) => {
       setError(err);
     });
   };
-
-  const sectionSize = methods.watch('sectionSize');
 
   return (
     <FormProvider {...methods}>
@@ -115,13 +117,6 @@ const TextStyles = ({ initialValues }: IProps) => {
             </div>
             <div className="mb-5">
               <Typography label={'Description'} name={'description'} />
-            </div>
-            <div className="mt-5 flex items-center justify-between">
-              <Label>{t('form:input-label-section-size')}</Label>
-              <ContainerWidth
-                value={sectionSize}
-                setValue={(v) => methods.setValue('sectionSize', v)}
-              />
             </div>
           </Card>
         </div>

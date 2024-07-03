@@ -11,7 +11,9 @@ export interface State {
   modalView: string;
   builder: {
     deviceView: DEVICE_VIEWS;
-    storeFrontSrc: boolean;
+    iframeSrc: boolean;
+    isReloadIframe: boolean;
+    iframeLoading: boolean;
   };
 }
 
@@ -26,7 +28,8 @@ const initialState = {
   builder: {
     deviceView: DEVICE_VIEWS.DESKTOP,
     iframeSrc: null,
-    isReloadIframe: false
+    isReloadIframe: false,
+    iframeLoading: false
   }
 };
 

@@ -61,6 +61,12 @@ export const GET_STORE_LAYOUT = gql`
   }
 `;
 
+export const GET_THEME_SETTINGS = gql`
+  query GetThemeSettings($etag: String!) {
+    getThemeSettings(etag: $etag)
+  }
+`;
+
 export const UPDATE_LAYOUT_COMPONENT_CONTENT = gql`
   mutation UpdateLayoutComponent(
     $componentId: ID!
@@ -75,6 +81,9 @@ export const UPDATE_LAYOUT_COMPONENT_CONTENT = gql`
       language: $language
     ) {
       componentId
+      etag {
+        layoutEtag
+      }
     }
   }
 `;
@@ -86,6 +95,9 @@ export const UPDATE_LAYOUT_COMPONENT_STYLES = gql`
   ) {
     updateLayoutComponentStyles(componentId: $componentId, styles: $styles) {
       componentId
+      etag {
+        layoutEtag
+      }
     }
   }
 `;
@@ -98,6 +110,9 @@ export const UPDATE_LAYOUT_COMPONENT_MODULE_NAME = gql`
     ) {
       componentId
       moduleName
+      etag {
+        layoutEtag
+      }
     }
   }
 `;
@@ -117,6 +132,9 @@ export const CREATE_LAYOUT = gql`
     ) {
       id
       name
+      etag {
+        layoutEtag
+      }
     }
   }
 `;
@@ -138,6 +156,9 @@ export const UPDATE_LAYOUT = gql`
     ) {
       id
       name
+      etag {
+        layoutEtag
+      }
     }
   }
 `;
@@ -164,6 +185,9 @@ export const ADD_LAYOUT_COMPONENT = gql`
       children: $children
     ) {
       componentId
+      etag {
+        layoutEtag
+      }
     }
   }
 `;
@@ -172,6 +196,9 @@ export const UPDATE_LAYOUT_COMPONENT_VISIBILITY = gql`
   mutation UpdateLayoutComponentVisibility($componentId: ID!) {
     updateLayoutComponentVisibility(componentId: $componentId) {
       componentId
+      etag {
+        layoutEtag
+      }
     }
   }
 `;
@@ -182,6 +209,9 @@ export const UPDATE_LAYOUT_COMPONENTS_POSITION = gql`
   ) {
     updateLayoutComponentsPosition(components: $components) {
       success
+      etag {
+        layoutEtag
+      }
     }
   }
 `;
@@ -190,13 +220,10 @@ export const DELETE_LAYOUT_COMPONENT = gql`
   mutation DeleteLayoutComponent($componentId: ID!) {
     deleteLayoutComponent(componentId: $componentId) {
       componentId
+      etag {
+        layoutEtag
+      }
     }
-  }
-`;
-
-export const GET_THEME_SETTINGS = gql`
-  query GetThemeSettings($etag: String!) {
-    getThemeSettings(etag: $etag)
   }
 `;
 

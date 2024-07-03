@@ -5,8 +5,10 @@ import Button from '@components/ui/button';
 import { UPDATE_PRODUCT_GALLERY } from '@graphql/product';
 import { useErrorLogger, useGetClient } from '@hooks/index';
 import { useDifferenceWith } from '@hooks/useDifferenceWith';
+import { useAppDispatch } from '@hooks/useGetClient';
 import { notify } from '@lib/notify';
-import { ImageType, Product } from '@ts-types/generated';
+import { setEtag } from '@store/client';
+import { EtagGroupsType, ImageType, Product } from '@ts-types/generated';
 import isEmpty from 'lodash/isEmpty';
 import { useTranslation } from 'next-i18next';
 import { memo, useState } from 'react';
@@ -25,6 +27,7 @@ const ProductGallery = ({ state, initialValues }: Props) => {
   const { t } = useTranslation();
 
   const dispatch = useFormReducer();
+  const reduxDispatch = useAppDispatch();
 
   const { id: productId } = initialValues;
 
@@ -50,8 +53,12 @@ const ProductGallery = ({ state, initialValues }: Props) => {
         'x-csrf-token': csrfToken
       }
     },
-    onCompleted: (data: { updateProductGallery: { id: number } }) => {
+    onCompleted: (data: {
+      updateProductGallery: { id: number; etag: EtagGroupsType };
+    }) => {
       if (!isEmpty(data?.updateProductGallery)) {
+        const { etag: newEtag } = data?.updateProductGallery ?? {};
+        reduxDispatch(setEtag({ etag: newEtag }));
         setInitGallery(gallery);
         notify(t('common:successfully-updated'), 'success');
       }

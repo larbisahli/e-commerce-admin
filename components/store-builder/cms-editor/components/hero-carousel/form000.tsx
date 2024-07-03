@@ -1,22 +1,34 @@
 /* eslint-disable jsx-a11y/interactive-supports-focus */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
+import { useMutation } from '@apollo/client';
 import Card from '@components/common/card';
 import ImageModal from '@components/image-modal';
-import ColorPicker from '@components/ui/color-picker/color-picker';
 import Description from '@components/ui/description';
 import Input from '@components/ui/input';
 import Label from '@components/ui/label';
+import { useModalAction } from '@components/ui/modal/modal.context';
 import Radio from '@components/ui/radio';
 import TextArea from '@components/ui/text-area';
-import type { HeroBannerType, ImageType } from '@ts-types/generated';
+import { UPDATE_LAYOUT_COMPONENT_CONTENT } from '@graphql/content';
+import { useErrorLogger } from '@hooks/useErrorLogger';
+import { useAppDispatch, useGetClient } from '@hooks/useGetClient';
+import { useSettings } from '@hooks/useSettings';
+import { useUI } from '@hooks/useUI';
+import { notify } from '@lib/notify';
+import { setEtag } from '@store/client';
+import type {
+  HeroBannerType,
+  ImageType,
+  StoreLayoutComponentType
+} from '@ts-types/generated';
 import { translationFallback } from '@utils/utils';
 import cloneDeep from 'lodash/cloneDeep';
 import isEmpty from 'lodash/isEmpty';
 import { useTranslation } from 'next-i18next';
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-import HeroBannerCard from './hero-banner-card';
+import FormActions from '../../helpers/FormActions';
 
 type FormValues = HeroBannerType;
 
@@ -37,81 +49,93 @@ const defaultValues = {
 };
 
 type IProps = {
-  initialValues?: HeroBannerType | any;
-  onSubmit: (e: FormValues) => void;
+  initialValues?: StoreLayoutComponentType;
+  handleBack: any;
 };
 
-export default function CreateOrUpdateSlideForm({
-  initialValues,
-  onSubmit
-}: IProps) {
+export default function CarouselForm({ initialValues, handleBack }: IProps) {
   const { t } = useTranslation();
-  const createMode = isEmpty(initialValues);
+
+  const data = initialValues.data;
+  const [error, setError] = useState(null);
+  const { selectedLanguage } = useSettings();
+
+  const { updateBuilderInfo } = useUI();
+  const dispatch = useAppDispatch();
 
   const {
-    watch,
-    register,
     handleSubmit,
+    register,
+    watch,
     setValue,
     formState: { errors }
   } = useForm<FormValues>({
-    defaultValues: !createMode
-      ? cloneDeep({
-          ...initialValues,
-          align: translationFallback(initialValues, 'align', 'left'),
-          status: (initialValues as HeroBannerType)?.published
-            ? 'publish'
-            : 'draft'
-        })
-      : (defaultValues as HeroBannerType)
+    defaultValues: !isEmpty(data)
+      ? cloneDeep({ ...data })
+      : (defaultValues as FormValues)
   });
 
-  const styles = watch('styles');
-  const thumbnail = watch('thumbnail') as ImageType[];
-  const btnLabel = watch('btnLabel');
-  const title = watch('title');
-  const description = watch('description');
-  const align = watch('align');
+  const { userInfo } = useGetClient();
+  const { closeModal } = useModalAction();
+  const csrfToken = userInfo?.csrfToken;
 
-  const ImageInformation = (
-    <span>
-      {t('form:hero-slider-image-helper-text')} &nbsp;
-      <span className="font-bold">
-        {'500x1400'} {t('common:pixel')}
-      </span>
-    </span>
+  const [updateLayoutComponent, { loading: updating }] = useMutation(
+    UPDATE_LAYOUT_COMPONENT_CONTENT,
+    {
+      context: {
+        headers: {
+          'x-csrf-token': csrfToken
+        }
+      },
+      onCompleted: (data: {
+        updateLayoutComponent: StoreLayoutComponentType;
+      }) => {
+        if (!isEmpty(data?.updateLayoutComponent)) {
+          const { etag: newEtag } = data?.updateLayoutComponent ?? {};
+          dispatch(setEtag({ etag: newEtag }));
+          notify(t('common:successfully-updated'), 'success', {
+            position: 'top-center',
+            autoClose: 2000
+          });
+          updateBuilderInfo({ isReloadIframe: true });
+          closeModal(null, null, { sectionId: initialValues.componentId });
+        }
+      }
+    }
   );
+
+  useErrorLogger(error);
+
+  const onSubmit = async (values: FormValues) => {
+    const variables = {
+      componentId: initialValues.componentId,
+      contentId: initialValues?.contentId,
+      language: selectedLanguage,
+      data: { values }
+    };
+
+    updateLayoutComponent({ variables }).catch((err) => {
+      setError(err);
+    });
+  };
+
+  const thumbnail = watch('thumbnail') as ImageType[];
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      <FormActions
+        btnLabel={t('form:button-label-save-content')}
+        title="Component Content"
+        disabled={updating}
+        loading={updating}
+      />
       <div className="flex flex-wrap border-b border-dashed border-border-base pb-8 first-line:my-5 sm:my-8">
-        <Description
-          title={t('form:input-label-image')}
-          details={ImageInformation}
-          className="w-full px-0 pb-5 sm:w-1/4 sm:py-8 sm:pe-4 md:w-1/4 md:pe-5"
-        />
         <Card className="w-full sm:w-3/4 md:w-3/4">
           <ImageModal
             onSelect={(photo) => setValue('thumbnail', photo)}
             selected={thumbnail}
             isThumbnail
           />
-          <div className="w-full">
-            {!isEmpty(thumbnail) && (
-              <div className="relative">
-                <div className="my-2 border-b border-dashed border-border-base"></div>
-                <Label>{t('form:input-label-demo')}</Label>
-                <HeroBannerCard
-                  thumbnail={thumbnail}
-                  btnLabel={btnLabel}
-                  title={title}
-                  description={description}
-                  styles={styles}
-                  align={align}
-                />
-              </div>
-            )}
-          </div>
         </Card>
       </div>
 
@@ -218,55 +242,6 @@ export default function CreateOrUpdateSlideForm({
           </div>
         </Card>
       </div>
-      <div className="my-5 flex flex-wrap sm:my-8">
-        <Description
-          title={t('form:input-label-slider-styles')}
-          details={`${
-            initialValues
-              ? t('form:item-description-edit')
-              : t('form:item-description-add')
-          } ${t('form:hero-slider-style-helper-text')}`}
-          className="w-full px-0 pb-5 sm:w-1/4 sm:py-8 sm:pe-4 md:w-1/4 md:pe-5"
-        />
-
-        <Card className="w-full sm:w-3/4 md:w-3/4">
-          <ColorPicker
-            label={t('form:input-text-color')}
-            {...register(`styles.textColor`)}
-            className="mt-5"
-          >
-            <DisplayColorCode color={styles?.textColor} />
-          </ColorPicker>
-
-          <ColorPicker
-            label={t('form:input-button-text-color')}
-            {...register(`styles.btnTextColor`)}
-            className="mt-5"
-          >
-            <DisplayColorCode color={styles?.btnTextColor} />
-          </ColorPicker>
-
-          <ColorPicker
-            label={t('form:input-button-background-color')}
-            {...register(`styles.btnBgc`)}
-            className="mt-5"
-          >
-            <DisplayColorCode color={styles?.btnBgc} />
-          </ColorPicker>
-        </Card>
-      </div>
     </form>
   );
 }
-
-const DisplayColorCode = ({ color }: { color: string }) => {
-  return (
-    <>
-      {color !== null && (
-        <span className="rounded border border-border-200 bg-gray-100 px-2 py-1 text-sm text-heading ms-3">
-          {color}
-        </span>
-      )}
-    </>
-  );
-};

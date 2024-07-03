@@ -3,13 +3,16 @@ import Card from '@components/common/card';
 import Description from '@components/ui/description';
 import Input from '@components/ui/input';
 import Label from '@components/ui/label';
+import { useModalAction } from '@components/ui/modal/modal.context';
 import SwitchInput from '@components/ui/switch-input';
 import TextArea from '@components/ui/text-area';
 import { UPDATE_LAYOUT_COMPONENT_CONTENT } from '@graphql/content';
 import { useErrorLogger, useGetClient } from '@hooks/index';
+import { useAppDispatch } from '@hooks/useGetClient';
 import { useSettings } from '@hooks/useSettings';
 import { useUI } from '@hooks/useUI';
 import { notify } from '@lib/index';
+import { setEtag } from '@store/client';
 import type { StoreLayoutComponentType } from '@ts-types/generated';
 import cloneDeep from 'lodash/cloneDeep';
 import isEmpty from 'lodash/isEmpty';
@@ -40,6 +43,7 @@ const InstallPromptForm = ({ initialValues }: IProps) => {
   const { selectedLanguage } = useSettings();
 
   const { updateBuilderInfo } = useUI();
+  const dispatch = useAppDispatch();
 
   const {
     register,
@@ -54,6 +58,7 @@ const InstallPromptForm = ({ initialValues }: IProps) => {
   });
 
   const { userInfo } = useGetClient();
+  const { closeModal } = useModalAction();
   const csrfToken = userInfo?.csrfToken;
 
   const [updateLayoutComponent, { loading: updating }] = useMutation(
@@ -67,12 +72,15 @@ const InstallPromptForm = ({ initialValues }: IProps) => {
       onCompleted: (data: {
         updateLayoutComponent: StoreLayoutComponentType;
       }) => {
-        if (!isEmpty(data)) {
+        if (!isEmpty(data?.updateLayoutComponent)) {
+          const { etag: newEtag } = data?.updateLayoutComponent ?? {};
+          dispatch(setEtag({ etag: newEtag }));
           notify(t('common:successfully-updated'), 'success', {
             position: 'top-center',
             autoClose: 2000
           });
           updateBuilderInfo({ isReloadIframe: true });
+          closeModal(null, null, { sectionId: initialValues.componentId });
         }
       }
     }
