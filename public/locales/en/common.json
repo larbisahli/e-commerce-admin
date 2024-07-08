@@ -27,6 +27,7 @@
   "order-excl-tax": "Excl. tax:",
   "order-tax": "Tax",
   "order-tax-rate": "Tax rate",
+  "order-tax-amount": "Tax amount",
   "order-delivery-fee": "Delivery fee",
   "order-discount": "Discount",
   "order-total": "Total",

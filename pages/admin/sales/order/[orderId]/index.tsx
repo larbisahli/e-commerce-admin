@@ -1,5 +1,6 @@
 import { useMutation, useQuery } from '@apollo/client';
 import Card from '@components/common/card';
+import { ArrowPrev } from '@components/icons/arrow-prev';
 import { DownloadFileIcon } from '@components/icons/download-file-icon';
 import AppLayout from '@components/layouts/app';
 import InvoicePdf from '@components/order/invoice-pdf';
@@ -8,14 +9,13 @@ import ErrorMessage from '@components/ui/error-message';
 import Label from '@components/ui/label';
 import Loader from '@components/ui/loader/loader';
 import SelectInput from '@components/ui/select-input';
-import { ORDER, UPDATE_STATUS_ORDER } from '@graphql/order';
+import { ORDER, STORE_INFO_ORDER, UPDATE_STATUS_ORDER } from '@graphql/order';
 import { ORDER_STATUSES_FOR_SELECT } from '@graphql/order-status';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetClient } from '@hooks/useGetClient';
 import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/notify';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
-import { PDFDownloadLink } from '@react-pdf/renderer';
 import { SSRProps } from '@ts-types/custom.types';
 import { OrderBy, SortOrder } from '@ts-types/enums';
 import {
@@ -23,7 +23,8 @@ import {
   CustomerType,
   OrderStatus,
   OrderType,
-  Product
+  Product,
+  SettingsType
 } from '@ts-types/generated';
 import { formatAddress } from '@utils/format-address';
 import { ROUTES } from '@utils/routes';
@@ -44,12 +45,21 @@ const Table = dynamic(
   { ssr: false, loading: () => <Loader text={'Loading'} /> }
 );
 
+const PDFDownloadLink = dynamic(
+  () => import('@react-pdf/renderer').then((mod) => mod.PDFDownloadLink),
+  { ssr: false, loading: () => <Loader text={'Loading'} /> }
+);
+
 type FormValues = OrderType;
 
 interface TOrder {
   order: OrderType;
   customer: CustomerType;
   products: Product[];
+}
+
+interface TStoreInfoOrder {
+  storeInfoOrder: SettingsType;
 }
 
 interface OrderVariable {
@@ -70,7 +80,7 @@ interface TOrderStatus {
 }
 export default function OrderDetailsPage({ client }: SSRProps) {
   const { t } = useTranslation();
-  const { query } = useRouter();
+  const { query, back } = useRouter();
 
   const orderId = query.orderId as string;
 
@@ -111,6 +121,17 @@ export default function OrderDetailsPage({ client }: SSRProps) {
     skip: isEmpty(etag)
   });
 
+  const { data: storeInfoOrderData, error: storeInfoOrderError } = useQuery<
+    TStoreInfoOrder,
+    { etag: string }
+  >(STORE_INFO_ORDER, {
+    variables: {
+      etag: etag?.configEtag
+    },
+    fetchPolicy: 'cache-and-network',
+    skip: isEmpty(etag)
+  });
+
   const [updateOrderStatus, { loading: updatingStatus }] = useMutation(
     UPDATE_STATUS_ORDER,
     {
@@ -129,6 +150,7 @@ export default function OrderDetailsPage({ client }: SSRProps) {
   );
 
   const { order } = orderData ?? {};
+  const { storeInfoOrder } = storeInfoOrderData ?? {};
   const { orderStatusForSelect } = orderStatusData ?? {};
 
   const { handleSubmit, control, setValue } = useForm<FormValues>({
@@ -165,6 +187,7 @@ export default function OrderDetailsPage({ client }: SSRProps) {
   useErrorLogger(error);
   useErrorLogger(orderError);
   useErrorLogger(orderStatusError);
+  useErrorLogger(storeInfoOrderError);
 
   const { price: subTotalExclTax } = usePrice(
     order && {
@@ -201,6 +224,10 @@ export default function OrderDetailsPage({ client }: SSRProps) {
       amount: order?.orderShipment?.totalInclTax ?? 0
     }
   );
+
+  const { price: totalTax } = usePrice({
+    amount: order?.subTotalInclTax - order?.subTotalExclTax
+  });
 
   if (loading) return <Loader text={t('common:text-loading')} />;
   if (error) return <ErrorMessage message={error.message} />;
@@ -281,10 +308,20 @@ export default function OrderDetailsPage({ client }: SSRProps) {
 
   return (
     <>
-      <div className="mb-5 flex justify-end">
-        {/* <PDFDownloadLink
+      <div className="mb-5 flex items-center justify-between">
+        <Button variant="outline" onClick={() => back()} type="button">
+          <span>
+            <ArrowPrev />
+          </span>
+          <span className="text-base font-semibold">Back</span>
+        </Button>
+        <PDFDownloadLink
           document={
-            <InvoicePdf order={order} systemCurrency={systemCurrency} />
+            <InvoicePdf
+              storeInfoOrder={storeInfoOrder}
+              order={order}
+              systemCurrency={systemCurrency}
+            />
           }
           fileName={`invoice-${order?.orderNumber}.pdf`}
         >
@@ -297,7 +334,7 @@ export default function OrderDetailsPage({ client }: SSRProps) {
               Download Invoice
             </Button>
           )}
-        </PDFDownloadLink> */}
+        </PDFDownloadLink>
       </div>
       <Card>
         <div className="mb-8">
@@ -360,7 +397,7 @@ export default function OrderDetailsPage({ client }: SSRProps) {
                 columns={columns}
                 emptyText={t('table:empty-table-data')}
                 data={order?.items! ?? []}
-                rowKey="id"
+                rowKey={(record) => record?.product?.id}
                 scroll={{ x: 300 }}
                 className="rounded-sm border"
               />
@@ -378,20 +415,6 @@ export default function OrderDetailsPage({ client }: SSRProps) {
               <div className="flex items-center justify-between border-b border-dashed py-2 text-sm text-body">
                 <span className="text-base text-gray-900">
                   {t('common:order-sub-total')}
-                </span>
-                <div className="flex flex-col items-end">
-                  <span className="text-base font-medium text-gray-700">
-                    {subTotalInclTax}
-                  </span>
-                  <div className="flex items-center justify-center text-xs text-gray-800">
-                    <span>{t('common:order-excl-tax')}</span>
-                    <span>{subTotalExclTax}</span>
-                  </div>
-                </div>
-              </div>
-              <div className="flex items-center justify-between border-b border-dashed py-2 text-sm text-body">
-                <span className="text-base text-gray-900">
-                  {t('common:order-delivery-fee')}
                 </span>
                 <div className="flex flex-col items-end">
                   <span className="text-base font-medium text-gray-700">
@@ -427,6 +450,16 @@ export default function OrderDetailsPage({ client }: SSRProps) {
                   <span className="text-base font-medium text-gray-800">{`${order?.tax?.rate}%`}</span>
                 </div>
               </div>
+              <div className="flex items-center justify-between border-b border-dashed py-2 text-sm text-body">
+                <span className="text-base text-gray-900">
+                  {t('common:order-tax-amount')}
+                </span>
+                <div className="flex flex-col items-end">
+                  <span className="text-base font-medium text-gray-800">
+                    {totalTax}
+                  </span>
+                </div>
+              </div>
               <div className="flex items-center justify-between py-2 text-base font-semibold">
                 <span className="text-lg text-black">
                   {t('common:order-total')}
@@ -435,7 +468,7 @@ export default function OrderDetailsPage({ client }: SSRProps) {
                   <span className="text-lg font-semibold text-black">
                     {grandTotalInclTax}
                   </span>
-                  <div className="flex items-center justify-center text-xs text-gray-700">
+                  <div className="flex items-center justify-center text-xs text-gray-800">
                     <span>{t('common:order-excl-tax')}</span>
                     <span>{grandTotalExclTax}</span>
                   </div>
@@ -470,14 +503,14 @@ export default function OrderDetailsPage({ client }: SSRProps) {
                 </span>
               </div>
               <div className="flex items-center justify-between border-dashed py-2 text-sm text-body">
-                <span className="text-md font-medium text-black">
+                <span className="text-md font-semibold text-black">
                   Shipment total
                 </span>
                 <div className="flex flex-col items-end">
-                  <span className="text-md font-medium text-gray-700">
+                  <span className="text-md font-semibold text-black">
                     {shipmentTotalInclTax}
                   </span>
-                  <div className="flex items-center justify-center text-xs text-gray-800">
+                  <div className="flex items-center justify-center text-xs font-semibold text-gray-800">
                     <span>{t('common:order-excl-tax')}</span>
                     <span>{shipmentTotalExclTax}</span>
                   </div>
@@ -496,9 +529,35 @@ export default function OrderDetailsPage({ client }: SSRProps) {
               </div>
               <div className="flex items-center justify-between border-b border-dashed py-2 text-sm text-body">
                 <span className="text-md text-gray-900">Placed from IP</span>
-                <span className="text-md text-gray-600">
-                  {order?.orderGeo?.ip}
-                </span>
+                <div className="flex items-center justify-center">
+                  <span className="text-md text-gray-600">
+                    {order?.orderGeo?.ip?.length !== 0
+                      ? order?.orderGeo?.ip
+                      : 'N/A'}
+                  </span>
+                </div>
+              </div>
+              <div className="flex items-center justify-between border-b border-dashed py-2 text-sm text-body">
+                <span className="text-md text-gray-900">IP geo info</span>
+                <div className="flex items-center justify-center">
+                  {order?.orderGeo?.geo ? (
+                    <>
+                      <span title="Country" className="text-md text-gray-600">
+                        {order?.orderGeo?.geo?.country}
+                      </span>
+                      <span className="mx-2 h-[10px] w-[2px] bg-gray-300"></span>
+                      <span title="City" className="text-md text-gray-600">
+                        {order?.orderGeo?.geo?.city}
+                      </span>
+                      <span className="mx-2 h-[10px] w-[2px] bg-gray-300"></span>
+                      <span title="TimeZone" className="text-md text-gray-600">
+                        {order?.orderGeo?.geo?.timezone}
+                      </span>
+                    </>
+                  ) : (
+                    <span className="text-md text-gray-600">N/A</span>
+                  )}
+                </div>
               </div>
               <div className="flex items-center justify-between border-dashed py-2 text-sm text-body">
                 <span className="text-md text-gray-900">Order Date</span>
@@ -524,7 +583,7 @@ export default function OrderDetailsPage({ client }: SSRProps) {
               </Link>
               {address && (
                 <button
-                  className="text-start"
+                  className="text-start hover:text-black"
                   onClick={() => setDisplayShipAdds((v) => !v)}
                 >
                   <span>{formatAddress(address)}</span>
@@ -548,7 +607,7 @@ export default function OrderDetailsPage({ client }: SSRProps) {
               </Link>
               {address && (
                 <button
-                  className="text-end"
+                  className="text-end hover:text-black"
                   onClick={() => setDisplayBillAdds((v) => !v)}
                 >
                   <span>{formatAddress(address)}</span>

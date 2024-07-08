@@ -13,9 +13,7 @@ export const ORDER = gql`
       discountAmount
       orderApprovedAt
       paymentCode
-      orderGeo {
-        ip
-      }
+      orderGeo
       currency {
         code
       }
@@ -86,6 +84,18 @@ export const ORDER = gql`
         registeredAt
       }
       createdAt
+    }
+  }
+`;
+
+export const STORE_INFO_ORDER = gql`
+  query StoreInfoOrder($etag: String!) {
+    storeInfoOrder(etag: $etag) {
+      storeName
+      storeEmail
+      storeNumber
+      addressLine1
+      addressLine2
     }
   }
 `;

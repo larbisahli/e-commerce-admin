@@ -16,10 +16,10 @@ const AdminFooter = () => {
       )}
     >
       <div className="flex flex-wrap items-center justify-between p-5">
-        <p className="text-gray-500">
+        <p className="text-sm text-gray-500">
           Copyright © {new Date().getFullYear()} dropgala. All rights reserved.
         </p>
-        <div className="flex items-center">
+        <div className="flex items-center text-sm">
           <Link href={'/#'}>
             <div className="text-gray-500">Privacy Policy</div>
           </Link>

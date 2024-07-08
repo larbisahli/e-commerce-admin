@@ -20,7 +20,9 @@ import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import FormActions from '../../helpers/FormActions';
+import Border from '../common/Border';
 import ContainerWidth from '../common/containerWidth';
+import Overlay from '../common/Overlay';
 import { ObjectFitTooltipContent } from '../common/ToolTips';
 import Typography from '../common/Typography';
 
@@ -35,7 +37,10 @@ const objectFitOptions = [
 type FormValues = {
   sectionSize: string;
   header: PageBuilderStyles['Typography'];
+  description: PageBuilderStyles['Typography'];
+  imageBorder: PageBuilderStyles['Border'];
   objectFit: { value: string };
+  overlay: PageBuilderStyles['Overlay'];
 };
 
 const defaultValues = {};
@@ -44,12 +49,14 @@ type IProps = {
   initialValues?: any;
 };
 
-const CategoryListStyles = ({ initialValues }: IProps) => {
+const CarouselStyles = ({ initialValues }: IProps) => {
   const { t } = useTranslation();
 
   const [error, setError] = useState(null);
 
   const data = initialValues?.styles;
+
+  const hasOverlay = initialValues?.moduleName === 'ImageBannerContentCenter';
 
   const { updateBuilderInfo } = useUI();
   const dispatch = useAppDispatch();
@@ -75,7 +82,7 @@ const CategoryListStyles = ({ initialValues }: IProps) => {
       onCompleted: (data: {
         updateLayoutComponentStyles: StoreLayoutComponentType;
       }) => {
-        if (!isEmpty(data.updateLayoutComponentStyles)) {
+        if (!isEmpty(data?.updateLayoutComponentStyles)) {
           const { etag: newEtag } = data?.updateLayoutComponentStyles ?? {};
           dispatch(setEtag({ etag: newEtag }));
           notify(t('common:successfully-updated'), 'success', {
@@ -97,7 +104,10 @@ const CategoryListStyles = ({ initialValues }: IProps) => {
       styles: {
         sectionSize: values.sectionSize,
         header: values.header,
-        objectFit: values.objectFit
+        description: values.description,
+        imageBorder: values.imageBorder,
+        objectFit: values.objectFit,
+        overlay: values.overlay
       }
     };
     updateLayoutComponent({ variables }).catch((err) => {
@@ -130,11 +140,26 @@ const CategoryListStyles = ({ initialValues }: IProps) => {
           <Card className="w-full sm:w-8/12 md:w-2/3">
             <div className="mb-5">
               <Typography
+                isTextAlign={false}
                 label={'Header'}
                 name={'header'}
-                isTextAlign={false}
               />
             </div>
+            <div className="mb-5">
+              <Typography
+                isTextAlign={false}
+                label={'Description'}
+                name={'description'}
+              />
+            </div>
+            <div className="mb-5">
+              <Border label={'Image Border'} name={'imageBorder'} />
+            </div>
+            {hasOverlay && (
+              <div className="mb-5">
+                <Overlay label={'Overlay'} name={'overlay'} />
+              </div>
+            )}
             <div className="mb-3">
               <div className="flex items-center justify-between">
                 <Label
@@ -168,4 +193,4 @@ const CategoryListStyles = ({ initialValues }: IProps) => {
   );
 };
 
-export default memo(CategoryListStyles);
+export default memo(CarouselStyles);

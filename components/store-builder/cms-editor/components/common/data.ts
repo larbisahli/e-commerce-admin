@@ -198,21 +198,6 @@ export const fontFamilyOptions = [
   }
 ];
 
-export const flexAlignmentOptions = [
-  {
-    value: 'start',
-    label: 'Start'
-  },
-  {
-    value: 'center',
-    label: 'Center'
-  },
-  {
-    value: 'end',
-    label: 'End'
-  }
-];
-
 export const animationSpeedOptions = [
   { value: 500, name: '500 milliseconds' },
   { value: 1000, name: '1 second' },

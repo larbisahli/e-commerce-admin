@@ -12,7 +12,7 @@ export const COLUMNS = {
     { label: 'Order ID', key: 'orderNumber' },
     { label: 'fullName', key: 'fullName' },
     { label: 'Address', key: 'address' },
-    { label: 'Payment Method', key: 'payment' },
+    { label: 'Payment Method', key: 'paymentCode' },
     { label: 'Grant Total', key: 'grandTotalInclTax' },
     { label: 'Quantity', key: 'totalQuantity' },
     { label: 'Order Status', key: 'orderStatus' },
@@ -58,8 +58,7 @@ export const COLUMNS = {
     { label: 'Phone', key: 'phoneNumber' },
     { label: 'Address', key: 'address' },
     { label: 'Registered At', key: 'registeredAt' },
-    { label: 'Placed By', key: 'createdBy' },
-    { label: 'Updated By', key: 'updatedBy' },
+    { label: 'Updated At', key: 'updatedAt' },
     { label: 'Actions', key: 'actions' }
   ],
   'shipping-zone': [

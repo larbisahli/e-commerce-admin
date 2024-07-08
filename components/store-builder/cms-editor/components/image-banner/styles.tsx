@@ -22,7 +22,6 @@ import { FormProvider, useForm } from 'react-hook-form';
 import FormActions from '../../helpers/FormActions';
 import Border from '../common/Border';
 import ContainerWidth from '../common/containerWidth';
-import FlexAlignment from '../common/flexAlignment';
 import Overlay from '../common/Overlay';
 import { ObjectFitTooltipContent } from '../common/ToolTips';
 import Typography from '../common/Typography';
@@ -42,7 +41,6 @@ type FormValues = {
   imageBorder: PageBuilderStyles['Border'];
   objectFit: { value: string };
   overlay: PageBuilderStyles['Overlay'];
-  flexAlignment: PageBuilderStyles['FlexAlignment'];
 };
 
 const defaultValues = {};
@@ -58,8 +56,6 @@ const ImageBannerStyles = ({ initialValues }: IProps) => {
 
   const data = initialValues?.styles;
 
-  const hasFlexAlignment =
-    initialValues?.moduleName === 'ImageBannerContentCenter';
   const hasOverlay = initialValues?.moduleName === 'ImageBannerContentCenter';
 
   const { updateBuilderInfo } = useUI();
@@ -111,8 +107,7 @@ const ImageBannerStyles = ({ initialValues }: IProps) => {
         description: values.description,
         imageBorder: values.imageBorder,
         objectFit: values.objectFit,
-        overlay: values.overlay,
-        flexAlignment: values.flexAlignment
+        overlay: values.overlay
       }
     };
     updateLayoutComponent({ variables }).catch((err) => {
@@ -160,17 +155,9 @@ const ImageBannerStyles = ({ initialValues }: IProps) => {
             <div className="mb-5">
               <Border label={'Image Border'} name={'imageBorder'} />
             </div>
-            {hasFlexAlignment && (
-              <div className="mb-5">
-                <Overlay label={'Overlay'} name={'overlay'} />
-              </div>
-            )}
             {hasOverlay && (
               <div className="mb-5">
-                <FlexAlignment
-                  label={'Content Alignment'}
-                  name={'flexAlignment'}
-                />
+                <Overlay label={'Overlay'} name={'overlay'} />
               </div>
             )}
             <div className="mb-3">

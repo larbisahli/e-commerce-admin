@@ -106,6 +106,9 @@ export const CREATE_SHIPPING = gql`
       deliveryTime: $deliveryTime
     ) {
       id
+      etag {
+        shipmentEtag
+      }
     }
   }
 `;
@@ -124,6 +127,9 @@ export const UPDATE_SHIPPING = gql`
       deletions: $deletions
     ) {
       id
+      etag {
+        shipmentEtag
+      }
     }
   }
 `;
@@ -132,6 +138,9 @@ export const DELETE_SHIPPING = gql`
   mutation DeleteShippingZone($id: Int!) {
     deleteShippingZone(id: $id) {
       id
+      etag {
+        shipmentEtag
+      }
     }
   }
 `;

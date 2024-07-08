@@ -64,6 +64,7 @@ export const CUSTOMERS = gql`
         }
       }
       registeredAt
+      updatedAt
     }
   }
 `;

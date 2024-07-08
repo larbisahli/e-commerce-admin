@@ -144,37 +144,24 @@ const CustomerList = ({ loading, customers, selectedColumns }: IProps) => {
         }
       },
       {
-        title: t('table:table-item-created-by'),
-        dataIndex: 'createdBy',
-        key: 'createdBy',
-        align: alignLeft,
-        width: 150,
-        ellipsis: true,
-        render: (
-          createdBy: CreatedUpdatedByAt['createdBy'],
-          record: TableRowProps
-        ) => {
-          if (record?.loading) {
-            return <TableRowPlaceholder />;
-          }
-          return <ProfileCart user={createdBy} createdAt={record?.createdAt} />;
-        }
-      },
-      {
         title: t('table:table-item-updated-by'),
-        dataIndex: 'updatedBy',
-        key: 'updatedBy',
+        dataIndex: 'updatedAt',
+        key: 'updatedAt',
         align: alignLeft,
-        width: 150,
-        ellipsis: true,
+        width: 200,
         render: (
-          updatedBy: CreatedUpdatedByAt['updatedBy'],
+          updatedAt: CreatedUpdatedByAt['updatedAt'],
           record: TableRowProps
         ) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
-          return <ProfileCart user={updatedBy} updatedAt={record?.updatedAt} />;
+          return (
+            updatedAt &&
+            `${dayjs(updatedAt).format('MMM D, YYYY')} at ${dayjs(
+              updatedAt
+            ).format('h:mm A')}`
+          );
         }
       },
       {

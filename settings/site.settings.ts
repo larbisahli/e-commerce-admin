@@ -193,21 +193,21 @@ export const siteSettings = {
             padding: '35px',
             isSubLink: true
           },
-          {
-            id: '9YSDcWhG',
-            href: ROUTES.STORE_EXTENSIONS,
-            label: 'sidebar-nav-item-extensions',
-            padding: '35px',
-            isSubLink: true,
-            disabled: true
-          },
-          {
-            id: '9YcW2hG',
-            href: ROUTES.TEMPLATE,
-            label: 'sidebar-nav-item-templates',
-            padding: '35px',
-            isSubLink: true
-          },
+          // {
+          //   id: '9YSDcWhG',
+          //   href: ROUTES.STORE_EXTENSIONS,
+          //   label: 'sidebar-nav-item-extensions',
+          //   padding: '35px',
+          //   isSubLink: true,
+          //   disabled: true
+          // },
+          // {
+          //   id: '9YcW2hG',
+          //   href: ROUTES.TEMPLATE,
+          //   label: 'sidebar-nav-item-templates',
+          //   padding: '35px',
+          //   isSubLink: true
+          // },
           {
             id: 'XDsaWhG',
             href: ROUTES.STORE_SETTINGS,

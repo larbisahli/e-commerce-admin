@@ -15,7 +15,7 @@ import { memo, useEffect } from 'react';
 
 import ModuleShowcase from './helpers/ModuleShowcase';
 
-const CarouselContent = dynamic(() => import('./components/hero-carousel'), {
+const CarouselContent = dynamic(() => import('./components/carousel'), {
   ssr: false,
   loading: () => <Loader special />
 });

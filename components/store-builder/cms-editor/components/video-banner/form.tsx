@@ -24,6 +24,7 @@ import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 
 import FormActions from '../../helpers/FormActions';
+import ContentAlignment from '../common/ContentAlignment';
 
 export const validationSchema = yup.object().shape({
   videoUrl: yup.string().required('form:error-url-required')
@@ -38,6 +39,7 @@ type FormValues = {
   autoplay: boolean;
   controls: boolean;
   displayContent: boolean;
+  contentAlignment: 'center';
   mute: boolean;
   loop: boolean;
 };
@@ -62,6 +64,7 @@ const VideoBannerForm = ({ initialValues }: IProps) => {
     register,
     watch,
     handleSubmit,
+    setValue,
     formState: { errors }
   } = useForm<FormValues>({
     resolver: yupResolver(validationSchema),
@@ -113,6 +116,7 @@ const VideoBannerForm = ({ initialValues }: IProps) => {
         buttonLabel: values.buttonLabel,
         buttonLink: values.buttonLink,
         displayContent: values.displayContent,
+        contentAlignment: values.contentAlignment,
         autoplay: values.autoplay,
         controls: values.controls,
         mute: values.mute,
@@ -126,6 +130,7 @@ const VideoBannerForm = ({ initialValues }: IProps) => {
   };
 
   const displayContent = watch('displayContent');
+  const contentAlignment = watch('contentAlignment');
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -194,6 +199,10 @@ const VideoBannerForm = ({ initialValues }: IProps) => {
               variant="outline"
               className="mb-5"
               disabled={!displayContent}
+            />
+            <ContentAlignment
+              contentAlignment={contentAlignment}
+              setValue={setValue}
             />
           </div>
           <div className="mb-3">

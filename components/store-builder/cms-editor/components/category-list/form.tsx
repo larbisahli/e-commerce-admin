@@ -426,7 +426,7 @@ const CategoryListForm = ({ initialValues }: IProps) => {
             }
             className="w-full sm:w-auto"
           >
-            Add New Item
+            New Item
           </Button>
         </Card>
       </div>

@@ -316,6 +316,7 @@ export interface ShippingZoneType extends CreatedUpdatedByAt {
   };
   zones?: CountryType[];
   shippingRates?: ShippingRateType[];
+  etag?: EtagGroupsType;
 }
 
 export interface DeliveryTimeType extends CreatedUpdatedByAt {
@@ -717,8 +718,7 @@ export interface OrderType extends CreatedUpdatedByAt {
   paymentId?: string;
   orderGeo?: {
     ip?: string;
-    city?: string;
-    state?: string;
+    geo?: any;
   };
   grandTotalInclTax: number;
   grandTotalExclTax: number;
@@ -747,7 +747,7 @@ export interface OrderType extends CreatedUpdatedByAt {
 }
 
 export interface orderItems {
-  product: ProductType;
+  product: Product;
   variantOption: VariationOptionsType;
   totalInclTax: number;
   totalExclTax: number;

@@ -7,8 +7,11 @@ import {
   View
 } from '@react-pdf/renderer';
 import { siteSettings } from '@settings/site.settings';
-import { CurrencyType } from '@ts-types/custom.types';
-import { OrderType, SettingsType } from '@ts-types/generated';
+import {
+  CustomerAddressType,
+  OrderType,
+  SettingsType
+} from '@ts-types/generated';
 import { formatAddress } from '@utils/format-address';
 import { formatPrice, formatVariantPrice } from '@utils/use-price';
 import dayjs from 'dayjs';
@@ -20,8 +23,9 @@ type PriceProps = {
   currencyCode?: string;
 };
 
-function usePrice(data?: PriceProps | null) {
-  const { amount, baseAmount, currencyCode } = data ?? {};
+function usePrice(data: PriceProps | null, systemCurrency: any) {
+  const { amount, baseAmount } = data ?? {};
+  const currencyCode = systemCurrency.code;
   const locale = siteSettings.defaultLanguage;
   const value = useMemo(() => {
     if (typeof amount !== 'number' || !currencyCode) return '';
@@ -37,53 +41,55 @@ function usePrice(data?: PriceProps | null) {
 }
 
 export default function InvoicePdf({
-  order = {},
+  storeInfoOrder,
+  order,
   systemCurrency
 }: {
+  storeInfoOrder: SettingsType;
   order: OrderType;
   systemCurrency: SettingsType['systemCurrency'];
 }) {
-  const { price: subTotalExclTax } = usePrice(
-    order && {
-      amount: order?.subTotalExclTax!
-    }
-  );
   const { price: subTotalInclTax } = usePrice(
     order && {
       amount: order?.subTotalInclTax!
-    }
+    },
+    systemCurrency
   );
   const { price: discountAmount } = usePrice(
     order && {
       amount: order?.discountAmount!
-    }
-  );
-  const { price: grandTotalExclTax } = usePrice(
-    order && {
-      amount: order?.grandTotalExclTax!
-    }
+    },
+    systemCurrency
   );
   const { price: grandTotalInclTax } = usePrice(
     order && {
       amount: order?.grandTotalInclTax!
-    }
-  );
-  const { price: shipmentTotalExclTax } = usePrice(
-    order && {
-      amount: order?.orderShipment?.totalExclTax ?? 0
-    }
+    },
+    systemCurrency
   );
   const { price: shipmentTotalInclTax } = usePrice(
     order && {
       amount: order?.orderShipment?.totalInclTax ?? 0
-    }
+    },
+    systemCurrency
   );
+
+  const { price: totalTax } = usePrice(
+    {
+      amount: order?.subTotalInclTax - order?.subTotalExclTax
+    },
+    systemCurrency
+  );
+
+  const customerAddress =
+    order?.customer?.address[0] ?? ({} as CustomerAddressType);
+
   return (
     <Document>
       <Page size="A4">
         <View style={styles.container}>
-          {/* Address */}
           <View style={styles.addressWrapper}>
+            {/* CUSTOMER ADDRESS */}
             <View style={styles.section}>
               <Text style={[styles.addressText, { marginBottom: 20 }]}>
                 Invoice No:
@@ -99,15 +105,15 @@ export default function InvoicePdf({
               >
                 {order?.customer?.fullName}
               </Text>
-              <Text style={styles.addressText}>{order?.customer?.email}</Text>
+              <Text style={styles.addressText}>{customerAddress?.email}</Text>
               <Text style={styles.addressText}>
-                {order?.customer?.address?.phoneNumber}
+                {customerAddress?.phoneNumber}
               </Text>
               <Text style={styles.addressText}>
-                {formatAddress(order?.customer?.address)}
+                {formatAddress(customerAddress)}
               </Text>
             </View>
-
+            {/* STORE ADDRESS */}
             <View style={[styles.section]}>
               <Text style={[styles.addressTextRight, { marginBottom: 20 }]}>
                 Date: {dayjs().format('D MMMM, YYYY')}
@@ -118,63 +124,62 @@ export default function InvoicePdf({
                   { color: '#374151', fontFamily: 'Lato Bold', fontSize: 12 }
                 ]}
               >
-                Pickbazar
+                {storeInfoOrder?.storeName}
               </Text>
-              <Text style={styles.addressTextRight}>pickbazar@dummy.com</Text>
-              <Text style={styles.addressTextRight}>+123456789</Text>
               <Text style={styles.addressTextRight}>
-                21 Jump Street, CA, California
+                {storeInfoOrder?.storeEmail}
+              </Text>
+              <Text style={styles.addressTextRight}>
+                {`+${storeInfoOrder?.storeNumber}`}
+              </Text>
+              <Text style={styles.addressTextRight}>
+                {storeInfoOrder?.addressLine1}
               </Text>
             </View>
           </View>
-
-          {/* Table */}
+          {/* PRODUCT TABLE */}
           <View style={styles.orderTable}>
-            {order?.items?.map((product, index) => {
-              // const { price } = usePrice({
-              //   // @ts-ignore
-              //   amount: parseFloat(product.pivot.subtotal)
-              // });
-              return (
-                <View style={styles.tbody} key={index}>
-                  <View style={styles.tr}>
-                    <Text
-                      style={[styles.td, { width: 50, textAlign: 'center' }]}
-                    >
-                      {index + 1}
-                    </Text>
-                    <Text style={[styles.td, { flex: 1 }]}>{product.name}</Text>
-                    <Text
-                      style={[styles.td, { width: 100, textAlign: 'right' }]}
-                    >
-                      {/* {price} */}
-                      {25}
-                    </Text>
-                  </View>
+            {order?.items?.map((item, index) => (
+              <View key={index} style={styles.tbody}>
+                <View style={styles.tr}>
+                  <Text style={[styles.td, { flex: 1 }]}>
+                    {item.product?.name}
+                  </Text>
+                  <Text style={[styles.td, { flex: 1 }]}>
+                    x {item?.totalQuantity ?? 0}
+                  </Text>
+                  <Text style={[styles.td, { width: 100, textAlign: 'right' }]}>
+                    {`${systemCurrency?.symbol} ${item?.totalInclTax}`}
+                  </Text>
                 </View>
-              );
-            })}
+              </View>
+            ))}
           </View>
-
           {/* Border */}
           <View style={styles.singleBorder} />
 
           {/* Total */}
           <View style={styles.totalCountWrapper}>
             <View style={styles.totalCountRow}>
-              <Text style={styles.totalCountCell}>Sub Total</Text>
+              <Text style={styles.totalCountCell}>Sub total</Text>
               <Text style={styles.totalCountCell}>{subTotalInclTax}</Text>
             </View>
             <View style={styles.totalCountRow}>
               <Text style={styles.totalCountCell}>Discount</Text>
-              <Text style={styles.totalCountCell}>{discountAmount}</Text>
+              <Text style={styles.totalCountCell}>{`-${discountAmount}`}</Text>
             </View>
             <View style={styles.totalCountRow}>
               <Text style={styles.totalCountCell}>Tax</Text>
-              <Text style={styles.totalCountCell}>{order?.tax?.rate}</Text>
+              <Text
+                style={styles.totalCountCell}
+              >{`${order?.tax?.rate}%`}</Text>
             </View>
             <View style={styles.totalCountRow}>
-              <Text style={styles.totalCountCell}>Delivery Fee</Text>
+              <Text style={styles.totalCountCell}>Tax amount</Text>
+              <Text style={styles.totalCountCell}>{totalTax}</Text>
+            </View>
+            <View style={styles.totalCountRow}>
+              <Text style={styles.totalCountCell}>Delivery fee</Text>
               <Text style={styles.totalCountCell}>{shipmentTotalInclTax}</Text>
             </View>
             <View style={styles.totalCountRow}>

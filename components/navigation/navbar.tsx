@@ -140,9 +140,9 @@ const Navbar = () => {
                 </div>
               </Button>
               <div className="mx-2 w-fit rounded-sm p-1 text-sm text-gray-500">
-                {trialDaysLeft.map((day) => (
+                {trialDaysLeft.map((day, idx) => (
                   <span
-                    key={day}
+                    key={idx}
                     className="mx-[2px] w-full rounded-sm border bg-gray-200 px-1 py-1 text-black"
                   >
                     {day}

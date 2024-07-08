@@ -16,8 +16,10 @@ import {
   useGetClient,
   useWarnIfUnsavedChanges
 } from '@hooks/index';
+import { useAppDispatch } from '@hooks/useGetClient';
 import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/notify';
+import { setEtag } from '@store/client';
 import { LanguageProps, Nullable } from '@ts-types/custom.types';
 import { OrderBy, RateType } from '@ts-types/enums';
 import { DeliveryTimeType, ShippingZoneType } from '@ts-types/generated';
@@ -117,6 +119,7 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
   });
 
   const { systemLanguage } = useSettings();
+  const dispatch = useAppDispatch();
 
   const {
     userInfo: { csrfToken, store: { etag } = {} }
@@ -150,9 +153,11 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
       }
     },
     onCompleted: (data: { createShippingZone: ShippingZoneType }) => {
-      if (!isEmpty(data)) {
+      if (!isEmpty(data?.createShippingZone)) {
         reset();
         notify(t('common:successfully-created'), 'success');
+        const { etag: newEtag } = data?.createShippingZone ?? {};
+        dispatch(setEtag({ etag: newEtag }));
         router.push(ROUTES.SHIPPING_ZONE);
       }
     }
@@ -168,8 +173,10 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
       }
     },
     onCompleted: (data: { updateShippingZone: ShippingZoneType }) => {
-      if (!isEmpty(data)) {
+      if (!isEmpty(data?.updateShippingZone)) {
         notify(t('common:successfully-updated'), 'success');
+        const { etag: newEtag } = data?.updateShippingZone ?? {};
+        dispatch(setEtag({ etag: newEtag }));
         router.push(ROUTES.SHIPPING_ZONE);
       }
     }

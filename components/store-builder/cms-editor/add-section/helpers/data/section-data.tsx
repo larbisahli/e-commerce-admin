@@ -187,10 +187,6 @@ export const sectionsLayout = [
         borderColor: '#222',
         border: 'all'
       },
-      flexAlignment: {
-        justifyContent: { value: 'center', label: 'Center' },
-        alignItems: { value: 'center', label: 'Center' }
-      },
       overlay: {
         overlayOpacity: 0,
         overlayColor: '#000'
@@ -237,7 +233,8 @@ export const sectionsLayout = [
       autoplay: true,
       controls: false,
       mute: true,
-      loop: false
+      loop: false,
+      contentAlignment: 'center'
     },
     styles: {
       header: {
@@ -289,10 +286,6 @@ export const sectionsLayout = [
         borderWidth: 0,
         borderColor: '#222',
         border: 'all'
-      },
-      flexAlignment: {
-        justifyContent: { value: 'center', label: 'Center' },
-        alignItems: { value: 'center', label: 'Center' }
       },
       sectionSize: 'auto'
     },
@@ -527,7 +520,8 @@ export const sectionsShop = [
     description: 'Slideshows a combination of image, text, and buttons.',
     icon: () => <Carousel />,
     data: {
-      items: [
+      contentAlignment: 'left',
+      slides: [
         {
           thumbnail: [
             {
@@ -538,10 +532,10 @@ export const sectionsShop = [
               width: 1000
             }
           ],
-          href: '/',
-          title: 'Xbox Series X & S',
-          description: 'Xbox Series X & S',
-          published: false,
+          displayContent: true,
+          buttonLink: '/',
+          header: 'Xbox Series X & S',
+          description: 'Pre-order Now',
           buttonLabel: 'Explore more',
           position: 0
         }
@@ -555,8 +549,73 @@ export const sectionsShop = [
       }
     },
     styles: {
-      sectionSize: 'full'
-    }
+      header: {
+        color: '#ffffff',
+        fontSize: 45,
+        fontStyle: 'normal',
+        fontFamily: {
+          label: 'Lato',
+          value: '--font-lato'
+        },
+        fontWeight: {
+          label: '900 - Extra Bold',
+          value: 900
+        },
+        lineHeight: 45,
+        letterSpacing: 0.55,
+        textTransform: 'none',
+        textDecoration: 'none'
+      },
+      description: {
+        color: '#ffffff',
+        fontSize: 30,
+        fontStyle: 'normal',
+        fontFamily: {
+          label: 'Lato',
+          value: '--font-lato'
+        },
+        fontWeight: {
+          label: '400 - Normal',
+          value: 400
+        },
+        lineHeight: 30,
+        letterSpacing: 0,
+        textTransform: 'none',
+        textDecoration: 'none'
+      },
+      imageBorder: {
+        borderRadius: 0,
+        borderStyle: {
+          value: 'solid',
+          label: 'Solid'
+        },
+        borderWidth: 0,
+        borderColor: '#222',
+        border: 'all'
+      },
+      overlay: {
+        overlayOpacity: 0,
+        overlayColor: '#000'
+      },
+      sectionSize: 'auto',
+      objectFit: { value: 'cover' }
+    },
+    children: [
+      {
+        moduleName: 'BannerWidgetNoBg',
+        position: 0,
+        data: {},
+        styles: {},
+        children: [
+          {
+            moduleName: 'ButtonPrimary',
+            position: 0,
+            data: {},
+            styles: {}
+          }
+        ]
+      }
+    ]
   }
 ];
 

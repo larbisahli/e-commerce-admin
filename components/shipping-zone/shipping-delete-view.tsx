@@ -6,9 +6,14 @@ import {
 } from '@components/ui/modal/modal.context';
 import { DELETE_SHIPPING, SHIPPING_ZONES } from '@graphql/shipping-zone';
 import { useErrorLogger } from '@hooks/useErrorLogger';
+import { useAppDispatch } from '@hooks/useGetClient';
+import { notify } from '@lib/notify';
+import { setEtag } from '@store/client';
+import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
 
 const ShippingDeleteView = () => {
+  const { t } = useTranslation();
   const [error, setError] = useState(null);
   const [deleteShipping, { loading }] = useMutation(DELETE_SHIPPING, {
     refetchQueries: [
@@ -19,14 +24,25 @@ const ShippingDeleteView = () => {
 
   const { id } = useModalState();
   const { closeModal } = useModalAction();
+  const dispatch = useAppDispatch();
 
   useErrorLogger(error);
 
   async function handleDelete() {
-    deleteShipping({ variables: { id } }).catch((err) => {
-      setError(err);
-    });
-    closeModal();
+    deleteShipping({ variables: { id } })
+      .then(({ data }) => {
+        const {
+          deleteShippingZone: { id, etag }
+        } = data;
+        if (id) {
+          dispatch(setEtag({ etag }));
+          notify(t('common:successfully-deleted'), 'success');
+        }
+        closeModal();
+      })
+      .catch((err) => {
+        setError(err);
+      });
   }
   return (
     <ConfirmationCard

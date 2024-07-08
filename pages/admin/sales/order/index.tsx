@@ -3,7 +3,6 @@ import AppLayout from '@components/layouts/app';
 import OrderList from '@components/order/order-list';
 import ErrorMessage from '@components/ui/error-message';
 import { ORDERS } from '@graphql/order';
-import { SHIPPING_ZONES } from '@graphql/shipping-zone';
 import { useGetClient } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useTableColumn } from '@hooks/useTableColumn';
@@ -49,7 +48,7 @@ interface ShippingVariable {
   etag: string;
 }
 
-export default function ShippingZonesPage({ client }: SSRProps) {
+export default function OrdersPage({ client }: SSRProps) {
   const { t } = useTranslation();
 
   const [page, setPage] = useState(1);
@@ -129,7 +128,7 @@ export default function ShippingZonesPage({ client }: SSRProps) {
     </>
   );
 }
-ShippingZonesPage.Layout = AppLayout;
+OrdersPage.Layout = AppLayout;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { locale } = context;

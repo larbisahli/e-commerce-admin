@@ -116,22 +116,6 @@ const ProductList = ({ loading, products, selectedColumns }: IProps) => {
         }
       },
       {
-        title: t('table:table-item-type'),
-        dataIndex: 'type',
-        key: 'type',
-        align: alignLeft,
-        width: 150,
-        render: (type: { id: string }, record: TableRowProps) => {
-          if (record?.loading) {
-            return <TableRowPlaceholder />;
-          }
-          if (type?.id === ProductType.Simple) {
-            return <span className="text-sm">Simple Product</span>;
-          }
-          return <span className="text-sm">Configurable Product</span>;
-        }
-      },
-      {
         title: t('table:table-item-unit'),
         dataIndex: 'salePrice',
         key: 'salePrice',
@@ -168,6 +152,34 @@ const ProductList = ({ loading, products, selectedColumns }: IProps) => {
             return <TableRowPlaceholder />;
           }
           return quantity;
+        }
+      },
+      {
+        title: t('table:table-item-type'),
+        dataIndex: 'type',
+        key: 'type',
+        align: alignLeft,
+        width: 130,
+        render: (type: { id: string }, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
+          if (type?.id === ProductType.Simple) {
+            return (
+              <Badge
+                text="Simple"
+                textColor={'text-gray-900'}
+                color="bg-blue-50"
+              />
+            );
+          }
+          return (
+            <Badge
+              text="Configurable"
+              textColor={'text-gray-900'}
+              color="bg-blue-50"
+            />
+          );
         }
       },
       {

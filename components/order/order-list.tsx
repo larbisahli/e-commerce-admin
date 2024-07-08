@@ -5,7 +5,6 @@ import { TableRowPlaceholder } from '@components/ui/placeholders/Table';
 import ProfileCart from '@components/ui/profile-card';
 import { usePlaceholder } from '@hooks/usePlaceholder';
 import { useSettings } from '@hooks/useSettings';
-import { PDFDownloadLink } from '@react-pdf/renderer';
 import {
   CreatedUpdatedByAt,
   CustomerType,
@@ -20,8 +19,6 @@ import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useTranslation } from 'next-i18next';
 import { useMemo } from 'react';
-
-import InvoicePdf from './invoice-pdf';
 
 const Table = dynamic(
   () => import('@components/ui/table').then((mod) => mod.Table),

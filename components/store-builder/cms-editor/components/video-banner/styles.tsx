@@ -21,7 +21,6 @@ import { FormProvider, useForm } from 'react-hook-form';
 import FormActions from '../../helpers/FormActions';
 import Border from '../common/Border';
 import ContainerWidth from '../common/containerWidth';
-import FlexAlignment from '../common/flexAlignment';
 import Overlay from '../common/Overlay';
 import Typography from '../common/Typography';
 
@@ -31,7 +30,6 @@ type FormValues = {
   description: PageBuilderStyles['Typography'];
   overlay: PageBuilderStyles['Overlay'];
   border: PageBuilderStyles['Border'];
-  flexAlignment: PageBuilderStyles['FlexAlignment'];
 };
 
 const defaultValues = {};
@@ -95,8 +93,7 @@ const VideoBannerStyles = ({ initialValues }: IProps) => {
         header: values.header,
         description: values.description,
         overlay: values.overlay,
-        border: values.border,
-        flexAlignment: values.flexAlignment
+        border: values.border
       }
     };
     updateLayoutComponent({ variables }).catch((err) => {
@@ -138,12 +135,6 @@ const VideoBannerStyles = ({ initialValues }: IProps) => {
             </div>
             <div className="mb-5">
               <Overlay label={'Overlay'} name={'overlay'} />
-            </div>
-            <div className="mb-5">
-              <FlexAlignment
-                label={'Content Alignment'}
-                name={'flexAlignment'}
-              />
             </div>
             <div className="mt-5 flex items-center justify-between">
               <Label>{t('form:input-label-section-size')}</Label>
