@@ -9,7 +9,8 @@ import {
   CreatedUpdatedByAt,
   CustomerType,
   OrderStatus,
-  OrderType
+  OrderType,
+  PaymentType
 } from '@ts-types/generated';
 import { formatAddress } from '@utils/format-address';
 import { useIsRTL } from '@utils/locals';
@@ -107,15 +108,15 @@ const OrderList = ({ loading, orders, selectedColumns }: IProps) => {
       },
       {
         title: t('table:table-payment-method'),
-        dataIndex: 'paymentCode',
-        key: 'paymentCode',
+        dataIndex: 'payment',
+        key: 'payment',
         align: 'center',
         width: 150,
-        render: (paymentCode: string, record: TableRowProps) => {
+        render: (payment: PaymentType, record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
-          return <span className="font-medium">{paymentCode}</span>;
+          return <span className="font-medium">{payment?.code}</span>;
         }
       },
       {

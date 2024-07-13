@@ -12,7 +12,9 @@ export const ORDER = gql`
       subTotalExclTax
       discountAmount
       orderApprovedAt
-      paymentCode
+      payment {
+        code
+      }
       orderGeo
       currency {
         code
@@ -124,7 +126,9 @@ export const ORDERS = gql`
       grandTotalInclTax
       grandTotalExclTax
       orderApprovedAt
-      paymentCode
+      payment {
+        code
+      }
       customer {
         fullName
         address {

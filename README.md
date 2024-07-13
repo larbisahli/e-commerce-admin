@@ -1,8 +1,5 @@
 ## How do I get into a Docker container's shell?
 
-IMPORTANT -> USE DYNAMIC IMPORT
-**\*\***\*\***\*\***\*\***\*\***\*\***\*\***\*\***\*\***\*\***\*\***\*\***\*\***\\**\*\*\***
-
 ```bash
 $  sudo docker exec -it admin-website sh
 ```
@@ -24,3 +21,5 @@ cat jwtRS256.key.pub
 https://shopify.github.io/draggable/examples/flexbox.html
 
 https://github.com/sapics/request-country/blob/master/index.js
+
+https://dgreene1.github.io/react-accessible-treeview/

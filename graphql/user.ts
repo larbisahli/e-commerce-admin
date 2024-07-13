@@ -77,6 +77,7 @@ export const USER_AUTH = gql`
           userRoleEtag
           orderStatusEtag
           taxEtag
+          paymentEtag
         }
       }
       googleProfileImage

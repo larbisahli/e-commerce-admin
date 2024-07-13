@@ -167,3 +167,11 @@ export enum DEVICE_VIEWS {
   TABLET = 'TABLET',
   MOBILE = 'MOBILE'
 }
+
+export enum offlinePaymentCodes {
+  bankDeposit = 'bankdeposit',
+  cod = 'cod',
+  cheque = 'cheque',
+  moneyOrder = 'moneyorder',
+  inStore = 'instore',
+}

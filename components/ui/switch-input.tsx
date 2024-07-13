@@ -11,6 +11,7 @@ interface Props {
   label: string;
   name: string;
   labelClassName?: string;
+  size?: 'small' | 'large'
 }
 
 const SwitchInput = ({
@@ -18,7 +19,8 @@ const SwitchInput = ({
   label,
   name,
   errors,
-  labelClassName
+  labelClassName,
+  size = 'small'
 }: Props) => {
   const { t } = useTranslation();
   return (
@@ -31,15 +33,21 @@ const SwitchInput = ({
             checked={value}
             onChange={onChange}
             className={cn(
-              'relative inline-flex h-4 w-7 items-center rounded-full border',
+              size === 'large' && 'h-[25px] w-[50px]',
+              size === 'small' && 'h-4 w-7',
+              'relative inline-flex items-center rounded-full border',
               value ? 'bg-blue-500' : 'bg-gray-300'
             )}
           >
             <span className="sr-only">Enable {label}</span>
             <span
-              className={`${
-                value ? 'translate-x-3' : 'translate-x-0'
-              } inline-block h-3 w-3 transform rounded-full border bg-light`}
+              className={cn(
+                size === 'large' && 'h-[25px] w-[25px]',
+                size === 'small' && 'h-3 w-3',
+                size === 'large' && value ? 'translate-x-6' : 'translate-x-0',
+                size === 'small' && value ? 'translate-x-3' : 'translate-x-0',
+                'inline-block transform rounded-full border bg-light'
+              )}
             />
           </Switch>
         )}

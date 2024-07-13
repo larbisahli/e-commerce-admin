@@ -146,7 +146,7 @@ const RecentOrders = ({ orders, title, loading }: IProps) => {
         <Table
           //@ts-ignore
           columns={columns}
-          emptyText={t('table:empty-table-data')}
+          emptyText="You haven't received any recent orders."
           data={loading ? tablePlaceholderRow : orders}
           rowKey="id"
           scroll={{ x: 700 }}

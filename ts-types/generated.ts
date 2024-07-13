@@ -151,6 +151,7 @@ export interface EtagGroupsType {
   userRoleEtag: string;
   orderStatusEtag: string;
   taxEtag: string;
+  paymentEtag: string
 }
 
 export interface Category extends CreatedUpdatedByAt {
@@ -251,6 +252,13 @@ export interface Tag extends CreatedUpdatedByAt {
     name?: Nullable<Scalars['String']>;
   };
 }
+
+export interface PaymentType {
+  code: Scalars['String'];
+  active: Scalars['Boolean'];
+  data: Scalars['JSON'];
+}
+
 
 export interface LanguageType extends CreatedUpdatedByAt {
   id: Scalars['Int'];
@@ -713,7 +721,7 @@ export interface OrderType extends CreatedUpdatedByAt {
   orderStatus?: OrderStatus;
   deliveryStatus?: OrderStatus;
   paymentStatus?: OrderStatus;
-  paymentCode?: string;
+  payment?: PaymentType;
   currency?: Nullable<CurrencyType>;
   paymentId?: string;
   orderGeo?: {

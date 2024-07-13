@@ -21,33 +21,45 @@ const settingRoutes = [
   {
     label: 'common:sidebar-nav-item-account-settings',
     url: ROUTES.ACCOUNT_SETTINGS,
-    renderIcon: () => <AccountSettingsIcon width={25} height={25} />
+    renderIcon: () => <AccountSettingsIcon width={25} height={25} />,
+    description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit'
   },
   {
     label: 'common:sidebar-nav-item-notifications',
     url: ROUTES.NOTIFICATION,
-    renderIcon: () => <NotificationBellIcon width={25} height={25} />
+    renderIcon: () => <NotificationBellIcon width={25} height={25} />,
+    description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit'
   },
   {
     label: 'common:sidebar-nav-item-tax',
     url: ROUTES.TAX,
-    renderIcon: () => <TaxIcon width={25} height={25} />
+    renderIcon: () => <TaxIcon width={25} height={25} />,
+    description: 'Your own tax rules and recommended services'
   },
   {
     label: 'common:sidebar-nav-item-checkout-settings',
     url: ROUTES.CHECKOUT_SETTINGS,
-    renderIcon: () => <CheckoutIcon width={25} height={25} />
+    renderIcon: () => <CheckoutIcon width={25} height={25} />,
+    description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit'
   },
   {
     label: 'common:sidebar-nav-item-payments',
     url: ROUTES.PAYMENT,
-    renderIcon: () => <PaymentIcon width={25} height={25} />
+    renderIcon: () => <PaymentIcon width={25} height={25} />,
+    description: 'Payment methods for the currencies you support in your store'
   },
   {
     label: 'common:sidebar-nav-item-tags',
     url: ROUTES.TAG,
-    renderIcon: () => <TagIcon width={25} height={25} />
+    renderIcon: () => <TagIcon width={25} height={25} />,
+    description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit'
   },
+  {
+    label: 'common:sidebar-nav-item-recent-login-history',
+    url: ROUTES.RECENT_LOGIN_HISTORY,
+    renderIcon: () => <LoginHistoryIcon width={25} height={25} />,
+    description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit'
+  }
   // {
   //   label: 'common:sidebar-nav-item-email-templates',
   //   url: ROUTES.EMAIL_TEMPLATE,
@@ -63,11 +75,6 @@ const settingRoutes = [
   //   url: ROUTES.MULTI_CURRENCY,
   //   renderIcon: () => <UsersIcon />
   // },
-  {
-    label: 'common:sidebar-nav-item-recent-login-history',
-    url: ROUTES.RECENT_LOGIN_HISTORY,
-    renderIcon: () => <LoginHistoryIcon width={25} height={25} />
-  }
 ];
 
 export default function Settings({ client }: SSRProps) {
@@ -93,13 +100,16 @@ export default function Settings({ client }: SSRProps) {
         label={t('form:form-title-settings')}
       />
       <section className="mx-auto mt-20 grid max-w-[900px] grid-cols-1  gap-5 rounded-md border bg-white p-5 shadow-sm sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3">
-        {settingRoutes?.map(({ label, url, renderIcon }) => (
+        {settingRoutes?.map(({ label, url, renderIcon, description }) => (
           <Link key={label} href={url}>
-            <div className="m-2 flex cursor-pointer items-center text-gray-500 hover:text-blue-500">
+            <div className="m-2 flex cursor-pointer items-center text-gray-500 group">
               <div className="mr-3 flex h-12 w-12 items-center justify-center rounded-full border bg-gray-100">
                 {renderIcon()}
               </div>
-              <span className="font-medium">{t(label)}</span>
+              <div className='flex-1'>
+              <span className="font-semibold text-gray-800 group-hover:text-blue-500">{t(label)}</span>
+              <p className='text-xs'>{description}</p>
+              </div>
             </div>
           </Link>
         ))}
