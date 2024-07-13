@@ -33,7 +33,7 @@ interface OptionsVariable {
 }
 
 interface TPayment {
-  getOfflinePayments: PaymentType[]
+  getOfflinePayments: PaymentType[];
 }
 
 export default function Payment({ client }: SSRProps) {
@@ -47,23 +47,29 @@ export default function Payment({ client }: SSRProps) {
     userInfo: { store: { etag } = {} }
   } = useGetClient(client);
 
-  const { data, loading, error } = useQuery<TPayment, OptionsVariable>(GET_OFFLINE_PAYMENTS, {
-    variables: {
-      etag: etag?.paymentEtag
-    },
-    fetchPolicy: 'cache-and-network',
-    skip: isEmpty(etag)
-  });
+  const { data, loading, error } = useQuery<TPayment, OptionsVariable>(
+    GET_OFFLINE_PAYMENTS,
+    {
+      variables: {
+        etag: etag?.paymentEtag
+      },
+      fetchPolicy: 'cache-and-network',
+      skip: isEmpty(etag)
+    }
+  );
 
   useErrorLogger(error);
 
   const { getOfflinePayments = [] } = data ?? {};
 
   const offlinePayments = useMemo(() => {
-    return getOfflinePayments.reduce((obj, cur) => ({...obj, [cur.code]: cur}), {})
-  }, [getOfflinePayments])
+    return getOfflinePayments.reduce(
+      (obj, cur) => ({ ...obj, [cur.code]: cur }),
+      {}
+    );
+  }, [getOfflinePayments]);
 
-  const onlinePayments = []
+  const onlinePayments = [];
 
   return (
     <>
@@ -76,12 +82,12 @@ export default function Payment({ client }: SSRProps) {
           href="/svg/settings.svg"
         />
       </Head>
-      <div className='border-b pb-3'>
+      <div className="border-b pb-3">
         <Button
           variant="outline"
           onClick={() => router.back()}
           type="button"
-          className='mb-4'
+          className="mb-4"
         >
           <ArrowPrev />
           <span>Settings</span>
@@ -90,7 +96,9 @@ export default function Payment({ client }: SSRProps) {
           Payment Methods
         </h1>
       </div>
-      <p className='text-gray-500 mt-4'>Set up payment methods for the currencies you support on your store. </p>
+      <p className="mt-4 text-gray-500">
+        Set up payment methods for the currencies you support on your store.{' '}
+      </p>
       <OfflinePayments initialValues={offlinePayments} loading={loading} />
       <OnlinePayments initialValues={onlinePayments} />
     </>

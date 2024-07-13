@@ -7,10 +7,10 @@
   "orientation": "portrait",
   "display": "standalone",
   "scope": "/admin/",
-  "id":  "/admin/dashboard",
+  "id": "/admin/dashboard",
   "screenshots": [
     {
-     "src": "/favicon/screenshots/dropgala-admin.png",
+      "src": "/favicon/screenshots/dropgala-admin.png",
       "sizes": "3024x1654",
       "type": "image/png",
       "form_factor": "wide",
@@ -18,25 +18,25 @@
     },
     {
       "src": "/favicon/screenshots/dropgala-admin-2.png",
-       "sizes": "3024x1654",
-       "type": "image/png",
-       "form_factor": "wide",
-       "label": "Dashboard"
-     },
+      "sizes": "3024x1654",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Dashboard"
+    },
     {
       "src": "/favicon/screenshots/dropgala-admin-3.png",
-       "sizes": "3024x1654",
-       "type": "image/png",
-       "form_factor": "wide",
-       "label": "Dashboard"
-     },
-     {
+      "sizes": "3024x1654",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Dashboard"
+    },
+    {
       "src": "/favicon/screenshots/dropgala-admin-3.png",
-       "sizes": "3024x1654",
-       "type": "image/png",
-       "form_factor": "narrow",
-       "label": "Dashboard"
-     }
+      "sizes": "3024x1654",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Dashboard"
+    }
   ],
   "icons": [
     {

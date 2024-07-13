@@ -56,28 +56,33 @@ export default function ChequeForm({ initialValues }: IProps) {
 
   const dispatch = useAppDispatch();
 
-  const [updatePayment, { loading: updating }] = useMutation(UPDATE_OFFLINE_PAYMENT, {
-    context: {
-      headers: {
-        'x-csrf-token': csrfToken
-      }
-    },
-    onCompleted: (data: { updateOfflinePayment: {code: string, etag: EtagGroupsType} }) => {
-      if (!isEmpty(data.updateOfflinePayment.code)) {
-        notify(t('common:successfully-updated'), 'success');
-        const { etag: newEtag } = data.updateOfflinePayment ?? {};
-        dispatch(setEtag({ etag: newEtag }));
+  const [updatePayment, { loading: updating }] = useMutation(
+    UPDATE_OFFLINE_PAYMENT,
+    {
+      context: {
+        headers: {
+          'x-csrf-token': csrfToken
+        }
+      },
+      onCompleted: (data: {
+        updateOfflinePayment: { code: string; etag: EtagGroupsType };
+      }) => {
+        if (!isEmpty(data.updateOfflinePayment.code)) {
+          notify(t('common:successfully-updated'), 'success');
+          const { etag: newEtag } = data.updateOfflinePayment ?? {};
+          dispatch(setEtag({ etag: newEtag }));
+        }
       }
     }
-  });
+  );
 
   useErrorLogger(error);
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    if(!state.name) {
-      notify('Please provide the payment display name', 'error')
-      return
+    if (!state.name) {
+      notify('Please provide the payment display name', 'error');
+      return;
     }
     const variables = {
       code: offlinePaymentCodes.cheque,
@@ -86,7 +91,7 @@ export default function ChequeForm({ initialValues }: IProps) {
         countries: state?.countries?.map((country) => {
           return {
             iso2: country.iso2,
-            name: country.name,
+            name: country.name
           };
         })
       }
@@ -137,13 +142,15 @@ export default function ChequeForm({ initialValues }: IProps) {
       <div className="my-5 flex flex-wrap sm:my-8">
         <Description
           title={t('form:input-label-description')}
-          details={"To integrate check payments into your store, simply complete the form below and click the 'Save' button."}
+          details={
+            "To integrate check payments into your store, simply complete the form below and click the 'Save' button."
+          }
           className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
         />
 
         <Card className="w-full sm:w-8/12 md:w-2/3">
           <Input
-            label='Display Name'
+            label="Display Name"
             isRequiredLabel
             name="name"
             value={state.name}
@@ -151,7 +158,7 @@ export default function ChequeForm({ initialValues }: IProps) {
             variant="outline"
             className="mb-5"
             placeholder={'Bank Deposit'}
-            note='The text in this box will be used to describe this payment method on your site. '
+            note="The text in this box will be used to describe this payment method on your site. "
           />
           <div className="mb-5">
             <Label>Available Countries</Label>
@@ -179,17 +186,21 @@ export default function ChequeForm({ initialValues }: IProps) {
               ]}
               isLoading={isEmpty(countries)}
             />
-            <p className='text-gray-500 text-xs my-2'>Which countries do you want to offer check payments to? If the customers billing country matches any of the selected countries, then they will have the option to pay by check.</p>
+            <p className="my-2 text-xs text-gray-500">
+              Which countries do you want to offer check payments to? If the
+              customers billing country matches any of the selected countries,
+              then they will have the option to pay by check.
+            </p>
           </div>
           <TextArea
-            label='Account Information'
+            label="Account Information"
             onChange={handleChange}
             value={state.description}
             name="description"
             variant="outline"
             className="mb-6"
             rows={7}
-            note='If a shopper chooses to pay via check, then they will be shown the text you type into this box once they complete their order. You should include details on how the shopper can send you the check (either your postal address or store address), and any other information that they might need to pay by check. The amount of the order will automatically be displayed.'
+            note="If a shopper chooses to pay via check, then they will be shown the text you type into this box once they complete their order. You should include details on how the shopper can send you the check (either your postal address or store address), and any other information that they might need to pay by check. The amount of the order will automatically be displayed."
           />
         </Card>
       </div>

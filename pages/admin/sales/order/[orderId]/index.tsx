@@ -530,13 +530,20 @@ export default function OrderDetailsPage({ client }: SSRProps) {
               <div className="flex items-center justify-between border-b border-dashed py-2 text-sm text-body">
                 <span className="text-md text-gray-900">Placed from IP</span>
                 <div className="flex items-center justify-center">
-                  {order?.orderGeo?.ip?.length !== 0 ? <Link href={`https://whatismyipaddress.com/ip/${order?.orderGeo?.ip}`} target='_blank'>
-                    <span className="text-md text-blue-500 hover:underline">
-                      {order?.orderGeo?.ip?.length !== 0
-                        ? order?.orderGeo?.ip
-                        : 'N/A'}
-                    </span>
-                  </Link> : <span className="text-md text-gray-600">N/A</span>}
+                  {order?.orderGeo?.ip?.length !== 0 ? (
+                    <Link
+                      href={`https://whatismyipaddress.com/ip/${order?.orderGeo?.ip}`}
+                      target="_blank"
+                    >
+                      <span className="text-md text-blue-500 hover:underline">
+                        {order?.orderGeo?.ip?.length !== 0
+                          ? order?.orderGeo?.ip
+                          : 'N/A'}
+                      </span>
+                    </Link>
+                  ) : (
+                    <span className="text-md text-gray-600">N/A</span>
+                  )}
                 </div>
               </div>
               <div className="flex items-center justify-between border-b border-dashed py-2 text-sm text-body">

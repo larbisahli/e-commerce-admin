@@ -4,7 +4,7 @@ import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
 import { GET_PAYMENT } from '@graphql/payment';
 import { useErrorLogger, useGetClient } from '@hooks/index';
-import { verifyAuth,XSRFHandler } from '@middleware/utils';
+import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { PaymentType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
@@ -30,19 +30,21 @@ interface OptionsVariable {
 }
 
 export default function inStore({ client }: SSRProps) {
-
   const {
     userInfo: { store: { etag } = {} }
   } = useGetClient(client);
 
-  const { data, loading, error } = useQuery<TPayment, OptionsVariable>(GET_PAYMENT, {
-    variables: {
-      code: offlinePaymentCodes.inStore,
-      etag: etag?.paymentEtag
-    },
-    fetchPolicy: 'cache-and-network',
-    skip: isEmpty(etag)
-  });
+  const { data, loading, error } = useQuery<TPayment, OptionsVariable>(
+    GET_PAYMENT,
+    {
+      variables: {
+        code: offlinePaymentCodes.inStore,
+        etag: etag?.paymentEtag
+      },
+      fetchPolicy: 'cache-and-network',
+      skip: isEmpty(etag)
+    }
+  );
 
   const { getPayment = {} } = data ?? {};
 
@@ -67,7 +69,7 @@ export default function inStore({ client }: SSRProps) {
           href="/svg/settings.svg"
         />
       </Head>
-      <InStoreForm initialValues={getPayment}/>
+      <InStoreForm initialValues={getPayment} />
     </>
   );
 }

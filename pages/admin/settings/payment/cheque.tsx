@@ -4,7 +4,7 @@ import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
 import { GET_PAYMENT } from '@graphql/payment';
 import { useErrorLogger, useGetClient } from '@hooks/index';
-import { verifyAuth,XSRFHandler } from '@middleware/utils';
+import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { PaymentType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
@@ -15,10 +15,9 @@ import Head from 'next/head';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { offlinePaymentCodes } from '@ts-types/enums';
 
-const ChequeForm = dynamic(
-  () => import('@components/payments/cheque-form'),
-  { ssr: true }
-);
+const ChequeForm = dynamic(() => import('@components/payments/cheque-form'), {
+  ssr: true
+});
 
 interface TPayment {
   getPayment: PaymentType;
@@ -30,19 +29,21 @@ interface OptionsVariable {
 }
 
 export default function Cheque({ client }: SSRProps) {
-
   const {
     userInfo: { store: { etag } = {} }
   } = useGetClient(client);
 
-  const { data, loading, error } = useQuery<TPayment, OptionsVariable>(GET_PAYMENT, {
-    variables: {
-      code: offlinePaymentCodes.cheque,
-      etag: etag?.paymentEtag
-    },
-    fetchPolicy: 'cache-and-network',
-    skip: isEmpty(etag)
-  });
+  const { data, loading, error } = useQuery<TPayment, OptionsVariable>(
+    GET_PAYMENT,
+    {
+      variables: {
+        code: offlinePaymentCodes.cheque,
+        etag: etag?.paymentEtag
+      },
+      fetchPolicy: 'cache-and-network',
+      skip: isEmpty(etag)
+    }
+  );
 
   const { getPayment = {} } = data ?? {};
 
@@ -67,7 +68,7 @@ export default function Cheque({ client }: SSRProps) {
           href="/svg/settings.svg"
         />
       </Head>
-      <ChequeForm initialValues={getPayment}/>
+      <ChequeForm initialValues={getPayment} />
     </>
   );
 }

@@ -20,10 +20,7 @@ export const GET_OFFLINE_PAYMENTS = gql`
 `;
 
 export const UPDATE_OFFLINE_PAYMENT = gql`
-  mutation UpdateOfflinePayment(
-    $code: String!
-    $data: JSONObject!
-  ) {
+  mutation UpdateOfflinePayment($code: String!, $data: JSONObject!) {
     updateOfflinePayment(code: $code, data: $data) {
       code
       etag {
@@ -34,10 +31,7 @@ export const UPDATE_OFFLINE_PAYMENT = gql`
 `;
 
 export const UPDATE_OFFLINE_PAYMENT_AVAILABILITY = gql`
-  mutation UpdateOfflinePaymentAvailability(
-    $code: String!
-    $active: Boolean!
-  ) {
+  mutation UpdateOfflinePaymentAvailability($code: String!, $active: Boolean!) {
     updateOfflinePaymentAvailability(code: $code, active: $active) {
       code
       etag {

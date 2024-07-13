@@ -56,28 +56,33 @@ export default function BankDepositForm({ initialValues }: IProps) {
 
   const dispatch = useAppDispatch();
 
-  const [updatePayment, { loading: updating }] = useMutation(UPDATE_OFFLINE_PAYMENT, {
-    context: {
-      headers: {
-        'x-csrf-token': csrfToken
-      }
-    },
-    onCompleted: (data: { updateOfflinePayment: {code: string, etag: EtagGroupsType} }) => {
-      if (!isEmpty(data.updateOfflinePayment.code)) {
-        notify(t('common:successfully-updated'), 'success');
-        const { etag: newEtag } = data.updateOfflinePayment ?? {};
-        dispatch(setEtag({ etag: newEtag }));
+  const [updatePayment, { loading: updating }] = useMutation(
+    UPDATE_OFFLINE_PAYMENT,
+    {
+      context: {
+        headers: {
+          'x-csrf-token': csrfToken
+        }
+      },
+      onCompleted: (data: {
+        updateOfflinePayment: { code: string; etag: EtagGroupsType };
+      }) => {
+        if (!isEmpty(data.updateOfflinePayment.code)) {
+          notify(t('common:successfully-updated'), 'success');
+          const { etag: newEtag } = data.updateOfflinePayment ?? {};
+          dispatch(setEtag({ etag: newEtag }));
+        }
       }
     }
-  });
+  );
 
   useErrorLogger(error);
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    if(!state.name) {
-      notify('Please provide the payment display name', 'error')
-      return
+    if (!state.name) {
+      notify('Please provide the payment display name', 'error');
+      return;
     }
     const variables = {
       code: offlinePaymentCodes.bankDeposit,
@@ -86,7 +91,7 @@ export default function BankDepositForm({ initialValues }: IProps) {
         countries: state?.countries?.map((country) => {
           return {
             iso2: country.iso2,
-            name: country.name,
+            name: country.name
           };
         })
       }
@@ -137,13 +142,15 @@ export default function BankDepositForm({ initialValues }: IProps) {
       <div className="my-5 flex flex-wrap sm:my-8">
         <Description
           title={t('form:input-label-description')}
-          details={"To integrate Bank Deposit into your store simply complete the form below and click the 'Save' button."}
+          details={
+            "To integrate Bank Deposit into your store simply complete the form below and click the 'Save' button."
+          }
           className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
         />
 
         <Card className="w-full sm:w-8/12 md:w-2/3">
           <Input
-            label='Display Name'
+            label="Display Name"
             isRequiredLabel
             name="name"
             value={state.name}
@@ -151,7 +158,7 @@ export default function BankDepositForm({ initialValues }: IProps) {
             variant="outline"
             className="mb-5"
             placeholder={'Bank Deposit'}
-            note='The text in this box will be used to describe this payment method on your site.'
+            note="The text in this box will be used to describe this payment method on your site."
           />
           <div className="mb-5">
             <Label>Available Countries</Label>
@@ -179,17 +186,21 @@ export default function BankDepositForm({ initialValues }: IProps) {
               ]}
               isLoading={isEmpty(countries)}
             />
-            <p className='text-gray-500 text-xs my-2'>Which countries do you want to offer Bank Deposit to? If the customers billing country matches any of the selected countries then they will have the option to pay by Bank Deposit.</p>
+            <p className="my-2 text-xs text-gray-500">
+              Which countries do you want to offer Bank Deposit to? If the
+              customers billing country matches any of the selected countries
+              then they will have the option to pay by Bank Deposit.
+            </p>
           </div>
           <TextArea
-            label='Account Information'
+            label="Account Information"
             onChange={handleChange}
             value={state.description}
             name="description"
             variant="outline"
             className="mb-6"
             rows={7}
-            note='If a customer chooses to pay via bank deposit then he will be shown the text you type into this box once he completes his order. You should include your bank details and other information here so the customer can pay for his order by bank deposit. The amount of the order will automatically be displayed. Type in %%OrderID%% to insert the current Order ID'
+            note="If a customer chooses to pay via bank deposit then he will be shown the text you type into this box once he completes his order. You should include your bank details and other information here so the customer can pay for his order by bank deposit. The amount of the order will automatically be displayed. Type in %%OrderID%% to insert the current Order ID"
           />
         </Card>
       </div>

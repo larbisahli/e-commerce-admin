@@ -151,7 +151,7 @@ export interface EtagGroupsType {
   userRoleEtag: string;
   orderStatusEtag: string;
   taxEtag: string;
-  paymentEtag: string
+  paymentEtag: string;
 }
 
 export interface Category extends CreatedUpdatedByAt {
@@ -258,7 +258,6 @@ export interface PaymentType {
   active: Scalars['Boolean'];
   data: Scalars['JSON'];
 }
-
 
 export interface LanguageType extends CreatedUpdatedByAt {
   id: Scalars['Int'];

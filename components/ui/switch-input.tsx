@@ -11,7 +11,7 @@ interface Props {
   label: string;
   name: string;
   labelClassName?: string;
-  size?: 'small' | 'large'
+  size?: 'small' | 'large';
 }
 
 const SwitchInput = ({

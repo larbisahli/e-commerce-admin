@@ -4,7 +4,7 @@ import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
 import { GET_PAYMENT } from '@graphql/payment';
 import { useErrorLogger, useGetClient } from '@hooks/index';
-import { verifyAuth,XSRFHandler } from '@middleware/utils';
+import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { offlinePaymentCodes } from '@ts-types/enums';
 import { PaymentType } from '@ts-types/generated';
@@ -30,19 +30,21 @@ interface OptionsVariable {
 }
 
 export default function BankDeposit({ client }: SSRProps) {
-
   const {
     userInfo: { store: { etag } = {} }
   } = useGetClient(client);
 
-  const { data, loading, error } = useQuery<TPayment, OptionsVariable>(GET_PAYMENT, {
-    variables: {
-      code: offlinePaymentCodes.bankDeposit,
-      etag: etag?.paymentEtag
-    },
-    fetchPolicy: 'cache-and-network',
-    skip: isEmpty(etag)
-  });
+  const { data, loading, error } = useQuery<TPayment, OptionsVariable>(
+    GET_PAYMENT,
+    {
+      variables: {
+        code: offlinePaymentCodes.bankDeposit,
+        etag: etag?.paymentEtag
+      },
+      fetchPolicy: 'cache-and-network',
+      skip: isEmpty(etag)
+    }
+  );
 
   const { getPayment = {} } = data ?? {};
 
@@ -67,7 +69,7 @@ export default function BankDeposit({ client }: SSRProps) {
           href="/svg/settings.svg"
         />
       </Head>
-      <BankDepositForm initialValues={getPayment}/>
+      <BankDepositForm initialValues={getPayment} />
     </>
   );
 }

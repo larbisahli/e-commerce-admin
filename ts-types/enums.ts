@@ -173,5 +173,5 @@ export enum offlinePaymentCodes {
   cod = 'cod',
   cheque = 'cheque',
   moneyOrder = 'moneyorder',
-  inStore = 'instore',
+  inStore = 'instore'
 }
