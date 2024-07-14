@@ -62,17 +62,15 @@ export enum RESOURCES {
   ORDER_STATUS = 'orderStatus',
   ORDER = 'order',
   ROLE = 'role',
-  SLIDERS = 'sliders',
   THEME = 'theme',
-  STORE = 'store',
   MARKETPLACE = 'marketPlace',
   STORE_SETTINGS = 'storeSettings',
-  PAGES = 'pages',
   MEDIA = 'media',
   MANUFACTURER = 'manufacturer',
   STORE_LANGUAGE = 'storeLanguage',
+  INTERNAL = 'internal',
   STORE_BUILDER = 'storeBuilder',
-  INTERNAL = 'internal'
+  PAYMENT = 'payment'
 }
 
 export enum ModuleGroups {

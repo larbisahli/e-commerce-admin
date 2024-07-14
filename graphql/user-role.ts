@@ -120,23 +120,7 @@ export const ROLE = gql`
               delete
             }
           }
-          sliders {
-            permissions {
-              read
-              write
-              update
-              delete
-            }
-          }
           theme {
-            permissions {
-              read
-              write
-              update
-              delete
-            }
-          }
-          store {
             permissions {
               read
               write
@@ -153,14 +137,6 @@ export const ROLE = gql`
             }
           }
           storeSettings {
-            permissions {
-              read
-              write
-              update
-              delete
-            }
-          }
-          pages {
             permissions {
               read
               write
@@ -192,6 +168,22 @@ export const ROLE = gql`
               delete
             }
           }
+          storeBuilder {
+            permissions {
+              read
+              write
+              update
+              delete
+            }
+          }
+          payment {
+            permissions {
+              read
+              write
+              update
+              delete
+            }
+          }
         }
       }
     }
@@ -202,6 +194,9 @@ export const CREATE_ROLE = gql`
   mutation CreateRole($name: String!, $privileges: PrivilegesInput!) {
     createRole(name: $name, privileges: $privileges) {
       name
+      etag {
+        userRoleEtag
+      }
     }
   }
 `;
@@ -214,6 +209,9 @@ export const UPDATE_ROLE = gql`
   ) {
     updateRole(id: $id, name: $name, privileges: $privileges) {
       name
+      etag {
+        userRoleEtag
+      }
     }
   }
 `;
@@ -221,9 +219,10 @@ export const UPDATE_ROLE = gql`
 export const DELETE_ROLE = gql`
   mutation DeleteRole($id: ID!) {
     deleteRole(id: $id) {
-      id
-      firstName
-      lastName
+      name
+      etag {
+        userRoleEtag
+      }
     }
   }
 `;

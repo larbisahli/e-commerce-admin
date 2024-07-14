@@ -93,21 +93,7 @@ export const resourceDefaultData = [
     [ACTION_PRIVILEGES.DELETE]: false
   },
   {
-    resource: RESOURCES.SLIDERS,
-    [ACTION_PRIVILEGES.WRITE]: false,
-    [ACTION_PRIVILEGES.READ]: false,
-    [ACTION_PRIVILEGES.UPDATE]: false,
-    [ACTION_PRIVILEGES.DELETE]: false
-  },
-  {
     resource: RESOURCES.THEME,
-    [ACTION_PRIVILEGES.WRITE]: false,
-    [ACTION_PRIVILEGES.READ]: false,
-    [ACTION_PRIVILEGES.UPDATE]: false,
-    [ACTION_PRIVILEGES.DELETE]: false
-  },
-  {
-    resource: RESOURCES.STORE,
     [ACTION_PRIVILEGES.WRITE]: false,
     [ACTION_PRIVILEGES.READ]: false,
     [ACTION_PRIVILEGES.UPDATE]: false,
@@ -122,13 +108,6 @@ export const resourceDefaultData = [
   },
   {
     resource: RESOURCES.STORE_SETTINGS,
-    [ACTION_PRIVILEGES.WRITE]: false,
-    [ACTION_PRIVILEGES.READ]: false,
-    [ACTION_PRIVILEGES.UPDATE]: false,
-    [ACTION_PRIVILEGES.DELETE]: false
-  },
-  {
-    resource: RESOURCES.PAGES,
     [ACTION_PRIVILEGES.WRITE]: false,
     [ACTION_PRIVILEGES.READ]: false,
     [ACTION_PRIVILEGES.UPDATE]: false,
@@ -154,12 +133,43 @@ export const resourceDefaultData = [
     [ACTION_PRIVILEGES.READ]: false,
     [ACTION_PRIVILEGES.UPDATE]: false,
     [ACTION_PRIVILEGES.DELETE]: false
+  },
+  {
+    resource: RESOURCES.STORE_BUILDER,
+    [ACTION_PRIVILEGES.WRITE]: false,
+    [ACTION_PRIVILEGES.READ]: false,
+    [ACTION_PRIVILEGES.UPDATE]: false,
+    [ACTION_PRIVILEGES.DELETE]: false
+  },
+  {
+    resource: RESOURCES.PAYMENT,
+    [ACTION_PRIVILEGES.WRITE]: false,
+    [ACTION_PRIVILEGES.READ]: false,
+    [ACTION_PRIVILEGES.UPDATE]: false,
+    [ACTION_PRIVILEGES.DELETE]: false
   }
-  // {
-  //   resource: RESOURCES.STORE_BUILDER,
-  //   [ACTION_PRIVILEGES.WRITE]: false,
-  //   [ACTION_PRIVILEGES.READ]: false,
-  //   [ACTION_PRIVILEGES.UPDATE]: false,
-  //   [ACTION_PRIVILEGES.DELETE]: false
-  // }
 ];
+
+export const resourcesNameMapper = {
+  [RESOURCES.USER]: 'User',
+  [RESOURCES.CATEGORY]: 'Category',
+  [RESOURCES.PRODUCT]: 'Product',
+  [RESOURCES.TAG]: 'Tag',
+  [RESOURCES.TAX]: 'Tax',
+  [RESOURCES.SUPPLIER]: 'Supplier',
+  [RESOURCES.ATTRIBUTE]: 'Attribute',
+  [RESOURCES.CUSTOMER]: 'Customer',
+  [RESOURCES.COUPON]: 'Coupon',
+  [RESOURCES.SHIPPING]: 'Shipping',
+  [RESOURCES.ORDER_STATUS]: 'Order Status',
+  [RESOURCES.ORDER]: 'Order',
+  [RESOURCES.ROLE]: 'User Role',
+  [RESOURCES.THEME]: 'Theme',
+  [RESOURCES.MARKETPLACE]: 'MarketPlace',
+  [RESOURCES.STORE_SETTINGS]: 'Store Settings',
+  [RESOURCES.MEDIA]: 'Media',
+  [RESOURCES.MANUFACTURER]: 'Manufacturer',
+  [RESOURCES.STORE_LANGUAGE]: 'Store Language',
+  [RESOURCES.STORE_BUILDER]: 'Store Builder',
+  [RESOURCES.PAYMENT]: 'Payment'
+};

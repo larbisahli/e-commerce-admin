@@ -89,6 +89,7 @@ export interface CreatedUpdatedByAt {
 export interface RoleType {
   id?: string;
   name?: string;
+  etag?: EtagGroupsType;
 }
 
 export interface ThemeType {

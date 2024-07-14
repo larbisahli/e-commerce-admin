@@ -16,7 +16,7 @@ interface tSettings {
   getSettings: SettingsType;
 }
 
-export default function AccountSettings({ client }: SSRProps) {
+export default function RecentLoginHistory({ client }: SSRProps) {
   const router = useRouter();
   const { t } = useTranslation();
 
@@ -27,7 +27,7 @@ export default function AccountSettings({ client }: SSRProps) {
   return (
     <>
       <Head>
-        <title>Account Settings | Dropgala</title>
+        <title>Login History | Dropgala</title>
         <link
           rel="icon"
           type="image/svg"
@@ -53,7 +53,7 @@ export default function AccountSettings({ client }: SSRProps) {
   );
 }
 
-AccountSettings.Layout = AppLayout;
+RecentLoginHistory.Layout = AppLayout;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { locale } = context;

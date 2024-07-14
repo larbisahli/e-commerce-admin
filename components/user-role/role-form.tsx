@@ -13,7 +13,7 @@ import {
   useWarnIfUnsavedChanges
 } from '@hooks/index';
 import { notify } from '@lib/index';
-import { UserType } from '@ts-types/generated';
+import { RoleType, UserType } from '@ts-types/generated';
 import { RoleInterfaceType } from '@ts-types/index';
 import { ROUTES } from '@utils/routes';
 import isEmpty from 'lodash/isEmpty';
@@ -23,6 +23,9 @@ import { useEffect, useState } from 'react';
 
 import { resourceDefaultData } from './resource-data';
 import RoleResourceTable from './role-resource-table';
+import FormActions from '@components/common/FormActions';
+import { useAppDispatch } from '@hooks/useGetClient';
+import { setEtag } from '@store/client';
 
 type IProps = {
   initialValues?: RoleInterfaceType | any;
@@ -38,8 +41,11 @@ const RoleCreateUpdateForm = ({ initialValues }: IProps) => {
   const [error, setError] = useState();
   const [unsavedChanges, setUnsavedChanges] = useState(true);
 
-  const { userInfo } = useGetClient();
-  const csrfToken = userInfo?.csrfToken;
+  const dispatch = useAppDispatch();
+
+  const {
+    userInfo: { csrfToken }
+  } = useGetClient();
 
   const [createRole, { loading: creating }] = useMutation(CREATE_ROLE, {
     context: {
@@ -47,9 +53,11 @@ const RoleCreateUpdateForm = ({ initialValues }: IProps) => {
         'x-csrf-token': csrfToken
       }
     },
-    onCompleted: (data: { updateRole: UserType }) => {
+    onCompleted: (data: { createRole: RoleType }) => {
       if (!isEmpty(data)) {
         notify(t('common:successfully-created'), 'success');
+        const { etag: newEtag } = data?.createRole ?? {};
+        dispatch(setEtag({ etag: newEtag }));
         router.push(ROUTES.USER_ROLE);
       }
     }
@@ -60,9 +68,11 @@ const RoleCreateUpdateForm = ({ initialValues }: IProps) => {
         'x-csrf-token': csrfToken
       }
     },
-    onCompleted: (data: { updateUser: UserType }) => {
-      if (!isEmpty(data)) {
+    onCompleted: (data: { updateRole: RoleType }) => {
+      if (!isEmpty(data?.updateRole?.name)) {
         notify(t('common:successfully-updated'), 'success');
+        const { etag: newEtag } = data?.updateRole ?? {};
+        dispatch(setEtag({ etag: newEtag }));
         router.push(ROUTES.USER_ROLE);
       }
     }
@@ -128,7 +138,18 @@ const RoleCreateUpdateForm = ({ initialValues }: IProps) => {
 
   return (
     <form onSubmit={onSubmit} noValidate>
-      <div className="my-5 flex flex-wrap border-b border-dashed border-border-base pb-8 sm:my-8">
+      <FormActions
+        backLink={ROUTES.USER_ROLE}
+        showSelectLanguage={false}
+        title={
+          isEmpty(initialValues)
+            ? t('form:form-title-new-role')
+            : t('form:form-title-edit-role')
+        }
+        loading={creating || updating}
+        disabled={creating || updating}
+      />
+      <div className="my-5 flex flex-wrap sm:my-8">
         <Description
           title={t('form:input-label-image')}
           details={t('form:category-image-helper-text')}
@@ -154,15 +175,6 @@ const RoleCreateUpdateForm = ({ initialValues }: IProps) => {
             <RoleResourceTable setRoles={setRoles} roles={roles} />
           </div>
         </Card>
-      </div>
-
-      <div className="mb-4 text-end">
-        <Button loading={creating || updating} disabled={creating || creating}>
-          <div className="mr-1">
-            <SaveIcon width="1.3rem" height="1.3rem" />
-          </div>
-          <div>{t('form:button-label-save')}</div>
-        </Button>
       </div>
     </form>
   );

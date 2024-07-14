@@ -8,15 +8,15 @@ import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { ArrowPrev } from '@components/icons/arrow-prev';
-import Button from '@components/ui/button';
 import { useRouter } from 'next/router';
+import Button from '@components/ui/button';
+import { ArrowPrev } from '@components/icons/arrow-prev';
 
 interface tSettings {
   getSettings: SettingsType;
 }
 
-export default function AccountSettings({ client }: SSRProps) {
+export default function CheckoutSettings({ client }: SSRProps) {
   const router = useRouter();
   const { t } = useTranslation();
 
@@ -27,7 +27,7 @@ export default function AccountSettings({ client }: SSRProps) {
   return (
     <>
       <Head>
-        <title>Account Settings | Dropgala</title>
+        <title>Checkout Settings | Dropgala</title>
         <link
           rel="icon"
           type="image/svg"
@@ -46,14 +46,14 @@ export default function AccountSettings({ client }: SSRProps) {
           <span>Settings</span>
         </Button>
         <h1 className="flex flex-1 text-2xl font-bold text-gray-700">
-          Account Settings
+          Checkout Settings
         </h1>
       </div>
     </>
   );
 }
 
-AccountSettings.Layout = AppLayout;
+CheckoutSettings.Layout = AppLayout;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { locale } = context;

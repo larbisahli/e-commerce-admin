@@ -85,7 +85,7 @@ export default function Payment({ client }: SSRProps) {
       <div className="border-b pb-3">
         <Button
           variant="outline"
-          onClick={() => router.back()}
+          onClick={() => router.push(`${ROUTES.SETTINGS}`)}
           type="button"
           className="mb-4"
         >

@@ -19,6 +19,9 @@ import Head from 'next/head';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useState } from 'react';
+import Button from '@components/ui/button';
+import { ArrowPrev } from '@components/icons/arrow-prev';
+import { useRouter } from 'next/router';
 
 const PageMainHeader = dynamic(
   () => import('@components/common/page-main-header'),
@@ -42,6 +45,7 @@ interface TRole {
 }
 
 export default function UserRole({ client }: SSRProps) {
+  const router = useRouter();
   const { t } = useTranslation();
   const [limit, setLimit] = useState({ id: 1, value: 10, label: 10 });
   const [page, setPage] = useState(1);
@@ -116,12 +120,20 @@ export default function UserRole({ client }: SSRProps) {
         <title>Notifications | Dropgala</title>
         <link rel="icon" type="image/svg" sizes="32x32" href="/svg/user.svg" />
       </Head>
-      <PageMainAction
-        showSelectLanguage={false}
-        hideBorder
-        title={t('common:sidebar-nav-item-notifications')}
-        label={t('common:sidebar-nav-item-notifications')}
-      />
+      <div className="border-b pb-3">
+        <Button
+          variant="outline"
+          onClick={() => router.push(`${ROUTES.SETTINGS}`)}
+          type="button"
+          className="mb-4"
+        >
+          <ArrowPrev />
+          <span>Settings</span>
+        </Button>
+        <h1 className="flex flex-1 text-2xl font-bold text-gray-700">
+          {t('common:sidebar-nav-item-notifications')}
+        </h1>
+      </div>
       <PageMainHeader
         columns={COLUMNS['notification']}
         selectedColumns={selectedTableColumns}

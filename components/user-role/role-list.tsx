@@ -56,7 +56,7 @@ const RoleList = ({ roles }: IProps) => {
               <ActionButtons
                 id={id}
                 editUrl={`${ROUTES.USER_ROLE}/edit/${id}`}
-                deleteModalView={'DELETE_ROLE'}
+                // deleteModalView={'DELETE_ROLE'}
               />
             </>
           );

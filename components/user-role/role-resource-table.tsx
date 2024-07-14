@@ -6,6 +6,7 @@ import { useIsRTL } from '@utils/locals';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
 import React, { useMemo } from 'react';
+import { resourcesNameMapper } from './resource-data';
 
 const Table = dynamic(
   () => import('@components/ui/table').then((mod) => mod.Table),
@@ -32,7 +33,9 @@ const RoleResourceTable = ({ setRoles, roles }: IProps) => {
         ellipsis: true,
         render: (resource: string) => (
           <div>
-            <span className="font-semibold">{resource}</span>
+            <span className="font-semibold">
+              {resourcesNameMapper[resource]}
+            </span>
           </div>
         )
       },
