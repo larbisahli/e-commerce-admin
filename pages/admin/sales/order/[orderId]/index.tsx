@@ -39,6 +39,7 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { SaveIcon } from '@components/icons/save-icon';
 
 const Table = dynamic(
   () => import('@components/ui/table').then((mod) => mod.Table),
@@ -382,7 +383,11 @@ export default function OrderDetailsPage({ client }: SSRProps) {
               placeholder={t('form:input-placeholder-order-status')}
             />
           </div>
-          <Button loading={updatingStatus} className="mt-5">
+          <Button
+            loading={updatingStatus}
+            className="mt-5"
+            renderIcon={<SaveIcon width="1.3rem" height="1.3rem" />}
+          >
             {t('form:button-label-update-status')}
           </Button>
         </form>
@@ -480,7 +485,7 @@ export default function OrderDetailsPage({ client }: SSRProps) {
               <div className="flex items-center justify-between border-b border-dashed py-2 text-sm text-body">
                 <span className="text-md text-gray-900">Payment method</span>
                 <span className="text-md font-medium text-gray-700">
-                  {order?.payment?.code}
+                  {order?.payment?.data?.name}
                 </span>
               </div>
               <div className="flex items-center justify-between border-b border-dashed py-2 text-sm text-body">

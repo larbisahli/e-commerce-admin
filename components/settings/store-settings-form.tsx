@@ -62,14 +62,6 @@ interface OptionsVariable {
   etag: string;
 }
 
-const paymentMethods = [
-  {
-    id: 1,
-    name: 'Cash on Delivery',
-    code: 'cash_on_delivery'
-  }
-];
-
 const webmanifestDisplays = [
   { name: 'fullscreen' },
   { name: 'standalone' },
@@ -402,17 +394,6 @@ export default function StoreSettingsForm({ settings }: IProps) {
           className="w-full px-0 pb-5 sm:w-1/4 sm:py-8 sm:pe-4 md:w-1/4 md:pe-5"
         />
         <Card className="w-full sm:w-3/4 md:w-3/4">
-          <div className="mb-5">
-            <Label>{t('form:input-label-payment-methods')}</Label>
-            <SelectInput
-              name="paymentMethods"
-              control={control}
-              isMulti
-              getOptionLabel={(option: any) => option?.name}
-              getOptionValue={(option: any) => option?.code}
-              options={paymentMethods}
-            />
-          </div>
           <div className="mb-5">
             <Label
               tooltipId="currencies"

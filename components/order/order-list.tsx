@@ -116,7 +116,7 @@ const OrderList = ({ loading, orders, selectedColumns }: IProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
-          return <span className="font-medium">{payment?.code}</span>;
+          return <span className="font-medium">{payment?.data?.name}</span>;
         }
       },
       {

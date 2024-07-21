@@ -14,6 +14,7 @@ export const ORDER = gql`
       orderApprovedAt
       payment {
         code
+        data
       }
       orderGeo
       currency {
@@ -128,6 +129,7 @@ export const ORDERS = gql`
       orderApprovedAt
       payment {
         code
+        data
       }
       customer {
         fullName
@@ -184,7 +186,7 @@ export const RECENT_ORDERS = gql`
 
 export const UPDATE_STATUS_ORDER = gql`
   mutation UpdateStatusOrder(
-    $id: Int!
+    $id: String!
     $orderStatus: OrderStatusInput!
     $paymentStatus: OrderStatusInput!
     $deliveryStatus: OrderStatusInput!
@@ -194,24 +196,6 @@ export const UPDATE_STATUS_ORDER = gql`
       orderStatus: $orderStatus
       paymentStatus: $paymentStatus
       deliveryStatus: $deliveryStatus
-    ) {
-      id
-    }
-  }
-`;
-
-export const UPDATE_ORDER = gql`
-  mutation UpdateShippingZone(
-    $id: Int!
-    $shippingZone: ShippingZoneInput
-    $additions: UpdateRateAndZoneInput
-    $deletions: UpdateRateAndZoneInput
-  ) {
-    updateShippingZone(
-      id: $id
-      shippingZone: $shippingZone
-      additions: $additions
-      deletions: $deletions
     ) {
       id
     }

@@ -265,7 +265,7 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
     // Sometimes we get undefined when using watch('zones')
     const upToDateZones = getValues('zones');
     if (isEmpty(upToDateZones)) {
-      setValue('zones', [{ id: 0, name: 'Global', iso2: 'XX' }]);
+      setValue('zones', [{ id: 0, name: '-- All Countries --', iso2: 'XX' }]);
     } else if (upToDateZones.length > 1 && exist) {
       setValue(
         'zones',
