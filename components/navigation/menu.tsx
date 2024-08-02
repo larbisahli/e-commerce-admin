@@ -121,7 +121,7 @@ function NavMenu() {
             <span>Your store:</span>
             <Link
               target="_blank"
-              href={`https://${alias}.dropgala.com`}
+              href={`https://${alias}.dropgala.shop`}
               className={cn(
                 'block px-1 text-sm font-semibold capitalize text-accent transition duration-200 hover:text-accent'
               )}
