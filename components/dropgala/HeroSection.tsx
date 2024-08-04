@@ -3,49 +3,34 @@ import Link from 'next/link';
 
 const HeroSection = () => {
   return (
-    <section className="hero-container mt-0 lg:mt-20">
-      <div className="container mx-auto flex flex-col flex-wrap items-center justify-between px-2 pt-12 md:flex-row md:pt-12 lg:px-4">
+    <section className="!container mx-auto mt-0 lg:mt-20">
+      <div className="flex flex-col items-center justify-center px-2 pt-12 md:pt-12 lg:px-4">
         {/* <!--Left Col--> */}
-        <div className="flex w-full flex-col justify-center overflow-y-hidden lg:items-start xl:w-2/5">
-          <h1 className="slide-in-bottom-h1 mb-5 text-center text-3xl font-bold leading-tight text-blue-500 md:text-4xl xl:text-left">
-            Launch your online store on a platform you can trust!
+        <div className="flex w-full flex-col items-center justify-center">
+          <h1 className="slide-in-bottom-h1 mb-5 text-center !text-6xl font-bold italic leading-tight text-black md:text-4xl xl:text-left">
+            Create Your Store Effortlessly
           </h1>
-          <div className="slide-in-bottom-subtitle w-full pb-8 text-center text-base leading-normal text-gray-700 xl:text-left">
-            <p className="w-fit py-2 xl:w-full">
-              <span className="font-semibold ">Secure</span>. Your data belongs
-              to you and no one else. We don't use, sell or share your data with
-              anyone. DropGala takes many steps to protect your data from others
-              so you can stay on top.
-            </p>
-            <p className="w-fit py-2 xl:w-full">
-              <span className="font-semibold">Fast and Reliable</span>. No one
-              wants to pay real money only to discover that their website is
-              slow or has been down for hours! DropGala’s technical team works
-              24/7 to guarantee your website remains fast and live no matter the
-              technical issue or size of traffic.
-            </p>
-            <p className="w-fit py-2 xl:w-full">
-              <span className="font-semibold">
-                Everything you need at your fingertips
-              </span>
-              . DropGala provides you with all the tools, features, and services
-              you need to grow and scale your ecommerce business.
+          <div className="slide-in-bottom-subtitle w-full max-w-xl pb-8 text-center text-base leading-normal text-gray-700">
+            <p className="w-fit py-2 text-center xl:w-full">
+              Secure, fast, and reliable. Dropgala protects your data, keeps
+              your site running smoothly 24/7, and provides all the tools to
+              grow your eCommerce business.
             </p>
           </div>
           <Link href="#subscription">
-            <div className="hover:text-underline inline-block rounded-sm border-blue-300 bg-blue-600 py-3 px-8 text-center text-lg font-medium text-white no-underline">
-              Join Our Waitlist!
+            <div className="hover:text-underline inline-block rounded-full bg-blue-600 py-3 px-6 text-center text-white no-underline shadow hover:bg-blue-500">
+              Start for free
             </div>
           </Link>
         </div>
 
         {/* <!--Right Col--> */}
-        <div className="w-fit max-w-[800px] overflow-y-hidden py-6 xl:w-3/5">
+        <div className="mt-12 w-fit overflow-y-hidden py-6">
           <Image
             alt="admin-site"
             src="/image/dropgala-admin.png"
-            className="slide-in-bottom mx-auto w-5/6 rounded-md border shadow lg:mr-0"
-            width={800}
+            className="slide-in-bottom mx-auto rounded-md border shadow lg:mr-0"
+            width={1000}
             height={500}
           />
         </div>

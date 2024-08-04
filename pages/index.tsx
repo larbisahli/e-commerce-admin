@@ -54,15 +54,15 @@ const HomePage = ({ posts }) => {
           <h2 className="text-center text-4xl font-semibold">
             The all-in-one homebase for your brand
           </h2>
-          <p className="text-center text-sm">
+          <p className="text-md mt-3 text-center">
             Create a fully-custom shop for your brand to deliver exceptional
             quality for your community
           </p>
-          <div className="container my-28 mx-auto flex flex-col-reverse flex-wrap items-center justify-between px-0 md:flex-row lg:px-4">
+          <div className="container my-16 mx-auto flex flex-col-reverse flex-wrap justify-between px-0 md:flex-row lg:px-4">
             {/* <!--Right Col--> */}
-            <div className="flex w-full flex-col items-center justify-center overflow-y-hidden lg:items-start xl:w-2/5">
+            <div className="flex w-full flex-col items-center justify-center overflow-y-hidden lg:items-start xl:w-1/2">
               <h2 className="slide-in-bottom-h1 my-4 text-center text-xl font-bold leading-tight text-gray-800 md:text-left md:text-3xl">
-                CUSTOM STOREFRONT BUILDER
+                Custom Store Builder
               </h2>
               <p className="slide-in-bottom-subtitle pb-8 text-center text-base leading-normal text-gray-700 md:text-left">
                 Dropgala gives you full control of your online store with a
@@ -71,55 +71,66 @@ const HomePage = ({ posts }) => {
               </p>
             </div>
             {/* <!--Left Col--> */}
-            <div className="w-fit max-w-[500px] overflow-y-hidden py-6 xl:w-3/5">
+            <div className="w-fit max-w-[600px] overflow-y-hidden py-6 xl:w-1/2">
               <Image
                 alt="store-site"
-                src="/landing.webp"
-                className="slide-in-bottom mx-auto lg:mr-0"
-                width={530}
+                src="/store-builder.png"
+                className="slide-in-bottom mx-auto rounded-md border shadow lg:mr-0"
+                width={600}
                 height={300}
               />
             </div>
           </div>
         </section>
-        <section className="container my-20 mx-auto flex flex-col-reverse flex-wrap items-center justify-between px-0 md:flex-row lg:px-4">
+        <section className="container my-16 mx-auto flex flex-col-reverse flex-wrap items-start justify-between px-0 md:flex-row lg:px-4">
           {/* <!--Right Col--> */}
-          <div className="w-fit max-w-[500px] overflow-y-hidden py-6 xl:w-3/5">
+          <div className="w-fit max-w-[600px] overflow-y-hidden py-6 xl:w-1/2">
             <Image
               alt="store-site"
               src="/landing.webp"
-              className="slide-in-bottom mx-auto lg:mr-0"
-              width={530}
+              className="slide-in-bottom mx-auto rounded-md border shadow lg:mr-0"
+              width={600}
               height={300}
             />
           </div>
           {/* <!--Left Col--> */}
-          <div className="flex w-full flex-col items-center justify-center overflow-y-hidden lg:items-start xl:w-2/5">
+          <div className="flex w-full flex-col items-center justify-center overflow-y-hidden lg:items-start xl:w-1/2">
             <h2 className="slide-in-bottom-h1 my-4 text-center text-xl font-bold leading-tight text-gray-800 md:text-left md:text-3xl">
-              Begin your Journey of Ecommerce Success
+              Launch your online store on a platform you can trust!
             </h2>
-            <p className="slide-in-bottom-subtitle pb-8 text-center text-base leading-normal text-gray-700 md:text-left">
-              DropGala gives you all the tools, features, and services you need
-              to achieve your ecommerce success.
-            </p>
-            {/* <Link href={'#features'}>
+            <div className="slide-in-bottom-subtitle w-full pb-8 text-center text-base leading-normal text-gray-700 xl:text-left">
+              <p className="w-fit py-2 xl:w-full">
+                <span className="font-semibold ">Secure</span>. Your data
+                belongs to you and no one else. We don't use, sell or share your
+                data with anyone. Dropgala takes many steps to protect your data
+                from others so you can stay on top.
+              </p>
+              <p className="w-fit py-2 xl:w-full">
+                <span className="font-semibold">Fast and Reliable</span>. No one
+                wants to pay real money only to discover that their website is
+                slow or has been down for hours! Dropgala’s technical team works
+                24/7 to guarantee your website remains fast and live no matter
+                the technical issue or size of traffic.
+              </p>
+              <p className="w-fit py-2 xl:w-full">
+                <span className="font-semibold">
+                  Everything you need at your fingertips
+                </span>
+                . Dropgala provides you with all the tools, features, and
+                services you need to grow and scale your ecommerce business.
+              </p>
+            </div>
+            <Link href={'#features'}>
               <div className="w-[115px] rounded border border-gray-300 px-3 py-2">
                 Learn more
-              </div>
-            </Link> */}
-            <Link href="#subscription">
-              <div className="hover:text-underline inline-block rounded-sm border-blue-300 bg-blue-600 py-3 px-8 text-center text-lg font-medium text-white no-underline">
-                Join Our Waitlist!
               </div>
             </Link>
           </div>
         </section>
         {/* ----------------- Features ------------------- */}
         <FeatureSection />
-        {/* ----------------- Pricing ------------------- */}
-        {/* <PricingSection /> */}
         {/* ----------------- Blog section ---------------------- */}
-        <section className="container mx-auto mt-22">
+        <section className="container mx-auto mt-16">
           <LatestBlogsCarousel posts={posts} MAX_DISPLAY={MAX_DISPLAY} />
           <div className="mt-3 flex justify-end text-base font-medium leading-6">
             <Link href="/blog">
@@ -130,6 +141,8 @@ const HomePage = ({ posts }) => {
             </Link>
           </div>
         </section>
+        {/* ----------------- Pricing ------------------- */}
+        {/* <PricingSection /> */}
         {/* ------------- FAQ ----------------- */}
         <FaqSection />
         {/* ------------------ Join us section ------------------ */}
