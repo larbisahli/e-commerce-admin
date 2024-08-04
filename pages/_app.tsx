@@ -20,6 +20,7 @@ import { appWithTranslation } from 'next-i18next';
 import React, { Fragment } from 'react';
 import { Provider } from 'react-redux';
 import { Slide, ToastContainer } from 'react-toastify';
+import nextI18nConfig from "../next-i18next.config";
 
 const Noop: React.FC = ({ children }: { children: React.ReactNode }) => (
   <>{children}</>
@@ -129,4 +130,4 @@ export function reportWebVitals(metric) {
   }
 }
 
-export default appWithTranslation(App);
+export default appWithTranslation(App, nextI18nConfig);
