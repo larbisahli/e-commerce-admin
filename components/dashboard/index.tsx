@@ -69,6 +69,9 @@ interface TDashOrders {
 
 export default function Dashboard() {
   const { t } = useTranslation();
+  const { t: newT } = useTranslation('common');
+
+  console.log('============>',{t, newT})
 
   const {
     userInfo: { firstName = '', store: { etag } = {} }

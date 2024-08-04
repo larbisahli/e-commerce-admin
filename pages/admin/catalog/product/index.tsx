@@ -49,6 +49,9 @@ const productTypesParams = [
 
 export default function ProductsPage({ client }: SSRProps) {
   const { t } = useTranslation();
+  const { t: newT } = useTranslation('common');
+
+  console.log('============>',{t, newT})
 
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState({ id: 1, value: 10, label: 10 });
