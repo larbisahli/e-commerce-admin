@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 const HeroSection = () => {
   return (
-    <section className="!container mx-auto mt-0 lg:mt-20">
+    <section className="hero-container !container mx-auto mt-0 lg:mt-20">
       <div className="flex flex-col items-center justify-center px-2 pt-12 md:pt-12 lg:px-4">
         {/* <!--Left Col--> */}
         <div className="flex w-full flex-col items-center justify-center">
