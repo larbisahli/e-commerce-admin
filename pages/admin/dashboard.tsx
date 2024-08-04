@@ -11,7 +11,7 @@ const Dashboard = dynamic(() => import('@components/dashboard'));
 
 export default function HomeDashboard({ client }: SSRProps) {
   useGetClient(client);
-  return <Dashboard />;
+  return <AppLayout><Dashboard /></AppLayout>;
 }
 
 HomeDashboard.Layout = AppLayout;
