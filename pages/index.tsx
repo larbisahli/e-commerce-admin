@@ -88,7 +88,7 @@ const HomePage = ({ posts }) => {
             <Image
               alt="store-site"
               src="/landing.webp"
-              className="slide-in-bottom mx-auto rounded-md border shadow lg:mr-0"
+              className="slide-in-bottom mx-auto lg:mr-0"
               width={600}
               height={300}
             />
