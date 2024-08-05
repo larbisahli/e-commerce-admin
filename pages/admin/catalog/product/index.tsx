@@ -20,6 +20,7 @@ import Head from 'next/head';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useState } from 'react';
+import Link from 'next/link';
 
 const PageMainHeader = dynamic(
   () => import('@components/common/page-main-header'),
@@ -129,6 +130,7 @@ export default function ProductsPage({ client }: SSRProps) {
         currentPage={page}
         perPage={limit.value}
       />
+      <Link href="/admin/dashboard">DASHBOARD</Link>
       <ProductList
         loading={loading}
         products={products}

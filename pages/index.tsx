@@ -14,6 +14,7 @@ import { getAllFilesFrontMatter } from '@lib/mdx';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const MAX_DISPLAY = 4;
 
@@ -154,10 +155,13 @@ const HomePage = ({ posts }) => {
   );
 };
 
-export async function getStaticProps() {
+export async function getStaticProps({ locale }) {
   const posts = await getAllFilesFrontMatter('blog');
 
-  return { props: { posts } };
+  return { props: {
+    ...(await serverSideTranslations(locale, ['common'])),
+    posts
+  } };
 }
 
 export default HomePage;
