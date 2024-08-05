@@ -11,6 +11,8 @@ import { useTranslation } from 'next-i18next';
 import { Fragment, useState } from 'react';
 
 import styles from './scss/index.module.scss';
+import { ROUTES } from '@utils/routes';
+import { useRouter } from 'next/router';
 
 let cx = classNames.bind(styles);
 
@@ -95,21 +97,27 @@ const RenderNotificationItem = ({ content }) => {
 };
 
 export default function NavNotification() {
+  const router = useRouter();
   const { t } = useTranslation('common');
 
   const hasNotification = false;
+
+  const handleNotificationRoute = () => {
+    router.push(ROUTES.NOTIFICATION);
+  };
 
   return (
     <Menu as="div" className="relative inline-block text-left">
       <Menu.Button
         className={cx(
-          'border-hover flex items-center rounded-sm border focus:outline-none',
+          'border-hover flex items-center rounded-sm border hover:border-blue-300 hover:bg-white focus:outline-none',
           { 'border-red-500': hasNotification }
         )}
+        onClick={handleNotificationRoute}
       >
         <div
           className={cn(
-            'flex h-10 w-10 cursor-pointer items-center justify-center overflow-hidden bg-white text-gray-500',
+            'flex h-10 w-10 cursor-pointer items-center  justify-center overflow-hidden bg-white text-gray-500',
             { 'border-red-400': hasNotification }
           )}
         >
@@ -136,7 +144,7 @@ export default function NavNotification() {
       >
         <Menu.Items
           as="ul"
-          className="notificationContainer absolute right-0 mt-1 w-96 origin-top-right bg-white py-4 shadow focus:outline-none"
+          className="notificationContainer absolute mt-1 hidden w-96 origin-top-right bg-white py-4 shadow focus:outline-none sm:right-0 sm:flex"
         >
           <div className="notificationWrapper">
             <div className="notificationWrapper">

@@ -220,7 +220,6 @@ export default function Dashboard() {
         <div className="text-3xl font-medium">
           <span>Welcome back,</span>
           <span className="mx-1 text-blue-600">{firstName}</span>
-          <Link href="/admin/catalog/product">PRODUCTS</Link>
         </div>
         <span className="text-md text-gray-500">
           {`You can impact someone's life today.`}

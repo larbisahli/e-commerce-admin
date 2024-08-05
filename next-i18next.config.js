@@ -8,5 +8,5 @@ module.exports = {
     defaultLocale: 'en'
     // localeDetection: false,
   },
-  localePath: path.resolve('./public/locales'),
+  localePath: path.resolve('./public/locales')
 };

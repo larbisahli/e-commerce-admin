@@ -7,7 +7,7 @@ const HeroSection = () => {
       <div className="flex flex-col items-center justify-center px-2 pt-12 md:pt-12 lg:px-4">
         {/* <!--Left Col--> */}
         <div className="flex w-full flex-col items-center justify-center">
-          <h1 className="slide-in-bottom-h1 mb-5 text-center !text-6xl font-bold italic leading-tight text-black md:text-4xl xl:text-left">
+          <h1 className="slide-in-bottom-h1 my-5 text-center !text-5xl font-bold italic leading-tight text-black sm:!text-6xl">
             Create Your Store Effortlessly
           </h1>
           <div className="slide-in-bottom-subtitle w-full max-w-xl pb-8 text-center text-base leading-normal text-gray-700">

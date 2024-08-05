@@ -9,11 +9,6 @@ export default function useOnClickOutside<T extends HTMLElement = HTMLElement>(
   useEffect(() => {
     const listener = (event: Event) => {
       const el = ref?.current;
-      console.log({
-        0: event?.target,
-        A: el.contains((event?.target as Node) || null),
-        el
-      });
       if (!el || el.contains((event?.target as Node) || null)) {
         return;
       }

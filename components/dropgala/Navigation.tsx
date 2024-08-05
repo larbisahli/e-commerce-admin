@@ -1,11 +1,15 @@
+import MenuSvg from '@components/icons/menu';
+import useOnClickOutside from '@utils/use-click-outside';
 import cn from 'classnames';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const { default: Link } = require('next/link');
 
 const Navigation = () => {
+  const ref = useRef(null);
   const [show, setShow] = useState(false);
+  const [openMenu, setOpenMenu] = useState(false);
 
   const controlNavbar = () => {
     if (typeof window !== 'undefined') {
@@ -28,19 +32,58 @@ const Navigation = () => {
     }
   }, []);
 
+  const handleClickOutside = () => {
+    setOpenMenu(false);
+  };
+
+  useOnClickOutside(ref, handleClickOutside);
+
   return (
-    <header className="fixed z-50 w-full px-6 py-4 transition-all">
+    <header className="fixed z-50 w-full px-3 py-4 transition-all sm:px-6">
       <div
         className={cn(
-          'container flex w-full bg-white bg-opacity-50 backdrop-blur-xl',
-          '!container mx-auto items-center justify-between rounded-full border py-3 px-5 shadow-sm',
+          'container relative flex w-full bg-white bg-opacity-50 backdrop-blur-xl',
+          'ms:py-3 ms:px-5 !container mx-auto items-center justify-between rounded-full border py-2 px-3 shadow-sm',
           show && 'shadow'
         )}
       >
+        <div
+          ref={ref}
+          className={cn(
+            'absolute left-0 right-0 top-[70px] max-w-[60%] rounded-xl border bg-white shadow',
+            'hidden sm:!hidden',
+            !openMenu && 'hidden',
+            openMenu && '!block'
+          )}
+        >
+          <div className="px-3 py-2">
+            <Link href="/#features">
+              <div className="w-full rounded-full px-4 py-2 text-gray-800 hover:bg-gray-50 hover:text-blue-500">
+                Features
+              </div>
+            </Link>
+            <Link href="/#pricing">
+              <div className="rounded-full px-4 py-2 text-gray-800 hover:bg-gray-50 hover:text-blue-500">
+                Pricing
+              </div>
+            </Link>
+            <Link href="/blog">
+              <div className="rounded-full px-4 py-2 text-gray-800 hover:bg-gray-50 hover:text-blue-500">
+                Blogs
+              </div>
+            </Link>
+          </div>
+        </div>
         <div className="flex w-full content-end justify-between">
           <div className="flex items-center">
+            <button
+              onClick={() => setOpenMenu((prev) => !prev)}
+              className="block cursor-pointer rounded-full p-1 hover:bg-gray-50 sm:hidden"
+            >
+              <MenuSvg />
+            </button>
             <Link href="/">
-              <div className="pt-2 text-center leading-normal text-blue-600">
+              <div className="px-2 text-center leading-normal text-blue-600">
                 <Image src={'/logo.svg'} alt="logo" width={80} height={30} />
               </div>
             </Link>
@@ -69,7 +112,7 @@ const Navigation = () => {
               </div>
             </Link>
             <Link href="https://dropgala.com/signup">
-              <div className="hover:text-underline inline-block rounded-full bg-blue-600 py-[6px] px-6 text-center text-white no-underline shadow hover:bg-blue-500">
+              <div className="hover:text-underline hidden rounded-full bg-blue-600 py-[6px] px-6 text-center text-white no-underline shadow hover:bg-blue-500 sm:inline-block">
                 Sign up
               </div>
             </Link>

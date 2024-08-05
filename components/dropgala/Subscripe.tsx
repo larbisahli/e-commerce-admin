@@ -22,7 +22,7 @@ const Subscribe = () => {
           dream!
         </p>
       </div>
-      <div className="mx-auto w-fit sm:w-[500px]">
+      <div className="mx-auto w-[350px] sm:w-[500px]">
         <div className="w-full">
           <MailchimpSubscribe
             url={process.env.NEXT_PUBLIC_MAILCHIMP_URL}

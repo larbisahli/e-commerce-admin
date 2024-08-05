@@ -51,7 +51,7 @@ const HomePage = ({ posts }) => {
         {/* HERO SECTION */}
         <HeroSection />
         <HowItWorksSection />
-        <section className="container my-20 mx-auto px-0 md:flex-row lg:px-4">
+        <section className="container my-20 mx-auto px-1 md:flex-row lg:px-4">
           <h2 className="text-center text-4xl font-semibold">
             The all-in-one homebase for your brand
           </h2>
@@ -83,7 +83,7 @@ const HomePage = ({ posts }) => {
             </div>
           </div>
         </section>
-        <section className="container my-16 mx-auto flex flex-col-reverse flex-wrap items-start justify-between px-0 md:flex-row lg:px-4">
+        <section className="container my-16 mx-auto flex flex-col-reverse flex-wrap items-start justify-between px-1 md:flex-row lg:px-4">
           {/* <!--Right Col--> */}
           <div className="w-fit max-w-[600px] overflow-y-hidden py-6 xl:w-1/2">
             <Image
@@ -131,9 +131,9 @@ const HomePage = ({ posts }) => {
         {/* ----------------- Features ------------------- */}
         <FeatureSection />
         {/* ----------------- Blog section ---------------------- */}
-        <section className="container mx-auto mt-16">
+        <section className="container mx-auto mt-16 px-1">
           <LatestBlogsCarousel posts={posts} MAX_DISPLAY={MAX_DISPLAY} />
-          <div className="mt-3 flex justify-end text-base font-medium leading-6">
+          <div className="mt-4 flex justify-center text-base font-medium leading-6 sm:justify-end">
             <Link href="/blog">
               <div className="flex items-center justify-center font-semibold text-blue-600 hover:text-blue-500">
                 <span>All Posts</span>
@@ -158,10 +158,12 @@ const HomePage = ({ posts }) => {
 export async function getStaticProps({ locale }) {
   const posts = await getAllFilesFrontMatter('blog');
 
-  return { props: {
-    ...(await serverSideTranslations(locale, ['common'])),
-    posts
-  } };
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['common'])),
+      posts
+    }
+  };
 }
 
 export default HomePage;

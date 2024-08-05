@@ -149,7 +149,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         'table',
         'common',
         'form',
-        'error',
+        'error'
       ])),
       client
     }

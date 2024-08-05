@@ -28,7 +28,7 @@ const FeatureSection = () => {
       className="container mx-auto mt-0 w-full rounded p-4 lg:mt-24 lg:px-0"
     >
       <div className="flex flex-col items-center">
-        <h2 className="slide-in-bottom-h1 my-5 mb-2 text-center text-4xl font-bold leading-tight text-gray-800 md:text-left">
+        <h2 className="slide-in-bottom-h1 my-5 mb-2 text-center text-4xl font-bold leading-tight text-blue-600 md:text-left">
           Features
         </h2>
         <p className="text-center text-lg text-gray-600">
@@ -39,7 +39,7 @@ const FeatureSection = () => {
         {/*  */}
         <div className="min-h-[280px] rounded-lg border bg-white shadow">
           <div className=" flex flex-col items-center justify-center p-4">
-            <div className="py-3 text-gray-700">
+            <div className="py-3 text-blue-600">
               <ShipIcon />
             </div>
             <div className="pt-1 text-center font-medium">
@@ -56,7 +56,7 @@ const FeatureSection = () => {
         {/*  */}
         <div className="min-h-[270px] rounded-lg border bg-white shadow">
           <div className=" flex flex-col items-center justify-center p-4">
-            <div className="py-3 text-gray-700">
+            <div className="py-3 text-blue-600">
               <LanguagesIcon width={45} height={45} />
             </div>
             <div className="pt-1 text-center font-medium">
@@ -73,7 +73,7 @@ const FeatureSection = () => {
         {/*  */}
         <div className="min-h-[270px] rounded-lg border bg-white shadow">
           <div className=" flex flex-col items-center justify-center p-4">
-            <div className="py-3 text-gray-700">
+            <div className="py-3 text-blue-600">
               <CustomerCheckout />
             </div>
             <div className="pt-1 text-center font-medium">
@@ -90,7 +90,7 @@ const FeatureSection = () => {
         {/*  */}
         <div className="min-h-[270px] rounded-lg border bg-white shadow">
           <div className=" flex flex-col items-center justify-center p-4">
-            <div className="py-3 text-gray-800">
+            <div className="py-3 text-blue-600">
               <SheetsIcon />
             </div>
             <div className="pt-1 text-center font-medium">
@@ -107,7 +107,7 @@ const FeatureSection = () => {
         {/*  */}
         <div className="min-h-[270px] rounded-lg border bg-white shadow">
           <div className=" flex flex-col items-center justify-center p-4">
-            <div className="py-3 text-gray-500">
+            <div className="py-3 text-blue-600">
               <CurrencyConvertIcon />
             </div>
             <div className="pt-1 text-center font-medium">
@@ -125,7 +125,7 @@ const FeatureSection = () => {
         {/*  */}
         <div className="min-h-[270px] rounded-lg border bg-white shadow">
           <div className=" flex flex-col items-center justify-center p-4">
-            <div className="py-3 text-gray-800">
+            <div className="py-3 text-blue-600">
               <ExpressCheckoutIcon />
             </div>
             <div className="pt-1 text-center font-medium">
@@ -142,7 +142,7 @@ const FeatureSection = () => {
         {/*  */}
         <div className="min-h-[270px] rounded-lg border bg-white shadow">
           <div className=" flex flex-col items-center justify-center p-4">
-            <div className="py-3 text-gray-800">
+            <div className="py-3 text-blue-600">
               <PwaIcon />
             </div>
             <div className="pt-1 text-center font-medium">
@@ -159,24 +159,23 @@ const FeatureSection = () => {
         {/*  */}
         <div className="min-h-[270px] rounded-lg border bg-white shadow">
           <div className=" flex flex-col items-center justify-center p-4">
-            <div className="py-3 text-gray-800">
+            <div className="py-3 text-blue-600">
               <CustomDesignIcon />
             </div>
-            <div className="pt-1 text-center font-medium">
-              Site Customization
-            </div>
+            <div className="pt-1 text-center font-medium">Store Builder</div>
             <div className="pt-5 text-center text-gray-700">
               <p>
-                Build your own custom store with a no-code website builder (or
-                upload your own code)
+                Build your own custom store with a no-code website builder to
+                suit your business requirements with customizable options and
+                advanced cms integration.
               </p>
             </div>
           </div>
         </div>
         {/*  */}
-        <div className="min-h-[270px] rounded-lg border bg-white shadow">
+        {/* <div className="min-h-[270px] rounded-lg border bg-white shadow">
           <div className=" flex flex-col items-center justify-center p-4">
-            <div className="py-3 text-gray-800">
+            <div className="py-3 text-blue-600">
               <ThemeIcon />
             </div>
             <div className="pt-1 text-center font-medium">
@@ -189,11 +188,11 @@ const FeatureSection = () => {
               </p>
             </div>
           </div>
-        </div>
+        </div> */}
         {/*  */}
         <div className="min-h-[270px] rounded-lg border bg-white shadow">
           <div className=" flex flex-col items-center justify-center p-4">
-            <div className="py-3 text-gray-800">
+            <div className="py-3 text-blue-600">
               <MediaIcon />
             </div>
             <div className="pt-1 text-center font-medium">Managing Media</div>
@@ -224,7 +223,7 @@ const FeatureSection = () => {
         {/*  */}
         <div className="min-h-[270px] rounded-lg border bg-white shadow">
           <div className=" flex flex-col items-center justify-center p-4">
-            <div className="py-3 text-gray-700">
+            <div className="py-3 text-blue-600">
               <CouponSvgIcon />
             </div>
             <div className="pt-1 text-center font-medium">
@@ -241,7 +240,7 @@ const FeatureSection = () => {
         {/*  */}
         <div className="min-h-[270px] rounded-lg border bg-white shadow">
           <div className=" flex flex-col items-center justify-center p-4">
-            <div className="py-3 text-gray-700">
+            <div className="py-3 text-blue-600">
               <AbandonedCartIcon />
             </div>
             <div className="pt-1 text-center font-medium">Abandoned Carts</div>
@@ -257,7 +256,7 @@ const FeatureSection = () => {
         {/*  */}
         <div className="min-h-[270px] rounded-lg border bg-white shadow">
           <div className=" flex flex-col items-center justify-center p-4">
-            <div className="py-3 text-gray-700">
+            <div className="py-3 text-blue-600">
               <SalesAnalyticsIcon />
             </div>
             <div className="pt-1 text-center font-medium">Sales analytics</div>
@@ -272,7 +271,7 @@ const FeatureSection = () => {
         {/*  */}
         <div className="min-h-[270px] rounded-lg border bg-white shadow">
           <div className=" flex flex-col items-center justify-center p-4">
-            <div className="py-3 text-gray-700">
+            <div className="py-3 text-blue-600">
               <AnalyticsIcon />
             </div>
             <div className="pt-1 text-center font-medium">SEO Support</div>
@@ -287,7 +286,7 @@ const FeatureSection = () => {
         {/*  */}
         <div className="min-h-[270px] rounded-lg border bg-white shadow">
           <div className=" flex flex-col items-center justify-center p-4">
-            <div className="py-3 text-gray-700">
+            <div className="py-3 text-blue-600">
               <GoogleAnalyticsIcon />
             </div>
             <div className="pt-1 text-center font-medium">
@@ -305,7 +304,7 @@ const FeatureSection = () => {
         {/*  */}
         <div className="min-h-[270px] rounded-lg border bg-white shadow">
           <div className=" flex flex-col items-center justify-center p-4">
-            <div className="py-3 text-gray-700">
+            <div className="py-3 text-blue-600">
               <DataLockIcon />
             </div>
             <div className="pt-1 text-center font-medium">
@@ -322,7 +321,7 @@ const FeatureSection = () => {
         {/*  */}
         <div className="min-h-[270px] rounded-lg border bg-white shadow">
           <div className=" flex flex-col items-center justify-center p-4">
-            <div className="py-3 text-gray-700">
+            <div className="py-3 text-blue-600">
               <PluginIcon />
             </div>
             <div className="pt-1 text-center font-medium">
@@ -339,7 +338,7 @@ const FeatureSection = () => {
         {/*  */}
         <div className="min-h-[270px] rounded-lg border bg-white shadow">
           <div className=" flex flex-col items-center justify-center p-4">
-            <div className="py-3 text-gray-700">
+            <div className="py-3 text-blue-600">
               <ThumbUpIcon />
             </div>
             <div className="pt-1 text-center font-medium">Products Reviews</div>
@@ -354,7 +353,7 @@ const FeatureSection = () => {
         {/*  */}
         <div className="min-h-[270px] rounded-lg border bg-white shadow">
           <div className=" flex flex-col items-center justify-center p-4">
-            <div className="py-3 text-gray-800">
+            <div className="py-3 text-blue-600">
               <AdminLineIcon />
             </div>
             <div className="pt-1 text-center font-medium">

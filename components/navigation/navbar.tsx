@@ -15,6 +15,7 @@ import { useEffect, useMemo, useState } from 'react';
 
 import NavMenu from './menu';
 import NavNotification from './notification';
+import LanguageSwitcher from './language-switcher';
 
 let cx = classNames.bind(styles);
 
@@ -89,7 +90,7 @@ const Navbar = () => {
   return (
     <header
       className={cx(
-        'border-b-400 fixed top-0 right-0 left-0 z-40 h-[58px] w-full border-b bg-gray-50',
+        'border-b-400 fixed top-0 right-0 left-0 z-40 h-fit w-full border-b bg-white bg-opacity-50 backdrop-blur-xl sm:h-[58px]',
         { 'sshadow-md': show }
       )}
     >
@@ -128,7 +129,7 @@ const Navbar = () => {
             <SearchBar />
           </div>
         </div> */}
-        <div className="">
+        <div className="hidden sm:block">
           <Link href={`${ROUTES.PLANS}`}>
             <div className="flex items-center pl-6">
               <Button>
@@ -155,8 +156,9 @@ const Navbar = () => {
           </Link>
         </div>
         <div className="flex flex-1 items-center justify-end space-s-5">
+          <LanguageSwitcher />
           <Link
-            className="flex h-10 w-10 items-center justify-center rounded-sm border bg-white text-gray-600 hover:border-blue-300 hover:text-accent"
+            className="hidden h-10 w-10 items-center justify-center rounded-sm border bg-white text-gray-600 hover:border-blue-300 hover:text-accent sm:flex"
             href={`${ROUTES.PRODUCT}/create`}
           >
             <AddIcon width={20} height={20} />
@@ -164,7 +166,7 @@ const Navbar = () => {
           <Link
             target="_blank"
             title="Create"
-            className="flex h-10 w-10 items-center justify-center rounded-sm border bg-white text-gray-600 hover:border-blue-300 hover:text-accent"
+            className="hidden h-10 w-10 items-center justify-center rounded-sm border bg-white text-gray-600 hover:border-blue-300 hover:text-accent sm:flex"
             href={`https://${alias}.dropgala.shop`}
           >
             <MyShopIcon width={20} height={20} />

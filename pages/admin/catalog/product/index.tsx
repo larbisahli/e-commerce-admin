@@ -130,7 +130,6 @@ export default function ProductsPage({ client }: SSRProps) {
         currentPage={page}
         perPage={limit.value}
       />
-      <Link href="/admin/dashboard">DASHBOARD</Link>
       <ProductList
         loading={loading}
         products={products}

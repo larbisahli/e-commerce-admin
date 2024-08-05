@@ -16,7 +16,7 @@ export default function SearchLayout({
 }: Props) {
   return (
     <div className="relative h-full">
-      <div className="sticky top-20">
+      <div className="sticky top-24">
         <div className="space-y-2 pb-8 md:space-y-5">
           <h2 className="md:leading-14 text-2xl font-bold leading-9 tracking-tight text-gray-900 sm:text-3xl sm:leading-10">
             Search
