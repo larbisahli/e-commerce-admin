@@ -113,6 +113,7 @@ export enum ModuleGroups {
   CATEGORY_LIST = 'CategoryList',
   CATEGORY_LIST_ITEM = 'CategoryListItem',
   PRODUCT_LIST = 'ProductList',
+  PRODUCT_LIST_WIDGET = 'ProductListWidget',
   CAROUSEL = 'Carousel',
   BUTTON = 'Button',
   EDITORIAL_TEXT = 'EditorialText',

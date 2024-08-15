@@ -207,9 +207,8 @@ const CmsEditorModal = () => {
             {meta?.moduleGroup === ModuleGroups.CATEGORY_LIST && !loading && (
               <CategoryListContent initialValues={initialValues} />
             )}
-            {meta?.moduleGroup === ModuleGroups.PRODUCT_LIST && !loading && (
-              <ProductListContent initialValues={initialValues} />
-            )}
+            {meta?.moduleGroup === ModuleGroups.PRODUCT_LIST_WIDGET &&
+              !loading && <ProductListContent initialValues={initialValues} />}
           </div>
         </div>
       </div>

@@ -9,7 +9,7 @@ export { ImageBannerSectionIcon as ImageBanner } from './image-banner';
 export { ImageTextSectionIcon } from './image-text';
 export { InstallPromptIcon as InstallPrompt } from './install-prompt';
 export { NewsletterSectionIcon as Subscription } from './newsletter';
-export { ProductCollectionSectionIcon as ProductList } from './product-collection';
+export { ProductCollectionSectionIcon as ProductListWidget } from './product-collection';
 export { PromoSectionIcon as PromoBanner } from './promo';
 export { SpacerSectionIcon as Spacer } from './spacer';
 export { TextSectionIcon as Text } from './text';

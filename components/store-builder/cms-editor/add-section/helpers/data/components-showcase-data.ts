@@ -17,9 +17,9 @@ export const componentsThumbnail = {
       title: 'Category List Slide'
     }
   ],
-  ProductList: [
+  ProductListWidget: [
     {
-      moduleName: 'ProductListSlide',
+      moduleName: 'ProductListSlideWidget',
       thumbnail: {
         image: '/static/components/product-list/product-list-slide.png',
         placeholder: '/static/components/product-list/product-list-slide.png'
@@ -27,12 +27,12 @@ export const componentsThumbnail = {
       title: 'Product list slide'
     },
     {
-      moduleName: 'ProductList',
+      moduleName: 'ProductListGridWidget',
       thumbnail: {
         image: '/static/components/product-list/product-list-regular.png',
         placeholder: '/static/components/product-list/product-list-regular.png'
       },
-      title: 'Product list regular'
+      title: 'Product list grid'
     }
   ],
   ImageBanner: [
