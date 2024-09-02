@@ -91,36 +91,6 @@ const OfflinePayments = ({ initialValues, loading }) => {
       </div>
       <div className="flex items-center justify-between border-b py-5">
         <h3 className="font-heading font-semibold">
-          {t('common:form-title-bank-deposit')}
-        </h3>
-        <div className="relative flex items-center justify-center">
-          {checkOfflineAvailability(offlinePaymentCodes.bankDeposit) && (
-            <div className="mr-3">
-              <SwitchComponent
-                value={initialValues[offlinePaymentCodes.bankDeposit]?.active}
-                onChange={(checked) =>
-                  onPaymentChange(checked, offlinePaymentCodes.bankDeposit)
-                }
-              />
-            </div>
-          )}
-          <Link href={`${ROUTES.PAYMENT}/${offlinePaymentCodes.bankDeposit}`}>
-            <Button
-              variant="outline"
-              type="button"
-              className="!rounded-md !border-blue-600 !text-blue-600 hover:!text-white"
-            >
-              {checkOfflineAvailability(offlinePaymentCodes.bankDeposit) ? (
-                <span>Edit</span>
-              ) : (
-                <span>Set up</span>
-              )}
-            </Button>
-          </Link>
-        </div>
-      </div>
-      <div className="flex items-center justify-between border-b py-5">
-        <h3 className="font-heading font-semibold">
           {t('common:form-title-cod')}
         </h3>
         <div className="relative flex items-center justify-center">
@@ -141,6 +111,36 @@ const OfflinePayments = ({ initialValues, loading }) => {
               className="!rounded-md !border-blue-600 !text-blue-600 hover:!text-white"
             >
               {checkOfflineAvailability(offlinePaymentCodes.cod) ? (
+                <span>Edit</span>
+              ) : (
+                <span>Set up</span>
+              )}
+            </Button>
+          </Link>
+        </div>
+      </div>
+      <div className="flex items-center justify-between border-b py-5">
+        <h3 className="font-heading font-semibold">
+          {t('common:form-title-bank-deposit')}
+        </h3>
+        <div className="relative flex items-center justify-center">
+          {checkOfflineAvailability(offlinePaymentCodes.bankDeposit) && (
+            <div className="mr-3">
+              <SwitchComponent
+                value={initialValues[offlinePaymentCodes.bankDeposit]?.active}
+                onChange={(checked) =>
+                  onPaymentChange(checked, offlinePaymentCodes.bankDeposit)
+                }
+              />
+            </div>
+          )}
+          <Link href={`${ROUTES.PAYMENT}/${offlinePaymentCodes.bankDeposit}`}>
+            <Button
+              variant="outline"
+              type="button"
+              className="!rounded-md !border-blue-600 !text-blue-600 hover:!text-white"
+            >
+              {checkOfflineAvailability(offlinePaymentCodes.bankDeposit) ? (
                 <span>Edit</span>
               ) : (
                 <span>Set up</span>

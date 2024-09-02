@@ -22,7 +22,7 @@ export const ROUTES = {
   STORE_SETTINGS: '/admin/store/store-settings',
   WHATSAPP: '/admin/whatsapp',
   SUPPORT: '/admin/support',
-  PLANS: '/admin/plans',
+  BILLING: '/admin/settings/billing',
   AFFILIATE: '/admin/affiliate-program',
   COLORS: '/admin/store/theme-settings/colors',
   STORE_NAVIGATION: '/admin/store/theme-settings/store-navigation',

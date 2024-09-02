@@ -16,6 +16,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { CreditCard } from '@components/icons/credit-card';
 
 const settingRoutes = [
   {
@@ -58,6 +59,12 @@ const settingRoutes = [
     label: 'common:sidebar-nav-item-recent-login-history',
     url: ROUTES.RECENT_LOGIN_HISTORY,
     renderIcon: () => <LoginHistoryIcon width={25} height={25} />,
+    description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit'
+  },
+  {
+    label: 'common:sidebar-nav-item-billing',
+    url: ROUTES.BILLING,
+    renderIcon: () => <CreditCard width={25} height={25} />,
     description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit'
   }
   // {
@@ -103,7 +110,7 @@ export default function Settings({ client }: SSRProps) {
         {settingRoutes?.map(({ label, url, renderIcon, description }) => (
           <Link key={label} href={url}>
             <div className="group m-2 flex cursor-pointer items-center text-gray-500">
-              <div className="mr-3 flex h-12 w-12 items-center justify-center rounded-full border bg-gray-100">
+              <div className="mr-3 flex h-12 w-12 items-center justify-center rounded-full border bg-gray-100 group-hover:text-blue-500">
                 {renderIcon()}
               </div>
               <div className="flex-1">

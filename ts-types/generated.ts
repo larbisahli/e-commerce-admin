@@ -580,6 +580,34 @@ export interface TaxType extends CreatedUpdatedByAt {
   countries?: TaxCountryType[];
 }
 
+export interface Subscriptions {
+  id: string;
+  name: string;
+  description: string;
+  image: string;
+  prices: [SubscriptionPrice];
+  status: string;
+  cancel_at_period_end: boolean;
+  created: Date;
+  current_period_start: Date;
+  current_period_end: Date;
+  ended_at: Date;
+  cancel_at: Date;
+  canceled_at: Date;
+  trial_start: Date;
+  trial_end: Date;
+}
+
+export interface SubscriptionPrice {
+  id: string;
+  currency: string;
+  interval: string;
+  intervalCount: number;
+  trialPeriodDays: number;
+  type: string;
+  unitAmount: number;
+}
+
 export interface SettingsType {
   logo?: ImageType[];
   favicon?: ImageType[];
@@ -666,6 +694,7 @@ export interface SettingsType {
   maintenanceMode: boolean;
   maintenancePassword: number;
   etag: EtagGroupsType;
+  subscription: Subscriptions;
 }
 
 export interface WebmanifestType {

@@ -12,7 +12,6 @@ import Label from '@components/ui/label';
 import SelectInput from '@components/ui/select-input';
 import TextArea from '@components/ui/text-area';
 import { CREATE_SUPPLIER, UPDATE_SUPPLIER } from '@graphql/supplier';
-import { useGetUser } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { notify } from '@lib/index';
 import type { Suppliers } from '@ts-types/generated';
@@ -25,6 +24,7 @@ import { useState } from 'react';
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import PhoneInput from 'react-phone-input-2';
+import { useGetClient } from '@hooks/useGetClient';
 
 type FormValues = Suppliers;
 
@@ -77,7 +77,7 @@ export default function CreateOrUpdateSupplierForm({ initialValues }: IProps) {
     getCountries();
   }, []);
 
-  const { userInfo } = useGetUser();
+  const { userInfo } = useGetClient();
   const csrfToken = userInfo?.csrfToken;
 
   const [createSupplier, { loading: creating }] = useMutation(CREATE_SUPPLIER, {

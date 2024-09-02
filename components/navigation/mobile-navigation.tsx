@@ -65,7 +65,7 @@ const MobileNavigation: React.FC = () => {
                 {/* <span className="mx-1"> Your trial ends today.</span> */}
               </div>
             </div>
-            <Link href={`${ROUTES.PLANS}`}>
+            <Link href={`${ROUTES.BILLING}`}>
               <div className="flex w-full items-center px-4">
                 <Button className="w-full !rounded-full">
                   <div className="flex items-center justify-center">

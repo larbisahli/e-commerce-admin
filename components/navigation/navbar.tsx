@@ -71,7 +71,13 @@ const Navbar = () => {
     userInfo: { store: { alias = '' } = {} }
   } = useGetClient();
 
-  const { createdAt, tier } = useSettings();
+  const { createdAt, subscription } = useSettings();
+  const settings = useSettings();
+
+  console.log('settings ::>>>', settings);
+
+  const isSubscribed =
+    !subscription?.cancel_at_period_end && subscription?.status === 'active';
 
   const trialDaysLeft = useMemo(() => {
     if (!createdAt) return [];
@@ -91,7 +97,7 @@ const Navbar = () => {
     <header
       className={cx(
         'border-b-400 fixed top-0 right-0 left-0 z-40 h-fit w-full border-b bg-white bg-opacity-50 backdrop-blur-xl sm:h-[58px]',
-        { 'sshadow-md': show }
+        { 'shadow-sm': show }
       )}
     >
       <nav
@@ -129,32 +135,34 @@ const Navbar = () => {
             <SearchBar />
           </div>
         </div> */}
-        <div className="hidden sm:block">
-          <Link href={`${ROUTES.PLANS}`}>
-            <div className="flex items-center pl-6">
-              <Button>
-                <div className="flex items-center">
-                  <div>
-                    <UpgradeIcon width={25} height={25} />
+        {!isSubscribed && (
+          <div className="hidden sm:block">
+            <Link href={`${ROUTES.BILLING}`}>
+              <div className="flex items-center pl-6">
+                <Button>
+                  <div className="flex items-center">
+                    <div>
+                      <UpgradeIcon width={25} height={25} />
+                    </div>
+                    <div className="font-medium">Upgrade plan</div>
                   </div>
-                  <div className="font-medium">Upgrade plan</div>
+                </Button>
+                <div className="mx-2 w-fit rounded-sm p-1 text-sm text-gray-500">
+                  {trialDaysLeft.map((day, idx) => (
+                    <span
+                      key={idx}
+                      className="mx-[2px] w-full rounded-sm border bg-gray-200 px-1 py-1 text-black"
+                    >
+                      {day}
+                    </span>
+                  ))}
+                  <span className="mx-1">Days left in your trial.</span>
+                  {/* <span className="mx-1"> Your trial ends today.</span> */}
                 </div>
-              </Button>
-              <div className="mx-2 w-fit rounded-sm p-1 text-sm text-gray-500">
-                {trialDaysLeft.map((day, idx) => (
-                  <span
-                    key={idx}
-                    className="mx-[2px] w-full rounded-sm border bg-gray-200 px-1 py-1 text-black"
-                  >
-                    {day}
-                  </span>
-                ))}
-                <span className="mx-1">Days left in your trial.</span>
-                {/* <span className="mx-1"> Your trial ends today.</span> */}
               </div>
-            </div>
-          </Link>
-        </div>
+            </Link>
+          </div>
+        )}
         <div className="flex flex-1 items-center justify-end space-s-5">
           <LanguageSwitcher />
           <Link

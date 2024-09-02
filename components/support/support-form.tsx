@@ -5,19 +5,17 @@ import Alert from '@components/ui/alert';
 import Button from '@components/ui/button';
 import Input from '@components/ui/input';
 import TextArea from '@components/ui/text-area';
-import { CREATE_SUPPLIER } from '@graphql/supplier';
 import { useGetClient } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { notify } from '@lib/index';
 import type { Suppliers } from '@ts-types/generated';
-import { ROUTES } from '@utils/routes';
 import cn from 'classnames';
 import isEmpty from 'lodash/isEmpty';
-import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { CREATE_SUPPORT_TICKETS } from '@graphql/support';
 
 type FormValues = {
   subject: string;
@@ -34,8 +32,6 @@ const defaultValues = {
 };
 
 export default function SupportForm({ initialValues }: IProps) {
-  const router = useRouter();
-
   const [error, setError] = useState(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -53,17 +49,16 @@ export default function SupportForm({ initialValues }: IProps) {
   const { userInfo } = useGetClient();
   const csrfToken = userInfo?.csrfToken;
 
-  const [createSupplier, { loading }] = useMutation(CREATE_SUPPLIER, {
+  const [createTicket, { loading }] = useMutation(CREATE_SUPPORT_TICKETS, {
     context: {
       headers: {
         'x-csrf-token': csrfToken
       }
     },
-    onCompleted: (data: { createSupplier: Suppliers }) => {
-      if (!isEmpty(data)) {
+    onCompleted: (data: { createSupportTicket: { id: string } }) => {
+      if (!isEmpty(data?.createSupportTicket)) {
         notify(t('common:successfully-created'), 'success');
         reset();
-        router.push(ROUTES.SUPPLIER);
       }
     }
   });
@@ -72,11 +67,12 @@ export default function SupportForm({ initialValues }: IProps) {
 
   const onSubmit = (values: FormValues) => {
     const variables = {
-      ...values
+      subject: values.subject,
+      content: values.content
     };
 
     if (isEmpty(initialValues)) {
-      createSupplier({ variables }).catch((err) => {
+      createTicket({ variables }).catch((err) => {
         setError(err);
       });
     }
@@ -115,7 +111,7 @@ export default function SupportForm({ initialValues }: IProps) {
             </div>
             <TextArea
               label={'Content'}
-              {...register('content')}
+              {...register('content', { required: 'Content is required' })}
               error={t(errors.content?.message!)}
               variant="outline"
               className="mt-5"

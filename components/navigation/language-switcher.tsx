@@ -47,7 +47,7 @@ function LanguageSwitcher() {
     <Menu as="div" className="relative inline-block text-left">
       <Menu.Button
         className={cx(
-          'z-[1000]px-3 flex items-center rounded-sm bg-white py-2 text-gray-700'
+          'z-[1000] flex items-center rounded-sm bg-white px-3 py-2 text-gray-700'
         )}
       >
         <div>{currentLocale?.label}</div>

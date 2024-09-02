@@ -19,6 +19,7 @@ export const fetchStoreSettings = createAsyncThunk(
   async (args: { configEtag: EtagGroupsType['configEtag'] }) => {
     const { data } = await apolloClient.query<{
       getStoreAdminConfig: SettingsType;
+      getStoreSubscription: any;
     }>({
       query: STORE_CONFIG,
       variables: {
@@ -27,9 +28,9 @@ export const fetchStoreSettings = createAsyncThunk(
       fetchPolicy: 'no-cache'
     });
 
-    const { getStoreAdminConfig } = data ?? {};
+    const { getStoreAdminConfig, getStoreSubscription } = data ?? {};
 
-    return getStoreAdminConfig;
+    return { ...getStoreAdminConfig, subscription: getStoreSubscription };
   }
 );
 
@@ -78,12 +79,12 @@ export const settingsSlice = createSlice({
         state.systemCurrency = payload.systemCurrency;
         state.storeEmail = payload.storeEmail;
         state.languages = payload.languages;
-        state.tier = payload.tier;
         state.storeName = payload.storeName;
         state.storeEmail = payload.storeEmail;
         state.status = payload.status;
         state.published = payload.published;
         state.createdAt = payload.createdAt;
+        state.subscription = payload.subscription;
       }
     );
     builder.addCase(

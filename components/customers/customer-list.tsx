@@ -2,7 +2,6 @@ import ActionButtons from '@components/common/action-buttons';
 import Badge from '@components/ui/badge/badge';
 import Loader from '@components/ui/loader/loader';
 import { TableRowPlaceholder } from '@components/ui/placeholders/Table';
-import ProfileCart from '@components/ui/profile-card';
 import { usePlaceholder } from '@hooks/usePlaceholder';
 import {
   Category,
