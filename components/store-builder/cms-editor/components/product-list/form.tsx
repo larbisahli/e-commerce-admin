@@ -67,7 +67,7 @@ interface OptionsVariable {
   etag: string;
 }
 
-const moduleSliderBlackList = ['ProductList'];
+const moduleSliderBlackList = ['ProductListWidget'];
 
 const ProductListForm = ({ initialValues }: IProps) => {
   const { t } = useTranslation();

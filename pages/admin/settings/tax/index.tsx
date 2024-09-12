@@ -4,12 +4,11 @@ import TaxList from '@components/tax/tax-list';
 import ErrorMessage from '@components/ui/error-message';
 import { TAXES } from '@graphql/tax';
 import { useErrorLogger, useGetClient } from '@hooks/index';
-import { useSettings } from '@hooks/useSettings';
 import { useTableColumn } from '@hooks/useTableColumn';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
-import { LanguageProps, SSRProps } from '@ts-types/custom.types';
+import { SSRProps } from '@ts-types/custom.types';
 import { OrderBy, SortOrder } from '@ts-types/enums';
-import { HeroBannerType, TaxType } from '@ts-types/generated';
+import { TaxType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import isEmpty from 'lodash/isEmpty';
 import type { GetServerSideProps } from 'next';
@@ -18,6 +17,9 @@ import Head from 'next/head';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useState } from 'react';
+import Button from '@components/ui/button';
+import { ArrowPrev } from '@components/icons/arrow-prev';
+import { useRouter } from 'next/router';
 
 const PageMainAction = dynamic(
   () => import('@components/common/PageMainAction'),
@@ -41,6 +43,7 @@ interface OptionsVariable {
 }
 
 export default function HeroBanner({ client }: SSRProps) {
+  const router = useRouter();
   const { t } = useTranslation();
 
   const [orderBy, setOrder] = useState(OrderBy.CREATED_AT);
@@ -79,6 +82,17 @@ export default function HeroBanner({ client }: SSRProps) {
         <title>Tax | Dropgala</title>
         <link rel="icon" type="image/svg" sizes="32x32" href="/svg/tax.svg" />
       </Head>
+      <div className="pb-3">
+        <Button
+          variant="outline"
+          onClick={() => router.push(`${ROUTES.SETTINGS}`)}
+          type="button"
+          className="mb-4"
+        >
+          <ArrowPrev />
+          <span>Settings</span>
+        </Button>
+      </div>
       <PageMainAction
         showSelectLanguage={false}
         hideBorder

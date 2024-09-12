@@ -18,6 +18,9 @@ import Head from 'next/head';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useState } from 'react';
+import Button from '@components/ui/button';
+import { ArrowPrev } from '@components/icons/arrow-prev';
+import { useRouter } from 'next/router';
 
 const PageMainHeader = dynamic(
   () => import('@components/common/page-main-header'),
@@ -41,6 +44,7 @@ interface TTags {
 }
 
 export default function Tags({ client }: SSRProps) {
+  const router = useRouter();
   const { t } = useTranslation();
 
   const [page, setPage] = useState(1);
@@ -97,6 +101,17 @@ export default function Tags({ client }: SSRProps) {
         <title>Tag | Dropgala</title>
         <link rel="icon" type="image/svg" sizes="32x32" href="/svg/tag.svg" />
       </Head>
+      <div className="pb-3">
+        <Button
+          variant="outline"
+          onClick={() => router.push(`${ROUTES.SETTINGS}`)}
+          type="button"
+          className="mb-4"
+        >
+          <ArrowPrev />
+          <span>Settings</span>
+        </Button>
+      </div>
       <PageMainAction
         href={`${ROUTES.TAG}/create`}
         title={t('common:sidebar-nav-item-tags')}

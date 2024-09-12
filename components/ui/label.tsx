@@ -30,7 +30,7 @@ const Label: React.FC<Props> = ({
       >
         {children}
         {isRequiredLabel && (
-          <span title="Required filed" className="m-[1px] text-blue-500">
+          <span title="Required filed" className="m-[1px] text-red-500">
             *
           </span>
         )}

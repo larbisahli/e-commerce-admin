@@ -18,8 +18,16 @@ export const SUPPORT_TICKETS = gql`
 `;
 
 export const CREATE_SUPPORT_TICKETS = gql`
-  mutation CreateSupportTicket($subject: String!, $content: String!) {
-    createSupportTicket(subject: $subject, content: $content) {
+  mutation CreateSupportTicket(
+    $subject: String!
+    $content: String!
+    $category: String!
+  ) {
+    createSupportTicket(
+      subject: $subject
+      content: $content
+      category: $category
+    ) {
       id
     }
   }

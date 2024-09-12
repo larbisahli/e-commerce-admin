@@ -16,10 +16,13 @@ import { useState } from 'react';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { CREATE_SUPPORT_TICKETS } from '@graphql/support';
+import SelectInput from '@components/ui/select-input';
+import Label from '@components/ui/label';
 
 type FormValues = {
   subject: string;
   content: string;
+  category: { value: string; id: string };
 };
 
 type IProps = {
@@ -28,8 +31,15 @@ type IProps = {
 
 const defaultValues = {
   subject: '',
-  content: null
+  content: null,
+  category: { value: 'Technical', id: 'technical' }
 };
+
+const categories = [
+  { value: 'Technical', id: 'technical' },
+  { value: 'Billing', id: 'billing' },
+  { value: 'General Inquiry', id: 'general_inquiry' }
+];
 
 export default function SupportForm({ initialValues }: IProps) {
   const [error, setError] = useState(null);
@@ -41,6 +51,7 @@ export default function SupportForm({ initialValues }: IProps) {
     register,
     handleSubmit,
     reset,
+    control,
     formState: { errors }
   } = useForm<FormValues>({
     defaultValues: initialValues ? { ...initialValues } : defaultValues
@@ -57,7 +68,7 @@ export default function SupportForm({ initialValues }: IProps) {
     },
     onCompleted: (data: { createSupportTicket: { id: string } }) => {
       if (!isEmpty(data?.createSupportTicket)) {
-        notify(t('common:successfully-created'), 'success');
+        notify(t('common:successfully-sent'), 'success');
         reset();
       }
     }
@@ -68,6 +79,7 @@ export default function SupportForm({ initialValues }: IProps) {
   const onSubmit = (values: FormValues) => {
     const variables = {
       subject: values.subject,
+      category: values.category?.id ?? 'general_inquiry',
       content: values.content
     };
 
@@ -109,7 +121,18 @@ export default function SupportForm({ initialValues }: IProps) {
                 placeholder="Subject"
               />
             </div>
+            <div className="">
+              <Label isRequiredLabel>{t('form:input-label-category')}</Label>
+              <SelectInput
+                name="category"
+                control={control}
+                getOptionLabel={(option: { value: string }) => option.value}
+                getOptionValue={(option: { id: string }) => option.id}
+                options={categories}
+              />
+            </div>
             <TextArea
+              isRequiredLabel
               label={'Content'}
               {...register('content', { required: 'Content is required' })}
               error={t(errors.content?.message!)}

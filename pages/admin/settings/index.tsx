@@ -19,12 +19,12 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { CreditCard } from '@components/icons/credit-card';
 
 const settingRoutes = [
-  {
-    label: 'common:sidebar-nav-item-account-settings',
-    url: ROUTES.ACCOUNT_SETTINGS,
-    renderIcon: () => <AccountSettingsIcon width={25} height={25} />,
-    description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit'
-  },
+  // {
+  //   label: 'common:sidebar-nav-item-account-settings',
+  //   url: ROUTES.ACCOUNT_SETTINGS,
+  //   renderIcon: () => <AccountSettingsIcon width={25} height={25} />,
+  //   description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit'
+  // },
   {
     label: 'common:sidebar-nav-item-notifications',
     url: ROUTES.NOTIFICATION,
@@ -55,12 +55,12 @@ const settingRoutes = [
     renderIcon: () => <TagIcon width={25} height={25} />,
     description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit'
   },
-  {
-    label: 'common:sidebar-nav-item-recent-login-history',
-    url: ROUTES.RECENT_LOGIN_HISTORY,
-    renderIcon: () => <LoginHistoryIcon width={25} height={25} />,
-    description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit'
-  },
+  // {
+  //   label: 'common:sidebar-nav-item-recent-login-history',
+  //   url: ROUTES.RECENT_LOGIN_HISTORY,
+  //   renderIcon: () => <LoginHistoryIcon width={25} height={25} />,
+  //   description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit'
+  // },
   {
     label: 'common:sidebar-nav-item-billing',
     url: ROUTES.BILLING,

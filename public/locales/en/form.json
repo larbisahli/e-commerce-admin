@@ -136,6 +136,7 @@
   "input-label-type": "Type",
   "input-label-types": "Types",
   "input-label-parent-category": "Parent Category",
+  "input-label-category": "Category",
   "input-label-animation-speed": "Animation Speed",
   "input-label-delay-speed": "Delay Speed",
   "input-label-object-fit": "Object fit value",

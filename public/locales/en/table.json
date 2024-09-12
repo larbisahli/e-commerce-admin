@@ -114,5 +114,6 @@
   "table-item-free": "Free",
   "table-item-rate-type": "Rate type",
   "table-item-delivery-time": "Delivery time",
-  "table-item-sku": "sku"
+  "table-item-sku": "sku",
+  "table-item-variant": "Variant"
 }

@@ -252,7 +252,22 @@ export default function OrderDetailsPage({ client }: SSRProps) {
       dataIndex: 'product',
       key: 'product',
       align: 'center',
-      render: (product: Product) => <span>{product?.sku}</span>
+      render: (product: Product, record: any) => (
+        <span>
+          {record.variantOption?.id ? record.variantOption.sku : product?.sku}
+        </span>
+      )
+    },
+    {
+      title: t('table:table-item-variant'),
+      dataIndex: 'product',
+      key: 'product',
+      align: 'center',
+      render: (product: Product, record: any) => (
+        <span>
+          {record.variantOption?.id ? record.variantOption.title : 'N/A'}
+        </span>
+      )
     },
     {
       title: t('table:table-item-quantity'),

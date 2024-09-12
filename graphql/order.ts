@@ -61,6 +61,9 @@ export const ORDER = gql`
         variantOption {
           id
           sku
+          title
+          salePrice
+          comparePrice
           quantity
         }
         totalInclTax

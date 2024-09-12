@@ -128,15 +128,15 @@ export const siteSettings = {
             label: 'sidebar-nav-item-manufacturers',
             padding: '35px',
             isSubLink: true
-          },
-          {
-            id: 'D2IXKt',
-            href: ROUTES.COMING_SOON,
-            label: 'sidebar-nav-item-reviews',
-            padding: '35px',
-            isSubLink: true,
-            disabled: true
           }
+          // {
+          //   id: 'D2IXKt',
+          //   href: ROUTES.COMING_SOON,
+          //   label: 'sidebar-nav-item-reviews',
+          //   padding: '35px',
+          //   isSubLink: true,
+          //   disabled: true
+          // }
         ]
       },
       {
@@ -240,12 +240,12 @@ export const siteSettings = {
       //     }
       //   ]
       // },
-      {
-        id: 'WD091WF2IqEI',
-        href: ROUTES.ANALYTICS,
-        label: 'sidebar-nav-item-analytics',
-        icon: 'AnalyticsIcon'
-      },
+      // {
+      //   id: 'WD091WF2IqEI',
+      //   href: ROUTES.ANALYTICS,
+      //   label: 'sidebar-nav-item-analytics',
+      //   icon: 'AnalyticsIcon'
+      // },
       // {
       //   id: 'JU3uxd123Sd',
       //   href: 'store',
