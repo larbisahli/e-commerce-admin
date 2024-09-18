@@ -146,3 +146,22 @@ export const UPDATE_STORE_SETTINGS = gql`
     }
   }
 `;
+
+export const UPDATE_CHECKOUT_SETTINGS = gql`
+  mutation UpdateCheckoutSettings($fields: [JSONObject!]) {
+    updateCheckoutSettings(fields: $fields) {
+      success
+      etag {
+        configEtag
+      }
+    }
+  }
+`;
+
+export const GET_CHECKOUT_SETTINGS = gql`
+  query GetCheckoutSettings($etag: String!) {
+    getCheckoutSettings(etag: $etag) {
+      fields
+    }
+  }
+`;

@@ -143,7 +143,7 @@ const HomePage = ({ posts }) => {
           </div>
         </section>
         {/* ----------------- Pricing ------------------- */}
-        {/* <PricingSection /> */}
+        <PricingSection />
         {/* ------------- FAQ ----------------- */}
         <FaqSection />
         {/* ------------------ Join us section ------------------ */}

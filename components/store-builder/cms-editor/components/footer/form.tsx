@@ -1,4 +1,4 @@
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import Card from '@components/common/card';
 import { AlignCenterIcon } from '@components/icons/builder/align-center';
 import { AlignLeftIcon } from '@components/icons/builder/align-left';
@@ -12,7 +12,10 @@ import Label from '@components/ui/label';
 import { useModalAction } from '@components/ui/modal/modal.context';
 import SelectInput from '@components/ui/select-input';
 import TextArea from '@components/ui/text-area';
-import { UPDATE_LAYOUT_COMPONENT_CONTENT } from '@graphql/content';
+import {
+  STORE_LAYOUTS,
+  UPDATE_LAYOUT_COMPONENT_CONTENT
+} from '@graphql/content';
 import { useErrorLogger, useGetClient } from '@hooks/index';
 import { useAppDispatch } from '@hooks/useGetClient';
 import { useSettings } from '@hooks/useSettings';
@@ -25,20 +28,21 @@ import classNames from 'classnames';
 import cloneDeep from 'lodash/cloneDeep';
 import isEmpty from 'lodash/isEmpty';
 import { useTranslation } from 'next-i18next';
-import { memo, useState } from 'react';
+import { memo, useEffect, useMemo, useState } from 'react';
 import React from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 
 import FormActions from '../../helpers/FormActions';
 
 type FormValues = {
-  thumbnail: ImageType[];
-  header: string;
-  description: string;
-  buttonLink: string;
-  buttonLabel: string;
-  contentAlignment: string;
   socials: any[];
+  links: {
+    groupName: string;
+    pages: {
+      name: string;
+      title: string;
+    }[];
+  }[];
 };
 
 const defaultValues = {};
@@ -62,30 +66,34 @@ const socialIcon = [
   }
 ];
 
-export const updatedIcons = socialIcon.map((item: any) => {
-  const TagName = socialIcons[item.value];
-  item.label = (
-    <div className="flex items-center text-body space-s-4">
-      <span className="flex h-4 w-4 items-center justify-center">
-        {TagName && <TagName className="h-4 w-4" />}
-      </span>
-      <span>{item.label}</span>
-    </div>
-  );
-  return item;
-});
-
 type IProps = {
   initialValues?: StoreLayoutComponentType;
 };
+
+interface TLayout {
+  storeLayouts: {
+    id: string;
+    name: string;
+    title: string;
+    isCustom: boolean;
+  }[];
+}
+
+interface OptionsVariable {
+  layoutName?: string;
+  etag: string;
+}
+
+const moduleSliderWhiteList = ['Footer', 'FooterSubscribe'];
 
 const FooterForm = ({ initialValues }: IProps) => {
   const { t } = useTranslation();
 
   const data = initialValues.data;
+  const moduleName = initialValues?.moduleName;
+
   const [error, setError] = useState(null);
   const { selectedLanguage } = useSettings();
-
   const dispatch = useAppDispatch();
 
   const { updateBuilderInfo } = useUI();
@@ -100,6 +108,21 @@ const FooterForm = ({ initialValues }: IProps) => {
   const { userInfo } = useGetClient();
   const { closeModal } = useModalAction();
   const csrfToken = userInfo?.csrfToken;
+  const etag = userInfo?.store?.etag;
+
+  const {
+    data: layoutData,
+    loading: layoutLoading,
+    error: layoutError
+  } = useQuery<TLayout, OptionsVariable>(STORE_LAYOUTS, {
+    variables: {
+      etag: etag?.layoutEtag
+    },
+    fetchPolicy: 'cache-and-network',
+    skip: isEmpty(etag)
+  });
+
+  const { storeLayouts = [] } = layoutData ?? {};
 
   const [updateLayoutComponent, { loading: updating }] = useMutation(
     UPDATE_LAYOUT_COMPONENT_CONTENT,
@@ -127,6 +150,7 @@ const FooterForm = ({ initialValues }: IProps) => {
   );
 
   useErrorLogger(error);
+  useErrorLogger(layoutError);
 
   const onSubmit = async (values: FormValues) => {
     const variables = {
@@ -134,26 +158,20 @@ const FooterForm = ({ initialValues }: IProps) => {
       contentId: initialValues?.contentId,
       language: selectedLanguage,
       data: {
-        thumbnail: values.thumbnail,
-        header: values.header,
-        description: values.description,
-        buttonLabel: values.buttonLabel,
-        buttonLink: values.buttonLink,
-        contentAlignment: values.contentAlignment
+        socials: values.socials,
+        links: values.links?.map((link) => ({
+          ...link,
+          pages: link.pages?.map((page) => ({
+            name: page.name,
+            title: page.title
+          }))
+        }))
       }
     };
 
     updateLayoutComponent({ variables }).catch((err) => {
       setError(err);
     });
-  };
-
-  const thumbnail = watch('thumbnail');
-  const contentAlignment = watch('contentAlignment');
-
-  const handleContentAlignment = (e, value) => {
-    e.preventDefault();
-    setValue('contentAlignment', value);
   };
 
   const {
@@ -165,6 +183,30 @@ const FooterForm = ({ initialValues }: IProps) => {
     name: 'socials'
   });
 
+  const {
+    fields: linkFields,
+    append: linkAppend,
+    remove: linkRemove
+  } = useFieldArray({
+    control,
+    name: 'links'
+  });
+
+  const isWhiteListed = useMemo(
+    () => moduleSliderWhiteList?.includes(moduleName),
+    [moduleName]
+  );
+
+  useEffect(() => {
+    console.log({ linkFields });
+    if (moduleName === 'FooterLight' && linkFields.length === 0) {
+      linkAppend({ pages: [], groupName: 'About' });
+    } else if (linkFields.length > 1) {
+      linkRemove();
+      linkAppend({ pages: [], groupName: 'About' });
+    }
+  }, [isWhiteListed]);
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormActions
@@ -173,122 +215,113 @@ const FooterForm = ({ initialValues }: IProps) => {
         disabled={updating}
         loading={updating}
       />
-      <div className="my-5 flex flex-wrap border-b border-dashed border-border-base pb-8 sm:my-8">
-        <Description
-          title={t('form:input-label-image')}
-          details={t('form:image-helper-text')}
-          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
-        />
-        <Card className="w-full sm:w-8/12 md:w-2/3">
-          <ImageModal
-            label="form:label-add-image"
-            isRequiredLabel
-            onSelect={(photo) => setValue('thumbnail', photo)}
-            selected={thumbnail}
-            isThumbnail
+      {isWhiteListed && (
+        <div className="my-5 flex flex-wrap border-b border-dashed border-gray-300 pb-8 sm:my-8">
+          <Description
+            title={t('form:links')}
+            details={t('form:shop-settings-helper-text')}
+            className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
           />
-        </Card>
-      </div>
-      <div className="my-5 flex flex-wrap border-b border-dashed border-border-base pb-8 sm:my-8">
-        <Description
-          title={t('form:input-label-image')}
-          details={t('form:image-helper-text')}
-          className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
-        />
-        <Card className="w-full sm:w-8/12 md:w-2/3">
-          <Input
-            label={'Heading'}
-            {...register('header')}
-            placeholder={'Heading'}
-            variant="outline"
-            className="mb-5"
-          />
-          <TextArea
-            label={'Description'}
-            {...register('description')}
-            placeholder={'Lorem ipsum dolor sit amet...'}
-            variant="outline"
-            className="mb-5"
-          />
-          <Input
-            label={'Button text'}
-            {...register('buttonLabel')}
-            placeholder={'Text'}
-            variant="outline"
-            className="mb-5"
-          />
-          <Input
-            label={'Links to (URL)'}
-            {...register('buttonLink')}
-            placeholder={'/collections/all'}
-            variant="outline"
-            className="mb-5"
-          />
-          {initialValues.moduleName === 'ImageBannerContentCenter' && (
-            <div className="mt-3 flex items-center justify-between">
-              <Label>Content alignment</Label>
-              <div className="flex items-center justify-center">
-                <button
-                  onClick={(e) => handleContentAlignment(e, TextAlignEnum.LEFT)}
-                  title="Left"
+          <Card className="w-full sm:w-8/12 md:w-2/3">
+            <div>
+              {linkFields.map((item, index: number) => (
+                <div
                   className={classNames(
-                    'flex h-7 w-10 items-center justify-center rounded-l-sm border-t border-b border-l border-gray-300 text-gray-600 hover:bg-gray-200 hover:text-blue-700',
-                    {
-                      'border-accent bg-blue-100 text-accent transition-colors hover:bg-blue-200':
-                        contentAlignment === TextAlignEnum.LEFT
-                    }
+                    'py-5 first:mt-5 first:border-t last:border-b-0 md:py-8 md:first:mt-10',
+                    'border-b border-dashed border-border-200 first:border-t-0 first:pt-0'
                   )}
+                  key={index}
                 >
-                  <AlignLeftIcon width={18} height={18} />
-                </button>
-                <button
-                  onClick={(e) =>
-                    handleContentAlignment(e, TextAlignEnum.CENTER)
-                  }
-                  title="Center"
-                  className={classNames(
-                    'flex h-7 w-10 items-center justify-center border-t border-b border-r border-l border-gray-300 text-gray-600 transition-colors hover:bg-gray-200 hover:text-blue-700',
-                    {
-                      'border-accent bg-blue-100 text-accent hover:bg-blue-200':
-                        contentAlignment === TextAlignEnum.CENTER,
-                      'border-l-accent':
-                        contentAlignment === TextAlignEnum.LEFT,
-                      '!border-r-0': contentAlignment === TextAlignEnum.RIGHT
-                    }
-                  )}
-                >
-                  <AlignCenterIcon width={18} height={18} />
-                </button>
-                <button
-                  onClick={(e) =>
-                    handleContentAlignment(e, TextAlignEnum.RIGHT)
-                  }
-                  title="Right"
-                  className={classNames(
-                    'flex h-7 w-10 items-center justify-center rounded-r-sm border-t border-b border-r border-gray-300 text-gray-600 hover:bg-gray-200 hover:text-blue-700',
-                    {
-                      'border-l border-accent border-l-accent bg-blue-100 text-accent transition-colors hover:bg-blue-200':
-                        contentAlignment === TextAlignEnum.RIGHT
-                    }
-                  )}
-                >
-                  <AlignRightIcon width={18} height={18} />
-                </button>
-              </div>
+                  <div className="relative">
+                    <Input
+                      label={t('form:input-label-group-name')}
+                      variant="outline"
+                      inputClassName="!rounded-sm"
+                      {...register(`links.${index}.groupName` as const)}
+                    />
+                    <div className="mt-5">
+                      <Label className="whitespace-nowrap">
+                        {t('form:input-label-select-pages')}
+                      </Label>
+                      <SelectInput
+                        name={`links.${index}.pages` as const}
+                        getOptionLabel={(option: any) => option.title}
+                        getOptionValue={(option: any) => option.name}
+                        control={control}
+                        options={storeLayouts}
+                        loading={layoutLoading}
+                        isMulti
+                      />
+                    </div>
+                    <button
+                      onClick={() => {
+                        linkRemove(index);
+                      }}
+                      type="button"
+                      className="absolute top-[-20px] right-0 text-sm text-red-500 transition-colors duration-200 hover:text-red-700 focus:outline-none sm:col-span-1 sm:mt-4"
+                    >
+                      {t('form:button-label-remove')}
+                    </button>
+                  </div>
+                </div>
+              ))}
             </div>
-          )}
-        </Card>
-      </div>
-
+            <Button
+              type="button"
+              onClick={() => linkAppend({ pages: [], groupName: '' })}
+              className="w-full sm:w-auto"
+            >
+              {t('form:button-label-add-link')}
+            </Button>
+          </Card>
+        </div>
+      )}
+      {!isWhiteListed && (
+        <div className="my-5 flex flex-wrap border-b border-dashed border-gray-300 pb-8 sm:my-8">
+          <Description
+            title={t('form:links')}
+            details={t('form:shop-settings-helper-text')}
+            className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
+          />
+          <Card className="w-full sm:w-8/12 md:w-2/3">
+            <div>
+              {linkFields.map((item, index: number) => (
+                <div
+                  className={classNames(
+                    'py-5 first:mt-5 first:border-t last:border-b-0 md:py-8 md:first:mt-10',
+                    'border-b border-dashed border-border-200 first:border-t-0 first:pt-0'
+                  )}
+                  key={index}
+                >
+                  <div className="relative">
+                    <div className="mt-5">
+                      <Label className="whitespace-nowrap">
+                        {t('form:input-label-select-pages')}
+                      </Label>
+                      <SelectInput
+                        name={`links.${index}.pages` as const}
+                        getOptionLabel={(option: any) => option.title}
+                        getOptionValue={(option: any) => option.name}
+                        control={control}
+                        options={storeLayouts}
+                        loading={layoutLoading}
+                        isMulti
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Card>
+        </div>
+      )}
       <div className="my-5 flex flex-wrap border-b border-dashed border-gray-300 pb-8 sm:my-8">
         <Description
           title={t('form:social-settings')}
           details={t('form:shop-settings-helper-text')}
           className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
         />
-
         <Card className="w-full sm:w-8/12 md:w-2/3">
-          {/* Social and Icon picker */}
           <div>
             {socialFields.map((item, index: number) => (
               <div
@@ -302,10 +335,14 @@ const FooterForm = ({ initialValues }: IProps) => {
                     </Label>
                     <SelectInput
                       name={`socials.${index}.icon` as const}
-                      // getOptionLabel={(option: { label: string }) => option.label}
-                      // getOptionValue={(option: { id: string }) => option.id}
+                      getOptionLabel={(option: { label: string }) =>
+                        option.label
+                      }
+                      getOptionValue={(option: { value: string }) =>
+                        option.value
+                      }
                       control={control}
-                      options={updatedIcons}
+                      options={socialIcon}
                       isClearable={true}
                       defaultValue={item?.icon!}
                     />
@@ -330,7 +367,6 @@ const FooterForm = ({ initialValues }: IProps) => {
               </div>
             ))}
           </div>
-
           <Button
             type="button"
             onClick={() =>

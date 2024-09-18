@@ -17,6 +17,9 @@ import { isEmpty } from 'lodash';
 import ErrorMessage from '@components/ui/error-message';
 import Loader from '@components/ui/loader/loader';
 import { useEffect, useState } from 'react';
+import Button from '@components/ui/button';
+import { ArrowPrev } from '@components/icons/arrow-prev';
+import { useRouter } from 'next/router';
 
 const PlansComponents = dynamic(() => import('@components/plans/plans'), {
   ssr: true
@@ -48,6 +51,7 @@ interface SubscriptionPrice {
 }
 
 export default function CreateSupplierPage({ client }: SSRProps) {
+  const router = useRouter();
   useGetClient(client);
 
   const [skipPlans, setSkipPlans] = useState(true);
@@ -111,6 +115,18 @@ export default function CreateSupplierPage({ client }: SSRProps) {
       <Head>
         <title>Billing | Dropgala</title>
       </Head>
+      <div className="border-b pb-3">
+        <Button
+          variant="outline"
+          onClick={() => router.push(`${ROUTES.SETTINGS}`)}
+          type="button"
+          className="mb-4"
+        >
+          <ArrowPrev />
+          <span>Settings</span>
+        </Button>
+        <div className="text-2xl font-semibold">Billing settings</div>
+      </div>
       {!isEmpty(getStoreSubscription) && (
         <SubscriptionComponents
           subscription={getStoreSubscription}

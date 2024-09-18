@@ -1,5 +1,7 @@
+import { ModuleGroups } from '@ts-types/enums';
+
 export const componentsThumbnail = {
-  CategoryList: [
+  [ModuleGroups.CATEGORY_LIST]: [
     {
       moduleName: 'CategoryList',
       thumbnail: {
@@ -17,7 +19,7 @@ export const componentsThumbnail = {
       title: 'Category List Slide'
     }
   ],
-  ProductListWidget: [
+  [ModuleGroups.PRODUCT_LIST_WIDGET]: [
     {
       moduleName: 'ProductListSlideWidget',
       thumbnail: {
@@ -35,7 +37,7 @@ export const componentsThumbnail = {
       title: 'Product list grid'
     }
   ],
-  ImageBanner: [
+  [ModuleGroups.IMAGE_BANNER]: [
     {
       moduleName: 'ImageBannerContentCenter',
       thumbnail: {
@@ -77,14 +79,40 @@ export const componentsThumbnail = {
       title: 'Hero Stack'
     }
   ],
-  Footer: [
+  [ModuleGroups.HEADER]: [
+    {
+      moduleName: 'Header',
+      thumbnail: {
+        image: '/static/components/header/header-default.png',
+        placeholder: '/static/components/header/header-default.png'
+      },
+      title: 'Header Default'
+    },
+    {
+      moduleName: 'HeaderElegant',
+      thumbnail: {
+        image: '/static/components/header/header-elegant.png',
+        placeholder: '/static/components/header/header-elegant.png'
+      },
+      title: 'Header Elegant'
+    },
+    {
+      moduleName: 'HeaderSatoshi',
+      thumbnail: {
+        image: '/static/components/header/header-satoshi.png',
+        placeholder: '/static/components/header/footer--satoshi.png'
+      },
+      title: 'Header Satoshi'
+    }
+  ],
+  [ModuleGroups.FOOTER]: [
     {
       moduleName: 'Footer',
       thumbnail: {
-        image: '/static/components/footer/footer-dark.png',
-        placeholder: '/static/components/footer/footer-dark.png'
+        image: '/static/components/footer/footer-default.png',
+        placeholder: '/static/components/footer/footer-default.png'
       },
-      title: 'Footer Dark'
+      title: 'Footer Default'
     },
     {
       moduleName: 'FooterSubscribe',
@@ -103,7 +131,7 @@ export const componentsThumbnail = {
       title: 'Footer Light'
     }
   ],
-  Subscription: [
+  [ModuleGroups.SUBSCRIPTION]: [
     {
       moduleName: 'Subscription',
       thumbnail: {

@@ -42,10 +42,11 @@ const SwitchInput = ({
             <span className="sr-only">Enable {label}</span>
             <span
               className={cn(
+                'translate-x-0',
                 size === 'large' && 'h-[25px] w-[25px]',
                 size === 'small' && 'h-3 w-3',
-                size === 'large' && value ? 'translate-x-6' : 'translate-x-0',
-                size === 'small' && value ? 'translate-x-3' : 'translate-x-0',
+                size === 'large' && value && '!translate-x-6',
+                size === 'small' && value && '!translate-x-3',
                 'inline-block transform rounded-full border bg-light'
               )}
             />

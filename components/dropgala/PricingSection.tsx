@@ -19,26 +19,33 @@ const PricingSection = () => {
       <div className="w-full pt-8">
         <div className="mt-8 flex w-full items-start justify-center">
           {/* PREMIUM */}
-          <div className="h-[900px] w-[500px] rounded-xl border bg-white shadow">
+          <div className="bg-whites h-fit w-fit rounded-xl border shadow">
             <div className="p-5">
-              <div className="pt-1 text-3xl font-semibold">Premium</div>
-              <div className="text-gray-500">For solo entrepreneurs</div>
-              <div className="pt-5">
-                <span className="text-5xl font-bold text-black">$15</span>
-                <span className="ml-1 text-gray-500">/month</span>
+              <div className="pt-1 text-3xl font-semibold text-blue-600">
+                Premium
               </div>
-              <div className="pt-5">
-                <Link href="#subscription">
-                  <div className="hover:text-underline inline-block w-full cursor-pointer rounded-[10px] bg-black py-2 px-8 text-center font-medium text-white no-underline hover:bg-gray-900">
-                    Get started with 7 days trial
+              <div className="text-gray-500">
+                Everything you need to start a successful business!
+              </div>
+              <div className="flex items-end justify-between">
+                <div className="flex-1 pt-5">
+                  <div>
+                    <span className="text-4xl font-bold text-black">$12</span>
+                    <span className="ml-1 text-gray-500">USD</span>
                   </div>
-                </Link>
+                  <div className="text-sm font-medium text-gray-400">
+                    per month
+                  </div>
+                </div>
+                <div className="rounded border border-blue-300 bg-blue-50 px-3 py-[2px] text-sm font-medium text-blue-500 shadow">
+                  $120 / year
+                </div>
               </div>
-              <div className="w-full pt-1 text-center">Cancel any time</div>
-              <div className="my-3 border-t pt-5 text-center text-gray-700">
+
+              <div className="my-3 grid grid-cols-1 gap-3 border-t pt-5 text-center text-gray-700 lg:grid-cols-3">
                 {/* ------------- */}
                 <div className="mt-3 flex items-center">
-                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-black text-white">
+                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 text-white">
                     <CheckMark width={11} height={11} />
                   </div>
                   <span className="mx-2 font-medium text-gray-800">
@@ -47,7 +54,7 @@ const PricingSection = () => {
                 </div>
                 {/* ------------- */}
                 <div className="mt-3 flex items-center">
-                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-black text-white">
+                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 text-white">
                     <CheckMark width={11} height={11} />
                   </div>
                   <span className="mx-2 font-medium text-gray-800">
@@ -56,7 +63,7 @@ const PricingSection = () => {
                 </div>
                 {/* ------------- */}
                 <div className="mt-3 flex items-center">
-                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-black text-white">
+                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 text-white">
                     <CheckMark width={11} height={11} />
                   </div>
                   <span className="mx-2 font-medium text-gray-800">
@@ -65,7 +72,16 @@ const PricingSection = () => {
                 </div>
                 {/* ------------- */}
                 <div className="mt-3 flex items-center">
-                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-black text-white">
+                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 text-white">
+                    <CheckMark width={11} height={11} />
+                  </div>
+                  <span className="mx-2 font-medium text-gray-800">
+                    Order managements
+                  </span>
+                </div>
+                {/* ------------- */}
+                <div className="mt-3 flex items-center">
+                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 text-white">
                     <CheckMark width={11} height={11} />
                   </div>
                   <span className="mx-2 font-medium text-gray-800">
@@ -74,7 +90,7 @@ const PricingSection = () => {
                 </div>
                 {/* ------------- */}
                 <div className="mt-3 flex items-center">
-                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-black text-white">
+                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 text-white">
                     <CheckMark width={11} height={11} />
                   </div>
                   <span className="mx-2 font-medium text-gray-800">
@@ -83,7 +99,7 @@ const PricingSection = () => {
                 </div>
                 {/* ------------- */}
                 <div className="mt-3 flex items-center">
-                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-black text-white">
+                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 text-white">
                     <CheckMark width={11} height={11} />
                   </div>
                   <span className="mx-2 font-medium text-gray-800">
@@ -92,7 +108,7 @@ const PricingSection = () => {
                 </div>
                 {/* ------------- */}
                 <div className="mt-3 flex items-center">
-                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-black text-white">
+                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 text-white">
                     <CheckMark width={11} height={11} />
                   </div>
                   <span className="mx-2 font-medium text-gray-800">
@@ -101,7 +117,7 @@ const PricingSection = () => {
                 </div>
                 {/* ------------- */}
                 <div className="mt-3 flex items-center">
-                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-black text-white">
+                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 text-white">
                     <CheckMark width={11} height={11} />
                   </div>
                   <span className="mx-2 font-medium text-gray-800">
@@ -110,7 +126,7 @@ const PricingSection = () => {
                 </div>
                 {/* ------------- */}
                 <div className="mt-3 flex items-center">
-                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-black text-white">
+                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 text-white">
                     <CheckMark width={11} height={11} />
                   </div>
                   <span className="mx-2 font-medium text-gray-800">
@@ -119,7 +135,7 @@ const PricingSection = () => {
                 </div>
                 {/* ------------- */}
                 <div className="mt-3 flex items-center">
-                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-black text-white">
+                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 text-white">
                     <CheckMark width={11} height={11} />
                   </div>
                   <span className="mx-2 font-medium text-gray-800">
@@ -128,7 +144,7 @@ const PricingSection = () => {
                 </div>
                 {/* ------------- */}
                 <div className="mt-3 flex items-center">
-                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-black text-white">
+                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 text-white">
                     <CheckMark width={11} height={11} />
                   </div>
                   <span className="mx-2 font-medium text-gray-800">
@@ -137,7 +153,7 @@ const PricingSection = () => {
                 </div>
                 {/* ------------- */}
                 <div className="mt-3 flex items-center">
-                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-black text-white">
+                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 text-white">
                     <CheckMark width={11} height={11} />
                   </div>
                   <span className="mx-2 font-medium text-gray-800">
@@ -146,7 +162,7 @@ const PricingSection = () => {
                 </div>
                 {/* ------------- */}
                 <div className="mt-3 flex items-center">
-                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-black text-white">
+                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 text-white">
                     <CheckMark width={11} height={11} />
                   </div>
                   <span className="mx-2 font-medium text-gray-800">
@@ -155,7 +171,7 @@ const PricingSection = () => {
                 </div>
                 {/* ------------- */}
                 <div className="mt-3 flex items-center">
-                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-black text-white">
+                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 text-white">
                     <CheckMark width={11} height={11} />
                   </div>
                   <span className="mx-2 font-medium text-gray-800">
@@ -164,12 +180,43 @@ const PricingSection = () => {
                 </div>
                 {/* ------------- */}
                 <div className="mt-3 flex items-center">
-                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-black text-white">
+                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 text-white">
                     <CheckMark width={11} height={11} />
                   </div>
                   <span className="mx-2 font-medium text-gray-800">
                     Unlimited customer reviews
                   </span>
+                </div>
+                {/* ------------- */}
+                <div className="mt-3 flex items-center">
+                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 text-white">
+                    <CheckMark width={11} height={11} />
+                  </div>
+                  <span className="mx-2 font-medium text-gray-800">
+                    Payments
+                  </span>
+                </div>
+                {/* ------------- */}
+                <div className="mt-3 flex items-center">
+                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 text-white">
+                    <CheckMark width={11} height={11} />
+                  </div>
+                  <span className="mx-2 font-medium text-gray-800">
+                    Advanced SEO
+                  </span>
+                </div>
+              </div>
+              {/* CTA */}
+              <div>
+                <div className="pt-5">
+                  <Link href="#subscription">
+                    <div className="hover:text-underline inline-block w-full cursor-pointer rounded-[4px] bg-[#1b91f2] py-2 px-8 text-center font-medium text-white no-underline hover:bg-[#38a4fc]">
+                      Get started with 14 days trial
+                    </div>
+                  </Link>
+                </div>
+                <div className="w-full pt-2 text-center text-xs text-gray-500">
+                  Cancel any time
                 </div>
               </div>
             </div>

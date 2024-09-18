@@ -139,14 +139,6 @@ const Navbar = () => {
           <div className="hidden sm:block">
             <Link href={`${ROUTES.BILLING}`}>
               <div className="flex items-center pl-6">
-                <Button>
-                  <div className="flex items-center">
-                    <div>
-                      <UpgradeIcon width={25} height={25} />
-                    </div>
-                    <div className="font-medium">Upgrade plan</div>
-                  </div>
-                </Button>
                 <div className="mx-2 w-fit rounded-sm p-1 text-sm text-gray-500">
                   {trialDaysLeft.map((day, idx) => (
                     <span
@@ -159,6 +151,11 @@ const Navbar = () => {
                   <span className="mx-1">Days left in your trial.</span>
                   {/* <span className="mx-1"> Your trial ends today.</span> */}
                 </div>
+                <Button className="rounded">
+                  <div className="flex items-center">
+                    <div className="font-medium">Select a Plan</div>
+                  </div>
+                </Button>
               </div>
             </Link>
           </div>

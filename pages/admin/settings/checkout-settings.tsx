@@ -2,28 +2,51 @@ import AppLayout from '@components/layouts/app';
 import { useGetClient } from '@hooks/useGetClient';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
-import { SettingsType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
-import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useRouter } from 'next/router';
-import Button from '@components/ui/button';
-import { ArrowPrev } from '@components/icons/arrow-prev';
+import dynamic from 'next/dynamic';
+import { GET_CHECKOUT_SETTINGS } from '@graphql/settings';
+import { useQuery } from '@apollo/client';
+import { useErrorLogger } from '@hooks/useErrorLogger';
+import Loader from '@components/ui/loader/loader';
+import { isEmpty } from 'lodash';
+import ErrorMessage from '@components/ui/error-message';
+
+const CheckoutSettingsComponent = dynamic(
+  () => import('@components/checkout-settings'),
+  {
+    ssr: true
+  }
+);
 
 interface tSettings {
-  getSettings: SettingsType;
+  getCheckoutSettings: {
+    fields: any[];
+  };
 }
 
 export default function CheckoutSettings({ client }: SSRProps) {
-  const router = useRouter();
-  const { t } = useTranslation();
-
   const {
     userInfo: { store: { etag } = {} }
   } = useGetClient(client);
 
+  const { data, loading, error } = useQuery<tSettings>(GET_CHECKOUT_SETTINGS, {
+    variables: {
+      etag: etag?.configEtag
+    },
+    fetchPolicy: 'cache-and-network',
+    skip: isEmpty(etag)
+  });
+
+  const { getCheckoutSettings = {} } = data ?? {};
+
+  useErrorLogger(error);
+
+  if (!isEmpty(error)) {
+    return <ErrorMessage message={error.message} />;
+  }
   return (
     <>
       <Head>
@@ -35,19 +58,21 @@ export default function CheckoutSettings({ client }: SSRProps) {
           href="/svg/settings.svg"
         />
       </Head>
+      {loading && (
+        <div className="absolute top-0 right-0 left-0 bottom-0 z-10 flex items-center justify-center">
+          <div
+            style={{ backdropFilter: 'blur(1px)' }}
+            className="absolute inset-0 h-full w-full"
+          ></div>
+          <div className="z-10">
+            <Loader special />
+          </div>
+        </div>
+      )}
       <div className="border-b pb-3">
-        <Button
-          variant="outline"
-          onClick={() => router.push(`${ROUTES.SETTINGS}`)}
-          type="button"
-          className="mb-4"
-        >
-          <ArrowPrev />
-          <span>Settings</span>
-        </Button>
-        <h1 className="flex flex-1 text-2xl font-bold text-gray-700">
-          Checkout Settings
-        </h1>
+        {!loading && !isEmpty(getCheckoutSettings) && (
+          <CheckoutSettingsComponent initialValues={getCheckoutSettings} />
+        )}
       </div>
     </>
   );

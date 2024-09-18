@@ -8,9 +8,7 @@ import { useAppDispatch } from '@hooks/useGetClient';
 import { useUI } from '@hooks/useUI';
 import { notify } from '@lib/index';
 import { setEtag } from '@store/client';
-import { PageBuilderStyles } from '@ts-types/custom.types';
 import type { StoreLayoutComponentType } from '@ts-types/generated';
-import cloneDeep from 'lodash/cloneDeep';
 import isEmpty from 'lodash/isEmpty';
 import { useTranslation } from 'next-i18next';
 import { memo, useState } from 'react';
@@ -18,13 +16,13 @@ import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import FormActions from '../../helpers/FormActions';
-import Border from '../common/Border';
-import Typography from '../common/Typography';
+import Color from '../common/color';
+import { cloneDeep } from 'lodash';
 
 type FormValues = {
-  header: PageBuilderStyles['Typography'];
-  description: PageBuilderStyles['Typography'];
-  imageBorder: PageBuilderStyles['Border'];
+  backgroundColor: string;
+  textColor: string;
+  borderColor: string;
 };
 
 const defaultValues = {};
@@ -33,7 +31,7 @@ type IProps = {
   initialValues?: any;
 };
 
-const FooterStyles = ({ initialValues }: IProps) => {
+const HeaderStyles = ({ initialValues }: IProps) => {
   const { t } = useTranslation();
 
   const [error, setError] = useState(null);
@@ -84,15 +82,19 @@ const FooterStyles = ({ initialValues }: IProps) => {
     const variables = {
       componentId: initialValues.componentId,
       styles: {
-        header: values.header,
-        description: values.description,
-        imageBorder: values.imageBorder
+        backgroundColor: values.backgroundColor,
+        textColor: values.textColor,
+        borderColor: values.borderColor
       }
     };
     updateLayoutComponent({ variables }).catch((err) => {
       setError(err);
     });
   };
+
+  const backgroundColor = methods.watch('backgroundColor');
+  const textColor = methods.watch('textColor');
+  const borderColor = methods.watch('borderColor');
 
   return (
     <FormProvider {...methods}>
@@ -116,13 +118,31 @@ const FooterStyles = ({ initialValues }: IProps) => {
           />
           <Card className="w-full sm:w-8/12 md:w-2/3">
             <div className="mb-5">
-              <Typography label={'Header'} name={'header'} />
+              <div className="mt-3">
+                <Color
+                  label={'Background color'}
+                  color={backgroundColor}
+                  register={methods.register('backgroundColor')}
+                />
+              </div>
             </div>
             <div className="mb-5">
-              <Typography label={'Description'} name={'description'} />
+              <div className="mt-3">
+                <Color
+                  label={'Text color'}
+                  color={textColor}
+                  register={methods.register('textColor')}
+                />
+              </div>
             </div>
             <div className="mb-5">
-              <Border label={'Image Border'} name={'imageBorder'} />
+              <div className="mt-3">
+                <Color
+                  label={'Border color'}
+                  color={borderColor}
+                  register={methods.register('borderColor')}
+                />
+              </div>
             </div>
           </Card>
         </div>
@@ -131,4 +151,4 @@ const FooterStyles = ({ initialValues }: IProps) => {
   );
 };
 
-export default memo(FooterStyles);
+export default memo(HeaderStyles);

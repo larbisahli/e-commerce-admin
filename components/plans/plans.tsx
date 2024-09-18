@@ -98,7 +98,78 @@ export default function PlansComponents({
           onClose={() => setErrorMessage(null)}
         />
       ) : null}
-      <div className="text-2xl font-semibold">Billing settings</div>
+      {/* ------------------------- */}
+      <div
+        className="heroCardIllustration ng-scope"
+        ng-include="heroCardCtrl.getCardIllustration()"
+        ng-className="{ illustrationWithIcon: heroCardCtrl.shouldShowStatusIcon() }"
+        ng-click="!heroCardCtrl.isMultiCtaCard() ? heroCardCtrl.cardAction(heroCardCtrl.card, $event) : null"
+      >
+        <svg
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 176 176"
+          className="ng-scope"
+        >
+          <g clip-path="url(#clip0)" fill-rule="evenodd" clip-rule="evenodd">
+            <path
+              d="M58.384 123.667L39.592 161h96.652l-19.475-37.333H58.384z"
+              fill="url(#paint0_linear)"
+            ></path>
+            <path
+              d="M0 136.5h69.868V16.333H0V136.5zM107.131 136.5h69.868V16.333h-69.868V136.5z"
+              fill="#F6F7F9"
+            ></path>
+            <path
+              d="M9.316 40.833h51.237v-10.5H9.316v10.5zM116.447 40.833h51.237v-10.5h-51.237v10.5zM9.316 110.833h51.237V53.667H9.316v57.166zM116.447 110.833h51.237V53.667h-51.237v57.166z"
+              fill="#DBDFE7"
+            ></path>
+            <path d="M47 147h82V0H47v147z" fill="url(#paint1_linear)"></path>
+            <path
+              d="M39.592 16.333h6.987V136.5h-6.987V16.333zM129.256 16.333h6.987V136.5h-6.987V16.333z"
+              fill="#34313F"
+              fill-opacity=".06"
+            ></path>
+            <path
+              d="M129 0H47v147h82V0zM63.166 104c-.643 0-1.166.522-1.166 1.167v17.5c0 .644.523 1.166 1.166 1.166h48.904c.644 0 1.167-.522 1.167-1.166v-17.5c0-.645-.523-1.167-1.167-1.167H63.167zm2.044-38.667c0-12.54 10.167-22.75 22.708-22.75 12.54 0 22.707 10.21 22.707 22.75 0 12.541-10.167 22.75-22.707 22.75-12.541 0-22.708-10.209-22.708-22.75zm56.536-38.5H54.73v-10.5h67.016v10.5z"
+              fill="#fff"
+            ></path>
+            <path
+              d="M47 0h82v65h-18.377c-.179-12.388-10.276-22.417-22.706-22.417-12.429 0-22.526 10.03-22.704 22.417H47V0zm7.73 26.833h67.016v-10.5H54.731v10.5z"
+              fill="#121118"
+            ></path>
+          </g>
+          <defs>
+            <linearGradient
+              id="paint0_linear"
+              x1="87.918"
+              y1="161"
+              x2="87.918"
+              y2="149.425"
+              gradientUnits="userSpaceOnUse"
+            >
+              <stop stop-color="#FBFCFD" stop-opacity=".01"></stop>
+              <stop offset="1" stop-color="#F6F7F9"></stop>
+            </linearGradient>
+            <linearGradient
+              id="paint1_linear"
+              x1="129"
+              y1="65.5"
+              x2="47"
+              y2="61"
+              gradientUnits="userSpaceOnUse"
+            >
+              <stop stop-color="#4100A3"></stop>
+              <stop offset="1" stop-color="#0D52FF"></stop>
+            </linearGradient>
+            <clipPath id="clip0">
+              <path fill="#fff" d="M0 0h176v176H0z"></path>
+            </clipPath>
+          </defs>
+        </svg>
+      </div>
+      <p>Start your free 14-day trial, no credit card required.</p>
+      {/* ------------------------- */}
       <div className="my-5 flex flex-wrap sm:my-8">
         <div className="w-full px-0 !pt-0 pb-5 sm:w-[35%] sm:py-8 sm:pe-4 md:w-[35%] md:pe-5">
           <Card className="pr-2 pb-2">

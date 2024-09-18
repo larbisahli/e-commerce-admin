@@ -76,7 +76,7 @@ const ComponentsShowcase = ({
             )
           );
           updateBuilderInfo({ isReloadIframe: true });
-          closeModal(null, null, { sectionId: componentId });
+          // closeModal(null, null, { sectionId: componentId });
         }
       },
       refetchQueries: [
@@ -225,14 +225,14 @@ const ComponentsShowcase = ({
 
 const ShowCaseTool = ({ title, thumbnail }) => {
   return (
-    <div className="fixed top-[90px] left-[475px] z-50 rounded-md border bg-white p-3 shadow">
-      <h3 className="pb-1 text-lg font-medium text-black">{title}</h3>
+    <div className="fixed top-[90px] left-[475px] z-50 rounded-md border border-gray-500 bg-[#1e1b1b] p-3 shadow">
+      <h3 className="pb-1 text-lg font-medium text-white">{title}</h3>
       <Image
         alt="thumbnail"
         src={thumbnail?.image}
         width={800}
         height={400}
-        className="rounded-md border"
+        className="rounded-md border border-gray-500"
       />
     </div>
   );

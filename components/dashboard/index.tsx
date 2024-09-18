@@ -17,9 +17,13 @@ import Link from 'next/link';
 import { useTranslation } from 'next-i18next';
 import { useMemo, useState } from 'react';
 
-import GettingStartedSection from './GettingStartedSection';
+import {
+  GettingStartedSectionStep2,
+  GettingStartedSectionStep1
+} from './GettingStartedSection';
 import RecommendationsSection from './RecommendationsSection';
 import TipsSection from './TipsSection';
+import { useLocalStorage } from '@hooks/useLocalStorage';
 
 const dates = [
   {
@@ -205,6 +209,13 @@ export default function Dashboard() {
     return FormatData(dateRange, avgOrderValue?.data);
   }, [dateRange, avgOrderValue?.data]);
 
+  const [StoredValue, setStoredValue] = useLocalStorage(
+    'getStartedGuideStep',
+    1
+  );
+
+  console.log({ StoredValue });
+
   return (
     <>
       <Head>
@@ -225,7 +236,10 @@ export default function Dashboard() {
           {`You can impact someone's life today.`}
         </span>
       </div>
-      <GettingStartedSection />
+      {StoredValue === 1 && (
+        <GettingStartedSectionStep1 setStoredValue={setStoredValue} />
+      )}
+      {StoredValue === 2 && <GettingStartedSectionStep2 />}
       <div>
         <h3 className="mb-4 flex flex-1 items-end text-xl text-gray-900">
           Store statistics

@@ -25,20 +25,8 @@ import ContainerWidth from '../common/containerWidth';
 import { ObjectFitTooltipContent } from '../common/ToolTips';
 import Typography from '../common/Typography';
 
-const objectFitOptions = [
-  { value: 'fill' },
-  { value: 'cover' },
-  { value: 'contain' },
-  { value: 'scale-down' },
-  { value: 'none' }
-];
-
 type FormValues = {
   sectionSize: string;
-  header: PageBuilderStyles['Typography'];
-  description: PageBuilderStyles['Typography'];
-  imageBorder: PageBuilderStyles['Border'];
-  objectFit: { value: string };
 };
 
 const defaultValues = {};
@@ -98,11 +86,7 @@ const HeaderStyles = ({ initialValues }: IProps) => {
     const variables = {
       componentId: initialValues.componentId,
       styles: {
-        sectionSize: values.sectionSize,
-        header: values.header,
-        description: values.description,
-        imageBorder: values.imageBorder,
-        objectFit: values.objectFit
+        sectionSize: values.sectionSize
       }
     };
     updateLayoutComponent({ variables }).catch((err) => {
@@ -133,34 +117,6 @@ const HeaderStyles = ({ initialValues }: IProps) => {
             className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
           />
           <Card className="w-full sm:w-8/12 md:w-2/3">
-            <div className="mb-5">
-              <Typography label={'Header'} name={'header'} />
-            </div>
-            <div className="mb-5">
-              <Typography label={'Description'} name={'description'} />
-            </div>
-            <div className="mb-5">
-              <Border label={'Image Border'} name={'imageBorder'} />
-            </div>
-            <div className="mb-3">
-              <div className="flex items-center justify-between">
-                <Label
-                  tooltipId="objectFit"
-                  renderTooltip={<ObjectFitTooltipContent />}
-                >
-                  {t('form:input-label-object-fit')}
-                </Label>
-                <div className="w-32">
-                  <SelectInput
-                    name="objectFit"
-                    control={methods.control}
-                    getOptionLabel={(option) => option.value}
-                    getOptionValue={(option) => option.value}
-                    options={objectFitOptions}
-                  />
-                </div>
-              </div>
-            </div>
             <div className="mt-5 flex items-center justify-between">
               <Label>{t('form:input-label-section-size')}</Label>
               <ContainerWidth

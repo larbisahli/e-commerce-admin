@@ -322,7 +322,7 @@ export default function LayoutNavigation({
           tabIndex={0}
           onKeyDown={(e) => handleKeyDown(e, headerComponent)}
           onClick={() => handleClick(headerComponent)}
-          className="mx-2 flex cursor-pointer items-center rounded-sm border border-gray-200 bg-gray-100 px-3 py-3 shadow-sm hover:bg-gray-200"
+          className="mx-2 flex cursor-default items-center rounded-sm border border-gray-200 bg-gray-100 px-3 py-3 shadow-sm hover:bg-gray-200"
         >
           <div className="mr-2">
             <HeaderIcon />

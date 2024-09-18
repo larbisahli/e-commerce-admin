@@ -104,7 +104,6 @@ export default function SubscriptionComponents({
           onClose={() => setErrorMessage(null)}
         />
       ) : null}
-      <div className="text-2xl font-semibold">Billing settings</div>
       <div className="my-8">
         <div className="mb-8 w-full">
           <div className="flex flex-wrap">

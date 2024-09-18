@@ -17,6 +17,7 @@ import Link from 'next/link';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { CreditCard } from '@components/icons/credit-card';
+import { DomainIcon } from '@components/icons/domain-icon';
 
 const settingRoutes = [
   // {
@@ -55,18 +56,24 @@ const settingRoutes = [
     renderIcon: () => <TagIcon width={25} height={25} />,
     description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit'
   },
+  {
+    label: 'common:sidebar-nav-item-billing',
+    url: ROUTES.BILLING,
+    renderIcon: () => <CreditCard width={25} height={25} />,
+    description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit'
+  },
+  {
+    label: 'common:sidebar-nav-item-domains',
+    url: ROUTES.DOMAINS,
+    renderIcon: () => <DomainIcon width={25} height={25} />,
+    description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit'
+  }
   // {
   //   label: 'common:sidebar-nav-item-recent-login-history',
   //   url: ROUTES.RECENT_LOGIN_HISTORY,
   //   renderIcon: () => <LoginHistoryIcon width={25} height={25} />,
   //   description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit'
   // },
-  {
-    label: 'common:sidebar-nav-item-billing',
-    url: ROUTES.BILLING,
-    renderIcon: () => <CreditCard width={25} height={25} />,
-    description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit'
-  }
   // {
   //   label: 'common:sidebar-nav-item-email-templates',
   //   url: ROUTES.EMAIL_TEMPLATE,
