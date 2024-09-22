@@ -99,6 +99,8 @@ export default function CreateOrUpdateAttributeForm({
       onCompleted: (data: { createAttribute: Attribute }) => {
         const { id } = data.createAttribute;
         if (id) {
+          const { etag: newEtag } = data.createAttribute ?? {};
+          dispatch(setEtag({ etag: newEtag }));
           notify(t('common:successfully-created'), 'success');
           router.push(`${ROUTES.ATTRIBUTE}/edit/${id}`);
         }
@@ -116,9 +118,9 @@ export default function CreateOrUpdateAttributeForm({
       },
       onCompleted: (data: { updateAttribute: Attribute }) => {
         if (!isEmpty(data?.updateAttribute)) {
-          notify(t('common:successfully-updated'), 'success');
           const { etag: newEtag } = data?.updateAttribute ?? {};
           dispatch(setEtag({ etag: newEtag }));
+          notify(t('common:successfully-updated'), 'success');
         }
       }
     }
@@ -209,9 +211,10 @@ export default function CreateOrUpdateAttributeForm({
       deleteAttributeValue({
         variables: { id: item?.id },
         onCompleted: (data: { deleteAttributeValue: AttributeValue }) => {
-          const value = data?.deleteAttributeValue?.value;
-
-          if (!isEmpty(value)) {
+          const id = data?.deleteAttributeValue?.id;
+          if (id) {
+            const { etag: newEtag } = data?.deleteAttributeValue ?? {};
+            dispatch(setEtag({ etag: newEtag }));
             notify(t('common:successfully-deleted'), 'success');
             remove(index);
           }

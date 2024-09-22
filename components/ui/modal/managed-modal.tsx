@@ -10,7 +10,6 @@ import {
   DELETE_DELIVERY_TIME,
   DELETE_LANGUAGE,
   DELETE_MANUFACTURER,
-  DELETE_ORDER_STATUS,
   DELETE_PRODUCT,
   DELETE_SHIPPING,
   DELETE_SUPPLIER,
@@ -43,10 +42,6 @@ const ProductDeleteView = dynamic(
 
 const AttributeDeleteView = dynamic(
   () => import('@components/attribute/attribute-delete-view')
-);
-
-const OrderStatusDeleteView = dynamic(
-  () => import('@components/order-status/order-status-delete-view')
 );
 
 const UserDeleteView = dynamic(
@@ -124,7 +119,6 @@ const ManagedModal = () => {
       {view === DELETE_TAG && <TagDeleteView />}
       {view === DELETE_LANGUAGE && <LanguageDeleteView />}
       {view === BAN_CUSTOMER && <BanCustomerView />}
-      {view === DELETE_ORDER_STATUS && <OrderStatusDeleteView />}
       {view === DELETE_USER && <UserDeleteView />}
       {view === DELETE_SUPPLIER && <SupplierDeleteView />}
       {view === DELETE_TAX && <TaxDeleteView />}

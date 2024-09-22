@@ -6,8 +6,9 @@ import {
 } from '@components/ui/modal/modal.context';
 import { DELETE_DELIVERY_TIME, DELIVERY_TIMES } from '@graphql/delivery-time';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetClient } from '@hooks/useGetClient';
+import { useAppDispatch, useGetClient } from '@hooks/useGetClient';
 import { notify } from '@lib/notify';
+import { setEtag } from '@store/client';
 import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
 
@@ -33,6 +34,7 @@ const ShippingDeleteView = () => {
 
   const { id } = useModalState();
   const { closeModal } = useModalAction();
+  const dispatch = useAppDispatch();
 
   useErrorLogger(error);
 
@@ -40,9 +42,10 @@ const ShippingDeleteView = () => {
     deleteShipping({ variables: { id } })
       .then(({ data }) => {
         const {
-          deleteDeliveryTime: { name }
+          deleteDeliveryTime: { id: shipId, etag }
         } = data;
-        if (name) {
+        if (shipId) {
+          dispatch(setEtag({ etag }));
           notify(t('common:successfully-deleted'), 'success');
         }
         closeModal();

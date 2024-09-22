@@ -6,8 +6,9 @@ import {
 } from '@components/ui/modal/modal.context';
 import { ATTRIBUTES, DELETE_ATTRIBUTE } from '@graphql/attribute';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetClient } from '@hooks/useGetClient';
+import { useAppDispatch, useGetClient } from '@hooks/useGetClient';
 import { notify } from '@lib/notify';
+import { setEtag } from '@store/client';
 import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
 
@@ -31,6 +32,7 @@ const AttributeDeleteView = () => {
     ]
   });
 
+  const dispatch = useAppDispatch();
   const { id } = useModalState();
   const { closeModal } = useModalAction();
 
@@ -40,9 +42,10 @@ const AttributeDeleteView = () => {
     deleteAttributeValue({ variables: { id } })
       .then(({ data }) => {
         const {
-          deleteAttribute: { id }
+          deleteAttribute: { id, etag }
         } = data;
         if (id) {
+          dispatch(setEtag({ etag }));
           notify(t('common:successfully-deleted'), 'success');
         }
         closeModal();

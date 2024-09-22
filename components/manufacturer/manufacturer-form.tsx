@@ -80,6 +80,8 @@ export default function CreateOrUpdateManufacturerForm({
       onCompleted: (data: { createManufacturer: ManufacturerType }) => {
         const { id } = data.createManufacturer;
         if (id) {
+          const { etag: newEtag } = data.createManufacturer ?? {};
+          dispatch(setEtag({ etag: newEtag }));
           notify(t('common:successfully-created'), 'success');
           router.push(`${ROUTES.MANUFACTURER}/edit/${id}`);
         }

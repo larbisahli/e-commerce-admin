@@ -1,18 +1,11 @@
 import ActionButtons from '@components/common/action-buttons';
 import StatusBadge from '@components/common/statusBadge';
-import Badge from '@components/ui/badge/badge';
 import Loader from '@components/ui/loader/loader';
 import { TableRowPlaceholder } from '@components/ui/placeholders/Table';
-import ProfileCart from '@components/ui/profile-card';
 import { usePlaceholder } from '@hooks/usePlaceholder';
-import {
-  CreatedUpdatedByAt,
-  OrderStatus,
-  PrivacyType
-} from '@ts-types/generated';
+import { OrderStatus } from '@ts-types/generated';
 import { useIsRTL } from '@utils/locals';
 import { ROUTES } from '@utils/routes';
-import dayjs from 'dayjs';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
 import { memo, useMemo } from 'react';
@@ -29,14 +22,9 @@ interface TableRowProps extends OrderStatus {
 export type IProps = {
   loading: boolean;
   orderStatuses: OrderStatus[] | undefined | null;
-  selectedColumns: string[];
 };
 
-const OrderStatusList = ({
-  loading,
-  orderStatuses,
-  selectedColumns
-}: IProps) => {
+const OrderStatusList = ({ loading, orderStatuses }: IProps) => {
   const { t } = useTranslation();
 
   const { alignLeft } = useIsRTL();
@@ -46,103 +34,29 @@ const OrderStatusList = ({
   const columns = useMemo(() => {
     return [
       {
-        title: t('table:table-item-id'),
-        dataIndex: 'id',
-        key: 'id',
-        align: alignLeft,
-        width: 80,
-        ellipsis: true
-      },
-      {
-        title: t('table:table-item-label'),
-        dataIndex: 'label',
-        key: 'label',
-        align: 'center',
+        title: t('table:table-item-status'),
+        dataIndex: 'status',
+        key: 'status',
+        align: 'left',
         ellipsis: true,
-        width: 200,
+        width: 250,
         render: (label: string, record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
-          return (
-            <StatusBadge
-              color={record?.color}
-              label={label ?? record?.translated?.label}
-            />
-          );
+          return <span>{label}</span>;
         }
       },
       {
-        title: t('table:table-item-privacy'),
-        dataIndex: 'privacy',
-        key: 'privacy',
-        align: alignLeft,
-        ellipsis: true,
-        width: 100,
-        render: (privacy: string, record: TableRowProps) => {
+        title: t('table:table-item-status-description'),
+        dataIndex: 'description',
+        key: 'description',
+        align: 'left',
+        render: (description: string, record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
-          return (
-            <Badge
-              text={privacy}
-              color={
-                privacy === PrivacyType.Private ? 'bg-blue-500' : 'bg-green-600'
-              }
-            />
-          );
-        }
-      },
-      {
-        title: t('table:table-item-created-at'),
-        dataIndex: 'createdAt',
-        key: 'createdAt',
-        align: 'center',
-        width: 200,
-        render: (
-          createdAt: CreatedUpdatedByAt['createdAt'],
-          record: TableRowProps
-        ) => {
-          if (record?.loading) {
-            return <TableRowPlaceholder />;
-          }
-          return `${dayjs(createdAt).format('MMM D, YYYY')} at ${dayjs(
-            createdAt
-          ).format('h:mm A')}`;
-        }
-      },
-      {
-        title: t('table:table-item-created-by'),
-        dataIndex: 'createdBy',
-        key: 'createdBy',
-        align: alignLeft,
-        width: 150,
-        ellipsis: true,
-        render: (
-          createdBy: CreatedUpdatedByAt['createdBy'],
-          record: TableRowProps
-        ) => {
-          if (record?.loading) {
-            return <TableRowPlaceholder />;
-          }
-          return <ProfileCart user={createdBy} createdAt={record?.createdAt} />;
-        }
-      },
-      {
-        title: t('table:table-item-updated-by'),
-        dataIndex: 'updatedBy',
-        key: 'updatedBy',
-        align: alignLeft,
-        width: 150,
-        ellipsis: true,
-        render: (
-          updatedBy: CreatedUpdatedByAt['updatedBy'],
-          record: TableRowProps
-        ) => {
-          if (record?.loading) {
-            return <TableRowPlaceholder />;
-          }
-          return <ProfileCart user={updatedBy} updatedAt={record?.updatedAt} />;
+          return description;
         }
       },
       {
@@ -159,7 +73,6 @@ const OrderStatusList = ({
             <ActionButtons
               id={id}
               editUrl={`${ROUTES.ORDER_STATUS}/edit/${id}`}
-              deleteModalView="DELETE_ORDER_STATUS"
             />
           );
         }
@@ -167,18 +80,10 @@ const OrderStatusList = ({
     ];
   }, [alignLeft, t]);
 
-  const tableColumns = useMemo(() => {
-    return columns?.filter(({ key }) => {
-      return (
-        key === 'id' || selectedColumns?.some((columnKey) => columnKey === key)
-      );
-    });
-  }, [columns, selectedColumns]);
-
   return (
     <Table
       //@ts-ignore
-      columns={tableColumns}
+      columns={columns}
       emptyText={t('table:empty-table-data')}
       data={loading ? tablePlaceholderRow : orderStatuses}
       rowKey="id"

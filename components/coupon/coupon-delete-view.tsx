@@ -6,8 +6,9 @@ import {
 } from '@components/ui/modal/modal.context';
 import { COUPONS, DELETE_COUPON } from '@graphql/coupons';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetClient } from '@hooks/useGetClient';
+import { useAppDispatch, useGetClient } from '@hooks/useGetClient';
 import { notify } from '@lib/notify';
+import { setEtag } from '@store/client';
 import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
 
@@ -27,10 +28,11 @@ const CouponDeleteView = () => {
     },
     refetchQueries: [
       COUPONS,
-      'CouponsForAdmin' // Query name
+      'Coupons' // Query name
     ]
   });
 
+  const dispatch = useAppDispatch();
   const { id } = useModalState();
   const { closeModal } = useModalAction();
 
@@ -40,9 +42,10 @@ const CouponDeleteView = () => {
     deleteCoupon({ variables: { id } })
       .then(({ data }) => {
         const {
-          deleteCoupon: { id }
+          deleteCoupon: { id, etag }
         } = data;
         if (id) {
+          dispatch(setEtag({ etag }));
           notify(t('common:successfully-deleted'), 'success');
         }
         closeModal();

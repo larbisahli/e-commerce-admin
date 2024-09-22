@@ -1,6 +1,6 @@
 import AppLayout from '@components/layouts/app';
 import { useGetClient } from '@hooks/index';
-import { verifyAuth } from '@middleware/utils';
+import { XSRFHandler, verifyAuth } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { ROUTES } from '@utils/routes';
 import type { GetServerSideProps } from 'next';
@@ -28,6 +28,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       }
     };
   }
+  const { csrfToken, csrfError } = await XSRFHandler(context);
 
   return {
     props: {
@@ -36,7 +37,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         'table',
         'widgets'
       ])),
-      client
+      client: { ...(client ?? {}), csrfToken, csrfError }
     }
   };
 };

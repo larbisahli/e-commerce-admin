@@ -30,6 +30,8 @@ const SelectInput = ({
   isSimple = false,
   closeMenuOnSelect = true,
   hideSelectedOptions = false,
+  components,
+  placeholder,
   // isSearchable=true,
   isDisabled = false,
   // isOptionDisabled=false,
@@ -55,7 +57,9 @@ const SelectInput = ({
           isSimple={isSimple}
           closeMenuOnSelect={closeMenuOnSelect}
           hideSelectedOptions={hideSelectedOptions}
+          components={components}
           options={options}
+          placeholder={placeholder ?? 'Select...'}
         />
       )}
     />

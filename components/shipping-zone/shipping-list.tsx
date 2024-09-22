@@ -71,7 +71,7 @@ const ShippingList = ({ loading, shippingZones, selectedColumns }: IProps) => {
                 }
                 width={100}
                 height={100}
-                // objectFit="container"
+                objectFit="cover"
               />
             </div>
           );

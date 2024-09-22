@@ -46,6 +46,25 @@ const OrderList = ({ loading, orders, selectedColumns }: IProps) => {
   const columns = useMemo(() => {
     return [
       {
+        title: t('table:table-order-status'),
+        dataIndex: 'orderStatus',
+        key: 'orderStatus',
+        align: 'left',
+        width: 150,
+        render: (orderStatus: OrderStatus, record: TableRowProps) => {
+          if (record?.loading) {
+            return <TableRowPlaceholder />;
+          }
+          return (
+            <StatusBadge
+              tooltip
+              color={orderStatus?.color}
+              label={orderStatus?.status}
+            />
+          );
+        }
+      },
+      {
         title: t('table:table-order-number'),
         dataIndex: 'orderNumber',
         key: 'orderNumber',
@@ -66,34 +85,6 @@ const OrderList = ({ loading, orders, selectedColumns }: IProps) => {
         }
       },
       {
-        title: t('table:table-item-customer'),
-        dataIndex: 'customer',
-        key: 'fullName',
-        align: 'center',
-        width: 180,
-        ellipsis: true,
-        render: (customer: CustomerType, record: TableRowProps) => {
-          if (record?.loading) {
-            return <TableRowPlaceholder />;
-          }
-          return <span className="capitalize">{customer.fullName}</span>;
-        }
-      },
-      {
-        title: t('table:table-item-address'),
-        dataIndex: 'customer',
-        key: 'address',
-        align: 'center',
-        width: 350,
-        render: (customer: CustomerType, record: TableRowProps) => {
-          if (record?.loading) {
-            return <TableRowPlaceholder />;
-          }
-          const address = customer?.address[0] ?? {};
-          return <span className="capitalize">{formatAddress(address)}</span>;
-        }
-      },
-      {
         title: t('table:table-quantity'),
         dataIndex: 'totalQuantity',
         key: 'totalQuantity',
@@ -104,19 +95,6 @@ const OrderList = ({ loading, orders, selectedColumns }: IProps) => {
             return <TableRowPlaceholder />;
           }
           return <div>{quantity}</div>;
-        }
-      },
-      {
-        title: t('table:table-payment-method'),
-        dataIndex: 'payment',
-        key: 'payment',
-        align: 'center',
-        width: 150,
-        render: (payment: PaymentType, record: TableRowProps) => {
-          if (record?.loading) {
-            return <TableRowPlaceholder />;
-          }
-          return <span className="font-medium">{payment?.data?.name}</span>;
         }
       },
       {
@@ -139,58 +117,50 @@ const OrderList = ({ loading, orders, selectedColumns }: IProps) => {
         }
       },
       {
-        title: t('table:table-order-status'),
-        dataIndex: 'orderStatus',
-        key: 'orderStatus',
+        title: t('table:table-item-customer'),
+        dataIndex: 'customer',
+        key: 'fullName',
         align: 'center',
-        width: 200,
-        render: (orderStatus: OrderStatus, record: TableRowProps) => {
+        width: 180,
+        ellipsis: true,
+        render: (customer: CustomerType, record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
           return (
-            <StatusBadge
-              tooltip
-              color={orderStatus?.color}
-              label={orderStatus?.label}
-            />
+            <Link href={`${ROUTES.CUSTOMER}/edit/${customer.id}`}>
+              <span className="text-md font-semibold capitalize text-blue-700 underline">
+                {customer.fullName}
+              </span>
+            </Link>
           );
         }
       },
       {
-        title: t('table:table-payment-status'),
-        dataIndex: 'paymentStatus',
-        key: 'paymentStatus',
+        title: t('table:table-item-address'),
+        dataIndex: 'customer',
+        key: 'address',
         align: 'center',
-        width: 200,
-        render: (paymentStatus: OrderStatus, record: TableRowProps) => {
+        width: 350,
+        render: (customer: CustomerType, record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
-          return (
-            <StatusBadge
-              color={paymentStatus?.color}
-              label={paymentStatus?.label}
-            />
-          );
+          const address = customer?.address[0] ?? {};
+          return <span className="capitalize">{formatAddress(address)}</span>;
         }
       },
       {
-        title: t('table:table-delivery-status'),
-        dataIndex: 'deliveryStatus',
-        key: 'deliveryStatus',
+        title: t('table:table-payment-method'),
+        dataIndex: 'payment',
+        key: 'payment',
         align: 'center',
-        width: 200,
-        render: (deliveryStatus: OrderStatus, record: TableRowProps) => {
+        width: 150,
+        render: (payment: PaymentType, record: TableRowProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
-          return (
-            <StatusBadge
-              color={deliveryStatus?.color}
-              label={deliveryStatus?.label}
-            />
-          );
+          return <span className="font-medium">{payment?.data?.name}</span>;
         }
       },
       {

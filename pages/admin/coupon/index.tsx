@@ -2,7 +2,6 @@ import { useQuery } from '@apollo/client';
 import CouponList from '@components/coupon/coupon-list';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
-import Loader from '@components/ui/loader/loader';
 import { COUPONS } from '@graphql/coupons';
 import { useErrorLogger, useGetClient } from '@hooks/index';
 import { useTableColumn } from '@hooks/useTableColumn';

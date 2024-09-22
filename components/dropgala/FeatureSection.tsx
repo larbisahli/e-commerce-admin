@@ -28,7 +28,7 @@ const FeatureSection = () => {
       className="container mx-auto mt-0 w-full rounded p-4 lg:mt-24 lg:px-0"
     >
       <div className="flex flex-col items-center">
-        <h2 className="slide-in-bottom-h1 my-5 mb-2 text-center text-4xl font-bold leading-tight text-blue-600 md:text-left">
+        <h2 className="slide-in-bottom-h1 my-5 mb-2 text-center text-4xl font-bold leading-tight md:text-left">
           Features
         </h2>
         <p className="text-center text-lg text-gray-600">

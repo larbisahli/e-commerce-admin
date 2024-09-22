@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/interactive-supports-focus */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 import 'react-phone-input-2/lib/style.css';
 
 import { useMutation } from '@apollo/client';
@@ -13,7 +11,9 @@ import SelectInput from '@components/ui/select-input';
 import TextArea from '@components/ui/text-area';
 import { CREATE_SUPPLIER, UPDATE_SUPPLIER } from '@graphql/supplier';
 import { useErrorLogger } from '@hooks/useErrorLogger';
+import { useAppDispatch, useGetClient } from '@hooks/useGetClient';
 import { notify } from '@lib/index';
+import { setEtag } from '@store/client';
 import type { Suppliers } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import { isValidPhoneNumber } from 'libphonenumber-js';
@@ -24,7 +24,6 @@ import { useState } from 'react';
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import PhoneInput from 'react-phone-input-2';
-import { useGetClient } from '@hooks/useGetClient';
 
 type FormValues = Suppliers;
 
@@ -77,6 +76,7 @@ export default function CreateOrUpdateSupplierForm({ initialValues }: IProps) {
     getCountries();
   }, []);
 
+  const dispatch = useAppDispatch();
   const { userInfo } = useGetClient();
   const csrfToken = userInfo?.csrfToken;
 
@@ -87,7 +87,9 @@ export default function CreateOrUpdateSupplierForm({ initialValues }: IProps) {
       }
     },
     onCompleted: (data: { createSupplier: Suppliers }) => {
-      if (!isEmpty(data)) {
+      if (!isEmpty(data?.createSupplier)) {
+        const { etag: newEtag } = data.createSupplier ?? {};
+        dispatch(setEtag({ etag: newEtag }));
         notify(t('common:successfully-created'), 'success');
         reset();
         router.push(ROUTES.SUPPLIER);
@@ -102,7 +104,9 @@ export default function CreateOrUpdateSupplierForm({ initialValues }: IProps) {
       }
     },
     onCompleted: (data: { updateSupplier: Suppliers }) => {
-      if (!isEmpty(data)) {
+      if (!isEmpty(data?.updateSupplier)) {
+        const { etag: newEtag } = data.updateSupplier ?? {};
+        dispatch(setEtag({ etag: newEtag }));
         notify(t('common:successfully-updated'), 'success');
         router.push(ROUTES.SUPPLIER);
       }

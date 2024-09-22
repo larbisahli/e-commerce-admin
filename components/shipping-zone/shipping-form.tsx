@@ -322,6 +322,12 @@ export default function CreateOrUpdateShippingForm({ initialValues }: IProps) {
     }
   }, [initialValues, setValue]);
 
+  useEffect(() => {
+    if (isEmpty(initialValues)) {
+      setValue('shippingZone.deliveryTime', deliveryTimeSelect[0]);
+    }
+  }, [initialValues, deliveryTimeSelect, setValue, getValues]);
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormActions

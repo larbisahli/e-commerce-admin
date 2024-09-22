@@ -4,14 +4,20 @@ export const useMediaQuery = (query: string, value: number) => {
   const [mediaQueryMatches, setMediaQueryMatches] = useState<boolean>(false);
 
   useEffect(() => {
-    setMediaQueryMatches(window.innerWidth <= value);
-    let mql = window.matchMedia(`(${query}: ${value}px)`);
-    mql.addEventListener('change', (e) => handler(e));
-    const handler = (e) => {
-      if (e.matches) setMediaQueryMatches(true);
-      else setMediaQueryMatches(false);
+    const mql = window.matchMedia(`(${query}: ${value}px)`);
+
+    const handler = (e: MediaQueryListEvent) => {
+      setMediaQueryMatches(e.matches);
     };
-    return () => mql.removeEventListener('change', (e) => handler(e));
+
+    // Initial check (trigger the handler)
+    setMediaQueryMatches(mql.matches);
+
+    // Add listener for change events
+    mql.addEventListener('change', handler);
+
+    // Cleanup event listener on component unmount
+    return () => mql.removeEventListener('change', handler);
   }, [query, value]);
 
   return mediaQueryMatches;

@@ -8,7 +8,7 @@ import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useSettings } from '@hooks/useSettings';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { LanguageProps, SSRProps } from '@ts-types/custom.types';
-import { OrderStatus } from '@ts-types/generated';
+import { EtagGroupsType, OrderStatus } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import { isEmpty } from 'lodash';
 import type { GetServerSideProps } from 'next';
@@ -26,15 +26,16 @@ const CreateOrUpdateOrderStatusForm = dynamic(
 interface TOrderStatus {
   orderStatus: OrderStatus;
 }
-interface OptionsVariable extends LanguageProps {
-  id: number;
+interface OptionsVariable {
+  id: string;
+  etag: string;
 }
 
 export default function UpdateOrderStatusPage({ client }: SSRProps) {
   const { query } = useRouter();
   const { t } = useTranslation();
 
-  const statusId = parseInt(query.statusId as string, 10);
+  const statusId = query.statusId as string;
 
   const { selectedLanguage } = useSettings();
 
@@ -47,7 +48,6 @@ export default function UpdateOrderStatusPage({ client }: SSRProps) {
     {
       variables: {
         id: statusId,
-        language: selectedLanguage,
         etag: etag?.orderStatusEtag
       },
       fetchPolicy: 'cache-and-network',

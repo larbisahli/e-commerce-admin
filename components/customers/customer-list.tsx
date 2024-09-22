@@ -17,6 +17,7 @@ import isEmpty from 'lodash/isEmpty';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
 import React, { useMemo } from 'react';
+import Link from 'next/link';
 
 const Table = dynamic(
   () => import('@components/ui/table').then((mod) => mod.Table),
@@ -60,7 +61,13 @@ const CustomerList = ({ loading, customers, selectedColumns }: IProps) => {
           if (record?.loading) {
             return <TableRowPlaceholder />;
           }
-          return <span>{fullName}</span>;
+          return (
+            <Link href={`${ROUTES.CUSTOMER}/edit/${record.id}`}>
+              <span className="text-md font-semibold capitalize text-blue-700 underline">
+                {fullName}
+              </span>
+            </Link>
+          );
         }
       },
       {

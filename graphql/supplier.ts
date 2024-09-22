@@ -103,6 +103,9 @@ export const CREATE_SUPPLIER = gql`
       note: $note
     ) {
       name
+      etag {
+        supplierEtag
+      }
     }
   }
 `;
@@ -131,6 +134,9 @@ export const UPDATE_SUPPLIER = gql`
       note: $note
     ) {
       name
+      etag {
+        supplierEtag
+      }
     }
   }
 `;
@@ -138,7 +144,10 @@ export const UPDATE_SUPPLIER = gql`
 export const DELETE_SUPPLIER = gql`
   mutation DeleteSupplier($id: Int!) {
     deleteSupplier(id: $id) {
-      name
+      id
+      etag {
+        supplierEtag
+      }
     }
   }
 `;

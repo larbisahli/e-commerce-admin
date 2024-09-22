@@ -52,6 +52,9 @@ export const DELETE_IMAGE = gql`
       mediaId: $mediaId
     ) {
       id
+      etag {
+        mediaEtag
+      }
     }
   }
 `;
@@ -61,15 +64,9 @@ export const CREATE_FOLDER = gql`
     createMediaFolder(parentId: $parentId, name: $name) {
       id
       name
-    }
-  }
-`;
-
-export const UPDATE_FOLDER = gql`
-  mutation UpdateMediaFolder($id: ID!, $name: String!) {
-    updateMediaFolder(id: $id, name: $name) {
-      id
-      name
+      etag {
+        mediaEtag
+      }
     }
   }
 `;

@@ -100,6 +100,9 @@ export const CREATE_DELIVERY_TIME = gql`
       language: $language
     ) {
       id
+      etag {
+        shipmentEtag
+      }
     }
   }
 `;
@@ -134,6 +137,9 @@ export const DELETE_DELIVERY_TIME = gql`
     deleteDeliveryTime(id: $id) {
       id
       name
+      etag {
+        shipmentEtag
+      }
     }
   }
 `;

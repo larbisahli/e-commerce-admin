@@ -107,6 +107,9 @@ export const CREATE_MANUFACTURER = gql`
       language: $language
     ) {
       id
+      etag {
+        manufacturerEtag
+      }
     }
   }
 `;
@@ -139,7 +142,10 @@ export const UPDATE_MANUFACTURER = gql`
 export const DELETE_MANUFACTURER = gql`
   mutation DeleteManufacturer($id: Int!) {
     deleteManufacturer(id: $id) {
-      name
+      id
+      etag {
+        manufacturerEtag
+      }
     }
   }
 `;

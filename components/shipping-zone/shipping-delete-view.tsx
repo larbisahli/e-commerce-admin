@@ -6,7 +6,7 @@ import {
 } from '@components/ui/modal/modal.context';
 import { DELETE_SHIPPING, SHIPPING_ZONES } from '@graphql/shipping-zone';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useAppDispatch } from '@hooks/useGetClient';
+import { useAppDispatch, useGetClient } from '@hooks/useGetClient';
 import { notify } from '@lib/notify';
 import { setEtag } from '@store/client';
 import { useTranslation } from 'next-i18next';
@@ -15,7 +15,17 @@ import { useState } from 'react';
 const ShippingDeleteView = () => {
   const { t } = useTranslation();
   const [error, setError] = useState(null);
+
+  const {
+    userInfo: { csrfToken }
+  } = useGetClient();
+
   const [deleteShipping, { loading }] = useMutation(DELETE_SHIPPING, {
+    context: {
+      headers: {
+        'x-csrf-token': csrfToken
+      }
+    },
     refetchQueries: [
       SHIPPING_ZONES,
       'Shippings' // Query name

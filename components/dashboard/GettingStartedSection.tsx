@@ -10,8 +10,15 @@ import { UpgradeIcon } from '@components/icons/sidebar/upgrade';
 import Button from '@components/ui/button';
 import cn from 'classnames';
 import { CheckMark } from '@components/icons/checkmark';
-import { useLocalStorage } from '@hooks/useLocalStorage';
 import { CloseIcon } from '@components/icons/close-icon';
+import { useSettings } from '@hooks/useSettings';
+import { useMutation } from '@apollo/client';
+import { RESEND_VERIFICATION_LINK } from '@graphql/settings';
+import { useGetClient } from '@hooks/useGetClient';
+import { notify } from '@lib/notify';
+import { useErrorLogger } from '@hooks/useErrorLogger';
+import { useState } from 'react';
+import classNames from 'classnames';
 
 function UpgradeIconComponent() {
   return (
@@ -176,6 +183,50 @@ function StoreInfoIconComponent() {
 }
 
 const GettingStartedSectionStep1 = ({ setStoredValue }) => {
+  const { published } = useSettings();
+
+  const [error, setError] = useState(null);
+  const [disableRequest, setDisableRequest] = useState(false);
+
+  const { userInfo } = useGetClient();
+
+  const csrfToken = userInfo?.csrfToken;
+
+  const [resendVerificationLink, { loading }] = useMutation(
+    RESEND_VERIFICATION_LINK,
+    {
+      context: {
+        headers: {
+          'x-csrf-token': csrfToken
+        }
+      },
+      onCompleted: (data: { resendVerificationLink: { success: boolean } }) => {
+        if (data?.resendVerificationLink.success) {
+          notify('Link has been sent to your email', 'success');
+          setDisableRequest(true);
+          setTimeout(
+            () => {
+              setDisableRequest(false);
+            },
+            60 * 10 * 1000
+          );
+        }
+      }
+    }
+  );
+
+  useErrorLogger(error);
+
+  const handleResendLink = () => {
+    if (disableRequest) {
+      notify('Please wait for a moment...', 'info');
+      return;
+    }
+    resendVerificationLink({ variables: {} }).catch((err) => {
+      setError(err);
+    });
+  };
+
   return (
     <div className="relative mb-8 w-full">
       <button
@@ -215,9 +266,9 @@ const GettingStartedSectionStep1 = ({ setStoredValue }) => {
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-1 border border-gray-300 lg:grid-cols-2">
+      <div className="grid grid-cols-1 border border-t-0 border-gray-300 lg:grid-cols-2">
         {/* Left */}
-        <div className="flex flex-col">
+        <div className="flex flex-col border border-x-0 border-b-0 border-gray-300">
           <h4 className="mx-6 border-b border-gray-300 py-3 text-lg">
             Start accepting orders
           </h4>
@@ -317,29 +368,35 @@ const GettingStartedSectionStep1 = ({ setStoredValue }) => {
         </div>
         {/* Right */}
         <div className="">
-          <div className="flex h-[180px] flex-1 border-b-0 border-t-[1px] border-gray-300 lg:h-[160px] lg:border-l-[1px] lg:border-t-0">
-            {/* Feedback verification section */}
-            <div className="flex w-full items-center justify-center px-8 py-8 pt-4">
-              <div className="mx-5 mb-2 h-[50px] w-[50px] font-semibold text-gray-700">
-                <AlertIcon width={45} height={45} />
-              </div>
-              <div className="mx-5 flex-1">
-                <div className="font-medium">Email verification</div>
-                <p className=" text-sm font-medium text-gray-600">
-                  {`Verify your email address to activate your online store.`}
-                </p>
-                <button className="mt-3 flex items-center rounded-sm border border-blue-500 px-4 py-1 text-gray-500 hover:bg-blue-100">
-                  <span className="pr-2 font-medium text-blue-500">
-                    {`Resend link`}
-                  </span>
-                  <div className="mb-1 text-blue-500">
-                    <ResendEmail width={18} height={18} />
-                  </div>
-                </button>
+          {!published && (
+            <div className="flex h-[180px] flex-1 border-b-0 border-t-[1px] border-gray-300 lg:h-[160px] lg:border-l-[1px]">
+              {/* Feedback verification section */}
+              <div className="flex w-full items-center justify-center px-8 py-8 pt-4">
+                <div className="mx-5 mb-2 h-[50px] w-[50px] font-semibold text-gray-700">
+                  <AlertIcon width={45} height={45} />
+                </div>
+                <div className="mx-5 flex-1">
+                  <div className="font-medium">Email verification</div>
+                  <p className=" text-sm font-medium text-gray-600">
+                    {`Verify your email address to activate your online store.`}
+                  </p>
+                  <button
+                    disabled={loading}
+                    onClick={handleResendLink}
+                    className="mt-3 flex items-center rounded-sm border border-blue-500 px-4 py-1 text-gray-500 hover:bg-blue-100"
+                  >
+                    <span className="pr-2 font-medium text-blue-500">
+                      {`Resend link`}
+                    </span>
+                    <div className="mb-1 text-blue-500">
+                      <ResendEmail width={18} height={18} />
+                    </div>
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="flex h-[180px] flex-1 border-b-0 border-t-[1px] border-gray-300 lg:h-[160px] lg:border-l-[1px]">
+          )}
+          <div className="flex h-[185px] flex-1 border-b-0 border-t-[1px] border-gray-300 lg:h-[160px] lg:border-l-[1px]">
             {/* View store */}
             <div className="flex w-full items-center justify-center px-8 py-8 pt-4">
               <Link href={`${ROUTES.BUILDER_STYLES}`} target="_blank">
@@ -362,7 +419,7 @@ const GettingStartedSectionStep1 = ({ setStoredValue }) => {
               </div>
             </div>
           </div>
-          <div className="flex h-[180px] flex-1 border-b-0 border-t-[1px] border-gray-300 lg:h-[160px] lg:border-l-[1px]">
+          <div className="flex h-[185px] flex-1 border-b-0 border-t-[1px] border-gray-300 lg:h-[160px] lg:border-l-[1px]">
             {/* Customize Store */}
             <div className="flex w-full items-center justify-center px-8 py-8 pt-4">
               <Link href={`${ROUTES.BUILDER_STYLES}`}>
@@ -385,7 +442,7 @@ const GettingStartedSectionStep1 = ({ setStoredValue }) => {
               </div>
             </div>
           </div>
-          <div className="flex h-[180px] flex-1 border-b-0 border-t-[1px] border-gray-300 lg:h-[160px] lg:border-l-[1px]">
+          <div className="flex h-[185px] flex-1 border-b-0 border-t-[1px] border-gray-300 lg:h-[160px] lg:border-l-[1px]">
             {/* Complete store profile */}
             <div className="flex w-full items-center justify-center px-8 py-8 pt-4">
               <Link href={`${ROUTES.STORE_SETTINGS}`}>
@@ -408,7 +465,7 @@ const GettingStartedSectionStep1 = ({ setStoredValue }) => {
               </div>
             </div>
           </div>
-          <div className="flex w-full flex-col items-center justify-center border-b-0 border-t-[1px] border-gray-300 px-8 py-8 pt-4 lg:border-l-[1px]">
+          <div className="flex h-[185px] w-full flex-col items-center justify-center border-b-0 border-t-[1px] border-gray-300 px-8 py-8 pt-4 lg:border-l-[1px]">
             <h2 className="mb-2 font-semibold text-gray-800">
               First impression count.
             </h2>
@@ -434,12 +491,58 @@ const GettingStartedSectionStep1 = ({ setStoredValue }) => {
 };
 
 const GettingStartedSectionStep2 = () => {
+  const { published } = useSettings();
+
+  const [error, setError] = useState(null);
+  const [disableRequest, setDisableRequest] = useState(false);
+
+  const { userInfo } = useGetClient();
+
+  const csrfToken = userInfo?.csrfToken;
+
+  const [resendVerificationLink, { loading }] = useMutation(
+    RESEND_VERIFICATION_LINK,
+    {
+      context: {
+        headers: {
+          'x-csrf-token': csrfToken
+        }
+      },
+      onCompleted: (data: { resendVerificationLink: { success: boolean } }) => {
+        if (data?.resendVerificationLink.success) {
+          notify('Link has been sent to your email', 'success');
+          setDisableRequest(true);
+          setTimeout(
+            () => {
+              setDisableRequest(false);
+            },
+            60 * 10 * 1000
+          );
+        }
+      }
+    }
+  );
+
+  useErrorLogger(error);
+
+  const handleResendLink = () => {
+    if (disableRequest) {
+      notify('Please wait for a moment...', 'info');
+      return;
+    }
+    resendVerificationLink({ variables: {} }).catch((err) => {
+      setError(err);
+    });
+  };
+
   return (
     <div className="mb-8 w-full">
-      <h3 className="mb-4 flex flex-1 items-end text-xl text-gray-900">
-        Get started guides
-      </h3>
-      <div className="border border-b-0 border-gray-300">
+      {!published && (
+        <h3 className="mb-4 flex flex-1 items-end text-xl text-gray-900">
+          Get started guides
+        </h3>
+      )}
+      <div className="border border-gray-300">
         <div className="flex items-center justify-center p-8">
           <div className="mx-5">
             <Link href={`${ROUTES.BILLING}`}>
@@ -467,49 +570,59 @@ const GettingStartedSectionStep2 = () => {
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-1 border border-gray-300 lg:grid-cols-2">
-        <div className="flex h-[180px] flex-1 border-b-0 border-t-0 border-gray-300 lg:h-[160px]">
-          {/* Feedback verification section */}
-          <div className="flex w-full items-center justify-center px-8 py-8 pt-4">
-            <div className="mx-5 mb-2 h-[50px] w-[50px] font-semibold text-gray-700">
-              <AlertIcon width={45} height={45} />
-            </div>
-            <div className="mx-5 flex-1">
-              <div className="font-medium">Email verification</div>
-              <p className=" text-sm font-medium text-gray-600">
-                {`Verify your email address to activate your online store.`}
-              </p>
-              <button className="mt-3 flex items-center rounded-sm border border-blue-500 px-4 py-1 text-gray-500 hover:bg-blue-100">
-                <span className="pr-2 font-medium text-blue-500">
-                  {`Resend link`}
-                </span>
-                <div className="mb-1 text-blue-500">
-                  <ResendEmail width={18} height={18} />
-                </div>
-              </button>
-            </div>
-          </div>
-        </div>
-        <div className="flex w-full flex-col items-center justify-center border-t-[1px] border-b-0 border-gray-300 px-8 py-8 pt-4 lg:border-l-[1px] lg:border-t-0">
-          <h2 className="mb-2 font-semibold text-gray-800">
-            First impression count.
-          </h2>
-          <p className="text-center text-sm font-medium text-gray-600">
-            Share your first impression to help us improve the overall dropgala
-            experience.
-          </p>
-          <Link href={ROUTES.DASHBOARD} target="_blank">
-            <div className="mt-3 flex items-center rounded-sm border border-gray-300 px-4 py-1 text-gray-500">
-              <span className="pr-2 font-medium text-gray-600">
-                Give feedback
-              </span>
-              <div className="mb-1">
-                <ExternalLinkIcon width={18} height={18} />
+      {!published && (
+        <div
+          className={classNames(
+            'grid grid-cols-1 border border-t-0 border-gray-300 lg:grid-cols-2'
+          )}
+        >
+          <div className="flex h-[180px] flex-1 items-center justify-center border-b-0 border-t-0 border-gray-300 lg:h-[160px]">
+            {/* Feedback verification section */}
+            <div className="flex h-fit w-fit flex-col items-center justify-center px-8 lg:flex-row">
+              <div className="mx-5 mb-2 h-[50px] w-[50px] font-semibold text-gray-700">
+                <AlertIcon width={45} height={45} />
+              </div>
+              <div className="mx-5 flex flex-1 flex-col items-center justify-center lg:block">
+                <div className="font-medium">Email verification</div>
+                <p className=" text-sm font-medium text-gray-600">
+                  {`Verify your email address to activate your online store.`}
+                </p>
+                <button
+                  disabled={loading}
+                  onClick={handleResendLink}
+                  className="mt-3 flex items-center rounded-sm border border-blue-500 px-4 py-1 text-gray-500 hover:bg-blue-100"
+                >
+                  <span className="pr-2 font-medium text-blue-500">
+                    {`Resend link`}
+                  </span>
+                  <div className="mb-1 text-blue-500">
+                    <ResendEmail width={18} height={18} />
+                  </div>
+                </button>
               </div>
             </div>
-          </Link>
+          </div>
+          <div className="flex w-full flex-col items-center justify-center border-t-[1px] border-b-0 border-gray-300 px-8 py-8 pt-4 lg:border-l-[1px] lg:border-t-0">
+            <h2 className="mb-2 font-semibold text-gray-800">
+              First impression count.
+            </h2>
+            <p className="text-center text-sm font-medium text-gray-600">
+              Share your first impression to help us improve the overall
+              dropgala experience.
+            </p>
+            <Link href={ROUTES.DASHBOARD} target="_blank">
+              <div className="mt-3 flex items-center rounded-sm border border-gray-300 px-4 py-1 text-gray-500">
+                <span className="pr-2 font-medium text-gray-600">
+                  Give feedback
+                </span>
+                <div className="mb-1">
+                  <ExternalLinkIcon width={18} height={18} />
+                </div>
+              </div>
+            </Link>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

@@ -80,6 +80,9 @@ export const CREATE_COUPON = gql`
     ) {
       id
       code
+      etag {
+        couponEtag
+      }
     }
   }
 `;
@@ -107,6 +110,9 @@ export const UPDATE_COUPON = gql`
     ) {
       id
       code
+      etag {
+        couponEtag
+      }
     }
   }
 `;
@@ -116,6 +122,9 @@ export const DELETE_COUPON = gql`
     deleteCoupon(id: $id) {
       id
       code
+      etag {
+        couponEtag
+      }
     }
   }
 `;

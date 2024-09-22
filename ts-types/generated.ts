@@ -233,6 +233,7 @@ export interface AttributeValue {
     value?: Scalars['String'];
     name?: Nullable<Scalars['String']>;
   };
+  etag?: EtagGroupsType;
 }
 
 export interface Attribute extends CreatedUpdatedByAt {
@@ -283,13 +284,9 @@ export interface StoreViewType extends CreatedUpdatedByAt {
 
 export interface OrderStatus extends CreatedUpdatedByAt {
   id?: Nullable<Scalars['Int']>;
-  label?: Nullable<Scalars['String']>;
   color?: Nullable<Scalars['String']>;
-  status?: { value: string } | string;
-  privacy?: PrivacyType;
-  translated?: {
-    label: string;
-  };
+  status?: string;
+  description?: string;
   etag?: EtagGroupsType;
 }
 
@@ -309,6 +306,7 @@ export interface Coupon extends CreatedUpdatedByAt {
   orderAmountLimit?: Nullable<Scalars['Int']>;
   couponStartDate?: Nullable<Scalars['Date']>;
   couponEndDate?: Nullable<Scalars['Date']>;
+  etag?: EtagGroupsType;
 }
 
 export interface ShippingZoneType extends CreatedUpdatedByAt {
@@ -521,6 +519,7 @@ export interface Suppliers extends CreatedUpdatedByAt {
   country?: Nullable<CountryType>;
   city?: Nullable<Scalars['String']> | { name: string };
   note?: Nullable<Scalars['String']>;
+  etag?: EtagGroupsType;
 }
 
 export interface ManufacturerType extends CreatedUpdatedByAt {
@@ -748,8 +747,6 @@ export interface OrderType extends CreatedUpdatedByAt {
   couponId?: number;
   customerId?: number;
   orderStatus?: OrderStatus;
-  deliveryStatus?: OrderStatus;
-  paymentStatus?: OrderStatus;
   payment?: PaymentType;
   currency?: Nullable<CurrencyType>;
   paymentId?: string;

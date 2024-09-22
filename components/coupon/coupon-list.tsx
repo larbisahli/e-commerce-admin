@@ -65,8 +65,8 @@ const CouponList = ({ loading, coupons, selectedColumns }: IProps) => {
                 role="button"
                 className="flex items-center text-accent"
                 onClick={(event) =>
-                  CopyToClipboard(event, (value) => {
-                    notify(`Coupon (${value}) successfully copied`, 'success');
+                  CopyToClipboard(event, () => {
+                    notify('Copied', 'info');
                   })
                 }
               >

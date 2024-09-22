@@ -1,8 +1,6 @@
 import { Bell } from '@components/icons/bell';
 import { CloseIcon } from '@components/icons/close-icon';
-import Link from '@components/ui/link';
 import { Menu, Transition } from '@headlessui/react';
-import { siteSettings } from '@settings/site.settings';
 import cn from 'classnames';
 import classNames from 'classnames/bind';
 import dayjs from 'dayjs';
@@ -13,6 +11,7 @@ import { Fragment, useState } from 'react';
 import styles from './scss/index.module.scss';
 import { ROUTES } from '@utils/routes';
 import { useRouter } from 'next/router';
+import { useMediaQuery } from '@hooks/useMediaQuery';
 
 let cx = classNames.bind(styles);
 
@@ -100,10 +99,14 @@ export default function NavNotification() {
   const router = useRouter();
   const { t } = useTranslation('common');
 
-  const hasNotification = false;
+  const hasNotification = true;
+
+  const isDesktopView = useMediaQuery('min-width', 640);
+
+  console.log({ isDesktopView });
 
   const handleNotificationRoute = () => {
-    router.push(ROUTES.NOTIFICATION);
+    !isDesktopView && router.push(ROUTES.NOTIFICATION);
   };
 
   return (
@@ -123,11 +126,11 @@ export default function NavNotification() {
         >
           {hasNotification && (
             <span
-              className={cn('text-md font-medium', {
+              className={cn('text-md font-medium ', {
                 'text-red-600': hasNotification
               })}
             >
-              7
+              {notifications?.length}
             </span>
           )}
           {!hasNotification && <Bell width={20} height={20} />}

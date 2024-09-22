@@ -123,6 +123,9 @@ export const CREATE_ATTRIBUTE = gql`
       language: $language
     ) {
       id
+      etag {
+        attributeEtag
+      }
     }
   }
 `;
@@ -154,6 +157,9 @@ export const DELETE_ATTRIBUTE = gql`
   mutation DeleteAttribute($id: Int!) {
     deleteAttribute(id: $id) {
       id
+      etag {
+        attributeEtag
+      }
     }
   }
 `;
@@ -161,7 +167,10 @@ export const DELETE_ATTRIBUTE = gql`
 export const DELETE_ATTRIBUTE_VALUE = gql`
   mutation DeleteAttributeValue($id: Int!) {
     deleteAttributeValue(id: $id) {
-      value
+      id
+      etag {
+        attributeEtag
+      }
     }
   }
 `;

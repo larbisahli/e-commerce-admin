@@ -35,6 +35,25 @@ const RecentOrders = ({ orders, title, loading }: IProps) => {
 
   const columns = [
     {
+      title: t('table:table-order-status'),
+      dataIndex: 'orderStatus',
+      key: 'orderStatus',
+      align: 'left',
+      width: 150,
+      render: (orderStatus: OrderStatus, record: TableRowProps) => {
+        if (record?.loading) {
+          return <TableRowPlaceholder />;
+        }
+        return (
+          <StatusBadge
+            tooltip
+            color={orderStatus?.color}
+            label={orderStatus?.status as string}
+          />
+        );
+      }
+    },
+    {
       title: t('table:table-order-number'),
       dataIndex: 'orderNumber',
       key: 'orderNumber',
@@ -52,20 +71,6 @@ const RecentOrders = ({ orders, title, loading }: IProps) => {
             </span>
           </Link>
         );
-      }
-    },
-    {
-      title: t('table:table-item-customer'),
-      dataIndex: 'customer',
-      key: 'customer',
-      align: 'center',
-      width: 180,
-      ellipsis: true,
-      render: (customer: CustomerType, record: TableRowProps) => {
-        if (record?.loading) {
-          return <TableRowPlaceholder />;
-        }
-        return <span className="capitalize">{customer.fullName}</span>;
       }
     },
     {
@@ -97,6 +102,20 @@ const RecentOrders = ({ orders, title, loading }: IProps) => {
       }
     },
     {
+      title: t('table:table-item-customer'),
+      dataIndex: 'customer',
+      key: 'customer',
+      align: 'center',
+      width: 130,
+      ellipsis: true,
+      render: (customer: CustomerType, record: TableRowProps) => {
+        if (record?.loading) {
+          return <TableRowPlaceholder />;
+        }
+        return <span className="capitalize">{customer.fullName}</span>;
+      }
+    },
+    {
       title: t('table:table-purchase-date'),
       dataIndex: 'createdAt',
       key: 'createdAt',
@@ -113,25 +132,6 @@ const RecentOrders = ({ orders, title, loading }: IProps) => {
           <span className="whitespace-nowrap">
             {dayjs.utc(createdAt).tz(dayjs.tz.guess()).fromNow()}
           </span>
-        );
-      }
-    },
-    {
-      title: t('table:table-order-status'),
-      dataIndex: 'orderStatus',
-      key: 'orderStatus',
-      align: 'center',
-      width: 200,
-      render: (orderStatus: OrderStatus, record: TableRowProps) => {
-        if (record?.loading) {
-          return <TableRowPlaceholder />;
-        }
-        return (
-          <StatusBadge
-            tooltip
-            color={orderStatus?.color}
-            label={orderStatus?.label}
-          />
         );
       }
     }

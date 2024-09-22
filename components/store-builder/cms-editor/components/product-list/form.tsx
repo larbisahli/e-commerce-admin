@@ -175,16 +175,7 @@ const ProductListForm = ({ initialValues }: IProps) => {
         productsPerView: Number(productsPerView),
         sliderConfiguration: values.sliderConfiguration,
         collection: values.collection?.map((product) => ({
-          ...product,
-          price: {
-            maxSalePrice: product?.maxPrice,
-            minSalePrice: product?.minPrice,
-            salePrice: product?.salePrice,
-            comparePrice: product?.comparePrice
-          },
-          createdAt: null,
-          updatedBy: null,
-          createdBy: null
+          id: product.id
         }))
       }
     };

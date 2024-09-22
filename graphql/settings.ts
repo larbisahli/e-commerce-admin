@@ -165,3 +165,11 @@ export const GET_CHECKOUT_SETTINGS = gql`
     }
   }
 `;
+
+export const RESEND_VERIFICATION_LINK = gql`
+  mutation ResendVerificationLink {
+    resendVerificationLink {
+      success
+    }
+  }
+`;

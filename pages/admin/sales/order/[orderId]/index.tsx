@@ -1,7 +1,10 @@
 import { useMutation, useQuery } from '@apollo/client';
 import Card from '@components/common/card';
+import StatusBadge from '@components/common/statusBadge';
 import { ArrowPrev } from '@components/icons/arrow-prev';
+import { CopyIcon } from '@components/icons/copy';
 import { DownloadFileIcon } from '@components/icons/download-file-icon';
+import { SaveIcon } from '@components/icons/save-icon';
 import AppLayout from '@components/layouts/app';
 import InvoicePdf from '@components/order/invoice-pdf';
 import Button from '@components/ui/button';
@@ -10,7 +13,7 @@ import Label from '@components/ui/label';
 import Loader from '@components/ui/loader/loader';
 import SelectInput from '@components/ui/select-input';
 import { ORDER, STORE_INFO_ORDER, UPDATE_STATUS_ORDER } from '@graphql/order';
-import { ORDER_STATUSES_FOR_SELECT } from '@graphql/order-status';
+import { ORDER_STATUSES } from '@graphql/order-status';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetClient } from '@hooks/useGetClient';
 import { useSettings } from '@hooks/useSettings';
@@ -29,6 +32,8 @@ import {
 import { formatAddress } from '@utils/format-address';
 import { ROUTES } from '@utils/routes';
 import usePrice from '@utils/use-price';
+import { CopyToClipboard } from '@utils/utils';
+import classNames from 'classnames';
 import dayjs from 'dayjs';
 import { isEmpty } from 'lodash';
 import { GetServerSideProps } from 'next';
@@ -39,7 +44,6 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { SaveIcon } from '@components/icons/save-icon';
 
 const Table = dynamic(
   () => import('@components/ui/table').then((mod) => mod.Table),
@@ -77,8 +81,12 @@ export interface QueryVariables {
 }
 
 interface TOrderStatus {
-  orderStatusForSelect: OrderStatus[];
+  orderStatuses: OrderStatus[];
 }
+
+const CustomStatusSelectOption = (option) => {
+  return <StatusBadge tooltip color={option?.color} label={option?.status} />;
+};
 export default function OrderDetailsPage({ client }: SSRProps) {
   const { t } = useTranslation();
   const { query, back } = useRouter();
@@ -97,7 +105,7 @@ export default function OrderDetailsPage({ client }: SSRProps) {
     data: orderStatusData,
     loading: orderStatusLoading,
     error: orderStatusError
-  } = useQuery<TOrderStatus, QueryVariables>(ORDER_STATUSES_FOR_SELECT, {
+  } = useQuery<TOrderStatus, QueryVariables>(ORDER_STATUSES, {
     variables: {
       page: 1,
       limit: 999,
@@ -152,7 +160,7 @@ export default function OrderDetailsPage({ client }: SSRProps) {
 
   const { order } = orderData ?? {};
   const { storeInfoOrder } = storeInfoOrderData ?? {};
-  const { orderStatusForSelect } = orderStatusData ?? {};
+  const { orderStatuses } = orderStatusData ?? {};
 
   const { handleSubmit, control, setValue } = useForm<FormValues>({
     defaultValues: {}
@@ -161,24 +169,15 @@ export default function OrderDetailsPage({ client }: SSRProps) {
   const { systemCurrency } = useSettings();
 
   useEffect(() => {
-    const { deliveryStatus, orderStatus, paymentStatus } = (order ??
-      {}) as OrderType;
-    deliveryStatus && setValue('deliveryStatus', deliveryStatus);
+    const { orderStatus } = (order ?? {}) as OrderType;
     orderStatus && setValue('orderStatus', orderStatus);
-    paymentStatus && setValue('paymentStatus', paymentStatus);
   }, [order, setValue]);
 
-  const ChangeStatus = ({
-    orderStatus,
-    deliveryStatus,
-    paymentStatus
-  }: FormValues) => {
+  const ChangeStatus = ({ orderStatus }: FormValues) => {
     updateOrderStatus({
       variables: {
         id: order.id,
-        orderStatus: { id: orderStatus?.id },
-        deliveryStatus: { id: deliveryStatus?.id },
-        paymentStatus: { id: paymentStatus?.id }
+        orderStatus: { id: orderStatus?.id }
       }
     }).catch((err) => {
       setError(err);
@@ -239,6 +238,7 @@ export default function OrderDetailsPage({ client }: SSRProps) {
       dataIndex: 'product',
       key: 'product',
       align: 'left',
+      width: 300,
       render: (product: Product) => (
         <Link target="_blank" href={`${ROUTES.PRODUCT}/edit/${product.id}`}>
           <span className="font-medium text-accent underline">
@@ -252,6 +252,7 @@ export default function OrderDetailsPage({ client }: SSRProps) {
       dataIndex: 'product',
       key: 'product',
       align: 'center',
+      width: 80,
       render: (product: Product, record: any) => (
         <span>
           {record.variantOption?.id ? record.variantOption.sku : product?.sku}
@@ -263,6 +264,7 @@ export default function OrderDetailsPage({ client }: SSRProps) {
       dataIndex: 'product',
       key: 'product',
       align: 'center',
+      width: 150,
       render: (product: Product, record: any) => (
         <span>
           {record.variantOption?.id ? record.variantOption.title : 'N/A'}
@@ -367,33 +369,9 @@ export default function OrderDetailsPage({ client }: SSRProps) {
             <SelectInput
               name="orderStatus"
               control={control}
-              getOptionLabel={(option: any) => option.label}
+              getOptionLabel={CustomStatusSelectOption}
               getOptionValue={(option: any) => option.id}
-              options={orderStatusForSelect}
-              loading={orderStatusLoading || loading}
-              placeholder={t('form:input-placeholder-order-status')}
-            />
-          </div>
-          <div className="z-20 mb-3 w-full lg:mb-0 lg:me-5">
-            <Label>{t('form:input-label-payment-status')}</Label>
-            <SelectInput
-              name="paymentStatus"
-              control={control}
-              getOptionLabel={(option: any) => option.label}
-              getOptionValue={(option: any) => option.id}
-              options={orderStatusForSelect}
-              loading={orderStatusLoading || loading}
-              placeholder={t('form:input-placeholder-order-status')}
-            />
-          </div>
-          <div className="z-10 mb-3 w-full lg:mb-0 lg:me-5">
-            <Label>{t('form:input-label-delivery-status')}</Label>
-            <SelectInput
-              name="deliveryStatus"
-              control={control}
-              getOptionLabel={(option: any) => option.label}
-              getOptionValue={(option: any) => option.id}
-              options={orderStatusForSelect}
+              options={orderStatuses}
               loading={orderStatusLoading || loading}
               placeholder={t('form:input-placeholder-order-status')}
             />
@@ -612,10 +590,18 @@ export default function OrderDetailsPage({ client }: SSRProps) {
               </Link>
               {address && (
                 <button
-                  className="text-start hover:text-black"
-                  onClick={() => setDisplayShipAdds((v) => !v)}
+                  className="flex items-center text-start hover:text-black"
+                  onClick={(event) => {
+                    setDisplayShipAdds((v) => !v);
+                    CopyToClipboard(event, () => {
+                      notify('Copied', 'info');
+                    });
+                  }}
                 >
-                  <span>{formatAddress(address)}</span>
+                  <div>{formatAddress(address)}</div>
+                  <div className="m-1 text-blue-500">
+                    <CopyIcon width={18} height={18} />
+                  </div>
                 </button>
               )}
               {address?.phoneNumber && <span>T: {address?.phoneNumber}</span>}
@@ -636,10 +622,18 @@ export default function OrderDetailsPage({ client }: SSRProps) {
               </Link>
               {address && (
                 <button
-                  className="text-end hover:text-black"
-                  onClick={() => setDisplayBillAdds((v) => !v)}
+                  className="group flex items-center text-end hover:text-black"
+                  onClick={(event) => {
+                    setDisplayBillAdds((v) => !v);
+                    CopyToClipboard(event, () => {
+                      notify('Copied', 'info');
+                    });
+                  }}
                 >
-                  <span>{formatAddress(address)}</span>
+                  <div className="m-1 text-blue-500">
+                    <CopyIcon width={18} height={18} />
+                  </div>
+                  <div>{formatAddress(address)}</div>
                 </button>
               )}
               {address?.phoneNumber && <span>T: {address?.phoneNumber}</span>}

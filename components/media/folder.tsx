@@ -3,12 +3,14 @@ import DotsIcon from '@components/icons/dots';
 import FolderSvg from '@components/icons/folder';
 import ImageComponent from '@components/ImageComponent';
 import { useModalAction } from '@components/ui/modal/modal.context';
-import { CREATE_FOLDER, UPDATE_FOLDER } from '@graphql/media';
+import { CREATE_FOLDER } from '@graphql/media';
 import { useGetClient } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
+import { useAppDispatch } from '@hooks/useGetClient';
 import { notify } from '@lib/notify';
+import { setEtag } from '@store/client';
 import { MEDIA_ITEM_MODAL } from '@ts-types/constants';
-import { MediaType, Tag } from '@ts-types/generated';
+import { MediaType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import isEmpty from 'lodash/isEmpty';
 import Link from 'next/link';
@@ -20,6 +22,7 @@ type IProps = {
   folder?: MediaType;
   isCreateMode?: boolean;
   handleNewFolderButton?: () => void;
+  // eslint-disable-next-line no-unused-vars
   refetch?: (variables?: Partial<any>) => Promise<ApolloQueryResult<any>>;
 };
 
@@ -38,6 +41,7 @@ export default function Folder({
 
   const [error, setError] = useState(null);
 
+  const dispatch = useAppDispatch();
   const { userInfo } = useGetClient();
   const csrfToken = userInfo?.csrfToken;
 
@@ -48,22 +52,11 @@ export default function Folder({
       }
     },
     onCompleted: (data: { createMediaFolder: MediaType }) => {
-      if (!isEmpty(data)) {
+      if (data.createMediaFolder?.id) {
+        const { etag } = data.createMediaFolder;
+        dispatch(setEtag({ etag }));
         notify(t('common:successfully-created'), 'success');
         refetch();
-      }
-    }
-  });
-
-  const [updateFolder, { loading: updating }] = useMutation(UPDATE_FOLDER, {
-    context: {
-      headers: {
-        'x-csrf-token': csrfToken
-      }
-    },
-    onCompleted: (data: { updateTag: Tag }) => {
-      if (!isEmpty(data)) {
-        notify(t('common:successfully-updated'), 'success');
       }
     }
   });
@@ -83,22 +76,10 @@ export default function Folder({
       handleNewFolderButton();
       return;
     }
-
-    console.log({ variables });
-
     handleNewFolderButton();
-
-    if (isEmpty({})) {
-      createFolder({ variables }).catch((err) => {
-        setError(err);
-      });
-    } else {
-      // updateFolder({ variables: { id: folder.id, ...input } }).catch(
-      //   (err) => {
-      //     setError(err);
-      //   }
-      // );
-    }
+    createFolder({ variables }).catch((err) => {
+      setError(err);
+    });
   };
 
   useEffect(() => {
@@ -127,7 +108,7 @@ export default function Folder({
   };
 
   const renderSpinner = () => {
-    if (creating || updating) {
+    if (creating) {
       return (
         <span className="absolute my-2 h-8 w-8 animate-spin rounded-full border-2 border-t-2 border-transparent border-t-blue-400 ms-2" />
       );

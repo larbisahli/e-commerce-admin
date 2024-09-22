@@ -10,7 +10,7 @@ import classNames from 'classnames';
 import { isEmpty } from 'lodash';
 import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { setEtag } from '@store/client';
 import { useAppDispatch, useGetClient } from '@hooks/useGetClient';
 import { useErrorLogger } from '@hooks/useErrorLogger';
@@ -25,7 +25,9 @@ const OfflinePayments = ({ initialValues, loading }) => {
     return initialValues[code] && initialValues[code].code;
   };
 
-  const paymentLen = Object.keys(initialValues);
+  const paymentLen = Object.keys(initialValues)?.filter(
+    (code) => initialValues[code]?.active
+  );
 
   const dispatch = useAppDispatch();
 

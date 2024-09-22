@@ -110,6 +110,8 @@ export default function CreateOrUpdateDeliveryForm({ initialValues }: IProps) {
     onCompleted: (data: { createDeliveryTime: DeliveryTimeType }) => {
       const { id } = data.createDeliveryTime;
       if (id) {
+        const { etag: newEtag } = data?.createDeliveryTime ?? {};
+        dispatch(setEtag({ etag: newEtag }));
         notify(t('common:successfully-created'), 'success');
         router.push(`${ROUTES.DELIVERY_TIME}/edit/${id}`);
       }
@@ -127,9 +129,9 @@ export default function CreateOrUpdateDeliveryForm({ initialValues }: IProps) {
     },
     onCompleted: (data: { updateDeliveryTime: DeliveryTimeType }) => {
       if (!isEmpty(data?.updateDeliveryTime)) {
-        notify(t('common:successfully-updated'), 'success');
         const { etag: newEtag } = data?.updateDeliveryTime ?? {};
         dispatch(setEtag({ etag: newEtag }));
+        notify(t('common:successfully-updated'), 'success');
       }
     }
   });

@@ -39,17 +39,7 @@ export const ORDER = gql`
       orderStatus {
         id
         color
-        label
-      }
-      paymentStatus {
-        id
-        color
-        label
-      }
-      deliveryStatus {
-        id
-        color
-        label
+        status
       }
       items {
         product {
@@ -135,6 +125,7 @@ export const ORDERS = gql`
         data
       }
       customer {
+        id
         fullName
         address {
           addressLine1
@@ -149,17 +140,7 @@ export const ORDERS = gql`
       orderStatus {
         id
         color
-        label
-      }
-      paymentStatus {
-        id
-        color
-        label
-      }
-      deliveryStatus {
-        id
-        color
-        label
+        status
       }
       createdAt
     }
@@ -180,7 +161,7 @@ export const RECENT_ORDERS = gql`
       orderStatus {
         id
         color
-        label
+        status
       }
       createdAt
     }
@@ -188,18 +169,8 @@ export const RECENT_ORDERS = gql`
 `;
 
 export const UPDATE_STATUS_ORDER = gql`
-  mutation UpdateStatusOrder(
-    $id: String!
-    $orderStatus: OrderStatusInput!
-    $paymentStatus: OrderStatusInput!
-    $deliveryStatus: OrderStatusInput!
-  ) {
-    updateStatusOrder(
-      id: $id
-      orderStatus: $orderStatus
-      paymentStatus: $paymentStatus
-      deliveryStatus: $deliveryStatus
-    ) {
+  mutation UpdateStatusOrder($id: String!, $orderStatus: OrderStatusInput!) {
+    updateStatusOrder(id: $id, orderStatus: $orderStatus) {
       id
     }
   }

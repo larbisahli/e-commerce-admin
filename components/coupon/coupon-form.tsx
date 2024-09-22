@@ -10,9 +10,10 @@ import SelectInput from '@components/ui/select-input';
 import { CREATE_COUPON, UPDATE_COUPON } from '@graphql/coupons';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetClient } from '@hooks/useGetClient';
+import { useAppDispatch, useGetClient } from '@hooks/useGetClient';
 import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/notify';
+import { setEtag } from '@store/client';
 import { Nullable, Scalars } from '@ts-types/custom.types';
 import { Coupon, CouponType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
@@ -109,6 +110,7 @@ export default function CreateOrUpdateCouponForm({ initialValues }: IProps) {
     resolver: yupResolver(couponValidationSchema)
   });
 
+  const dispatch = useAppDispatch();
   const { userInfo } = useGetClient();
   const csrfToken = userInfo?.csrfToken;
 
@@ -127,7 +129,9 @@ export default function CreateOrUpdateCouponForm({ initialValues }: IProps) {
       }
     },
     onCompleted: (data: { createCoupon: Coupon }) => {
-      if (!isEmpty(data)) {
+      if (data.createCoupon?.id) {
+        const { etag: newEtag } = data.createCoupon ?? {};
+        dispatch(setEtag({ etag: newEtag }));
         notify(t('common:successfully-created'), 'success');
         reset();
         router.push(ROUTES.COUPON);
@@ -142,7 +146,9 @@ export default function CreateOrUpdateCouponForm({ initialValues }: IProps) {
       }
     },
     onCompleted: (data: { updateCoupon: Coupon }) => {
-      if (!isEmpty(data)) {
+      if (data.updateCoupon.id) {
+        const { etag: newEtag } = data.updateCoupon ?? {};
+        dispatch(setEtag({ etag: newEtag }));
         notify(t('common:successfully-updated'), 'success');
       }
     }
@@ -182,7 +188,7 @@ export default function CreateOrUpdateCouponForm({ initialValues }: IProps) {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormActions
-        backLink={ROUTES.SHIPPING_ZONE}
+        backLink={ROUTES.COUPON}
         showSelectLanguage={false}
         title={
           isEmpty(initialValues)

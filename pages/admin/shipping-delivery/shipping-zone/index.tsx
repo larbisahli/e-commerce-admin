@@ -6,7 +6,7 @@ import { SHIPPING_ZONES } from '@graphql/shipping-zone';
 import { useGetClient } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useTableColumn } from '@hooks/useTableColumn';
-import { verifyAuth } from '@middleware/utils';
+import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import type { SSRProps } from '@ts-types/custom.types';
 import type { ShippingZoneType } from '@ts-types/generated';
 import { OrderBy, SortOrder } from '@ts-types/generated';
@@ -152,6 +152,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
+  const { csrfToken, csrfError } = await XSRFHandler(context);
+
   return {
     props: {
       ...(await serverSideTranslations(locale!, [
@@ -160,7 +162,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         'form',
         'error'
       ])),
-      client
+      client: { ...(client ?? {}), csrfToken, csrfError }
     }
   };
 };

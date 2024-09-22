@@ -1,13 +1,5 @@
 // TODO: Add translation
 export const COLUMNS = {
-  'order-status': [
-    { label: 'Label', key: 'label' },
-    { label: 'Privacy', key: 'privacy' },
-    { label: 'Creation Date', key: 'createdAt' },
-    { label: 'Placed By', key: 'createdBy' },
-    { label: 'Last Updated By', key: 'updatedBy' },
-    { label: 'Actions', key: 'actions' }
-  ],
   order: [
     { label: 'Order ID', key: 'orderNumber' },
     { label: 'fullName', key: 'fullName' },
@@ -16,8 +8,6 @@ export const COLUMNS = {
     { label: 'Grant Total', key: 'grandTotalInclTax' },
     { label: 'Quantity', key: 'totalQuantity' },
     { label: 'Order Status', key: 'orderStatus' },
-    { label: 'Payment Status', key: 'paymentStatus' }, // customer_is_guest
-    { label: 'Delivery Status', key: 'deliveryStatus' },
     { label: 'Purchase Date', key: 'createdAt' },
     { label: 'Last Updated By', key: 'updatedBy' },
     { label: 'Actions', key: 'actions' }

@@ -6,8 +6,9 @@ import {
 } from '@components/ui/modal/modal.context';
 import { DELETE_MANUFACTURER, MANUFACTURERS } from '@graphql/manufacturer';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetClient } from '@hooks/useGetClient';
+import { useAppDispatch, useGetClient } from '@hooks/useGetClient';
 import { notify } from '@lib/notify';
+import { setEtag } from '@store/client';
 import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
 
@@ -30,6 +31,7 @@ const ManufacturerDeleteView = () => {
     }
   );
 
+  const dispatch = useAppDispatch();
   const { id } = useModalState();
   const { closeModal } = useModalAction();
 
@@ -39,9 +41,10 @@ const ManufacturerDeleteView = () => {
     deleteManufacturerValue({ variables: { id } })
       .then(({ data }) => {
         const {
-          deleteManufacturer: { name }
+          deleteManufacturer: { id, etag }
         } = data;
-        if (name) {
+        if (id) {
+          dispatch(setEtag({ etag }));
           notify(t('common:successfully-deleted'), 'success');
         }
         closeModal();

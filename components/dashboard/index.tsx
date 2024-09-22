@@ -394,7 +394,7 @@ export default function Dashboard() {
         <RecentOrders
           loading={recentOrderLoading}
           orders={recentOrders}
-          title={t('table:recent-order-table-title')}
+          title={`${t('table:recent-order-table-title')} ( 24H )`}
         />
       </div>
       <RecommendationsSection />

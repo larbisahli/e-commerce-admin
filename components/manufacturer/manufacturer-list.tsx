@@ -19,7 +19,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import React, { useMemo } from 'react';
-import { Tooltip } from 'react-tooltip';
 
 const Table = dynamic(
   () => import('@components/ui/table').then((mod) => mod.Table),

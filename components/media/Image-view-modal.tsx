@@ -3,6 +3,7 @@ import 'rc-pagination/assets/index.css';
 
 import { useMutation } from '@apollo/client';
 import { DownloadIcon } from '@components/icons/download-icon';
+import TrashIcon from '@components/icons/trash';
 import ImageComponent from '@components/ImageComponent';
 import Button from '@components/ui/button';
 import Modal from '@components/ui/modal/modal';
@@ -12,8 +13,9 @@ import {
 } from '@components/ui/modal/modal.context';
 import { DELETE_IMAGE, MEDIA } from '@graphql/media';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useGetClient } from '@hooks/useGetClient';
+import { useAppDispatch, useGetClient } from '@hooks/useGetClient';
 import { notify } from '@lib/notify';
+import { setEtag } from '@store/client';
 import { MEDIA_ITEM_MODAL } from '@ts-types/constants';
 import { mediaURL } from '@utils/utils';
 import cn from 'classnames';
@@ -28,6 +30,7 @@ const ImageViewModal = () => {
 
   const [error, setError] = useState(null);
 
+  const dispatch = useAppDispatch();
   const { closeModal } = useModalAction();
   const { isOpen, view, id: parentId = null, meta } = useModalState();
 
@@ -76,19 +79,25 @@ const ImageViewModal = () => {
     const { width, height } =
       photo.width > 600
         ? {
-            width: Math.round(photo.width / 1.5),
-            height: Math.round(photo.height / 1.5)
+            width: Math.round(photo.width / 2),
+            height: Math.round(photo.height / 2)
           }
         : photo;
 
     return (
-      <div className="flex-2 mx-auto rounded">
+      <div
+        className="flex-2 relative mx-2 rounded-xl border shadow"
+        style={{ height: `${height}px` }}
+      >
+        <div className="flex-0 absolute top-0 right-0 z-30 p-2">
+          {renderActionButtons()}
+        </div>
         <ImageComponent
           src={photo?.image}
           customPlaceholder={photo?.placeholder}
           width={width}
           height={height}
-          className="rounded"
+          className="rounded-xl"
           objectFit="cover"
         />
       </div>
@@ -101,9 +110,11 @@ const ImageViewModal = () => {
     }
 
     return (
-      <div className="my-2">
-        <span className="pr-1 font-medium">Size:</span>
-        <span className="text-gray-800">{photo?.size?.formatBytes()}</span>
+      <div className="my-3">
+        <div className="pr-1 text-sm font-medium text-black">Size</div>
+        <div className="text-sm text-gray-600">
+          {photo?.size?.formatBytes()}
+        </div>
       </div>
     );
   };
@@ -115,15 +126,13 @@ const ImageViewModal = () => {
 
     return (
       <>
-        <div className="my-2">
-          <span className="pr-1 font-medium">File type:</span>
-          <span className="uppercase text-gray-800">
-            {photo.mimeType?.split('/')[1]}
-          </span>
+        <div className="my-3">
+          <div className="pr-1 text-sm font-medium text-black">File type</div>
+          <div className="text-gray-600">Image</div>
         </div>
-        <div className="my-2">
-          <span className="pr-1 font-medium">MIME-Type:</span>
-          <span className="text-gray-800">{photo.mimeType}</span>
+        <div className="my-3">
+          <div className="pr-1 text-sm font-medium text-black">MIME-Type:</div>
+          <div className="text-sm text-gray-600">{photo.mimeType}</div>
         </div>
       </>
     );
@@ -132,9 +141,9 @@ const ImageViewModal = () => {
   const renderItems = () => {
     if (isFolder) {
       return (
-        <div className="my-2">
-          <span className="pr-1 font-medium">Items:</span>
-          <span className="text-gray-800">{itemsCount}</span>
+        <div className="my-3">
+          <div className="pr-1 text-sm font-medium text-black">Items</div>
+          <div className="text-sm text-gray-600">{itemsCount}</div>
         </div>
       );
     }
@@ -147,13 +156,13 @@ const ImageViewModal = () => {
     }
     return (
       <>
-        <div className="my-2">
-          <span className="pr-1 font-medium">Width:</span>
-          <span className="text-gray-800">{`${photo.width}px`}</span>
+        <div className="my-3">
+          <div className="pr-1 text-sm font-medium text-black">Width</div>
+          <div className="text-sm text-gray-600">{`${photo.width}px`}</div>
         </div>
-        <div className="my-2">
-          <span className="pr-1 font-medium">Height:</span>
-          <span className="text-gray-800">{`${photo.height}px`}</span>
+        <div className="my-3">
+          <div className="pr-1 text-sm font-medium text-black">Height</div>
+          <div className="text-sm text-gray-600">{`${photo.height}px`}</div>
         </div>
       </>
     );
@@ -163,9 +172,10 @@ const ImageViewModal = () => {
     deletePhoto({ variables: { parentId, mediaId, imageId: photo.id } })
       .then(({ data }) => {
         const {
-          deleteMediaImage: { id }
+          deleteMediaImage: { id, etag }
         } = data;
         if (id) {
+          dispatch(setEtag({ etag }));
           notify(t('common:successfully-deleted'), 'success');
         }
         closeModal();
@@ -181,51 +191,40 @@ const ImageViewModal = () => {
     }
 
     return (
-      <div className="flex w-full items-center justify-end pb-8 pt-10">
-        <Button
-          onClick={() => saveAs(`${mediaURL}/${photo.image}`, `${name}.png`)}
-          variant="outline"
-          className="mr-6 text-blue-500"
-        >
-          <div className="px-2">
-            <DownloadIcon width={25} height={25} />
-          </div>
-          {'Download'}
-        </Button>
+      <div className="flex flex-col items-end">
         <Button
           onClick={deleteMediaPhoto}
           loading={loading}
           disabled={loading}
-          variant="custom"
+          variant="outline"
           className={cn(
-            'w-fit bg-red-600 py-2 px-4 hover:bg-red-700 focus:outline-none',
-            'text-light transition duration-200 ease-in focus:bg-red-700',
-            'rounded text-center text-base font-semibold shadow-md'
+            'mb-2 !w-12 !bg-red-600 py-2 px-4 !text-white hover:!border-red-900 hover:!bg-red-700'
           )}
         >
-          {t('button-delete')}
+          <div className="px-2">
+            <TrashIcon width={18} height={18} />
+          </div>
+        </Button>
+        <Button
+          onClick={() => saveAs(`${mediaURL}/${photo.image}`, `${name}.png`)}
+          variant="outline"
+          className="!w-12 !bg-blue-600 !text-white hover:!border-blue-900 hover:!bg-blue-700"
+        >
+          <div className="px-2">
+            <DownloadIcon width={25} height={25} />
+          </div>
         </Button>
       </div>
     );
   };
 
   const renderDate = () => {
-    if (isFolder) {
-      return (
-        <div className="my-2">
-          <span className="pr-1 font-medium">Created at:</span>
-          <span className="">{`${dayjs(createdAt).format(
-            'MMM D, YYYY'
-          )} at ${dayjs(createdAt).format('h:mm A')}`}</span>
-        </div>
-      );
-    }
     return (
-      <div className="my-2">
-        <span className="pr-1 font-medium">Uploaded at:</span>
-        <span className="">{`${dayjs(photo.createdAt).format(
+      <div className="my-3">
+        <div className="pr-1 text-sm font-medium text-black">Created</div>
+        <div className="text-sm text-gray-600">{`${dayjs(createdAt).format(
           'MMM D, YYYY'
-        )} at ${dayjs(photo.createdAt).format('h:mm A')}`}</span>
+        )} at ${dayjs(createdAt).format('h:mm A')}`}</div>
       </div>
     );
   };
@@ -238,19 +237,22 @@ const ImageViewModal = () => {
           <div className="flex h-full w-full flex-col overflow-auto">
             <div
               className="border-b border-gray-200 bg-gray-100 p-4 text-lg font-semibold capitalize
-              text-gray-800"
+              text-gray-600"
             >
               {name}
             </div>
-            <div className="mt-8 flex h-full flex-col gap-3 p-4">
+            <div className="mt-2 flex h-full flex-col gap-3">
               {renderImage()}
-              <div className="flex h-full w-full flex-1 flex-col">
+              <div className="mt-2 flex h-full w-full flex-1 flex-col pb-8">
                 <div className="flex h-full flex-col">
                   <div className="relative flex-1">
-                    <div className="border-l-2 border-gray-200 px-3 pt-0">
+                    <div className="border-t border-gray-300 px-3 pt-4">
+                      <div className="pb-2 font-medium">File details</div>
                       <div className="mb-2">
-                        <span className="pr-1 font-medium">Name:</span>
-                        <span className="">{name}</span>
+                        <div className="pr-1 text-sm font-medium text-black">
+                          Name
+                        </div>
+                        <div className="text-sm text-gray-600">{name}</div>
                       </div>
                       {renderSize()}
                       {renderItems()}
@@ -259,7 +261,6 @@ const ImageViewModal = () => {
                       {renderImageDimensions()}
                     </div>
                   </div>
-                  <div className="flex-0">{renderActionButtons()}</div>
                 </div>
               </div>
             </div>
