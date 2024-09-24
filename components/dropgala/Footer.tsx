@@ -31,7 +31,7 @@ const Footer = () => {
             Blogs
           </div>
         </Link>
-        <Link href="/#subscription">
+        <Link href={ROUTES.SIGNUP}>
           <div className="mx-3 text-base text-gray-500 hover:text-blue-500">
             Sign up
           </div>

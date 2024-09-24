@@ -1,4 +1,5 @@
 import MenuSvg from '@components/icons/menu';
+import { ROUTES } from '@utils/routes';
 import useOnClickOutside from '@utils/use-click-outside';
 import cn from 'classnames';
 import Image from 'next/image';
@@ -106,12 +107,12 @@ const Navigation = () => {
             </div>
           </div>
           <div className="flex items-center justify-center font-medium">
-            <Link href="https://dropgala.com/login">
+            <Link href={ROUTES.LOGIN}>
               <div className="hover:text-underline mx-3 inline-block rounded-full border border-gray-300 bg-white py-[6px] px-6 text-center text-gray-800 no-underline shadow hover:bg-gray-50">
                 Login
               </div>
             </Link>
-            <Link href="https://dropgala.com/signup">
+            <Link href={ROUTES.SIGNUP}>
               <div className="hover:text-underline hidden rounded-full bg-blue-600 py-[6px] px-6 text-center text-white no-underline shadow hover:bg-blue-500 sm:inline-block">
                 Sign up
               </div>
