@@ -30,7 +30,7 @@ const PricingSection = () => {
               <div className="flex items-end justify-between">
                 <div className="flex-1 pt-5">
                   <div>
-                    <span className="text-4xl font-bold text-black">$12</span>
+                    <span className="text-4xl font-bold text-black">$10</span>
                     <span className="ml-1 text-gray-500">USD</span>
                   </div>
                   <div className="text-sm font-medium text-gray-400">
@@ -38,7 +38,8 @@ const PricingSection = () => {
                   </div>
                 </div>
                 <div className="rounded border border-blue-300 bg-blue-50 px-3 py-[2px] text-sm font-medium text-blue-500 shadow">
-                  $120 / year
+                  <span>$100 / year</span>
+                  <span className="mx-1 text-xs">(-16%)</span>
                 </div>
               </div>
 

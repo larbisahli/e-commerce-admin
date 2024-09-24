@@ -67,8 +67,6 @@ export default function NavNotification() {
   const router = useRouter();
   const { t } = useTranslation('common');
 
-  const hasNotification = true;
-
   const {
     userInfo: { store: { etag } = {} }
   } = useGetClient();
@@ -88,8 +86,6 @@ export default function NavNotification() {
 
   const isDesktopView = useMediaQuery('min-width', 640);
 
-  console.log({ recentOrders });
-
   const handleNotificationRoute = () => {
     !isDesktopView && router.push(ROUTES.NOTIFICATION);
   };
@@ -102,6 +98,8 @@ export default function NavNotification() {
       content: null
     }));
   }, [recentOrders]);
+
+  const hasNotification = !isEmpty(notifications);
 
   return (
     <Menu as="div" className="relative inline-block text-left">

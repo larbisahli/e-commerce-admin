@@ -409,7 +409,10 @@ const GettingStartedSectionStep1 = ({ setStoredValue }) => {
                 <p className="text-sm font-medium text-gray-600">
                   {`Verify your email address to activate your online store.`}
                 </p>
-                <Link href={`${ROUTES.BUILDER_STYLES}`} target="_blank">
+                <Link
+                  href={`https://${userInfo?.store?.alias}.dropgala.shop`}
+                  target="_blank"
+                >
                   <button className="mt-4 flex items-center rounded-sm border border-blue-500 px-4 py-1 text-gray-500 hover:bg-blue-100">
                     <span className="pr-2 font-medium text-blue-500">
                       {`View store`}
