@@ -98,7 +98,6 @@ export default function PlansComponents({
           onClose={() => setErrorMessage(null)}
         />
       ) : null}
-      <p>Start your free 14-day trial, no credit card required.</p>
       {/* ------------------------- */}
       <div className="my-5 flex flex-wrap sm:my-8">
         <div className="w-full px-0 !pt-0 pb-5 sm:w-[35%] sm:py-8 sm:pe-4 md:w-[35%] md:pe-5">

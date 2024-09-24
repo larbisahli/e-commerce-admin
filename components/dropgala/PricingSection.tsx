@@ -12,8 +12,11 @@ const PricingSection = () => {
         <h2 className="slide-in-bottom-h1 mt-5 text-center text-5xl font-bold leading-tight text-gray-800 md:text-left">
           Pricing
         </h2>
-        <p className="text-center">
+        {/* <p className="text-center text-gray-400">
           Offering the most competitive rates to entrepreneurs
+        </p> */}
+        <p className="text-center text-gray-600">
+          Start your free 14-day trial, no credit card required.
         </p>
       </div>
       <div className="w-full pt-8">
@@ -223,6 +226,9 @@ const PricingSection = () => {
             </div>
           </div>
         </div>
+        <p className="text-center text-gray-500 mt-5">
+          Offering the most competitive rates to entrepreneurs.
+        </p>
       </div>
     </section>
   );
