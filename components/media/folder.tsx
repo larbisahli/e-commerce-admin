@@ -58,6 +58,12 @@ export default function Folder({
         notify(t('common:successfully-created'), 'success');
         refetch();
       }
+    },
+    onError: (error) => {
+      error?.graphQLErrors?.forEach((err) => {
+        notify(err.message ?? 'Something happened', 'error');
+      });
+      setError(error);
     }
   });
 
@@ -77,9 +83,7 @@ export default function Folder({
       return;
     }
     handleNewFolderButton();
-    createFolder({ variables }).catch((err) => {
-      setError(err);
-    });
+    createFolder({ variables });
   };
 
   useEffect(() => {

@@ -1,6 +1,6 @@
 export const ROUTES = {
   DASHBOARD: '/admin/dashboard',
-  FORGET_PASSWORD: '/admin/forget-password',
+  FORGET_PASSWORD: '/store/forget-password',
   LOGIN: '/admin/login',
   SIGNUP: '/admin/signup',
   LOGOUT: '/admin/logout',

@@ -6,6 +6,7 @@ import { DASH_ANALYTICS } from '@graphql/analytics';
 import { RECENT_ORDERS } from '@graphql/order';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetClient } from '@hooks/useGetClient';
+import { useLocalStorage } from '@hooks/useLocalStorage';
 import { useSettings } from '@hooks/useSettings';
 import { DashAnalyticsType, OrderType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
@@ -18,12 +19,11 @@ import { useTranslation } from 'next-i18next';
 import { useMemo, useState } from 'react';
 
 import {
-  GettingStartedSectionStep2,
-  GettingStartedSectionStep1
+  GettingStartedSectionStep1,
+  GettingStartedSectionStep2
 } from './GettingStartedSection';
 import RecommendationsSection from './RecommendationsSection';
 import TipsSection from './TipsSection';
-import { useLocalStorage } from '@hooks/useLocalStorage';
 
 const dates = [
   {
@@ -93,7 +93,7 @@ export default function Dashboard() {
       etag: etag?.orderEtag
     },
     fetchPolicy: 'cache-and-network',
-    skip: isEmpty(selectedDate) || isEmpty(etag)
+    skip: isEmpty(etag)
   });
 
   const { recentOrders } = recentOrderData ?? {};

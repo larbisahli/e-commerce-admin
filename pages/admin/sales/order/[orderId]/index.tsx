@@ -33,7 +33,6 @@ import { formatAddress } from '@utils/format-address';
 import { ROUTES } from '@utils/routes';
 import usePrice from '@utils/use-price';
 import { CopyToClipboard } from '@utils/utils';
-import classNames from 'classnames';
 import dayjs from 'dayjs';
 import { isEmpty } from 'lodash';
 import { GetServerSideProps } from 'next';
@@ -569,9 +568,20 @@ export default function OrderDetailsPage({ client }: SSRProps) {
               <div className="flex items-center justify-between border-dashed py-2 text-sm text-body">
                 <span className="text-md text-gray-900">Order Date</span>
                 <span className="text-md text-gray-600">
-                  {`${dayjs(order?.createdAt).format('MMM D, YYYY')} at ${dayjs(
-                    order?.createdAt
-                  ).format('h:mm A')}`}
+                  {order?.createdAt &&
+                    `${dayjs(order?.createdAt).format(
+                      'MMM D, YYYY'
+                    )} at ${dayjs(order?.createdAt).format('h:mm A')}`}
+                </span>
+              </div>
+              <div className="flex items-center justify-between border-dashed py-2 text-sm text-body">
+                <span className="text-md text-gray-900">Store Language</span>
+                <span className="text-md text-gray-600">
+                  <Link href={ROUTES.LANGUAGES} target="_blank">
+                    <span className="text-md text-blue-500 hover:underline">
+                      English
+                    </span>
+                  </Link>
                 </span>
               </div>
             </section>

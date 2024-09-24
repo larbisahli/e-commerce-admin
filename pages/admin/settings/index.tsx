@@ -1,6 +1,8 @@
 import PageMainAction from '@components/common/PageMainAction';
 import { AccountSettingsIcon } from '@components/icons/account-settings-icon';
 import CheckoutIcon from '@components/icons/checkout-icon';
+import { CreditCard } from '@components/icons/credit-card';
+import { DomainIcon } from '@components/icons/domain-icon';
 import { LoginHistoryIcon } from '@components/icons/login-history-icon';
 import { NotificationBellIcon } from '@components/icons/notification-icon';
 import { PaymentIcon } from '@components/icons/payment-icon';
@@ -16,8 +18,6 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { CreditCard } from '@components/icons/credit-card';
-import { DomainIcon } from '@components/icons/domain-icon';
 
 const settingRoutes = [
   // {
@@ -26,12 +26,12 @@ const settingRoutes = [
   //   renderIcon: () => <AccountSettingsIcon width={25} height={25} />,
   //   description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit'
   // },
-  {
-    label: 'common:sidebar-nav-item-notifications',
-    url: ROUTES.NOTIFICATION,
-    renderIcon: () => <NotificationBellIcon width={25} height={25} />,
-    description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit'
-  },
+  // {
+  //   label: 'common:sidebar-nav-item-notifications',
+  //   url: ROUTES.NOTIFICATION,
+  //   renderIcon: () => <NotificationBellIcon width={25} height={25} />,
+  //   description: 'Brief messages informing you that an order has been placed, etc.'
+  // },
   {
     label: 'common:sidebar-nav-item-tax',
     url: ROUTES.TAX,
@@ -42,7 +42,8 @@ const settingRoutes = [
     label: 'common:sidebar-nav-item-checkout-settings',
     url: ROUTES.CHECKOUT_SETTINGS,
     renderIcon: () => <CheckoutIcon width={25} height={25} />,
-    description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit'
+    description:
+      'Features that minimize friction and smooth process of checkout'
   },
   {
     label: 'common:sidebar-nav-item-payments',
@@ -54,19 +55,19 @@ const settingRoutes = [
     label: 'common:sidebar-nav-item-tags',
     url: ROUTES.TAG,
     renderIcon: () => <TagIcon width={25} height={25} />,
-    description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit'
+    description: 'Manage tags and use them for search and products.'
   },
   {
     label: 'common:sidebar-nav-item-billing',
     url: ROUTES.BILLING,
     renderIcon: () => <CreditCard width={25} height={25} />,
-    description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit'
+    description: 'Select plans and manage subscriptions'
   },
   {
     label: 'common:sidebar-nav-item-domains',
     url: ROUTES.DOMAINS,
     renderIcon: () => <DomainIcon width={25} height={25} />,
-    description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit'
+    description: 'Add you own custom domain to your store.'
   }
   // {
   //   label: 'common:sidebar-nav-item-recent-login-history',

@@ -102,6 +102,7 @@ export default function User({ client }: SSRProps) {
         <link rel="icon" type="image/svg" sizes="32x32" href="/svg/user.svg" />
       </Head>
       <PageMainAction
+        showSelectLanguage={false}
         href={`${ROUTES.USER}/create`}
         title={t('form:button-label-add-user')}
         label={t('form:input-label-users')}

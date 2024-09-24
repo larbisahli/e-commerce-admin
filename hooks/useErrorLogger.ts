@@ -7,6 +7,13 @@ import { useEffect } from 'react';
 export function useErrorLogger(error?: any, isVisible: boolean = true) {
   const router = useRouter();
   useEffect(() => {
+    console.log(
+      !isEmpty(error),
+      error?.networkError?.statusCode === 403,
+      '======>',
+      error?.graphQLErrors
+    );
+
     if (!isEmpty(error)) {
       // Sentry Logs
       sentry(error);

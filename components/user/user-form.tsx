@@ -3,9 +3,7 @@ import 'react-phone-input-2/lib/style.css';
 import { useMutation, useQuery } from '@apollo/client';
 import Card from '@components/common/card';
 import FormActions from '@components/common/FormActions';
-import { SaveIcon } from '@components/icons/save-icon';
 import ImageModal from '@components/image-modal';
-import Button from '@components/ui/button';
 import Description from '@components/ui/description';
 import ValidationError from '@components/ui/form-validation-error';
 import Input from '@components/ui/input';
@@ -176,6 +174,8 @@ const UserCreateUpdateForm = ({ initialValues }: IProps) => {
   const phoneNumber = watch('phoneNumber');
   const profile = watch('profile');
 
+  const hideRole = userInfo?.isAdmin;
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate>
       <FormActions
@@ -228,6 +228,18 @@ const UserCreateUpdateForm = ({ initialValues }: IProps) => {
             error={t(errors.lastName?.message!)}
           />
           <div className="mb-4">
+            <SelectRoles control={control} />
+          </div>
+          <Input
+            label={t('form:input-label-email')}
+            isRequiredLabel
+            {...register('email')}
+            type="email"
+            variant="outline"
+            className="mb-4"
+            error={t(errors.email?.message!)}
+          />
+          <div className="mb-4">
             <Label>{t('form:input-label-phone')}</Label>
             <PhoneInput
               country="us"
@@ -253,16 +265,6 @@ const UserCreateUpdateForm = ({ initialValues }: IProps) => {
             {/* @ts-ignore */}
             <ValidationError message={t(errors.phoneNumber?.message)} />
           </div>
-          <Input
-            label={t('form:input-label-email')}
-            isRequiredLabel
-            {...register('email')}
-            type="email"
-            variant="outline"
-            className="mb-4"
-            error={t(errors.email?.message!)}
-          />
-          <SelectRoles control={control} />
           {errors?.role && (
             <p className="my-2 text-start text-xs text-red-500">
               {/* @ts-ignore */}

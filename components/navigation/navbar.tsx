@@ -1,5 +1,4 @@
 import { AddIcon, MyShopIcon } from '@components/icons/sidebar';
-import { UpgradeIcon } from '@components/icons/sidebar/upgrade';
 import styles from '@components/navigation/scss/index.module.scss';
 import Button from '@components/ui/button';
 import Link from '@components/ui/link';
@@ -13,9 +12,9 @@ import { motion } from 'framer-motion';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useMemo, useState } from 'react';
 
+import LanguageSwitcher from './language-switcher';
 import NavMenu from './menu';
 import NavNotification from './notification';
-import LanguageSwitcher from './language-switcher';
 
 let cx = classNames.bind(styles);
 

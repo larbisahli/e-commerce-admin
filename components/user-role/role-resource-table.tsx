@@ -6,6 +6,7 @@ import { useIsRTL } from '@utils/locals';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
 import React, { useMemo } from 'react';
+
 import { resourcesNameMapper } from './resource-data';
 
 const Table = dynamic(
@@ -40,21 +41,6 @@ const RoleResourceTable = ({ setRoles, roles }: IProps) => {
         )
       },
       {
-        title: t('table:table-item-write'),
-        dataIndex: [ACTION_PRIVILEGES.WRITE],
-        key: [ACTION_PRIVILEGES.WRITE],
-        align: 'center',
-        width: 70,
-        render: (value, resource) => (
-          <RenderResourceComponent
-            field={ACTION_PRIVILEGES.WRITE}
-            value={value}
-            resource={resource}
-            setRoles={setRoles}
-          />
-        )
-      },
-      {
         title: t('table:table-item-read'),
         dataIndex: [ACTION_PRIVILEGES.READ],
         key: [ACTION_PRIVILEGES.READ],
@@ -63,6 +49,21 @@ const RoleResourceTable = ({ setRoles, roles }: IProps) => {
         render: (value, resource) => (
           <RenderResourceComponent
             field={ACTION_PRIVILEGES.READ}
+            value={value}
+            resource={resource}
+            setRoles={setRoles}
+          />
+        )
+      },
+      {
+        title: t('table:table-item-write'),
+        dataIndex: [ACTION_PRIVILEGES.WRITE],
+        key: [ACTION_PRIVILEGES.WRITE],
+        align: 'center',
+        width: 70,
+        render: (value, resource) => (
+          <RenderResourceComponent
+            field={ACTION_PRIVILEGES.WRITE}
             value={value}
             resource={resource}
             setRoles={setRoles}

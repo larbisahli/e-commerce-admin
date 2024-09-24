@@ -78,10 +78,14 @@ export default function Uploader({
                   // @ts-ignore
                   notify(image?.error?.message, 'error');
                   setError(image?.error);
+                  setLoading(false);
                 }
                 console.log(`<:FINISHED UPLOAD:>`, image);
               })
-              .catch(console.log);
+              .catch((error) => {
+                console.log(error);
+                setLoading(false);
+              });
           } else {
             notify('Image type is not supported!', 'error');
             setLoading(false);

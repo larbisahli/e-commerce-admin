@@ -1,12 +1,11 @@
-import { useMutation } from '@apollo/client';
 import Alert from '@components/ui/alert';
 import Button from '@components/ui/button';
 import PasswordInput from '@components/ui/password-input';
-import { RESET_PASSWORD } from '@graphql/login';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetClient } from '@hooks/useGetClient';
 import { ROUTES } from '@utils/routes';
+import { apiURL } from '@utils/utils';
 import { isEmpty } from 'lodash';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
@@ -35,30 +34,16 @@ const ResetPassword = () => {
 
   const { token } = router.query;
 
-  console.log({ token });
-
   const { userInfo } = useGetClient();
+  const [error, setFetchError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  const csrfToken = userInfo?.csrfToken;
-
-  const [errorMsg, setErrorMsg] = useState<string | null | undefined>('');
   const [passwordStrength, setPasswordStrength] = useState<{
     score: number;
     feedback: PasswordFeedback;
   }>(null);
 
-  const [resetPassword, { loading }] = useMutation(RESET_PASSWORD, {
-    context: {
-      headers: {
-        'x-csrf-token': csrfToken
-      }
-    },
-    onCompleted: (data: { resetPassword: { success: boolean } }) => {
-      if (data?.resetPassword?.success) {
-        router.push(ROUTES.LOGIN);
-      }
-    }
-  });
+  const csrfToken = userInfo?.csrfToken;
 
   const {
     register,
@@ -71,35 +56,53 @@ const ResetPassword = () => {
     resolver: yupResolver(schema)
   });
 
-  useErrorLogger(errorMsg);
+  useErrorLogger(error);
 
   function onReCaptchaChange(reCaptchaToken) {
     const values = getValues();
-
-    resetPassword({
-      variables: {
+    fetch(`${apiURL}/pass/reset-password`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-csrf-token': csrfToken
+      },
+      body: JSON.stringify({
         password: values.password,
         reCaptchaToken,
         token
-      }
-    }).catch((error) => {
-      const err = error?.graphQLErrors[0];
-      setErrorMsg(err?.message);
-      _reCaptchaRef.current.reset();
-      reset();
-    });
+      })
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setLoading(false);
+        if (data?.success) {
+          router.push(ROUTES.LOGIN);
+          reset();
+        } else if (data?.message) {
+          setFetchError(data?.message);
+          _reCaptchaRef.current.reset();
+        }
+      })
+      .catch((err) => {
+        console.log({ err, message: err?.message });
+        setLoading(false);
+        setFetchError(err.message);
+        _reCaptchaRef.current.reset();
+        reset();
+      });
   }
 
   async function onSubmit() {
     const values = getValues();
 
     if (values.password !== values.passwordConfirmation) {
-      setErrorMsg(t('form:error-match-passwords'));
+      setFetchError(t('form:error-match-passwords'));
       return;
     }
 
     if (passwordStrength.score <= 2) {
-      setErrorMsg(t('error-weak-password'));
+      setFetchError(t('error-weak-password'));
       return;
     }
 
@@ -108,23 +111,21 @@ const ResetPassword = () => {
 
   useEffect(() => {
     if (!token) {
-      router.push(ROUTES.LOGIN);
+      router.push(ROUTES.FORGET_PASSWORD);
     }
-  }, [token]);
+  }, [router, token]);
 
   const password = watch('password');
 
-  console.log({ passwordStrength });
-
   return (
     <>
-      {errorMsg && (
+      {error && (
         <Alert
           variant="error"
-          message={t(errorMsg)}
+          message={t(error)}
           className="mb-6"
           closeable={true}
-          onClose={() => setErrorMsg('')}
+          onClose={() => setFetchError('')}
         />
       )}
       {!isEmpty(passwordStrength?.feedback?.warning) && (
