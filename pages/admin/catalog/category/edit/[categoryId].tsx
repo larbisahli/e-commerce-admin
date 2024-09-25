@@ -37,8 +37,6 @@ export default function UpdateCategoriesPage({ client }: SSRProps) {
 
   const { selectedLanguage } = useSettings();
 
-  console.log('PAGE >>>',{client})
-
   const {
     userInfo: { store: { etag } = {} }
   } = useGetClient(client);
