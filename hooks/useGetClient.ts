@@ -13,7 +13,6 @@ export function useGetClient(client?: UserType) {
   const userInfo = useAppSelector(clientInfo);
   const dispatch = useAppDispatch();
   useErrorLogger(client?.csrfError);
-  console.log('================>>>>>>>',{client})
   useEffect(() => {
     if (!isEmpty(client)) {
       dispatch(setClient(client));
