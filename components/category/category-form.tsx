@@ -153,8 +153,6 @@ export default function CreateOrUpdateCategoriesForm({
 
   const { userInfo } = useGetClient();
 
-  console.log('userInfo >>>>',{userInfo})
-
   const { selectedLanguage } = useSettings();
   const dispatch = useAppDispatch();
 

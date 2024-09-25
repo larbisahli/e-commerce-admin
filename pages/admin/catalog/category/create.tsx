@@ -16,7 +16,6 @@ const CreateOrUpdateCategoriesForm = dynamic(
 
 export default function CreateCategoriesPage({ client }: SSRProps) {
   const { t } = useTranslation();
-  console.log('CreateCategoriesPage >>>',{client})
   useGetClient(client);
 
   return (

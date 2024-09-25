@@ -10,7 +10,6 @@ export const clientSlice = createSlice({
   reducers: {
     setClient: (state: UserType, action: PayloadAction<UserType>) => {
       state = action.payload;
-      console.log('setClient >>>',{payload:action.payload})
       return state;
     },
     setEtag: (

@@ -6,7 +6,7 @@ import { CATEGORIES } from '@graphql/category';
 import { useErrorLogger, useGetClient } from '@hooks/index';
 import { useSettings } from '@hooks/useSettings';
 import { useTableColumn } from '@hooks/useTableColumn';
-import { verifyAuth } from '@middleware/utils';
+import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { SSRProps, TableQueryVariables } from '@ts-types/custom.types';
 import { OrderBy, SortOrder } from '@ts-types/generated';
 import { Category } from '@ts-types/generated';
@@ -147,6 +147,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     };
   }
 
+  const { csrfToken, csrfError } = await XSRFHandler(context);
+
   return {
     props: {
       ...(await serverSideTranslations(locale!, [
@@ -155,7 +157,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         'table',
         'error'
       ])),
-      client
+      client: { ...(client ?? {}), csrfToken, csrfError }
     }
   };
 };
