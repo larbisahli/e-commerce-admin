@@ -521,6 +521,7 @@
   "input-label-display-order": "Display Order",
   "input-label-tax-rate": "Tax rate",
   "input-label-position": "Position",
+  "input-label-menu-position": "Menu position",
   "input-label-slides-per-view": "Sliders Per View",
   "input-label-slider-styles": "Slider Styles",
   "hero-slider-style-helper-text": "Add your slider text and button styles from here",

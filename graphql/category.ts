@@ -34,7 +34,9 @@ export const CREATE_CATEGORY = gql`
       language: $language
     ) {
       id
-      name
+      etag {
+        categoryEtag
+      }
     }
   }
 `;

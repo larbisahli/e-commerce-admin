@@ -187,6 +187,8 @@ export default function CreateOrUpdateCategoriesForm({
       if (!id) {
         return;
       }
+      const { etag: newEtag } = data?.createCategory ?? {};
+      dispatch(setEtag({ etag: newEtag }));
       if (saveMode === SaveOptions.Default) {
         notify(t('common:successfully-created'), 'success');
         router.push(`${ROUTES.CATEGORY}/edit/${id}`);
@@ -399,7 +401,7 @@ export default function CreateOrUpdateCategoriesForm({
             )}
           </div>
           <Input
-            label={`${t('form:input-label-position')}`}
+            label={`${t('form:input-label-menu-position')}`}
             type="number"
             min={0}
             {...register('position')}
