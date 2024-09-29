@@ -114,7 +114,7 @@ export const PRODUCT = gql`
           name
         }
       }
-      manufacturers {
+      brands {
         id
         name
         translated {
@@ -281,7 +281,7 @@ export const CREATE_PRODUCT = gql`
     $categories: [CategoryInput!]!
     $suppliers: [SupplierInput]
     $tags: [TagInput]
-    $manufacturers: [ManufacturerInput]
+    $brands: [BrandInput]
     $attributes: [AttributeVariationInput]
     $variationOptions: [VariationOptionInput]
     $variations: [VariationInput]
@@ -312,7 +312,7 @@ export const CREATE_PRODUCT = gql`
       categories: $categories
       suppliers: $suppliers
       tags: $tags
-      manufacturers: $manufacturers
+      brands: $brands
       attributes: $attributes
       variationOptions: $variationOptions
       variations: $variations
@@ -482,7 +482,7 @@ export const UPDATE_PRODUCT_SELECT_GROUP = gql`
         id
         name
       }
-      manufacturers {
+      brands {
         id
         name
       }

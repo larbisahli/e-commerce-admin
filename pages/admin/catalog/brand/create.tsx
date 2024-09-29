@@ -8,30 +8,25 @@ import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-const CreateOrUpdateManufacturerForm = dynamic(
-  () => import('@components/manufacturer/manufacturer-form'),
+const CreateOrUpdateBrandForm = dynamic(
+  () => import('@components/brand/brand-form'),
   { ssr: true }
 );
 
-export default function CreateManufacturerPage({ client }: SSRProps) {
+export default function CreateBrandPage({ client }: SSRProps) {
   useGetClient(client);
   return (
     <>
       <Head>
-        <title>New Manufacturer | Dropgala</title>
-        <link
-          rel="icon"
-          type="image/svg"
-          sizes="32x32"
-          href="/svg/manufacturer.svg"
-        />
+        <title>New Brand | Dropgala</title>
+        <link rel="icon" type="image/svg" sizes="32x32" href="/svg/brand.svg" />
       </Head>
-      <CreateOrUpdateManufacturerForm />
+      <CreateOrUpdateBrandForm />
     </>
   );
 }
 
-CreateManufacturerPage.Layout = AppLayout;
+CreateBrandPage.Layout = AppLayout;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { locale } = context;

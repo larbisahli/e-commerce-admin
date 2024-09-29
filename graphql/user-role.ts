@@ -152,7 +152,7 @@ export const ROLE = gql`
               delete
             }
           }
-          manufacturer {
+          brand {
             permissions {
               read
               write

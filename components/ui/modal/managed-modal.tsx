@@ -9,7 +9,7 @@ import {
   DELETE_CUSTOMER,
   DELETE_DELIVERY_TIME,
   DELETE_LANGUAGE,
-  DELETE_MANUFACTURER,
+  DELETE_BRAND,
   DELETE_PRODUCT,
   DELETE_SHIPPING,
   DELETE_SUPPLIER,
@@ -54,8 +54,8 @@ const SupplierDeleteView = dynamic(
 
 const TaxDeleteView = dynamic(() => import('@components/tax/tax-delete-view'));
 
-const ManufacturerDeleteView = dynamic(
-  () => import('@components/manufacturer/manufacturer-delete-view')
+const BrandDeleteView = dynamic(
+  () => import('@components/brand/brand-delete-view')
 );
 
 const DeliveryTimeDeleteView = dynamic(
@@ -122,7 +122,7 @@ const ManagedModal = () => {
       {view === DELETE_USER && <UserDeleteView />}
       {view === DELETE_SUPPLIER && <SupplierDeleteView />}
       {view === DELETE_TAX && <TaxDeleteView />}
-      {view === DELETE_MANUFACTURER && <ManufacturerDeleteView />}
+      {view === DELETE_BRAND && <BrandDeleteView />}
       {view === DELETE_DELIVERY_TIME && <DeliveryTimeDeleteView />}
       {view === FAVICON_VIEWER_MODAL && <FaviconModalView />}
       {view === CMS_BUILDER_MODAL && <CmsEditorModal />}

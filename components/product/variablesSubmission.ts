@@ -28,7 +28,7 @@ const creationVariable = (values: Product): Product => {
           };
         }),
     categories: values?.categories?.map(({ id }) => ({ id })),
-    manufacturers: values?.manufacturers?.map(({ id }) => ({ id })),
+    brands: values?.brands?.map(({ id }) => ({ id })),
     tags: values?.tags?.map(({ id }) => ({ id })),
     suppliers: values?.suppliers?.map(({ id }) => ({ id })),
     thumbnail: values.thumbnail?.map(({ id }) => ({ id })),

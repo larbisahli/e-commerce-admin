@@ -69,7 +69,7 @@ function ProductForm({
     type,
     categories,
     suppliers,
-    manufacturers,
+    brands,
     attributes,
     tags,
     productSeo,
@@ -115,7 +115,7 @@ function ProductForm({
     categories,
     suppliers,
     tags,
-    manufacturers,
+    brands,
     isUpdateMode
   };
   const productContentState = {

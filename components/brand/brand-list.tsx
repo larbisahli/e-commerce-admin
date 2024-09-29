@@ -5,12 +5,8 @@ import { TableRowPlaceholder } from '@components/ui/placeholders/Table';
 import ProfileCart from '@components/ui/profile-card';
 import { usePlaceholder } from '@hooks/usePlaceholder';
 import { siteSettings } from '@settings/site.settings';
-import { DELETE_MANUFACTURER } from '@ts-types/constants';
-import {
-  CreatedUpdatedByAt,
-  ImageType,
-  ManufacturerType
-} from '@ts-types/generated';
+import { DELETE_BRAND } from '@ts-types/constants';
+import { BrandType, CreatedUpdatedByAt, ImageType } from '@ts-types/generated';
 import { useIsRTL } from '@utils/locals';
 import dayjs from 'dayjs';
 import { isEmpty } from 'lodash';
@@ -26,20 +22,16 @@ const Table = dynamic(
 );
 
 type IProps = {
-  manufacturers: ManufacturerType[];
+  brands: BrandType[];
   selectedColumns: string[];
   loading: boolean;
 };
 
-interface TableRowProps extends ManufacturerType {
+interface TableRowProps extends BrandType {
   loading: boolean;
 }
 
-const ManufacturerList = ({
-  loading,
-  manufacturers,
-  selectedColumns
-}: IProps) => {
+const BrandList = ({ loading, brands, selectedColumns }: IProps) => {
   const { t } = useTranslation();
   const router = useRouter();
 
@@ -185,7 +177,7 @@ const ManufacturerList = ({
             <ActionButtons
               id={id}
               editUrl={`${router.asPath}/edit/${id}`}
-              deleteModalView={DELETE_MANUFACTURER}
+              deleteModalView={DELETE_BRAND}
             />
           );
         }
@@ -206,7 +198,7 @@ const ManufacturerList = ({
       // @ts-ignore
       columns={tableColumns}
       emptyText={t('table:empty-table-data')}
-      data={loading ? tablePlaceholderRow : manufacturers}
+      data={loading ? tablePlaceholderRow : brands}
       rowKey="id"
       scroll={{ x: 380 }}
       className="mb-6 overflow-hidden border"
@@ -214,4 +206,4 @@ const ManufacturerList = ({
   );
 };
 
-export default ManufacturerList;
+export default BrandList;

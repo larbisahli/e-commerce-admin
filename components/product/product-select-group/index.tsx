@@ -11,8 +11,8 @@ import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/notify';
 import { setEtag } from '@store/client';
 import {
+  BrandType,
   Category,
-  ManufacturerType,
   Product,
   Suppliers,
   Tag
@@ -22,8 +22,8 @@ import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { memo, useMemo, useState } from 'react';
 
+import ProductBrand from './product-brand';
 import ProductCategory from './product-category';
-import ProductManufacturer from './product-manufacturer';
 import ProductSupplier from './product-supplier';
 import ProductTag from './product-tag';
 
@@ -31,7 +31,7 @@ interface Props {
   initialValues: Product;
   state: {
     categories: Product['categories'];
-    manufacturers: Product['manufacturers'];
+    brands: Product['brands'];
     tags: Product['tags'];
     suppliers: Product['suppliers'];
     isUpdateMode: boolean;
@@ -46,7 +46,7 @@ const ProductSelectGroup = ({ state, initialValues }: Props) => {
 
   const productId = parseInt(query.productId as string, 10);
 
-  const { categories, manufacturers, suppliers, tags, isUpdateMode } = state;
+  const { categories, brands, suppliers, tags, isUpdateMode } = state;
 
   const [initProductCategories, setInitProductCategories] = useState<
     Category[]
@@ -57,9 +57,9 @@ const ProductSelectGroup = ({ state, initialValues }: Props) => {
   const [initProductSuppliers, setInitProductSuppliers] = useState<Suppliers[]>(
     () => initialValues?.suppliers
   );
-  const [initProductManufacturers, setInitProductManufacturers] = useState<
-    ManufacturerType[]
-  >(() => initialValues?.manufacturers);
+  const [initProductBrands, setInitProductBrands] = useState<BrandType[]>(
+    () => initialValues?.brands
+  );
 
   // __ CATEGORIES __
   const { additions: additionalCategories, deletions: deletedCategories } =
@@ -74,8 +74,8 @@ const ProductSelectGroup = ({ state, initialValues }: Props) => {
     useDifferenceWith(tags, initProductTags, isUpdateMode);
 
   // __ TAGS __
-  const { additions: additionalManufacturer, deletions: deletedManufacturer } =
-    useDifferenceWith(manufacturers, initProductManufacturers, isUpdateMode);
+  const { additions: additionalBrand, deletions: deletedBrand } =
+    useDifferenceWith(brands, initProductBrands, isUpdateMode);
 
   const isUpdated = useMemo(() => {
     return (
@@ -85,8 +85,8 @@ const ProductSelectGroup = ({ state, initialValues }: Props) => {
       !isEmpty(deletedSuppliers) ||
       !isEmpty(additionalTags) ||
       !isEmpty(deletedTags) ||
-      !isEmpty(additionalManufacturer) ||
-      !isEmpty(deletedManufacturer)
+      !isEmpty(additionalBrand) ||
+      !isEmpty(deletedBrand)
     );
   }, [
     additionalCategories,
@@ -95,8 +95,8 @@ const ProductSelectGroup = ({ state, initialValues }: Props) => {
     deletedSuppliers,
     additionalTags,
     deletedTags,
-    additionalManufacturer,
-    deletedManufacturer
+    additionalBrand,
+    deletedBrand
   ]);
 
   const { selectedLanguage } = useSettings();
@@ -120,12 +120,12 @@ const ProductSelectGroup = ({ state, initialValues }: Props) => {
             categories = [],
             tags = [],
             suppliers = [],
-            manufacturers
+            brands
           } = data.updateProductSelectGroup;
           setInitProductCategories(categories);
           setInitProductTags(tags);
           setInitProductSuppliers(suppliers);
-          setInitProductManufacturers(manufacturers);
+          setInitProductBrands(brands);
           notify(t('common:successfully-updated'), 'success');
         }
       }
@@ -148,13 +148,13 @@ const ProductSelectGroup = ({ state, initialValues }: Props) => {
           categories: additionalCategories,
           tags: additionalTags,
           suppliers: additionalSuppliers,
-          manufacturers: additionalManufacturer
+          brands: additionalBrand
         },
         deletions: {
           categories: deletedCategories,
           tags: deletedTags,
           suppliers: deletedSuppliers,
-          manufacturers: deletedManufacturer
+          brands: deletedBrand
         }
       }
     }).catch((err) => {
@@ -183,7 +183,10 @@ const ProductSelectGroup = ({ state, initialValues }: Props) => {
   };
 
   return (
-    <Accordion isUpdated={isUpdated} Title={() => t('form:type-product-group')}>
+    <Accordion
+      isUpdated={isUpdated}
+      Title={() => <>{t('form:type-product-group')}</>}
+    >
       <div className="my-5 flex flex-wrap sm:my-8">
         <Description
           details={t('form:type-product-group-help-text')}
@@ -191,7 +194,7 @@ const ProductSelectGroup = ({ state, initialValues }: Props) => {
         />
         <Card className="w-full sm:w-3/4 md:w-3/4">
           <ProductCategory categories={categories} />
-          <ProductManufacturer manufacturers={manufacturers} />
+          <ProductBrand brands={brands} />
           <ProductSupplier suppliers={suppliers} />
           <ProductTag tags={tags} />
           {renderSaveButton()}

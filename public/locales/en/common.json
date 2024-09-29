@@ -49,7 +49,7 @@
   "august": "August",
   "september": "September",
   "supplier": "Supplier",
-  "manufacturer": "Manufacturer",
+  "brand": "Brand",
   "october": "October",
   "november": "November",
   "december": "December",
@@ -86,7 +86,7 @@
   "sidebar-nav-item-order-status": "Order Status",
   "sidebar-nav-item-customers": "Customers",
   "sidebar-nav-item-suppliers": "Suppliers",
-  "sidebar-nav-item-manufacturer": "Manufacturer",
+  "sidebar-nav-item-brand": "Brand",
   "sidebar-nav-item-catalog": "Catalog",
   "sidebar-nav-item-users": "Users",
   "sidebar-nav-item-all-users": "All Users",
@@ -329,5 +329,5 @@
   "input-info2-store-link": "You can always replace this store custom domain with your own domain name",
   "sidebar-nav-item-new-product": "New Product",
   "sidebar-nav-item-reviews": "Reviews",
-  "sidebar-nav-item-manufacturers": "Manufacturers"
+  "sidebar-nav-item-brands": "Brands"
 }

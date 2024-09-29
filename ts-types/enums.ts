@@ -66,7 +66,7 @@ export enum RESOURCES {
   MARKETPLACE = 'marketPlace',
   STORE_SETTINGS = 'storeSettings',
   MEDIA = 'media',
-  MANUFACTURER = 'manufacturer',
+  BRAND = 'brand',
   STORE_LANGUAGE = 'storeLanguage',
   INTERNAL = 'internal',
   STORE_BUILDER = 'storeBuilder',

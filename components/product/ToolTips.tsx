@@ -14,11 +14,11 @@ export const CategoryTooltipContent = () => {
   );
 };
 
-export const ManufacturerTooltipContent = () => {
+export const BrandTooltipContent = () => {
   return (
     <div className="flex flex-col">
-      <div className="max-w-[300px] leading-snug">Select Manufacturer</div>
-      <Link href={ROUTES.MANUFACTURER}>
+      <div className="max-w-[300px] leading-snug">Select Brand</div>
+      <Link href={ROUTES.BRAND}>
         <div className="font-medium text-blue-600 underline" target="_blank">
           See More
         </div>

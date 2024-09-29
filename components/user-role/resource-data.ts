@@ -121,7 +121,7 @@ export const resourceDefaultData = [
     [ACTION_PRIVILEGES.DELETE]: false
   },
   {
-    resource: RESOURCES.MANUFACTURER,
+    resource: RESOURCES.BRAND,
     [ACTION_PRIVILEGES.WRITE]: false,
     [ACTION_PRIVILEGES.READ]: false,
     [ACTION_PRIVILEGES.UPDATE]: false,
@@ -168,7 +168,7 @@ export const resourcesNameMapper = {
   [RESOURCES.MARKETPLACE]: 'MarketPlace',
   [RESOURCES.STORE_SETTINGS]: 'Store Settings',
   [RESOURCES.MEDIA]: 'Media',
-  [RESOURCES.MANUFACTURER]: 'Manufacturer',
+  [RESOURCES.BRAND]: 'Brand',
   [RESOURCES.STORE_LANGUAGE]: 'Store Language',
   [RESOURCES.STORE_BUILDER]: 'Store Builder',
   [RESOURCES.PAYMENT]: 'Payment'

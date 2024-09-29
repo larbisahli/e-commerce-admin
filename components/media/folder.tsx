@@ -178,6 +178,7 @@ export default function Folder({
             customPlaceholder={photo?.placeholder}
             width={160}
             height={160}
+            className="rounded"
             objectFit="cover"
           />
         </button>

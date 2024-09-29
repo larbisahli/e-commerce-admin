@@ -126,7 +126,7 @@ export const COLUMNS = {
     { label: 'Updated By', key: 'updatedBy' },
     { label: 'Actions', key: 'actions' }
   ],
-  manufacturer: [
+  brand: [
     { label: 'Logo', key: 'logo' },
     { label: 'Name', key: 'name' },
     { label: 'Creation Date', key: 'createdAt' },

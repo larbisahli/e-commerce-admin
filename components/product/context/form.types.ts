@@ -5,7 +5,7 @@ import {
   AttributeValue,
   Category,
   ImageType,
-  ManufacturerType,
+  BrandType,
   Product,
   Suppliers,
   Tag,
@@ -31,7 +31,7 @@ export enum Actions {
   TAGS = 'TAGS',
   SUPPLIERS = 'SUPPLIERS',
   CATEGORIES = 'CATEGORIES',
-  MANUFACTURERS = 'MANUFACTURERS',
+  BRANDS = 'BRANDS',
   PRODUCT_SHIPPING_INFO = 'PRODUCT_SHIPPING_INFO',
   PRODUCT_SEO = 'PRODUCT_SEO',
   INSERT_PRODUCT_LIST = 'INSERT_PRODUCT_LIST',
@@ -55,7 +55,7 @@ interface VariationPayload {
     | Category
     | Tag
     | Suppliers
-    | ManufacturerType
+    | BrandType
     | ImageType
     | AttributeValue
     | CartesianType[]

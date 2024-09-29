@@ -147,7 +147,7 @@ export interface EtagGroupsType {
   analyticEtag: string;
   orderEtag: string;
   tagEtag: string;
-  manufacturerEtag: string;
+  brandEtag: string;
   attributeEtag: string;
   userRoleEtag: string;
   orderStatusEtag: string;
@@ -410,7 +410,7 @@ export interface Product extends CreatedUpdatedByAt {
   thumbnail?: ImageType[];
   gallery?: ImageType[];
   categories?: Array<Category>;
-  manufacturers?: Array<ManufacturerType>;
+  brands?: Array<BrandType>;
   suppliers?: Nullable<Array<Suppliers>>;
   tags?: Nullable<Array<Nullable<Tag>>>;
   attributes?: VariationType[];
@@ -522,7 +522,7 @@ export interface Suppliers extends CreatedUpdatedByAt {
   etag?: EtagGroupsType;
 }
 
-export interface ManufacturerType extends CreatedUpdatedByAt {
+export interface BrandType extends CreatedUpdatedByAt {
   id: Scalars['Int'];
   name?: Scalars['String'];
   link?: Nullable<Scalars['String']>;

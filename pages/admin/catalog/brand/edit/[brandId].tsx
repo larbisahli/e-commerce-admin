@@ -2,13 +2,13 @@ import { useQuery } from '@apollo/client';
 import { PageFormPlaceholder } from '@components/common/commonComponents';
 import AppLayout from '@components/layouts/app';
 import ErrorMessage from '@components/ui/error-message';
-import { MANUFACTURER } from '@graphql/manufacturer';
+import { BRAND } from '@graphql/brand';
 import { useGetClient } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useSettings } from '@hooks/useSettings';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import type { LanguageProps, SSRProps } from '@ts-types/custom.types';
-import type { ManufacturerType } from '@ts-types/generated';
+import type { BrandType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import { isEmpty } from 'lodash';
 import type { GetServerSideProps } from 'next';
@@ -18,23 +18,23 @@ import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-const CreateOrUpdateManufacturerForm = dynamic(
-  () => import('@components/manufacturer/manufacturer-form'),
+const CreateOrUpdateBrandForm = dynamic(
+  () => import('@components/brand/brand-form'),
   { ssr: true, loading: () => <PageFormPlaceholder /> }
 );
 
-interface TManufacturer {
-  manufacturer: ManufacturerType;
+interface TBrand {
+  brand: BrandType;
 }
 interface OptionsVariable extends LanguageProps {
   id: number;
 }
 
-export default function UpdateManufacturerPage({ client }: SSRProps) {
+export default function UpdateBrandPage({ client }: SSRProps) {
   const { t } = useTranslation();
   const { query } = useRouter();
 
-  const manufacturerId = parseInt(query.manufacturerId as string, 10);
+  const brandId = parseInt(query.brandId as string, 10);
 
   const { selectedLanguage } = useSettings();
 
@@ -42,24 +42,21 @@ export default function UpdateManufacturerPage({ client }: SSRProps) {
     userInfo: { store: { etag } = {} }
   } = useGetClient(client);
 
-  const { data, loading, error } = useQuery<TManufacturer, OptionsVariable>(
-    MANUFACTURER,
-    {
-      variables: {
-        id: manufacturerId,
-        language: selectedLanguage,
-        etag: etag?.manufacturerEtag
-      },
-      fetchPolicy: 'cache-and-network',
-      skip: isEmpty(selectedLanguage) || isEmpty(etag)
-    }
-  );
+  const { data, loading, error } = useQuery<TBrand, OptionsVariable>(BRAND, {
+    variables: {
+      id: brandId,
+      language: selectedLanguage,
+      etag: etag?.brandEtag
+    },
+    fetchPolicy: 'cache-and-network',
+    skip: isEmpty(selectedLanguage) || isEmpty(etag)
+  });
 
-  const { manufacturer = [] } = data ?? {};
+  const { brand = [] } = data ?? {};
 
   useErrorLogger(error);
 
-  if (isEmpty(manufacturer) || loading) {
+  if (isEmpty(brand) || loading) {
     return <PageFormPlaceholder />;
   }
 
@@ -70,20 +67,15 @@ export default function UpdateManufacturerPage({ client }: SSRProps) {
   return (
     <>
       <Head>
-        <title>Edit Manufacturer | Dropgala</title>
-        <link
-          rel="icon"
-          type="image/svg"
-          sizes="32x32"
-          href="/svg/manufacturer.svg"
-        />
+        <title>Edit Brand | Dropgala</title>
+        <link rel="icon" type="image/svg" sizes="32x32" href="/svg/brand.svg" />
       </Head>
-      <CreateOrUpdateManufacturerForm initialValues={manufacturer} />
+      <CreateOrUpdateBrandForm initialValues={brand} />
     </>
   );
 }
 
-UpdateManufacturerPage.Layout = AppLayout;
+UpdateBrandPage.Layout = AppLayout;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { locale } = context;

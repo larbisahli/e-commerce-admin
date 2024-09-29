@@ -1,14 +1,14 @@
 import { useQuery } from '@apollo/client';
+import BrandList from '@components/brand/brand-list';
 import AppLayout from '@components/layouts/app';
-import ManufacturerList from '@components/manufacturer/manufacturer-list';
 import ErrorMessage from '@components/ui/error-message';
-import { MANUFACTURERS } from '@graphql/manufacturer';
+import { BRANDS } from '@graphql/brand';
 import { useErrorLogger, useGetClient } from '@hooks/index';
 import { useSettings } from '@hooks/useSettings';
 import { useTableColumn } from '@hooks/useTableColumn';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { SSRProps, TableQueryVariables } from '@ts-types/custom.types';
-import { ManufacturerType, OrderBy, SortOrder } from '@ts-types/generated';
+import { BrandType, OrderBy, SortOrder } from '@ts-types/generated';
 import { COLUMNS } from '@utils/data/table-columns';
 import { ROUTES } from '@utils/routes';
 import isEmpty from 'lodash/isEmpty';
@@ -36,19 +36,18 @@ const PageMainAction = dynamic(
 );
 
 interface TSupplier {
-  manufacturers: ManufacturerType[];
-  manufacturerCount: { count: number };
+  brands: BrandType[];
+  brandCount: { count: number };
 }
 
-export default function ManufacturerPage({ client }: SSRProps) {
+export default function BrandPage({ client }: SSRProps) {
   const { t } = useTranslation();
 
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState({ id: 1, value: 10, label: 10 });
   const [orderBy, setOrder] = useState(OrderBy.CREATED_AT);
 
-  const { selectedTableColumns, handleColumnChange } =
-    useTableColumn('manufacturer');
+  const { selectedTableColumns, handleColumnChange } = useTableColumn('brand');
 
   const { selectedLanguage } = useSettings();
 
@@ -59,21 +58,20 @@ export default function ManufacturerPage({ client }: SSRProps) {
   const { data, loading, error, fetchMore } = useQuery<
     TSupplier,
     TableQueryVariables
-  >(MANUFACTURERS, {
+  >(BRANDS, {
     variables: {
       page,
       limit: limit.value,
       orderBy,
       sortedBy: SortOrder.Desc,
       language: selectedLanguage,
-      etag: etag?.manufacturerEtag
+      etag: etag?.brandEtag
     },
     fetchPolicy: 'cache-and-network',
     skip: isEmpty(selectedLanguage) || isEmpty(etag)
   });
 
-  const { manufacturers = [], manufacturerCount: { count } = { count: 0 } } =
-    data ?? {};
+  const { brands = [], brandCount: { count } = { count: 0 } } = data ?? {};
 
   useErrorLogger(error);
 
@@ -96,21 +94,16 @@ export default function ManufacturerPage({ client }: SSRProps) {
   return (
     <>
       <Head>
-        <title>Manufacturers | Dropgala</title>
-        <link
-          rel="icon"
-          type="image/svg"
-          sizes="32x32"
-          href="/svg/manufacturer.svg"
-        />
+        <title>Brands | Dropgala</title>
+        <link rel="icon" type="image/svg" sizes="32x32" href="/svg/brand.svg" />
       </Head>
       <PageMainAction
-        href={`${ROUTES.MANUFACTURER}/create`}
-        title={t('common:sidebar-nav-item-manufacturers')}
-        label={t('form:button-label-add-manufacturer')}
+        href={`${ROUTES.BRAND}/create`}
+        title={t('common:sidebar-nav-item-brands')}
+        label={t('form:button-label-add-brand')}
       />
       <PageMainHeader
-        columns={COLUMNS['manufacturer']}
+        columns={COLUMNS['brand']}
         selectedColumns={selectedTableColumns}
         handleColumnChange={handleColumnChange}
         onLimitChange={(value) => {
@@ -122,16 +115,16 @@ export default function ManufacturerPage({ client }: SSRProps) {
         currentPage={page}
         perPage={limit.value}
       />
-      <ManufacturerList
+      <BrandList
         loading={loading}
         selectedColumns={selectedTableColumns}
-        manufacturers={manufacturers}
+        brands={brands}
       />
     </>
   );
 }
 
-ManufacturerPage.Layout = AppLayout;
+BrandPage.Layout = AppLayout;
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { locale } = context;

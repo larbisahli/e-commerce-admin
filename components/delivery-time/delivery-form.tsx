@@ -179,8 +179,8 @@ export default function CreateOrUpdateDeliveryForm({ initialValues }: IProps) {
         forceSystemLang={isEmpty(initialValues)}
         title={
           isEmpty(initialValues)
-            ? t('form:form-title-new-manufacturer')
-            : t('form:form-title-edit-manufacturer')
+            ? t('form:form-title-new-brand')
+            : t('form:form-title-edit-brand')
         }
         loading={creating || updating}
         disabled={creating || updating}

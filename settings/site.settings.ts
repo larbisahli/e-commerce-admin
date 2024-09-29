@@ -124,8 +124,8 @@ export const siteSettings = {
           },
           {
             id: 'D2IXXKt',
-            href: ROUTES.MANUFACTURER,
-            label: 'sidebar-nav-item-manufacturers',
+            href: ROUTES.BRAND,
+            label: 'sidebar-nav-item-brands',
             padding: '35px',
             isSubLink: true
           }

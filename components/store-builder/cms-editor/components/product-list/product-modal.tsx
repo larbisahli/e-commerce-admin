@@ -26,7 +26,13 @@ interface ProductVariable extends TableQueryVariables {
   id: number;
 }
 
-const ProductModal = ({ modalOpen, collection, setModalOpen, setValue }) => {
+const ProductModal = ({
+  modalOpen,
+  collection,
+  setModalOpen,
+  setValue,
+  setProducts
+}) => {
   const { t } = useTranslation();
 
   const [page, setPage] = useState(1);
@@ -78,6 +84,10 @@ const ProductModal = ({ modalOpen, collection, setModalOpen, setValue }) => {
       }
     });
   };
+
+  useEffect(() => {
+    setProducts(products);
+  }, [products]);
 
   useEffect(() => {
     setSelectedProducts(collection ?? []);

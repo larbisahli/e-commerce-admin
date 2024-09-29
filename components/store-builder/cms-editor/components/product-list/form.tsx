@@ -67,7 +67,7 @@ interface OptionsVariable {
   etag: string;
 }
 
-const moduleSliderBlackList = ['ProductListWidget'];
+const moduleSliderBlackList = ['ProductListGridWidget'];
 
 const ProductListForm = ({ initialValues }: IProps) => {
   const { t } = useTranslation();
@@ -76,6 +76,7 @@ const ProductListForm = ({ initialValues }: IProps) => {
   const moduleName = initialValues?.moduleName;
 
   const [modalOpen, setModalOpen] = useState(false);
+  const [cachedProducts, setProducts] = useState([]);
   const [error, setError] = useState(null);
   const { selectedLanguage } = useSettings();
 
@@ -151,7 +152,7 @@ const ProductListForm = ({ initialValues }: IProps) => {
   useErrorLogger(error);
   useErrorLogger(categoryQueryError);
 
-  const isBlackListed = useMemo(
+  const isGridModule = useMemo(
     () => moduleSliderBlackList?.includes(moduleName),
     [moduleName]
   );
@@ -196,6 +197,12 @@ const ProductListForm = ({ initialValues }: IProps) => {
   const loop = watch('sliderConfiguration.loop');
   const draggable = watch('sliderConfiguration.draggable');
 
+  const tableCollection = useMemo(() => {
+    return collection.map((item) => {
+      return cachedProducts.find((p) => p.id === item.id);
+    });
+  }, [cachedProducts, collection]);
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <ProductModal
@@ -203,6 +210,7 @@ const ProductListForm = ({ initialValues }: IProps) => {
         setModalOpen={setModalOpen}
         collection={collection}
         setValue={setValue}
+        setProducts={setProducts}
       />
       <FormActions
         btnLabel={t('form:button-label-save-content')}
@@ -244,7 +252,7 @@ const ProductListForm = ({ initialValues }: IProps) => {
             />
             <p className="my-1 text-xs text-gray-500">{`Links to (URL): /category/${category?.urlKey}`}</p>
           </div>
-          {isBlackListed && (
+          {isGridModule && (
             <>
               <Input
                 label={'Products per column'}
@@ -262,7 +270,7 @@ const ProductListForm = ({ initialValues }: IProps) => {
           )}
         </Card>
       </div>
-      {!isBlackListed && (
+      {!isGridModule && (
         <div className="my-5 flex flex-wrap sm:my-8">
           <Description
             title={'Slider Configuration'}
@@ -343,8 +351,8 @@ const ProductListForm = ({ initialValues }: IProps) => {
           {!isEmpty(collection) && (
             <div className="mt-5">
               <ProductList
-                products={collection}
-                loading={false}
+                products={tableCollection}
+                loading={!cachedProducts}
                 selectedColumns={[
                   'thumbnail',
                   'name',

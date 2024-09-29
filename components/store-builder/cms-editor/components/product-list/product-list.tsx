@@ -47,14 +47,14 @@ const ProductList = ({ loading, products, selectedColumns }: IProps) => {
 
   let columns = useMemo(() => {
     return [
-      {
-        title: t('table:table-item-id'),
-        dataIndex: 'id',
-        key: 'id',
-        align: alignLeft,
-        width: 80,
-        ellipsis: true
-      },
+      // {
+      //   title: t('table:table-item-id'),
+      //   dataIndex: 'id',
+      //   key: 'id',
+      //   align: alignLeft,
+      //   width: 80,
+      //   ellipsis: true
+      // },
       {
         title: t('table:table-item-image'),
         dataIndex: 'thumbnail',

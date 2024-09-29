@@ -11,17 +11,14 @@ import Alert from '@components/ui/alert';
 import Description from '@components/ui/description';
 import Input from '@components/ui/input';
 import TextArea from '@components/ui/text-area';
-import {
-  CREATE_MANUFACTURER,
-  UPDATE_MANUFACTURER
-} from '@graphql/manufacturer';
+import { CREATE_BRAND, UPDATE_BRAND } from '@graphql/brand';
 import { useGetClient } from '@hooks/index';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useAppDispatch } from '@hooks/useGetClient';
 import { useSettings } from '@hooks/useSettings';
 import { notify } from '@lib/index';
 import { setEtag } from '@store/client';
-import type { ManufacturerType } from '@ts-types/generated';
+import type { BrandType } from '@ts-types/generated';
 import { ROUTES } from '@utils/routes';
 import { translationFallback } from '@utils/utils';
 import isEmpty from 'lodash/isEmpty';
@@ -31,10 +28,10 @@ import { useState } from 'react';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 
-type FormValues = ManufacturerType;
+type FormValues = BrandType;
 
 type IProps = {
-  initialValues?: ManufacturerType | any;
+  initialValues?: BrandType | any;
 };
 
 const defaultValues = {
@@ -43,9 +40,7 @@ const defaultValues = {
   description: null
 };
 
-export default function CreateOrUpdateManufacturerForm({
-  initialValues
-}: IProps) {
+export default function CreateOrUpdateBrandForm({ initialValues }: IProps) {
   const router = useRouter();
 
   const [error, setError] = useState(null);
@@ -69,43 +64,37 @@ export default function CreateOrUpdateManufacturerForm({
   const { userInfo } = useGetClient();
   const csrfToken = userInfo?.csrfToken;
 
-  const [createManufacturer, { loading: creating }] = useMutation(
-    CREATE_MANUFACTURER,
-    {
-      context: {
-        headers: {
-          'x-csrf-token': csrfToken
-        }
-      },
-      onCompleted: (data: { createManufacturer: ManufacturerType }) => {
-        const { id } = data.createManufacturer;
-        if (id) {
-          const { etag: newEtag } = data.createManufacturer ?? {};
-          dispatch(setEtag({ etag: newEtag }));
-          notify(t('common:successfully-created'), 'success');
-          router.push(`${ROUTES.MANUFACTURER}/edit/${id}`);
-        }
+  const [createBrand, { loading: creating }] = useMutation(CREATE_BRAND, {
+    context: {
+      headers: {
+        'x-csrf-token': csrfToken
+      }
+    },
+    onCompleted: (data: { createBrand: BrandType }) => {
+      const { id } = data.createBrand;
+      if (id) {
+        const { etag: newEtag } = data.createBrand ?? {};
+        dispatch(setEtag({ etag: newEtag }));
+        notify(t('common:successfully-created'), 'success');
+        router.push(`${ROUTES.BRAND}/edit/${id}`);
       }
     }
-  );
+  });
 
-  const [updateManufacturer, { loading: updating }] = useMutation(
-    UPDATE_MANUFACTURER,
-    {
-      context: {
-        headers: {
-          'x-csrf-token': csrfToken
-        }
-      },
-      onCompleted: (data: { updateManufacturer: ManufacturerType }) => {
-        if (!isEmpty(data?.updateManufacturer)) {
-          notify(t('common:successfully-updated'), 'success');
-          const { etag: newEtag } = data?.updateManufacturer ?? {};
-          dispatch(setEtag({ etag: newEtag }));
-        }
+  const [updateBrand, { loading: updating }] = useMutation(UPDATE_BRAND, {
+    context: {
+      headers: {
+        'x-csrf-token': csrfToken
+      }
+    },
+    onCompleted: (data: { updateBrand: BrandType }) => {
+      if (!isEmpty(data?.updateBrand)) {
+        notify(t('common:successfully-updated'), 'success');
+        const { etag: newEtag } = data?.updateBrand ?? {};
+        dispatch(setEtag({ etag: newEtag }));
       }
     }
-  );
+  });
 
   useErrorLogger(error);
 
@@ -117,11 +106,11 @@ export default function CreateOrUpdateManufacturerForm({
     };
 
     if (isEmpty(initialValues)) {
-      createManufacturer({ variables }).catch((err) => {
+      createBrand({ variables }).catch((err) => {
         setError(err);
       });
     } else {
-      updateManufacturer({
+      updateBrand({
         variables: { ...variables, id: initialValues.id }
       }).catch((err) => {
         setError(err);
@@ -144,7 +133,7 @@ export default function CreateOrUpdateManufacturerForm({
       ) : null}
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormActions
-          backLink={ROUTES.MANUFACTURER}
+          backLink={ROUTES.BRAND}
           forceSystemLang={isEmpty(initialValues)}
           title={
             isEmpty(initialValues)
@@ -155,18 +144,18 @@ export default function CreateOrUpdateManufacturerForm({
           disabled={creating || updating}
         />
         <LanguageDefaultDescInfo
-          label="New Manufacturer"
+          label="New Brand"
           isVisible={isEmpty(initialValues)}
         />
         <div className="my-5 flex flex-wrap border-b border-dashed border-border-base pb-8 sm:my-8">
           <Description
             title={t('form:input-label-logo')}
-            details={t('form:manufacturer-image-helper-text')}
+            details={t('form:brand-image-helper-text')}
             className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
           />
           <Card className="w-full sm:w-8/12 md:w-2/3">
             <ImageModal
-              label="form:label-add-manufacturer-logo"
+              label="form:label-add-brand-logo"
               onSelect={(logo) => setValue('logo', logo)}
               selected={logo}
               isThumbnail
@@ -175,26 +164,26 @@ export default function CreateOrUpdateManufacturerForm({
         </div>
         <div className="my-5 flex flex-wrap border-b border-dashed border-border-base pb-8 sm:my-8">
           <Description
-            title={t('common:manufacturer')}
+            title={t('common:brand')}
             details={`${
               initialValues
                 ? t('form:item-description-update')
                 : t('form:item-description-add')
-            } ${t('form:form-description-manufacturer-name')}`}
+            } ${t('form:form-description-brand-name')}`}
             className="w-full px-0 pb-5 sm:w-4/12 sm:py-8 sm:pe-4 md:w-1/3 md:pe-5"
           />
 
           <Card className="w-full sm:w-8/12 md:w-2/3">
             <div className="grid grid-cols-2 gap-5">
               <Input
-                label={t('form:input-label-manufacturer-name')}
+                label={t('form:input-label-brand-name')}
                 isRequiredLabel
                 {...register('name', { required: 'Name is required' })}
                 error={t(errors.name?.message!)}
                 placeholder={translationFallback(
                   initialValues,
                   'name',
-                  'Enter manufacturer name'
+                  'Enter brand name'
                 )}
                 variant="outline"
                 className="mb-5"
@@ -203,7 +192,7 @@ export default function CreateOrUpdateManufacturerForm({
                 label={t('form:input-label-website')}
                 {...register('link')}
                 error={t(errors.link?.message!)}
-                placeholder="Enter Manufacturer website url"
+                placeholder="Enter Brand website url"
                 variant="outline"
                 className="mb-5"
               />

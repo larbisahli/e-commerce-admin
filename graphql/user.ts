@@ -72,7 +72,7 @@ export const USER_AUTH = gql`
           analyticEtag
           orderEtag
           tagEtag
-          manufacturerEtag
+          brandEtag
           attributeEtag
           userRoleEtag
           orderStatusEtag

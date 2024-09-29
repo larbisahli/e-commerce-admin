@@ -4,7 +4,7 @@ import {
   useModalAction,
   useModalState
 } from '@components/ui/modal/modal.context';
-import { DELETE_MANUFACTURER, MANUFACTURERS } from '@graphql/manufacturer';
+import { BRANDS, DELETE_BRAND } from '@graphql/brand';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useAppDispatch, useGetClient } from '@hooks/useGetClient';
 import { notify } from '@lib/notify';
@@ -12,24 +12,21 @@ import { setEtag } from '@store/client';
 import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
 
-const ManufacturerDeleteView = () => {
+const BrandDeleteView = () => {
   const { t } = useTranslation();
   const [error, setError] = useState(null);
 
   const { userInfo } = useGetClient();
   const csrfToken = userInfo?.csrfToken;
 
-  const [deleteManufacturerValue, { loading }] = useMutation(
-    DELETE_MANUFACTURER,
-    {
-      context: {
-        headers: {
-          'x-csrf-token': csrfToken
-        }
-      },
-      refetchQueries: [MANUFACTURERS, 'Manufacturers']
-    }
-  );
+  const [deleteBrandValue, { loading }] = useMutation(DELETE_BRAND, {
+    context: {
+      headers: {
+        'x-csrf-token': csrfToken
+      }
+    },
+    refetchQueries: [BRANDS, 'Brands']
+  });
 
   const dispatch = useAppDispatch();
   const { id } = useModalState();
@@ -38,10 +35,10 @@ const ManufacturerDeleteView = () => {
   useErrorLogger(error);
 
   async function handleDelete() {
-    deleteManufacturerValue({ variables: { id } })
+    deleteBrandValue({ variables: { id } })
       .then(({ data }) => {
         const {
-          deleteManufacturer: { id, etag }
+          deleteBrand: { id, etag }
         } = data;
         if (id) {
           dispatch(setEtag({ etag }));
@@ -63,4 +60,4 @@ const ManufacturerDeleteView = () => {
   );
 };
 
-export default ManufacturerDeleteView;
+export default BrandDeleteView;

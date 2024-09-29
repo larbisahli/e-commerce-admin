@@ -60,7 +60,7 @@ export const ROUTES = {
   MARKETPLACE_THEME: '/admin/marketplace/theme/listing',
   MARKETPLACE_APP: '/admin/marketplace/app/listing',
   MARKETPLACE_THEME_PAGE: '/admin/marketplace/theme',
-  MANUFACTURER: '/admin/catalog/manufacturer',
+  BRAND: '/admin/catalog/brand',
   SUPPLIER: '/admin/catalog/supplier',
   LANGUAGES: '/admin/store/languages',
   STORE_EXTENSIONS: '/admin/store/extensions',

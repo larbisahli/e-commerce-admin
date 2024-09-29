@@ -3,30 +3,30 @@ import {
   Actions,
   useFormReducer
 } from '@components/product/context/form.context';
-import { ManufacturerTooltipContent } from '@components/product/ToolTips';
+import { BrandTooltipContent } from '@components/product/ToolTips';
 // import ValidationError from '@components/ui/form-validation-error';
 import Label from '@components/ui/label';
 import Select from '@components/ui/select/select';
-import { MANUFACTURERS_FOR_SELECT } from '@graphql/manufacturer';
+import { BRANDS_FOR_SELECT } from '@graphql/brand';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetClient } from '@hooks/useGetClient';
 import { useSettings } from '@hooks/useSettings';
 import {
+  BrandType,
   Category,
   LanguageType,
-  ManufacturerType,
   OrderBy
 } from '@ts-types/generated';
 import { isEmpty } from 'lodash';
 import { useTranslation } from 'next-i18next';
 import React, { memo, useMemo } from 'react';
 
-interface TManufacturerSelect {
-  manufacturersForSelect: ManufacturerType[];
+interface TBrandSelect {
+  brandsForSelect: BrandType[];
 }
 
 interface Props {
-  manufacturers: ManufacturerType[];
+  brands: BrandType[];
 }
 
 interface OptionsVariable {
@@ -37,7 +37,7 @@ interface OptionsVariable {
   etag: string;
 }
 
-const ProductManufacturer = ({ manufacturers }: Props) => {
+const ProductBrand = ({ brands }: Props) => {
   const { t } = useTranslation('common');
 
   const dispatch = useFormReducer();
@@ -48,28 +48,28 @@ const ProductManufacturer = ({ manufacturers }: Props) => {
     userInfo: { store: { etag } = {} }
   } = useGetClient();
 
-  const { data, loading, error } = useQuery<
-    TManufacturerSelect,
-    OptionsVariable
-  >(MANUFACTURERS_FOR_SELECT, {
-    variables: {
-      page: 1,
-      limit: 999,
-      orderBy: OrderBy.CREATED_AT,
-      language: selectedLanguage,
-      etag: etag?.manufacturerEtag
-    },
-    fetchPolicy: 'cache-and-network',
-    skip: isEmpty(selectedLanguage) || isEmpty(etag)
-  });
+  const { data, loading, error } = useQuery<TBrandSelect, OptionsVariable>(
+    BRANDS_FOR_SELECT,
+    {
+      variables: {
+        page: 1,
+        limit: 999,
+        orderBy: OrderBy.CREATED_AT,
+        language: selectedLanguage,
+        etag: etag?.brandEtag
+      },
+      fetchPolicy: 'cache-and-network',
+      skip: isEmpty(selectedLanguage) || isEmpty(etag)
+    }
+  );
 
-  const { manufacturersForSelect = [] } = data ?? {};
+  const { brandsForSelect = [] } = data ?? {};
 
   useErrorLogger(error);
 
   const onChange = (values: Category[]) => {
     dispatch({
-      type: Actions.MANUFACTURERS,
+      type: Actions.BRANDS,
       payload: {
         values
       }
@@ -77,36 +77,36 @@ const ProductManufacturer = ({ manufacturers }: Props) => {
   };
 
   const options = useMemo(() => {
-    return manufacturersForSelect?.map(({ id, name, translated }) => {
+    return brandsForSelect?.map(({ id, name, translated }) => {
       return {
         id,
         name: name ?? translated?.name
       };
     });
-  }, [manufacturersForSelect]);
+  }, [brandsForSelect]);
 
-  const manufacturerValues = useMemo(() => {
-    return manufacturers?.map(({ id, name, translated }) => {
+  const brandValues = useMemo(() => {
+    return brands?.map(({ id, name, translated }) => {
       return {
         id,
         name: name ?? translated?.name
       };
     });
-  }, [manufacturers]);
+  }, [brands]);
 
   return (
     <div className="mb-5">
       <Label
         openTooltipOnClick
-        tooltipId="manufacturer"
-        renderTooltip={<ManufacturerTooltipContent />}
+        tooltipId="brand"
+        renderTooltip={<BrandTooltipContent />}
       >
-        {t('form:input-label-manufacturers')}
+        {t('form:input-label-brands')}
       </Label>
       <Select
         options={options}
-        value={manufacturerValues}
-        name="manufacturers"
+        value={brandValues}
+        name="brands"
         isMulti
         getOptionLabel={(option: any) => option.name}
         getOptionValue={(option: any) => option.id}
@@ -118,4 +118,4 @@ const ProductManufacturer = ({ manufacturers }: Props) => {
   );
 };
 
-export default memo(ProductManufacturer);
+export default memo(ProductBrand);

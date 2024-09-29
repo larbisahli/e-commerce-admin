@@ -1,6 +1,6 @@
 import {
   Category,
-  ManufacturerType,
+  BrandType,
   ProductStatus,
   ProductType,
   Suppliers,
@@ -30,7 +30,7 @@ const {
   TAGS,
   SUPPLIERS,
   CATEGORIES,
-  MANUFACTURERS,
+  BRANDS,
   PRODUCT_SHIPPING_INFO,
   PRODUCT_SEO,
   INSERT_PRODUCT_LIST,
@@ -69,10 +69,10 @@ export function formReducer(
         ...state,
         tags: payload.values as Tag[]
       };
-    case MANUFACTURERS:
+    case BRANDS:
       return {
         ...state,
-        manufacturers: payload.values as ManufacturerType[]
+        brands: payload.values as BrandType[]
       };
     case SUPPLIERS:
       return {

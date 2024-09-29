@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
-export const MANUFACTURER = gql`
-  query Manufacturer($id: Int!, $language: LanguageInput!, $etag: String!) {
-    manufacturer(id: $id, language: $language, etag: $etag) {
+export const BRAND = gql`
+  query Brand($id: Int!, $language: LanguageInput!, $etag: String!) {
+    brand(id: $id, language: $language, etag: $etag) {
       id
       name
       description
@@ -20,8 +20,8 @@ export const MANUFACTURER = gql`
   }
 `;
 
-export const MANUFACTURERS = gql`
-  query Manufacturers(
+export const BRANDS = gql`
+  query Brands(
     $page: Int!
     $limit: Int!
     $orderBy: String
@@ -29,10 +29,10 @@ export const MANUFACTURERS = gql`
     $language: LanguageInput!
     $etag: String!
   ) {
-    manufacturerCount(etag: $etag) {
+    brandCount(etag: $etag) {
       count
     }
-    manufacturers(
+    brands(
       page: $page
       limit: $limit
       orderBy: $orderBy
@@ -67,15 +67,15 @@ export const MANUFACTURERS = gql`
   }
 `;
 
-export const MANUFACTURERS_FOR_SELECT = gql`
-  query ManufacturersForSelect(
+export const BRANDS_FOR_SELECT = gql`
+  query BrandsForSelect(
     $page: Int!
     $limit: Int!
     $orderBy: String!
     $language: LanguageInput!
     $etag: String!
   ) {
-    manufacturersForSelect(
+    brandsForSelect(
       page: $page
       limit: $limit
       orderBy: $orderBy
@@ -91,15 +91,15 @@ export const MANUFACTURERS_FOR_SELECT = gql`
   }
 `;
 
-export const CREATE_MANUFACTURER = gql`
-  mutation CreateManufacturer(
+export const CREATE_BRAND = gql`
+  mutation CreateBrand(
     $name: String!
     $link: String
     $description: String
     $language: LanguageInput!
     $logo: [ImageInput]
   ) {
-    createManufacturer(
+    createBrand(
       name: $name
       link: $link
       description: $description
@@ -108,14 +108,14 @@ export const CREATE_MANUFACTURER = gql`
     ) {
       id
       etag {
-        manufacturerEtag
+        brandEtag
       }
     }
   }
 `;
 
-export const UPDATE_MANUFACTURER = gql`
-  mutation UpdateManufacturer(
+export const UPDATE_BRAND = gql`
+  mutation UpdateBrand(
     $id: Int!
     $name: String!
     $link: String
@@ -123,7 +123,7 @@ export const UPDATE_MANUFACTURER = gql`
     $language: LanguageInput!
     $logo: [ImageInput]
   ) {
-    updateManufacturer(
+    updateBrand(
       id: $id
       name: $name
       link: $link
@@ -133,18 +133,18 @@ export const UPDATE_MANUFACTURER = gql`
     ) {
       id
       etag {
-        manufacturerEtag
+        brandEtag
       }
     }
   }
 `;
 
-export const DELETE_MANUFACTURER = gql`
-  mutation DeleteManufacturer($id: Int!) {
-    deleteManufacturer(id: $id) {
+export const DELETE_BRAND = gql`
+  mutation DeleteBrand($id: Int!) {
+    deleteBrand(id: $id) {
       id
       etag {
-        manufacturerEtag
+        brandEtag
       }
     }
   }
