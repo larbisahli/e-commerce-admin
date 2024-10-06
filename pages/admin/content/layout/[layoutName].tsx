@@ -132,16 +132,18 @@ export default function CreateSupplierPage({ client }: SSRProps) {
   useEffect(() => {
     if (alias && meta?.sectionId && !iframeLoading) {
       // @ts-ignore
-      const iframeWin =
-        document.getElementById('storefront-iframe').contentWindow;
-      iframeWin.postMessage(
-        {
-          source: StoreBuilder.GALA_CMS_BUILDER,
-          actionType: StoreBuilderActions.SCROLL_TO_SECTION,
-          sectionId: meta?.sectionId
-        },
-        getBuilderSrc(alias)
-      );
+      setTimeout(() => {
+        const iframeWin =
+          document.getElementById('storefront-iframe').contentWindow;
+        iframeWin.postMessage(
+          {
+            source: StoreBuilder.GALA_CMS_BUILDER,
+            actionType: StoreBuilderActions.SCROLL_TO_SECTION,
+            sectionId: meta?.sectionId
+          },
+          getBuilderSrc(alias)
+        );
+      }, 900);
     }
   }, [alias, meta?.sectionId, iframeLoading]);
 

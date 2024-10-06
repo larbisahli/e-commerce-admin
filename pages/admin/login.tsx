@@ -1,10 +1,11 @@
 import FormFooter from '@components/auth/form-footer';
 import LoginForm from '@components/auth/login-form';
 // import LogoSvg from '@components/icons/logo';
-import { useGetClient } from '@hooks/index';
+import { useGetClient, useMediaQuery } from '@hooks/index';
 import { verifyAuth, XSRFHandler } from '@middleware/utils';
 import { SSRProps } from '@ts-types/custom.types';
 import { ROUTES } from '@utils/routes';
+import { isBoolean } from 'lodash';
 import { GetServerSideProps } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -12,7 +13,7 @@ import { useRouter } from 'next/router';
 import Script from 'next/script';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 
 import bgImage from '../../public/no-revisions.jpg';
 
@@ -20,7 +21,11 @@ const LoginPage = ({ client }: SSRProps) => {
   const router = useRouter();
   const { t } = useTranslation('common');
 
+  const gWidthRef = useRef(null);
+
   const [googleCredentials, setGoogleCredentials] = useState(null);
+
+  const isDesktop = useMediaQuery('min-width', 768);
 
   useGetClient(client);
 
@@ -28,30 +33,39 @@ const LoginPage = ({ client }: SSRProps) => {
     router.prefetch('/dashboard');
   }, []);
 
+  useEffect(() => {
+    if (isBoolean(isDesktop)) {
+      gWidthRef.current = { width: isDesktop ? 400 : 350 };
+    }
+  }, [isDesktop]);
+
   const handleGoogle = async (response) => {
     console.log('handleGoogle :>> ', { response });
     setGoogleCredentials(response);
   };
 
-  const initGoogleAuth = () => {
-    const google = (window as any).google;
-    if (google) {
-      google.accounts.id.initialize({
-        client_id: process.env.GOOGLE_OAUTH_CLIENT_ID,
-        callback: handleGoogle
-      });
-      const divRef = document.getElementById('signUpDiv');
-      google.accounts.id.renderButton(divRef, {
-        type: 'standard',
-        theme: 'filled_blue',
-        size: 'large',
-        text: 'signin_with',
-        logo_alignment: 'left',
-        width: 400,
-        shape: 'rectangular'
-      });
-      google.accounts.id.prompt();
-    }
+  const initGoogleAuth = (isDesktop) => {
+    setTimeout(() => {
+      const google = (window as any).google;
+      if (google) {
+        console.log({ isDesktop });
+        google.accounts.id.initialize({
+          client_id: process.env.GOOGLE_OAUTH_CLIENT_ID,
+          callback: handleGoogle
+        });
+        const divRef = document.getElementById('signUpDiv');
+        google.accounts.id.renderButton(divRef, {
+          type: 'standard',
+          theme: 'filled_blue',
+          size: 'large',
+          text: 'signin_with',
+          logo_alignment: 'left',
+          width: gWidthRef.current.width,
+          shape: 'rectangular'
+        });
+        google.accounts.id.prompt();
+      }
+    }, 500);
   };
 
   return (
@@ -59,7 +73,7 @@ const LoginPage = ({ client }: SSRProps) => {
       {/* Google Signup/signin script */}
       <Script
         src="https://accounts.google.com/gsi/client"
-        onReady={initGoogleAuth}
+        onReady={() => initGoogleAuth(isDesktop)}
       />
       <div className="flex h-screen items-center justify-center">
         {/* --------- */}

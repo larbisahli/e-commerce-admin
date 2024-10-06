@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 export const useMediaQuery = (query: string, value: number) => {
-  const [mediaQueryMatches, setMediaQueryMatches] = useState<boolean>(false);
+  const [mediaQueryMatches, setMediaQueryMatches] = useState<boolean>(null);
 
   useEffect(() => {
     const mql = window.matchMedia(`(${query}: ${value}px)`);

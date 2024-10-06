@@ -142,7 +142,7 @@ const LoginForm = ({ googleCredentials }: Props) => {
       <form
         onSubmit={handleSubmit(onSubmit)}
         noValidate
-        className="mt-8 w-[400px]"
+        className="mt-8 w-[350px] md:w-[400px]"
       >
         <div className="phone-number-class mb-5">
           <Input
