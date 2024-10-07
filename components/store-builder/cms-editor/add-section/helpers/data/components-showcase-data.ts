@@ -109,24 +109,24 @@ export const componentsThumbnail = {
     {
       moduleName: 'Footer',
       thumbnail: {
-        image: '/static/components/footer/footer-default.png',
-        placeholder: '/static/components/footer/footer-default.png'
+        image: '/static/components/footerr/footer-default.png',
+        placeholder: '/static/components/footerr/footer-default.png'
       },
       title: 'Footer Default'
     },
     {
       moduleName: 'FooterSubscribe',
       thumbnail: {
-        image: '/static/components/footer/footer-subscribe.png',
-        placeholder: '/static/components/footer/footer-subscribe.png'
+        image: '/static/components/footerr/footer-subscribe.png',
+        placeholder: '/static/components/footerr/footer-subscribe.png'
       },
       title: 'Footer Subscribe'
     },
     {
       moduleName: 'FooterLight',
       thumbnail: {
-        image: '/static/components/footer/footer-light.png',
-        placeholder: '/static/components/footer/footer-light.png'
+        image: '/static/components/footerr/footer-light.png',
+        placeholder: '/static/components/footerr/footer-light.png'
       },
       title: 'Footer Light'
     }
