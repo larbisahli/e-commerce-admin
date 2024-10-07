@@ -1,24 +1,24 @@
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
+import { useMutation } from '@apollo/client';
 import AlertIcon from '@components/icons/alert';
-import ExternalLinkIcon from '@components/icons/external-link';
-import ResendEmail from '@components/icons/resend-email';
-import { ROUTES } from '@utils/routes';
-import Link from 'next/link';
-import { UpgradeIcon } from '@components/icons/sidebar/upgrade';
-import Button from '@components/ui/button';
-import cn from 'classnames';
 import { CheckMark } from '@components/icons/checkmark';
 import { CloseIcon } from '@components/icons/close-icon';
-import { useSettings } from '@hooks/useSettings';
-import { useMutation } from '@apollo/client';
+import ExternalLinkIcon from '@components/icons/external-link';
+import ResendEmail from '@components/icons/resend-email';
+import { UpgradeIcon } from '@components/icons/sidebar/upgrade';
+import Button from '@components/ui/button';
 import { RESEND_VERIFICATION_LINK } from '@graphql/settings';
-import { useGetClient } from '@hooks/useGetClient';
-import { notify } from '@lib/notify';
 import { useErrorLogger } from '@hooks/useErrorLogger';
-import { useState } from 'react';
+import { useGetClient } from '@hooks/useGetClient';
+import { useSettings } from '@hooks/useSettings';
+import { notify } from '@lib/notify';
+import { ROUTES } from '@utils/routes';
+import cn from 'classnames';
 import classNames from 'classnames';
+import Link from 'next/link';
+import { useState } from 'react';
 
 function UpgradeIconComponent() {
   return (
@@ -183,7 +183,7 @@ function StoreInfoIconComponent() {
 }
 
 const GettingStartedSectionStep1 = ({ setStoredValue }) => {
-  const { published } = useSettings();
+  const { published, subscription } = useSettings();
 
   const [error, setError] = useState(null);
   const [disableRequest, setDisableRequest] = useState(false);
@@ -227,6 +227,10 @@ const GettingStartedSectionStep1 = ({ setStoredValue }) => {
     });
   };
 
+  const isSubscribed =
+    !subscription?.cancel_at_period_end && subscription?.status === 'active';
+
+
   return (
     <div className="relative mb-8 w-full">
       <button
@@ -238,7 +242,7 @@ const GettingStartedSectionStep1 = ({ setStoredValue }) => {
       <h3 className="mb-4 flex flex-1 items-end text-xl text-gray-900">
         Get started guides
       </h3>
-      <div className="border border-b-0 border-gray-300">
+      {!isSubscribed && <div className="border border-b-0 border-gray-300">
         <div className="flex items-center justify-center p-8">
           <div className="mx-5">
             <Link href={`${ROUTES.BILLING}`}>
@@ -265,8 +269,8 @@ const GettingStartedSectionStep1 = ({ setStoredValue }) => {
             </Link>
           </div>
         </div>
-      </div>
-      <div className="grid grid-cols-1 border border-t-0 border-gray-300 lg:grid-cols-2">
+      </div>}
+      <div className={classNames("grid grid-cols-1 border border-t-0 border-gray-300 lg:grid-cols-2", isSubscribed && 'border-t')}>
         {/* Left */}
         <div className="flex flex-col border border-x-0 border-b-0 border-gray-300">
           <h4 className="mx-6 border-b border-gray-300 py-3 text-lg">
@@ -494,7 +498,7 @@ const GettingStartedSectionStep1 = ({ setStoredValue }) => {
 };
 
 const GettingStartedSectionStep2 = () => {
-  const { published } = useSettings();
+  const { published, subscription } = useSettings();
 
   const [error, setError] = useState(null);
   const [disableRequest, setDisableRequest] = useState(false);
@@ -538,6 +542,9 @@ const GettingStartedSectionStep2 = () => {
     });
   };
 
+  const isSubscribed =
+    !subscription?.cancel_at_period_end && subscription?.status === 'active';
+
   return (
     <div className="mb-8 w-full">
       {!published && (
@@ -545,7 +552,7 @@ const GettingStartedSectionStep2 = () => {
           Get started guides
         </h3>
       )}
-      <div className="border border-gray-300">
+      {isSubscribed && <div className="border border-gray-300">
         <div className="flex items-center justify-center p-8">
           <div className="mx-5">
             <Link href={`${ROUTES.BILLING}`}>
@@ -572,11 +579,12 @@ const GettingStartedSectionStep2 = () => {
             </Link>
           </div>
         </div>
-      </div>
+      </div>}
       {!published && (
         <div
           className={classNames(
-            'grid grid-cols-1 border border-t-0 border-gray-300 lg:grid-cols-2'
+            'grid grid-cols-1 border border-t-0 border-gray-300 lg:grid-cols-2',
+            isSubscribed && 'border-t'
           )}
         >
           <div className="flex h-[180px] flex-1 items-center justify-center border-b-0 border-t-0 border-gray-300 lg:h-[160px]">
@@ -630,4 +638,4 @@ const GettingStartedSectionStep2 = () => {
   );
 };
 
-export { GettingStartedSectionStep2, GettingStartedSectionStep1 };
+export { GettingStartedSectionStep1,GettingStartedSectionStep2 };

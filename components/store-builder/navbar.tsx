@@ -2,7 +2,6 @@ import DesktopIcon from '@components/icons/desktop-icon';
 import MobileIcon from '@components/icons/mobile-icon';
 import TabletIcon from '@components/icons/tablet-icon';
 import styles from '@components/navigation/scss/index.module.scss';
-import Button from '@components/ui/button';
 import { useGetClient } from '@hooks/useGetClient';
 import { useUI } from '@hooks/useUI';
 import { DEVICE_VIEWS } from '@ts-types/enums';
