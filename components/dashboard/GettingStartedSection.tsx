@@ -552,7 +552,7 @@ const GettingStartedSectionStep2 = () => {
           Get started guides
         </h3>
       )}
-      {isSubscribed && <div className="border border-gray-300">
+      {!isSubscribed && <div className="border border-gray-300">
         <div className="flex items-center justify-center p-8">
           <div className="mx-5">
             <Link href={`${ROUTES.BILLING}`}>
