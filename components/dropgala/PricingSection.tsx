@@ -1,4 +1,5 @@
 import { CheckMark } from '@components/icons/checkmark';
+import { ROUTES } from '@utils/routes';
 import Link from 'next/link';
 
 // https://www.dropship.io/pricing
@@ -213,7 +214,7 @@ const PricingSection = () => {
               {/* CTA */}
               <div>
                 <div className="pt-5">
-                  <Link href="#subscription">
+                  <Link href={ROUTES.SIGNUP}>
                     <div className="hover:text-underline inline-block w-full cursor-pointer rounded-[4px] bg-[#1b91f2] py-2 px-8 text-center font-medium text-white no-underline hover:bg-[#38a4fc]">
                       Get started with 14 days trial
                     </div>
