@@ -1,16 +1,16 @@
+import { UpgradeIcon } from '@components/icons/sidebar/upgrade';
+import Button from '@components/ui/button';
+import { useSettings } from '@hooks/useSettings';
 import { useUI } from '@hooks/useUI';
 import { siteSettings } from '@settings/site.settings';
+import { ROUTES } from '@utils/routes';
+import Link from 'next/link';
 import { useTranslation } from 'next-i18next';
 import React, { useMemo, useState } from 'react';
 
 import Drawer from '../ui/drawer';
 import DrawerWrapper from '../ui/drawer-wrapper';
 import SidebarItem from './sidebar/sidebar-item';
-import Button from '@components/ui/button';
-import Link from 'next/link';
-import { ROUTES } from '@utils/routes';
-import { useSettings } from '@hooks/useSettings';
-import { UpgradeIcon } from '@components/icons/sidebar/upgrade';
 
 const MobileNavigation: React.FC = () => {
   const {

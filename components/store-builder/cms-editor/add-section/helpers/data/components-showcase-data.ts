@@ -88,14 +88,14 @@ export const componentsThumbnail = {
       },
       title: 'Header Default'
     },
-    {
-      moduleName: 'HeaderElegant',
-      thumbnail: {
-        image: '/static/components/header/header-elegant.png',
-        placeholder: '/static/components/header/header-elegant.png'
-      },
-      title: 'Header Elegant'
-    },
+    // {
+    //   moduleName: 'HeaderElegant',
+    //   thumbnail: {
+    //     image: '/static/components/header/header-elegant.png',
+    //     placeholder: '/static/components/header/header-elegant.png'
+    //   },
+    //   title: 'Header Elegant'
+    // },
     {
       moduleName: 'HeaderSatoshi',
       thumbnail: {
