@@ -230,7 +230,6 @@ const GettingStartedSectionStep1 = ({ setStoredValue }) => {
   const isSubscribed =
     !subscription?.cancel_at_period_end && subscription?.status === 'active';
 
-
   return (
     <div className="relative mb-8 w-full">
       <button
@@ -242,35 +241,42 @@ const GettingStartedSectionStep1 = ({ setStoredValue }) => {
       <h3 className="mb-4 flex flex-1 items-end text-xl text-gray-900">
         Get started guides
       </h3>
-      {!isSubscribed && <div className="border border-b-0 border-gray-300">
-        <div className="flex items-center justify-center p-8">
-          <div className="mx-5">
-            <Link href={`${ROUTES.BILLING}`}>
-              <UpgradeIconComponent />
-            </Link>
-          </div>
-          <div className="max-w-[500px]">
-            <div className="text-lg font-semibold">
-              Ready to upgrade your trial and activate your store?
+      {!isSubscribed && (
+        <div className="border border-b-0 border-gray-300">
+          <div className="flex items-center justify-center p-8">
+            <div className="mx-5">
+              <Link href={`${ROUTES.BILLING}`}>
+                <UpgradeIconComponent />
+              </Link>
             </div>
-            <p className="mt-1 mb-5 font-normal text-gray-700">
-              Find your perfect domain or use an existing one when you choose a
-              plan for your store.
-            </p>
-            <Link href={`${ROUTES.BILLING}`}>
-              <Button>
-                <div className="flex items-center">
-                  <div>
-                    <UpgradeIcon width={25} height={25} />
+            <div className="max-w-[500px]">
+              <div className="text-lg font-semibold">
+                Ready to upgrade your trial and activate your store?
+              </div>
+              <p className="mt-1 mb-5 font-normal text-gray-700">
+                Find your perfect domain or use an existing one when you choose
+                a plan for your store.
+              </p>
+              <Link href={`${ROUTES.BILLING}`}>
+                <Button>
+                  <div className="flex items-center">
+                    <div>
+                      <UpgradeIcon width={25} height={25} />
+                    </div>
+                    <div className="font-medium">Upgrade your trial</div>
                   </div>
-                  <div className="font-medium">Upgrade your trial</div>
-                </div>
-              </Button>
-            </Link>
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
-      </div>}
-      <div className={classNames("grid grid-cols-1 border border-t-0 border-gray-300 lg:grid-cols-2", isSubscribed && 'border-t')}>
+      )}
+      <div
+        className={classNames(
+          'grid grid-cols-1 border border-t-0 border-gray-300 lg:grid-cols-2',
+          isSubscribed && 'border-t'
+        )}
+      >
         {/* Left */}
         <div className="flex flex-col border border-x-0 border-b-0 border-gray-300">
           <h4 className="mx-6 border-b border-gray-300 py-3 text-lg">
@@ -552,34 +558,36 @@ const GettingStartedSectionStep2 = () => {
           Get started guides
         </h3>
       )}
-      {!isSubscribed && <div className="border border-gray-300">
-        <div className="flex items-center justify-center p-8">
-          <div className="mx-5">
-            <Link href={`${ROUTES.BILLING}`}>
-              <UpgradeIconComponent />
-            </Link>
-          </div>
-          <div className="max-w-[500px]">
-            <div className="text-lg font-semibold">
-              Ready to upgrade your trial and activate your store?
+      {!isSubscribed && (
+        <div className="border border-gray-300">
+          <div className="flex items-center justify-center p-8">
+            <div className="mx-5">
+              <Link href={`${ROUTES.BILLING}`}>
+                <UpgradeIconComponent />
+              </Link>
             </div>
-            <p className="mt-1 mb-5 font-normal text-gray-700">
-              Find your perfect domain or use an existing one when you choose a
-              plan for your store.
-            </p>
-            <Link href={`${ROUTES.BILLING}`}>
-              <Button>
-                <div className="flex items-center">
-                  <div>
-                    <UpgradeIcon width={25} height={25} />
+            <div className="max-w-[500px]">
+              <div className="text-lg font-semibold">
+                Ready to upgrade your trial and activate your store?
+              </div>
+              <p className="mt-1 mb-5 font-normal text-gray-700">
+                Find your perfect domain or use an existing one when you choose
+                a plan for your store.
+              </p>
+              <Link href={`${ROUTES.BILLING}`}>
+                <Button>
+                  <div className="flex items-center">
+                    <div>
+                      <UpgradeIcon width={25} height={25} />
+                    </div>
+                    <div className="font-medium">Upgrade your trial</div>
                   </div>
-                  <div className="font-medium">Upgrade your trial</div>
-                </div>
-              </Button>
-            </Link>
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
-      </div>}
+      )}
       {!published && (
         <div
           className={classNames(
@@ -638,4 +646,4 @@ const GettingStartedSectionStep2 = () => {
   );
 };
 
-export { GettingStartedSectionStep1,GettingStartedSectionStep2 };
+export { GettingStartedSectionStep1, GettingStartedSectionStep2 };

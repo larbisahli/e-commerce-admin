@@ -39,7 +39,7 @@ const Loader = (props: Props) => {
       >
         <svg
           style={{ animationDuration: '3s' }}
-          className="h-16 w-16 animate-spin stroke-gray-600"
+          className="h-16 w-16 animate-spin stroke-blue-600"
           viewBox="0 0 256 256"
         >
           <line
@@ -116,7 +116,7 @@ const Loader = (props: Props) => {
           ></line>
         </svg>
         {showText && (
-          <span className="text-md stroke-gray-500 font-medium">{text}</span>
+          <span className="text-lg font-semibold italic text-body">{text}</span>
         )}
       </div>
     );

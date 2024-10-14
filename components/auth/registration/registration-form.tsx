@@ -3,6 +3,7 @@ import 'react-phone-input-2/lib/style.css';
 import { CheckMarkCircle } from '@components/icons/checkmark-circle';
 import Alert from '@components/ui/alert';
 import Button from '@components/ui/button';
+import Loader from '@components/ui/loader/loader';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useErrorLogger } from '@hooks/useErrorLogger';
 import { useGetClient } from '@hooks/useGetClient';
@@ -98,6 +99,24 @@ const RegistrationForm = ({
     score: number;
     feedback: PasswordFeedback;
   }>(null);
+  const [loadingText, setLoadingText] = useState(
+    "Hang tight, we're setting things up!"
+  );
+
+  useEffect(() => {
+    if (loading) {
+      setTimeout(
+        () => setLoadingText('Your store is ready to launch any moment now!'),
+        2500
+      );
+      setTimeout(
+        () => setLoadingText('Almost there—your store is about to go live!'),
+        5000
+      );
+    } else {
+      setLoadingText("Hang tight, we're setting things up!");
+    }
+  }, [loading]);
 
   const {
     register,
@@ -306,6 +325,17 @@ const RegistrationForm = ({
 
   return (
     <div className="h-full">
+      {loading && (
+        <div className="absolute top-0 right-0 left-0 bottom-0 z-10 flex items-center justify-center">
+          <div
+            style={{ backdropFilter: 'blur(1px)' }}
+            className="absolute inset-0 h-full w-full"
+          ></div>
+          <div className="z-10">
+            <Loader special text={loadingText} />
+          </div>
+        </div>
+      )}
       <div className="invisible absolute">
         <ReCAPTCHA
           sitekey={process.env.RECAPTCHA_SITE_KEY}

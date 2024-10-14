@@ -46,7 +46,7 @@ import {
 } from './ToolTips';
 
 const generateMaintenancePassword = () => {
-  return Math.floor(Math.random() * 90000) + 10000;
+  return Math.floor(Math.random() * 900000) + 100000;
 };
 
 type FormValues = SettingsType;
