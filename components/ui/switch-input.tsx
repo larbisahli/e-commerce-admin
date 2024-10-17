@@ -11,6 +11,7 @@ interface Props {
   label: string;
   name: string;
   labelClassName?: string;
+  disabled?: boolean;
   size?: 'small' | 'large';
 }
 
@@ -20,6 +21,7 @@ const SwitchInput = ({
   name,
   errors,
   labelClassName,
+  disabled,
   size = 'small'
 }: Props) => {
   const { t } = useTranslation();
@@ -36,8 +38,9 @@ const SwitchInput = ({
               size === 'large' && 'h-[25px] w-[50px]',
               size === 'small' && 'h-4 w-7',
               'relative inline-flex items-center rounded-full border',
-              value ? 'bg-blue-500' : 'bg-gray-300'
+              !disabled && value ? 'bg-blue-500' : 'bg-gray-300'
             )}
+            disabled={disabled}
           >
             <span className="sr-only">Enable {label}</span>
             <span

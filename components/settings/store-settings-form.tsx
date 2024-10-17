@@ -30,9 +30,11 @@ import { FAVICON_VIEWER_MODAL } from '@ts-types/constants';
 import { OrderBy } from '@ts-types/enums';
 import { SettingsType, TaxType } from '@ts-types/generated';
 import { CURRENCY } from '@utils/currency';
+import { ROUTES } from '@utils/routes';
 import cn from 'classnames';
 import { isValidPhoneNumber } from 'libphonenumber-js';
 import { isEmpty } from 'lodash';
+import Link from 'next/link';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -88,8 +90,11 @@ export default function StoreSettingsForm({ settings }: IProps) {
 
   const [error, setError] = useState(null);
 
-  const { systemCurrency } = useSettings();
+  const { systemCurrency, subscription } = useSettings();
   const dispatch = useAppDispatch();
+
+  const isSubscribed =
+    !subscription?.cancel_at_period_end && subscription?.status === 'active';
 
   const {
     register,
@@ -688,7 +693,15 @@ export default function StoreSettingsForm({ settings }: IProps) {
           details={t('form:shop-settings-helper-text')}
           className="w-full px-0 pb-5 sm:w-1/4 sm:py-8 sm:pe-4 md:w-1/4 md:pe-5"
         />
-        <Card className="w-full sm:w-3/4 md:w-3/4">
+
+        <Card className="relative w-full sm:w-3/4 md:w-3/4">
+          {!isSubscribed && (
+            <Link href={ROUTES.BILLING} className="z-50">
+              <div className="mb-5 font-medium text-blue-700 underline">
+                To make your store public, please choose a subscription plan.
+              </div>
+            </Link>
+          )}
           <div className="flex-4 mb-5 min-w-[200px]">
             <Label className="text-lg">
               {t('form:input-label-maintenance-mode')}
@@ -707,12 +720,14 @@ export default function StoreSettingsForm({ settings }: IProps) {
               name="maintenanceMode"
               label={t('form:input-label-maintenance')}
               control={control}
+              disabled={!isSubscribed}
             />
           </div>
           <Label>{t('form:input-label-password')}</Label>
           <div
             className={cn('my-1 flex w-fit rounded-sm border bg-gray-100', {
-              'pointer-events-none opacity-50': !maintenanceMode
+              'pointer-events-none opacity-50':
+                !maintenanceMode || !isSubscribed
             })}
           >
             <div className="flex items-center px-4 py-2">
@@ -729,6 +744,7 @@ export default function StoreSettingsForm({ settings }: IProps) {
                 const pass = generateMaintenancePassword();
                 setValue('maintenancePassword', pass);
               }}
+              disabled={!isSubscribed}
               className="flex items-center justify-center border-l border-gray-300 px-5 py-2 text-gray-800"
             >
               <ResetIcon />

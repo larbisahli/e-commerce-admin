@@ -136,7 +136,7 @@ const Navbar = () => {
         </div> */}
         {!isSubscribed && (
           <div className="hidden sm:block">
-            <Link href={`${ROUTES.BILLING}`}>
+            <Link href={ROUTES.BILLING}>
               <div className="flex items-center pl-6">
                 <div className="mx-2 w-fit rounded-sm p-1 text-sm text-gray-500">
                   {trialDaysLeft.map((day, idx) => (
