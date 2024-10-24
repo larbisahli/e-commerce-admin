@@ -85,6 +85,8 @@ export const settingsSlice = createSlice({
         state.published = payload.published;
         state.createdAt = payload.createdAt;
         state.subscription = payload.subscription;
+        state.maintenanceMode = payload.maintenanceMode;
+        state.maintenancePassword = payload.maintenancePassword;
       }
     );
     builder.addCase(

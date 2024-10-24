@@ -237,6 +237,7 @@ export default function LayoutNavigation({
   const handleStoreComponentSelect = (block: {
     moduleName: string;
     componentId: string;
+    moduleGroup: string;
   }) => {
     // @ts-ignore
     const iframeWin =
@@ -246,7 +247,8 @@ export default function LayoutNavigation({
         source: StoreBuilder.GALA_CMS_BUILDER,
         actionType: StoreBuilderActions.BLOCK_SELECTION,
         moduleName: block?.moduleName,
-        componentId: block?.componentId
+        componentId: block?.componentId,
+        moduleGroup: block?.moduleGroup
       },
       getBuilderSrc(alias)
     );
@@ -322,7 +324,11 @@ export default function LayoutNavigation({
           tabIndex={0}
           onKeyDown={(e) => handleKeyDown(e, headerComponent)}
           onClick={() => handleClick(headerComponent)}
-          className="mx-2 flex cursor-default items-center rounded-sm border border-gray-200 bg-gray-100 px-3 py-3 shadow-sm hover:bg-gray-200"
+          onMouseOver={() => handleHover(headerComponent)}
+          onFocus={() => handleHover(headerComponent)}
+          onMouseOut={handleHoverOut}
+          onBlur={handleHoverOut}
+          className="mx-2 flex cursor-pointer items-center rounded-sm border border-gray-200 bg-gray-100 px-3 py-3 shadow-sm hover:bg-gray-200"
         >
           <div className="mr-2">
             <HeaderIcon />
@@ -425,6 +431,10 @@ export default function LayoutNavigation({
           tabIndex={0}
           onKeyDown={(e) => handleKeyDown(e, footerComponent)}
           onClick={() => handleClick(footerComponent)}
+          onMouseOver={() => handleHover(footerComponent)}
+          onFocus={() => handleHover(footerComponent)}
+          onMouseOut={handleHoverOut}
+          onBlur={handleHoverOut}
           className="mx-2 flex cursor-pointer items-center rounded-sm border border-gray-200 bg-gray-100 px-3 py-3 shadow-sm hover:bg-gray-200"
         >
           <div className="mr-2">

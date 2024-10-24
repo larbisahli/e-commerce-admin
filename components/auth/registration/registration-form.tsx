@@ -328,7 +328,7 @@ const RegistrationForm = ({
       {loading && (
         <div className="absolute top-0 right-0 left-0 bottom-0 z-10 flex items-center justify-center">
           <div
-            style={{ backdropFilter: 'blur(1px)' }}
+            style={{ backdropFilter: 'blur(2px)' }}
             className="absolute inset-0 h-full w-full"
           ></div>
           <div className="z-10">

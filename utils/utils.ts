@@ -221,7 +221,16 @@ export const resolvePath = (obj: any, path: string, defaultValue: any) =>
       obj || {}
     );
 
-export const getBuilderSrc = (alias: string, path?: string) => {
+export const getBuilderSrc = (
+  alias: string,
+  path?: string,
+  maintenancePassword?: number
+) => {
+  if (maintenancePassword) {
+    return PRODUCTION_ENV
+      ? `https://${alias}.dropgala.shop/maintenance/${maintenancePassword}`
+      : `http://localhost:3000/maintenance/${maintenancePassword}`;
+  }
   const pathname = path === 'home-page' ? '' : path ?? '';
   return PRODUCTION_ENV
     ? `https://${alias}.dropgala.shop/${pathname}`

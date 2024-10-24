@@ -22,6 +22,8 @@ export const STORE_CONFIG = gql`
       tier
       status
       createdAt
+      maintenanceMode
+      maintenancePassword
     }
     getStoreSubscription {
       id

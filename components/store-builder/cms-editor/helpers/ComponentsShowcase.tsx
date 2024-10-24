@@ -76,7 +76,7 @@ const ComponentsShowcase = ({
             )
           );
           updateBuilderInfo({ isReloadIframe: true });
-          // closeModal(null, null, { sectionId: componentId });
+          // closeModal(null, null, { componentId: componentId });
         }
       },
       refetchQueries: [

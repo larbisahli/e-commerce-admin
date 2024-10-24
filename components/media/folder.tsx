@@ -1,6 +1,8 @@
 import { ApolloQueryResult, useMutation } from '@apollo/client';
 import DotsIcon from '@components/icons/dots';
 import FolderSvg from '@components/icons/folder';
+import { GifIcon } from '@components/icons/gif';
+import { VideoIcon } from '@components/icons/video';
 import ImageComponent from '@components/ImageComponent';
 import { useModalAction } from '@components/ui/modal/modal.context';
 import { CREATE_FOLDER } from '@graphql/media';
@@ -157,39 +159,52 @@ export default function Folder({
 
   const renderImage = () => {
     return (
-      <div
-        title={folder?.name}
-        className="group flex h-fit w-48 flex-col items-center p-5 hover:bg-blue-100"
-      >
-        <button
-          onClick={handleModalClick}
-          className="relative flex h-40 w-40 items-center justify-center rounded border border-gray-300 bg-gray-100"
-        >
-          <button className="absolute top-0 right-0 z-30 hidden cursor-pointer bg-white px-1 text-black group-hover:block">
-            <div className="rotate-90">
-              <DotsIcon />
-            </div>
-          </button>
-          <div className="absolute top-0 left-0 z-30 rounded-sm bg-black p-[2px] text-xs text-white">
-            {photo?.size?.formatBytes()}
-          </div>
-          <ImageComponent
-            src={photo?.image}
-            customPlaceholder={photo?.placeholder}
-            width={160}
-            height={160}
-            className="rounded"
-            objectFit="cover"
-          />
-        </button>
-        {renderTitle()}
-      </div>
+      <ImageComponent
+        src={photo?.image}
+        customPlaceholder={photo?.placeholder}
+        width={160}
+        height={160}
+        className="rounded"
+        objectFit="cover"
+      />
     );
+  };
+
+  const renderGif = () => {
+    return <GifIcon width="65" height="65" />;
+  };
+
+  const renderVideo = () => {
+    return <VideoIcon width="65" height="65" />;
   };
 
   if (isEmpty(image)) {
     return renderFolder();
   }
 
-  return renderImage();
+  return (
+    <div
+      title={folder?.name}
+      className="group flex h-fit w-48 flex-col items-center p-5 hover:bg-blue-100"
+    >
+      <button
+        onClick={handleModalClick}
+        className="relative flex h-40 w-40 items-center justify-center rounded border border-gray-300 bg-gray-100"
+      >
+        <button className="absolute top-0 right-0 z-30 hidden cursor-pointer bg-white px-1 text-black group-hover:block">
+          <div className="rotate-90">
+            <DotsIcon />
+          </div>
+        </button>
+        <div className="absolute top-0 left-0 z-30 rounded-sm bg-black p-[2px] text-xs text-white">
+          {photo?.size?.formatBytes()}
+        </div>
+        {photo.mimeType === 'video/mp4' && renderVideo()}
+        {photo.mimeType === 'image/gif' && renderGif()}
+        {['image/png', 'image/jpeg', 'image/jpg'].includes(photo.mimeType) &&
+          renderImage()}
+      </button>
+      {renderTitle()}
+    </div>
+  );
 }

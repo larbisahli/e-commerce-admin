@@ -77,7 +77,7 @@ const ComponentsShowcase = ({
               (c) => c.moduleName === data.updateComponentModuleName.moduleName
             )
           );
-          closeModal(LIBRARY_SECTION_MODAL, null, { sectionId: componentId });
+          closeModal(LIBRARY_SECTION_MODAL, null, { componentId });
           updateBuilderInfo({ isReloadIframe: true });
         }
       },

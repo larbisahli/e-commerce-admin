@@ -1,9 +1,13 @@
 import { TwoArrowPrev } from '@components/icons/two-arrow';
 import Navbar from '@components/store-builder/navbar';
 import Sidebar from '@components/store-builder/sidebar';
-import { useModalAction } from '@components/ui/modal/modal.context';
+import {
+  useModalAction,
+  useModalState
+} from '@components/ui/modal/modal.context';
 import { useAppDispatch, useGetClient } from '@hooks/useGetClient';
 import { useSettings } from '@hooks/useSettings';
+import { useUI } from '@hooks/useUI';
 import { fetchStoreSettings, setCurrentLanguage } from '@store/settings';
 import {
   ADD_SECTION_MODAL,
@@ -37,6 +41,7 @@ const AppLayout: React.FC = ({ children }: Props) => {
   const { openModal } = useModalAction();
   const { languages = [] } = useSettings();
   const { userInfo } = useGetClient();
+  const { setModalData } = useUI();
 
   const [showSlider, setShowSlider] = useState(true);
 
@@ -72,36 +77,7 @@ const AppLayout: React.FC = ({ children }: Props) => {
         function (e) {
           if (e.data?.source === StoreBuilder.GALA_CMS_BUILDER) {
             const data = e.data;
-            console.log('message ::>', data, layoutName.current);
-            if (data.actionType === StoreBuilderActions.EDIT_ACTION) {
-              openModal(CMS_BUILDER_MODAL, null, data);
-            } else if (data.actionType === StoreBuilderActions.ADD_NEW_AFTER) {
-              openModal(ADD_SECTION_MODAL, null, {
-                afterComponentId: data.componentId,
-                moduleName: data.moduleName,
-                position: data.position,
-                layoutName: layoutName.current
-              });
-            } else if (data.actionType === StoreBuilderActions.ADD_NEW_BEFORE) {
-              openModal(ADD_SECTION_MODAL, null, {
-                beforeComponentId: data.componentId,
-                moduleName: data.moduleName,
-                position: data.position,
-                layoutName: layoutName.current
-              });
-            } else if (data.actionType === StoreBuilderActions.DELETE_ACTION) {
-              openModal(DELETE_COMPONENT, data.componentId, {});
-            }
-          }
-          if (e.data?.source === StoreBuilder.GALA_CMS_BUILDER_LIBRARY) {
-            const data = e.data;
-            console.log('message ::>', data, layoutName.current);
-            openModal(LIBRARY_SECTION_MODAL, null, {
-              componentId: data.componentId,
-              moduleName: data.moduleName,
-              moduleGroup: data.moduleGroup,
-              layoutName: layoutName.current
-            });
+            setModalData({ data: { ...data, layoutName: layoutName.current } });
           }
         },
         false

@@ -24,6 +24,7 @@ import { saveAs } from 'file-saver';
 import { isEmpty } from 'lodash';
 import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
+import ReactPlayer from 'react-player';
 
 const ImageViewModal = () => {
   const { t } = useTranslation();
@@ -84,10 +85,27 @@ const ImageViewModal = () => {
           }
         : photo;
 
+    if (photo.mimeType === 'video/mp4') {
+      return (
+        <div className="flex-2 relative mx-2 min-h-[200px] min-w-[500px] rounded-xl border shadow">
+          <div className="flex-0 absolute top-0 right-0 z-30 p-2">
+            {renderActionButtons()}
+          </div>
+          <ReactPlayer
+            className="max-h-[500px]"
+            url={`${mediaURL}/${photo?.image}`}
+            width={500}
+            height={500}
+            controls={true}
+          />
+        </div>
+      );
+    }
+
     return (
       <div
-        className="flex-2 relative mx-2 rounded-xl border shadow"
-        style={{ height: `${height}px` }}
+        className="flex-2 relative mx-2 flex items-center justify-center rounded-lg border shadow"
+        style={{ height: `${height}px`, minHeight: '150px' }}
       >
         <div className="flex-0 absolute top-0 right-0 z-30 p-2">
           {renderActionButtons()}
@@ -97,7 +115,7 @@ const ImageViewModal = () => {
           customPlaceholder={photo?.placeholder}
           width={width}
           height={height}
-          className="rounded-xl"
+          className="rounded-lg"
           objectFit="cover"
         />
       </div>
@@ -191,27 +209,27 @@ const ImageViewModal = () => {
     }
 
     return (
-      <div className="flex flex-col items-end">
+      <div className="flex items-center justify-center gap-2">
         <Button
           onClick={deleteMediaPhoto}
           loading={loading}
           disabled={loading}
           variant="outline"
           className={cn(
-            'mb-2 !w-12 !bg-red-600 py-2 px-4 !text-white hover:!border-red-900 hover:!bg-red-700'
+            '!h-8 !w-8 !rounded !bg-red-600 py-2 px-4 !text-white hover:!border-red-900 hover:!bg-red-700'
           )}
         >
           <div className="px-2">
-            <TrashIcon width={18} height={18} />
+            <TrashIcon width={16} height={16} />
           </div>
         </Button>
         <Button
           onClick={() => saveAs(`${mediaURL}/${photo.image}`, `${name}.png`)}
           variant="outline"
-          className="!w-12 !bg-blue-600 !text-white hover:!border-blue-900 hover:!bg-blue-700"
+          className="!h-8 !w-8 !rounded !bg-blue-600 !text-white hover:!border-blue-900 hover:!bg-blue-700"
         >
           <div className="px-2">
-            <DownloadIcon width={25} height={25} />
+            <DownloadIcon width={16} height={16} />
           </div>
         </Button>
       </div>

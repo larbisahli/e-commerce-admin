@@ -59,7 +59,7 @@ const AddSectionModal = () => {
       if (!isEmpty(data.addLayoutComponent)) {
         const { componentId, etag: newEtag } = data?.addLayoutComponent ?? {};
         dispatch(setEtag({ etag: newEtag }));
-        closeModal(ADD_SECTION_MODAL, null, { sectionId: componentId });
+        closeModal(ADD_SECTION_MODAL, null, { componentId });
         updateBuilderInfo({ isReloadIframe: true });
         notify(t('common:successfully-added'), 'success', {
           position: 'top-center',

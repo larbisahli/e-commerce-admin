@@ -90,7 +90,7 @@ const PromoBannerForm = ({ initialValues }: IProps) => {
             autoClose: 2000
           });
           updateBuilderInfo({ isReloadIframe: true });
-          closeModal(null, null, { sectionId: initialValues.componentId });
+          closeModal(null, null, { componentId: initialValues.componentId });
         }
       }
     }

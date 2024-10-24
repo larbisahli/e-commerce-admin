@@ -130,7 +130,7 @@ export default function CreateSupplierPage({ client }: SSRProps) {
    * STOREFRONT POSTMESSAGE FOR WINDOW SCROLL TO UPDATED COMPONENT
    */
   useEffect(() => {
-    if (alias && meta?.sectionId && !iframeLoading) {
+    if (alias && meta?.componentId && !iframeLoading) {
       // @ts-ignore
       setTimeout(() => {
         const iframeWin =
@@ -139,13 +139,13 @@ export default function CreateSupplierPage({ client }: SSRProps) {
           {
             source: StoreBuilder.GALA_CMS_BUILDER,
             actionType: StoreBuilderActions.SCROLL_TO_SECTION,
-            sectionId: meta?.sectionId
+            componentId: meta?.componentId
           },
           getBuilderSrc(alias)
         );
       }, 900);
     }
-  }, [alias, meta?.sectionId, iframeLoading]);
+  }, [alias, meta?.componentId, iframeLoading]);
 
   return (
     <>

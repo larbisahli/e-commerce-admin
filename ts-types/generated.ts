@@ -497,6 +497,7 @@ export interface ImageType {
   size?: Scalars['Int'];
   height?: Scalars['Int'];
   width?: Scalars['Int'];
+  mimeType?: string;
 }
 
 export interface MediaType extends CreatedUpdatedByAt {

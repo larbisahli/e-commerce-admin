@@ -116,7 +116,9 @@ const Loader = (props: Props) => {
           ></line>
         </svg>
         {showText && (
-          <span className="text-lg font-semibold italic text-body">{text}</span>
+          <span className="text-lg font-semibold italic text-blue-700">
+            {text}
+          </span>
         )}
       </div>
     );

@@ -54,6 +54,7 @@ const ComponentDeleteView = () => {
           const { etag: newEtag } = data?.deleteLayoutComponent ?? {};
           dispatch(setEtag({ etag: newEtag }));
           updateBuilderInfo({ isReloadIframe: true });
+          closeModal(null, null, { componentId });
           notify(t('common:successfully-deleted'), 'success', {
             position: 'top-center',
             autoClose: 1000

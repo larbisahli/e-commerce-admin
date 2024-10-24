@@ -72,7 +72,6 @@ const Navbar = () => {
 
   const { createdAt, subscription } = useSettings();
   const settings = useSettings();
-
   console.log('settings ::>>>', settings);
 
   const isSubscribed =

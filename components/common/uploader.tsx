@@ -55,7 +55,15 @@ export default function Uploader({
         });
 
         for await (const file of acceptedFiles) {
-          if (['image/png', 'image/jpeg', 'image/jpg'].includes(file.type)) {
+          if (
+            [
+              'image/png',
+              'image/jpeg',
+              'image/jpg',
+              'image/gif',
+              'video/mp4'
+            ].includes(file.type)
+          ) {
             var formData = new FormData();
             formData.append('image', file);
             formData.append('mediaId', mediaId ?? '');
