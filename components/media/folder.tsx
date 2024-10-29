@@ -158,13 +158,18 @@ export default function Folder({
   };
 
   const renderImage = () => {
+    const calcWidth = Math.round(photo.width / 3);
+    const calcHeight = Math.round(photo.height / 3);
+    const { width, height } = {
+      width: photo.width > calcWidth ? calcWidth : photo.width,
+      height: photo.height > calcHeight ? calcHeight : photo.height
+    };
     return (
       <ImageComponent
         src={photo?.image}
         customPlaceholder={photo?.placeholder}
-        width={160}
-        height={160}
-        className="rounded"
+        width={width}
+        height={height}
         objectFit="cover"
       />
     );

@@ -8,11 +8,17 @@ export const STORE_SETTINGS = gql`
         id
         image
         placeholder
+        width
+        height
+        mimeType
       }
       logo {
         id
         image
         placeholder
+        width
+        height
+        mimeType
       }
       storeName
       storeEmail

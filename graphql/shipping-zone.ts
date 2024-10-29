@@ -8,6 +8,9 @@ export const SHIPPING_ZONE = gql`
         id
         image
         placeholder
+        width
+        height
+        mimeType
       }
       name
       displayName
@@ -61,6 +64,9 @@ export const SHIPPING_ZONES = gql`
         id
         image
         placeholder
+        width
+        height
+        mimeType
       }
       name
       active

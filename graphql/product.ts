@@ -42,6 +42,9 @@ export const PRODUCTS = gql`
         id
         image
         placeholder
+        width
+        height
+        mimeType
       }
       translated {
         name
@@ -90,11 +93,17 @@ export const PRODUCT = gql`
         id
         image
         placeholder
+        width
+        height
+        mimeType
       }
       gallery {
         id
         image
         placeholder
+        width
+        height
+        mimeType
       }
       categories {
         id
@@ -219,6 +228,9 @@ export const LINKED_PRODUCTS = gql`
         id
         image
         placeholder
+        width
+        height
+        mimeType
       }
     }
     upsellProducts(id: $id, language: $language, etag: $etag) {
@@ -237,6 +249,9 @@ export const LINKED_PRODUCTS = gql`
         id
         image
         placeholder
+        width
+        height
+        mimeType
       }
     }
     crossSellProducts(id: $id, language: $language, etag: $etag) {
@@ -255,6 +270,9 @@ export const LINKED_PRODUCTS = gql`
         id
         image
         placeholder
+        width
+        height
+        mimeType
       }
     }
   }

@@ -1,4 +1,6 @@
 import { CloseIcon } from '@components/icons/close-icon';
+import { GifIcon } from '@components/icons/gif';
+import { VideoIcon } from '@components/icons/video';
 import ImageComponent from '@components/ImageComponent';
 import isEmpty from 'lodash/isEmpty';
 import Image from 'next/image';
@@ -86,9 +88,35 @@ const Thumbs = ({
     setDraggedItem(null);
   };
 
+  const renderImage = (photo) => {
+    const calcWidth = Math.round(photo.width / 3);
+    const calcHeight = Math.round(photo.height / 3);
+    const { width, height } = {
+      width: photo.width > calcWidth ? calcWidth : photo.width,
+      height: photo.height > calcHeight ? calcHeight : photo.height
+    };
+    return (
+      <ImageComponent
+        src={photo?.image}
+        customPlaceholder={photo?.placeholder}
+        width={width}
+        height={height}
+        objectFit="cover"
+      />
+    );
+  };
+
+  const renderGif = () => {
+    return <GifIcon width="65" height="65" />;
+  };
+
+  const renderVideo = () => {
+    return <VideoIcon width="65" height="65" />;
+  };
+
   return (
     <ul className="flex flex-wrap items-center">
-      {photos?.map(({ id, image, placeholder }) => {
+      {photos?.map(({ id, image, placeholder, mimeType, width, height }) => {
         return (
           // eslint-disable-next-line jsx-a11y/click-events-have-key-events
           <li
@@ -108,13 +136,11 @@ const Thumbs = ({
             >
               <CloseIcon width={15} height={15} />
             </button>
-            <div className="relative h-22 w-22 min-w-0 overflow-hidden rounded-sm">
-              <ImageComponent
-                src={image}
-                customPlaceholder={placeholder}
-                layout="fill"
-                objectFit="cover"
-              />
+            <div className="relative flex h-22 w-22 min-w-0 items-center justify-center overflow-hidden rounded border">
+              {mimeType === 'video/mp4' && renderVideo()}
+              {mimeType === 'image/gif' && renderGif()}
+              {['image/png', 'image/jpeg', 'image/jpg'].includes(mimeType) &&
+                renderImage({ image, placeholder, width, height })}
             </div>
           </li>
         );

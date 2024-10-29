@@ -198,6 +198,9 @@ export const CATEGORY = gql`
         id
         image
         placeholder
+        width
+        height
+        mimeType
       }
       hasChildren
       urlKey
@@ -210,6 +213,9 @@ export const CATEGORY = gql`
         id
         image
         placeholder
+        width
+        height
+        mimeType
       }
     }
   }

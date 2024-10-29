@@ -142,11 +142,17 @@ const ImageViewModal = () => {
       return null;
     }
 
+    let fileTypeEle = <div className="text-gray-600">Image</div>;
+
+    if (photo.mimeType === 'video/mp4') {
+      fileTypeEle = <div className="text-gray-600">Video</div>;
+    }
+
     return (
       <>
         <div className="my-3">
           <div className="pr-1 text-sm font-medium text-black">File type</div>
-          <div className="text-gray-600">Image</div>
+          {fileTypeEle}
         </div>
         <div className="my-3">
           <div className="pr-1 text-sm font-medium text-black">MIME-Type:</div>
@@ -169,7 +175,7 @@ const ImageViewModal = () => {
   };
 
   const renderImageDimensions = () => {
-    if (isFolder) {
+    if (isFolder || photo.mimeType === 'video/mp4') {
       return null;
     }
     return (
@@ -272,9 +278,9 @@ const ImageViewModal = () => {
                         </div>
                         <div className="text-sm text-gray-600">{name}</div>
                       </div>
+                      {renderType()}
                       {renderSize()}
                       {renderItems()}
-                      {renderType()}
                       {renderDate()}
                       {renderImageDimensions()}
                     </div>

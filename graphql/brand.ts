@@ -15,6 +15,9 @@ export const BRAND = gql`
         id
         image
         placeholder
+        width
+        height
+        mimeType
       }
     }
   }
@@ -50,6 +53,9 @@ export const BRANDS = gql`
         id
         image
         placeholder
+        width
+        height
+        mimeType
       }
       createdAt
       updatedAt

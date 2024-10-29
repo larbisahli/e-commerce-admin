@@ -35,6 +35,9 @@ export const USER = gql`
         id
         image
         placeholder
+        width
+        height
+        mimeType
       }
       role {
         id
@@ -85,6 +88,9 @@ export const USER_AUTH = gql`
         id
         image
         placeholder
+        width
+        height
+        mimeType
       }
       role {
         id

@@ -1,3 +1,5 @@
+import { GifIcon } from '@components/icons/gif';
+import { VideoIcon } from '@components/icons/video';
 import ImageComponent from '@components/ImageComponent';
 import Checkbox from '@components/ui/checkbox';
 import { ImageType } from '@ts-types/generated';
@@ -24,26 +26,21 @@ const ImageThumb = ({
     e: React.ChangeEvent<HTMLInputElement>,
     photo: ImageType
   ) => {
-    console.log({ photo });
-    const { id, image, placeholder, height, width } = photo;
     const target = e.target;
     const checked = target['checked'];
 
     if (isThumbnail) {
       if (checked) {
-        setSelectedImages([{ id, image, placeholder, height, width }]);
+        setSelectedImages([photo]);
       } else {
         setSelectedImages([]);
       }
     } else {
       if (checked) {
-        setSelectedImages((prev) => [
-          ...(prev ?? []),
-          { id, image, placeholder }
-        ]);
+        setSelectedImages((prev) => [...(prev ?? []), photo]);
       } else {
         setSelectedImages((prev) => [
-          ...((prev ?? [])?.filter((img) => img.id !== id) ?? [])
+          ...((prev ?? [])?.filter((img) => img.id !== photo.id) ?? [])
         ]);
       }
     }
@@ -53,6 +50,32 @@ const ImageThumb = ({
     selectedImages?.find((value) => value.id === photo?.id)
   );
   const size = photo?.size?.formatBytes();
+
+  const renderImage = () => {
+    const calcWidth = Math.round(photo.width / 3);
+    const calcHeight = Math.round(photo.height / 3);
+    const { width, height } = {
+      width: photo.width > calcWidth ? calcWidth : photo.width,
+      height: photo.height > calcHeight ? calcHeight : photo.height
+    };
+    return (
+      <ImageComponent
+        src={photo?.image}
+        customPlaceholder={photo?.placeholder}
+        width={width}
+        height={height}
+        objectFit="cover"
+      />
+    );
+  };
+
+  const renderGif = () => {
+    return <GifIcon width="65" height="65" />;
+  };
+
+  const renderVideo = () => {
+    return <VideoIcon width="65" height="65" />;
+  };
 
   return (
     <React.Fragment>
@@ -74,12 +97,11 @@ const ImageThumb = ({
           )}
         >
           <div className="absolute top-0 right-0 left-0 bottom-0 z-40 flex h-28 w-28 items-center justify-center text-white">
-            <ImageComponent
-              src={photo?.image}
-              customPlaceholder={photo?.placeholder}
-              layout="fill"
-              objectFit="cover"
-            />
+            {photo.mimeType === 'video/mp4' && renderVideo()}
+            {photo.mimeType === 'image/gif' && renderGif()}
+            {['image/png', 'image/jpeg', 'image/jpg'].includes(
+              photo.mimeType
+            ) && renderImage()}
           </div>
           <Checkbox
             name="image"
