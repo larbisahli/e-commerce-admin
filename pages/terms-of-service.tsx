@@ -164,7 +164,7 @@ const HomePage = () => {
             </ul>
           </div>
         </section>
-        {/* <!--Footer--> */}
+        {/* <!--Footer-->  */}
         <Footer />
       </main>
     </div>
