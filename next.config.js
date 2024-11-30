@@ -58,7 +58,7 @@ const moduleExports = {
     NEXT_PUBLIC_SENTRY_DSN:
       'https://bb6c9168b250492493d8695e9851c780@o1189599.ingest.sentry.io/6310398',
     SENTRY_AUTH_TOKEN: '896bfeeab4b511ec839996dc720e1b31',
-    RECAPTCHA_SITE_KEY: '6LdJql4pAAAAAJocVjHmcQoj3pW13vgMqf_zP7CG',
+    RECAPTCHA_SITE_KEY: '6LfGco4qAAAAAFoBzRJwZUJJUI5C7wtJX5S6MBu-',
     GOOGLE_OAUTH_CLIENT_ID:
       '334672365238-6sat8ta6unldrefjd33ngah67bih7jfk.apps.googleusercontent.com',
     GOOGLE_OAUTH_CLIENT_SECRET: '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'
